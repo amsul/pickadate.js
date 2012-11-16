@@ -1,0 +1,88 @@
+
+
+body {
+    margin: 1em;
+}
+
+a {
+    color: #0089ec;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5 {
+    font-weight: 100;
+}
+
+h1 {
+    line-height: 1.5;
+    letter-spacing: -4px;
+    font-size: 3em;
+}
+
+fieldset {
+    margin-bottom: 2.4em;
+}
+
+label:hover {
+    color: #0089ec;
+}
+
+input[type=date],
+input[type=text] {
+    font-size: 1.5em;
+    font-weight: bold;
+    padding: 10px 12px;
+    border: 4px solid #e2e2e2;
+
+    -webkit-box-shadow: none;
+       -moz-box-shadow: none;
+            box-shadow: none;
+}
+
+input[type=date]:focus,
+input[type=text]:focus {
+    outline: none;
+    border-color: #0089ec;
+}
+
+
+
+
+.button-full {
+    display: block;
+    background: #0089ec;
+    color: #fff;
+    text-decoration: none;
+    text-align: center;
+    padding: 15px 0;
+    font-size: 1.4em;
+}
+
+
+.underline-highlight {
+    border-bottom: 4px solid #0089ec;
+}
+
+.holder {
+    max-width: 540px;
+    margin: 2.4em auto 4.2em;
+}
+
+.aligncenter {
+    text-align: center;
+}
+
+.link-inherit {
+    color: inherit;
+    text-decoration: none;
+}
+
+
+
+
+
+

@@ -1,0 +1,142 @@
+<title>Pickadate.js</title>
+
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="demo.css">
+<link rel="stylesheet" href="pickadate.css">
+
+
+<section class="holder">
+
+    <h1><strong title="Pick a Date" class="underline-highlight">pickadate.js</strong></h1>
+    <h2>A lightweight jQuery dateinput picker <small>(<a title="Documentation" href="docs.htm">read the docs</a>)</small></h2>
+
+    <a href="https://github.com/amsul/pickadate.js"><img width="124" height="124" style="position:absolute;top:0;right:0;border:0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <fieldset>
+        <h3><label for="input_01">Pick a date. Go ahead...</label></h3>
+        <input id="input_01" class="datepicker" type="text">
+    </fieldset>
+
+    <p>Bind it like this: <code>$( '.datepicker' ).datepicker()</code></p>
+
+</section>
+
+
+<section class="holder aligncenter">
+
+    <p><a class="button-full" href="">Download pickadate.js</a></p>
+    <p><a href="docs.htm">Read the docs</a> or <a href="https://github.com/amsul/pickadate.js">view it on Github</a></p>
+
+</section>
+
+
+<section class="holder">
+
+    <fieldset>
+        <h3><label for="input_02">Here's one with the date already filled in:</label></h3>
+        <input id="input_02" class="datepicker" type="text" value="14 August, 2012">
+    </fieldset>
+
+    <fieldset>
+        <h3><label for="input_03">Use the scary&#42; <code>type="date"</code>:</label></h3>
+        <input id="input_03" type="date" value="31 October, 2012">
+    </fieldset>
+
+    <fieldset>
+        <h3><label for="input_04">Or, the friendly&#42;&#42; <code>type="text"</code>:</label></h3>
+        <input id="input_04" class="datepicker" type="text" value="25 December, 2012">
+    </fieldset>
+
+    <fieldset>
+        <h3><label for="input_05">Did I mention it's excitingly lightweight?</label></h3>
+        <input id="input_05" class="datepicker" type="text" value="1 January, 2013">
+    </fieldset>
+
+    <fieldset>
+        <h3><label for="input_06">You're in love with it now, aren't you?</label></h3>
+        <input id="input_06" class="datepicker" type="text" value="14 February, 2013">
+    </fieldset>
+
+    <fieldset>
+        <h3><label for="input_07">I'm actually pretty unique.</label></h3>
+        <input id="input_07" class="datepicker" type="text" value="29 February, 2016">
+    </fieldset>
+
+    <fieldset>
+        <h3><label for="input_08">Others will fool you into believing they're cool.</label></h3>
+        <input id="input_08" class="datepicker" type="text" value="1 April, 2013">
+    </fieldset>
+
+    <fieldset>
+        <h3><label for="input_09">But honestly, who's the coolest around the house?</label></h3>
+        <input id="input_09" class="datepicker" type="text" value="12 May, 2013">
+    </fieldset>
+
+</section>
+
+
+<section class="holder aligncenter">
+
+    <p><a class="button-full" href="">Download pickadate.js</a></p>
+    <p><a href="docs.htm">Read the docs</a> or <a href="https://github.com/amsul/pickadate.js">view it on Github</a></p>
+
+</section>
+
+
+<section class="holder">
+
+    <hr>
+
+    <small class="dimmed">
+        <p>&#42; Scary, because there's a tiny height change on page load for <i>some</i> browsers. That's because the input element is changed from <code>type="date"</code> to <code>type="text"</code> to remove the default browser stylings.</p>
+        <p>&#42;&#42; Friendly, because.. well everyone loves Santa :)</p>
+    </small>
+</section>
+
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+
+<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+<script src="pickadate.js"></script>
+
+<script type="text/javascript">
+    $( '#input_02' ).datepicker({
+        date_min: false,
+        date_max: [ 2012, 12, 14 ]
+    })
+    $( '#input_03' ).datepicker({
+        date_min: [ 2012, 10, 25 ],
+        date_max: 5
+    })
+    $( '#input_04' ).datepicker({
+        date_min: [ 2012, 12, 25 ],
+        date_max: [ 2012, 12, 25 ]
+    })
+    $( '#input_05' ).datepicker({
+        date_min: false,
+        date_max: [ 2013, 1, 20 ]
+    })
+    $( '#input_06' ).datepicker({
+        date_min: [ 2012, 12, 25 ],
+        date_max: [ 2013, 2, 14 ]
+    })
+    $( '#input_07' ).datepicker({
+        date_min: [ 2016, 2, 1 ],
+        date_max: [ 2016, 3, 31 ]
+    })
+    $( '#input_08' ).datepicker({
+        date_min: [ 2013, 2, 1 ],
+        date_max: [ 2013, 5, 20 ]
+    })
+    $( '#input_09' ).datepicker({
+        date_min: false
+    })
+
+    $( '[type=date], .datepicker' ).datepicker()
+</script>
+
+
+
+
+
