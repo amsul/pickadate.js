@@ -1,19 +1,19 @@
 /*!
- *  datepicker.js v0.9.8 - 15 November, 2012
- *  By Amsul (http://amsul.ca)
- *  Hosted on https://github.com/amsul/pickadate.js
+ * datepicker.js v0.9.8 - 17 November, 2012
+ * By Amsul (http://amsul.ca)
+ * Hosted on https://github.com/amsul/pickadate.js
  */
 
 /**
- *  TODO: month & year dropdown selectors
- *  TODO: add methods onSelectDate, onMonthChange, onOpenCalendar, onCloseCalendar
+ * TODO: month & year dropdown selectors
+ * TODO: add methods onSelectDate, onMonthChange, onOpenCalendar, onCloseCalendar
  */
 
 /*jshint
-    debug: true,
-    devel: true,
-    browser: true,
-    asi: true
+   debug: true,
+   devel: true,
+   browser: true,
+   asi: true
  */
 
 
@@ -36,7 +36,7 @@
 
 
         /**
-         *  Helper functions
+         * Helper functions
          */
 
         // Check if a value is an array
@@ -64,7 +64,7 @@
 
 
         /**
-         *  Create a Date Picker
+         * Create a Date Picker
          */
         DatePicker = function( $element, options ) {
 
@@ -108,35 +108,39 @@
 
 
             /**
-             *  Create the Picker prototype
+             * Create the Picker prototype
              */
 
             P = Picker.prototype = {
 
                 /**
-                 *  Attach the Picker constructor
+                 * Attach the Picker constructor
                  */
                 constructor: Picker,
 
 
                 /**
-                 *  Create the picker
+                 * Create the picker
                  */
                 create: function( $element, options ) {
 
-                    // Store the element
+                    // Store the elements
                     P.$element = $element
+                    P._element = $element[ 0 ]
 
                     // Convert into a regular text input
                     // to remove user-agent stylings
-                    P.$element[ 0 ].type = 'text'
+                    P._element.type = 'text'
+
+                    // Set the element as readonly
+                    P._element.readOnly = true
 
                     // Create a calendar object and
                     // immediately render it
                     P.calendar = P.createCalendarObject().render()
 
                     // If the calendar has focus on load
-                    if ( P.$element[ 0 ] === document.activeElement ) {
+                    if ( P._element === document.activeElement ) {
 
                         // Trigger the focus handler
                         P.$element.trigger( 'focus' )
@@ -148,35 +152,34 @@
 
 
                 /**
-                 *  Create a calendar object
+                 * Create a calendar object
                  */
                 createCalendarObject: function() {
 
                     var
 
                         /**
-                         *  Create the calendar table head
-                         *  that contains all the weekday labels
+                         * Create the calendar table head
+                         * that contains all the weekday labels
                          */
-                        tableHead = (function() {
+                        tableHead = (function( settings ) {
 
                             var
                                 wrappedTableHead = function( weekday ) {
-                                    return create( 'th', weekday, P.settings.class_weekdays )
+                                    return create( 'th', weekday, settings.class_weekdays )
                                 },
-                                weekdaysCollection = ( P.settings.show_weekdays_short ) ? P.settings.weekdays_short : P.settings.weekdays_full
+                                weekdaysCollection = ( settings.show_weekdays_short ) ? settings.weekdays_short : settings.weekdays_full
 
                             // Go through each day of the week
-                            // and return a wrapped the header
-                            // and then do a join.
+                            // and return a wrapped the header.
                             // Take the result and apply another
                             // wrapper to group the cells
                             return create( 'thead', weekdaysCollection.map( wrappedTableHead ) )
-                        })(),
+                        })( P.settings ),
 
 
                         /**
-                         *  Create the calendar table body
+                         * Create the calendar table body
                          */
                         createTableBody = function() {
 
@@ -236,7 +239,6 @@
                                 setDateClassAndBinding = function( loopDate ) {
 
                                     var
-
                                         // Boolean check for date state
                                         isDateDisabled = false,
 
@@ -359,8 +361,8 @@
 
 
                         /**
-                         *  Get the nav for next and previous
-                         *  month as a string
+                         * Get the nav for next and previous
+                         * month as a string
                          */
                         createMonthNav = function() {
 
@@ -391,9 +393,9 @@
 
 
                         /**
-                         *  Get the default collection
-                         *  of items in a calendar
-                         *  * Depends on at least one calendar body
+                         * Get the default collection
+                         * of items in a calendar
+                         * * Depends on at least one calendar body
                          */
                         getDefaultCalendarItems = function() {
                             return [
@@ -416,7 +418,7 @@
                     return {
 
                         /**
-                         *  Render a complete calendar
+                         * Render a complete calendar
                          */
                         render: function() {
 
@@ -515,7 +517,7 @@
 
 
                         /**
-                         *  Open the calendar
+                         * Open the calendar
                          */
                         open: function() {
 
@@ -525,8 +527,8 @@
 
 
                                 /**
-                                 *  Check if the click position asks
-                                 *  for the calendar to be closed
+                                 * Check if the click position asks
+                                 * for the calendar to be closed
                                  */
                                 onClickWindow = function() {
 
@@ -560,7 +562,7 @@
 
 
                         /**
-                         *  Close the calendar
+                         * Close the calendar
                          */
                         close: function() {
 
@@ -583,8 +585,8 @@
 
 
                         /**
-                         *  Set the calendar as active
-                         *  ie. hovered over by the user
+                         * Set the calendar as active
+                         * ie. hovered over by the user
                          */
                         setCalendarActive: function( trueOrFalse ) {
 
@@ -600,8 +602,8 @@
 
 
                         /**
-                         *  Set a day as selected by receiving
-                         *  the day jQuery object
+                         * Set a day as selected by receiving
+                         * the day jQuery object
                          */
                         setCalendarDate: function( $dayTargeted ) {
 
@@ -676,7 +678,7 @@
                             if ( $dayTargeted ) {
 
                                 // Set the element value
-                                P.$element[ 0 ].value = DATE_SELECTED.DATE + ' ' + P.getSelectedMonth() + ', ' + DATE_SELECTED.YEAR
+                                P._element.value = DATE_SELECTED.DATE + ' ' + P.getSelectedMonth() + ', ' + DATE_SELECTED.YEAR
 
                                 // Close the calendar
                                 calendarObject.close()
@@ -687,8 +689,8 @@
 
 
                         /**
-                         *  Change the month visible
-                         *  on the calendar
+                         * Change the month visible
+                         * on the calendar
                          */
                         changeMonth: function( direction ) {
 
@@ -710,7 +712,7 @@
 
 
                 /**
-                 *  Get today's date calendar object
+                 * Get today's date calendar object
                  */
                 getDateToday: function() {
 
@@ -736,7 +738,7 @@
 
 
                 /**
-                 *  Get the minimum date allowed on the calendar
+                 * Get the minimum date allowed on the calendar
                  */
                 getDateMin: function() {
 
@@ -772,7 +774,7 @@
 
 
                 /**
-                 *  Get the maximum date allowed on the calendar
+                 * Get the maximum date allowed on the calendar
                  */
                 getDateMax: function() {
 
@@ -815,8 +817,8 @@
 
 
                 /**
-                 *  Get the date that determines
-                 *  the month to show in focus
+                 * Get the date that determines
+                 * the month to show in focus
                  */
                 getMonthFocused: function() {
 
@@ -826,8 +828,8 @@
                 }, //getMonthFocused
 
                 /**
-                 *  Set the date that determines
-                 *  the month to show in focus
+                 * Set the date that determines
+                 * the month to show in focus
                  */
                 setMonthFocused: function( calendarDateArray ) {
 
@@ -871,8 +873,8 @@
 
 
                 /**
-                 *  Get the date that determines
-                 *  which date is selected
+                 * Get the date that determines
+                 * which date is selected
                  */
                 getDateSelected: function() {
 
@@ -882,7 +884,7 @@
 
                         var
                             // Try to parse the value from the input element
-                            dateSelected = Date.parse( P.$element[ 0 ].value )
+                            dateSelected = Date.parse( P._element.value )
 
 
                         // If there's no valid date in the input
@@ -908,9 +910,9 @@
 
 
                 /**
-                 *  Get the count of the number of
-                 *  days in a month, given the
-                 *  month and year
+                 * Get the count of the number of
+                 * days in a month, given the
+                 * month and year
                  */
                 getCountDays: function( year, month ) {
 
@@ -945,9 +947,9 @@
 
 
                 /**
-                 *  Get the count of the number of
-                 *  days to shift the month by,
-                 *  given the date and day of week
+                 * Get the count of the number of
+                 * days to shift the month by,
+                 * given the date and day of week
                  */
                 getCountShiftDays: function( date, dayIndex ) {
 
@@ -977,7 +979,7 @@
 
 
                 /**
-                 *  Get the focused month
+                 * Get the focused month
                  */
                 getFocusedMonth: function() {
                     var monthsCollection = ( P.settings.show_months_full ) ? P.settings.months_full : P.settings.months_short
@@ -986,7 +988,7 @@
 
 
                 /**
-                 *  Get the focused year
+                 * Get the focused year
                  */
                 getFocusedYear: function() {
                     return MONTH_FOCUSED.YEAR
@@ -994,7 +996,7 @@
 
 
                 /**
-                 *  Get the selected date
+                 * Get the selected date
                  */
                 getSelectedDate: function() {
                     return DATE_SELECTED.DATE
@@ -1002,7 +1004,7 @@
 
 
                 /**
-                 *  Get the selected month as a string
+                 * Get the selected month as a string
                  */
                 getSelectedMonth: function() {
                     var monthsCollection = ( P.settings.show_months_full ) ? P.settings.months_full : P.settings.months_short
@@ -1011,7 +1013,7 @@
 
 
                 /**
-                 *  Get the selected month as a string
+                 * Get the selected month as a string
                  */
                 getSelectedYear: function() {
                     return DATE_SELECTED.YEAR
@@ -1020,8 +1022,8 @@
 
 
                 /**
-                 *  Find the day element node
-                 *  of the selected day
+                 * Find the day element node
+                 * of the selected day
                  */
                 findSelectedDay: function() {
                     return P.$calendarHolder.find( '.' + P.settings.class_day_selected )
@@ -1030,9 +1032,9 @@
 
 
                 /**
-                 *  Update the selected day
-                 *  when receiving a delegated
-                 *  click on a day in the calendar
+                 * Update the selected day
+                 * when receiving a delegated
+                 * click on a day in the calendar
                  */
                 onClickCalendar: function( event ) {
 
@@ -1082,7 +1084,7 @@
 
 
     /**
-     *  Default options for the picker
+     * Default options for the picker
      */
     DatePicker.defaults = {
 
@@ -1136,7 +1138,7 @@
 
 
     /**
-     *  Extend jQuery
+     * Extend jQuery
      */
     $.fn.datepicker = function( options ) {
         return this.each(function() {
