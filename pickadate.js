@@ -1,10 +1,11 @@
 /*!
- * datepicker.js v0.9.8 - 17 November, 2012
+ * datepicker.js v0.9.8 - 18 November, 2012
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  */
 
 /**
+ * TODO: date formats :747
  * TODO: month & year dropdown selectors
  * TODO: add methods onSelectDate, onMonthChange, onOpenCalendar, onCloseCalendar
  */
@@ -39,7 +40,7 @@
         STRING_PREV = 'prev',
         STRING_NEXT = 'next',
 
-        STRING_PREFIX_DATEPICER = 'datepicker--',
+        STRING_PREFIX_DATEPICKER = 'datepicker--',
 
         $window = $( window ),
 
@@ -72,42 +73,40 @@
         // Create a calendar date
         createDate = function( datePassed ) {
 
-            var
-                year, month, date, newDate
+            var newDate
 
 
             // If the date passed is an array
             if ( isArray( datePassed ) ) {
 
-                year = datePassed[ 0 ]
-
-                // Figure out the month
-                month = (function( monthId ) {
-
-                    // If the month is more than
-                    // December, increase the year
-                    // and make it January
-                    if ( monthId > 11 ) {
-                        year += 1
-                        return 0
-                    }
-
-                    // If the month is less than
-                    // January, decrease the year
-                    // and make it December
-                    if ( monthId < 0 ) {
-                        year -= 1
-                        return 11
-                    }
-
-                    // Otherwise just return it
-                    return monthId
-                })( datePassed[ 1 ] )
-
-                date = datePassed[ 2 ]
-
                 // Create the new date
-                newDate = new Date( year, month, date )
+                newDate = (function( year, monthId, date ) {
+
+                    // Figure out the month
+                    var month = (function() {
+
+                        // If the month is more than
+                        // December, increase the year
+                        // and make it January
+                        if ( monthId > 11 ) {
+                            year += 1
+                            return 0
+                        }
+
+                        // If the month is less than
+                        // January, decrease the year
+                        // and make it December
+                        if ( monthId < 0 ) {
+                            year -= 1
+                            return 11
+                        }
+
+                        // Otherwise just return it
+                        return monthId
+                    })()
+
+                    return new Date( year, month, date )
+                })( datePassed[ 0 ], datePassed[ 1 ], datePassed[ 2 ] )
             }
 
 
@@ -174,9 +173,6 @@
                 // The Picker constructor
                 Picker = function( $element, options ) {
 
-                    // Ensure a valid element was passed
-                    if ( $element[ 0 ].nodeName !== 'INPUT' ) return false
-
                     // Ensure workable options are available
                     if ( typeof options !== 'object' ) options = {}
 
@@ -207,9 +203,12 @@
                  */
                 create: function( $element, options ) {
 
-                    var element = element = $element[ 0 ]
+                    var element = $element[ 0 ]
 
-                    // Store the elements
+                    // Ensure an input element was passed
+                    if ( element.nodeName !== 'INPUT' ) return false
+
+                    // Store the element
                     P.$element = $element
                     P._element = element
 
@@ -379,7 +378,6 @@
                                 } //setDateClassAndBinding
 
 
-
                             // Go through all the days in the calendar
                             // and map a calendar date
                             for ( var index = 0; index < DAYS_IN_CALENDAR; index += 1 ) {
@@ -392,23 +390,17 @@
                                 pseudoIndex = index - countShiftby
 
 
-                                // Create a calendar date with
-                                // a negative or positive pseudoIndex
-                                loopDate = createDate([ monthFocused.YEAR, monthFocused.MONTH, pseudoIndex ])
-
-
                                 // If the pseudoIndex is zero or negative,
                                 // we need the dates from the previous month.
                                 // If the pseudoIndex is greater than the days
                                 // in the month, we need dates from the next month.
-                                if ( pseudoIndex <= 0 || pseudoIndex > countMonthDays ) {
-                                    isMonthFocused = false
-                                }
-
                                 // Otherwise we need dates from the focused month.
-                                else {
-                                    isMonthFocused = true
-                                }
+                                isMonthFocused = ( pseudoIndex <= 0 || pseudoIndex > countMonthDays ) ? false : true
+
+
+                                // Create a calendar date with
+                                // a negative or positive pseudoIndex
+                                loopDate = createDate([ monthFocused.YEAR, monthFocused.MONTH, pseudoIndex ])
 
 
                                 // Set the date class and bindings on the looped date
@@ -423,7 +415,7 @@
 
                                 // Check if it's the end of a week.
                                 // * We add 1 for 0index compensation
-                                if ( index % DAYS_IN_WEEK + 1 === DAYS_IN_WEEK ) {
+                                if ( ( index % DAYS_IN_WEEK ) + 1 === DAYS_IN_WEEK ) {
 
                                     // Wrap the week and pass it into the calendar weeks
                                     calendarWeeks.push( create( STRING_TR, calendarDates.splice( 0, DAYS_IN_WEEK ) ) )
@@ -445,12 +437,6 @@
                         createMonthNav = function() {
 
                             var
-                                // Get the minimum date
-                                dateMinimum = P.getDateMin(),
-
-                                // Get the maximum date
-                                dateMaximum = P.getDateMax(),
-
                                 createMonthTag = function( tagName ) {
 
                                     // If the tag is STRING_PREV, and month focused is
@@ -458,7 +444,7 @@
                                     // or if tag is STRING_NEXT month focused is
                                     // greater or equal to the maximum date month,
                                     // return an empty string
-                                    if ( dateMinimum && ( tagName === STRING_PREV && MONTH_FOCUSED.MONTH <= dateMinimum.MONTH && MONTH_FOCUSED.YEAR <= dateMinimum.YEAR ) || dateMaximum && ( tagName === STRING_NEXT && MONTH_FOCUSED.MONTH >= dateMaximum.MONTH && MONTH_FOCUSED.YEAR >= dateMaximum.YEAR ) ) {
+                                    if ( DATE_MIN && ( tagName === STRING_PREV && MONTH_FOCUSED.MONTH <= DATE_MIN.MONTH && MONTH_FOCUSED.YEAR <= DATE_MIN.YEAR ) || DATE_MAX && ( tagName === STRING_NEXT && MONTH_FOCUSED.MONTH >= DATE_MAX.MONTH && MONTH_FOCUSED.YEAR >= DATE_MAX.YEAR ) ) {
                                         return ''
                                     }
 
@@ -504,8 +490,10 @@
                                 // Create a reference to this calendar object
                                 calendarObject = this,
 
-                                // Create the collection of calendar items
-                                calendarItems = (function() {
+                                // Create the wrapped calendar
+                                // using the collection of calendar items
+                                // and creating a new table body
+                                calendarWrapped = (function() {
 
                                     var
                                         // First create a new calendar table body
@@ -519,23 +507,25 @@
                                     collection.push( create( 'table', [ tableHead, tableBody ], SETTINGS.class_calendar ) )
 
                                     // Return the collection
-                                    return collection
-                                })(), //calendarItems
-
-
-                                // Create a new calendar box
-                                // with the items collection
-                                calendarBoxString = create( STRING_DIV, calendarItems, SETTINGS.class_calendar_box ),
+                                    // wrapped in a calendar box
+                                    return create( STRING_DIV,
+                                        create( STRING_DIV,
+                                            collection,
+                                            SETTINGS.class_calendar_box
+                                        ),
+                                        SETTINGS.class_calendar_wrap
+                                    )
+                                })(), //calendarWrapped
 
 
                                 // Event to set the calendar as active
                                 onCalendarActive = function() {
-                                    P.calendar.setCalendarActive( true )
+                                    calendarObject.setCalendarActive( true )
                                 },
 
                                 // Event to set the calendar as inactive
                                 onCalendarInactive = function() {
-                                    P.calendar.setCalendarActive()
+                                    calendarObject.setCalendarActive()
                                 }
 
 
@@ -544,17 +534,18 @@
                             if ( P.$holder ) {
 
                                 // Just replace it with the calendar string
-                                P.$holder.html( calendarBoxString )
+                                P.$holder.html( calendarWrapped )
 
                                 // And then return
                                 return calendarObject
                             }
 
+
                             // Otherwise if there's no calendar holder
-                            // wrap the box with the holder and
+                            // wrap the calendar with the holder and
                             // create the jQuery object
                             // while binding delegated events
-                            P.$holder = $( create( STRING_DIV, calendarBoxString, SETTINGS.class_picker_holder ) ).on({
+                            P.$holder = $( create( STRING_DIV, calendarWrapped, SETTINGS.class_picker_holder ) ).on({
                                 click: P.onClickCalendar,
                                 mouseenter: onCalendarActive,
                                 mouseleave: onCalendarInactive
@@ -565,27 +556,24 @@
                             // while binding the events
                             P.$element.on({
 
-                                // Prevent user from keying a value
-                                keypress: function() { return false },
+                                mouseenter: onCalendarActive,
+                                mouseleave: onCalendarInactive,
 
                                 // On tab, close the calendar
                                 keydown: function( event ) {
                                     var keycode = ( event.keyCode ) ? event.keyCode : event.which
                                     if ( keycode === 9 ) {
-                                        P.calendar.close()
+                                        calendarObject.close()
                                     }
                                 },
 
                                 // On focus, open the calendar
-                                focusin: function() { P.calendar.open() },
-
-                                mouseenter: onCalendarActive,
-                                mouseleave: onCalendarInactive
+                                focusin: function() { calendarObject.open() }
 
                             }).after( P.$holder )
 
 
-                            // Create a random calendar id
+                            // Create a random calendar object id
                             calendarObject.id = Math.floor( Math.random()*1e9 )
 
 
@@ -614,7 +602,7 @@
                                     if ( calendarObject.isOpen && !calendarObject.isActive ) {
 
                                         // Close the calendar
-                                        P.calendar.close()
+                                        calendarObject.close()
                                     }
                                 }
 
@@ -630,7 +618,6 @@
 
                             // Add the "opened" class to the calendar holder
                             P.$holder.addClass( SETTINGS.class_picker_open )
-
 
                             // Bind the click event to the window
                             $window.on( 'click.P' + calendarObject.id, onClickWindow )
@@ -780,7 +767,7 @@
                                 monthAddOrSubtract = ( direction === STRING_PREV ) ? -1 : 1
 
                             // Set the month to show in focus
-                            P.setMonthFocused( MONTH_FOCUSED.YEAR, MONTH_FOCUSED.MONTH + monthAddOrSubtract, MONTH_FOCUSED.DATE )
+                            P.setMonthFocused( MONTH_FOCUSED.YEAR, MONTH_FOCUSED.MONTH + monthAddOrSubtract )
 
                             // Set the selected day
                             calendarObject.setCalendarDate()
@@ -811,22 +798,18 @@
 
                     return DATE_MIN || (DATE_MIN = (function( settingsDate ) {
 
-                        var dateMinimum
-
                         // Return false if there is no minimum date
                         if ( !settingsDate ) { return false }
 
-
-                        // If the date is not an array,
-                        // set the minimum date to today
-                        if ( !isArray( settingsDate ) ) {
-                            return P.getDateToday()
+                        // If the date is an array,
+                        // construct the date while fixing month index
+                        if ( isArray( settingsDate ) ) {
+                            return createDate([ settingsDate[ 0 ], settingsDate[ 1 ] - 1, settingsDate[ 2 ] ])
                         }
 
-
-                        // Otherwise construct the date while fixing month index
+                        // Otherwise set the minimum date to today
                         // and return the new calendar date
-                        return createDate([ settingsDate[ 0 ], settingsDate[ 1 ] - 1, settingsDate[ 2 ] ])
+                        return P.getDateToday()
                     })( SETTINGS.date_min ))
                 }, //getDateMin
 
@@ -842,20 +825,20 @@
                         // Return false if there is no maximum date
                         if ( !settingsDate ) { return false }
 
-                        // Check if a positive number was passed
-                        if ( !isNaN( settingsDate ) && settingsDate > 0 ) {
-
-                            // Create a calendar date while
-                            // setting the maximum date by adding the number
-                            return createDate([ dateToday.YEAR, dateToday.MONTH, dateToday.DATE + settingsDate ])
-                        }
-
                         // Check if an array was passed
                         if ( isArray( settingsDate ) ) {
 
                             // Create a calendar date while
                             // compensating for month index
                             return createDate([ settingsDate[ 0 ], settingsDate[ 1 ] - 1, settingsDate[ 2 ] ])
+                        }
+
+                        // Check if a positive number was passed
+                        if ( !isNaN( settingsDate ) && settingsDate > 0 ) {
+
+                            // Create a calendar date while
+                            // setting the maximum date by adding the number
+                            return createDate([ dateToday.YEAR, dateToday.MONTH, dateToday.DATE + settingsDate ])
                         }
 
                         // Return false for everything else
@@ -880,10 +863,12 @@
                  * Set the date that determines
                  * the month to show in focus
                  */
-                setMonthFocused: function( year, month, date ) {
+                setMonthFocused: function( year, month ) {
 
                     // Create and return the month focused
-                    return ( MONTH_FOCUSED = createDate([ year, month, date ]) )
+                    // * We set the date to first of month
+                    //   because date doesn't matter here
+                    return ( MONTH_FOCUSED = createDate([ year, month, 1 ]) )
                 }, //setMonthFocused
 
 
@@ -896,17 +881,12 @@
 
                     // If there's a date selected, return it
                     // otherwise figure out the date
-                    return DATE_SELECTED || (DATE_SELECTED = (function() {
+                    // while parsing it as a date
+                    return DATE_SELECTED || (DATE_SELECTED = (function( dateEntered ) {
 
-                        var
-                            // Try to parse the value from the input element
-                            dateEntered = Date.parse( P._element.value )
-
-
-                        // If there's no valid date in the input
+                        // If there's no valid date in the input,
+                        // get and return today's date
                         if ( isNaN( dateEntered ) ) {
-
-                            // Get and return today's date
                             return P.getDateToday()
                         }
 
@@ -914,7 +894,7 @@
                         // Otherwise, create and return a new date
                         // using the date entered
                         return createDate( dateEntered )
-                    })())
+                    })( Date.parse( P._element.value ) ))
                 }, //getDateSelected
 
 
@@ -965,17 +945,17 @@
                     var
                         // Get the column index for the
                         // day if month starts on 0
-                        tempColumnIndex = date % DAYS_IN_WEEK,
+                        dayColumnIndexAtZero = date % DAYS_IN_WEEK,
 
                         // Get the absolute difference
-                        absoluteDifference = Math.abs( dayIndex - tempColumnIndex )
+                        absoluteDifference = Math.abs( dayIndex - dayColumnIndexAtZero )
 
 
                     // Compare the day index if the
                     // month starts on the first day
                     // with the day index
                     // the date actually falls on
-                    return ( dayIndex >= tempColumnIndex ) ?
+                    return ( dayIndex >= dayColumnIndexAtZero ) ?
 
                         // If the actual position is greater
                         // shift by the difference in the two
@@ -1054,6 +1034,7 @@
                         // Get the target data
                         targetData = $target.data()
 
+
                     // If there's a date provided
                     if ( targetData.date ) {
 
@@ -1110,34 +1091,35 @@
         show_months_full: true,
         show_weekdays_short: true,
 
-        class_picker_open: STRING_PREFIX_DATEPICER + 'opened',
-        class_picker_holder: STRING_PREFIX_DATEPICER + 'holder',
+        class_picker_open: STRING_PREFIX_DATEPICKER + 'opened',
+        class_picker_holder: STRING_PREFIX_DATEPICKER + 'holder',
 
-        class_calendar_box: STRING_PREFIX_DATEPICER + 'calendar__box',
+        class_calendar_wrap: STRING_PREFIX_DATEPICKER + 'calendar__wrap',
+        class_calendar_box: STRING_PREFIX_DATEPICKER + 'calendar__box',
 
-        class_calendar: STRING_PREFIX_DATEPICER + 'calendar',
-        class_calendar_body: STRING_PREFIX_DATEPICER + 'calendar__body',
-        class_calendar_date: STRING_PREFIX_DATEPICER + 'calendar__date',
+        class_calendar: STRING_PREFIX_DATEPICKER + 'calendar',
+        class_calendar_body: STRING_PREFIX_DATEPICKER + 'calendar__body',
+        class_calendar_date: STRING_PREFIX_DATEPICKER + 'calendar__date',
 
-        class_year: STRING_PREFIX_DATEPICER + 'year',
+        class_year: STRING_PREFIX_DATEPICKER + 'year',
 
-        class_month: STRING_PREFIX_DATEPICER + 'month',
-        class_month_nav: STRING_PREFIX_DATEPICER + 'month__nav',
-        class_month_prev: STRING_PREFIX_DATEPICER + 'month__prev',
-        class_month_next: STRING_PREFIX_DATEPICER + 'month__next',
+        class_month: STRING_PREFIX_DATEPICKER + 'month',
+        class_month_nav: STRING_PREFIX_DATEPICKER + 'month__nav',
+        class_month_prev: STRING_PREFIX_DATEPICKER + 'month__prev',
+        class_month_next: STRING_PREFIX_DATEPICKER + 'month__next',
 
-        class_week: STRING_PREFIX_DATEPICER + 'week',
-        class_weekdays: STRING_PREFIX_DATEPICER + 'weekday',
+        class_week: STRING_PREFIX_DATEPICKER + 'week',
+        class_weekdays: STRING_PREFIX_DATEPICKER + 'weekday',
 
-        class_day_disabled: STRING_PREFIX_DATEPICER + 'day__disabled',
-        class_day_selected: STRING_PREFIX_DATEPICER + 'day__selected',
-        class_day_today: STRING_PREFIX_DATEPICER + 'day__today',
-        class_day_infocus: STRING_PREFIX_DATEPICER + 'day__infocus',
-        class_day_outfocus: STRING_PREFIX_DATEPICER + 'day__outfocus',
+        class_day_disabled: STRING_PREFIX_DATEPICKER + 'day__disabled',
+        class_day_selected: STRING_PREFIX_DATEPICKER + 'day__selected',
+        class_day_today: STRING_PREFIX_DATEPICKER + 'day__today',
+        class_day_infocus: STRING_PREFIX_DATEPICKER + 'day__infocus',
+        class_day_outfocus: STRING_PREFIX_DATEPICKER + 'day__outfocus',
 
-        class_box_months: STRING_PREFIX_DATEPICER + 'holder__months',
-        class_box_years: STRING_PREFIX_DATEPICER + 'holder__years',
-        class_box_weekdays: STRING_PREFIX_DATEPICER + 'holder__weekdays'
+        class_box_months: STRING_PREFIX_DATEPICKER + 'holder__months',
+        class_box_years: STRING_PREFIX_DATEPICKER + 'holder__years',
+        class_box_weekdays: STRING_PREFIX_DATEPICKER + 'holder__weekdays'
     } //DatePicker.defaults
 
 
