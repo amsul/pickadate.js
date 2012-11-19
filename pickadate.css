@@ -8,22 +8,10 @@
 
 .datepicker--calendar__wrap {
     position: relative;
-    border: 1px solid transparent;
     max-width: 320px;
     min-width: 256px;
-    background: #fff;
-    color: #000;
-    font-size: 18px;
     max-height: 0;
     overflow-y: hidden;
-
-    -webkit-border-radius: 6px;
-       -moz-border-radius: 6px;
-            border-radius: 6px;
-
-    -webkit-box-sizing: border-box;
-       -moz-box-sizing: border-box;
-            box-sizing: border-box;
 
     -webkit-transition: all .15s ease-out;
        -moz-transition: all .15s ease-out;
@@ -31,7 +19,6 @@
 }
 
 .datepicker--opened .datepicker--calendar__wrap {
-    border-color: #ccc;
     top: .5em;
     max-height: 25em;
 
@@ -41,7 +28,19 @@
 }
 
 .datepicker--calendar__box {
-    margin: 1em;
+    padding: 1em;
+    font-size: 18px;
+    color: #000;
+    background: #fff;
+    border: 1px solid #ccc;
+
+    -webkit-border-radius: 6px;
+       -moz-border-radius: 6px;
+            border-radius: 6px;
+
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
 }
 
 

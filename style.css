@@ -609,7 +609,7 @@ input[type=search] {
 .table th,
 .table td {
     vertical-align: top;
-    padding: 5px 10px;
+    padding: 10px;
     border-top: 1px solid #e2e2e2;
     border-right: 1px solid #e2e2e2;
 }

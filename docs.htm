@@ -12,7 +12,7 @@
     <h1><a href="http://amsul.github.com/pickadate.js" class="link-inherit"><strong title="Pick a Date" class="underline-highlight">pickadate.js</strong></a></h1>
     <h2>A lightweight jQuery dateinput picker</h2>
 
-    <h3>Weighs 6.8kb (2.7kb gzipped) <small class="dimmed"><small><small><small>&ndash; whereas jQuery UI datepicker is 42kb minified</small></small></small></small></h3>
+    <h3>Weighs 6.66kb (2.8kb gzipped) <small class="dimmed"><small><small><small>&ndash; whereas jQuery UI datepicker is 42kb minified</small></small></small></small></h3>
 
     <a href="https://github.com/amsul/pickadate.js"><img width="124" height="124" style="position:absolute;top:0;right:0;border:0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
 
@@ -32,13 +32,16 @@ weekdays_short: [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ],
 month_prev: '&amp;#9664;',
 month_next: '&amp;#9654;',
 
-<a href="#date_ranges">// Date ranges</a>
+<a href="#ranges">// Date ranges</a>
 date_min: true,
 date_max: false,
 
 <a href="#strings">// Display strings</a>
 show_months_full: true,
 show_weekdays_short: true,
+
+<a href="#formats">// Date format</a>
+format: 'd mmmm, yyyy',
 
 <a href="#theme">// Classes</a>
 class_picker_open: 'datepicker--opened',
@@ -95,7 +98,88 @@ class_box_weekdays: 'datepicker--holder__weekdays'</code></pre>
 </section>
 
 
-<section class="holder" id="date_ranges">
+<section class="holder" id="formats">
+
+    <fieldset>
+        <h3><strong class="underline-highlight">Custom date formats</strong></h3>
+        <input id="input_03" class="datepicker" type="text">
+    </fieldset>
+
+    <pre><code>$( '.datepicker' ).datepicker({
+    format: 'dddd, dd/mm/yyyy'
+})</code></pre>
+
+    <p>The date formats follow these rules:</p>
+
+    <table class="table" width="100%">
+        <thead>
+            <tr>
+                <th>Rule</th>
+                <th>Result</th>
+                <th>Example</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>d</code></td>
+                <td>Date</td>
+                <td>1-31</td>
+            </tr>
+            <tr>
+                <td><code>dd</code></td>
+                <td>Date with leading zero</td>
+                <td>01-31</td>
+            </tr>
+            <tr>
+                <td><code>ddd</code></td>
+                <td>Weekday &ndash; short</td>
+                <td>Sun-Sat</td>
+            </tr>
+            <tr>
+                <td><code>dddd</code></td>
+                <td>Weekday &ndash; full</td>
+                <td>Sunday-Saturday</td>
+            </tr>
+            <tr>
+                <td><code>m</code></td>
+                <td>Month</td>
+                <td>1-12</td>
+            </tr>
+            <tr>
+                <td><code>mm</code></td>
+                <td>Month with leading zero</td>
+                <td>01-12</td>
+            </tr>
+            <tr>
+                <td><code>mmm</code></td>
+                <td>Month name &ndash; short</td>
+                <td>Jan-Dec</td>
+            </tr>
+            <tr>
+                <td><code>mmmm</code></td>
+                <td>Month name &ndash; full</td>
+                <td>January-December</td>
+            </tr>
+            <tr>
+                <td><code>yy</code></td>
+                <td>Year &ndash; short</td>
+                <td>00-99</td>
+            </tr>
+            <tr>
+                <td><code>yyyy</code></td>
+                <td>Year &ndash; full</td>
+                <td>2000-2999</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>To escape any letter, just add an <code>!</code> right before the letter. Example:</p>
+    <p><code>'You selecte!d: dd-mm-yyyy'</code></p>
+
+</section>
+
+
+<section class="holder" id="ranges">
 
     <fieldset>
         <h3><strong class="underline-highlight">Minimum and maximum date range</strong></h3>
@@ -191,7 +275,7 @@ class_box_weekdays: 'datepicker--holder__weekdays'</code></pre>
     <fieldset class="datepicker-themed">
         <h3><strong class="underline-highlight">Themed calendar</strong></h3>
         <p>Go crazy.</p>
-        <input id="input_03" class="datepicker" type="text">
+        <input id="input_05" class="datepicker" type="text">
     </fieldset>
 
     <pre><code>.datepicker-themed {
@@ -275,12 +359,16 @@ class_box_weekdays: 'datepicker--holder__weekdays'</code></pre>
         show_months_full: false
     })
 
-    $( '#input_03' ).datepicker()
+    $( '#input_03' ).datepicker({
+        format: 'dddd, dd/mm/yyyy'
+    })
 
     $( '#input_04' ).datepicker({
         date_min: false,
         date_max: 5
     })
+
+    $( '#input_05' ).datepicker()
 
 </script>
 <script type="text/javascript">
