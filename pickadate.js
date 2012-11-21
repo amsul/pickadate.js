@@ -1,5 +1,5 @@
 /*!
- * datepicker.js v1.0.5 - 21 November, 2012
+ * pickadate.js v1.0.8 - 21 November, 2012
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  */
@@ -8,6 +8,7 @@
  * TODO: month & year dropdown selectors
  * TODO: add methods onSelectDate, onMonthChange, onOpenCalendar, onCloseCalendar
  * TODO: alternate value sent to server
+ * TODO: scroll calendar into view
  */
 
 /*jshint
@@ -28,7 +29,6 @@
     var
 
         // Globals & constants
-        SECONDS_IN_DAY = 86400000,
         DAYS_IN_WEEK = 7,
         WEEKS_IN_CALENDAR = 6,
         DAYS_IN_CALENDAR = WEEKS_IN_CALENDAR * DAYS_IN_WEEK,
@@ -43,7 +43,6 @@
         STRING_PREFIX_DATEPICKER = 'datepicker--',
 
         NAMESPACED_CLICK = 'click.P',
-        NAMESPACED_WIDGET = 'widgets.datepicker',
 
         $window = $( window ),
 
@@ -88,33 +87,7 @@
             if ( isArray( datePassed ) ) {
 
                 // Create the new date
-                newDate = (function( year, monthId, date ) {
-
-                    // Figure out the month
-                    var month = (function() {
-
-                        // If the month is more than
-                        // December, increase the year
-                        // and make it January
-                        if ( monthId > 11 ) {
-                            year += 1
-                            return 0
-                        }
-
-                        // If the month is less than
-                        // January, decrease the year
-                        // and make it December
-                        if ( monthId < 0 ) {
-                            year -= 1
-                            return 11
-                        }
-
-                        // Otherwise just return it
-                        return monthId
-                    })()
-
-                    return new Date( year, month, date )
-                })( datePassed[ 0 ], datePassed[ 1 ], datePassed[ 2 ] )
+                newDate = new Date( datePassed[ 0 ], datePassed[ 1 ], datePassed[ 2 ] )
             }
 
 
@@ -271,10 +244,21 @@
                         tableHead = (function() {
 
                             var
+                                sunday,
                                 wrappedTableHead = function( weekday ) {
                                     return create( 'th', weekday, SETTINGS.class_weekdays )
                                 },
                                 weekdaysCollection = ( SETTINGS.show_weekdays_short ) ? SETTINGS.weekdays_short : SETTINGS.weekdays_full
+
+                            // If the first day should be Monday
+                            if ( SETTINGS.first_day ) {
+
+                                // Grab Sunday
+                                sunday = weekdaysCollection.shift()
+
+                                // Push it to the end of the collection
+                                weekdaysCollection.push( sunday )
+                            }
 
                             // Go through each day of the week
                             // and return a wrapped header row.
@@ -545,6 +529,13 @@
                                 absoluteDifference = Math.abs( dayIndex - dayColumnIndexAtZero )
 
 
+                            // If the first day should be Monday,
+                            // reduce the absolute difference by 1
+                            if ( SETTINGS.first_day ) {
+                                absoluteDifference -= 1
+                            }
+
+
                             // Compare the day index if the
                             // month starts on the first day
                             // with the day index
@@ -771,9 +762,8 @@
 
                         // Check if the format exists and
                         // invoke the function to get the value
-                        // or replace any leading "!" to escape
-                        // the characters
-                        return ( formats[ value ] ) ? formats[ value ]() : value.replace( /^!/, '' )
+                        // otherwise just return value itself
+                        return ( formats[ value ] ) ? formats[ value ]() : value
                     }).join( '' )
                 }, //getDateFormatted
 
@@ -905,8 +895,8 @@
                         // Close the calendar
                         P.calendar.close()
 
-                        // Broadcast changes
-                        P.$element.trigger("change")
+                        // Broadcast the change event
+                        P.$element.trigger( 'change' )
                     }
 
                     return P
@@ -999,7 +989,7 @@
                     yyyy: function() { return DATE_SELECTED.YEAR },
 
                     // Create an array by splitting the format in the settings
-                    toArray: function() { return SETTINGS.format.split( /(d{1,4}|m{1,4}|y{4}|yy|!.)/g ) }
+                    toArray: function() { return SETTINGS.format.split( /(?=\b)(d{1,4}|m{1,4}|y{4}|yy)+(\b)/g ) }
                 } //dateFormats
 
 
@@ -1029,18 +1019,21 @@
         month_next: '&#9654;',
 
         // Date limits
-        date_min: true,
+        date_min: false,
         date_max: false,
 
-        // Display strings
+        // Display strings on the calendar
         show_months_full: true,
         show_weekdays_short: true,
 
-        // Date format
+        // Date format to show on the input element
         format: 'd mmmm, yyyy',
 
-        // Disable for browsers with support
+        // Disable for browsers with native date support
         disable_picker: false,
+
+        // First day of the week: 0 = Sunday, 1 = Monday
+        first_day: 0,
 
         class_input_focus: STRING_PREFIX_DATEPICKER + 'input__focused',
 
@@ -1080,11 +1073,12 @@
     /**
      * Extend jQuery
      */
-    $.fn.datepicker = function( options ) {
+    $.fn.pickadate = function( options ) {
+        var namespacedWidget = 'widgets.pickadate'
         return this.each(function() {
             var $this = $( this )
-            if ( !$this.data( NAMESPACED_WIDGET ) ) {
-                $this.data( NAMESPACED_WIDGET, new DatePicker( $this, options ) )
+            if ( !$this.data( namespacedWidget ) ) {
+                $this.data( namespacedWidget, new DatePicker( $this, options ) )
             }
             return this
         })

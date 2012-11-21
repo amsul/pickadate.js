@@ -12,7 +12,7 @@
     <h1><strong title="Pick a Date" class="underline-highlight">pickadate.js</strong></h1>
     <h2>A lightweight jQuery dateinput picker <small>(<a title="Documentation" href="docs.htm">read the docs</a>)</small></h2>
 
-    <h3>Weighs 6.7kb (2.7kb gzipped) <small class="dimmed"><small><small><small>&ndash; whereas jQuery UI datepicker is 30kb minified</small></small></small></small></h3>
+    <h3>Weighs 6.67kb (2.7kb gzipped) <small class="dimmed"><small><small><small>&ndash; whereas jQuery UI datepicker is 30kb minified</small></small></small></small></h3>
 
     <a href="https://github.com/amsul/pickadate.js"><img width="124" height="124" style="position:absolute;top:0;right:0;border:0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
 
@@ -21,7 +21,7 @@
         <input id="input_01" class="datepicker" type="text">
     </fieldset>
 
-    <p>Bind it like this: <code>$( '.datepicker' ).datepicker()</code></p>
+    <p>As easy as: <code>$( '.datepicker' ).pickadate()</code></p>
 
 </section>
 
@@ -105,39 +105,7 @@
 <script src="pickadate.js"></script>
 
 <script type="text/javascript">
-    $( '#input_02' ).datepicker({
-        date_min: false,
-        date_max: [ 2012, 12, 14 ]
-    })
-    $( '#input_03' ).datepicker({
-        date_min: [ 2012, 10, 25 ],
-        date_max: 5
-    })
-    $( '#input_04' ).datepicker({
-        date_min: [ 2012, 12, 25 ],
-        date_max: [ 2012, 12, 25 ]
-    })
-    $( '#input_05' ).datepicker({
-        date_min: false,
-        date_max: [ 2013, 1, 20 ]
-    })
-    $( '#input_06' ).datepicker({
-        date_min: [ 2012, 12, 25 ],
-        date_max: [ 2013, 2, 14 ]
-    })
-    $( '#input_07' ).datepicker({
-        date_min: [ 2016, 2, 1 ],
-        date_max: [ 2016, 3, 31 ]
-    })
-    $( '#input_08' ).datepicker({
-        date_min: [ 2013, 2, 1 ],
-        date_max: [ 2013, 5, 20 ]
-    })
-    $( '#input_09' ).datepicker({
-        date_min: false
-    })
-
-    $( '[type=date], .datepicker' ).datepicker()
+    $( '[type=date], .datepicker' ).pickadate()
 </script>
 <script type="text/javascript">
 
