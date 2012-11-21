@@ -92,6 +92,11 @@
 .datepicker--month__next {
     position: absolute;
     top: 0;
+    padding: .5em;
+    margin: -.5em;
+    width: 16px;
+    height: 24px;
+    line-height: 28px;
 }
 
 .datepicker--month__prev {
