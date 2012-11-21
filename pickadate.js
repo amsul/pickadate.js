@@ -9,6 +9,8 @@
  * TODO: add methods onSelectDate, onMonthChange, onOpenCalendar, onCloseCalendar
  * TODO: alternate value sent to server
  *
+ * change position of "toArray"
+ *
  * FIX: ipad bug due to lack of mouse events
  */
 
@@ -768,7 +770,7 @@
                  * Get selected date in the
                  * correct format
                  */
-                getFormattedDate: function() {
+                getDateFormatted: function() {
 
                     var formats = P.dateFormats
 
@@ -779,11 +781,11 @@
 
                         // Check if the format exists and
                         // invoke the function to get the value
-                        // or replace any leading "/" to escape
+                        // or replace any leading "!" to escape
                         // the characters
                         return ( formats[ value ] ) ? formats[ value ]() : value.replace( /^!/, '' )
                     }).join( '' )
-                }, //getFormattedDate
+                }, //getDateFormatted
 
 
                 /**
@@ -830,12 +832,13 @@
 
                     // If there's a date selected, return it
                     // otherwise figure out the date
-                    // while parsing it as a date
                     return DATE_SELECTED || ( DATE_SELECTED = (function( dateEntered ) {
 
                         // If there's no valid date in the input,
                         // get and return today's date
                         if ( isNaN( dateEntered ) ) {
+
+                            console.log( dateEntered, P._element.value )
                             return DATE_TODAY
                         }
 
@@ -913,7 +916,7 @@
                     if ( $dayTargeted ) {
 
                         // Set the element value as the formatted date
-                        P._element.value = P.getFormattedDate()
+                        P._element.value = P.getDateFormatted()
 
                         // Close the calendar
                         P.calendar.close()
@@ -997,8 +1000,8 @@
                     dd: function() { return leadZero( DATE_SELECTED.DATE ) },
                     ddd: function() { return SETTINGS.weekdays_short[ DATE_SELECTED.DAY ] },
                     dddd: function() { return SETTINGS.weekdays_full[ DATE_SELECTED.DAY ] },
-                    m: function() { return DATE_SELECTED.MONTH },
-                    mm: function() { return leadZero( DATE_SELECTED.MONTH ) },
+                    m: function() { return DATE_SELECTED.MONTH + 1 },
+                    mm: function() { return leadZero( DATE_SELECTED.MONTH + 1 ) },
                     mmm: function() { return SETTINGS.months_short[ DATE_SELECTED.MONTH ] },
                     mmmm: function() { return SETTINGS.months_full[ DATE_SELECTED.MONTH ] },
                     yy: function() { return DATE_SELECTED.YEAR.toString().substr( 2,2 ) },
