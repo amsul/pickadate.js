@@ -778,7 +778,7 @@
                     // Go through the date formats array
                     // and return the appropriate values.
                     // At the end, return the joined array
-                    return formats.toArray(format).map( function( value ) {
+                    return formats.toArray( format ).map( function( value ) {
 
                         // Check if the format exists and
                         // invoke the function to get the value
