@@ -1,5 +1,5 @@
 /*!
- * datepicker.js v1.0.3 - 20 November, 2012
+ * datepicker.js v1.0.5 - 21 November, 2012
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  */
@@ -8,8 +8,6 @@
  * TODO: month & year dropdown selectors
  * TODO: add methods onSelectDate, onMonthChange, onOpenCalendar, onCloseCalendar
  * TODO: alternate value sent to server
- *
- * FIX: ipad bug due to lack of mouse events
  */
 
 /*jshint
@@ -45,6 +43,7 @@
         STRING_PREFIX_DATEPICKER = 'datepicker--',
 
         NAMESPACED_CLICK = 'click.P',
+        NAMESPACED_WIDGET = 'widgets.datepicker',
 
         $window = $( window ),
 
@@ -201,7 +200,7 @@
 
 
                 /**
-                 * Initialize the options
+                 * Initialize the picker
                  */
                 init: function( $element, options ) {
 
@@ -577,16 +576,6 @@
                                 // Create a reference to this calendar object
                                 calendarObject = this,
 
-                                // Event to set the calendar as active
-                                onCalendarActive = function() {
-                                    calendarObject.active = true
-                                },
-
-                                // Event to set the calendar as inactive
-                                onCalendarInactive = function() {
-                                    calendarObject.active = false
-                                },
-
                                 // Create the wrapped calendar
                                 // using the collection of calendar items
                                 // and creating a new table body
@@ -632,9 +621,7 @@
                             // create the jQuery object
                             // while binding delegated events
                             P.$holder = $( create( STRING_DIV, calendarWrapped, SETTINGS.class_picker_holder ) ).on({
-                                click: P.onClickCalendar,
-                                mouseenter: onCalendarActive,
-                                mouseleave: onCalendarInactive
+                                click: P.onClickCalendar
                             })
 
 
@@ -642,13 +629,9 @@
                             // while binding the events
                             P.$element.on({
 
-                                mouseenter: onCalendarActive,
-                                mouseleave: onCalendarInactive,
-
                                 // On tab, close the calendar
                                 keydown: function( event ) {
-                                    var keycode = ( event.keyCode ) ? event.keyCode : event.which
-                                    if ( keycode === 9 ) {
+                                    if ( event.keyCode === 9 ) {
                                         calendarObject.close()
                                     }
                                 },
@@ -677,15 +660,15 @@
                                 // Create a reference to this calendar object
                                 calendarObject = this,
 
-
                                 /**
-                                 * Check if the click position asks
-                                 * for the calendar to be closed
+                                 * Check if the click position requires
+                                 * the calendar to be closed
                                  */
-                                onClickWindow = function() {
+                                onClickWindow = function( event ) {
 
-                                    // If the calendar is opened and it's not active
-                                    if ( calendarObject.isOpen && !calendarObject.active ) {
+                                    // If the calendar is opened
+                                    // and the target is not the element
+                                    if ( calendarObject.isOpen && P._element !== event.target ) {
 
                                         // Close the calendar
                                         calendarObject.close()
@@ -703,7 +686,7 @@
                             calendarObject.isOpen = true
 
                             // Add the "opened" class to the element
-                            P.$element.addClass( SETTINGS.class_input_open )
+                            P.$element.addClass( SETTINGS.class_input_focus )
 
                             // Add the "opened" class to the calendar holder
                             P.$holder.addClass( SETTINGS.class_picker_open )
@@ -729,7 +712,7 @@
                             calendarObject.isOpen = false
 
                             // Remove the "opened" class from the element
-                            P.$element.removeClass( SETTINGS.class_input_open )
+                            P.$element.removeClass( SETTINGS.class_input_focus )
 
                             // Remove the "opened" class from the calendar holder
                             P.$holder.removeClass( SETTINGS.class_picker_open )
@@ -887,12 +870,6 @@
                     }
 
 
-                    // If there's no change in time, just return it
-                    if ( dateTargeted.TIME === DATE_SELECTED.TIME ) {
-                        return P
-                    }
-
-
                     // Set the target as the newly selected date
                     DATE_SELECTED = dateTargeted
 
@@ -972,6 +949,10 @@
 
                         // Get the target data
                         targetData = $target.data()
+
+
+                    // Stop the event from bubbling up to the window
+                    event.stopPropagation()
 
 
                     // If there's a date provided
@@ -1058,7 +1039,7 @@
         // Disable for browsers with support
         disable_picker: false,
 
-        class_input_open: STRING_PREFIX_DATEPICKER + 'input__opened',
+        class_input_focus: STRING_PREFIX_DATEPICKER + 'input__focused',
 
         class_picker_open: STRING_PREFIX_DATEPICKER + 'opened',
         class_picker_holder: STRING_PREFIX_DATEPICKER + 'holder',
@@ -1099,8 +1080,8 @@
     $.fn.datepicker = function( options ) {
         return this.each(function() {
             var $this = $( this )
-            if ( !$this.data( 'widgets.datepicker' ) ) {
-                $this.data( 'widgets.datepicker', new DatePicker( $this, options ) )
+            if ( !$this.data( NAMESPACED_WIDGET ) ) {
+                $this.data( NAMESPACED_WIDGET, new DatePicker( $this, options ) )
             }
             return this
         })
