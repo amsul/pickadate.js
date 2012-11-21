@@ -644,14 +644,14 @@
                             }).after( P.$holder )
 
 
-                            // Bind a submit event to the element's parent form (if it exists)
-                            // format the element's value to format_submit before submitting
-                            $(parentForm).on({
-                                submit: function() {
-                                    P._element.value = P.getDateFormatted( SETTINGS.format_submit )
-                                }
-                            })
-
+                            // If format_submit is not false, bind a submit event
+                            // to the element's parent form to format the element's
+                            // value to format_submit before submitting
+                            if (SETTINGS.format_submit) {
+                                $(parentForm).on({
+                                    submit: function() { P._element.value = P.getDateFormatted( SETTINGS.format_submit ) }
+                                })
+                            }
 
                             // Create a random calendar object id
                             calendarObject.id = Math.floor( Math.random()*1e9 )
