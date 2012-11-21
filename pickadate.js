@@ -1,5 +1,5 @@
 /*!
- * datepicker.js v1.0.2 - 20 November, 2012
+ * datepicker.js v1.0.3 - 20 November, 2012
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  */
@@ -210,6 +210,13 @@
                     // Ensure an input element was passed
                     if ( element.nodeName !== 'INPUT' ) return false
 
+                    // Merge the settings
+                    SETTINGS = $.extend( {}, DatePicker.defaults, options )
+
+                    // Check if it should be disabled
+                    // for browsers that support `type=date`
+                    if ( SETTINGS.disable_picker ) return false
+
                     // Store the element
                     P.$element = $element
                     P._element = element
@@ -220,10 +227,6 @@
 
                     // Set the element as readonly
                     element.readOnly = true
-
-
-                    // Merge the settings
-                    SETTINGS = $.extend( {}, DatePicker.defaults, options )
 
                     // Get the date today
                     DATE_TODAY = P.getDateToday()
@@ -1051,6 +1054,9 @@
 
         // Date format
         format: 'd mmmm, yyyy',
+
+        // Disable for browsers with support
+        disable_picker: false,
 
         class_input_open: STRING_PREFIX_DATEPICKER + 'input__opened',
 

@@ -43,6 +43,9 @@ show_weekdays_short: true,
 <a href="#formats">// Date format</a>
 format: 'd mmmm, yyyy',
 
+<a href="#disable">// Disable picker</a>
+disable_picker: false,
+
 <a href="#theme">// Classes</a>
 class_picker_open: 'datepicker--opened',
 class_picker_holder: 'datepicker--holder',
@@ -179,11 +182,29 @@ class_box_weekdays: 'datepicker--holder__weekdays'</code></pre>
 </section>
 
 
+<section class="holder" id="disable">
+
+    <fieldset>
+        <h3><strong class="underline-highlight">Disable picker for native calendar</strong></h3>
+        <input id="input_04" class="datepicker" type="date">
+    </fieldset>
+
+    <pre><code>$( '.datepicker' ).datepicker({
+    disable_picker: true
+})
+</code></pre>
+
+    <p>Some browsers have good native support for <code>type="date"</code>.</p>
+    <p>If you want to selectively disable the picker for these browsers, I would suggest detecing for support with something like <a target="_blank" href="http://modernizr.com/">Modernizr</a> and then setting <code>disable_picker</code> to <code>true</code>.</p>
+
+</section>
+
+
 <section class="holder" id="ranges">
 
     <fieldset>
         <h3><strong class="underline-highlight">Minimum and maximum date range</strong></h3>
-        <input id="input_04" class="datepicker" type="text">
+        <input id="input_05" class="datepicker" type="text">
     </fieldset>
 
     <pre><code>$( '.datepicker' ).datepicker({
@@ -275,7 +296,7 @@ class_box_weekdays: 'datepicker--holder__weekdays'</code></pre>
     <fieldset class="datepicker-themed">
         <h3><strong class="underline-highlight">Themed calendar</strong></h3>
         <p>Go crazy.</p>
-        <input id="input_05" class="datepicker" type="text">
+        <input id="input_06" class="datepicker" type="text">
     </fieldset>
 
     <pre><code>.datepicker-themed {
@@ -364,11 +385,15 @@ class_box_weekdays: 'datepicker--holder__weekdays'</code></pre>
     })
 
     $( '#input_04' ).datepicker({
+        disable_picker: true
+    })
+
+    $( '#input_05' ).datepicker({
         date_min: false,
         date_max: 5
     })
 
-    $( '#input_05' ).datepicker()
+    $( '#input_06' ).datepicker()
 
 </script>
 <script type="text/javascript">
