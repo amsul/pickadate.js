@@ -3,8 +3,9 @@
 
 A lightweight jQuery dateinput picker
 
-
+```
 $( 'input[type=date]' ).pickadate()
+```
 
 
 Demo: <http://amsul.github.com/pickadate.js>
