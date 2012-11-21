@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v1.0.8 - 21 November, 2012
+ * pickadate.js v1.1.0 - 21 November, 2012
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  */
@@ -7,7 +7,6 @@
 /**
  * TODO: month & year dropdown selectors
  * TODO: add methods onSelectDate, onMonthChange, onOpenCalendar, onCloseCalendar
- * TODO: alternate value sent to server
  * TODO: scroll calendar into view
  */
 
@@ -236,6 +235,26 @@
                 createCalendar: function() {
 
                     var
+
+                        /**
+                         * The hidden input value to keep
+                         * the value to send use on the server-side
+                         */
+                        hiddenInput = (function( formatSubmit ) {
+
+                            // Check if there's a format for submit value.
+                            // Otherwise return null
+                            return ( formatSubmit ) ? (
+
+                                // Create the hidden input value using
+                                // the name of the original input with a suffix.
+                                // And then update the value with whatever
+                                // is entered in the input on load
+                                P._hidden = $( '<input type=hidden name=' + P._element.name + '_submit>' ).
+                                    val( ( P._element.value ) ? P.getDateFormatted( formatSubmit ) : '' )[ 0 ]
+                            ) : null
+                        })( SETTINGS.format_submit ),
+
 
                         /**
                          * Create the calendar table head
@@ -626,7 +645,7 @@
                                 // On focus, open the calendar
                                 focusin: function() { calendarObject.open() }
 
-                            }).after( P.$holder )
+                            }).after( [ P.$holder, hiddenInput ] )
 
 
                             // Create a random calendar object id
@@ -747,14 +766,13 @@
                  * Get selected date in the
                  * correct format
                  */
-                getDateFormatted: function() {
+                getDateFormatted: function( format ) {
 
                     var formats = P.dateFormats
 
-                    // Go through the date formats array
-                    // and return the appropriate values.
-                    // At the end, return the joined array
-                    return formats.toArray().map( function( value ) {
+                    // Go through the date formats array and
+                    // convert the format passed into an array to map
+                    return formats.toArray( format || SETTINGS.format ).map( function( value ) {
 
                         // Check if the format exists and
                         // invoke the function to get the value
@@ -888,6 +906,13 @@
                         // Set the element value as the formatted date
                         P._element.value = P.getDateFormatted()
 
+                        // If there's a hidden input
+                        if ( P._hidden ) {
+
+                            // Set the hidden value using the submit format
+                            P._hidden.value = P.getDateFormatted( SETTINGS.format_submit )
+                        }
+
                         // Close the calendar
                         P.calendar.close()
 
@@ -981,11 +1006,11 @@
                     mm: function() { return leadZero( DATE_SELECTED.MONTH + 1 ) },
                     mmm: function() { return SETTINGS.months_short[ DATE_SELECTED.MONTH ] },
                     mmmm: function() { return SETTINGS.months_full[ DATE_SELECTED.MONTH ] },
-                    yy: function() { return DATE_SELECTED.YEAR.toString().substr( 2,2 ) },
+                    yy: function() { return DATE_SELECTED.YEAR.toString().substr( 2, 2 ) },
                     yyyy: function() { return DATE_SELECTED.YEAR },
 
-                    // Create an array by splitting the format in the settings
-                    toArray: function() { return SETTINGS.format.split( /(?=\b)(d{1,4}|m{1,4}|y{4}|yy)+(\b)/g ) }
+                    // Create an array by splitting the format passed
+                    toArray: function( format ) { return format.split( /(?=\b)(d{1,4}|m{1,4}|y{4}|yy)+(\b)/g ) }
                 }, //dateFormats
 
 
@@ -1013,6 +1038,9 @@
 
                     // Date format to show on the input element
                     format: 'd mmmm, yyyy',
+
+                    // Date format to send to the server
+                    format_submit: false,
 
                     // Disable for browsers with native date support
                     disable_picker: false,

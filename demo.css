@@ -84,6 +84,11 @@ input.datepicker--input__focused {
 
 
 
+.notification {
+    background: #edffed;
+    padding: .6em 1em;
+    border: 1px solid #cddfcd;
+}
 
 
 

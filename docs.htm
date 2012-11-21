@@ -41,7 +41,8 @@ show_months_full: true,
 show_weekdays_short: true,
 
 <a href="#formats">// Date format</a>
-format: 'd mmmm, yyyy',
+format: 'd mmmm, yyyy',,
+format_submit: false,
 
 <a href="#disable">// Disable picker</a>
 disable_picker: false,
@@ -109,12 +110,17 @@ class_box_weekdays: 'datepicker--holder__weekdays'</code></pre>
 
     <fieldset>
         <h3><strong class="underline-highlight">Custom date formats</strong></h3>
-        <input id="input_03" class="datepicker" type="text">
+        <input id="input_03" class="datepicker" name="custom_date" type="text">
     </fieldset>
 
     <pre><code>$( '.datepicker' ).pickadate({
-    format: 'You selected: dddd, dd/mm/yyyy'
+    format: 'You selected: dddd, dd/mm/yyyy',
+    format_submit: 'yyyy-mm-dd'
 })</code></pre>
+
+    <p>You can use <code>format_submit</code> to submit an alternate value to the server.</p>
+
+    <p>This is done by creating a hidden input field using the name of the original input plus the suffix <code>_submit</code>.</p>
 
     <p>The date formats follow these rules:</p>
 
@@ -396,8 +402,13 @@ class_box_weekdays: 'datepicker--holder__weekdays'</code></pre>
         show_months_full: false
     })
 
-    $( '#input_03' ).pickadate({
-        format: 'You selected: dddd, dd/mm/yyyy'
+    var $custom_date = $( '#input_03' ).pickadate({
+        format: 'You selected: dddd, dd/mm/yyyy',
+        format_submit: 'yyyy-mm-dd'
+    }).on({
+        change: function() {
+            $custom_date.after( '<p class="notification">Value to submit: <code>' + $custom_date.data( 'widgets.pickadate' )._hidden.value + '</code></p>' )
+        }
     })
 
     $( '#input_04' ).pickadate({
