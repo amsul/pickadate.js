@@ -50,6 +50,10 @@ input.datepicker--input__focused {
     border-color: #0089ec;
 }
 
+input[type=submit] {
+    margin-top: 1em;
+    padding: 8px 20px;
+}
 
 
 

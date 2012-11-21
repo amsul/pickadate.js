@@ -40,8 +40,11 @@ date_max: false,
 show_months_full: true,
 show_weekdays_short: true,
 
-<a href="#formats">// Date format</a>
+<a href="#formats">// Displayed date format</a>
 format: 'd mmmm, yyyy',
+
+<a href="#submitted-formats">// Submitted date format</a>
+format_submit: 'yyyy-mm-dd',
 
 <a href="#disable">// Disable picker</a>
 disable_picker: false,
@@ -182,12 +185,32 @@ class_box_weekdays: 'datepicker--holder__weekdays'</code></pre>
 
 </section>
 
+<section class="holder" id="submitted-formats">
+
+    <form method="get" accept-charset="utf-8">
+        <fieldset>
+            <h3><strong class="underline-highlight">Custom submitted date formats</strong></h3>
+            <input id="input_04" name="date" class="datepicker" type="text">
+            <input type="submit" value="Submit">
+        </fieldset>
+    </form>
+
+    <pre><code>$( '.datepicker' ).datepicker({
+    format_submit: 'dd-mm-yyyy'
+})</code></pre>
+
+    <p>By default, the date picker will submit dates to the server in the format <code>yyyy-mm-dd</code> regardless of the format displayed to the user, as per <a href="http://dev.w3.org/html5/spec/forms.html#input-author-notes" title="4.10.1.5 Date, time, and number formats">the W3C's notes on date formats</a>.</p>
+
+    <p>You can override the submitted format by setting <code>format_submit</code> to a string, following the <a href="#formats">same format rules as above</a>. You can also disable on-submit reformatting entirely by setting <code>format_submit</code> to <code>false</code>. In this case, the value submitted to the server will match the displayed format.</p>
+
+</section>
+
 
 <section class="holder" id="disable">
 
     <fieldset>
         <h3><strong class="underline-highlight">Disable picker for native calendar</strong></h3>
-        <input id="input_04" class="datepicker" type="date">
+        <input id="input_05" class="datepicker" type="date">
     </fieldset>
 
     <pre><code>$( '.datepicker' ).datepicker({
@@ -205,7 +228,7 @@ class_box_weekdays: 'datepicker--holder__weekdays'</code></pre>
 
     <fieldset>
         <h3><strong class="underline-highlight">Minimum and maximum date range</strong></h3>
-        <input id="input_05" class="datepicker" type="text">
+        <input id="input_06" class="datepicker" type="text">
     </fieldset>
 
     <pre><code>$( '.datepicker' ).datepicker({
@@ -297,7 +320,7 @@ class_box_weekdays: 'datepicker--holder__weekdays'</code></pre>
     <fieldset class="datepicker-themed">
         <h3><strong class="underline-highlight">Themed calendar</strong></h3>
         <p>Go crazy.</p>
-        <input id="input_06" class="datepicker" type="text">
+        <input id="input_07" class="datepicker" type="text">
     </fieldset>
 
     <pre><code>.datepicker-themed {
@@ -386,15 +409,19 @@ class_box_weekdays: 'datepicker--holder__weekdays'</code></pre>
     })
 
     $( '#input_04' ).datepicker({
-        disable_picker: true
+        format_submit: 'dd-mm-yyyy'
     })
 
     $( '#input_05' ).datepicker({
+        disable_picker: true
+    })
+
+    $( '#input_06' ).datepicker({
         date_min: false,
         date_max: 5
     })
 
-    $( '#input_06' ).datepicker()
+    $( '#input_07' ).datepicker()
 
 </script>
 <script type="text/javascript">
