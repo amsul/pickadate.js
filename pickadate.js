@@ -183,7 +183,7 @@
                     if ( element.nodeName !== 'INPUT' ) return false
 
                     // Merge the settings
-                    SETTINGS = $.extend( {}, DatePicker.defaults, options )
+                    SETTINGS = $.extend( {}, P.defaults, options )
 
                     // Check if it should be disabled
                     // for browsers that support `type=date`
@@ -244,7 +244,6 @@
                         tableHead = (function() {
 
                             var
-                                sunday,
                                 wrappedTableHead = function( weekday ) {
                                     return create( 'th', weekday, SETTINGS.class_weekdays )
                                 },
@@ -253,11 +252,8 @@
                             // If the first day should be Monday
                             if ( SETTINGS.first_day ) {
 
-                                // Grab Sunday
-                                sunday = weekdaysCollection.shift()
-
-                                // Push it to the end of the collection
-                                weekdaysCollection.push( sunday )
+                                // Grab Sunday and push it to the end of the collection
+                                weekdaysCollection.push( weekdaysCollection.splice( 0, 1 )[ 0 ] )
                             }
 
                             // Go through each day of the week
@@ -990,7 +986,72 @@
 
                     // Create an array by splitting the format in the settings
                     toArray: function() { return SETTINGS.format.split( /(?=\b)(d{1,4}|m{1,4}|y{4}|yy)+(\b)/g ) }
-                } //dateFormats
+                }, //dateFormats
+
+
+                /**
+                 * Default options for the picker
+                 */
+                defaults: {
+
+                    months_full: [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ],
+                    months_short: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
+
+                    weekdays_full: [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ],
+                    weekdays_short: [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ],
+
+                    month_prev: '&#9664;',
+                    month_next: '&#9654;',
+
+                    // Date limits
+                    date_min: false,
+                    date_max: false,
+
+                    // Display strings on the calendar
+                    show_months_full: true,
+                    show_weekdays_short: true,
+
+                    // Date format to show on the input element
+                    format: 'd mmmm, yyyy',
+
+                    // Disable for browsers with native date support
+                    disable_picker: false,
+
+                    // First day of the week: 0 = Sunday, 1 = Monday
+                    first_day: 0,
+
+                    class_input_focus: STRING_PREFIX_DATEPICKER + 'input__focused',
+
+                    class_picker_open: STRING_PREFIX_DATEPICKER + 'opened',
+                    class_picker_holder: STRING_PREFIX_DATEPICKER + 'holder',
+
+                    class_calendar_wrap: STRING_PREFIX_DATEPICKER + 'calendar__wrap',
+                    class_calendar_box: STRING_PREFIX_DATEPICKER + 'calendar__box',
+
+                    class_calendar: STRING_PREFIX_DATEPICKER + 'calendar',
+                    class_calendar_body: STRING_PREFIX_DATEPICKER + 'calendar__body',
+                    class_calendar_date: STRING_PREFIX_DATEPICKER + 'calendar__date',
+
+                    class_year: STRING_PREFIX_DATEPICKER + 'year',
+
+                    class_month: STRING_PREFIX_DATEPICKER + 'month',
+                    class_month_nav: STRING_PREFIX_DATEPICKER + 'month__nav',
+                    class_month_prev: STRING_PREFIX_DATEPICKER + 'month__prev',
+                    class_month_next: STRING_PREFIX_DATEPICKER + 'month__next',
+
+                    class_week: STRING_PREFIX_DATEPICKER + 'week',
+                    class_weekdays: STRING_PREFIX_DATEPICKER + 'weekday',
+
+                    class_day_disabled: STRING_PREFIX_DATEPICKER + 'day__disabled',
+                    class_day_selected: STRING_PREFIX_DATEPICKER + 'day__selected',
+                    class_day_today: STRING_PREFIX_DATEPICKER + 'day__today',
+                    class_day_infocus: STRING_PREFIX_DATEPICKER + 'day__infocus',
+                    class_day_outfocus: STRING_PREFIX_DATEPICKER + 'day__outfocus',
+
+                    class_box_months: STRING_PREFIX_DATEPICKER + 'holder__months',
+                    class_box_years: STRING_PREFIX_DATEPICKER + 'holder__years',
+                    class_box_weekdays: STRING_PREFIX_DATEPICKER + 'holder__weekdays'
+                } //defaults
 
 
             } //Picker.prototype
@@ -1000,73 +1061,6 @@
             // Return a new Picker constructor
             return new Picker( $element, options )
         } //DatePicker
-
-
-
-
-    /**
-     * Default options for the picker
-     */
-    DatePicker.defaults = {
-
-        months_full: [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ],
-        months_short: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
-
-        weekdays_full: [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ],
-        weekdays_short: [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ],
-
-        month_prev: '&#9664;',
-        month_next: '&#9654;',
-
-        // Date limits
-        date_min: false,
-        date_max: false,
-
-        // Display strings on the calendar
-        show_months_full: true,
-        show_weekdays_short: true,
-
-        // Date format to show on the input element
-        format: 'd mmmm, yyyy',
-
-        // Disable for browsers with native date support
-        disable_picker: false,
-
-        // First day of the week: 0 = Sunday, 1 = Monday
-        first_day: 0,
-
-        class_input_focus: STRING_PREFIX_DATEPICKER + 'input__focused',
-
-        class_picker_open: STRING_PREFIX_DATEPICKER + 'opened',
-        class_picker_holder: STRING_PREFIX_DATEPICKER + 'holder',
-
-        class_calendar_wrap: STRING_PREFIX_DATEPICKER + 'calendar__wrap',
-        class_calendar_box: STRING_PREFIX_DATEPICKER + 'calendar__box',
-
-        class_calendar: STRING_PREFIX_DATEPICKER + 'calendar',
-        class_calendar_body: STRING_PREFIX_DATEPICKER + 'calendar__body',
-        class_calendar_date: STRING_PREFIX_DATEPICKER + 'calendar__date',
-
-        class_year: STRING_PREFIX_DATEPICKER + 'year',
-
-        class_month: STRING_PREFIX_DATEPICKER + 'month',
-        class_month_nav: STRING_PREFIX_DATEPICKER + 'month__nav',
-        class_month_prev: STRING_PREFIX_DATEPICKER + 'month__prev',
-        class_month_next: STRING_PREFIX_DATEPICKER + 'month__next',
-
-        class_week: STRING_PREFIX_DATEPICKER + 'week',
-        class_weekdays: STRING_PREFIX_DATEPICKER + 'weekday',
-
-        class_day_disabled: STRING_PREFIX_DATEPICKER + 'day__disabled',
-        class_day_selected: STRING_PREFIX_DATEPICKER + 'day__selected',
-        class_day_today: STRING_PREFIX_DATEPICKER + 'day__today',
-        class_day_infocus: STRING_PREFIX_DATEPICKER + 'day__infocus',
-        class_day_outfocus: STRING_PREFIX_DATEPICKER + 'day__outfocus',
-
-        class_box_months: STRING_PREFIX_DATEPICKER + 'holder__months',
-        class_box_years: STRING_PREFIX_DATEPICKER + 'holder__years',
-        class_box_weekdays: STRING_PREFIX_DATEPICKER + 'holder__weekdays'
-    } //DatePicker.defaults
 
 
 
