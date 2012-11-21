@@ -904,6 +904,9 @@
 
                         // Close the calendar
                         P.calendar.close()
+
+                        // Broadcast changes
+                        P.$element.trigger("change")
                     }
 
                     return P
