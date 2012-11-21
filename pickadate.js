@@ -7,7 +7,6 @@
 /**
  * TODO: month & year dropdown selectors
  * TODO: add methods onSelectDate, onMonthChange, onOpenCalendar, onCloseCalendar
- * TODO: alternate value sent to server
  */
 
 /*jshint
@@ -573,6 +572,9 @@
                         render: function() {
 
                             var
+                                // Get the element's parent form, if any
+                                parentForm = P._element.form,
+
                                 // Create a reference to this calendar object
                                 calendarObject = this,
 
@@ -641,6 +643,15 @@
 
                             }).after( P.$holder )
 
+
+                            // If format_submit is not false, bind a submit event
+                            // to the element's parent form to format the element's
+                            // value to format_submit before submitting
+                            if (SETTINGS.format_submit) {
+                                $(parentForm).on({
+                                    submit: function() { P._element.value = P.getDateFormatted( SETTINGS.format_submit ) }
+                                })
+                            }
 
                             // Create a random calendar object id
                             calendarObject.id = Math.floor( Math.random()*1e9 )
@@ -760,14 +771,14 @@
                  * Get selected date in the
                  * correct format
                  */
-                getDateFormatted: function() {
+                getDateFormatted: function( format ) {
 
                     var formats = P.dateFormats
 
                     // Go through the date formats array
                     // and return the appropriate values.
                     // At the end, return the joined array
-                    return formats.toArray().map( function( value ) {
+                    return formats.toArray( format ).map( function( value ) {
 
                         // Check if the format exists and
                         // invoke the function to get the value
@@ -775,6 +786,7 @@
                         // the characters
                         return ( formats[ value ] ) ? formats[ value ]() : value.replace( /^!/, '' )
                     }).join( '' )
+
                 }, //getDateFormatted
 
 
@@ -900,7 +912,7 @@
                     if ( $dayTargeted ) {
 
                         // Set the element value as the formatted date
-                        P._element.value = P.getDateFormatted()
+                        P._element.value = P.getDateFormatted( SETTINGS.format )
 
                         // Close the calendar
                         P.calendar.close()
@@ -998,8 +1010,8 @@
                     yy: function() { return DATE_SELECTED.YEAR.toString().substr( 2,2 ) },
                     yyyy: function() { return DATE_SELECTED.YEAR },
 
-                    // Create an array by splitting the format in the settings
-                    toArray: function() { return SETTINGS.format.split( /(d{1,4}|m{1,4}|y{4}|yy|!.)/g ) }
+                    // Create an array by splitting the format given in the argument
+                    toArray: function( format ) { return format.split( /(d{1,4}|m{1,4}|y{4}|yy|!.)/g ) }
                 } //dateFormats
 
 
@@ -1036,8 +1048,11 @@
         show_months_full: true,
         show_weekdays_short: true,
 
-        // Date format
+        // Displayed date format
         format: 'd mmmm, yyyy',
+
+        // Submitted date format
+        format_submit: 'yyyy-mm-dd',
 
         // Disable for browsers with support
         disable_picker: false,
