@@ -44,7 +44,8 @@ input[type=text] {
 }
 
 input[type=date]:focus,
-input[type=text]:focus {
+input[type=text]:focus,
+input.datepicker--input__opened {
     outline: none;
     border-color: #0089ec;
 }

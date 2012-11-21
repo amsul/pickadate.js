@@ -1,5 +1,5 @@
 /*!
- * datepicker.js v1.0.1 - 19 November, 2012
+ * datepicker.js v1.0.2 - 20 November, 2012
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  */
@@ -8,8 +8,6 @@
  * TODO: month & year dropdown selectors
  * TODO: add methods onSelectDate, onMonthChange, onOpenCalendar, onCloseCalendar
  * TODO: alternate value sent to server
- *
- * change position of "toArray"
  *
  * FIX: ipad bug due to lack of mouse events
  */
@@ -701,6 +699,9 @@
                             // Set calendar as open
                             calendarObject.isOpen = true
 
+                            // Add the "opened" class to the element
+                            P.$element.addClass( SETTINGS.class_input_open )
+
                             // Add the "opened" class to the calendar holder
                             P.$holder.addClass( SETTINGS.class_picker_open )
 
@@ -723,6 +724,9 @@
 
                             // Set calendar as closed
                             calendarObject.isOpen = false
+
+                            // Remove the "opened" class from the element
+                            P.$element.removeClass( SETTINGS.class_input_open )
 
                             // Remove the "opened" class from the calendar holder
                             P.$holder.removeClass( SETTINGS.class_picker_open )
@@ -838,7 +842,7 @@
                         // get and return today's date
                         if ( isNaN( dateEntered ) ) {
 
-                            console.log( dateEntered, P._element.value )
+                            // console.log( dateEntered, P._element.value )
                             return DATE_TODAY
                         }
 
@@ -1047,6 +1051,8 @@
 
         // Date format
         format: 'd mmmm, yyyy',
+
+        class_input_open: STRING_PREFIX_DATEPICKER + 'input__opened',
 
         class_picker_open: STRING_PREFIX_DATEPICKER + 'opened',
         class_picker_holder: STRING_PREFIX_DATEPICKER + 'holder',
