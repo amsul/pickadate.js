@@ -16,46 +16,38 @@
 
     <fieldset>
         <h3><label for="input_01">Pick a date. Go ahead...</label></h3>
-        <input id="input_01" class="datepicker" name="date" type="date" value="February 02, 2012">
+        <input id="input_01" class="datepicker" name="date" type="date" value="December 02, 2011">
     </fieldset>
 
 </section>
 
 
-<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+<script src="jquery.js"></script>
 <script src="pickadate.js"></script>
 
 <script type="text/javascript">
     var asdf = $( '[type=date], .datepicker' ).pickadate({
         // first_day: 1,
+        month_selector: true,
+        year_selector: [ -5, 5 ],
+        date_min: [ 2011, 10, 13 ],
+        date_max: [ 2013, 2, 13 ],
         format_submit: 'yyyy/mm/dd',
         onOpen: function() {
-          console.log( 'opened' )
+          // console.log( 'opened' )
         },
         onClose: function() {
-          console.log( 'closed' )
+          // console.log( 'closed' )
         },
         onSelect: function() {
-          console.log( 'selected' )
+          // console.log( 'selected' )
         },
         onChangeMonth: function() {
-          console.log( 'changed month' )
+          // console.log( 'changed month' )
         }
     })
-    console.log( asdf.data( 'widgets.pickadate' ) )
-</script>
-<script type="text/javascript">
-
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-36321179-2']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
+    var lol = asdf.data( 'pickadate' ).open()
+    console.log( lol )
 </script>
 
 

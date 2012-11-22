@@ -106,8 +106,8 @@
     right: 0;
 }
 
-.datepicker--month,
-.datepicker--year {
+.datepicker--month__box,
+.datepicker--year__box {
     text-align: center;
 }
 
@@ -119,6 +119,22 @@
     font-size: .66em;
     color: #999;
     font-weight: bold;
+}
+
+.datepicker--month__selector,
+.datepicker--year__selector {
+    font-size: .8em;
+    border: 1px solid #ccc;
+    height: 32px;
+}
+
+.datepicker--month__selector {
+    margin-bottom: .5em;
+    width: 50%;
+}
+
+.datepicker--year__selector {
+    width: 32%;
 }
 
 
