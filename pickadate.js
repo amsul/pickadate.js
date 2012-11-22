@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v1.1.0 - 21 November, 2012
+ * pickadate.js v1.1.1 - 21 November, 2012
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  */
@@ -52,7 +52,7 @@
 
         // Check if a value is an array
         isArray = Array.isArray || function( value ) {
-            return {}.toString.call( value ) === '[object Array]'
+            return {}.toString.call( value ) == '[object Array]'
         },
 
         // Return numbers below 10 with a leading zero
@@ -178,8 +178,9 @@
 
                     var element = $element[ 0 ]
 
-                    // Ensure an input element was passed
-                    if ( element.nodeName !== 'INPUT' ) return false
+                    // If the element isn't an input field
+                    // ensure that we create a hidden element
+                    if ( element.nodeName != 'INPUT' ) return false
 
                     // Merge the settings
                     SETTINGS = $.extend( {}, P.defaults, options )
@@ -218,7 +219,7 @@
                     P.calendar = P.createCalendar().render()
 
                     // If the element has focus on load
-                    if ( element === document.activeElement ) {
+                    if ( element == document.activeElement ) {
 
                         // Trigger the focus handler
                         $element.trigger( 'focus' )
@@ -351,13 +352,13 @@
 
 
                                     // If it's today, add the class
-                                    if ( loopDate.TIME === DATE_TODAY.TIME ) {
+                                    if ( loopDate.TIME == DATE_TODAY.TIME ) {
                                         klassCollection.push( SETTINGS.class_day_today )
                                     }
 
 
                                     // If it's the selected date, add the class
-                                    if ( loopDate.TIME === DATE_SELECTED.TIME ) {
+                                    if ( loopDate.TIME == DATE_SELECTED.TIME ) {
                                         klassCollection.push( SETTINGS.class_day_selected )
                                     }
 
@@ -421,7 +422,7 @@
 
                                 // Check if it's the end of a week.
                                 // * We add 1 for 0index compensation
-                                if ( ( index % DAYS_IN_WEEK ) + 1 === DAYS_IN_WEEK ) {
+                                if ( ( index % DAYS_IN_WEEK ) + 1 == DAYS_IN_WEEK ) {
 
                                     // Wrap the week and pass it into the calendar weeks
                                     calendarWeeks.push( create( STRING_TR, calendarDates.splice( 0, DAYS_IN_WEEK ) ) )
@@ -450,7 +451,7 @@
                                     // or if tag is STRING_NEXT month focused is
                                     // greater or equal to the maximum date month,
                                     // return an empty string
-                                    if ( DATE_MIN && ( tagName === STRING_PREV && MONTH_FOCUSED.MONTH <= DATE_MIN.MONTH && MONTH_FOCUSED.YEAR <= DATE_MIN.YEAR ) || DATE_MAX && ( tagName === STRING_NEXT && MONTH_FOCUSED.MONTH >= DATE_MAX.MONTH && MONTH_FOCUSED.YEAR >= DATE_MAX.YEAR ) ) {
+                                    if ( DATE_MIN && ( tagName == STRING_PREV && MONTH_FOCUSED.MONTH <= DATE_MIN.MONTH && MONTH_FOCUSED.YEAR <= DATE_MIN.YEAR ) || DATE_MAX && ( tagName == STRING_NEXT && MONTH_FOCUSED.MONTH >= DATE_MAX.MONTH && MONTH_FOCUSED.YEAR >= DATE_MAX.YEAR ) ) {
                                         return ''
                                     }
 
@@ -492,27 +493,33 @@
 
 
                         /**
-                         * Get the count of the number of
-                         * days in a month, given the
-                         * month and year
+                         * Get the count of the number of days in a month,
+                         * given the month and year.
+                         * This is calculated manually for this reason: http://jsperf.com/manual-month-days-vs-new-date
                          */
                         getCountDays = function( year, month ) {
 
                             var
+                                isLeap,
+
                                 // Set flip based on if month is
                                 // before or after July
                                 flip = ( month > 6 ) ? true : false
 
                             // If it's February
-                            if ( month === 1 ) {
+                            if ( month == 1 ) {
 
-                                // If it's not a leap year
-                                // then 28 otherwise 29
-                                return ( year % 4 ) ? 28 : 29
+                                // Check if it's a leap year
+                                // according to: http://en.wikipedia.org/wiki/Leap_year#Algorithm
+                                isLeap = ( ( ( year % 400 ) === 0 || ( year % 100 ) !== 0 ) && ( year % 4 ) === 0 )
+
+                                // If it's a leap year
+                                // then 29 otherwise 28
+                                return ( isLeap ) ? 29 : 28
                             }
 
 
-                            // If it's an odd month ID
+                            // If it's an odd month index
                             if ( month % 2 ) {
 
                                 // If it's after July then 31
@@ -521,7 +528,7 @@
                             }
 
 
-                            // If it's an even month ID
+                            // If it's an even month index
                             // and it's after July then 30
                             // otherwise 31
                             return ( flip ) ? 30 : 31
@@ -540,15 +547,11 @@
                                 // day if month starts on 0
                                 dayColumnIndexAtZero = date % DAYS_IN_WEEK,
 
-                                // Get the absolute difference
-                                absoluteDifference = Math.abs( dayIndex - dayColumnIndexAtZero )
-
-
-                            // If the first day should be Monday,
-                            // reduce the absolute difference by 1
-                            if ( SETTINGS.first_day ) {
-                                absoluteDifference -= 1
-                            }
+                                // Get the difference between the actual
+                                // day index and the column index at zero.
+                                // Then, if the first day should be Monday,
+                                // reduce the difference by 1
+                                difference = dayIndex - dayColumnIndexAtZero + ( ( SETTINGS.first_day ) ? -1 : 0 )
 
 
                             // Compare the day index if the
@@ -559,11 +562,11 @@
 
                                 // If the actual position is greater
                                 // shift by the difference in the two
-                                absoluteDifference :
+                                difference :
 
-                                // Otherwise shift by the difference
-                                // between the week length and absolute difference
-                                DAYS_IN_WEEK - absoluteDifference
+                                // Otherwise shift by the adding the negative
+                                // difference to the days in week
+                                DAYS_IN_WEEK + difference
                         } //getCountShiftDays
 
 
@@ -637,7 +640,7 @@
 
                                 // On tab, close the calendar
                                 keydown: function( event ) {
-                                    if ( event.keyCode === 9 ) {
+                                    if ( event.keyCode == 9 ) {
                                         calendarObject.close()
                                     }
                                 },
@@ -674,7 +677,7 @@
 
                                     // If the calendar is opened
                                     // and the target is not the element
-                                    if ( calendarObject.isOpen && P._element !== event.target ) {
+                                    if ( calendarObject.isOpen && P._element != event.target ) {
 
                                         // Close the calendar
                                         calendarObject.close()
@@ -831,8 +834,6 @@
                         // If there's no valid date in the input,
                         // get and return today's date
                         if ( isNaN( dateEntered ) ) {
-
-                            // console.log( dateEntered, P._element.value )
                             return DATE_TODAY
                         }
 
@@ -879,7 +880,7 @@
 
 
                     // If it's the same month
-                    if ( dateTargeted.MONTH === MONTH_FOCUSED.MONTH ) {
+                    if ( dateTargeted.MONTH == MONTH_FOCUSED.MONTH ) {
 
                         // Remove the "selected" state from the selected node
                         $daySelected.removeClass( SETTINGS.class_day_selected )
@@ -982,7 +983,7 @@
                     // If there's a navigator provided
                     if ( targetData.nav ) {
 
-                        var direction = ( targetData.nav === STRING_PREV ) ? -1 : 1
+                        var direction = ( targetData.nav == STRING_PREV ) ? -1 : 1
 
                         // Change the month according to direction
                         P.changeMonth( direction )
