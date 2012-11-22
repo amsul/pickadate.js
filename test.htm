@@ -1,0 +1,64 @@
+<meta name="viewport" content="width=device-width,maximum-scale=1">
+
+<title>Pickadate.js</title>
+
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="demo.css">
+<link rel="stylesheet" href="pickadate.css">
+
+
+<section class="holder">
+
+    <h1><strong title="Pick a Date" class="underline-highlight">pickadate.js</strong></h1>
+    <h2>A lightweight jQuery dateinput picker <small>(<a title="Documentation" href="docs.htm">read the docs</a>)</small></h2>
+
+    <a href="https://github.com/amsul/pickadate.js"><img width="124" height="124" style="position:absolute;top:0;right:0;border:0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <fieldset>
+        <h3><label for="input_01">Pick a date. Go ahead...</label></h3>
+        <input id="input_01" class="datepicker" name="date" type="date" value="February 02, 2012">
+    </fieldset>
+
+</section>
+
+
+<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+<script src="pickadate.js"></script>
+
+<script type="text/javascript">
+    var asdf = $( '[type=date], .datepicker' ).pickadate({
+        // first_day: 1,
+        format_submit: 'yyyy/mm/dd',
+        onOpen: function() {
+          console.log( 'opened' )
+        },
+        onClose: function() {
+          console.log( 'closed' )
+        },
+        onSelect: function() {
+          console.log( 'selected' )
+        },
+        onChangeMonth: function() {
+          console.log( 'changed month' )
+        }
+    })
+    console.log( asdf.data( 'widgets.pickadate' ) )
+</script>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36321179-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+
+
+
