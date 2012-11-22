@@ -140,6 +140,9 @@
                 // The maximum selectable date
                 DATE_MAX,
 
+                // An array of selectable dates, each represented by an array
+                SELECTABLE_DATES,
+
                 // The month in focus on the calendar
                 MONTH_FOCUSED,
 
@@ -213,6 +216,15 @@
                     DATE_MIN = P.getDateRange( SETTINGS.date_min )
                     DATE_MAX = P.getDateRange( SETTINGS.date_max, 1 )
 
+                    if ( SETTINGS.selectable_dates != undefined && isArray( SETTINGS.selectable_dates ) ) {
+                        SELECTABLE_DATES = [];
+                        for ( var i in SETTINGS.selectable_dates ) {
+                            var date = createDate( [ SETTINGS.selectable_dates[i][0],
+                                SETTINGS.selectable_dates[i][1] - 1,
+                                SETTINGS.selectable_dates[i][2] ] );
+                            SELECTABLE_DATES.push( date );
+                        }
+                    }
 
                     // Create a calendar object and
                     // immediately render it
@@ -348,6 +360,22 @@
                                     if ( loopDate.TIME < DATE_MIN.TIME || loopDate.TIME > DATE_MAX.TIME ) {
                                         isDateDisabled = true
                                         klassCollection.push( SETTINGS.class_day_disabled )
+                                    }
+
+                                    // If it's not one of the arbitrary selectable dates.
+                                    if ( isArray( SELECTABLE_DATES ) ) {
+                                        var dateIsInArray = false;
+
+                                        $.each( SELECTABLE_DATES, function( index, selectableDate ) {
+                                           if ( selectableDate.TIME == loopDate.TIME ) {
+                                               dateIsInArray = true;
+                                           }
+                                        });
+                                        // Date is not in the array - disable it.
+                                        if ( !dateIsInArray ) {
+                                            isDateDisabled = true
+                                            klassCollection.push( SETTINGS.class_day_disabled )
+                                        }
                                     }
 
 
