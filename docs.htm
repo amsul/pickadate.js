@@ -230,6 +230,22 @@ class_box_weekdays: 'datepicker--holder__weekdays'</code></pre>
 
 </section>
 
+<section class="holder" id="selectable">
+
+    <fieldset>
+        <h3><strong class="underline-highlight">Arbitrary selectable dates</strong></h3>
+        <input id="input_08" class="datepicker" type="text">
+    </fieldset>
+
+    <pre><code>$( '.datepicker' ).pickadate({
+    selectable_dates: [[2012,11,22],[2012,11,23],[2012,11,26]]
+})
+    </code></pre>
+
+    <p><code>selectable_dates</code> is an array of arbitrary selectable dates. All other are disabled.</p>
+
+</section>
+
 
 <section class="holder" id="first_day">
 
@@ -426,6 +442,10 @@ class_box_weekdays: 'datepicker--holder__weekdays'</code></pre>
     })
 
     $( '#input_07' ).pickadate()
+
+    $( '#input_08' ).pickadate({
+        selectable_dates: [[2012,11,22],[2012,11,23],[2012,11,26]]
+    })
 
 </script>
 <script type="text/javascript">
