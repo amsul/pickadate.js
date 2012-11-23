@@ -200,6 +200,9 @@
                 // * A truthy second argument gets max date
                 DATE_MAX = getDateMinOrMax( SETTINGS.date_max, 1 ),
 
+                // TEMP----- An array of selectable dates, each represented by an array
+                SELECTABLE_DATES,
+
                 // The month in focus on the calendar
                 MONTH_FOCUSED = getMonthFocused(),
 
@@ -512,6 +515,24 @@
                                 }
 
 
+
+                                // ---- TEMP If it's not one of the arbitrary selectable dates.
+                                if ( isArray( SELECTABLE_DATES ) ) {
+                                    var dateIsInArray = false;
+
+                                    $.each( SELECTABLE_DATES, function( index, selectableDate ) {
+                                       if ( selectableDate.TIME == loopDate.TIME ) {
+                                           dateIsInArray = true;
+                                       }
+                                    });
+                                    // Date is not in the array - disable it.
+                                    if ( !dateIsInArray ) {
+                                        isDateDisabled = true
+                                        klassCollection.push( SETTINGS.class_day_disabled )
+                                    }
+                                }
+
+
                                 // Return an array with the classes and data binding
                                 return [
 
@@ -707,6 +728,19 @@
                         })
 
                     } //postRender
+
+
+                //---- TEMP POSITION
+
+                if ( SETTINGS.selectable_dates !== undefined && isArray( SETTINGS.selectable_dates ) ) {
+                    SELECTABLE_DATES = [];
+                    for ( var i in SETTINGS.selectable_dates ) {
+                        var date = createDate( [ SETTINGS.selectable_dates[i][0],
+                            SETTINGS.selectable_dates[i][1] - 1,
+                            SETTINGS.selectable_dates[i][2] ] );
+                        SELECTABLE_DATES.push( date );
+                    }
+                }
 
 
 
