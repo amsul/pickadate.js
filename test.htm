@@ -16,7 +16,7 @@
 
     <fieldset>
         <h3><label for="input_01">Pick a date. Go ahead...</label></h3>
-        <input id="input_01" class="datepicker" name="date" type="date" value="">
+        <input id="input_01" class="datepicker" name="date" type="date" autofocus value="">
     </fieldset>
 
 </section>
@@ -45,10 +45,11 @@
         },
         onChangeMonth: function() {
           // console.log( 'changed month' )
-        }
+        },
+        // dates_disabled: [ true, [2012,11,20], [2012,11,2], [2012,11,5] ]
     })
-    var lol = asdf.data( 'pickadate' ).open()
-    console.log( lol )
+    // var lol = asdf.data( 'pickadate' ).open()
+    // console.log( lol )
 </script>
 
 

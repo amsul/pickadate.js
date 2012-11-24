@@ -12,7 +12,7 @@
     <h1><a href="http://amsul.github.com/pickadate.js" class="link-inherit"><strong title="Pick a Date" class="underline-highlight">pickadate.js</strong></a></h1>
     <h2>A lightweight jQuery dateinput picker</h2>
 
-    <h3>Weighs 6.9kb (2.8kb gzipped) <small class="dimmed"><small><small><small>&ndash; whereas jQuery UI datepicker is 30kb minified</small></small></small></small></h3>
+    <h3>Weighs 7.8kb (3.3kb gzipped) <small class="dimmed"><small><small><small>&ndash; whereas jQuery UI datepicker is 30kb minified</small></small></small></small></h3>
 
     <a href="https://github.com/amsul/pickadate.js"><img width="124" height="124" style="position:absolute;top:0;right:0;border:0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
 
@@ -36,12 +36,15 @@ month_next: '&amp;#9654;',
 date_min: false,
 date_max: false,
 
+<a href="#dates_disabled">// Dates disabled</a>
+dates_disabled: false,
+
 <a href="#strings">// Display strings</a>
 show_months_full: true,
 show_weekdays_short: true,
 
 <a href="#formats">// Date format</a>
-format: 'd mmmm, yyyy',,
+format: 'd mmmm, yyyy',
 format_submit: false,
 
 <a href="#disable">// Disable picker</a>
@@ -230,19 +233,30 @@ class_box_weekdays: 'datepicker--holder__weekdays'</code></pre>
 
 </section>
 
-<section class="holder" id="selectable">
+
+<section class="holder" id="dates_disabled">
 
     <fieldset>
-        <h3><strong class="underline-highlight">Arbitrary selectable dates</strong></h3>
-        <input id="input_08" class="datepicker" type="text">
+        <h3><strong class="underline-highlight">Selectively disable dates</strong></h3>
+        <input id="input_06a" class="datepicker" type="text">
     </fieldset>
 
     <pre><code>$( '.datepicker' ).pickadate({
-    selectable_dates: [[2012,11,22],[2012,11,23],[2012,11,26]]
+    dates_disabled: [ [2012,11,2], [2012,11,5], [2012,11,28] ]
 })
     </code></pre>
 
-    <p><code>selectable_dates</code> is an array of arbitrary selectable dates. All other are disabled.</p>
+    <p><code>dates_disabled</code> can be an array of arbitrary dates to disable.</p>
+    <p>Alternatively, you can make ALL the dates in the calendar disabled, EXCEPT the ones specified if you set <code>true</code> as the first item in the array.</p>
+
+    <fieldset>
+        <input id="input_06b" class="datepicker" type="text">
+    </fieldset>
+
+    <pre><code>$( '.datepicker' ).pickadate({
+    dates_disabled: [ true, [2012,11,2], [2012,11,5], [2012,11,28] ]
+})
+    </code></pre>
 
 </section>
 
@@ -251,7 +265,7 @@ class_box_weekdays: 'datepicker--holder__weekdays'</code></pre>
 
     <fieldset>
         <h3><strong class="underline-highlight">Set Monday as the first day</strong></h3>
-        <input id="input_06" class="datepicker" type="text">
+        <input id="input_07" class="datepicker" type="text">
     </fieldset>
 
     <pre><code>$( '.datepicker' ).pickadate({
@@ -334,7 +348,7 @@ class_box_weekdays: 'datepicker--holder__weekdays'</code></pre>
     <fieldset class="datepicker-themed">
         <h3><strong class="underline-highlight">Themed calendar</strong></h3>
         <p>Go crazy.</p>
-        <input id="input_07" class="datepicker" type="text">
+        <input id="input_08" class="datepicker" type="text">
     </fieldset>
 
     <pre><code>.datepicker-themed {
@@ -421,10 +435,9 @@ class_box_weekdays: 'datepicker--holder__weekdays'</code></pre>
 
     var $custom_date = $( '#input_03' ).pickadate({
         format: 'You selected: dddd, dd/mm/yyyy',
-        format_submit: 'yyyy-mm-dd'
-    }).on({
-        change: function() {
-            $custom_date.after( '<p class="notification">Value to submit: <code>' + $custom_date.data( 'widgets.pickadate' )._hidden.value + '</code></p>' )
+        format_submit: 'yyyy-mm-dd',
+        onSelect: function() {
+            $custom_date.after( '<p class="notification">Value to submit: <code>' + $custom_date.data( 'pickadate' ).getSubmitValue() + '</code></p>' )
         }
     })
 
@@ -437,15 +450,19 @@ class_box_weekdays: 'datepicker--holder__weekdays'</code></pre>
         date_max: 5
     })
 
-    $( '#input_06' ).pickadate({
+    $( '#input_06a' ).pickadate({
+        dates_disabled: [ [2012,11,2], [2012,11,5], [2012,11,28] ]
+    })
+
+    $( '#input_06b' ).pickadate({
+        dates_disabled: [ true, [2012,11,2], [2012,11,5], [2012,11,28] ]
+    })
+
+    $( '#input_07' ).pickadate({
         first_day: 1
     })
 
-    $( '#input_07' ).pickadate()
-
-    $( '#input_08' ).pickadate({
-        selectable_dates: [[2012,11,22],[2012,11,23],[2012,11,26]]
-    })
+    $( '#input_08' ).pickadate()
 
 </script>
 <script type="text/javascript">
