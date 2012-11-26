@@ -1,17 +1,13 @@
 /*!
- * pickadate.js v1.2.5 - 24 November, 2012
+ * pickadate.js v1.2.6 - 25 November, 2012
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
+ * Licensed under MIT ("expat" flavour) license.
  */
 
 /**
  * TODO: scroll calendar into view
- * TODO: public method to pick a date
  * TODO: keyboard a11y
- *
- * FIX: exports - give trigger functions correct scope
- * FIX: year_selector should be integer not array
- * FIX: shift year_selector if close to min/max date
  */
 
 /*jshint
@@ -107,7 +103,7 @@
 
             // Create and return the select element string
             return createNode( 'select', selector, klass )
-        },
+        }, //createSelector
 
         // Create a calendar date
         createDate = function( datePassed ) {
@@ -167,51 +163,32 @@
 
                 // The calendar object
                 CALENDAR = {
-
-                    // A unique calendar ID
                     id: ~~( Math.random() * 1e9 )
-
                 }, //CALENDAR
 
 
                 // The public methods
                 EXPORTS = {
-                    open: calendarOpen,
-                    close: calendarClose,
-                    show: function( month, year ) {
-
-                        // Compensate for 0index months
-                        showMonth( --month, year )
+                    open: function() {
+                        calendarOpen()
+                        return this
                     },
-                    getSubmitValue: function() {
-                        return ELEMENT_HIDDEN.value
+                    close: function() {
+                        calendarClose()
+                        return this
+                    },
+                    show: function( month, year ) {
+                        showMonth( --month, year )
+                        return this
+                    },
+                    getDate: function() {
+                        return ( ELEMENT_HIDDEN ? ELEMENT_HIDDEN.value : ELEMENT.value )
+                    },
+                    setDate: function( year, month, date ) {
+                        setDateSelected( createDate( [ year, --month, date ] ) )
+                        return this
                     }
-                },
-
-
-                // Create the calendar table head
-                // with all the weekday labels in collection
-                TABLE_HEAD = (function( weekdaysCollection ) {
-
-                    // If the first day should be Monday
-                    if ( SETTINGS.first_day ) {
-
-                        // Grab Sunday and push it to the end of the collection
-                        weekdaysCollection.push( weekdaysCollection.splice( 0, 1 )[ 0 ] )
-                    }
-
-                    // Go through each day of the week
-                    // and return a wrapped header row.
-                    // Take the result and apply another
-                    // table head wrapper to group
-                    return createNode( 'thead',
-                        createNode( STRING_TR,
-                            weekdaysCollection.map( function( weekday ) {
-                                return createNode( 'th', weekday, SETTINGS.klass.weekdays )
-                            })
-                        )
-                    ) //endreturn
-                })( SETTINGS.show_weekdays_short ? SETTINGS.weekdays_short : SETTINGS.weekdays_full ), //TABLE_HEAD
+                }, //EXPORTS
 
 
                 // The element node passed
@@ -234,7 +211,7 @@
                     }
 
                     return element
-                })( $ELEMENT[ 0 ] ),
+                })( $ELEMENT[ 0 ] ), //ELEMENT
 
 
                 // The hidden input element
@@ -248,27 +225,10 @@
                         // the name of the original input with a suffix.
                         // And then update the value with whatever
                         // is entered in the input on load
-                        ELEMENT_HIDDEN = $( '<input type=hidden name=' + ELEMENT.name + '_submit>' ).
+                        ELEMENT_HIDDEN = $( '<input type=hidden name=' + ELEMENT.name + SETTINGS.hidden_suffix + '>' ).
                             val( ELEMENT.value ? getDateFormatted( formatSubmit ) : '' )[ 0 ]
                     ) : null
                 })( SETTINGS.format_submit ),
-
-
-                // Today
-                DATE_TODAY = getDateToday(),
-
-                // The date selected
-                DATE_SELECTED = getDateSelected(),
-
-                // The minimum selectable date
-                DATE_MIN = getDateMinOrMax( SETTINGS.date_min ),
-
-                // The maximum selectable date
-                // * A truthy second argument gets max date
-                DATE_MAX = getDateMinOrMax( SETTINGS.date_max, 1 ),
-
-                // The month in focus on the calendar
-                MONTH_FOCUSED = getMonthFocused(),
 
 
                 // The date in various formats
@@ -289,6 +249,23 @@
                 }, //DATE_FORMATS
 
 
+                // Today
+                DATE_TODAY = getDateToday(),
+
+                // The date selected
+                DATE_SELECTED = getDateSelected(),
+
+                // The minimum selectable date
+                DATE_MIN = getDateMinOrMax( SETTINGS.date_min ),
+
+                // The maximum selectable date
+                // * A truthy second argument gets max date
+                DATE_MAX = getDateMinOrMax( SETTINGS.date_max, 1 ),
+
+                // The month in focus on the calendar
+                MONTH_FOCUSED = getMonthFocused(),
+
+
                 // Create a collection of dates to disable
                 DATES_TO_DISABLE = (function( datesCollection ) {
 
@@ -300,7 +277,7 @@
                         // remove the flag from the collection and
                         // set the condition of which dates to disable
                         if ( datesCollection[ 0 ] === true ) {
-                            createTableBody.disabled = datesCollection.shift()
+                            CALENDAR.disabled = datesCollection.shift()
                         }
 
                         // Map through the dates passed
@@ -311,7 +288,7 @@
                             // and return the date minus 1 for weekday 0index
                             // plus the first day of the week
                             if ( !isNaN( date ) ) {
-                                createTableBody.disabledDays = true
+                                CALENDAR.disabledDays = true
                                 return --date + SETTINGS.first_day
                             }
 
@@ -334,12 +311,12 @@
                     // based on the time being the same as a disabled date
                     // or the day index of the week being within the collection
                     var isDisabledDate = function( date ) {
-                        return ( this.TIME == date.TIME ) || ( createTableBody.disabledDays && DATES_TO_DISABLE.indexOf( this.DAY ) > -1 )
+                        return ( this.TIME == date.TIME ) || ( CALENDAR.disabledDays && DATES_TO_DISABLE.indexOf( this.DAY ) > -1 )
                     }
 
 
-                    // If the table body should be disabled
-                    if ( createTableBody.disabled ) {
+                    // If all calendar dates should be disabled
+                    if ( CALENDAR.disabled ) {
 
                         // Return a function that maps the
                         // collection of dates to not disable
@@ -353,22 +330,47 @@
 
                     // Otherwise check if this date should be disabled
                     return isDisabledDate
-                })(),
+                })(), //DISABLED_DATES
+
+
+                // Create the calendar table head
+                // with all the weekday labels in collection
+                TABLE_HEAD = (function( weekdaysCollection ) {
+
+                    // If the first day should be Monday
+                    if ( SETTINGS.first_day ) {
+
+                        // Grab Sunday and push it to the end of the collection
+                        weekdaysCollection.push( weekdaysCollection.splice( 0, 1 )[ 0 ] )
+                    }
+
+                    // Go through each day of the week
+                    // and return a wrapped header row.
+                    // Take the result and apply another
+                    // table head wrapper to group it all
+                    return createNode( 'thead',
+                        createNode( STRING_TR,
+                            weekdaysCollection.map( function( weekday ) {
+                                return createNode( 'th', weekday, SETTINGS.klass.weekdays )
+                            })
+                        )
+                    )
+                })( SETTINGS.show_weekdays_short ? SETTINGS.weekdays_short : SETTINGS.weekdays_full ), //TABLE_HEAD
 
 
                 // Initialize everything
                 initialize = (function() {
 
                     // Create a new wrapped calendar while
-                    // creating the holder jQuery object
-                    // and binding events
+                    // creating the jQuery holder object
+                    // and binding events to the holder
                     $HOLDER = $( createNode( STRING_DIV, createCalendarWrapped(), SETTINGS.klass.picker_holder ) ).on({
                         click: onClickCalendar
                     })
 
 
-                    // Insert the calendar after the element
-                    // while binding all events
+                    // Insert everything after the element
+                    // while binding events to the element
                     $ELEMENT.on({
 
                         // On tab, close the calendar
@@ -394,8 +396,10 @@
                         // Open the calendar
                         calendarOpen()
                     }
-                })() //initialize
 
+                    // Trigger the onStart method within exports scope
+                    triggerFunction( SETTINGS.onStart, EXPORTS )
+                })() //initialize
 
 
             /**
@@ -404,7 +408,6 @@
             function createMonthNav() {
 
                 var
-
                     createMonthTag = function( upper ) {
 
                         // If the focused month is outside the range
@@ -477,64 +480,53 @@
 
                 var
                     yearFocused = MONTH_FOCUSED.YEAR,
-                    yearSelector = SETTINGS.year_selector
+                    yearsInSelector = SETTINGS.year_selector
 
 
-                // If there is a need for a year selector
-                if ( yearSelector ) {
+                // If there is a need for a years selector
+                // then create a dropdown within the valid range
+                if ( yearsInSelector ) {
 
-                    // If the year selector isn't an array,
-                    // we default to 5 years before and after
-                    if ( !isArray( yearSelector ) ) {
-                        yearSelector = [ -5, 5 ]
-                    }
+                    // If year selector setting is true, default to 5.
+                    // Otherwise divide the years in selector in half
+                    // to get half before and half after
+                    yearsInSelector = ( yearsInSelector === true ) ? 5 : ~~( yearsInSelector / 2 )
 
                     var
-                        // Figure out the first year to display
-                        firstYear = (function( lowerRange, minYear ) {
+                        // Create a collection to hold the years
+                        yearsCollection = [],
 
-                            // If a negative number is passed,
-                            // subtract the relative difference
-                            if ( lowerRange < 0 ) {
-                                var year = yearFocused + lowerRange
-                                return year > minYear ? year : minYear
-                            }
+                        // The lowest year possible is the difference between
+                        // the focused year and the number of years in the selector
+                        lowestYear = yearFocused - yearsInSelector,
 
-                            // If it's less than the focused year
-                            // lower range is the first year
-                            if ( lowerRange < yearFocused ) {
-                                return lowerRange
-                            }
+                        // The first year is the lower of the two numbers.
+                        // The lowest year or the minimum year.
+                        firstYear = getNumberInRange( lowestYear, DATE_MIN.YEAR ),
 
-                            // Otherwise just keep the focused year
-                            return yearFocused
-                        })( yearSelector[ 0 ], DATE_MIN.YEAR ),
+                        // The highest year is the sum of the focused year
+                        // and the years in selector plus the left over years.
+                        highestYear = yearFocused + yearsInSelector + ( firstYear - lowestYear ),
 
-                        // Figure out the last year to display
-                        lastYear = (function( upperRange, maxYear ) {
-
-                            // If the number passed is greater than
-                            // the current year, upper range is last year
-                            if ( upperRange > yearFocused ) {
-                                return upperRange
-                            }
-
-                            // If it's a positive number
-                            // add the relative difference
-                            if ( upperRange > 0 ) {
-                                var year = yearFocused + upperRange
-                                return year < maxYear ? year : maxYear
-                            }
-
-                            // Otherwise just keep the focused year
-                            return yearFocused
-                        })( yearSelector[ 1 ], DATE_MAX.YEAR ),
-
-                        // Create a new array to hold the years
-                        yearsCollection = []
+                        // The last year is the higher of the two numbers.
+                        // The highest year or the maximum year.
+                        lastYear = getNumberInRange( highestYear, DATE_MAX.YEAR, 1 )
 
 
-                    // Add the years to the collection
+                    // Check if there are left over years to put into the selector
+                    yearsInSelector = highestYear - lastYear
+
+
+                    // If there are left overs
+                    if ( yearsInSelector ) {
+
+                        // The first year is the lower of the two numbers.
+                        // The lowest year minus years in selector, or the minimum year
+                        firstYear = getNumberInRange( lowestYear - yearsInSelector, DATE_MIN.YEAR )
+                    }
+
+
+                    // Add the years to the collection by looping through the range
                     for ( var index = 0; index <= lastYear - firstYear; index += 1 ) {
                         yearsCollection.push( firstYear + index )
                     }
@@ -731,8 +723,8 @@
                         // The calendar year tag
                         createNode( STRING_DIV, createYearLabel(), SETTINGS.klass.year_box ) +
 
-                        // The calendar table
-                        // with a new calendar table body
+                        // The calendar table with table head
+                        // and a new calendar table body
                         createNode( 'table', [ TABLE_HEAD, createTableBody() ], SETTINGS.klass.calendar ),
 
                         // Calendar box class
@@ -743,6 +735,22 @@
                     SETTINGS.klass.calendar_wrap
                 ) //endreturn
             } //calendarWrapped
+
+
+            /**
+             * Get the number that's allowed within an
+             * upper or lower limit. A truthy third argument
+             * test against the upper limit.
+             */
+            function getNumberInRange( number, limit, upper ) {
+
+                // If we need to test against the upper limit
+                // and number is less than the limit,
+                // or we need to test against the lower limit
+                // and number is more than the limit,
+                // return the number. Otherwise return the limit.
+                return ( ( upper && number < limit ) || ( !upper && number > limit ) ? number : limit )
+            } //getNumberInRange
 
 
             /**
@@ -854,33 +862,32 @@
              * Set a day as selected by receiving
              * the day jQuery object that was clicked
              */
-            function setDateSelected( dateArray, $dayTargeted ) {
+            function setDateSelected( datePassed, $dayTargeted ) {
 
                 var
-                    // The calendar date targeted
-                    dateTargeted,
-
                     // Get the selected day
                     $daySelected = $findInHolder( SETTINGS.klass.day_selected )
 
 
-                // Create the targetted date from the
-                // date array passed and float the values
-                dateTargeted = {
-                    YEAR: +dateArray[ 0 ],
-                    MONTH: +dateArray[ 1 ] - 1, // We minus 1 to get the month at 0index
-                    DATE: +dateArray[ 2 ],
-                    DAY: +dateArray[ 3 ],
-                    TIME: +dateArray[ 4 ]
-                }
-
 
                 // Set the target as the newly selected date
-                DATE_SELECTED = dateTargeted
+                // by checking if it's an array or calendar date object
+                DATE_SELECTED = isArray( datePassed ) ?
+
+                    // Create the targetted date from the
+                    // date array passed and float the values
+                    // and compensate for month 0index
+                    {
+                        YEAR: +datePassed[ 0 ],
+                        MONTH: +datePassed[ 1 ] - 1,
+                        DATE: +datePassed[ 2 ],
+                        DAY: +datePassed[ 3 ],
+                        TIME: +datePassed[ 4 ]
+                    } : datePassed
 
 
-                // If it's the same month
-                if ( dateTargeted.MONTH == MONTH_FOCUSED.MONTH ) {
+                // If there's a targeted node and it's the same month
+                if ( $dayTargeted && DATE_SELECTED.MONTH == MONTH_FOCUSED.MONTH ) {
 
                     // Remove the "selected" state from the selected node
                     $daySelected.removeClass( SETTINGS.klass.day_selected )
@@ -894,7 +901,7 @@
                 else {
 
                     // Set the target as the newly focused month
-                    MONTH_FOCUSED = dateTargeted
+                    MONTH_FOCUSED = DATE_SELECTED
 
                     // Render a new calendar
                     calendarRender()
@@ -916,9 +923,7 @@
                 // Trigger the onSelect method within exports scope
                 triggerFunction( SETTINGS.onSelect, EXPORTS )
 
-
-                // Close the calendar
-                calendarClose()
+                return CALENDAR
             } //setDateSelected
 
 
@@ -1033,8 +1038,7 @@
                 // Then render a new calendar
                 calendarRender()
 
-                // Trigger the onChangeMonth method within exports scope
-                triggerFunction( SETTINGS.onChangeMonth, EXPORTS )
+                return CALENDAR
             } //showMonth
 
 
@@ -1182,6 +1186,9 @@
                     // Set the selected day
                     setDateSelected( targetData.date.split( STRING_DATE_DIVIDER ), $target )
 
+                    // Close the calendar
+                    calendarClose()
+
                     return
                 }
 
@@ -1200,7 +1207,6 @@
 
 
 
-
             // Return the exports
             return EXPORTS
         } //Picker
@@ -1208,32 +1214,9 @@
 
 
     /**
-     * Extend jQuery
-     */
-    $.fn.pickadate = function( options ) {
-
-        var pickadate = 'pickadate'
-
-        // Merge the options with a deep copy
-        options = $.extend( true, {}, $.fn.pickadate.defaults, options )
-
-        // Check if it should be disabled
-        // for browsers that natively support `type=date`
-        if ( options.disable_picker ) { return this }
-
-        return this.each( function() {
-            var $this = $( this )
-            if ( !$this.data( pickadate ) ) {
-                $this.data( pickadate, new Picker( $this, options ) )
-            }
-        })
-    } //pickadate
-
-
-    /**
      * Default options for the picker
      */
-    $.fn.pickadate.defaults = {
+    Picker.defaults = {
 
         months_full: [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ],
         months_short: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
@@ -1247,6 +1230,18 @@
         // Display strings
         show_months_full: true,
         show_weekdays_short: true,
+
+        // Date format to show on the input element
+        format: 'd mmmm, yyyy',
+
+        // Date format to send to the server
+        format_submit: false,
+
+        // Hidden element name suffix
+        hidden_suffix: '_submit',
+
+        // First day of the week: 0 = Sunday, 1 = Monday
+        first_day: 0,
 
         // Month & year dropdown selectors
         month_selector: false,
@@ -1262,20 +1257,11 @@
         // Disable for browsers with native date support
         disable_picker: false,
 
-        // Date format to show on the input element
-        format: 'd mmmm, yyyy',
-
-        // Date format to send to the server
-        format_submit: false,
-
-        // First day of the week: 0 = Sunday, 1 = Monday
-        first_day: 0,
-
         // Events
         onOpen: null,
         onClose: null,
         onSelect: null,
-        onChangeMonth: null,
+        onStart: null,
 
 
         // Classes
@@ -1317,8 +1303,31 @@
             box_years: STRING_PREFIX_DATEPICKER + 'holder__years',
             box_weekdays: STRING_PREFIX_DATEPICKER + 'holder__weekdays'
         }
+    } //Picker.defaults
 
-    } //pickadate.defaults
+
+    /**
+     * Extend jQuery
+     */
+    $.fn.pickadate = function( options ) {
+
+        var pickadate = 'pickadate'
+
+        // Merge the options with a deep copy
+        options = $.extend( true, {}, Picker.defaults, options )
+
+        // Check if it should be disabled
+        // for browsers that natively support `type=date`
+        if ( options.disable_picker ) { return this }
+
+        return this.each( function() {
+            var $this = $( this )
+            if ( !$this.data( pickadate ) ) {
+                $this.data( pickadate, new Picker( $this, options ) )
+            }
+        })
+    } //pickadate
+
 
 
 })( jQuery, window, document );

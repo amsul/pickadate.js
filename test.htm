@@ -1,3 +1,5 @@
+<!doctype html>
+
 <meta name="viewport" content="width=device-width,maximum-scale=1">
 
 <title>Pickadate.js</title>
@@ -26,12 +28,12 @@
 <script src="pickadate.js"></script>
 
 <script type="text/javascript">
-    var asdf = $( '[type=date], .datepicker' ).pickadate({
+    var $input = $( '[type=date], .datepicker' ).pickadate({
         // first_day: 1,
         month_selector: true,
-        year_selector: [ -5, 5 ],
-        // date_min: -4,
-        // date_max: 3,
+        year_selector: 9,
+        date_min: [ 2011, 10, 9 ],
+        date_max: [ 2013, 2, 14 ],
         format: 'dddd dd, mmm, yyyy',
         format_submit: 'yyyy/mm/dd',
         onOpen: function() {
@@ -48,8 +50,7 @@
         },
         dates_disabled: [ 3, /*[2012,11,20], [2012,11,2], */5, /*[2012,11,5]*/ ]
     })
-    // var lol = asdf.data( 'pickadate' ).open()
-    // console.log( lol )
+    // var picker = $input.data( 'pickadate' ).setDate( 2012, 10, 14 )
 </script>
 
 
