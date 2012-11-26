@@ -2,6 +2,7 @@
 
 body {
     margin: 1em;
+    font-size: 17px;
 }
 
 a {
@@ -24,6 +25,7 @@ h1 {
 }
 
 fieldset {
+    position: relative;
     margin-bottom: 2.4em;
 }
 
@@ -45,21 +47,27 @@ input[type=text] {
 
 input[type=date]:focus,
 input[type=text]:focus,
-input.datepicker--input__focused {
+input.pickadate--input__focused {
     outline: none;
     border-color: #0089ec;
 }
 
 
 
-
+.button,
 .button-full {
-    display: block;
+    display: inline-block;
+    border: 0;
     background: #0089ec;
     color: #fff;
     text-decoration: none;
-    text-align: center;
+    padding: 8px 18px;
+}
+
+.button-full {
     padding: 15px 0;
+    text-align: center;
+    display: block;
     font-size: 1.4em;
 }
 
@@ -70,7 +78,18 @@ input.datepicker--input__focused {
 
 .holder {
     max-width: 540px;
-    margin: 2.4em auto 4.2em;
+    margin: 0 auto;
+    padding: 3em 0 4.2em;
+    border-bottom: 1px dotted #ddd;
+}
+
+.holder-top {
+    padding-top: 0;
+}
+
+.holder-clean {
+    border-bottom: 0;
+    padding-bottom: 0;
 }
 
 .aligncenter {

@@ -191,6 +191,10 @@
                 }, //EXPORTS
 
 
+                // The classes
+                CLASSES = SETTINGS.klass,
+
+
                 // The element node passed
                 ELEMENT = (function( element ) {
 
@@ -311,7 +315,7 @@
                     // based on the time being the same as a disabled date
                     // or the day index of the week being within the collection
                     var isDisabledDate = function( date ) {
-                        return ( this.TIME == date.TIME ) || ( CALENDAR.disabledDays && DATES_TO_DISABLE.indexOf( this.DAY ) > -1 )
+                        return this.TIME == date.TIME || ( CALENDAR.disabledDays && DATES_TO_DISABLE.indexOf( this.DAY ) > -1 )
                     }
 
 
@@ -351,7 +355,7 @@
                     return createNode( 'thead',
                         createNode( STRING_TR,
                             weekdaysCollection.map( function( weekday ) {
-                                return createNode( 'th', weekday, SETTINGS.klass.weekdays )
+                                return createNode( 'th', weekday, CLASSES.weekdays )
                             })
                         )
                     )
@@ -364,7 +368,7 @@
                     // Create a new wrapped calendar while
                     // creating the jQuery holder object
                     // and binding events to the holder
-                    $HOLDER = $( createNode( STRING_DIV, createCalendarWrapped(), SETTINGS.klass.picker_holder ) ).on({
+                    $HOLDER = $( createNode( STRING_DIV, createCalendarWrapped(), CLASSES.picker_holder ) ).on({
                         click: onClickCalendar
                     })
 
@@ -421,7 +425,7 @@
                         // Otherwise, return the created tag
                         return createNode( STRING_DIV,
                             SETTINGS[ monthTag ],
-                            SETTINGS.klass[ monthTag ],
+                            CLASSES[ monthTag ],
                             { name: 'nav', value: ( upper || -1 ) }
                         ) //endreturn
                     } //createMonthTag
@@ -454,7 +458,7 @@
                         MONTH_FOCUSED.MONTH,
 
                         // Class
-                        SETTINGS.klass.month_selector,
+                        CLASSES.month_selector,
 
                         // Base index
                         0,
@@ -469,7 +473,7 @@
 
 
                 // Otherwise just return the month focused
-                return createNode( STRING_DIV, monthsCollection[ MONTH_FOCUSED.MONTH ], SETTINGS.klass.month )
+                return createNode( STRING_DIV, monthsCollection[ MONTH_FOCUSED.MONTH ], CLASSES.month )
             } //createMonthLabel
 
 
@@ -513,7 +517,7 @@
                         lastYear = getNumberInRange( highestYear, DATE_MAX.YEAR, 1 )
 
 
-                    // Check if there are left over years to put into the selector
+                    // Check if there are left over years to put in the selector
                     yearsInSelector = highestYear - lastYear
 
 
@@ -540,14 +544,14 @@
                         yearFocused,
 
                         // Class
-                        SETTINGS.klass.year_selector,
+                        CLASSES.year_selector,
 
                         // Base index
                         firstYear
                     ) //endreturn
                 }
 
-                return createNode( STRING_DIV, yearFocused, SETTINGS.klass.year )
+                return createNode( STRING_DIV, yearFocused, CLASSES.year )
             } //createYearLabel
 
 
@@ -597,10 +601,10 @@
                             klassCollection = [
 
                                 // The generic date class
-                                SETTINGS.klass.calendar_date,
+                                CLASSES.calendar_date,
 
                                 // The class for in or out of focus
-                                ( isMonthFocused ? SETTINGS.klass.day_infocus : SETTINGS.klass.day_outfocus )
+                                ( isMonthFocused ? CLASSES.day_infocus : CLASSES.day_outfocus )
                             ]
 
 
@@ -614,19 +618,19 @@
                             isDateDisabled = true
 
                             // Add the disabled class
-                            klassCollection.push( SETTINGS.klass.day_disabled )
+                            klassCollection.push( CLASSES.day_disabled )
                         }
 
 
                         // If it's today, add the class
                         if ( loopDate.TIME == DATE_TODAY.TIME ) {
-                            klassCollection.push( SETTINGS.klass.day_today )
+                            klassCollection.push( CLASSES.day_today )
                         }
 
 
                         // If it's the selected date, add the class
                         if ( loopDate.TIME == DATE_SELECTED.TIME ) {
-                            klassCollection.push( SETTINGS.klass.day_selected )
+                            klassCollection.push( CLASSES.day_selected )
                         }
 
 
@@ -697,7 +701,7 @@
 
 
                 // Join the dates and wrap the calendar body
-                return createNode( 'tbody', calendarWeeks, SETTINGS.klass.calendar_body )
+                return createNode( 'tbody', calendarWeeks, CLASSES.calendar_body )
             } //createTableBody
 
 
@@ -715,24 +719,24 @@
                     createNode( STRING_DIV,
 
                         // The prev/next month tags
-                        createNode( STRING_DIV, createMonthNav(), SETTINGS.klass.month_nav ) +
+                        createNode( STRING_DIV, createMonthNav(), CLASSES.month_nav ) +
 
                         // The calendar month tag
-                        createNode( STRING_DIV, createMonthLabel(), SETTINGS.klass.month_box ) +
+                        createNode( STRING_DIV, createMonthLabel(), CLASSES.month_box ) +
 
                         // The calendar year tag
-                        createNode( STRING_DIV, createYearLabel(), SETTINGS.klass.year_box ) +
+                        createNode( STRING_DIV, createYearLabel(), CLASSES.year_box ) +
 
                         // The calendar table with table head
                         // and a new calendar table body
-                        createNode( 'table', [ TABLE_HEAD, createTableBody() ], SETTINGS.klass.calendar ),
+                        createNode( 'table', [ TABLE_HEAD, createTableBody() ], CLASSES.calendar ),
 
                         // Calendar box class
-                        SETTINGS.klass.calendar_box
+                        CLASSES.calendar_box
                     ),
 
                     // Calendar wrap class
-                    SETTINGS.klass.calendar_wrap
+                    CLASSES.calendar_wrap
                 ) //endreturn
             } //calendarWrapped
 
@@ -866,7 +870,7 @@
 
                 var
                     // Get the selected day
-                    $daySelected = $findInHolder( SETTINGS.klass.day_selected )
+                    $daySelected = $findInHolder( CLASSES.day_selected )
 
 
 
@@ -890,10 +894,10 @@
                 if ( $dayTargeted && DATE_SELECTED.MONTH == MONTH_FOCUSED.MONTH ) {
 
                     // Remove the "selected" state from the selected node
-                    $daySelected.removeClass( SETTINGS.klass.day_selected )
+                    $daySelected.removeClass( CLASSES.day_selected )
 
                     // Add the "selected" state to the targeted node
-                    $dayTargeted.addClass( SETTINGS.klass.day_selected )
+                    $dayTargeted.addClass( CLASSES.day_selected )
                 }
 
 
@@ -1082,12 +1086,12 @@
             function postRender() {
 
                 // Find the month selector and bind the change event
-                $findInHolder( SETTINGS.klass.month_selector ).on({
+                $findInHolder( CLASSES.month_selector ).on({
                     change: function() { showMonth( +this.value ) }
                 })
 
                 // Find the year selector and bind the change event
-                $findInHolder( SETTINGS.klass.year_selector ).on({
+                $findInHolder( CLASSES.year_selector ).on({
                     change: function() { showMonth( MONTH_FOCUSED.MONTH, +this.value ) }
                 })
             } //postRender
@@ -1109,10 +1113,10 @@
 
 
                 // Add the "focused" class to the element
-                $ELEMENT.addClass( SETTINGS.klass.input_focus )
+                $ELEMENT.addClass( CLASSES.input_focus )
 
                 // Add the "opened" class to the calendar holder
-                $HOLDER.addClass( SETTINGS.klass.picker_open )
+                $HOLDER.addClass( CLASSES.picker_open )
 
 
                 // Bind the click event to the window
@@ -1145,10 +1149,10 @@
 
 
                 // Remove the "focused" class from the element
-                $ELEMENT.removeClass( SETTINGS.klass.input_focus )
+                $ELEMENT.removeClass( CLASSES.input_focus )
 
                 // Remove the "opened" class from the calendar holder
-                $HOLDER.removeClass( SETTINGS.klass.picker_open )
+                $HOLDER.removeClass( CLASSES.picker_open )
 
 
                 // Unbind the click event from the window
