@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v1.2.6 - 25 November, 2012
+ * pickadate.js v1.3 - 26 November, 2012
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
@@ -36,7 +36,7 @@
         STRING_TR = 'tr',
         STRING_DATE_DIVIDER = '/',
 
-        STRING_PREFIX_DATEPICKER = 'pickadate--',
+        STRING_PREFIX_DATEPICKER = 'pickadate__',
 
         $window = $( window ),
 
@@ -337,8 +337,8 @@
                 })(), //DISABLED_DATES
 
 
-                // Create the calendar table head
-                // with all the weekday labels in collection
+                // Create the calendar table head with weekday labels
+                // by copying the weekdays collection based on the settings
                 TABLE_HEAD = (function( weekdaysCollection ) {
 
                     // If the first day should be Monday
@@ -359,7 +359,7 @@
                             })
                         )
                     )
-                })( SETTINGS.show_weekdays_short ? SETTINGS.weekdays_short : SETTINGS.weekdays_full ), //TABLE_HEAD
+                })( ( SETTINGS.show_weekdays_short ? SETTINGS.weekdays_short : SETTINGS.weekdays_full ).slice( 0 ) ), //TABLE_HEAD
 
 
                 // Initialize everything
@@ -1271,41 +1271,41 @@
         // Classes
         klass: {
 
-            input_focus: STRING_PREFIX_DATEPICKER + 'input__focused',
+            input_focus: STRING_PREFIX_DATEPICKER + 'input--focused',
 
-            picker_open: STRING_PREFIX_DATEPICKER + 'opened',
             picker_holder: STRING_PREFIX_DATEPICKER + 'holder',
+            picker_open: STRING_PREFIX_DATEPICKER + 'holder--opened',
 
-            calendar_wrap: STRING_PREFIX_DATEPICKER + 'calendar__wrap',
-            calendar_box: STRING_PREFIX_DATEPICKER + 'calendar__box',
+            calendar_wrap: STRING_PREFIX_DATEPICKER + 'calendar--wrap',
+            calendar_box: STRING_PREFIX_DATEPICKER + 'calendar--box',
 
             calendar: STRING_PREFIX_DATEPICKER + 'calendar',
-            calendar_body: STRING_PREFIX_DATEPICKER + 'calendar__body',
-            calendar_date: STRING_PREFIX_DATEPICKER + 'calendar__date',
+            calendar_body: STRING_PREFIX_DATEPICKER + 'calendar--body',
+            calendar_date: STRING_PREFIX_DATEPICKER + 'calendar--date',
 
             year: STRING_PREFIX_DATEPICKER + 'year',
-            year_box: STRING_PREFIX_DATEPICKER + 'year__box',
-            year_selector: STRING_PREFIX_DATEPICKER + 'year__selector',
+            year_box: STRING_PREFIX_DATEPICKER + 'year--box',
+            year_selector: STRING_PREFIX_DATEPICKER + 'year--selector',
 
             month: STRING_PREFIX_DATEPICKER + 'month',
-            month_box: STRING_PREFIX_DATEPICKER + 'month__box',
-            month_selector: STRING_PREFIX_DATEPICKER + 'month__selector',
-            month_nav: STRING_PREFIX_DATEPICKER + 'month__nav',
-            month_prev: STRING_PREFIX_DATEPICKER + 'month__prev',
-            month_next: STRING_PREFIX_DATEPICKER + 'month__next',
+            month_box: STRING_PREFIX_DATEPICKER + 'month--box',
+            month_selector: STRING_PREFIX_DATEPICKER + 'month--selector',
+            month_nav: STRING_PREFIX_DATEPICKER + 'month--nav',
+            month_prev: STRING_PREFIX_DATEPICKER + 'month--prev',
+            month_next: STRING_PREFIX_DATEPICKER + 'month--next',
 
             week: STRING_PREFIX_DATEPICKER + 'week',
             weekdays: STRING_PREFIX_DATEPICKER + 'weekday',
 
-            day_disabled: STRING_PREFIX_DATEPICKER + 'day__disabled',
-            day_selected: STRING_PREFIX_DATEPICKER + 'day__selected',
-            day_today: STRING_PREFIX_DATEPICKER + 'day__today',
-            day_infocus: STRING_PREFIX_DATEPICKER + 'day__infocus',
-            day_outfocus: STRING_PREFIX_DATEPICKER + 'day__outfocus',
+            day_disabled: STRING_PREFIX_DATEPICKER + 'day--disabled',
+            day_selected: STRING_PREFIX_DATEPICKER + 'day--selected',
+            day_today: STRING_PREFIX_DATEPICKER + 'day--today',
+            day_infocus: STRING_PREFIX_DATEPICKER + 'day--infocus',
+            day_outfocus: STRING_PREFIX_DATEPICKER + 'day--outfocus',
 
-            box_months: STRING_PREFIX_DATEPICKER + 'holder__months',
-            box_years: STRING_PREFIX_DATEPICKER + 'holder__years',
-            box_weekdays: STRING_PREFIX_DATEPICKER + 'holder__weekdays'
+            box_months: STRING_PREFIX_DATEPICKER + 'holder--months',
+            box_years: STRING_PREFIX_DATEPICKER + 'holder--years',
+            box_weekdays: STRING_PREFIX_DATEPICKER + 'holder--weekdays'
         }
     } //Picker.defaults
 

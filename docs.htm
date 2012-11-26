@@ -68,28 +68,28 @@ onChangeMonth: null,
 
 <a href="#theme" id="classes">// Classes</a>
 klass: {
-    input_focus: 'pickadate--input__focused',
-    picker_open: 'pickadate--opened',
-    picker_holder: 'pickadate--holder',
-    calendar_box: 'pickadate--calendar__box',
-    calendar: 'pickadate--calendar',
-    calendar_body: 'pickadate--calendar__body',
-    calendar_date: 'pickadate--calendar__date',
-    year: 'pickadate--year',
-    month: 'pickadate--month',
-    month_nav: 'pickadate--month__nav',
-    month_prev: 'pickadate--month__prev',
-    month_next: 'pickadate--month__next',
-    week: 'pickadate--week',
-    weekdays: 'pickadate--weekday',
-    day_disabled: 'pickadate--day__disabled',
-    day_selected: 'pickadate--day__selected',
-    day_today: 'pickadate--day__today',
-    day_infocus: 'pickadate--day__infocus',
-    day_outfocus: 'pickadate--day__outfocus',
-    box_months: 'pickadate--holder__months',
-    box_years: 'pickadate--holder__years',
-    box_weekdays: 'pickadate--holder__weekdays'
+    input_focus: 'pickadate__input--focused',
+    picker_holder: 'pickadate__holder',
+    picker_open: 'pickadate__holder--opened',
+    calendar_box: 'pickadate__calendar--box',
+    calendar: 'pickadate__calendar',
+    calendar_body: 'pickadate__calendar--body',
+    calendar_date: 'pickadate__calendar--date',
+    year: 'pickadate__year',
+    month: 'pickadate__month',
+    month_nav: 'pickadate__month--nav',
+    month_prev: 'pickadate__month--prev',
+    month_next: 'pickadate__month--next',
+    week: 'pickadate__week',
+    weekdays: 'pickadate__weekday',
+    day_disabled: 'pickadate__day--disabled',
+    day_selected: 'pickadate__day--selected',
+    day_today: 'pickadate__day--today',
+    day_infocus: 'pickadate__day--infocus',
+    day_outfocus: 'pickadate__day--outfocus',
+    box_months: 'pickadate__holder--months',
+    box_years: 'pickadate__holder--years',
+    box_weekdays: 'pickadate__holder--weekdays'
 }</code></pre>
 
 </section>
@@ -101,7 +101,7 @@ klass: {
 
     <pre><code>$( '.datepicker' ).pickadate()</code></pre>
 
-    <p>With the basic, you get all the default options listed above:</p>
+    <p>With the basic setup, you get all the default options listed above:</p>
 
     <fieldset>
         <input id="picker_simple" class="datepicker" type="text">
@@ -302,7 +302,7 @@ klass: {
 
     <h3><strong class="underline-highlight">Selectively disable dates</strong></h3>
 
-    <p>You may pass an array of arbitrary dates to to disabled specific dates.</p>
+    <p>You may pass an array of arbitrary dates to disable specific dates.</p>
 
     <pre><code>$( '.datepicker' ).pickadate({
     dates_disabled: [
@@ -402,25 +402,25 @@ klass: {
 
     <style>
         .datepicker-themed input.datepicker,
-        .datepicker-themed input.pickadate--input__focused {
+        .datepicker-themed input.pickadate__input--focused {
             border-color: #5a4;
         }
-        .datepicker-themed .pickadate--holder {
+        .datepicker-themed .pickadate__holder {
             height: auto;
             position: relative;
             z-index: 10;
         }
-        .datepicker-themed .pickadate--calendar__wrap {
+        .datepicker-themed .pickadate__calendar--wrap {
             max-width: 100%;
             max-height: none;
             top: .5em;
         }
-        .datepicker-themed .pickadate--calendar__wrap {
+        .datepicker-themed .pickadate__calendar--wrap {
             -webkit-box-shadow: none;
                -moz-box-shadow: none;
                     box-shadow: none;
         }
-        .datepicker-themed .pickadate--calendar__box {
+        .datepicker-themed .pickadate__calendar--box {
             border-color: #eee;
             border-width: 4px;
 
@@ -428,24 +428,24 @@ klass: {
                -moz-border-radius: 0;
                     border-radius: 0;
         }
-        .datepicker-themed .pickadate--month__nav {
+        .datepicker-themed .pickadate__month--nav {
             font-size: .8em;
         }
-        .datepicker-themed .pickadate--month__box {
+        .datepicker-themed .pickadate__month--box {
             display: inline-block;
             width: 30%;
             margin-left: 24%;
             margin-right: 2%;
         }
-        .datepicker-themed .pickadate--year__box {
+        .datepicker-themed .pickadate__year--box {
             display: inline-block;
             width: 20%;
         }
-        .datepicker-themed .pickadate--month__selector,
-        .datepicker-themed .pickadate--year__selector {
+        .datepicker-themed .pickadate__month--selector,
+        .datepicker-themed .pickadate__year--selector {
             width: 100%;
         }
-        .datepicker-themed .pickadate--weekday {
+        .datepicker-themed .pickadate__weekday {
             font-size: .6em;
             text-transform: uppercase;
             font-weight: bold;
@@ -454,7 +454,7 @@ klass: {
             padding-right: 10px;
             padding-left: 10px;
         }
-        .datepicker-themed .pickadate--calendar__date {
+        .datepicker-themed .pickadate__calendar--date {
             text-align: right;
             padding-right: 8px;
             padding-left: 8px;
@@ -464,27 +464,27 @@ klass: {
                -moz-border-radius: 0;
                     border-radius: 0;
         }
-        .datepicker-themed .pickadate--day__outfocus {
+        .datepicker-themed .pickadate__day--outfocus {
             color: #ddd;
         }
-        .datepicker-themed .pickadate--day__today {
+        .datepicker-themed .pickadate__day--today {
             color: #5a4;
             position: relative;
         }
-        .datepicker-themed .pickadate--month__prev,
-        .datepicker-themed .pickadate--month__next {
+        .datepicker-themed .pickadate__month--prev,
+        .datepicker-themed .pickadate__month--next {
             line-height: 26px;
             top: 3px;
         }
-        .datepicker-themed .pickadate--calendar__date:hover,
-        .datepicker-themed .pickadate--month__prev:hover,
-        .datepicker-themed .pickadate--month__next:hover {
+        .datepicker-themed .pickadate__calendar--date:hover,
+        .datepicker-themed .pickadate__month--prev:hover,
+        .datepicker-themed .pickadate__month--next:hover {
             background: #ceb;
             border-color: #ceb;
             color: #000;
         }
-        .datepicker-themed .pickadate--day__selected,
-        .datepicker-themed .pickadate--day__selected:hover {
+        .datepicker-themed .pickadate__day--selected,
+        .datepicker-themed .pickadate__day--selected:hover {
             background: #5a4;
             border-color: #382;
             color: #fff;
@@ -493,8 +493,8 @@ klass: {
                -moz-box-shadow: inset 0 2px 2px #7c6;
                     box-shadow: inset 0 2px 2px #7c6;
         }
-        .datepicker-themed .pickadate--day__disabled,
-        .datepicker-themed .pickadate--day__disabled:hover {
+        .datepicker-themed .pickadate__day--disabled,
+        .datepicker-themed .pickadate__day--disabled:hover {
             background: #f5f5f5;
             border-color: #f5f5f5;
             color: #ddd;
@@ -512,45 +512,45 @@ klass: {
     </fieldset>
 
     <pre><code>.datepicker-themed input.datepicker,
-.datepicker-themed input.pickadate--input__focused {
+.datepicker-themed input.pickadate__input--focused {
     border-color: #5a4;
 }
-.datepicker-themed .pickadate--holder {
+.datepicker-themed .pickadate__holder {
     height: auto;
     position: relative;
     z-index: 10;
 }
-.datepicker-themed .pickadate--calendar__wrap {
+.datepicker-themed .pickadate__calendar--wrap {
     max-width: 100%;
     max-height: none;
     top: .5em;
 }
-.datepicker-themed .pickadate--calendar__wrap {
+.datepicker-themed .pickadate__calendar--wrap {
     box-shadow: none;
 }
-.datepicker-themed .pickadate--calendar__box {
+.datepicker-themed .pickadate__calendar--box {
     border-color: #eee;
     border-width: 4px;
     border-radius: 0;
 }
-.datepicker-themed .pickadate--month__nav {
+.datepicker-themed .pickadate__month--nav {
     font-size: .8em;
 }
-.datepicker-themed .pickadate--month__box {
+.datepicker-themed .pickadate__month--box {
     display: inline-block;
     width: 30%;
     margin-left: 24%;
     margin-right: 2%;
 }
-.datepicker-themed .pickadate--year__box {
+.datepicker-themed .pickadate__year--box {
     display: inline-block;
     width: 20%;
 }
-.datepicker-themed .pickadate--month__selector,
-.datepicker-themed .pickadate--year__selector {
+.datepicker-themed .pickadate__month--selector,
+.datepicker-themed .pickadate__year--selector {
     width: 100%;
 }
-.datepicker-themed .pickadate--weekday {
+.datepicker-themed .pickadate__weekday {
     font-size: .6em;
     text-transform: uppercase;
     font-weight: bold;
@@ -559,41 +559,41 @@ klass: {
     padding-right: 10px;
     padding-left: 10px;
 }
-.datepicker-themed .pickadate--calendar__date {
+.datepicker-themed .pickadate__calendar--date {
     text-align: right;
     padding-right: 8px;
     padding-left: 8px;
     border: 1px solid #fff;
     border-radius: 0;
 }
-.datepicker-themed .pickadate--day__outfocus {
+.datepicker-themed .pickadate__day--outfocus {
     color: #ddd;
 }
-.datepicker-themed .pickadate--day__today {
+.datepicker-themed .pickadate__day--today {
     color: #5a4;
     position: relative;
 }
-.datepicker-themed .pickadate--month__prev,
-.datepicker-themed .pickadate--month__next {
+.datepicker-themed .pickadate__month--prev,
+.datepicker-themed .pickadate__month--next {
     line-height: 26px;
     top: 3px;
 }
-.datepicker-themed .pickadate--calendar__date:hover,
-.datepicker-themed .pickadate--month__prev:hover,
-.datepicker-themed .pickadate--month__next:hover {
+.datepicker-themed .pickadate__calendar--date:hover,
+.datepicker-themed .pickadate__month--prev:hover,
+.datepicker-themed .pickadate__month--next:hover {
     background: #ceb;
     border-color: #ceb;
     color: #000;
 }
-.datepicker-themed .pickadate--day__selected,
-.datepicker-themed .pickadate--day__selected:hover {
+.datepicker-themed .pickadate__day--selected,
+.datepicker-themed .pickadate__day--selected:hover {
     background: #5a4;
     border-color: #382;
     color: #fff;
     box-shadow: inset 0 2px 2px #7c6;
 }
-.datepicker-themed .pickadate--day__disabled,
-.datepicker-themed .pickadate--day__disabled:hover {
+.datepicker-themed .pickadate__day--disabled,
+.datepicker-themed .pickadate__day--disabled:hover {
     background: #f5f5f5;
     border-color: #f5f5f5;
     color: #ddd;
@@ -778,7 +778,7 @@ calendar.close()
         format: 'You selected: dddd, dd mmm, yyyy',
         format_submit: 'yyyy-mm-dd',
         onSelect: function() {
-            $custom_date.after( '<p class="notification">Date to submit: <code>' + $picker.getDate() + '</code></p>' )
+            $custom_date.next().after( '<p class="notification">Date to submit: <code>' + $picker.getDate() + '</code></p>' )
         }
     })
     var $picker = $custom_date.data( 'pickadate' )
