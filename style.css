@@ -676,7 +676,7 @@ input[type=submit]:active,
 pre,
 code {
     font-family: 'Monaco', 'Consolas', 'Liberation Mono', monospace;
-    padding: 3px 5px 3px;
+    padding: 1px 3px;
     border: 1px solid #e9ebeb;
     background-color: #f5f8f8;
     font-size: .9em;

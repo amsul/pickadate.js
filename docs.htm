@@ -1,3 +1,5 @@
+<!doctype html>
+
 <meta name="viewport" content="width=device-width,maximum-scale=1">
 
 <title>Pickadate.js &#8226; Documentation</title>
@@ -7,12 +9,12 @@
 <link rel="stylesheet" href="pickadate.css">
 
 
-<section class="holder">
+<section class="holder holder-top holder-clean">
 
     <h1><a href="http://amsul.github.com/pickadate.js" class="link-inherit"><strong title="Pick a Date" class="underline-highlight">pickadate.js</strong></a></h1>
-    <h2>A lightweight jQuery dateinput picker</h2>
+    <h2>A responsive and lightweight jQuery dateinput picker</h2>
 
-    <h3>Weighs 6.9kb (2.8kb gzipped) <small class="dimmed"><small><small><small>&ndash; whereas jQuery UI datepicker is 30kb minified</small></small></small></small></h3>
+    <h3>Weighs 7.94kb (3.3kb gzipped) <small class="dimmed"><small><small><small>&ndash; whereas jQuery UI datepicker is 30kb minified</small></small></small></small></h3>
 
     <a href="https://github.com/amsul/pickadate.js"><img width="124" height="124" style="position:absolute;top:0;right:0;border:0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
 
@@ -32,69 +34,85 @@ weekdays_short: [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ],
 month_prev: '&amp;#9664;',
 month_next: '&amp;#9654;',
 
-<a href="#ranges">// Date ranges</a>
-date_min: false,
-date_max: false,
-
 <a href="#strings">// Display strings</a>
 show_months_full: true,
 show_weekdays_short: true,
 
 <a href="#formats">// Date format</a>
-format: 'd mmmm, yyyy',,
+format: 'd mmmm, yyyy',
 format_submit: false,
-
-<a href="#disable">// Disable picker</a>
-disable_picker: false,
+hidden_suffix: '_submit',
 
 <a href="#first_day">// First day of week</a>
 first_day: 0,
 
-<a href="#theme">// Classes</a>
-class_input_focus: 'datepicker--input__focused',
-class_picker_open: 'datepicker--opened',
-class_picker_holder: 'datepicker--holder',
-class_calendar_box: 'datepicker--calendar__box',
-class_calendar: 'datepicker--calendar',
-class_calendar_body: 'datepicker--calendar__body',
-class_calendar_date: 'datepicker--calendar__date',
-class_year: 'datepicker--year',
-class_month: 'datepicker--month',
-class_month_nav: 'datepicker--month__nav',
-class_month_prev: 'datepicker--month__prev',
-class_month_next: 'datepicker--month__next',
-class_week: 'datepicker--week',
-class_weekdays: 'datepicker--weekday',
-class_day_disabled: 'datepicker--day__disabled',
-class_day_selected: 'datepicker--day__selected',
-class_day_today: 'datepicker--day__today',
-class_day_infocus: 'datepicker--day__infocus',
-class_day_outfocus: 'datepicker--day__outfocus',
-class_box_months: 'datepicker--holder__months',
-class_box_years: 'datepicker--holder__years',
-class_box_weekdays: 'datepicker--holder__weekdays'</code></pre>
+<a href="#selectors">// Month &amp; year dropdown selectors</a>
+month_selector: false,
+year_selector: false,
+
+<a href="#ranges">// Date ranges</a>
+date_min: false,
+date_max: false,
+
+<a href="#dates_disabled">// Dates disabled</a>
+dates_disabled: false,
+
+<a href="#disable">// Disable picker</a>
+disable_picker: false,
+
+<a href="#events">// Calendar events</a>
+onOpen: null,
+onClose: null,
+onSelect: null,
+onChangeMonth: null,
+
+<a href="#theme" id="classes">// Classes</a>
+klass: {
+    input_focus: 'pickadate--input__focused',
+    picker_open: 'pickadate--opened',
+    picker_holder: 'pickadate--holder',
+    calendar_box: 'pickadate--calendar__box',
+    calendar: 'pickadate--calendar',
+    calendar_body: 'pickadate--calendar__body',
+    calendar_date: 'pickadate--calendar__date',
+    year: 'pickadate--year',
+    month: 'pickadate--month',
+    month_nav: 'pickadate--month__nav',
+    month_prev: 'pickadate--month__prev',
+    month_next: 'pickadate--month__next',
+    week: 'pickadate--week',
+    weekdays: 'pickadate--weekday',
+    day_disabled: 'pickadate--day__disabled',
+    day_selected: 'pickadate--day__selected',
+    day_today: 'pickadate--day__today',
+    day_infocus: 'pickadate--day__infocus',
+    day_outfocus: 'pickadate--day__outfocus',
+    box_months: 'pickadate--holder__months',
+    box_years: 'pickadate--holder__years',
+    box_weekdays: 'pickadate--holder__weekdays'
+}</code></pre>
 
 </section>
 
 
 <section class="holder">
 
-    <fieldset>
-        <h3><strong class="underline-highlight">Simple setup</strong></h3>
-        <input id="input_01" class="datepicker" type="text">
-    </fieldset>
+    <h3><strong class="underline-highlight">Simple setup</strong></h3>
 
     <pre><code>$( '.datepicker' ).pickadate()</code></pre>
+
+    <p>With the basic, you get all the default options listed above:</p>
+
+    <fieldset>
+        <input id="picker_simple" class="datepicker" type="text">
+    </fieldset>
 
 </section>
 
 
 <section class="holder" id="strings">
 
-    <fieldset>
-        <h3><strong class="underline-highlight">Custom month and weekday tags</strong></h3>
-        <input id="input_02" class="datepicker" type="text">
-    </fieldset>
+    <h3><strong class="underline-highlight">Custom month and weekday tags</strong></h3>
 
     <pre><code>$( '.datepicker' ).pickadate({
     month_prev: '&amp;larr;',
@@ -103,26 +121,33 @@ class_box_weekdays: 'datepicker--holder__weekdays'</code></pre>
     show_months_full: false
 })</code></pre>
 
+    <fieldset>
+        <input id="picker_strings" class="datepicker" type="text">
+    </fieldset>
+
 </section>
 
 
 <section class="holder" id="formats">
 
-    <fieldset>
-        <h3><strong class="underline-highlight">Custom date formats</strong></h3>
-        <input id="input_03" class="datepicker" name="custom_date" type="text">
-    </fieldset>
+    <h3><strong class="underline-highlight">Custom date formats</strong></h3>
 
     <pre><code>$( '.datepicker' ).pickadate({
-    format: 'You selected: dddd, dd/mm/yyyy',
+    format: 'You selected: dddd, dd mmm, yyyy',
     format_submit: 'yyyy-mm-dd'
 })</code></pre>
 
-    <p>You can use <code>format_submit</code> to submit an alternate value to the server.</p>
+    <p>Show human-friendly date formats while using a different format to submit to the server. Pick a date:</p>
 
-    <p>This is done by creating a hidden input field using the name of the original input plus the suffix <code>_submit</code>.</p>
+    <fieldset>
+        <input id="picker_formats" class="datepicker" name="custom_date" type="text">
+    </fieldset>
 
-    <p>The date formats follow these rules:</p>
+    <p>This is done by creating a hidden input field using the name of the original input element plus the string set in the <code>hidden_suffix</code> option.</p>
+
+    <p>As a default, <code>hidden_suffix</code> is <code>'_submit'</code>.</p>
+
+    <p>The dates can be formatted using the following rules:</p>
 
     <table class="table" width="100%">
         <thead>
@@ -189,54 +214,9 @@ class_box_weekdays: 'datepicker--holder__weekdays'</code></pre>
 </section>
 
 
-<section class="holder" id="disable">
-
-    <fieldset>
-        <h3><strong class="underline-highlight">Disable picker for native calendar</strong></h3>
-        <input id="input_04" class="datepicker" type="date">
-    </fieldset>
-
-    <pre><code>$( '.datepicker' ).pickadate({
-    disable_picker: true
-})
-</code></pre>
-
-    <p>Some browsers have good native support for <code>type="date"</code>.</p>
-    <p>If you want to selectively disable the picker for these browsers, I would suggest detecing for support with something like <a target="_blank" href="http://modernizr.com/">Modernizr</a> and then setting <code>disable_picker</code> to <code>true</code>.</p>
-
-</section>
-
-
-<section class="holder" id="ranges">
-
-    <fieldset>
-        <h3><strong class="underline-highlight">Minimum and maximum date range</strong></h3>
-        <input id="input_05" class="datepicker" type="text">
-    </fieldset>
-
-    <pre><code>$( '.datepicker' ).pickadate({
-    date_min: [ 2012, 10, 14 ],
-    date_max: 5
-})
-</code></pre>
-
-    <p><code>date_min</code> and <code>date_max</code> can be either</p>
-    <ol>
-        <li>an array (format: [ YYYY, MM, DD ] )</li>
-        <li>or true / false</li>
-    </ol>
-
-    <p><code>date_max</code> can also be an integer - representing the number of days till the max date.</p>
-
-</section>
-
-
 <section class="holder" id="first_day">
 
-    <fieldset>
-        <h3><strong class="underline-highlight">Set Monday as the first day</strong></h3>
-        <input id="input_06" class="datepicker" type="text">
-    </fieldset>
+    <h3><strong class="underline-highlight">Set Monday as the first day</strong></h3>
 
     <pre><code>$( '.datepicker' ).pickadate({
     first_day: 1
@@ -245,138 +225,520 @@ class_box_weekdays: 'datepicker--holder__weekdays'</code></pre>
 
     <p>Set <code>first_day</code> to <code>1</code> for Monday and <code>0</code> for Sunday.</p>
 
+    <fieldset>
+        <input id="picker_dates_first_day" class="datepicker" type="text">
+    </fieldset>
+
+</section>
+
+
+<section class="holder" id="selectors">
+
+    <h3><strong class="underline-highlight">Month and year dropdowns</strong></h3>
+
+    <pre><code>$( '.datepicker' ).pickadate({
+    month_selector: true,
+    year_selector: true
+})</code></pre>
+
+    <p>If <code>month_selector</code> or <code>year_selector</code> is <code>true</code>, a select menu is displayed:</p>
+
+    <fieldset>
+        <input id="picker_selectors" class="datepicker" type="text">
+    </fieldset>
+
+    <p>To change the number of years in the dropdown, set <code>year_selector</code> as an even integer (half before the year in focus and half after). If set to <code>true</code>, it defaults to <code>10</code>.</p>
+
+    <pre><code>$( '.datepicker' ).pickadate({
+    year_selector: 4
+})</code></pre>
+
+    <fieldset>
+        <input id="picker_selectors_b" class="datepicker" type="text">
+    </fieldset>
+
+</section>
+
+
+<section class="holder" id="ranges">
+
+    <h3><strong class="underline-highlight">Minimum and maximum date range</strong></h3>
+
+    <pre><code>$( '.datepicker' ).pickadate({
+    date_min: [ 2012, 10, 14 ],
+    date_max: 5
+})</code></pre>
+
+    <fieldset>
+        <input id="picker_ranges_a" class="datepicker" type="text">
+    </fieldset>
+
+    <p><code>date_min</code> and <code>date_max</code> can be either</p>
+    <ol>
+        <li>an array representing a date (format: [ yyyy, mm, dd ] )</li>
+        <li>a boolean (true / false)</li>
+        <li>or an integer</li>
+    </ol>
+
+    <p>If <code>date_max</code> or <code>date_min</code> are <code>true</code>, the range limit is set to today.</p>
+
+    <p>If <code>date_max</code> is an integer, it must be a positive integer representing the number of days till the max date.</p>
+
+    <p>If <code>date_min</code> is an integer, it must be a negative integer representing the number of days from the min date.</p>
+
+    <pre><code>$( '.datepicker' ).pickadate({
+    date_min: -8,
+    date_max: true
+})</code></pre>
+
+    <fieldset>
+        <input id="picker_ranges_b" class="datepicker" type="text">
+    </fieldset>
+
+</section>
+
+
+<section class="holder" id="dates_disabled">
+
+    <h3><strong class="underline-highlight">Selectively disable dates</strong></h3>
+
+    <p>You may pass an array of arbitrary dates to to disabled specific dates.</p>
+
+    <pre><code>$( '.datepicker' ).pickadate({
+    dates_disabled: [
+        [ 2012, 11, 2],
+        [ 2012, 11, 5],
+        [ 2012, 11, 28]
+    ]
+})</code></pre>
+
+    <fieldset>
+        <input id="picker_dates_disabled_a" class="datepicker" type="text">
+    </fieldset>
+
+    <p>If you also want to disable certain days of the week, such as all Saturdays (7<sup>th</sup> day of week) and Sundays (1<sup>st</sup> day of week), you can do this:</p>
+
+    <pre><code>$( '.datepicker' ).pickadate({
+    dates_disabled: [
+        1, 7,
+        [ 2012, 11, 2],
+        [ 2012, 11, 5],
+        [ 2012, 11, 28]
+    ]
+})</code></pre>
+
+    <fieldset>
+        <input id="picker_dates_disabled_b" class="datepicker" type="text">
+    </fieldset>
+
+    <p>Alternatively, you can disable ALL the dates in the calendar, EXCEPT the ones specified if you set <code>true</code> as the first item in the array.</p>
+
+    <pre><code>$( '.datepicker' ).pickadate({
+    dates_disabled: [
+        true,
+        1, 7,
+        [ 2012, 11, 2],
+        [ 2012, 11, 5],
+        [ 2012, 11, 28]
+    ]
+})</code></pre>
+
+    <fieldset>
+        <input id="picker_dates_disabled_c" class="datepicker" type="text">
+    </fieldset>
+
+</section>
+
+
+<section class="holder" id="disable">
+
+    <h3><strong class="underline-highlight">Disable picker for native calendar</strong></h3>
+
+    <pre><code>$( '.datepicker' ).pickadate({
+    disable_picker: true
+})</code></pre>
+
+    <fieldset>
+        <input id="picker_disable" class="datepicker" type="date">
+    </fieldset>
+
+    <p>Some mobile browsers have good native support for <code>type="date"</code>.</p>
+    <p>If you want to selectively disable the picker for these browsers, I would suggest detecing for support with something like <a target="_blank" href="http://modernizr.com/">Modernizr</a> and then setting <code>disable_picker</code> to <code>true</code>.</p>
+
+</section>
+
+
+<section class="holder" id="events">
+
+    <h3><strong class="underline-highlight">Do stuff on calendar events</strong></h3>
+
+    <pre><code>$( '.datepicker' ).pickadate({
+    onOpen: function() {
+        alert( 'Opened' )
+    },
+    onClose: function() {
+        alert( 'Closed' )
+    },
+    onSelect: function() {
+        alert( 'Selected: ' + this.getDate() )
+    },
+    onStart: function() {
+        console.log( 'Hello there :)' )
+    }
+})</code></pre>
+
+    <p>You can have events trigger as the user interacts with the picker.</p>
+
+    <p>Within the scope of these methods, <code>this</code> gives you access to the <a href="#api">calendar API</a>. Pick a date:</p>
+
+    <fieldset>
+        <input id="picker_events" class="datepicker" type="date">
+    </fieldset>
+
 </section>
 
 
 <section class="holder" id="theme">
 
     <style>
-        .datepicker-themed {
-            position: relative;
+        .datepicker-themed input.datepicker,
+        .datepicker-themed input.pickadate--input__focused {
+            border-color: #5a4;
         }
-        .datepicker-themed .datepicker--calendar__box {
-            border: none;
+        .datepicker-themed .pickadate--holder {
+            height: auto;
+            position: relative;
+            z-index: 10;
+        }
+        .datepicker-themed .pickadate--calendar__wrap {
             max-width: 100%;
-
-            -webkit-box-shadow: 0 0 0 6px #e20, 0 24px 54px 18px rgba(0,0,0,.2);
-               -moz-box-shadow: 0 0 0 6px #e20, 0 24px 54px 18px rgba(0,0,0,.2);
-                    box-shadow: 0 0 0 6px #e20, 0 24px 54px 18px rgba(0,0,0,.2);
+            max-height: none;
+            top: .5em;
+        }
+        .datepicker-themed .pickadate--calendar__wrap {
+            -webkit-box-shadow: none;
+               -moz-box-shadow: none;
+                    box-shadow: none;
+        }
+        .datepicker-themed .pickadate--calendar__box {
+            border-color: #eee;
+            border-width: 4px;
 
             -webkit-border-radius: 0;
                -moz-border-radius: 0;
                     border-radius: 0;
         }
-        .datepicker-themed .datepicker--month {
+        .datepicker-themed .pickadate--month__nav {
+            font-size: .8em;
+        }
+        .datepicker-themed .pickadate--month__box {
+            display: inline-block;
+            width: 30%;
+            margin-left: 24%;
+            margin-right: 2%;
+        }
+        .datepicker-themed .pickadate--year__box {
+            display: inline-block;
+            width: 20%;
+        }
+        .datepicker-themed .pickadate--month__selector,
+        .datepicker-themed .pickadate--year__selector {
+            width: 100%;
+        }
+        .datepicker-themed .pickadate--weekday {
+            font-size: .6em;
             text-transform: uppercase;
             font-weight: bold;
-            font-style: italic;
+            border-bottom: 1px solid #eee;
+            text-align: right;
+            padding-right: 10px;
+            padding-left: 10px;
         }
-        .datepicker-themed .datepicker--calendar__date {
-            border-left: 1px solid #e20;
-            border-top: 1px solid #e20;
-            border-bottom: 1px solid #e20;
+        .datepicker-themed .pickadate--calendar__date {
+            text-align: right;
+            padding-right: 8px;
+            padding-left: 8px;
+            border: 1px solid #fff;
 
-            -webkit-border-radius: 16px;
-               -moz-border-radius: 16px;
-                    border-radius: 16px;
+            -webkit-border-radius: 0;
+               -moz-border-radius: 0;
+                    border-radius: 0;
         }
-        .datepicker-themed tr:last-child .datepicker--calendar__date {
-            border-bottom: 1px solid #e20;
+        .datepicker-themed .pickadate--day__outfocus {
+            color: #ddd;
         }
-        .datepicker-themed .datepicker--calendar__date:last-child {
-            border-right: 1px solid #e20;
+        .datepicker-themed .pickadate--day__today {
+            color: #5a4;
+            position: relative;
         }
-        .datepicker-themed .datepicker--day__today {
-            font-weight: bold;
-            color: #e20;
+        .datepicker-themed .pickadate--month__prev,
+        .datepicker-themed .pickadate--month__next {
+            line-height: 26px;
+            top: 3px;
         }
-        .datepicker-themed .datepicker--day__selected,
-        .datepicker-themed .datepicker--day__infocus:hover,
-        .datepicker-themed .datepicker--day__outfocus:hover,
-        .datepicker-themed .datepicker--month__prev:hover,
-        .datepicker-themed .datepicker--month__next:hover {
-            background: #e20;
+        .datepicker-themed .pickadate--calendar__date:hover,
+        .datepicker-themed .pickadate--month__prev:hover,
+        .datepicker-themed .pickadate--month__next:hover {
+            background: #ceb;
+            border-color: #ceb;
+            color: #000;
+        }
+        .datepicker-themed .pickadate--day__selected,
+        .datepicker-themed .pickadate--day__selected:hover {
+            background: #5a4;
+            border-color: #382;
             color: #fff;
-            font-weight: bold;
-        }
-        .datepicker-themed .datepicker--day__outfocus {
-            border-color: #ccc !important;
-            color: #999;
-        }
-        .datepicker-themed .datepicker--day__disabled,
-        .datepicker-themed .datepicker--day__disabled:hover {
-            border-color: #ddd !important;
-            color: #bbb !important;
-            background: #f5f5f5 !important;
-            font-weight: 100 !important;
 
-            -moz-opacity: .6;
-                 opacity: .6;
+            -webkit-box-shadow: inset 0 2px 2px #7c6;
+               -moz-box-shadow: inset 0 2px 2px #7c6;
+                    box-shadow: inset 0 2px 2px #7c6;
+        }
+        .datepicker-themed .pickadate--day__disabled,
+        .datepicker-themed .pickadate--day__disabled:hover {
+            background: #f5f5f5;
+            border-color: #f5f5f5;
+            color: #ddd;
+
+            -webkit-box-shadow: none;
+               -moz-box-shadow: none;
+                    box-shadow: none;
         }
     </style>
 
     <fieldset class="datepicker-themed">
         <h3><strong class="underline-highlight">Themed calendar</strong></h3>
         <p>Go crazy.</p>
-        <input id="input_07" class="datepicker" type="text">
+        <input id="picker_themed" class="datepicker" type="text">
     </fieldset>
 
-    <pre><code>.datepicker-themed {
-    position: relative;
+    <pre><code>.datepicker-themed input.datepicker,
+.datepicker-themed input.pickadate--input__focused {
+    border-color: #5a4;
 }
-.datepicker-themed .datepicker--calendar__box {
-    border: none;
+.datepicker-themed .pickadate--holder {
+    height: auto;
+    position: relative;
+    z-index: 10;
+}
+.datepicker-themed .pickadate--calendar__wrap {
     max-width: 100%;
-    box-shadow: 0 0 0 6px #e20, 0 24px 54px 18px rgba(0,0,0,.2);
+    max-height: none;
+    top: .5em;
+}
+.datepicker-themed .pickadate--calendar__wrap {
+    box-shadow: none;
+}
+.datepicker-themed .pickadate--calendar__box {
+    border-color: #eee;
+    border-width: 4px;
     border-radius: 0;
 }
-.datepicker-themed .datepicker--month {
+.datepicker-themed .pickadate--month__nav {
+    font-size: .8em;
+}
+.datepicker-themed .pickadate--month__box {
+    display: inline-block;
+    width: 30%;
+    margin-left: 24%;
+    margin-right: 2%;
+}
+.datepicker-themed .pickadate--year__box {
+    display: inline-block;
+    width: 20%;
+}
+.datepicker-themed .pickadate--month__selector,
+.datepicker-themed .pickadate--year__selector {
+    width: 100%;
+}
+.datepicker-themed .pickadate--weekday {
+    font-size: .6em;
     text-transform: uppercase;
     font-weight: bold;
-    font-style: italic;
+    border-bottom: 1px solid #eee;
+    text-align: right;
+    padding-right: 10px;
+    padding-left: 10px;
 }
-.datepicker-themed .datepicker--calendar__date {
-    border-left: 1px solid #e20;
-    border-top: 1px solid #e20;
-    border-bottom: 1px solid #e20;
-    border-radius: 16px;
+.datepicker-themed .pickadate--calendar__date {
+    text-align: right;
+    padding-right: 8px;
+    padding-left: 8px;
+    border: 1px solid #fff;
+    border-radius: 0;
 }
-.datepicker-themed tr:last-child .datepicker--calendar__date {
-    border-bottom: 1px solid #e20;
+.datepicker-themed .pickadate--day__outfocus {
+    color: #ddd;
 }
-.datepicker-themed .datepicker--calendar__date:last-child {
-    border-right: 1px solid #e20;
+.datepicker-themed .pickadate--day__today {
+    color: #5a4;
+    position: relative;
 }
-.datepicker-themed .datepicker--day__today {
-    font-weight: bold;
-    color: #e20;
+.datepicker-themed .pickadate--month__prev,
+.datepicker-themed .pickadate--month__next {
+    line-height: 26px;
+    top: 3px;
 }
-.datepicker-themed .datepicker--day__selected,
-.datepicker-themed .datepicker--day__infocus:hover,
-.datepicker-themed .datepicker--day__outfocus:hover,
-.datepicker-themed .datepicker--month__prev:hover,
-.datepicker-themed .datepicker--month__next:hover {
-    background: #e20;
+.datepicker-themed .pickadate--calendar__date:hover,
+.datepicker-themed .pickadate--month__prev:hover,
+.datepicker-themed .pickadate--month__next:hover {
+    background: #ceb;
+    border-color: #ceb;
+    color: #000;
+}
+.datepicker-themed .pickadate--day__selected,
+.datepicker-themed .pickadate--day__selected:hover {
+    background: #5a4;
+    border-color: #382;
     color: #fff;
-    font-weight: bold;
+    box-shadow: inset 0 2px 2px #7c6;
 }
-.datepicker-themed .datepicker--day__outfocus {
-    border-color: #ccc !important;
-    color: #999;
-}
-.datepicker-themed .datepicker--day__disabled,
-.datepicker-themed .datepicker--day__disabled:hover {
-    border-color: #ddd !important;
-    color: #bbb !important;
-    background: #f5f5f5 !important;
-    font-weight: 100 !important;
-    opacity: .6;
+.datepicker-themed .pickadate--day__disabled,
+.datepicker-themed .pickadate--day__disabled:hover {
+    background: #f5f5f5;
+    border-color: #f5f5f5;
+    color: #ddd;
+    box-shadow: none;
 }</code></pre>
 
 </section>
 
 
-<section class="holder aligncenter">
+<section class="holder" id="api">
+
+    <h1><strong class="underline-highlight">api</strong></h1>
+
+    <p>There are 4 basic events in the options:</p>
+
+    <ol>
+        <li><code>onStart</code>: invoked when the picker is triggered.</li>
+        <li><code>onOpen</code>: invoked when the picker opens.</li>
+        <li><code>onSelect</code>: invoked when a date is selected.</li>
+        <li><code>onClose</code>: invoked when the picker closes.</li>
+    </ol>
+
+    <p>Within the scope of these methods, <code>this</code> refers to the calendar object.</p>
+
+    <pre><code>$( '.datepicker' ).pickadate({
+    onStart: function() {
+        var calendar = this
+    }
+})</code></pre>
+
+    <p>Alternatively, you can grab the calendar object like this:</p>
+
+    <pre><code>var input = $( '.datepicker' ).pickadate()
+var calendar = input.data( 'pickadate' )
+</code></pre>
+
+    <p>The following methods are available on the calendar:</p>
+
+    <ol>
+        <li><code><a href="#api_open_close">open</a></code></li>
+        <li><code><a href="#api_open_close">close</a></code></li>
+        <li><code><a href="#api_show">show</a></code></li>
+        <li><code><a href="#api_getDate">getDate</a></code></li>
+        <li><code><a href="#api_setDate">setDate</a></code></li>
+    </ol>
+
+</section>
+
+
+<section class="holder" id="api_open_close">
+
+    <h3><strong class="underline-highlight">Open &amp; close calendar</strong></h3>
+
+    <pre><code>calendar.open()
+calendar.close()
+</code></pre>
+
+    <p>
+        <button id="api_button_open" class="button" type="button">Open</button>
+        <button id="api_button_close" class="button" type="button" style="display:none">Close</button>
+    </p>
+
+    <fieldset>
+        <input id="api_picker_open" class="datepicker" type="text">
+    </fieldset>
+
+</section>
+
+
+<section class="holder" id="api_show">
+
+    <h3><strong class="underline-highlight">Show a specific month</strong></h3>
+
+    <pre><code>calendar.show( month, year )</code></pre>
+
+    <p>Month and year have to be integers representing the month and year to show on the calendar.</p>
+
+    <p><code>year</code> is optional. If none is specified, it shows the month of the year already in focus.</p>
+
+    <pre><code>calendar.show( 4 )</code></pre>
+
+    <p>
+        <button id="api_button_show" class="button" type="button">Show</button>
+    </p>
+
+    <fieldset>
+        <input id="api_picker_show" class="datepicker" type="text">
+    </fieldset>
+
+    <p>This method does <strong><i>not</i></strong> open the calendar. However, the methods <strong><i>are</i></strong> chainable. So you can do this:</p>
+
+    <pre><code>calendar.show( 10, 2015 ).open()</code></pre>
+
+    <p>
+        <button id="api_button_show_open" class="button" type="button">Show &amp; open</button>
+    </p>
+
+    <fieldset>
+        <input id="api_picker_show_open" class="datepicker" type="text">
+    </fieldset>
+
+</section>
+
+
+<section class="holder" id="api_getDate">
+
+    <h3><strong class="underline-highlight">Get the date</strong></h3>
+
+    <pre><code>calendar.getDate()</code></pre>
+
+    <p>
+        <button id="api_button_getDate" class="button" type="button">Get date</button>
+    </p>
+
+    <fieldset>
+        <input id="api_picker_getDate" class="datepicker" type="text" value="14 August, 1988">
+    </fieldset>
+
+    <p>The format of the date you get is based on the options you provide for <code>format</code> or <code>format_submit</code> (if provided).</p>
+
+</section>
+
+
+<section class="holder" id="api_setDate">
+
+    <h3><strong class="underline-highlight">Set the date</strong></h3>
+
+    <pre><code>calendar.setDate( year, month, date )</code></pre>
+
+    <p>All three arguments have to be integers represending the date to select on the calendar. All three are required.</p>
+
+    <pre><code>calendar.setDate( 2020, 2, 14 )</code></pre>
+
+    <p>
+        <button id="api_button_setDate" class="button" type="button">Set date</button>
+    </p>
+
+    <fieldset>
+        <input id="api_picker_setDate" class="datepicker" type="text">
+    </fieldset>
+
+</section>
+
+
+<section class="holder holder-clean aligncenter">
 
     <p><a class="button-full" href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js</a></p>
     <small class="dimmed"><p>Browser support: IE9+, Chrome, Firefox, Safari 3+, Opera 9.5+, iOS Safari, Android browser</p></small>
@@ -394,38 +756,172 @@ class_box_weekdays: 'datepicker--holder__weekdays'</code></pre>
 
 <script type="text/javascript">
 
-    $( '#input_01' ).pickadate()
+    $( '#picker_simple' ).pickadate()
 
-    $( '#input_02' ).pickadate({
+    $( '#picker_strings' ).pickadate({
         month_prev: '&larr;',
         month_next: '&rarr;',
         weekdays_short: [ 'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa' ],
         show_months_full: false
     })
 
-    var $custom_date = $( '#input_03' ).pickadate({
-        format: 'You selected: dddd, dd/mm/yyyy',
-        format_submit: 'yyyy-mm-dd'
-    }).on({
-        change: function() {
-            $custom_date.after( '<p class="notification">Value to submit: <code>' + $custom_date.data( 'widgets.pickadate' )._hidden.value + '</code></p>' )
-        }
+    $( '#picker_selectors' ).pickadate({
+        month_selector: true,
+        year_selector: true
     })
 
-    $( '#input_04' ).pickadate({
+    $( '#picker_selectors_b' ).pickadate({
+        year_selector: 4
+    })
+
+    var $custom_date = $( '#picker_formats' ).pickadate({
+        format: 'You selected: dddd, dd mmm, yyyy',
+        format_submit: 'yyyy-mm-dd',
+        onSelect: function() {
+            $custom_date.after( '<p class="notification">Date to submit: <code>' + $picker.getDate() + '</code></p>' )
+        }
+    })
+    var $picker = $custom_date.data( 'pickadate' )
+
+    $( '#picker_disable' ).pickadate({
         disable_picker: true
     })
 
-    $( '#input_05' ).pickadate({
+    $( '#picker_events' ).pickadate({
+        onOpen: function() {
+            alert( 'Opened' )
+        },
+        onClose: function() {
+            alert( 'Closed' )
+        },
+        onSelect: function() {
+            alert( 'Selected: ' + this.getDate() )
+        },
+        onStart: function() {
+            console.log( 'Hello there :)' )
+        }
+    })
+
+    $( '#picker_ranges_a' ).pickadate({
         date_min: [ 2012, 10, 14 ],
         date_max: 5
     })
 
-    $( '#input_06' ).pickadate({
+    $( '#picker_ranges_b' ).pickadate({
+        date_min: -8,
+        date_max: true
+    })
+
+    $( '#picker_dates_disabled_a' ).pickadate({
+        dates_disabled: [
+            [ 2012, 11, 2],
+            [ 2012, 11, 5],
+            [ 2012, 11, 28]
+        ]
+    })
+
+    $( '#picker_dates_disabled_b' ).pickadate({
+        dates_disabled: [
+            1, 7,
+            [ 2012, 11, 2],
+            [ 2012, 11, 5],
+            [ 2012, 11, 28]
+        ]
+    })
+
+    $( '#picker_dates_disabled_c' ).pickadate({
+        dates_disabled: [
+            true,
+            1, 7,
+            [ 2012, 11, 2],
+            [ 2012, 11, 5],
+            [ 2012, 11, 28]
+        ]
+    })
+
+    $( '#picker_dates_first_day' ).pickadate({
         first_day: 1
     })
 
-    $( '#input_07' ).pickadate()
+    $( '#picker_themed' ).pickadate({
+        month_prev: '&#9664;&nbsp;&nbsp;Prev',
+        month_next: 'Next&nbsp;&nbsp;&#9654;',
+        month_selector: true,
+        year_selector: true,
+        dates_disabled: [ 1, 7 ]
+    })
+
+
+    /**
+     * API stuff
+     */
+
+    var
+        api_picker_open = $( '#api_picker_open' ).pickadate({
+            onOpen: function() {
+                api_button_close.show()
+                api_button_open.hide()
+            },
+            onClose: function() {
+                api_button_open.show()
+                api_button_close.hide()
+            }
+        }),
+        api_calendar_open = api_picker_open.data( 'pickadate' ),
+        api_button_open = $( '#api_button_open' ).on({
+            click: function() {
+                setTimeout( function() {
+                    api_calendar_open.open()
+                }, 0)
+            }
+        }),
+        api_button_close = $( '#api_button_close' ).on({
+            click: function() {
+                api_calendar_open.close()
+            }
+        })
+
+
+    var
+        api_picker_show = $( '#api_picker_show' ).pickadate(),
+        api_calendar_show = api_picker_show.data( 'pickadate' ),
+        api_button_show = $( '#api_button_show' ).on({
+            click: function() {
+                api_calendar_show.show( 4 )
+            }
+        })
+
+
+    var
+        api_picker_show_open = $( '#api_picker_show_open' ).pickadate(),
+        api_calendar_show_open = api_picker_show_open.data( 'pickadate' ),
+        api_button_show_open = $( '#api_button_show_open' ).on({
+            click: function() {
+                setTimeout( function() {
+                    api_calendar_show_open.show( 10, 2015 ).open()
+                }, 0)
+            }
+        })
+
+
+    var
+        api_picker_getDate = $( '#api_picker_getDate' ).pickadate(),
+        api_calendar_getDate = api_picker_getDate.data( 'pickadate' ),
+        api_button_getDate = $( '#api_button_getDate' ).on({
+            click: function() {
+                alert( api_calendar_getDate.getDate() )
+            }
+        })
+
+
+    var
+        api_picker_setDate = $( '#api_picker_setDate' ).pickadate(),
+        api_calendar_setDate = api_picker_setDate.data( 'pickadate' ),
+        api_button_setDate = $( '#api_button_setDate' ).on({
+            click: function() {
+                api_calendar_setDate.setDate( 2020, 2, 14 )
+            }
+        })
 
 </script>
 <script type="text/javascript">

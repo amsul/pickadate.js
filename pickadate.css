@@ -1,12 +1,13 @@
 
 
-.datepicker--holder {
+.pickadate--holder {
+    width: 100%;
     height: 0;
     position: absolute;
     z-index: 10000;
 }
 
-.datepicker--calendar__wrap {
+.pickadate--calendar__wrap {
     position: relative;
     max-width: 320px;
     min-width: 256px;
@@ -18,7 +19,7 @@
             transition: all .15s ease-out;
 }
 
-.datepicker--opened .datepicker--calendar__wrap {
+.pickadate--opened .pickadate--calendar__wrap {
     top: .5em;
     max-height: 25em;
 
@@ -27,9 +28,10 @@
             box-shadow: 0 6px 18px 1px rgba(0,0,0,.12);
 }
 
-.datepicker--calendar__box {
+.pickadate--calendar__box {
     padding: 1em;
-    font-size: 18px;
+    font-size: 1em;
+    line-height: 1.5;
     color: #000;
     background: #fff;
     border: 1px solid #ccc;
@@ -44,17 +46,16 @@
 }
 
 
-.datepicker--calendar {
+.pickadate--calendar {
     text-align: center;
     border-collapse: collapse;
     border-spacing: 0;
     table-layout: fixed;
     width: 100%;
     margin-top: 1em;
-    font-size: 1em;
 }
 
-.datepicker--calendar__date {
+.pickadate--calendar__date {
     padding: .33em 0 .25em;
     margin: 1px;
     font-weight: 100;
@@ -65,7 +66,7 @@
 }
 
 
-.datepicker--weekday {
+.pickadate--weekday {
     width: 14.285714286%; /* 100/7 */
     font-size: .8em;
     padding-bottom: .75em;
@@ -74,70 +75,86 @@
 }
 
 
-.datepicker--day__infocus:hover,
-.datepicker--day__outfocus:hover,
-.datepicker--month__prev:hover,
-.datepicker--month__next:hover {
+.pickadate--day__infocus:hover,
+.pickadate--day__outfocus:hover,
+.pickadate--month__prev:hover,
+.pickadate--month__next:hover {
     cursor: pointer;
     color: #000;
     background: #b1dcfb;
 }
 
 
-.datepicker--month__nav {
+.pickadate--month__nav {
     position: relative;
 }
 
-.datepicker--month__prev,
-.datepicker--month__next {
+.pickadate--month__prev,
+.pickadate--month__next {
     position: absolute;
     top: 0;
     padding: .5em;
     margin: -.5em;
-    width: 16px;
+    min-width: 16px;
     height: 24px;
     line-height: 28px;
 }
 
-.datepicker--month__prev {
+.pickadate--month__prev {
     left: 0;
 }
-.datepicker--month__next {
+.pickadate--month__next {
     right: 0;
 }
 
-.datepicker--month,
-.datepicker--year {
+.pickadate--month__box,
+.pickadate--year__box {
     text-align: center;
 }
 
-.datepicker--month {
+.pickadate--month {
     font-weight: 500;
 }
 
-.datepicker--year {
+.pickadate--year {
     font-size: .66em;
     color: #999;
     font-weight: bold;
 }
 
+.pickadate--month__selector,
+.pickadate--year__selector {
+    font-size: .8em;
+    border: 1px solid #ccc;
+    height: 32px;
+}
 
-.datepicker--day__outfocus {
+.pickadate--month__selector {
+    margin-bottom: .5em;
+    width: 50%;
+}
+
+.pickadate--year__selector {
+    width: 32%;
+}
+
+
+.pickadate--day__outfocus {
     color: #ccc;
 }
 
-.datepicker--day__today {
+.pickadate--day__today {
     color: #0089ec;
 }
 
-.datepicker--day__selected,
-.datepicker--day__selected:hover {
+.pickadate--day__selected,
+.pickadate--day__selected:hover {
     background: #0089ec;
     color: #fff;
 }
 
-.datepicker--day__disabled,
-.datepicker--day__disabled:hover {
+.pickadate--day__disabled,
+.pickadate--day__disabled:hover {
     background: #f5f5f5;
     color: #ddd;
     cursor: default;
