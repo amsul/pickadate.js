@@ -712,7 +712,17 @@ calendar.close()
         <input id="api_picker_getDate" class="datepicker" type="text" value="14 August, 1988">
     </fieldset>
 
-    <p>The format of the date you get is based on the options you provide for <code>format</code> or <code>format_submit</code> (if provided).</p>
+    <p>Optionally, you can pass a format in which you would like to get the date:</p>
+
+    <pre><code>calendar.getDate( 'yyyy-mm-dd' )</code></pre>
+
+    <p>
+        <button id="api_button_getDate_b" class="button" type="button">Get date formatted</button>
+    </p>
+
+    <fieldset>
+        <input id="api_picker_getDate_b" class="datepicker" type="text" value="14 August, 1988">
+    </fieldset>
 
 </section>
 
@@ -910,6 +920,15 @@ calendar.close()
         api_button_getDate = $( '#api_button_getDate' ).on({
             click: function() {
                 alert( api_calendar_getDate.getDate() )
+            }
+        })
+
+    var
+        api_picker_getDate_b = $( '#api_picker_getDate_b' ).pickadate(),
+        api_calendar_getDate_b = api_picker_getDate_b.data( 'pickadate' ),
+        api_button_getDate_b = $( '#api_button_getDate_b' ).on({
+            click: function() {
+                alert( api_calendar_getDate_b.getDate( 'yyyy-mm-dd' ) )
             }
         })
 

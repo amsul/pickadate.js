@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v1.3 - 26 November, 2012
+ * pickadate.js v1.3.1 - 27 November, 2012
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
@@ -181,9 +181,7 @@
                         showMonth( --month, year )
                         return this
                     },
-                    getDate: function() {
-                        return ( ELEMENT_HIDDEN ? ELEMENT_HIDDEN.value : ELEMENT.value )
-                    },
+                    getDate: getDateFormatted,
                     setDate: function( year, month, date ) {
                         setDateSelected( createDate( [ year, --month, date ] ) )
                         return this
