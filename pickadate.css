@@ -58,6 +58,8 @@
 .pickadate__calendar--date {
     padding: .33em 0 .25em;
     font-weight: 100;
+    border: 1px solid #fff;
+    margin: -1px;
 }
 
 
@@ -160,11 +162,20 @@
     color: #fff;
 }
 
+.pickadate__day--highlighted,
+.pickadate__day--highlighted:hover {
+    border-color: #0089ec;
+}
+
 .pickadate__day--disabled,
 .pickadate__day--disabled:hover {
     background: #f5f5f5;
     color: #ddd;
     cursor: default;
+}
+
+.pickadate__day--disabled:before {
+    border-top-color: #aaa;
 }
 
 
