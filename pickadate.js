@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v1.3.2 - 28 November, 2012
+ * pickadate.js v1.3.3 - 28 November, 2012
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
@@ -7,7 +7,6 @@
 
 /**
  * TODO: scroll calendar into view
- * TODO: keyboard a11y
  * TODO: positive min date & negative max date
  *
  * FIX: click to close on iOS
@@ -84,7 +83,7 @@
         }, //createNode
 
         // Create a `select` element string
-        createSelector = function( collection, selectedIndex, klass, baseIndex, attributeFunc ) {
+        createSelector = function( collection, selectedIndex, klass, baseIndex, tabindex, attributeFunc ) {
 
             // Create a dom string node
             return createNode(
@@ -114,7 +113,10 @@
                 }),
 
                 // With a certain class
-                klass
+                klass,
+
+                // And some tabindex
+                'tabindex=' + tabindex
             )
         }, //createSelector
 
@@ -406,71 +408,28 @@
                     })
 
 
-                    console.log( 'over here with keydown' )
-
-
                     // Insert everything after the element
                     // while binding the events to the element
                     $ELEMENT.on({
-                        focusin: calendarOpen,
-
+                        'focusin click': calendarOpen,
                         keydown: function( event ) {
 
                             var keycode = event.keyCode
 
-                            // If the calendar is open and the keycode warrants a date change
-                            if ( !CALENDAR.isOpen && keycodeToDateChange( keycode ) ) {
+                            // If backspace was pressed or if the calendar
+                            // is closed and the keycode warrants a date change,
+                            // prevent it from going any further.
+                            if ( keycode == 8 || !CALENDAR.isOpen && keycodeToDateChange( keycode ) ) {
 
-                                // Open the calendar
-                                calendarOpen()
+                                // Prevent it from moving the page
+                                event.preventDefault()
 
-                                // Stop from propagating further
+                                // Prevent it from propagating to window
                                 event.stopPropagation()
 
-                                // Prevent the default action
-                                event.preventDefault()
-                            }
-
-
-                            // Enter
-                            else if ( CALENDAR.isOpen ) {
-
-                                // Prevent the default action if a "super" key isn't held
-                                // and the tab key isn't pressed
-                                if ( !event.metaKey && keycode != 9 ) {
-                                    event.preventDefault()
-                                }
-
-
-                                // Translate the keycode into a date increase
-                                var dateChange = keycodeToDateChange( keycode )
-
-
-                                // If there's a change in date
-                                if ( dateChange ) {
-
-                                    // Set the date as selected
-                                    setDateSelected(
-
-                                        // By creating a new validated date,
-                                        // incrementing by the date change
-                                        createValidatedDate( [ MONTH_FOCUSED.YEAR, MONTH_FOCUSED.MONTH, DATE_HIGHLIGHTED.DATE + dateChange ], dateChange ),
-
-                                        // And keep it a superficial selection
-                                        true
-                                    )
-                                }
-
-                                if ( keycode == 13 ) {
-
-                                    // Set the value in the element
-                                    setElementsValue()
-
-                                    // Close the calendar
-                                    // calendarClose()
-
-                                    // Stop from going further
-                                    return
+                                // Open the calendar if backspace wasn't pressed
+                                if ( keycode != 8 ) {
+                                    calendarOpen()
                                 }
                             }
                         }
@@ -550,6 +509,9 @@
                         // Base index
                         0,
 
+                        // Tabindex
+                        ( CALENDAR.isOpen ? 0 : -1 ),
+
                         // If the month is outside of the range,
                         // set the attribute to disabled
                         function( month ) {
@@ -581,7 +543,7 @@
                     // If year selector setting is true, default to 5.
                     // Otherwise divide the years in selector in half
                     // to get half before and half after
-                    yearsInSelector = ( yearsInSelector === true ) ? 5 : ~~( yearsInSelector / 2 )
+                    yearsInSelector = yearsInSelector === true ? 5 : ~~( yearsInSelector / 2 )
 
                     var
                         // Create a collection to hold the years
@@ -925,13 +887,15 @@
              */
             function setDateSelected( dateTargeted, isSuperficial, $dayTargeted ) {
 
+                var isSameMonth = dateTargeted.MONTH == MONTH_FOCUSED.MONTH
+
 
                 // Set the target as the newly highlighted date
                 DATE_HIGHLIGHTED = dateTargeted
 
 
                 // If there's a targeted node and the month hasn't changed
-                if ( $dayTargeted && DATE_HIGHLIGHTED.MONTH == MONTH_FOCUSED.MONTH ) {
+                if ( $dayTargeted && isSameMonth ) {
 
                     // Find the highlighted day and remove the "highlighted" state
                     $findInHolder( CLASSES.day_highlighted ).removeClass( CLASSES.day_highlighted )
@@ -942,10 +906,16 @@
 
 
                 // Otherwise if there's been a change in month
+                // or there's no targetted node
                 else {
 
                     // Set the target as the newly focused month
                     MONTH_FOCUSED = DATE_HIGHLIGHTED
+
+                    // If a day was targeted, set the date selected as the date highlighted
+                    if ( $dayTargeted ) {
+                        DATE_SELECTED = DATE_HIGHLIGHTED
+                    }
 
                     // Render a new calendar
                     calendarRender()
@@ -956,7 +926,8 @@
                 if ( !isSuperficial ) {
 
                     // Set the actual element values
-                    setElementsValue()
+                    // while updating the highlighted node
+                    setElementsValue( isSameMonth )
                 }
             } //setDateSelected
 
@@ -964,7 +935,19 @@
             /**
              * Set the date in the input element and hidden input
              */
-            function setElementsValue() {
+            function setElementsValue( updateHighlighted ) {
+
+
+                // If there's a need to update the highlighted node
+                if ( updateHighlighted ) {
+
+                    // Find the selected node and remove the "selected" class
+                    $findInHolder( CLASSES.day_selected ).removeClass( CLASSES.day_selected )
+
+                    // Find the highlighted node and add the "selected" class
+                    $findInHolder( CLASSES.day_highlighted ).addClass( CLASSES.day_selected )
+                }
+
 
                 // Set the date selected as the date highlighted
                 DATE_SELECTED = DATE_HIGHLIGHTED
@@ -972,12 +955,14 @@
                 // Set the element value as the formatted date
                 ELEMENT.value = getDateFormatted()
 
+
                 // If there's a hidden input
                 if ( ELEMENT_HIDDEN ) {
 
                     // Set the hidden value using the submit format
                     ELEMENT_HIDDEN.value = getDateFormatted( SETTINGS.format_submit )
                 }
+
 
                 // Trigger the onSelect method within exports scope
                 triggerFunction( SETTINGS.onSelect, EXPORTS )
@@ -1169,20 +1154,29 @@
             function postRender() {
 
                 // Find the month selector and bind the change event
-                $findInHolder( CLASSES.month_selector ).on({
+                CALENDAR.selectMonth = $findInHolder( CLASSES.month_selector ).on({
                     change: function() {
+
+                        // Show the month based on the option selected
                         showMonth( +this.value )
+
+                        // Find the new month selector and focus back on it
                         $findInHolder( CLASSES.month_selector ).focus()
                     }
-                })
+                })[ 0 ]
 
                 // Find the year selector and bind the change event
-                $findInHolder( CLASSES.year_selector ).on({
+                CALENDAR.selectYear = $findInHolder( CLASSES.year_selector ).on({
                     change: function() {
+
+                        // Show the year based on the option selected
+                        // and month currently in focus
                         showMonth( MONTH_FOCUSED.MONTH, +this.value )
+
+                        // Find the new year selector and focus back on it
                         $findInHolder( CLASSES.year_selector ).focus()
                     }
-                })
+                })[ 0 ]
             } //postRender
 
 
@@ -1192,9 +1186,7 @@
             function calendarOpen() {
 
                 // If it's already open, do nothing
-                if ( CALENDAR.isOpen ) {
-                    return
-                }
+                if ( CALENDAR.isOpen ) { return }
 
 
                 // Set calendar as open
@@ -1204,21 +1196,22 @@
                 // Add the "focused" class to the element
                 $ELEMENT.addClass( CLASSES.input_focus )
 
+
                 // Add the "opened" class to the calendar holder
                 $HOLDER.addClass( CLASSES.picker_open )
 
 
-                // Bind the click events to the window
-                $window.on( 'click.P' + CALENDAR.id, function( event ) {
+                // Allow month and year selectors to be focusable
+                if ( CALENDAR.selectMonth ) {
+                    CALENDAR.selectMonth.tabIndex = 0
+                }
+                if ( CALENDAR.selectYear.tabIndex ) {
+                    CALENDAR.selectYear.tabIndex = 0
+                }
 
-                    // And if the calendar is opened and the target
-                    // is not the input element, close the calendar.
-                    // * We don't worry about clicks on the calendar
-                    //   because those are stopped from propagating up.
-                    if ( CALENDAR.isOpen && ELEMENT != event.target ) {
-                        calendarClose()
-                    }
-                })
+
+                // Bind the click to close event to the window
+                $window.on( 'click.P' + CALENDAR.id + ' keydown.P' + CALENDAR.id + ' focusin.P' + CALENDAR.id, onWindowEvent )
 
 
                 // Trigger the onOpen method within exports scope
@@ -1242,8 +1235,17 @@
                 $HOLDER.removeClass( CLASSES.picker_open )
 
 
-                // Unbind the click event from the window
-                $window.off( 'click.P' + CALENDAR.id + ' keydown.P' + CALENDAR.id )
+                // Allow month and year selectors to be focusable
+                if ( CALENDAR.selectMonth ) {
+                    CALENDAR.selectMonth.tabIndex = -1
+                }
+                if ( CALENDAR.selectYear.tabIndex ) {
+                    CALENDAR.selectYear.tabIndex = -1
+                }
+
+
+                // Unbind the Picker event from the window
+                $window.off( '.P' + CALENDAR.id )
 
 
                 // Trigger the onClose method within exports scope
@@ -1309,6 +1311,77 @@
             } //onClickCalendar
 
 
+
+            /**
+             * Handle all the click and keydown events on the window
+             */
+            function onWindowEvent( event ) {
+
+                var
+                    handled = false,
+
+                    // Get the keycode
+                    keycode = event.keyCode,
+
+                    // Check if the target is the input element
+                    // or the year or month selector
+                    pickerTargeted = event.target == ELEMENT || event.target == CALENDAR.selectMonth || event.target == CALENDAR.selectYear,
+
+                    // Translate the keycode into a date change
+                    dateChange = keycodeToDateChange( keycode )
+
+                // If there's no keycode, it's a click. And if the target
+                // is not anything within the picker, close the calendar.
+                // * We don't worry about clicks on the calendar
+                //   because those are stopped from propagating up.
+                if ( !keycode && !pickerTargeted ) {
+                    calendarClose()
+                    return
+                }
+
+                // Enter
+                if ( pickerTargeted && keycode == 13 ) {
+
+                    // Set the value in the element as the highlighted date
+                    // * Truthy argument updates the highlighted node
+                    setElementsValue( 1 )
+                    calendarClose()
+                    return
+                }
+
+
+                if ( event.target == CALENDAR.selectMonth || event.target == CALENDAR.selectYear ) {
+                    $ELEMENT.removeClass( CLASSES.input_focus )
+                    return
+                }
+
+
+                // Prevent the default action if a "super" key
+                // is not held and the tab key isn't pressed
+                if ( !event.metaKey && keycode != 9 ) {
+
+                    // Prevent the default action
+                    event.preventDefault()
+                }
+
+
+                // If there's a date change
+                if ( dateChange ) {
+
+                    // Set the date as selected superficially
+                    setDateSelected(
+
+                        // By creating new validated dates,
+                        // incrementally by the date change
+                        createValidatedDate( [ MONTH_FOCUSED.YEAR, MONTH_FOCUSED.MONTH, DATE_HIGHLIGHTED.DATE + dateChange ], dateChange ),
+
+                        // Truthy argument makes it a superficial selection
+                        1
+                    )
+                }
+            } //onWindowEvent
+
+
             /**
              * Convert a keycode to a relative increase in date
              */
@@ -1335,8 +1408,6 @@
                 }
 
                 console.log( 'keydown', keycode )
-
-                return
             } //keycodeToDateChange
 
 
