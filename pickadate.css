@@ -28,7 +28,7 @@
             box-shadow: 0 6px 18px 1px rgba(0,0,0,.12);
 }
 
-.pickadate__calendar--box {
+.pickadate__calendar {
     padding: 1em;
     font-size: 1em;
     line-height: 1.5;
@@ -46,7 +46,7 @@
 }
 
 
-.pickadate__calendar {
+.pickadate__calendar--table {
     text-align: center;
     border-collapse: collapse;
     border-spacing: 0;
@@ -54,14 +54,6 @@
     width: 100%;
     margin-top: 1em;
 }
-
-.pickadate__calendar--date {
-    padding: .33em 0 .25em;
-    font-weight: 100;
-    border: 1px solid #fff;
-    margin: -1px;
-}
-
 
 .pickadate__weekday {
     width: 14.285714286%; /* 100/7 */
@@ -104,8 +96,8 @@
     right: 0;
 }
 
-.pickadate__month--box,
-.pickadate__year--box {
+.pickadate__month--wrap,
+.pickadate__year--wrap {
     text-align: center;
 }
 
@@ -135,6 +127,13 @@
     width: 32%;
 }
 
+
+.pickadate__day {
+    padding: .33em 0 .25em;
+    font-weight: 100;
+    border: 1px solid #fff;
+    margin: -1px;
+}
 
 .pickadate__day--outfocus {
     color: #ccc;

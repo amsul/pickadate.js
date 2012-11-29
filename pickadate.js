@@ -10,7 +10,6 @@
  * TODO: positive min date & negative max date
  *
  * FIX: click to close on iOS
- * FIX: select menus on iOS
  */
 
 /*jshint
@@ -36,6 +35,7 @@
         DAYS_IN_CALENDAR = WEEKS_IN_CALENDAR * DAYS_IN_WEEK,
 
         STRING_DIV = 'div',
+        STRING_SELECT = 'select',
         STRING_TR = 'tr',
         STRING_DATE_DIVIDER = '/',
 
@@ -63,7 +63,7 @@
 
         // Return numbers below 10 with a leading zero
         leadZero = function( number ) {
-            return ( ( number < 10 ) ? '0': '' ) + number
+            return ( number < 10 ? '0': '' ) + number
         },
 
         // Create a dom node string
@@ -82,43 +82,31 @@
             return '<' + wrapper + klass + attribute + '>' + item + '</' + wrapper + '>'
         }, //createNode
 
-        // Create a `select` element string
-        createSelector = function( collection, selectedIndex, klass, baseIndex, tabindex, attributeFunc ) {
+        // Create a dom node string of options from a collection
+        createOptions = function( collection, baseIndex, selectedIndex, attributeFunc ) {
 
-            // Create a dom string node
-            return createNode(
+            // By mapping through the collection
+            // and wrapping each item into an option node
+            return collection.map( function( item, index ) {
 
-                // For a select element
-                'select',
+                // Increase the index by the baseIndex
+                index += baseIndex
 
-                // By mapping through the collection
-                collection.map( function( month, index ) {
+                // Create a dom string node
+                return createNode(
 
-                    // Add a shift in index if needed
-                    index += baseIndex || 0
+                    // For an option element
+                    'option',
 
-                    // Create a dom string node
-                    return createNode(
+                    // With the item and no classes
+                    item, 0,
 
-                        // For an option element
-                        'option',
-
-                        // With the month and no classes
-                        month, 0,
-
-                        // Trigger the attribute function within the collection scope
-                        // and then append the value and "selected" tag as needed
-                        ( triggerFunction( attributeFunc, collection, [ index ] ) || '' ) + 'value=' + index + ( selectedIndex == index ? ' selected' : '' )
-                    )
-                }),
-
-                // With a certain class
-                klass,
-
-                // And some tabindex
-                'tabindex=' + tabindex
-            )
-        }, //createSelector
+                    // Trigger the attribute function within the collection scope
+                    // and then append the value and "selected" tag as needed
+                    ( triggerFunction( attributeFunc, collection, [ index ] ) || '' ) + 'value=' + index + ( selectedIndex == index ? ' selected' : '' )
+                )
+            })
+        }, //createOptions
 
         // Create a calendar date
         createDate = function( datePassed ) {
@@ -169,14 +157,28 @@
         Picker = function( $ELEMENT, SETTINGS ) {
 
             var
-                // The calendar holder
-                $HOLDER,
-
-
                 // The calendar object
                 CALENDAR = {
                     id: ~~( Math.random() * 1e9 )
                 }, //CALENDAR
+
+
+                // The date in various formats
+                DATE_FORMATS = {
+                    d: function() { return DATE_SELECTED.DATE },
+                    dd: function() { return leadZero( DATE_SELECTED.DATE ) },
+                    ddd: function() { return SETTINGS.weekdays_short[ DATE_SELECTED.DAY ] },
+                    dddd: function() { return SETTINGS.weekdays_full[ DATE_SELECTED.DAY ] },
+                    m: function() { return DATE_SELECTED.MONTH + 1 },
+                    mm: function() { return leadZero( DATE_SELECTED.MONTH + 1 ) },
+                    mmm: function() { return SETTINGS.months_short[ DATE_SELECTED.MONTH ] },
+                    mmmm: function() { return SETTINGS.months_full[ DATE_SELECTED.MONTH ] },
+                    yy: function() { return DATE_SELECTED.YEAR.toString().substr( 2, 2 ) },
+                    yyyy: function() { return DATE_SELECTED.YEAR },
+
+                    // Create an array by splitting the format passed
+                    toArray: function( format ) { return format.split( /(?=\b)(d{1,4}|m{1,4}|y{4}|yy)+(\b)/g ) }
+                }, //DATE_FORMATS
 
 
                 // The public methods
@@ -218,44 +220,6 @@
                 CLASSES = SETTINGS.klass,
 
 
-                // The element node
-                ELEMENT = (function( element ) {
-
-                    // If the element isn't an input field
-                    // ensure that we create a hidden element
-                    if ( element.nodeName != 'INPUT' ) {
-                        SETTINGS.format_submit = SETTINGS.format_submit || 'yyyy-mm-dd'
-                    }
-
-                    // Otherwise check the focus state,
-                    // convert into a regular text input
-                    // to remove user-agent stylings,
-                    // and set element as readonly
-                    else {
-                        element.autofocus = ( element == document.activeElement )
-                        element.type = 'text'
-                        element.readOnly = true
-                    }
-
-                    return element
-                })( $ELEMENT[ 0 ] ), //ELEMENT
-
-
-                // The hidden input element
-                ELEMENT_HIDDEN = (function( formatSubmit ) {
-
-                    // Check if there's a format for submit value
-                    return formatSubmit ?
-
-                        // Create the hidden input value using the name of the original input with a suffix.
-                        // And then update the value with whatever is entered in the input on load
-                        $( '<input type=hidden name=' + ELEMENT.name + SETTINGS.hidden_suffix + '>' ).val( ELEMENT.value ? getDateFormatted( formatSubmit ) : '' )[ 0 ] :
-
-                        // Otherwise return nothing
-                        0
-                })( SETTINGS.format_submit ),
-
-
                 // Create calendar object for the min date
                 DATE_MIN = createDateMinOrMax( SETTINGS.date_min ),
 
@@ -283,9 +247,8 @@
                         // and return the collection
                         return datesCollection.map( function( date ) {
 
-                            // If the date is a number, set disabledDays to true
-                            // and return the date minus 1 for weekday 0index
-                            // plus the first day of the week
+                            // If the date is a number, return the date minus 1
+                            // for weekday 0index plus the first day of the week
                             if ( !isNaN( date ) ) {
                                 return --date + SETTINGS.first_day
                             }
@@ -313,21 +276,16 @@
                     }
 
 
-                    // If all calendar dates should be disabled
-                    if ( CALENDAR.disabled ) {
-
-                        // Return a function that maps each date
-                        // in the collectipon of dates to not disable
-                        return function( date, i, collection ) {
+                    // If all calendar dates should be disabled,
+                    // return a function that maps each date
+                    // in the collection of dates to not disable.
+                    // Otherwise check if this date should be disabled
+                    return CALENDAR.disabled ? function( date, i, collection ) {
 
                             // Map the array of disabled dates
                             // and check if this is not one
                             return ( collection.map( isDisabledDate, this ).indexOf( true ) < 0 )
-                        }
-                    }
-
-                    // Otherwise check if this date should be disabled
-                    return isDisabledDate
+                        } : isDisabledDate
                 })(), //DISABLED_DATES
 
 
@@ -335,13 +293,26 @@
                 DATE_TODAY = createDate(),
 
 
+                // The element node
+                ELEMENT = (function( element ) {
+
+                    // Check the autofocus state, convert the element into
+                    // a regular text input to remove user-agent stylings,
+                    // and then set the element as readonly
+                    element.autofocus = ( element == document.activeElement )
+                    element.type = 'text'
+                    element.readOnly = true
+                    return element
+                })( $ELEMENT[ 0 ] ), //ELEMENT
+
+
                 // Create calendar object for the highlighted day
                 DATE_HIGHLIGHTED = (function( dateEntered ) {
 
                     // If there's no valid date in the input,
                     // set the highlighted date to today after validating.
-                    // Otherwise, create a new date using the date entered.
-                    return isNaN( dateEntered ) ? createValidatedDate( DATE_TODAY ) : createDate( dateEntered )
+                    // Otherwise, create a validated date using the date entered.
+                    return createValidatedDate( isNaN( dateEntered ) ? DATE_TODAY : dateEntered )
                 })( Date.parse( ELEMENT.value ) ),
 
 
@@ -353,22 +324,14 @@
                 MONTH_FOCUSED = DATE_HIGHLIGHTED,
 
 
-                // The date in various formats
-                DATE_FORMATS = {
-                    d: function() { return DATE_SELECTED.DATE },
-                    dd: function() { return leadZero( DATE_SELECTED.DATE ) },
-                    ddd: function() { return SETTINGS.weekdays_short[ DATE_SELECTED.DAY ] },
-                    dddd: function() { return SETTINGS.weekdays_full[ DATE_SELECTED.DAY ] },
-                    m: function() { return DATE_SELECTED.MONTH + 1 },
-                    mm: function() { return leadZero( DATE_SELECTED.MONTH + 1 ) },
-                    mmm: function() { return SETTINGS.months_short[ DATE_SELECTED.MONTH ] },
-                    mmmm: function() { return SETTINGS.months_full[ DATE_SELECTED.MONTH ] },
-                    yy: function() { return DATE_SELECTED.YEAR.toString().substr( 2, 2 ) },
-                    yyyy: function() { return DATE_SELECTED.YEAR },
+                // If there's a format for the hidden input element, create the element
+                // using the name of the original input plus suffix and update the value
+                // with whatever is entered in the input on load. Otherwise set it to zero.
+                ELEMENT_HIDDEN = SETTINGS.format_submit ? $( '<input type=hidden name=' + ELEMENT.name + SETTINGS.hidden_suffix + '>' ).val( ELEMENT.value ? getDateFormatted( SETTINGS.format_submit ) : '' )[ 0 ] : null,
 
-                    // Create an array by splitting the format passed
-                    toArray: function( format ) { return format.split( /(?=\b)(d{1,4}|m{1,4}|y{4}|yy)+(\b)/g ) }
-                }, //DATE_FORMATS
+
+                // The calendar holder
+                $HOLDER,
 
 
                 // Create the calendar table head with weekday labels
@@ -400,10 +363,10 @@
                 // Initialize everything
                 initialize = (function() {
 
-                    // Create a new wrapped calendar while
-                    // creating the jQuery holder object
-                    // and binding events to the holder
-                    $HOLDER = $( createNode( STRING_DIV, createCalendarWrapped(), CLASSES.picker_holder ) ).on({
+                    // Create a new wrapped calendar within the jQuery holder object
+                    $HOLDER = $( createNode( STRING_DIV, createCalendarWrapped(), CLASSES.holder ) ).on({
+
+                        // Handle all click events
                         click: onClickCalendar
                     })
 
@@ -452,6 +415,7 @@
                 })() //initialize
 
 
+
             /**
              * Create the nav for next/prev month
              */
@@ -494,35 +458,30 @@
 
 
                 // If there's a need for a month selector
-                if ( SETTINGS.month_selector ) {
+                return ( SETTINGS.month_selector ) ?
 
-                    // Create and return a selector
-                    // using the months collection
-                    return createSelector( monthsCollection,
+                    // Create the dom string node for a select element
+                    createNode( STRING_SELECT,
 
-                        // Selected index
-                        MONTH_FOCUSED.MONTH,
+                        // Create the options with the months collection
+                        // and 0 base index and focused month select index
+                        createOptions( monthsCollection, 0, MONTH_FOCUSED.MONTH,
 
-                        // Class
+                            // If the month is outside of the range,
+                            // set the attribute to disabled
+                            function( month ) {
+                                return isInvalidMonth( month, MONTH_FOCUSED.YEAR, 'disabled ' ) || ''
+                            }
+                        ),
+
+                        // The month selector class
                         CLASSES.month_selector,
 
-                        // Base index
-                        0,
+                        // And some tabindex
+                        'tabindex=' + ( CALENDAR.isOpen ? 0 : -1 )
 
-                        // Tabindex
-                        ( CALENDAR.isOpen ? 0 : -1 ),
-
-                        // If the month is outside of the range,
-                        // set the attribute to disabled
-                        function( month ) {
-                            return isInvalidMonth( month, MONTH_FOCUSED.YEAR, 'disabled ' ) || ''
-                        }
-                    ) //endreturn
-                }
-
-
-                // Otherwise just return the month focused
-                return createNode( STRING_DIV, monthsCollection[ MONTH_FOCUSED.MONTH ], CLASSES.month )
+                    // Otherwise just return the month focused
+                    ) : createNode( STRING_DIV, monthsCollection[ MONTH_FOCUSED.MONTH ], CLASSES.month )
             } //createMonthLabel
 
 
@@ -585,19 +544,9 @@
                     }
 
 
-                    // Create and return a selector
-                    // for the years collection
-                    return createSelector( yearsCollection,
-
-                        // Selected index
-                        yearFocused,
-
-                        // Class
-                        CLASSES.year_selector,
-
-                        // Base index
-                        firstYear
-                    ) //endreturn
+                    // Create and return a selector for the years collection with
+                    // the first year as base index and the focused year as selected index.
+                    return createNode( STRING_SELECT, createOptions( yearsCollection, firstYear, yearFocused ), CLASSES.year_selector )
                 }
 
                 return createNode( STRING_DIV, yearFocused, CLASSES.year )
@@ -649,8 +598,8 @@
                             // with the default classes already included
                             klassCollection = [
 
-                                // The generic date class
-                                CLASSES.calendar_date,
+                                // The generic day class
+                                CLASSES.day,
 
                                 // The class for in or out of focus
                                 ( isMonthFocused ? CLASSES.day_infocus : CLASSES.day_outfocus )
@@ -774,17 +723,17 @@
                         createNode( STRING_DIV, createMonthNav(), CLASSES.month_nav ) +
 
                         // The calendar month tag
-                        createNode( STRING_DIV, createMonthLabel(), CLASSES.month_box ) +
+                        createNode( STRING_DIV, createMonthLabel(), CLASSES.month_wrap ) +
 
                         // The calendar year tag
-                        createNode( STRING_DIV, createYearLabel(), CLASSES.year_box ) +
+                        createNode( STRING_DIV, createYearLabel(), CLASSES.year_wrap ) +
 
                         // The calendar table with table head
                         // and a new calendar table body
-                        createNode( 'table', [ TABLE_HEAD, createTableBody() ], CLASSES.calendar ),
+                        createNode( 'table', [ TABLE_HEAD, createTableBody() ], CLASSES.calendar_table ),
 
-                        // Calendar box class
-                        CLASSES.calendar_box
+                        // Calendar class
+                        CLASSES.calendar
                     ),
 
                     // Calendar wrap class
@@ -894,8 +843,8 @@
                 DATE_HIGHLIGHTED = dateTargeted
 
 
-                // If there's a targeted node and the month hasn't changed
-                if ( $dayTargeted && isSameMonth ) {
+                // If it's the same month and there's a targeted node
+                if ( isSameMonth && $dayTargeted ) {
 
                     // Find the highlighted day and remove the "highlighted" state
                     $findInHolder( CLASSES.day_highlighted ).removeClass( CLASSES.day_highlighted )
@@ -906,7 +855,6 @@
 
 
                 // Otherwise if there's been a change in month
-                // or there's no targetted node
                 else {
 
                     // Set the target as the newly focused month
@@ -1076,17 +1024,30 @@
             function createValidatedDate( datePassed, direction ) {
 
                 // Create a date to validate
-                datePassed = isArray( datePassed ) ? createDate( datePassed ) : datePassed
+                datePassed = !datePassed.TIME ? createDate( datePassed ) : datePassed
 
 
                 // If there are disabled dates
                 if ( DATES_TO_DISABLE ) {
 
+                    // Create a reference to the original date passed
+                    var originalDate = datePassed
+
                     // Check if this date is disabled. If it is,
                     // then keep adding the direction (or 1) to the date
                     // until we get to a date that's enabled.
                     while ( DATES_TO_DISABLE.filter( DISABLED_DATES, datePassed ).length ) {
+
+                        // Create the next date based on the direction
                         datePassed = createDate([ datePassed.YEAR, datePassed.MONTH, datePassed.DATE + ( direction || 1 ) ])
+
+                        // If we've looped through to another month,
+                        // then increase/decrease the date by one and
+                        // continue looping with the new original date
+                        if ( datePassed.MONTH != originalDate.MONTH ) {
+                            datePassed = createDate([ originalDate.YEAR, originalDate.MONTH, direction > 0 ? ++originalDate.DATE : --originalDate.DATE ])
+                            originalDate = datePassed
+                        }
                     }
                 }
 
@@ -1162,7 +1123,10 @@
 
                         // Find the new month selector and focus back on it
                         $findInHolder( CLASSES.month_selector ).focus()
-                    }
+                    },
+
+                    // *** For iOS ***
+                    click: function( event ) { event.stopPropagation() }
                 })[ 0 ]
 
                 // Find the year selector and bind the change event
@@ -1175,7 +1139,10 @@
 
                         // Find the new year selector and focus back on it
                         $findInHolder( CLASSES.year_selector ).focus()
-                    }
+                    },
+
+                    // *** For iOS ***
+                    click: function( event ) { event.stopPropagation() }
                 })[ 0 ]
             } //postRender
 
@@ -1198,20 +1165,98 @@
 
 
                 // Add the "opened" class to the calendar holder
-                $HOLDER.addClass( CLASSES.picker_open )
+                $HOLDER.addClass( CLASSES.open )
 
 
                 // Allow month and year selectors to be focusable
                 if ( CALENDAR.selectMonth ) {
                     CALENDAR.selectMonth.tabIndex = 0
                 }
-                if ( CALENDAR.selectYear.tabIndex ) {
+                if ( CALENDAR.selectYear ) {
                     CALENDAR.selectYear.tabIndex = 0
                 }
 
 
                 // Bind the click to close event to the window
-                $window.on( 'click.P' + CALENDAR.id + ' keydown.P' + CALENDAR.id + ' focusin.P' + CALENDAR.id, onWindowEvent )
+                $window.on( 'click.P' + CALENDAR.id, function( event ) {
+
+                    // If the target is not the element, close the calendar.
+                    // * We don't worry about clicks on the calendar
+                    //   because those are stopped from propagating up.
+                    if ( event.target != ELEMENT ) {
+                        calendarClose()
+                    }
+
+                }).on( 'keydown.P' + CALENDAR.id, function( event ) {
+
+                    if ( event.target == ELEMENT ) {
+
+
+                        var
+                            // Get the keycode
+                            keycode = event.keyCode,
+
+                            // Translate the keycode into a date change
+                            dateChange = keycodeToDateChange( keycode )
+
+
+                        // Prevent the default action if a "super" key
+                        // is not held and the tab key isn't pressed
+                        if ( !event.metaKey && keycode != 9 ) {
+
+                            // Prevent the default action
+                            event.preventDefault()
+                        }
+
+
+                        // Enter
+                        if ( keycode == 13 ) {
+
+                            // Set the value in the element as the highlighted date
+                            // * Truthy argument updates the highlighted node into selected
+                            setElementsValue( 1 )
+                            calendarClose()
+                            return
+                        }
+
+                        // Escape
+                        if ( keycode == 27 ) {
+                            calendarClose()
+                            return
+                        }
+
+
+                        // If there's a date change
+                        if ( dateChange ) {
+
+                            // Set the date as selected superficially
+                            setDateSelected(
+
+                                // By creating new validated dates,
+                                // incrementally by the date change
+                                createValidatedDate( [ MONTH_FOCUSED.YEAR, MONTH_FOCUSED.MONTH, DATE_HIGHLIGHTED.DATE + dateChange ], dateChange ),
+
+                                // Truthy argument makes it a superficial selection
+                                1
+                            )
+                        }
+
+                    }
+
+
+                }).on( 'focusin.P' + CALENDAR.id, function( event ) {
+
+                    if ( event.target == CALENDAR.selectMonth || event.target == CALENDAR.selectYear ) {
+                        $ELEMENT.removeClass( CLASSES.input_focus )
+                        return
+                    }
+
+                    if ( event.target != ELEMENT && event.target != CALENDAR.selectMonth && event.target != CALENDAR.selectYear ) {
+                        calendarClose()
+                        return
+                    }
+
+                })
 
 
                 // Trigger the onOpen method within exports scope
@@ -1232,14 +1277,14 @@
                 $ELEMENT.removeClass( CLASSES.input_focus )
 
                 // Remove the "opened" class from the calendar holder
-                $HOLDER.removeClass( CLASSES.picker_open )
+                $HOLDER.removeClass( CLASSES.open )
 
 
-                // Allow month and year selectors to be focusable
+                // Disable month and year selectors from being focusable
                 if ( CALENDAR.selectMonth ) {
                     CALENDAR.selectMonth.tabIndex = -1
                 }
-                if ( CALENDAR.selectYear.tabIndex ) {
+                if ( CALENDAR.selectYear ) {
                     CALENDAR.selectYear.tabIndex = -1
                 }
 
@@ -1309,77 +1354,6 @@
                 // Put focus back onto the element
                 $ELEMENT.focus()
             } //onClickCalendar
-
-
-
-            /**
-             * Handle all the click and keydown events on the window
-             */
-            function onWindowEvent( event ) {
-
-                var
-                    handled = false,
-
-                    // Get the keycode
-                    keycode = event.keyCode,
-
-                    // Check if the target is the input element
-                    // or the year or month selector
-                    pickerTargeted = event.target == ELEMENT || event.target == CALENDAR.selectMonth || event.target == CALENDAR.selectYear,
-
-                    // Translate the keycode into a date change
-                    dateChange = keycodeToDateChange( keycode )
-
-                // If there's no keycode, it's a click. And if the target
-                // is not anything within the picker, close the calendar.
-                // * We don't worry about clicks on the calendar
-                //   because those are stopped from propagating up.
-                if ( !keycode && !pickerTargeted ) {
-                    calendarClose()
-                    return
-                }
-
-                // Enter
-                if ( pickerTargeted && keycode == 13 ) {
-
-                    // Set the value in the element as the highlighted date
-                    // * Truthy argument updates the highlighted node
-                    setElementsValue( 1 )
-                    calendarClose()
-                    return
-                }
-
-
-                if ( event.target == CALENDAR.selectMonth || event.target == CALENDAR.selectYear ) {
-                    $ELEMENT.removeClass( CLASSES.input_focus )
-                    return
-                }
-
-
-                // Prevent the default action if a "super" key
-                // is not held and the tab key isn't pressed
-                if ( !event.metaKey && keycode != 9 ) {
-
-                    // Prevent the default action
-                    event.preventDefault()
-                }
-
-
-                // If there's a date change
-                if ( dateChange ) {
-
-                    // Set the date as selected superficially
-                    setDateSelected(
-
-                        // By creating new validated dates,
-                        // incrementally by the date change
-                        createValidatedDate( [ MONTH_FOCUSED.YEAR, MONTH_FOCUSED.MONTH, DATE_HIGHLIGHTED.DATE + dateChange ], dateChange ),
-
-                        // Truthy argument makes it a superficial selection
-                        1
-                    )
-                }
-            } //onWindowEvent
 
 
             /**
@@ -1474,22 +1448,20 @@
 
             input_focus: STRING_PREFIX_DATEPICKER + 'input--focused',
 
-            picker_holder: STRING_PREFIX_DATEPICKER + 'holder',
-            picker_open: STRING_PREFIX_DATEPICKER + 'holder--opened',
-
-            calendar_wrap: STRING_PREFIX_DATEPICKER + 'calendar--wrap',
-            calendar_box: STRING_PREFIX_DATEPICKER + 'calendar--box',
+            holder: STRING_PREFIX_DATEPICKER + 'holder',
+            open: STRING_PREFIX_DATEPICKER + 'holder--opened',
 
             calendar: STRING_PREFIX_DATEPICKER + 'calendar',
+            calendar_wrap: STRING_PREFIX_DATEPICKER + 'calendar--wrap',
+            calendar_table: STRING_PREFIX_DATEPICKER + 'calendar--table',
             calendar_body: STRING_PREFIX_DATEPICKER + 'calendar--body',
-            calendar_date: STRING_PREFIX_DATEPICKER + 'calendar--date',
 
             year: STRING_PREFIX_DATEPICKER + 'year',
-            year_box: STRING_PREFIX_DATEPICKER + 'year--box',
+            year_wrap: STRING_PREFIX_DATEPICKER + 'year--wrap',
             year_selector: STRING_PREFIX_DATEPICKER + 'year--selector',
 
             month: STRING_PREFIX_DATEPICKER + 'month',
-            month_box: STRING_PREFIX_DATEPICKER + 'month--box',
+            month_wrap: STRING_PREFIX_DATEPICKER + 'month--wrap',
             month_selector: STRING_PREFIX_DATEPICKER + 'month--selector',
             month_nav: STRING_PREFIX_DATEPICKER + 'month--nav',
             month_prev: STRING_PREFIX_DATEPICKER + 'month--prev',
@@ -1498,16 +1470,13 @@
             week: STRING_PREFIX_DATEPICKER + 'week',
             weekdays: STRING_PREFIX_DATEPICKER + 'weekday',
 
+            day: STRING_PREFIX_DATEPICKER + 'day',
             day_disabled: STRING_PREFIX_DATEPICKER + 'day--disabled',
             day_selected: STRING_PREFIX_DATEPICKER + 'day--selected',
             day_highlighted: STRING_PREFIX_DATEPICKER + 'day--highlighted',
             day_today: STRING_PREFIX_DATEPICKER + 'day--today',
             day_infocus: STRING_PREFIX_DATEPICKER + 'day--infocus',
-            day_outfocus: STRING_PREFIX_DATEPICKER + 'day--outfocus',
-
-            box_months: STRING_PREFIX_DATEPICKER + 'holder--months',
-            box_years: STRING_PREFIX_DATEPICKER + 'holder--years',
-            box_weekdays: STRING_PREFIX_DATEPICKER + 'holder--weekdays'
+            day_outfocus: STRING_PREFIX_DATEPICKER + 'day--outfocus'
         }
     } //Picker.defaults
 
@@ -1528,7 +1497,7 @@
 
         return this.each( function() {
             var $this = $( this )
-            if ( !$this.data( pickadate ) ) {
+            if ( this.nodeName == 'INPUT' && !$this.data( pickadate ) ) {
                 $this.data( pickadate, new Picker( $this, options ) )
             }
         })
@@ -1537,6 +1506,7 @@
 
 
 })( jQuery, window, document );
+
 
 
 
