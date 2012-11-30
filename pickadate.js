@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v1.3.4 - 30 November, 2012
+ * pickadate.js v1.3.5 - 30 November, 2012
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
@@ -34,10 +34,6 @@
         DAYS_IN_CALENDAR = WEEKS_IN_CALENDAR * DAYS_IN_WEEK,
 
         STRING_DIV = 'div',
-        STRING_SELECT = 'select',
-        STRING_TR = 'tr',
-        STRING_DATE_DIVIDER = '/',
-
         STRING_PREFIX_DATEPICKER = 'pickadate__',
 
         $window = $( window ),
@@ -80,32 +76,6 @@
             // Return the wrapped item
             return '<' + wrapper + klass + attribute + '>' + item + '</' + wrapper + '>'
         }, //createNode
-
-        // Create a dom node string of options from a collection
-        createOptions = function( collection, baseIndex, selectedIndex, attributeFunc ) {
-
-            // By mapping through the collection
-            // and wrapping each item into an option node
-            return collection.map( function( item, index ) {
-
-                // Increase the index by the baseIndex
-                index += baseIndex
-
-                // Create a dom string node
-                return createNode(
-
-                    // For an option element
-                    'option',
-
-                    // With the item and no classes
-                    item, 0,
-
-                    // Trigger the attribute function within the collection scope
-                    // and then append the value and "selected" tag as needed
-                    ( triggerFunction( attributeFunc, collection, [ index ] ) || '' ) + 'value=' + index + ( selectedIndex == index ? ' selected' : '' )
-                )
-            })
-        }, //createOptions
 
         // Create a calendar date
         createDate = function( datePassed ) {
@@ -367,7 +337,7 @@
                     // Take the result and apply another
                     // table head wrapper to group it all.
                     return createNode( 'thead',
-                        createNode( STRING_TR,
+                        createNode( 'tr',
                             weekdaysCollection.map( function( weekday ) {
                                 return createNode( 'th', weekday, CLASSES.weekdays )
                             })
@@ -477,18 +447,24 @@
                 return ( SETTINGS.monthSelector ) ?
 
                     // Create the dom string node for a select element
-                    createNode( STRING_SELECT,
+                    createNode( 'select',
 
-                        // Create the options with the months collection
-                        // and 0 base index and focused month select index
-                        createOptions( monthsCollection, 0, MONTH_FOCUSED.MONTH,
+                        // Map through the months collection
+                        monthsCollection.map( function( month, monthIndex ) {
 
-                            // If the month is outside of the range,
-                            // set the attribute to disabled
-                            function( month ) {
-                                return isInvalidMonth( month, MONTH_FOCUSED.YEAR, 'disabled ' ) || ''
-                            }
-                        ),
+                            // Create a dom string node for each option
+                            return createNode( 'option',
+
+                                // With the month and no classes
+                                month, 0,
+
+                                // Set the value and selected index
+                                'value=' + monthIndex + ( MONTH_FOCUSED.MONTH == monthIndex ? ' selected' : '' ) +
+
+                                // Plus the disabled attribute if it's an invalid month
+                                ( isInvalidMonth( monthIndex, MONTH_FOCUSED.YEAR, ' disabled' ) || '' )
+                            )
+                        }),
 
                         // The month selector class
                         CLASSES.monthSelector,
@@ -560,11 +536,33 @@
                     }
 
 
-                    // Create and return a selector for the years collection with
-                    // the first year as base index and the focused year as selected index.
-                    return createNode( STRING_SELECT, createOptions( yearsCollection, firstYear, yearFocused ), CLASSES.yearSelector )
+                    // Create the dom string node for a select element
+                    return createNode( 'select',
+
+                        // Map through the years collection
+                        yearsCollection.map( function( year ) {
+
+                            // Create a dom string node for each option
+                            return createNode( 'option',
+
+                                // With the year and no classes
+                                year, 0,
+
+                                // Set the value and selected index
+                                'value=' + year + ( yearFocused == year ? ' selected' : '' )
+                            )
+                        }),
+
+                        // The year selector class
+                        CLASSES.yearSelector,
+
+                        // And some tabindex
+                        'tabindex=' + ( CALENDAR.isOpen ? 0 : -1 )
+                    )
                 }
 
+
+                // Otherwise just return the year focused
                 return createNode( STRING_DIV, yearFocused, CLASSES.year )
             } //createYearLabel
 
@@ -669,7 +667,7 @@
                                 loopDate.DATE,
                                 loopDate.DAY,
                                 loopDate.TIME
-                            ].join( STRING_DATE_DIVIDER )
+                            ].join( '/' )
                         ]
                     } //createDateClassAndBinding
 
@@ -710,7 +708,7 @@
                     if ( ( index % DAYS_IN_WEEK ) + 1 == DAYS_IN_WEEK ) {
 
                         // Wrap the week and append it into the calendar weeks
-                        calendarWeeks += createNode( STRING_TR, calendarDates.splice( 0, DAYS_IN_WEEK ) )
+                        calendarWeeks += createNode( 'tr', calendarDates.splice( 0, DAYS_IN_WEEK ) )
                     }
 
                 } //endfor
@@ -846,91 +844,58 @@
             } //getCountShiftDays
 
 
+
             /**
-             * Set a day as highlighted by receiving
-             * the day jQuery object that was clicked
+             * Set a date as selected or only highlighted
              */
-            function setDateSelected( dateTargeted, isSuperficial, $dayTargeted ) {
+            function setDateSelected( dateTargeted, isHighlight, $nodeTargeted ) {
 
-                var isSameMonth = dateTargeted.MONTH == MONTH_FOCUSED.MONTH
-
-
-                // Set the target as the newly highlighted date
+                // Set the target as the highlight
                 DATE_HIGHLIGHTED = dateTargeted
 
+                // Set the target as the focus
+                MONTH_FOCUSED = dateTargeted
 
-                // If it's the same month and there's a targeted node
-                if ( isSameMonth && $dayTargeted ) {
-
-                    // Find the highlighted day and remove the "highlighted" state
-                    $findInHolder( CLASSES.dayHighlighted ).removeClass( CLASSES.dayHighlighted )
-
-                    // Add the "highlighted" state to the targeted node
-                    $dayTargeted.addClass( CLASSES.dayHighlighted )
-                }
-
-
-                // Otherwise if there's been a change in month
-                else {
-
-                    // Set the target as the newly focused month
-                    MONTH_FOCUSED = DATE_HIGHLIGHTED
-
-                    // If a day was targeted, set the date selected as the date highlighted
-                    if ( $dayTargeted ) {
-                        DATE_SELECTED = DATE_HIGHLIGHTED
-                    }
-
-                    // Render a new calendar
+                // If it's just a highlight, render a new calendar
+                if ( isHighlight ) {
                     calendarRender()
                 }
 
-
-                // If it's not just a superficial selection
-                if ( !isSuperficial ) {
-
-                    // Set the actual element values
-                    // while updating the highlighted node
-                    setElementsValue( isSameMonth )
+                // Otherwise set the element value as well
+                // * A truthy second argument renders new calendar
+                else {
+                    setElementsValue( dateTargeted, 1 )
                 }
             } //setDateSelected
+
 
 
             /**
              * Set the date in the input element and hidden input
              */
-            function setElementsValue( updateHighlighted ) {
+            function setElementsValue( dateTargeted, updateCalendar ) {
 
-
-                // If there's a need to update the highlighted node
-                if ( updateHighlighted ) {
-
-                    // Find the selected node and remove the "selected" class
-                    $findInHolder( CLASSES.daySelected ).removeClass( CLASSES.daySelected )
-
-                    // Find the highlighted node and add the "selected" class
-                    $findInHolder( CLASSES.dayHighlighted ).addClass( CLASSES.daySelected )
-                }
-
-
-                // Set the date selected as the date highlighted
-                DATE_SELECTED = DATE_HIGHLIGHTED
+                // Set the target as the selection
+                DATE_SELECTED = dateTargeted
 
                 // Set the element value as the formatted date
                 ELEMENT.value = getDateFormatted()
 
-
-                // If there's a hidden input
+                // If there's a hidden input,
+                // set the value with the submit format
                 if ( ELEMENT_HIDDEN ) {
-
-                    // Set the hidden value using the submit format
                     ELEMENT_HIDDEN.value = getDateFormatted( SETTINGS.formatSubmit )
                 }
 
+                // If the calendar should be updated, render a new one
+                if ( updateCalendar ) {
+                    calendarRender()
+                }
 
                 // Trigger the onSelect method within exports scope
                 triggerFunction( SETTINGS.onSelect, EXPORTS )
             } //setElementsValue
+
 
 
             /**
@@ -1221,8 +1186,8 @@
                         if ( keycode == 13 ) {
 
                             // Set the value in the element as the highlighted date
-                            // * Truthy argument updates the highlighted node into selected
-                            setElementsValue( 1 )
+                            // * Truthy second argument updates the highlighted node into selected
+                            setElementsValue( DATE_HIGHLIGHTED, 1 )
                             calendarClose()
                             return
                         }
@@ -1328,7 +1293,7 @@
                 if ( targetData.date ) {
 
                     // Split the target data into an array
-                    var dateToSelect = targetData.date.split( STRING_DATE_DIVIDER )
+                    var dateToSelect = targetData.date.split( '/' )
 
                     // Create the a calendar date object from the
                     // array while floating the values
