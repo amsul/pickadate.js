@@ -46,7 +46,7 @@ input[type=text] {
 
 input[type=date]:focus,
 input[type=text]:focus,
-input.pickadate--input__focused {
+input.pickadate__input--focused {
     outline: none;
     border-color: #0089ec;
 }
