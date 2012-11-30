@@ -14,7 +14,7 @@
     <h1><a href="http://amsul.github.com/pickadate.js" class="link-inherit"><strong title="Pick a Date" class="underline-highlight">pickadate.js</strong></a></h1>
     <h2>A responsive and lightweight<br>jQuery dateinput picker</h2>
 
-    <h3>Weighs 8.74kb (3.6kb gzipped)</h3>
+    <h3>Weighs 8.5kb (3.5kb gzipped)</h3>
 
     <a href="https://github.com/amsul/pickadate.js"><img width="124" height="124" style="position:absolute;top:0;right:0;border:0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
 
@@ -23,7 +23,7 @@
 </section>
 
 
-<section class="holder">
+<section class="holder" id="options">
 
     <h3>All the options and default settings:</h3>
     <pre><code><a href="#strings">// Strings</a>
@@ -399,7 +399,7 @@ klass: {
 <section class="holder" id="theme">
 
     <style>
-        .datepicker-themed input.datepicker,
+        .datepicker-themed input[type=text]:focus,
         .datepicker-themed input.pickadate__input--focused {
             border-color: #5a4;
         }
@@ -487,12 +487,16 @@ klass: {
         .datepicker-themed .pickadate__day--selected,
         .datepicker-themed .pickadate__day--selected:hover {
             background: #5a4;
-            border-color: #382;
             color: #fff;
 
             -webkit-box-shadow: inset 0 1px 2px #7c6;
                -moz-box-shadow: inset 0 1px 2px #7c6;
                     box-shadow: inset 0 1px 2px #7c6;
+        }
+        .datepicker-themed .pickadate__day--selected,
+        .datepicker-themed .pickadate__day--selected:hover,
+        .datepicker-themed .pickadate__day--highlighted {
+            border-color: #382;
         }
         .datepicker-themed .pickadate__day--disabled,
         .datepicker-themed .pickadate__day--disabled:hover {
@@ -512,7 +516,7 @@ klass: {
         <input id="picker_themed" class="datepicker" type="text">
     </fieldset>
 
-    <pre><code>.datepicker-themed input.datepicker,
+    <pre><code>.datepicker-themed input[type=text]:focus,
 .datepicker-themed input.pickadate__input--focused {
     border-color: #5a4;
 }
@@ -592,9 +596,13 @@ klass: {
 .datepicker-themed .pickadate__day--selected,
 .datepicker-themed .pickadate__day--selected:hover {
     background: #5a4;
-    border-color: #382;
     color: #fff;
     box-shadow: inset 0 1px 2px #7c6;
+}
+.datepicker-themed .pickadate__day--selected,
+.datepicker-themed .pickadate__day--selected:hover,
+.datepicker-themed .pickadate__day--highlighted {
+    border-color: #382;
 }
 .datepicker-themed .pickadate__day--disabled,
 .datepicker-themed .pickadate__day--disabled:hover {
@@ -735,9 +743,9 @@ calendar.close()
 
     <h3><strong class="underline-highlight">Set the date</strong></h3>
 
-    <pre><code>calendar.setDate( year, month, date )</code></pre>
+    <pre><code>calendar.setDate( year, month, date, highlight )</code></pre>
 
-    <p>All three arguments have to be integers represending the date to select on the calendar. All three are required.</p>
+    <p><code>year</code>, <code>month</code>, <code>date</code> are required integers representing the date to select on the calendar.</p>
 
     <pre><code>calendar.setDate( 2020, 2, 14 )</code></pre>
 
@@ -747,6 +755,19 @@ calendar.close()
 
     <fieldset>
         <input id="api_picker_setDate" class="datepicker" type="text">
+    </fieldset>
+
+
+    <p><code>highlight</code> is optional. If <code>highlight</code> is <code>true</code>, the date will only be highlighted and not selected. This means the <code>input</code> value won't change.</p>
+
+    <pre><code>calendar.setDate( 2020, 2, 14, true )</code></pre>
+
+    <p>
+        <button id="api_button_setDate_b" class="button" type="button">Set date</button>
+    </p>
+
+    <fieldset>
+        <input id="api_picker_setDate_b" class="datepicker" type="text">
     </fieldset>
 
 </section>
@@ -943,6 +964,16 @@ calendar.close()
         api_button_setDate = $( '#api_button_setDate' ).on({
             click: function() {
                 api_calendar_setDate.setDate( 2020, 2, 14 )
+            }
+        })
+
+
+    var
+        api_picker_setDate_b = $( '#api_picker_setDate_b' ).pickadate(),
+        api_calendar_setDate_b = api_picker_setDate_b.data( 'pickadate' ),
+        api_button_setDate_b = $( '#api_button_setDate_b' ).on({
+            click: function() {
+                api_calendar_setDate_b.setDate( 2020, 2, 14, true )
             }
         })
 

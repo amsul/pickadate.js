@@ -1289,6 +1289,10 @@
                 event.stopPropagation()
 
 
+                // Put focus back onto the element
+                $ELEMENT.focus()
+
+
                 // If there's a date provided
                 if ( targetData.date ) {
 
@@ -1306,13 +1310,11 @@
                     }
 
                     // Set the date as selected
+                    // * Falsy second argument updates the element values
                     setDateSelected( dateToSelect, false, $target )
 
                     // Close the calendar
                     calendarClose()
-
-                    // Stop from going further
-                    return
                 }
 
 
@@ -1322,10 +1324,6 @@
                     // Show the month according to the direction
                     showMonth( MONTH_FOCUSED.MONTH + targetData.nav )
                 }
-
-
-                // Put focus back onto the element
-                $ELEMENT.focus()
             } //onClickCalendar
 
 
