@@ -132,7 +132,7 @@
     padding: .33em 0 .25em;
     font-weight: 100;
     border: 1px solid #fff;
-    margin: -1px;
+    margin: -1px -1px 0;
 }
 
 .pickadate__day--outfocus {

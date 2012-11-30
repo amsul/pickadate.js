@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v1.3.3 - 28 November, 2012
+ * pickadate.js v1.3.4 - 30 November, 2012
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
@@ -7,7 +7,6 @@
 
 /**
  * TODO: scroll calendar into view
- * TODO: positive min date & negative max date
  *
  * FIX: click to close on iOS
  */
@@ -167,18 +166,35 @@
                 DATE_FORMATS = {
                     d: function() { return DATE_SELECTED.DATE },
                     dd: function() { return leadZero( DATE_SELECTED.DATE ) },
-                    ddd: function() { return SETTINGS.weekdays_short[ DATE_SELECTED.DAY ] },
-                    dddd: function() { return SETTINGS.weekdays_full[ DATE_SELECTED.DAY ] },
+                    ddd: function() { return SETTINGS.weekdaysShort[ DATE_SELECTED.DAY ] },
+                    dddd: function() { return SETTINGS.weekdaysFull[ DATE_SELECTED.DAY ] },
                     m: function() { return DATE_SELECTED.MONTH + 1 },
                     mm: function() { return leadZero( DATE_SELECTED.MONTH + 1 ) },
-                    mmm: function() { return SETTINGS.months_short[ DATE_SELECTED.MONTH ] },
-                    mmmm: function() { return SETTINGS.months_full[ DATE_SELECTED.MONTH ] },
+                    mmm: function() { return SETTINGS.monthsShort[ DATE_SELECTED.MONTH ] },
+                    mmmm: function() { return SETTINGS.monthsFull[ DATE_SELECTED.MONTH ] },
                     yy: function() { return DATE_SELECTED.YEAR.toString().substr( 2, 2 ) },
                     yyyy: function() { return DATE_SELECTED.YEAR },
 
                     // Create an array by splitting the format passed
                     toArray: function( format ) { return format.split( /(?=\b)(d{1,4}|m{1,4}|y{4}|yy)+(\b)/g ) }
                 }, //DATE_FORMATS
+
+
+                // Translate a keycode to a relative change in date
+                KEYCODE_TO_DATE = {
+
+                    // Down
+                    40: 7,
+
+                    // Up
+                    38: -7,
+
+                    // Right
+                    39: 1,
+
+                    // Left
+                    37: -1
+                }, //KEYCODE_TO_DATE
 
 
                 // The public methods
@@ -220,13 +236,17 @@
                 CLASSES = SETTINGS.klass,
 
 
+                // Create calendar object for today
+                DATE_TODAY = createDate(),
+
+
                 // Create calendar object for the min date
-                DATE_MIN = createDateMinOrMax( SETTINGS.date_min ),
+                DATE_MIN = createDateMinOrMax( SETTINGS.dateMin ),
 
 
                 // Create calendar object for the max date
                 // * A truthy second argument creates max date
-                DATE_MAX = createDateMinOrMax( SETTINGS.date_max, 1 ),
+                DATE_MAX = createDateMinOrMax( SETTINGS.dateMax, 1 ),
 
 
                 // Create a collection of dates to disable
@@ -250,7 +270,7 @@
                             // If the date is a number, return the date minus 1
                             // for weekday 0index plus the first day of the week
                             if ( !isNaN( date ) ) {
-                                return --date + SETTINGS.first_day
+                                return --date + SETTINGS.firstDay
                             }
 
                             // Otherwise Fix the month 0index
@@ -261,7 +281,7 @@
                             return createDate( date )
                         })
                     }
-                })( SETTINGS.dates_disabled ), //DATES_TO_DISABLE
+                })( SETTINGS.datesDisabled ), //DATES_TO_DISABLE
 
 
                 // Create a function that will filter through the dates
@@ -287,10 +307,6 @@
                             return ( collection.map( isDisabledDate, this ).indexOf( true ) < 0 )
                         } : isDisabledDate
                 })(), //DISABLED_DATES
-
-
-                // Create calendar object for today
-                DATE_TODAY = createDate(),
 
 
                 // The element node
@@ -327,7 +343,7 @@
                 // If there's a format for the hidden input element, create the element
                 // using the name of the original input plus suffix and update the value
                 // with whatever is entered in the input on load. Otherwise set it to zero.
-                ELEMENT_HIDDEN = SETTINGS.format_submit ? $( '<input type=hidden name=' + ELEMENT.name + SETTINGS.hidden_suffix + '>' ).val( ELEMENT.value ? getDateFormatted( SETTINGS.format_submit ) : '' )[ 0 ] : null,
+                ELEMENT_HIDDEN = SETTINGS.formatSubmit ? $( '<input type=hidden name=' + ELEMENT.name + SETTINGS.hiddenSuffix + '>' ).val( ELEMENT.value ? getDateFormatted( SETTINGS.formatSubmit ) : '' )[ 0 ] : null,
 
 
                 // The calendar holder
@@ -340,7 +356,7 @@
                 TABLE_HEAD = (function( weekdaysCollection ) {
 
                     // If the first day should be Monday
-                    if ( SETTINGS.first_day ) {
+                    if ( SETTINGS.firstDay ) {
 
                         // Grab Sunday and push it to the end of the collection
                         weekdaysCollection.push( weekdaysCollection.splice( 0, 1 )[ 0 ] )
@@ -357,7 +373,7 @@
                             })
                         )
                     )
-                })( ( SETTINGS.show_weekdays_short ? SETTINGS.weekdays_short : SETTINGS.weekdays_full ).slice( 0 ) ), //TABLE_HEAD
+                })( ( SETTINGS.showWeekdaysShort ? SETTINGS.weekdaysShort : SETTINGS.weekdaysFull ).slice( 0 ) ), //TABLE_HEAD
 
 
                 // Initialize everything
@@ -382,7 +398,7 @@
                             // If backspace was pressed or if the calendar
                             // is closed and the keycode warrants a date change,
                             // prevent it from going any further.
-                            if ( keycode == 8 || !CALENDAR.isOpen && keycodeToDateChange( keycode ) ) {
+                            if ( keycode == 8 || !CALENDAR.isOpen && KEYCODE_TO_DATE[ keycode ] ) {
 
                                 // Prevent it from moving the page
                                 event.preventDefault()
@@ -430,7 +446,7 @@
                             return ''
                         }
 
-                        var monthTag = 'month_' + ( upper ? 'next' : 'prev' )
+                        var monthTag = 'month' + ( upper ? 'Next' : 'Prev' )
 
                         // Otherwise, return the created tag
                         return createNode( STRING_DIV,
@@ -454,11 +470,11 @@
 
                 var
                     // Grab the collection of months
-                    monthsCollection = SETTINGS.show_months_full ? SETTINGS.months_full : SETTINGS.months_short
+                    monthsCollection = SETTINGS.showMonthsFull ? SETTINGS.monthsFull : SETTINGS.monthsShort
 
 
                 // If there's a need for a month selector
-                return ( SETTINGS.month_selector ) ?
+                return ( SETTINGS.monthSelector ) ?
 
                     // Create the dom string node for a select element
                     createNode( STRING_SELECT,
@@ -475,7 +491,7 @@
                         ),
 
                         // The month selector class
-                        CLASSES.month_selector,
+                        CLASSES.monthSelector,
 
                         // And some tabindex
                         'tabindex=' + ( CALENDAR.isOpen ? 0 : -1 )
@@ -492,7 +508,7 @@
 
                 var
                     yearFocused = MONTH_FOCUSED.YEAR,
-                    yearsInSelector = SETTINGS.year_selector
+                    yearsInSelector = SETTINGS.yearSelector
 
 
                 // If there is a need for a years selector
@@ -546,7 +562,7 @@
 
                     // Create and return a selector for the years collection with
                     // the first year as base index and the focused year as selected index.
-                    return createNode( STRING_SELECT, createOptions( yearsCollection, firstYear, yearFocused ), CLASSES.year_selector )
+                    return createNode( STRING_SELECT, createOptions( yearsCollection, firstYear, yearFocused ), CLASSES.yearSelector )
                 }
 
                 return createNode( STRING_DIV, yearFocused, CLASSES.year )
@@ -602,7 +618,7 @@
                                 CLASSES.day,
 
                                 // The class for in or out of focus
-                                ( isMonthFocused ? CLASSES.day_infocus : CLASSES.day_outfocus )
+                                ( isMonthFocused ? CLASSES.dayInfocus : CLASSES.dayOutfocus )
                             ]
 
 
@@ -616,25 +632,25 @@
                             isDateDisabled = true
 
                             // Add the disabled class
-                            klassCollection.push( CLASSES.day_disabled )
+                            klassCollection.push( CLASSES.dayDisabled )
                         }
 
 
                         // If it's today, add the class
                         if ( loopDate.TIME == DATE_TODAY.TIME ) {
-                            klassCollection.push( CLASSES.day_today )
+                            klassCollection.push( CLASSES.dayToday )
                         }
 
 
                         // If it's the highlighted date, add the class
                         if ( loopDate.TIME == DATE_HIGHLIGHTED.TIME ) {
-                            klassCollection.push( CLASSES.day_highlighted )
+                            klassCollection.push( CLASSES.dayHighlighted )
                         }
 
 
                         // If it's the selected date, add the class
                         if ( loopDate.TIME == DATE_SELECTED.TIME ) {
-                            klassCollection.push( CLASSES.day_selected )
+                            klassCollection.push( CLASSES.daySelected )
                         }
 
 
@@ -702,7 +718,7 @@
 
 
                 // Join the dates and wrap the calendar body
-                return createNode( 'tbody', calendarWeeks, CLASSES.calendar_body )
+                return createNode( 'tbody', calendarWeeks, CLASSES.calendarBody )
             } //createTableBody
 
 
@@ -720,24 +736,24 @@
                     createNode( STRING_DIV,
 
                         // The prev/next month tags
-                        createNode( STRING_DIV, createMonthNav(), CLASSES.month_nav ) +
+                        createNode( STRING_DIV, createMonthNav(), CLASSES.monthNav ) +
 
                         // The calendar month tag
-                        createNode( STRING_DIV, createMonthLabel(), CLASSES.month_wrap ) +
+                        createNode( STRING_DIV, createMonthLabel(), CLASSES.monthWrap ) +
 
                         // The calendar year tag
-                        createNode( STRING_DIV, createYearLabel(), CLASSES.year_wrap ) +
+                        createNode( STRING_DIV, createYearLabel(), CLASSES.yearWrap ) +
 
                         // The calendar table with table head
                         // and a new calendar table body
-                        createNode( 'table', [ TABLE_HEAD, createTableBody() ], CLASSES.calendar_table ),
+                        createNode( 'table', [ TABLE_HEAD, createTableBody() ], CLASSES.calendarTable ),
 
                         // Calendar class
                         CLASSES.calendar
                     ),
 
                     // Calendar wrap class
-                    CLASSES.calendar_wrap
+                    CLASSES.calendarWrap
                 ) //endreturn
             } //calendarWrapped
 
@@ -811,7 +827,7 @@
                     // day index and the column index at zero.
                     // Then, if the first day should be Monday,
                     // reduce the difference by 1
-                    difference = dayIndex - dayColumnIndexAtZero + ( SETTINGS.first_day ? -1 : 0 )
+                    difference = dayIndex - dayColumnIndexAtZero + ( SETTINGS.firstDay ? -1 : 0 )
 
 
                 // Compare the day index if the
@@ -847,10 +863,10 @@
                 if ( isSameMonth && $dayTargeted ) {
 
                     // Find the highlighted day and remove the "highlighted" state
-                    $findInHolder( CLASSES.day_highlighted ).removeClass( CLASSES.day_highlighted )
+                    $findInHolder( CLASSES.dayHighlighted ).removeClass( CLASSES.dayHighlighted )
 
                     // Add the "highlighted" state to the targeted node
-                    $dayTargeted.addClass( CLASSES.day_highlighted )
+                    $dayTargeted.addClass( CLASSES.dayHighlighted )
                 }
 
 
@@ -890,10 +906,10 @@
                 if ( updateHighlighted ) {
 
                     // Find the selected node and remove the "selected" class
-                    $findInHolder( CLASSES.day_selected ).removeClass( CLASSES.day_selected )
+                    $findInHolder( CLASSES.daySelected ).removeClass( CLASSES.daySelected )
 
                     // Find the highlighted node and add the "selected" class
-                    $findInHolder( CLASSES.day_highlighted ).addClass( CLASSES.day_selected )
+                    $findInHolder( CLASSES.dayHighlighted ).addClass( CLASSES.daySelected )
                 }
 
 
@@ -908,7 +924,7 @@
                 if ( ELEMENT_HIDDEN ) {
 
                     // Set the hidden value using the submit format
-                    ELEMENT_HIDDEN.value = getDateFormatted( SETTINGS.format_submit )
+                    ELEMENT_HIDDEN.value = getDateFormatted( SETTINGS.formatSubmit )
                 }
 
 
@@ -981,34 +997,25 @@
              */
             function createDateMinOrMax( limit, upper ) {
 
-
-                // If the limit is set to true,
-                // just return today
+                // If the limit is set to true, just return today
                 if ( limit === true ) {
                     return DATE_TODAY
                 }
 
-
-                // If the limit is an array,
-                // construct the date while fixing month 0index
+                // If the limit is an array, construct the date
+                // while fixing month 0index
                 if ( isArray( limit ) ) {
                     --limit[ 1 ]
                     return createDate( limit )
                 }
 
-
-                // Check if truthy upper and positive upper limit
-                // or a falsy upper and negative lower limit
-                if ( upper && limit > 0 || !upper && limit < 0 ) {
-
-                    // Create a calendar date while setting
-                    // the limit date by adding the number
+                // If there is a limit and its a number, create a
+                // calendar date relative to today by adding the limit
+                if ( limit && !isNaN( limit ) ) {
                     return createDate([ DATE_TODAY.YEAR, DATE_TODAY.MONTH, DATE_TODAY.DATE + limit ])
                 }
 
-
-                // Otherwise there's no limit,
-                // so create an infinite date
+                // Otherwise create an infinite date
                 limit = upper ? Infinity : -Infinity
                 return {
                     YEAR: limit,
@@ -1023,7 +1030,8 @@
              */
             function createValidatedDate( datePassed, direction ) {
 
-                // Create a date to validate
+
+                // If the date passed isn't a date, create one
                 datePassed = !datePassed.TIME ? createDate( datePassed ) : datePassed
 
 
@@ -1115,14 +1123,14 @@
             function postRender() {
 
                 // Find the month selector and bind the change event
-                CALENDAR.selectMonth = $findInHolder( CLASSES.month_selector ).on({
+                CALENDAR.selectMonth = $findInHolder( CLASSES.monthSelector ).on({
                     change: function() {
 
                         // Show the month based on the option selected
                         showMonth( +this.value )
 
                         // Find the new month selector and focus back on it
-                        $findInHolder( CLASSES.month_selector ).focus()
+                        $findInHolder( CLASSES.monthSelector ).focus()
                     },
 
                     // *** For iOS ***
@@ -1130,7 +1138,7 @@
                 })[ 0 ]
 
                 // Find the year selector and bind the change event
-                CALENDAR.selectYear = $findInHolder( CLASSES.year_selector ).on({
+                CALENDAR.selectYear = $findInHolder( CLASSES.yearSelector ).on({
                     change: function() {
 
                         // Show the year based on the option selected
@@ -1138,7 +1146,7 @@
                         showMonth( MONTH_FOCUSED.MONTH, +this.value )
 
                         // Find the new year selector and focus back on it
-                        $findInHolder( CLASSES.year_selector ).focus()
+                        $findInHolder( CLASSES.yearSelector ).focus()
                     },
 
                     // *** For iOS ***
@@ -1161,7 +1169,7 @@
 
 
                 // Add the "focused" class to the element
-                $ELEMENT.addClass( CLASSES.input_focus )
+                $ELEMENT.addClass( CLASSES.inputFocus )
 
 
                 // Add the "opened" class to the calendar holder
@@ -1197,7 +1205,7 @@
                             keycode = event.keyCode,
 
                             // Translate the keycode into a date change
-                            dateChange = keycodeToDateChange( keycode )
+                            dateChange = KEYCODE_TO_DATE[ keycode ] || 0
 
 
                         // Prevent the default action if a "super" key
@@ -1247,7 +1255,7 @@
                 }).on( 'focusin.P' + CALENDAR.id, function( event ) {
 
                     if ( event.target == CALENDAR.selectMonth || event.target == CALENDAR.selectYear ) {
-                        $ELEMENT.removeClass( CLASSES.input_focus )
+                        $ELEMENT.removeClass( CLASSES.inputFocus )
                         return
                     }
 
@@ -1274,7 +1282,7 @@
 
 
                 // Remove the "focused" class from the element
-                $ELEMENT.removeClass( CLASSES.input_focus )
+                $ELEMENT.removeClass( CLASSES.inputFocus )
 
                 // Remove the "opened" class from the calendar holder
                 $HOLDER.removeClass( CLASSES.open )
@@ -1356,35 +1364,6 @@
             } //onClickCalendar
 
 
-            /**
-             * Convert a keycode to a relative increase in date
-             */
-            function keycodeToDateChange( keycode ) {
-
-                // Down
-                if ( keycode == 40 ) {
-                    return 7
-                }
-
-                // Up
-                if ( keycode == 38 ) {
-                    return -7
-                }
-
-                // Right
-                if ( keycode == 39 ) {
-                    return 1
-                }
-
-                // Left
-                if ( keycode == 37 ) {
-                    return -1
-                }
-
-                console.log( 'keydown', keycode )
-            } //keycodeToDateChange
-
-
 
             // Return the exports
             return EXPORTS
@@ -1397,44 +1376,44 @@
      */
     Picker.defaults = {
 
-        months_full: [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ],
-        months_short: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
+        monthsFull: [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ],
+        monthsShort: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
 
-        weekdays_full: [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ],
-        weekdays_short: [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ],
+        weekdaysFull: [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ],
+        weekdaysShort: [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ],
 
-        month_prev: '&#9664;',
-        month_next: '&#9654;',
+        monthPrev: '&#9664;',
+        monthNext: '&#9654;',
 
         // Display strings
-        show_months_full: true,
-        show_weekdays_short: true,
+        showMonthsFull: true,
+        showWeekdaysShort: true,
 
         // Date format to show on the input element
         format: 'd mmmm, yyyy',
 
         // Date format to send to the server
-        format_submit: false,
+        formatSubmit: false,
 
         // Hidden element name suffix
-        hidden_suffix: '_submit',
+        hiddenSuffix: '_submit',
 
         // First day of the week: 0 = Sunday, 1 = Monday
-        first_day: 0,
+        firstDay: 0,
 
         // Month & year dropdown selectors
-        month_selector: false,
-        year_selector: false,
+        monthSelector: false,
+        yearSelector: false,
 
         // Date ranges
-        date_min: false,
-        date_max: false,
+        dateMin: false,
+        dateMax: false,
 
         // Dates to disable
-        dates_disabled: false,
+        datesDisabled: false,
 
         // Disable for browsers with native date support
-        disable_picker: false,
+        disablePicker: false,
 
         // Events
         onOpen: null,
@@ -1446,37 +1425,37 @@
         // Classes
         klass: {
 
-            input_focus: STRING_PREFIX_DATEPICKER + 'input--focused',
+            inputFocus: STRING_PREFIX_DATEPICKER + 'input--focused',
 
             holder: STRING_PREFIX_DATEPICKER + 'holder',
             open: STRING_PREFIX_DATEPICKER + 'holder--opened',
 
             calendar: STRING_PREFIX_DATEPICKER + 'calendar',
-            calendar_wrap: STRING_PREFIX_DATEPICKER + 'calendar--wrap',
-            calendar_table: STRING_PREFIX_DATEPICKER + 'calendar--table',
-            calendar_body: STRING_PREFIX_DATEPICKER + 'calendar--body',
+            calendarWrap: STRING_PREFIX_DATEPICKER + 'calendar--wrap',
+            calendarTable: STRING_PREFIX_DATEPICKER + 'calendar--table',
+            calendarBody: STRING_PREFIX_DATEPICKER + 'calendar--body',
 
             year: STRING_PREFIX_DATEPICKER + 'year',
-            year_wrap: STRING_PREFIX_DATEPICKER + 'year--wrap',
-            year_selector: STRING_PREFIX_DATEPICKER + 'year--selector',
+            yearWrap: STRING_PREFIX_DATEPICKER + 'year--wrap',
+            yearSelector: STRING_PREFIX_DATEPICKER + 'year--selector',
 
             month: STRING_PREFIX_DATEPICKER + 'month',
-            month_wrap: STRING_PREFIX_DATEPICKER + 'month--wrap',
-            month_selector: STRING_PREFIX_DATEPICKER + 'month--selector',
-            month_nav: STRING_PREFIX_DATEPICKER + 'month--nav',
-            month_prev: STRING_PREFIX_DATEPICKER + 'month--prev',
-            month_next: STRING_PREFIX_DATEPICKER + 'month--next',
+            monthWrap: STRING_PREFIX_DATEPICKER + 'month--wrap',
+            monthSelector: STRING_PREFIX_DATEPICKER + 'month--selector',
+            monthNav: STRING_PREFIX_DATEPICKER + 'month--nav',
+            monthPrev: STRING_PREFIX_DATEPICKER + 'month--prev',
+            monthNext: STRING_PREFIX_DATEPICKER + 'month--next',
 
             week: STRING_PREFIX_DATEPICKER + 'week',
             weekdays: STRING_PREFIX_DATEPICKER + 'weekday',
 
             day: STRING_PREFIX_DATEPICKER + 'day',
-            day_disabled: STRING_PREFIX_DATEPICKER + 'day--disabled',
-            day_selected: STRING_PREFIX_DATEPICKER + 'day--selected',
-            day_highlighted: STRING_PREFIX_DATEPICKER + 'day--highlighted',
-            day_today: STRING_PREFIX_DATEPICKER + 'day--today',
-            day_infocus: STRING_PREFIX_DATEPICKER + 'day--infocus',
-            day_outfocus: STRING_PREFIX_DATEPICKER + 'day--outfocus'
+            dayDisabled: STRING_PREFIX_DATEPICKER + 'day--disabled',
+            daySelected: STRING_PREFIX_DATEPICKER + 'day--selected',
+            dayHighlighted: STRING_PREFIX_DATEPICKER + 'day--highlighted',
+            dayToday: STRING_PREFIX_DATEPICKER + 'day--today',
+            dayInfocus: STRING_PREFIX_DATEPICKER + 'day--infocus',
+            dayOutfocus: STRING_PREFIX_DATEPICKER + 'day--outfocus'
         }
     } //Picker.defaults
 
@@ -1493,7 +1472,7 @@
 
         // Check if it should be disabled
         // for browsers that natively support `type=date`
-        if ( options.disable_picker ) { return this }
+        if ( options.disablePicker ) { return this }
 
         return this.each( function() {
             var $this = $( this )
