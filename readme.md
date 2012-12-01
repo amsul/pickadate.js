@@ -1,4 +1,4 @@
-# pickadate.js v1.3.5
+# pickadate.js v1.3.6
 
 
 A lightweight jQuery dateinput picker: [demo](http://amsul.github.com/pickadate.js) & [docs](http://amsul.github.com/pickadate.js/docs.htm>).
@@ -7,9 +7,17 @@ A lightweight jQuery dateinput picker: [demo](http://amsul.github.com/pickadate.
 ```
 $( 'input[type=date]' ).pickadate()
 ```
+
+### Browser support
+IE7+, Chrome, Firefox, Safari 3+, Opera 9.5+, iOS Safari, Android browser.
+
+Use `pickadate.legacy.js` instead of `pickadate.js` to support IE7+
   
 
 ### Notable updates
+
+### 1.3.6
+- Added support for legacy browsers
 
 #### 1.3.5
 
