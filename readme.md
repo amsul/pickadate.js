@@ -1,4 +1,4 @@
-# pickadate.js v1.3.6
+# pickadate.js v1.3.7
 
 
 A lightweight jQuery dateinput picker: [demo](http://amsul.github.com/pickadate.js) & [docs](http://amsul.github.com/pickadate.js/docs.htm>).
