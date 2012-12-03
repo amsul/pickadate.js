@@ -16,7 +16,10 @@ IE7+, Chrome, Firefox, Safari 3+, Opera 9.5+, iOS Safari, Android browser.
 
 ### Notable updates
 
-### 1.3.6
+#### 1.3.7
+- [Alternate formatting for pre-filled date](http://amsul.github.com/pickadate.js/docs.htm#prefilled)
+
+#### 1.3.6
 - Added support for legacy browsers
 
 #### 1.3.5
