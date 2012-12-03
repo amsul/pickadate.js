@@ -4,9 +4,9 @@
 
 <title>Pickadate.js &#8226; Documentation</title>
 
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="demo.css">
-<link rel="stylesheet" href="pickadate.css">
+<link rel="stylesheet" href="demo/style.css">
+<link rel="stylesheet" href="demo/demo.css">
+<link rel="stylesheet" href="source/pickadate.css">
 
 <!--[if lt IE 9]>
     <script>document.createElement('section')</script>
@@ -18,7 +18,7 @@
     <h1><a href="http://amsul.github.com/pickadate.js" class="link-inherit"><strong title="Pick a Date" class="underline-highlight">pickadate.js</strong></a></h1>
     <h2>A responsive and lightweight<br>jQuery dateinput picker</h2>
 
-    <h3>Weighs 8.26kb (3.4kb gzipped)</h3>
+    <h3>Weighs 8.3kb (3.4kb gzipped)</h3>
 
     <a href="https://github.com/amsul/pickadate.js"><img width="124" height="124" style="position:absolute;top:0;right:0;border:0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
 
@@ -103,12 +103,39 @@ klass: {
 
     <h3><strong class="underline-highlight">Simple setup</strong></h3>
 
-    <pre><code>$( '.datepicker' ).pickadate()</code></pre>
+    <p>With the basic setup, you get all the default options listed above.</p>
 
-    <p>With the basic setup, you get all the default options listed above:</p>
+    <pre><code>$( '.datepicker' ).pickadate()</code></pre>
 
     <fieldset>
         <input id="picker_simple" class="datepicker" type="text">
+    </fieldset>
+
+</section>
+
+
+<section class="holder" id="prefilled">
+
+    <h3><strong class="underline-highlight">Pre-filled date</strong></h3>
+
+    <p>If you would like to set the default value in the <code>input</code> field, there are 2 ways.</p>
+
+    <p>The first method is to just set the <code>value</code> of the element:</p>
+
+    <pre><code>&lt;input value="August 14, 1988" class="datepicker" type="text"&gt;</code></pre>
+
+    <fieldset>
+        <input id="picker_value" class="datepicker" type="text" value="August 14, 1988">
+    </fieldset>
+
+    <p>This works as long as your <code>value</code> is formatted in a <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Date/parse" target="_blank">way that the browser can understand</a>.</p>
+
+    <p>The second way is to set the <code>data-value</code> attribute of the element in a <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Date/parse" target="_blank">format the browser can easily parse</a>:</p>
+
+    <pre><code>&lt;input value="August 14" data-value="1988/08/14" class="datepicker" type="text"&gt;</code></pre>
+
+    <fieldset>
+        <input id="picker_value_b" class="datepicker" type="text" value="August 14" data-value="1988/08/14">
     </fieldset>
 
 </section>
@@ -797,11 +824,17 @@ calendar.close()
 
 
 <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
-<script src="pickadate.js"></script>
+<script src="source/pickadate.js"></script>
 
 <script type="text/javascript">
 
     $( '#picker_simple' ).pickadate()
+
+    $( '#picker_value' ).pickadate()
+
+    $( '#picker_value_b' ).pickadate({
+        format: 'mmmm dd'
+    })
 
     $( '#picker_strings' ).pickadate({
         monthPrev: '&larr;',
