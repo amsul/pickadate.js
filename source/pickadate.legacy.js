@@ -1,11 +1,12 @@
 /*!
- * pickadate.js v1.3.6 - 1 December, 2012
+ * pickadate.js v1.3.7 - 03 December, 2012
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
  */
 
 /**
+ * TODO: translations support
  * TODO: scroll calendar into view
  *
  * FIX: click to close on iOS
@@ -17,6 +18,7 @@
    browser: true,
    asi: true
  */
+
 
 
 ;(function( $, window, document, undefined ) {
@@ -46,9 +48,9 @@
 
         // Check if a value is a function
         // and trigger it, if that
-        triggerFunction = function( func, scope, args ) {
-            if ( typeof func == 'function' ) {
-                return func.call( scope, args )
+        triggerFunction = function( callback, scope, args ) {
+            if ( typeof callback == 'function' ) {
+                return callback.apply( scope, args )
             }
         },
 
@@ -343,7 +345,7 @@
 
 
                 // Initialize everything
-                initialize = (function() {
+                initialize = (function( elementDataValue ) {
 
                     // Create a new wrapped calendar within the jQuery holder object
                     $HOLDER = $( createNode( STRING_DIV, createCalendarWrapped(), CLASSES.holder ) ).on({
@@ -381,62 +383,53 @@
                     }).after( [ $HOLDER, ELEMENT_HIDDEN ] )
 
 
-                    // Do stuff after rendering the calendar
-                    postRender()
+                    // If the data value parses as a date, set the date
+                    if ( !isNaN( elementDataValue ) ) {
+                        setDateSelected( createDate( elementDataValue ) )
+                    }
 
 
-                    // If the element has autofocus
+                    // If the element has autofocus open the calendar
                     if ( ELEMENT.autofocus ) {
-
-                        // Open the calendar
                         calendarOpen()
                     }
 
+
+                    // Do stuff after rendering the calendar
+                    postRender()
+
                     // Trigger the onStart method within exports scope
                     triggerFunction( SETTINGS.onStart, EXPORTS )
-                })() //initialize
+                })( Date.parse( ELEMENT.getAttribute( 'data-value' ) ) ) //initialize
 
 
 
             /**
              * Create the nav for next/prev month
              */
-            function createMonthNav() {
+            function createMonthNav( next ) {
 
-                var
-                    createMonthTag = function( upper ) {
+                // If the focused month is outside the range
+                // return an empty string
+                if ( ( next && MONTH_FOCUSED.YEAR >= DATE_MAX.YEAR && MONTH_FOCUSED.MONTH >= DATE_MAX.MONTH ) || ( !next && MONTH_FOCUSED.YEAR <= DATE_MIN.YEAR && MONTH_FOCUSED.MONTH <= DATE_MIN.MONTH ) ) {
+                    return ''
+                }
 
-                        // If the focused month is outside the range
-                        // return an empty string
-                        if ( ( upper && MONTH_FOCUSED.YEAR >= DATE_MAX.YEAR && MONTH_FOCUSED.MONTH >= DATE_MAX.MONTH ) || ( !upper && MONTH_FOCUSED.YEAR <= DATE_MIN.YEAR && MONTH_FOCUSED.MONTH <= DATE_MIN.MONTH ) ) {
-                            return ''
-                        }
+                var monthTag = 'month' + ( next ? 'Next' : 'Prev' )
 
-                        var monthTag = 'month' + ( upper ? 'Next' : 'Prev' )
-
-                        // Otherwise, return the created tag
-                        return createNode( STRING_DIV,
-                            SETTINGS[ monthTag ],
-                            CLASSES[ monthTag ],
-                            'data-nav=' + ( upper || -1 )
-                        ) //endreturn
-                    } //createMonthTag
-
-                // Create and both the month tags
-                // * Passing a truthy argument
-                //   creates the "next" tag
-                return createMonthTag() + createMonthTag( 1 )
+                // Otherwise, return the created tag
+                return createNode( STRING_DIV,
+                    SETTINGS[ monthTag ],
+                    CLASSES[ monthTag ],
+                    'data-nav=' + ( next || -1 )
+                ) //endreturn
             } //createMonthNav
 
 
             /**
              * Create the month label
              */
-            function createMonthLabel() {
-
-                var
-                    // Grab the collection of months
-                    monthsCollection = SETTINGS.showMonthsFull ? SETTINGS.monthsFull : SETTINGS.monthsShort
+            function createMonthLabel( monthsCollection ) {
 
 
                 // If there's a need for a month selector
@@ -730,10 +723,11 @@
                     createNode( STRING_DIV,
 
                         // The prev/next month tags
-                        createNode( STRING_DIV, createMonthNav(), CLASSES.monthNav ) +
+                        // * Truthy argument creates "next" tag
+                        createNode( STRING_DIV, createMonthNav() + createMonthNav( 1 ), CLASSES.monthNav ) +
 
                         // The calendar month tag
-                        createNode( STRING_DIV, createMonthLabel(), CLASSES.monthWrap ) +
+                        createNode( STRING_DIV, createMonthLabel( SETTINGS.showMonthsFull ? SETTINGS.monthsFull : SETTINGS.monthsShort ), CLASSES.monthWrap ) +
 
                         // The calendar year tag
                         createNode( STRING_DIV, createYearLabel(), CLASSES.yearWrap ) +
@@ -1046,35 +1040,40 @@
              */
             function postRender() {
 
-                // Find the month selector and bind the change event
+                // Find and store the month selector
                 CALENDAR.selectMonth = $findInHolder( CLASSES.monthSelector ).on({
+
+                    // *** For iOS ***
+                    click: function( event ) { event.stopPropagation() },
+
+                    // Bind the change event
                     change: function() {
 
                         // Show the month based on the option selected
+                        // while parsing as a float
                         showMonth( +this.value )
 
                         // Find the new month selector and focus back on it
                         $findInHolder( CLASSES.monthSelector ).focus()
-                    },
-
-                    // *** For iOS ***
-                    click: function( event ) { event.stopPropagation() }
+                    }
                 })[ 0 ]
 
-                // Find the year selector and bind the change event
+                // Find and store the year selector
                 CALENDAR.selectYear = $findInHolder( CLASSES.yearSelector ).on({
+
+                    // *** For iOS ***
+                    click: function( event ) { event.stopPropagation() },
+
+                    // Bind the change event
                     change: function() {
 
                         // Show the year based on the option selected
-                        // and month currently in focus
+                        // and month currently in focus while parsing as a float
                         showMonth( MONTH_FOCUSED.MONTH, +this.value )
 
                         // Find the new year selector and focus back on it
                         $findInHolder( CLASSES.yearSelector ).focus()
-                    },
-
-                    // *** For iOS ***
-                    click: function( event ) { event.stopPropagation() }
+                    }
                 })[ 0 ]
             } //postRender
 
@@ -1112,6 +1111,7 @@
                 if ( isLegacyIE ) {
                     calendarRender()
                 }
+
 
                 // Bind all the events to the document
                 $document.on( 'click.P' + CALENDAR.id + ' focusin.P' + CALENDAR.id + ' keydown.P' + CALENDAR.id, onDocumentEvent )
@@ -1290,9 +1290,33 @@
 
 
     /**
+     * Extend jQuery
+     */
+    $.fn.pickadate = function( options ) {
+
+        var pickadate = 'pickadate'
+
+        // Merge the options with a deep copy
+        options = $.extend( true, {}, $.fn.pickadate.defaults, options )
+
+        // Check if it should be disabled
+        // for browsers that natively support `type=date`
+        if ( options.disablePicker ) { return this }
+
+        return this.each( function() {
+            var $this = $( this )
+            if ( this.nodeName == 'INPUT' && !$this.data( pickadate ) ) {
+                $this.data( pickadate, new Picker( $this, options ) )
+            }
+        })
+    } //$.fn.pickadate
+
+
+
+    /**
      * Default options for the picker
      */
-    Picker.defaults = {
+    $.fn.pickadate.defaults = {
 
         monthsFull: [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ],
         monthsShort: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
@@ -1375,31 +1399,8 @@
             dayInfocus: STRING_PREFIX_DATEPICKER + 'day--infocus',
             dayOutfocus: STRING_PREFIX_DATEPICKER + 'day--outfocus'
         }
-    } //Picker.defaults
+    } //$.fn.pickadate.defaults
 
-
-
-    /**
-     * Extend jQuery
-     */
-    $.fn.pickadate = function( options ) {
-
-        var pickadate = 'pickadate'
-
-        // Merge the options with a deep copy
-        options = $.extend( true, {}, Picker.defaults, options )
-
-        // Check if it should be disabled
-        // for browsers that natively support `type=date`
-        if ( options.disablePicker ) { return this }
-
-        return this.each( function() {
-            var $this = $( this )
-            if ( this.nodeName == 'INPUT' && !$this.data( pickadate ) ) {
-                $this.data( pickadate, new Picker( $this, options ) )
-            }
-        })
-    } //pickadate
 
 
 
@@ -1537,6 +1538,9 @@
 
 
 })( jQuery, window, document );
+
+
+
 
 
 
