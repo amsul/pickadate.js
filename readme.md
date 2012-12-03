@@ -11,8 +11,8 @@ $( 'input[type=date]' ).pickadate()
 ### Browser support
 IE7+, Chrome, Firefox, Safari 3+, Opera 9.5+, iOS Safari, Android browser.
 
-Use `pickadate.legacy.js` instead of `pickadate.js` to support IE7+
-  
+`pickadate.js` supports IE 9 +. To support IE 7+, use `pickadate.legacy.js` instead.
+
 
 ### Notable updates
 
@@ -33,7 +33,7 @@ Use `pickadate.legacy.js` instead of `pickadate.js` to support IE7+
 - [Month & year selector](http://amsul.github.com/pickadate.js/docs.htm#selectors)
 - [Selectively disable dates](http://amsul.github.com/pickadate.js/docs.htm#dates_disabled)
 - [Calendar events](http://amsul.github.com/pickadate.js/docs.htm#events) and [api]((http://amsul.github.com/pickadate.js/docs.htm#api)
-- [Inline calendar](http://amsul.github.com/pickadate.js/docs.htm#theme)  
+- [Inline calendar](http://amsul.github.com/pickadate.js/docs.htm#theme)
 - [Classes option revised](http://amsul.github.com/pickadate.js/docs.htm#classes)
 
 

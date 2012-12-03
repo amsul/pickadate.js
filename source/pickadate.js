@@ -380,16 +380,52 @@
                     }).after( [ $HOLDER, ELEMENT_HIDDEN ] )
 
 
-                    // Do stuff after rendering the calendar
-                    postRender()
+                    var FORMAT_TO_LENGTH = {
+                        yyyy: function() {
+                            return {
+                                length: 4,
+                                type: 'YEAR'
+                            }
+                        },
+                        mm: function() {
+                            return {
+                                length: 2,
+                                type: 'MONTH'
+                            }
+                        }
+                    }
+
+                    var anotherdate = $ELEMENT.data( 'date' )
+                    //
+                    if ( anotherdate ) {
+
+                        var newdate = {}
+
+                        DATE_FORMATS.toArray( SETTINGS.formatSubmit ).map( function( format ) {
+
+                            var newformat = FORMAT_TO_LENGTH[ format ] ? FORMAT_TO_LENGTH[ format ]() : ''
+
+                            if ( newformat ) {
+                                newdate[ newformat.type ] = anotherdate.slice( 0, newformat.length )
+                            }
+
+                            console.log( newdate )
+
+                            return
+                        })
+
+                        debugger
+                    }
 
 
-                    // If the element has autofocus
+                    // If the element has autofocus open the calendar
                     if ( ELEMENT.autofocus ) {
-
-                        // Open the calendar
                         calendarOpen()
                     }
+
+
+                    // Do stuff after rendering the calendar
+                    postRender()
 
                     // Trigger the onStart method within exports scope
                     triggerFunction( SETTINGS.onStart, EXPORTS )
