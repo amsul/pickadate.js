@@ -1,11 +1,12 @@
 /*!
- * pickadate.js v1.3.6 - 1 December, 2012
+ * pickadate.js v1.3.7 - 03 December, 2012
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
  */
 
 /**
+ * TODO: translations support
  * TODO: scroll calendar into view
  *
  * FIX: click to close on iOS
@@ -342,7 +343,7 @@
 
 
                 // Initialize everything
-                initialize = (function() {
+                initialize = (function( elementDataValue ) {
 
                     // Create a new wrapped calendar within the jQuery holder object
                     $HOLDER = $( createNode( STRING_DIV, createCalendarWrapped(), CLASSES.holder ) ).on({
@@ -380,41 +381,9 @@
                     }).after( [ $HOLDER, ELEMENT_HIDDEN ] )
 
 
-                    var FORMAT_TO_LENGTH = {
-                        yyyy: function() {
-                            return {
-                                length: 4,
-                                type: 'YEAR'
-                            }
-                        },
-                        mm: function() {
-                            return {
-                                length: 2,
-                                type: 'MONTH'
-                            }
-                        }
-                    }
-
-                    var anotherdate = $ELEMENT.data( 'date' )
-                    //
-                    if ( anotherdate ) {
-
-                        var newdate = {}
-
-                        DATE_FORMATS.toArray( SETTINGS.formatSubmit ).map( function( format ) {
-
-                            var newformat = FORMAT_TO_LENGTH[ format ] ? FORMAT_TO_LENGTH[ format ]() : ''
-
-                            if ( newformat ) {
-                                newdate[ newformat.type ] = anotherdate.slice( 0, newformat.length )
-                            }
-
-                            console.log( newdate )
-
-                            return
-                        })
-
-                        debugger
+                    // If the data value parses as a date, set the date
+                    if ( !isNaN( elementDataValue ) ) {
+                        setDateSelected( createDate( elementDataValue ) )
                     }
 
 
@@ -429,49 +398,36 @@
 
                     // Trigger the onStart method within exports scope
                     triggerFunction( SETTINGS.onStart, EXPORTS )
-                })() //initialize
+                })( Date.parse( ELEMENT.getAttribute( 'data-value' ) ) ) //initialize
 
 
 
             /**
              * Create the nav for next/prev month
              */
-            function createMonthNav() {
+            function createMonthNav( next ) {
 
-                var
-                    createMonthTag = function( upper ) {
+                // If the focused month is outside the range
+                // return an empty string
+                if ( ( next && MONTH_FOCUSED.YEAR >= DATE_MAX.YEAR && MONTH_FOCUSED.MONTH >= DATE_MAX.MONTH ) || ( !next && MONTH_FOCUSED.YEAR <= DATE_MIN.YEAR && MONTH_FOCUSED.MONTH <= DATE_MIN.MONTH ) ) {
+                    return ''
+                }
 
-                        // If the focused month is outside the range
-                        // return an empty string
-                        if ( ( upper && MONTH_FOCUSED.YEAR >= DATE_MAX.YEAR && MONTH_FOCUSED.MONTH >= DATE_MAX.MONTH ) || ( !upper && MONTH_FOCUSED.YEAR <= DATE_MIN.YEAR && MONTH_FOCUSED.MONTH <= DATE_MIN.MONTH ) ) {
-                            return ''
-                        }
+                var monthTag = 'month' + ( next ? 'Next' : 'Prev' )
 
-                        var monthTag = 'month' + ( upper ? 'Next' : 'Prev' )
-
-                        // Otherwise, return the created tag
-                        return createNode( STRING_DIV,
-                            SETTINGS[ monthTag ],
-                            CLASSES[ monthTag ],
-                            'data-nav=' + ( upper || -1 )
-                        ) //endreturn
-                    } //createMonthTag
-
-                // Create and both the month tags
-                // * Passing a truthy argument
-                //   creates the "next" tag
-                return createMonthTag() + createMonthTag( 1 )
+                // Otherwise, return the created tag
+                return createNode( STRING_DIV,
+                    SETTINGS[ monthTag ],
+                    CLASSES[ monthTag ],
+                    'data-nav=' + ( next || -1 )
+                ) //endreturn
             } //createMonthNav
 
 
             /**
              * Create the month label
              */
-            function createMonthLabel() {
-
-                var
-                    // Grab the collection of months
-                    monthsCollection = SETTINGS.showMonthsFull ? SETTINGS.monthsFull : SETTINGS.monthsShort
+            function createMonthLabel( monthsCollection ) {
 
 
                 // If there's a need for a month selector
@@ -765,10 +721,11 @@
                     createNode( STRING_DIV,
 
                         // The prev/next month tags
-                        createNode( STRING_DIV, createMonthNav(), CLASSES.monthNav ) +
+                        // * Truthy argument creates "next" tag
+                        createNode( STRING_DIV, createMonthNav() + createMonthNav( 1 ), CLASSES.monthNav ) +
 
                         // The calendar month tag
-                        createNode( STRING_DIV, createMonthLabel(), CLASSES.monthWrap ) +
+                        createNode( STRING_DIV, createMonthLabel( SETTINGS.showMonthsFull ? SETTINGS.monthsFull : SETTINGS.monthsShort ), CLASSES.monthWrap ) +
 
                         // The calendar year tag
                         createNode( STRING_DIV, createYearLabel(), CLASSES.yearWrap ) +
@@ -1326,9 +1283,33 @@
 
 
     /**
+     * Extend jQuery
+     */
+    $.fn.pickadate = function( options ) {
+
+        var pickadate = 'pickadate'
+
+        // Merge the options with a deep copy
+        options = $.extend( true, {}, $.fn.pickadate.defaults, options )
+
+        // Check if it should be disabled
+        // for browsers that natively support `type=date`
+        if ( options.disablePicker ) { return this }
+
+        return this.each( function() {
+            var $this = $( this )
+            if ( this.nodeName == 'INPUT' && !$this.data( pickadate ) ) {
+                $this.data( pickadate, new Picker( $this, options ) )
+            }
+        })
+    } //$.fn.pickadate
+
+
+
+    /**
      * Default options for the picker
      */
-    Picker.defaults = {
+    $.fn.pickadate.defaults = {
 
         monthsFull: [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ],
         monthsShort: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
@@ -1411,30 +1392,7 @@
             dayInfocus: STRING_PREFIX_DATEPICKER + 'day--infocus',
             dayOutfocus: STRING_PREFIX_DATEPICKER + 'day--outfocus'
         }
-    } //Picker.defaults
-
-
-    /**
-     * Extend jQuery
-     */
-    $.fn.pickadate = function( options ) {
-
-        var pickadate = 'pickadate'
-
-        // Merge the options with a deep copy
-        options = $.extend( true, {}, Picker.defaults, options )
-
-        // Check if it should be disabled
-        // for browsers that natively support `type=date`
-        if ( options.disablePicker ) { return this }
-
-        return this.each( function() {
-            var $this = $( this )
-            if ( this.nodeName == 'INPUT' && !$this.data( pickadate ) ) {
-                $this.data( pickadate, new Picker( $this, options ) )
-            }
-        })
-    } //pickadate
+    } //$.fn.pickadate.defaults
 
 
 
