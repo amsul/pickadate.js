@@ -108,5 +108,10 @@ input.pickadate__input--focused {
     border: 1px solid #cddfcd;
 }
 
+.notification--highlight {
+    background: #ffd;
+    border-color: #eec;
+}
+
 
 

@@ -11,7 +11,7 @@ $( 'input[type=date]' ).pickadate()
 ### Browser support
 IE7+, Chrome, Firefox, Safari, Opera, iOS Safari, Android browser.
 
-The `pickadate.js` script supports IE 9 +. To support IE 7+ and other old browsers, include `pickadate.legacy.js` instead.
+The `pickadate.js` script supports IE 9+ by default. To support IE 7+ and other old browsers, include `pickadate.legacy.js` instead.
 
 
 ### Notable updates
