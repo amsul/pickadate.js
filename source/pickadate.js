@@ -15,7 +15,8 @@
    devel: true,
    browser: true,
    asi: true,
-   unused: true
+   unused: true,
+   eqnull: true
  */
 
 
@@ -1163,7 +1164,7 @@
 
                 // Otherwise return the in range return value
                 // or the month itself
-                return inRangeValue || month
+                return inRangeValue != null ? inRangeValue : month
             } //getMonthInRange
 
 
