@@ -609,8 +609,8 @@
                                 // Set the value and selected index
                                 'value=' + monthIndex + ( MONTH_FOCUSED.MONTH == monthIndex ? ' selected' : '' ) +
 
-                                // Plus the disabled attribute if it's an invalid month
-                                ( isInvalidMonth( monthIndex, MONTH_FOCUSED.YEAR, ' disabled' ) || '' )
+                                // Plus the disabled attribute if it's outside the range
+                                getMonthInRange( monthIndex, MONTH_FOCUSED.YEAR, ' disabled', '' )
                             )
                         }),
 
@@ -1040,9 +1040,9 @@
                 // Ensure we have a year to work with
                 year = year || MONTH_FOCUSED.YEAR
 
-                // Validate the month to be within
-                // the minimum and maximum date
-                month = isInvalidMonth( month, year ) || month
+                // Get the month to be within
+                // the minimum and maximum date limits
+                month = getMonthInRange( month, year )
 
                 // Set the month to show in focus
                 setMonthFocused( month, year )
@@ -1143,11 +1143,11 @@
 
 
             /**
-             * Validate a month by comparing with the date range.
+             * Return a month by comparing with the date range.
              * If outside the range, returns the value passed.
-             * Otherwise returns nothing.
+             * Otherwise returns the in range value or the month itself.
              */
-            function isInvalidMonth( month, year, returnValue ) {
+            function getMonthInRange( month, year, returnValue, inRangeValue ) {
 
                 // If the month is less than the min month,
                 // then return the return value or min month
@@ -1160,7 +1160,11 @@
                 if ( year >= DATE_MAX.YEAR && month > DATE_MAX.MONTH ) {
                     return returnValue || DATE_MAX.MONTH
                 }
-            } //isInvalidMonth
+
+                // Otherwise return the in range return value
+                // or the month itself
+                return inRangeValue || month
+            } //getMonthInRange
 
 
 
