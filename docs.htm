@@ -1,5 +1,7 @@
 <!doctype html>
 
+<meta charset="utf-8">
+
 <meta name="viewport" content="width=device-width,maximum-scale=1">
 
 <title>Pickadate.js &#8226; Documentation</title>
@@ -18,9 +20,9 @@
     <h1><a href="http://amsul.github.com/pickadate.js" class="link-inherit"><strong title="Pick a Date" class="underline-highlight">pickadate.js</strong></a></h1>
     <h2>A responsive and lightweight<br>jQuery dateinput picker</h2>
 
-    <h3>Weighs 8.3kb (3.4kb gzipped)</h3>
+    <h3>Weighs 8.8kb (3.6kb gzipped)</h3>
 
-    <a href="https://github.com/amsul/pickadate.js"><img width="124" height="124" style="position:absolute;top:0;right:0;border:0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+    <a href="https://github.com/amsul/pickadate.js"><img width="128" height="128" style="position:absolute;top:0;right:0;border:0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
 
     <h4><a href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js</a> or <a href="https://github.com/amsul/pickadate.js">view it on Github</a></h4>
 
@@ -30,47 +32,47 @@
 <section class="holder" id="options">
 
     <h3>All the options and default settings:</h3>
-    <pre><code><a href="#strings">// Strings</a>
+    <pre><code>// <a href="#strings">Strings</a> and <a href="#translations">translations</a>
 monthsFull: [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ],
 monthsShort: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
 weekdaysFull: [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ],
 weekdaysShort: [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ],
+
+// <a href="#strings">Display strings</a>
 monthPrev: '&amp;#9664;',
 monthNext: '&amp;#9654;',
-
-<a href="#strings">// Display strings</a>
 showMonthsFull: true,
 showWeekdaysShort: true,
 
-<a href="#formats">// Date format</a>
+// <a href="#formats">Date format</a>
 format: 'd mmmm, yyyy',
 formatSubmit: false,
 hiddenSuffix: '_submit',
 
-<a href="#first_day">// First day of week</a>
+// <a href="#first_day">First day of week</a>
 firstDay: 0,
 
-<a href="#selectors">// Month &amp; year dropdown selectors</a>
+// <a href="#selectors">Month &amp; year dropdown selectors</a>
 monthSelector: false,
 yearSelector: false,
 
-<a href="#ranges">// Date ranges</a>
+// <a href="#ranges">Date ranges</a>
 dateMin: false,
 dateMax: false,
 
-<a href="#dates_disabled">// Dates disabled</a>
+// <a href="#dates_disabled">Dates disabled</a>
 datesDisabled: false,
 
-<a href="#disable">// Disable picker</a>
+// <a href="#disable">Disable picker</a>
 disablePicker: false,
 
-<a href="#events">// Calendar events</a>
+// <a href="#events">Calendar events</a>
 onOpen: null,
 onClose: null,
 onSelect: null,
 onChangeMonth: null,
 
-<a href="#theme" id="classes">// Classes</a>
+// <a href="#theme" id="classes">Classes</a>
 klass: {
     inputFocus: 'pickadate__input--focused',
     pickerHolder: 'pickadate__holder',
@@ -114,33 +116,6 @@ klass: {
 </section>
 
 
-<section class="holder" id="prefilled">
-
-    <h3><strong class="underline-highlight">Pre-filled date</strong></h3>
-
-    <p>If you would like to set the default value in the <code>input</code> field, there are 2 ways.</p>
-
-    <p>The first method is to just set the <code>value</code> of the element:</p>
-
-    <pre><code>&lt;input value="August 14, 1988" class="datepicker" type="text"&gt;</code></pre>
-
-    <fieldset>
-        <input id="picker_value" class="datepicker" type="text" value="August 14, 1988">
-    </fieldset>
-
-    <p>This works as long as your <code>value</code> is formatted in a <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Date/parse" target="_blank">way that the browser can understand</a>.</p>
-
-    <p>The second way is to set the <code>data-value</code> attribute of the element in a <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Date/parse" target="_blank">format the browser can easily parse</a>:</p>
-
-    <pre><code>&lt;input value="August 14" data-value="1988/08/14" class="datepicker" type="text"&gt;</code></pre>
-
-    <fieldset>
-        <input id="picker_value_b" class="datepicker" type="text" value="August 14" data-value="1988/08/14">
-    </fieldset>
-
-</section>
-
-
 <section class="holder" id="strings">
 
     <h3><strong class="underline-highlight">Custom month and weekday tags</strong></h3>
@@ -159,13 +134,48 @@ klass: {
 </section>
 
 
+<section class="holder" id="translations">
+
+    <h3><strong class="underline-highlight">Any language support</strong></h3>
+
+    <p>You can add support for any language in one of two ways.</p>
+
+    <p>(1) By passing the months and weekdays as an array for <i>each invocation</i>:</p>
+
+    <pre><code>$( '.datepicker' ).pickadate({
+    formatSubmit: 'dd/mm/yyyy',
+    weekdaysShort: [ 'Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam' ],
+    monthsShort: [ 'Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec' ],
+    monthsFull: [ 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre' ]
+})</code></pre>
+
+    <p>(2) Or by globally extending the default picker options for <i>all instances</i>:</p>
+
+    <pre><code>$.extend( $.fn.pickadate.defaults, {
+    formatSubmit: 'dd/mm/yyyy',
+    monthsFull: [ 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre' ],
+    monthsShort: [ 'Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec' ],
+    weekdaysShort: [ 'Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam' ]
+})</code></pre>
+
+    <fieldset>
+        <input id="picker_strings_b" class="datepicker" type="text">
+    </fieldset>
+
+    <p>There are <a href="https://github.com/amsul/pickadate.js/tree/gh-pages/translations">extensions for 26 languages</a> already available.</p>
+
+    <p class="notification notification--highlight">* The <code>data-value</code> attribute and <code>formatSubmit</code> option are both required to parse your dates correctly. <a href="#formats">Read more</a> &darr;</p>
+
+</section>
+
+
 <section class="holder" id="formats">
 
     <h3><strong class="underline-highlight">Custom date formats</strong></h3>
 
     <pre><code>$( '.datepicker' ).pickadate({
     format: 'You selected: dddd, dd mmm, yyyy',
-    formatSubmit: 'yyyy-mm-dd'
+    formatSubmit: 'yyyy/mm/dd'
 })</code></pre>
 
     <p>Show human-friendly date formats while using a different format to submit to the server. Pick a date:</p>
@@ -241,6 +251,26 @@ klass: {
             </tr>
         </tbody>
     </table>
+
+    <br>
+
+    <h3 id="formats_hidden"><strong class="underline-highlight">Default value formatting</strong></h3>
+
+    <p>If your <code>input</code> field has a custom date format or language that doesn't <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Date/parse" target="_blank">easily parse as a date</a>, you can specify the date using the <code>data-value</code> attribute:</p>
+
+    <pre><code>&lt;input value="August 14" data-value="1988/08/14" class="datepicker" type="text"&gt;</code></pre>
+
+    <fieldset>
+        <input id="picker_formats_b" class="datepicker" type="text" value="August 14" data-value="1988/08/14">
+    </fieldset>
+
+    <p>The <code>data-value</code> attribute must be formatted using the <code>formatSubmit</code> option:</p>
+
+    <pre><code>$( '.datepicker' ).pickadate({
+    format: 'mmmm dd',
+    formatSubmit: 'yyyy/mm/dd'
+})</code></pre>
+
 
 </section>
 
@@ -813,7 +843,7 @@ calendar.close()
 <section class="holder holder-clean aligncenter">
 
     <p><a class="button-full" href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js</a></p>
-    <small class="dimmed"><p>Browser support: IE7+, Chrome, Firefox, Safari 3+, Opera 9.5+, iOS Safari, Android browser</p></small>
+    <small class="dimmed"><p>Browser support: IE7+, Chrome, Firefox, Safari, Opera, iOS Safari, Android browser</p></small>
     <p><a href="https://github.com/amsul/pickadate.js">View it on Github</a></p>
 
 </section>
@@ -824,23 +854,30 @@ calendar.close()
 
 
 <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
-<script src="source/pickadate.js"></script>
+
+<!--[if !(lt IE 9)]> -->
+    <script src="source/pickadate.js"></script>
+<!-- <![endif]-->
+<!--[if lt IE 9]>
+    <script src="source/pickadate.legacy.js"></script>
+<![endif]-->
 
 <script type="text/javascript">
 
     $( '#picker_simple' ).pickadate()
-
-    $( '#picker_value' ).pickadate()
-
-    $( '#picker_value_b' ).pickadate({
-        format: 'mmmm dd'
-    })
 
     $( '#picker_strings' ).pickadate({
         monthPrev: '&larr;',
         monthNext: '&rarr;',
         weekdaysShort: [ 'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa' ],
         showMonthsFull: false
+    })
+
+    $( '#picker_strings_b' ).pickadate({
+        formatSubmit: 'dd/mm/yyyy',
+        weekdaysShort: [ 'Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam' ],
+        monthsShort: [ 'Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc' ],
+        monthsFull: [ 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre' ]
     })
 
     $( '#picker_selectors' ).pickadate({
@@ -854,12 +891,17 @@ calendar.close()
 
     var $custom_date = $( '#picker_formats' ).pickadate({
         format: 'You selected: dddd, dd mmm, yyyy',
-        formatSubmit: 'yyyy-mm-dd',
+        formatSubmit: 'yyyy/mm/dd',
         onSelect: function() {
             $custom_date.next().after( '<p class="notification">Date to submit: <code>' + $picker.getDate( 'yyyy-mm-dd' ) + '</code></p>' )
         }
     })
     var $picker = $custom_date.data( 'pickadate' )
+
+    $( '#picker_formats_b' ).pickadate({
+        format: 'mmmm dd',
+        formatSubmit: 'yyyy/mm/dd'
+    })
 
     $( '#picker_disable' ).pickadate({
         disablePicker: true

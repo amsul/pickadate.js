@@ -1,4 +1,4 @@
-# pickadate.js v1.3.7
+# pickadate.js v1.3.8
 
 
 A lightweight jQuery dateinput picker: [demo](http://amsul.github.com/pickadate.js) & [docs](http://amsul.github.com/pickadate.js/docs.htm>).
@@ -9,15 +9,18 @@ $( 'input[type=date]' ).pickadate()
 ```
 
 ### Browser support
-IE7+, Chrome, Firefox, Safari 3+, Opera 9.5+, iOS Safari, Android browser.
+IE7+, Chrome, Firefox, Safari, Opera, iOS Safari, Android browser.
 
-`pickadate.js` supports IE 9 +. To support IE 7+, use `pickadate.legacy.js` instead.
+The `pickadate.js` script supports IE 9+ by default. To support IE 7+ and other old browsers, include `pickadate.legacy.js` instead.
 
 
 ### Notable updates
 
+#### 1.3.8
+- [Translations](http://amsul.github.com/pickadate.js/docs.htm#translations)
+
 #### 1.3.7
-- [Alternate formatting for pre-filled date](http://amsul.github.com/pickadate.js/docs.htm#prefilled)
+- [Default value formatting](http://amsul.github.com/pickadate.js/docs.htm#formats_hidden)
 
 #### 1.3.6
 - Added support for legacy browsers
