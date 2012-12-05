@@ -1,12 +1,11 @@
 /*!
- * pickadate.js v1.3.8 - 04 December, 2012
+ * pickadate.js v1.3.9 - 05 December, 2012
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
  */
 
 /**
- * TODO: get/set min & max date
  * TODO: scroll calendar into view
  * TODO: click to close on iOS
  */
@@ -78,13 +77,13 @@
                 DATE_TODAY = createDate(),
 
 
-                // Create calendar object for the min date
-                DATE_MIN = createDateMinOrMax( SETTINGS.dateMin ),
+                // Set the min date
+                DATE_MIN = setDateMinOrMax( SETTINGS.dateMin ),
 
 
-                // Create calendar object for the max date
+                // Set the max date
                 // * A truthy second argument creates max date
-                DATE_MAX = createDateMinOrMax( SETTINGS.dateMax, 1 ),
+                DATE_MAX = setDateMinOrMax( SETTINGS.dateMax, 1 ),
 
 
                 // Create a collection of dates to disable
@@ -530,7 +529,33 @@
                         // Then set it as the date selected
                         setDateSelected( createValidatedDate([ year, --month, date ]), isSuperficial )
                         return P
-                    } //setDate
+                    }, //setDate
+
+
+                    /**
+                     * Get the min or max date based on
+                     * the argument being truthy or falsey
+                     */
+                    getDateLimit: function( upper ) {
+                        return upper ? DATE_MAX : DATE_MIN
+                    }, //getDateLimit
+
+
+                    /**
+                     * Set the min or max date based on second
+                     * argument being truthy or falsey.
+                     */
+                    setDateLimit: function( date, upper ) {
+
+                        // Set the relevant date
+                        if ( upper ) DATE_MAX = setDateMinOrMax( date, 1 )
+                        else DATE_MIN = setDateMinOrMax( date )
+
+                        // Render a new calendar
+                        calendarRender()
+
+                        return P
+                    } //setDateLimit
 
 
                 } //Picker.prototype
@@ -1031,7 +1056,7 @@
              * Create the min or max date allowed on the calendar
              * * A truthy second argument creates the max date
              */
-            function createDateMinOrMax( limit, upper ) {
+            function setDateMinOrMax( limit, upper ) {
 
                 // If the limit is set to true, just return today
                 if ( limit === true ) {
@@ -1058,7 +1083,7 @@
                     MONTH: limit,
                     TIME: limit
                 }
-            } //createDateMinOrMax
+            } //setDateMinOrMax
 
 
             /**
