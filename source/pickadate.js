@@ -45,9 +45,9 @@
 
         // Check if a value is a function
         // and trigger it, if that
-        triggerFunction = function( callback, scope, args ) {
+        triggerFunction = function( callback, scope ) {
             if ( typeof callback == 'function' ) {
-                return callback.apply( scope, args )
+                return callback.call( scope )
             }
         },
 
@@ -165,71 +165,71 @@
 
                     // Return the date formats object
                     return {
-                        d: function( dateObj ) {
+                        d: function( string ) {
 
-                            // If there's a date object, then get the digits length
-                            // in `this` string. Otherwise return the selected date.
-                            return dateObj ? getDigitsLength( this ) : DATE_SELECTED.DATE
+                            // If there's string, then get the digits length.
+                            // Otherwise return the selected date.
+                            return string ? getDigitsLength( string ) : DATE_SELECTED.DATE
                         },
-                        dd: function( dateObj ) {
+                        dd: function( string ) {
 
-                            // If there's a date object, then the length is always 2.
+                            // If there's a string, then the length is always 2.
                             // Otherwise return the selected date with a leading zero.
-                            return dateObj ? 2 : leadZero( DATE_SELECTED.DATE )
+                            return string ? 2 : leadZero( DATE_SELECTED.DATE )
                         },
-                        ddd: function( dateObj ) {
+                        ddd: function( string ) {
 
-                            // If there's a date object, then get the length of the first word.
+                            // If there's a string, then get the length of the first word.
                             // Otherwise return the short selected weekday.
-                            return dateObj ? getFirstWordLength( this ) : SETTINGS.weekdaysShort[ DATE_SELECTED.DAY ]
+                            return string ? getFirstWordLength( string ) : SETTINGS.weekdaysShort[ DATE_SELECTED.DAY ]
                         },
-                        dddd: function( dateObj ) {
+                        dddd: function( string ) {
 
-                            // If there's a date object, then get the length of the first word.
+                            // If there's a string, then get the length of the first word.
                             // Otherwise return the full selected weekday.
-                            return dateObj ? getFirstWordLength( this ) : SETTINGS.weekdaysFull[ DATE_SELECTED.DAY ]
+                            return string ? getFirstWordLength( string ) : SETTINGS.weekdaysFull[ DATE_SELECTED.DAY ]
                         },
-                        m: function( dateObj ) {
+                        m: function( string ) {
 
-                            // If there's a date object, then get the length of the digits
+                            // If there's a string, then get the length of the digits
                             // Otherwise return the selected month with 0index compensation.
-                            return dateObj ? getDigitsLength( this ) : DATE_SELECTED.MONTH + 1
+                            return string ? getDigitsLength( string ) : DATE_SELECTED.MONTH + 1
                         },
-                        mm: function( dateObj ) {
+                        mm: function( string ) {
 
-                            // If there's a date object, then the length is always 2.
+                            // If there's a string, then the length is always 2.
                             // Otherwise return the selected month with 0index and leading zero.
-                            return dateObj ? 2 : leadZero( DATE_SELECTED.MONTH + 1 )
+                            return string ? 2 : leadZero( DATE_SELECTED.MONTH + 1 )
                         },
-                        mmm: function( dateObj ) {
+                        mmm: function( string, dateObject ) {
 
                             var collection = SETTINGS.monthsShort
 
-                            // If there's a date object, get the length of the month
+                            // If there's a string, get length of the relevant month string
                             // from the short months collection. Otherwise return the
                             // selected month from that collection.
-                            return dateObj ? getMonthLength( this, dateObj, collection ) : collection[ DATE_SELECTED.MONTH ]
+                            return string ? getMonthLength( string, dateObject, collection ) : collection[ DATE_SELECTED.MONTH ]
                         },
-                        mmmm: function( dateObj ) {
+                        mmmm: function( string, dateObject ) {
 
                             var collection = SETTINGS.monthsFull
 
-                            // If there's a date object, get the length of the month
+                            // If there's a string, get length of the relevant month string
                             // from the full months collection. Otherwise return the
                             // selected month from that collection.
-                            return dateObj ? getMonthLength( this, dateObj, collection ) : collection[ DATE_SELECTED.MONTH ]
+                            return string ? getMonthLength( string, dateObject, collection ) : collection[ DATE_SELECTED.MONTH ]
                         },
-                        yy: function( dateObj ) {
+                        yy: function( string ) {
 
-                            // If there's a date object, then the length is always 2.
+                            // If there's a string, then the length is always 2.
                             // Otherwise return the selected year by slicing out the first 2 digits.
-                            return dateObj ? 2 : ( '' + DATE_SELECTED.YEAR ).slice( 2 )
+                            return string ? 2 : ( '' + DATE_SELECTED.YEAR ).slice( 2 )
                         },
-                        yyyy: function( dateObj ) {
+                        yyyy: function( string ) {
 
-                            // If there's a date object, then the length is always 4.
+                            // If there's a string, then the length is always 4.
                             // Otherwise return the selected year.
-                            return dateObj ? 4 : DATE_SELECTED.YEAR
+                            return string ? 4 : DATE_SELECTED.YEAR
                         },
 
                         // Create an array by splitting the format passed
@@ -380,24 +380,19 @@
                         // Map through the submit format array
                         DATE_FORMATS.toArray( SETTINGS.formatSubmit ).map( function( formatItem ) {
 
-                            // If the format exists, figure out the length of the format
+                            // If the formatting length function exists, invoke it with the
+                            // the format length in the `data-value` and the date we are creating.
+                            // Otherwise it is the length of the formatting item being mapped
+                            var formattingLength = DATE_FORMATS[ formatItem ] ? DATE_FORMATS[ formatItem ]( dateDataValue, dateEntered ) : formatItem.length
+
+                            // If the formatting length function exists, slice up
+                            // the value and pass it into the date we're creating.
                             if ( DATE_FORMATS[ formatItem ] ) {
-
-                                // Get the format length by applying the function within scope
-                                // of the element `data-value` and pass in the date we are creating
-                                var formatlength = DATE_FORMATS[ formatItem ].apply( dateDataValue, [ dateEntered ] )
-
-                                // Slice up the value and pass it into the new date
-                                dateEntered[ formatItem ] = dateDataValue.slice( 0, formatlength )
-
-                                // Set the remainder of the sliced value as the element value
-                                dateDataValue = dateDataValue.slice( formatlength )
+                                dateEntered[ formatItem ] = dateDataValue.slice( 0, formattingLength )
                             }
 
-                            // Otherwise just replace the value
-                            else {
-                                dateDataValue = dateDataValue.replace( formatItem, '' )
-                            }
+                            // Update the remainder of the string by slicing the format length
+                            dateDataValue = dateDataValue.slice( formattingLength )
                         })
 
                         // Finally, create an array with the date entered while
@@ -863,7 +858,7 @@
             /**
              * Set a date as selected or only highlighted
              */
-            function setDateSelected( dateTargeted, isHighlight, $nodeTargeted ) {
+            function setDateSelected( dateTargeted, isHighlight ) {
 
                 // Set the target as the highlight
                 DATE_HIGHLIGHTED = dateTargeted
