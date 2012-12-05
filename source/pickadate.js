@@ -1,22 +1,21 @@
 /*!
- * pickadate.js v1.3.7 - 03 December, 2012
+ * pickadate.js v1.3.8 - 04 December, 2012
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
  */
 
 /**
- * TODO: translations support
  * TODO: scroll calendar into view
- *
- * FIX: click to close on iOS
+ * TODO: click to close on iOS
  */
 
 /*jshint
    debug: true,
    devel: true,
    browser: true,
-   asi: true
+   asi: true,
+   unused: true
  */
 
 
@@ -84,14 +83,6 @@
             }
 
 
-            // If date passed is a number
-            else if ( !isNaN( datePassed ) ) {
-
-                // Create a new date with it
-                datePassed = new Date( datePassed )
-            }
-
-
             // Otherwise
             else {
 
@@ -122,6 +113,19 @@
         Picker = function( $ELEMENT, SETTINGS ) {
 
             var
+                // The element node
+                ELEMENT = (function( element ) {
+
+                    // Check the autofocus state, convert the element into
+                    // a regular text input to remove user-agent stylings,
+                    // and then set the element as readonly
+                    element.autofocus = ( element == document.activeElement )
+                    element.type = 'text'
+                    element.readOnly = true
+                    return element
+                })( $ELEMENT[ 0 ] ), //ELEMENT
+
+
                 // The calendar object
                 CALENDAR = {
                     id: ~~( Math.random() * 1e9 )
@@ -129,21 +133,110 @@
 
 
                 // The date in various formats
-                DATE_FORMATS = {
-                    d: function() { return DATE_SELECTED.DATE },
-                    dd: function() { return leadZero( DATE_SELECTED.DATE ) },
-                    ddd: function() { return SETTINGS.weekdaysShort[ DATE_SELECTED.DAY ] },
-                    dddd: function() { return SETTINGS.weekdaysFull[ DATE_SELECTED.DAY ] },
-                    m: function() { return DATE_SELECTED.MONTH + 1 },
-                    mm: function() { return leadZero( DATE_SELECTED.MONTH + 1 ) },
-                    mmm: function() { return SETTINGS.monthsShort[ DATE_SELECTED.MONTH ] },
-                    mmmm: function() { return SETTINGS.monthsFull[ DATE_SELECTED.MONTH ] },
-                    yy: function() { return DATE_SELECTED.YEAR.toString().substr( 2, 2 ) },
-                    yyyy: function() { return DATE_SELECTED.YEAR },
+                DATE_FORMATS = (function() {
 
-                    // Create an array by splitting the format passed
-                    toArray: function( format ) { return format.split( /(?=\b)(d{1,4}|m{1,4}|y{4}|yy)+(\b)/g ) }
-                }, //DATE_FORMATS
+                    // Get the length of the first word
+                    function getFirstWordLength( string ) {
+                        return string.match( /\w+/ )[ 0 ].length
+                    }
+
+                    // If the second character is a digit, length is 2 otherwise 1.
+                    function getDigitsLength( string ) {
+                        return (/\d/).test( string[ 1 ] ) ? 2 : 1
+                    }
+
+                    // Get the length of the month from a string
+                    function getMonthLength( string, dateObj, collection ) {
+
+                        // Grab the first word
+                        var word = string.match( /\w+/ )[ 0 ]
+
+                        // If there's no index for the date object's month,
+                        // find it in the relevant months collection and add 1
+                        // because we subtract 1 when we create the date object
+                        if ( !dateObj.mm && !dateObj.m ) {
+                            dateObj.m = collection.indexOf( word ) + 1
+                        }
+
+                        // Return the length of the word
+                        return word.length
+                    }
+
+
+                    // Return the date formats object
+                    return {
+                        d: function( dateObj ) {
+
+                            // If there's a date object, then get the digits length
+                            // in `this` string. Otherwise return the selected date.
+                            return dateObj ? getDigitsLength( this ) : DATE_SELECTED.DATE
+                        },
+                        dd: function( dateObj ) {
+
+                            // If there's a date object, then the length is always 2.
+                            // Otherwise return the selected date with a leading zero.
+                            return dateObj ? 2 : leadZero( DATE_SELECTED.DATE )
+                        },
+                        ddd: function( dateObj ) {
+
+                            // If there's a date object, then get the length of the first word.
+                            // Otherwise return the short selected weekday.
+                            return dateObj ? getFirstWordLength( this ) : SETTINGS.weekdaysShort[ DATE_SELECTED.DAY ]
+                        },
+                        dddd: function( dateObj ) {
+
+                            // If there's a date object, then get the length of the first word.
+                            // Otherwise return the full selected weekday.
+                            return dateObj ? getFirstWordLength( this ) : SETTINGS.weekdaysFull[ DATE_SELECTED.DAY ]
+                        },
+                        m: function( dateObj ) {
+
+                            // If there's a date object, then get the length of the digits
+                            // Otherwise return the selected month with 0index compensation.
+                            return dateObj ? getDigitsLength( this ) : DATE_SELECTED.MONTH + 1
+                        },
+                        mm: function( dateObj ) {
+
+                            // If there's a date object, then the length is always 2.
+                            // Otherwise return the selected month with 0index and leading zero.
+                            return dateObj ? 2 : leadZero( DATE_SELECTED.MONTH + 1 )
+                        },
+                        mmm: function( dateObj ) {
+
+                            var collection = SETTINGS.monthsShort
+
+                            // If there's a date object, get the length of the month
+                            // from the short months collection. Otherwise return the
+                            // selected month from that collection.
+                            return dateObj ? getMonthLength( this, dateObj, collection ) : collection[ DATE_SELECTED.MONTH ]
+                        },
+                        mmmm: function( dateObj ) {
+
+                            var collection = SETTINGS.monthsFull
+
+                            // If there's a date object, get the length of the month
+                            // from the full months collection. Otherwise return the
+                            // selected month from that collection.
+                            return dateObj ? getMonthLength( this, dateObj, collection ) : collection[ DATE_SELECTED.MONTH ]
+                        },
+                        yy: function( dateObj ) {
+
+                            // If there's a date object, then the length is always 2.
+                            // Otherwise return the selected year by slicing out the first 2 digits.
+                            return dateObj ? 2 : ( '' + DATE_SELECTED.YEAR ).slice( 2 )
+                        },
+                        yyyy: function( dateObj ) {
+
+                            // If there's a date object, then the length is always 4.
+                            // Otherwise return the selected year.
+                            return dateObj ? 4 : DATE_SELECTED.YEAR
+                        },
+
+                        // Create an array by splitting the format passed
+                        toArray: function( format ) { return format.split( /(?=\b)(d{1,4}|m{1,4}|y{4}|yy)+(\b)/g ) }
+
+                    } //endreturn
+                })(), //DATE_FORMATS
 
 
                 // Translate a keycode to a relative change in date
@@ -239,7 +332,7 @@
                                 return --date + SETTINGS.firstDay
                             }
 
-                            // Otherwise Fix the month 0index
+                            // Otherwise assume it's an array and fix the month 0index
                             --date[ 1 ]
 
                             // Then create and return the date,
@@ -275,27 +368,55 @@
                 })(), //DISABLED_DATES
 
 
-                // The element node
-                ELEMENT = (function( element ) {
-
-                    // Check the autofocus state, convert the element into
-                    // a regular text input to remove user-agent stylings,
-                    // and then set the element as readonly
-                    element.autofocus = ( element == document.activeElement )
-                    element.type = 'text'
-                    element.readOnly = true
-                    return element
-                })( $ELEMENT[ 0 ] ), //ELEMENT
-
-
                 // Create calendar object for the highlighted day
-                DATE_HIGHLIGHTED = (function( dateEntered ) {
+                DATE_HIGHLIGHTED = (function( dateDataValue, dateEntered ) {
 
-                    // If there's no valid date in the input,
-                    // set the highlighted date to today after validating.
-                    // Otherwise, create a validated date using the date entered.
-                    return createValidatedDate( isNaN( dateEntered ) ? DATE_TODAY : dateEntered )
-                })( Date.parse( ELEMENT.value ) ),
+                    // If there a date `data-value`
+                    if ( dateDataValue ) {
+
+                        // Set the date entered to an empty object
+                        dateEntered = {}
+
+                        // Map through the submit format array
+                        DATE_FORMATS.toArray( SETTINGS.formatSubmit ).map( function( formatItem ) {
+
+                            // If the format exists, figure out the length of the format
+                            if ( DATE_FORMATS[ formatItem ] ) {
+
+                                // Get the format length by applying the function within scope
+                                // of the element `data-value` and pass in the date we are creating
+                                var formatlength = DATE_FORMATS[ formatItem ].apply( dateDataValue, [ dateEntered ] )
+
+                                // Slice up the value and pass it into the new date
+                                dateEntered[ formatItem ] = dateDataValue.slice( 0, formatlength )
+
+                                // Set the remainder of the sliced value as the element value
+                                dateDataValue = dateDataValue.slice( formatlength )
+                            }
+
+                            // Otherwise just replace the value
+                            else {
+                                dateDataValue = dateDataValue.replace( formatItem, '' )
+                            }
+                        })
+
+                        // Finally, create an array with the date entered while
+                        // parsing each item as an integer and compensating for 0index
+                        dateEntered = [ +(dateEntered.yyyy || dateEntered.yy), +(dateEntered.mm || dateEntered.m) - 1, +(dateEntered.dd || dateEntered.d) ]
+                    }
+
+
+                    // Otherwise, try to parse the date in the input
+                    else {
+                        dateEntered = Date.parse( dateEntered )
+                    }
+
+
+                    // If there's a valid date in the input or the dateEntered
+                    // is now an array, create a validated date with it.
+                    // Otherwise set the highlighted date to today after validating.
+                    return createValidatedDate( !isNaN( dateEntered ) || Array.isArray( dateEntered ) ? dateEntered : DATE_TODAY )
+                })( ELEMENT.getAttribute( 'data-value' ), ELEMENT.value ),
 
 
                 // The date selected is initially the date highlighted
@@ -310,10 +431,6 @@
                 // using the name of the original input plus suffix and update the value
                 // with whatever is entered in the input on load. Otherwise set it to zero.
                 ELEMENT_HIDDEN = SETTINGS.formatSubmit ? $( '<input type=hidden name=' + ELEMENT.name + SETTINGS.hiddenSuffix + '>' ).val( ELEMENT.value ? getDateFormatted( SETTINGS.formatSubmit ) : '' )[ 0 ] : null,
-
-
-                // The calendar holder
-                $HOLDER,
 
 
                 // Create the calendar table head with weekday labels
@@ -342,63 +459,9 @@
                 })( ( SETTINGS.showWeekdaysShort ? SETTINGS.weekdaysShort : SETTINGS.weekdaysFull ).slice( 0 ) ), //TABLE_HEAD
 
 
-                // Initialize everything
-                initialize = (function( elementDataValue ) {
+                // Create the calendar holder with a new wrapped calendar and bind the click
+                $HOLDER = $( createNode( STRING_DIV, createCalendarWrapped(), CLASSES.holder ) ).on( 'click', onClickCalendar )
 
-                    // Create a new wrapped calendar within the jQuery holder object
-                    $HOLDER = $( createNode( STRING_DIV, createCalendarWrapped(), CLASSES.holder ) ).on({
-
-                        // Handle all click events
-                        click: onClickCalendar
-                    })
-
-
-                    // Insert everything after the element
-                    // while binding the events to the element
-                    $ELEMENT.on({
-                        'focusin click': calendarOpen,
-                        keydown: function( event ) {
-
-                            var keycode = event.keyCode
-
-                            // If backspace was pressed or if the calendar
-                            // is closed and the keycode warrants a date change,
-                            // prevent it from going any further.
-                            if ( keycode == 8 || !CALENDAR.isOpen && KEYCODE_TO_DATE[ keycode ] ) {
-
-                                // Prevent it from moving the page
-                                event.preventDefault()
-
-                                // Prevent it from propagating to document
-                                event.stopPropagation()
-
-                                // Open the calendar if backspace wasn't pressed
-                                if ( keycode != 8 ) {
-                                    calendarOpen()
-                                }
-                            }
-                        }
-                    }).after( [ $HOLDER, ELEMENT_HIDDEN ] )
-
-
-                    // If the data value parses as a date, set the date
-                    if ( !isNaN( elementDataValue ) ) {
-                        setDateSelected( createDate( elementDataValue ) )
-                    }
-
-
-                    // If the element has autofocus open the calendar
-                    if ( ELEMENT.autofocus ) {
-                        calendarOpen()
-                    }
-
-
-                    // Do stuff after rendering the calendar
-                    postRender()
-
-                    // Trigger the onStart method within exports scope
-                    triggerFunction( SETTINGS.onStart, EXPORTS )
-                })( Date.parse( ELEMENT.getAttribute( 'data-value' ) ) ) //initialize
 
 
 
@@ -579,6 +642,7 @@
                     calendarWeeks = '',
 
                     // Count the number of days in the focused month
+                    // by getting the 0-th date of the next month
                     countMonthDays = createDate([ MONTH_FOCUSED.YEAR, MONTH_FOCUSED.MONTH + 1, 0 ]).DATE,
 
                     // Count the days to shift the start of the month
@@ -1271,9 +1335,56 @@
                     }
 
                 } //if ELEMENT
-
             } //onDocumentEvent
 
+
+
+
+
+            /**
+             * Initialize everything
+             */
+
+            // Insert everything after the element
+            // while binding the events to the element
+            $ELEMENT.on({
+                'focusin click': calendarOpen,
+                keydown: function( event ) {
+
+                    var keycode = event.keyCode
+
+                    // If backspace was pressed or if the calendar
+                    // is closed and the keycode warrants a date change,
+                    // prevent it from going any further.
+                    if ( keycode == 8 || !CALENDAR.isOpen && KEYCODE_TO_DATE[ keycode ] ) {
+
+                        // Prevent it from moving the page
+                        event.preventDefault()
+
+                        // Prevent it from propagating to document
+                        event.stopPropagation()
+
+                        // Open the calendar if backspace wasn't pressed
+                        if ( keycode != 8 ) {
+                            calendarOpen()
+                        }
+                    }
+                }
+            }).after( [ $HOLDER, ELEMENT_HIDDEN ] )
+
+
+            // If the element has autofocus open the calendar
+            if ( ELEMENT.autofocus ) {
+                calendarOpen()
+            }
+
+
+            // Do stuff after rendering the calendar
+            postRender()
+
+
+            // Trigger the onStart method within exports scope
+            triggerFunction( SETTINGS.onStart, EXPORTS )
 
 
             // Return the exports
