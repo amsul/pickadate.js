@@ -115,3 +115,43 @@ input.pickadate__input--focused {
 
 
 
+/**
+ * Syntax highlighting
+ */
+
+.selector {
+    color: #0069bc;
+}
+
+.string {
+    color: #26bb1a;
+}
+
+.function,
+.method {
+    color: #0069bc;
+}
+
+.comment {
+    color: #0089ec;
+    font-style: italic;
+}
+
+.constant {
+    color: #fc40bd;
+}
+
+.tag-name,
+.attribute {
+    color: #c50;
+}
+
+.keyword {
+    color: #b90690;
+}
+
+.rainbow,
+.operator {
+    color: #585856;
+}
+
