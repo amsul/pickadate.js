@@ -1,4 +1,4 @@
-# pickadate.js v1.3.8
+# pickadate.js v1.4.0
 
 
 A lightweight jQuery dateinput picker: [demo](http://amsul.github.com/pickadate.js) & [docs](http://amsul.github.com/pickadate.js/docs.htm>).
@@ -15,6 +15,10 @@ The `pickadate.js` script supports IE 9+ by default. To support IE 7+ and other 
 
 
 ### Notable updates
+
+#### 1.4.0
+- [Get min & max date](http://amsul.github.com/pickadate.js/docs.htm#api_getDateLimit)
+- [Set min & max date](http://amsul.github.com/pickadate.js/docs.htm#api_setDateLimit)
 
 #### 1.3.8
 - [Translations](http://amsul.github.com/pickadate.js/docs.htm#translations)

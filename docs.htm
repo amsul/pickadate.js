@@ -27,7 +27,7 @@
 
         <a href="https://github.com/amsul/pickadate.js"><img width="128" height="128" style="position:absolute;top:0;right:0;border:0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
 
-        <h4><a href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js</a> or <a href="https://github.com/amsul/pickadate.js">view it on Github</a></h4>
+        <h4><a href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js</a> (<a href="#legacy">old browsers</a>) or <a href="https://github.com/amsul/pickadate.js">view it on Github</a></h4>
 
     </section>
 
@@ -181,7 +181,7 @@ klass: {
     formatSubmit: 'yyyy/mm/dd'
 })</code></pre>
 
-        <p>Show human-friendly date formats while using a different format to submit to the server. Pick a date:</p>
+        <p>Display human-friendly date formats while using a different format to submit to the server. Pick a date:</p>
 
         <fieldset>
             <input id="picker_formats" class="datepicker" name="custom_date" type="text">
@@ -191,7 +191,7 @@ klass: {
 
         <p>As a default, <code>hiddenSuffix</code> is <code>'_submit'</code>.</p>
 
-        <p>The dates can be formatted using the following rules:</p>
+        <p id="formatting_rules">The dates can be formatted using the following rules:</p>
 
         <table class="table" width="100%">
             <thead>
@@ -362,15 +362,15 @@ klass: {
 
     <section class="holder" id="dates_disabled">
 
-        <h3><strong class="underline-highlight">Selectively disable dates</strong></h3>
+        <h3><strong class="underline-highlight">Disable arbitrary dates</strong></h3>
 
-        <p>You may pass an array of arbitrary dates to disable specific dates.</p>
+        <p>Pass an array of arbitrary dates (each formatted as <code>[ yyyy, mm, dd ]</code>) to disable them.</p>
 
         <pre><code>$( '.datepicker' ).pickadate({
     datesDisabled: [
-        [ 2012, 12, 2],
-        [ 2012, 12, 5],
-        [ 2012, 12, 28]
+        [ 2012, 12, 2 ],
+        [ 2012, 12, 5 ],
+        [ 2012, 12, 28 ]
     ]
 })</code></pre>
 
@@ -378,14 +378,16 @@ klass: {
             <input id="picker_dates_disabled_a" class="datepicker" type="text">
         </fieldset>
 
-        <p>If you also want to disable certain days of the week, such as all Saturdays (7<sup>th</sup> day of week) and Sundays (1<sup>st</sup> day of week), you can do this:</p>
+        <h3><strong class="underline-highlight">Disable days of the week</strong></h3>
+
+        <p>Disable certain days of the week, such as all Saturdays (7<sup>th</sup> day of week) and Sundays (1<sup>st</sup> day of week), by passing an integer between 1 and 7:</p>
 
         <pre><code>$( '.datepicker' ).pickadate({
     datesDisabled: [
         1, 7,
-        [ 2012, 12, 2],
-        [ 2012, 12, 5],
-        [ 2012, 12, 28]
+        [ 2012, 12, 2 ],
+        [ 2012, 12, 5 ],
+        [ 2012, 12, 28 ]
     ]
 })</code></pre>
 
@@ -393,15 +395,17 @@ klass: {
             <input id="picker_dates_disabled_b" class="datepicker" type="text">
         </fieldset>
 
-        <p>Alternatively, you can disable ALL the dates in the calendar, EXCEPT the ones specified if you set <code>true</code> as the first item in the array.</p>
+        <h3><strong class="underline-highlight">Disable all dates.. except some</strong></h3>
+
+        <p>Alternatively, disable ALL the dates in the calendar, EXCEPT the ones specified if you set <code>true</code> as the first item in the array.</p>
 
         <pre><code>$( '.datepicker' ).pickadate({
     datesDisabled: [
         true,
         1, 7,
-        [ 2012, 12, 2],
-        [ 2012, 12, 5],
-        [ 2012, 12, 28]
+        [ 2012, 12, 2 ],
+        [ 2012, 12, 5 ],
+        [ 2012, 12, 28 ]
     ]
 })</code></pre>
 
@@ -449,9 +453,9 @@ klass: {
     }
 })</code></pre>
 
-        <p>You can have events trigger as the user interacts with the picker.</p>
+        <p>Have events trigger as the user interacts with the picker.</p>
 
-        <p>Within the scope of these methods, <code>this</code> gives you access to the <a href="#api">calendar API</a>. Pick a date:</p>
+        <p>Within scope of these methods, <code>this</code> refers to the <a href="#api">calendar picker</a>. Pick a date:</p>
 
         <fieldset>
             <input id="picker_events" class="datepicker" type="date">
@@ -793,7 +797,7 @@ calendar.close()</code></pre>
             <input id="api_picker_getDate" class="datepicker" type="text" value="14 August, 1988">
         </fieldset>
 
-        <p>Optionally, you can pass a format in which you would like to get the date:</p>
+        <p>Optionally, you can pass a <a href="#formatting_rules">format</a> in which you would like to get the date:</p>
 
         <pre><code>calendar.getDate( 'yyyy-mm-dd' )</code></pre>
 
@@ -832,7 +836,7 @@ calendar.close()</code></pre>
         <pre><code>calendar.setDate( 2020, 2, 14, true )</code></pre>
 
         <p>
-            <button id="api_button_setDate_b" class="button" type="button">Set date</button>
+            <button id="api_button_setDate_b" class="button" type="button">Set date highlighted</button>
         </p>
 
         <fieldset>
@@ -842,11 +846,110 @@ calendar.close()</code></pre>
     </section>
 
 
-    <section class="holder holder-clean aligncenter">
+    <section class="holder" id="api_getDateLimit">
+
+        <h3><strong class="underline-highlight">Get the min or max date</strong></h3>
+
+        <pre><code>calendar.getDateLimit( upper, format )</code></pre>
+
+        <p><code>upper</code> is optional. If <code>upper</code> is <code>true</code>, it returns the maximum date. Otherwise it gets the minimum date.</p>
+
+        <p><code>format</code> is also optional. If none is specified, it falls back to the default <code>format</code> option in your invocation. Dates can be formatted with <a href="#formatting_rules">these rules</a>.</p>
+
+        <pre><code>calendar.getDateLimit()
+calendar.getDateLimit( true, 'yyyy-mm-dd' )</code></pre>
+
+        <p>
+            <button id="api_button_getDateLimit_a" class="button" type="button">Get min date</button>
+            <button id="api_button_getDateLimit_b" class="button" type="button">Get max date formatted</button>
+        </p>
+
+        <fieldset>
+            <input id="api_picker_getDateLimit" class="datepicker" type="text">
+        </fieldset>
+
+    </section>
+
+
+    <section class="holder" id="api_setDateLimit">
+
+        <h3><strong class="underline-highlight">Set the min or max date</strong></h3>
+
+        <pre><code>calendar.setDateLimit( date, upper )</code></pre>
+
+        <p><code>date</code> is a required <a href="#ranges">array, integer, or boolean</a> – similar to the <code>dateMin</code> and <code>dateMax</code> options in your invocation. This date is used to set the limit.</p>
+
+        <p><code>upper</code> is optional. If <code>upper</code> is <code>true</code>, it will set the date as the maximum date selectable. Otherwise it sets it as the minimum date selectable.</p>
+
+        <pre><code>calendar.setDateLimit( 40 )
+calendar.setDateLimit( [ 2013, 6, 23 ], true )</code></pre>
+
+        <p>
+            <button id="api_button_setDateLimit_a" class="button" type="button">Set min date</button>
+            <button id="api_button_setDateLimit_b" class="button" type="button">Set max date</button>
+        </p>
+
+        <fieldset>
+            <input id="api_picker_setDateLimit" class="datepicker" type="text">
+        </fieldset>
+
+    </section>
+
+
+    <section class="holder" id="api_from_to">
+
+        <h3><strong class="underline-highlight">From &amp; to calendars</strong></h3>
+
+        <p>Using the calendar API, you can create two calendars with a "from" and "to" interaction.</p>
+
+        <fieldset>
+            <p><strong><label for="picker_from">Select a "from" date:</label></strong></p>
+            <input id="picker_from" class="datepicker" type="date">
+        </fieldset>
+
+        <fieldset>
+            <p><strong><label for="picker_to">Select a "to" date:</label></strong></p>
+            <input id="picker_to" class="datepicker" type="date">
+        </fieldset>
+
+        <pre><code>var
+    picker_from = $( '#picker_from' ).pickadate({
+        onSelect: function() {
+
+            // Get the date and split into an array
+            var fromDate = createDateArray( this.getDate( 'yyyy-mm-dd' )  )
+
+            // Set the lower limit of the "to" picker
+            picker_to.data( 'pickadate' ).setDateLimit( fromDate )
+        }
+    }),
+
+    picker_to = $( '#picker_to' ).pickadate({
+        onSelect: function() {
+
+            // Get the date and split into an array
+            var toDate = createDateArray( this.getDate( 'yyyy-mm-dd' )  )
+
+            // Set the upper limit of the "from" picker
+            picker_from.data( 'pickadate' ).setDateLimit( toDate, 1 )
+        }
+    })
+
+
+// Create an array from the date while parsing each date unit as an integer
+function createDateArray( date ) {
+    return date.split( '-' ).map(function( value ) { return +value })
+}</code></pre>
+
+    </section>
+
+
+    <section class="holder holder-clean aligncenter" id="legacy">
 
         <p><a class="button-full" href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js</a></p>
         <small class="dimmed"><p>Browser support: IE7+, Chrome, Firefox, Safari, Opera, iOS Safari, Android browser</p></small>
         <p><a href="https://github.com/amsul/pickadate.js">View it on Github</a></p>
+        <p class="notification notification--highlight">The <code>pickadate.js</code> script supports IE 9+ by default. To support IE 7+ and other old browsers, use the <code>pickadate.legacy.js</code> script instead.</p>
 
     </section>
 
@@ -877,15 +980,6 @@ calendar.close()</code></pre>
             monthsFull: [ 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre' ]
         })
 
-        $( '#picker_selectors' ).pickadate({
-            monthSelector: true,
-            yearSelector: true
-        })
-
-        $( '#picker_selectors_b' ).pickadate({
-            yearSelector: 4
-        })
-
         var $custom_date = $( '#picker_formats' ).pickadate({
             format: 'You selected: dddd, dd mmm, yyyy',
             formatSubmit: 'yyyy/mm/dd',
@@ -898,6 +992,15 @@ calendar.close()</code></pre>
         $( '#picker_formats_b' ).pickadate({
             format: 'mmmm dd',
             formatSubmit: 'yyyy/mm/dd'
+        })
+
+        $( '#picker_selectors' ).pickadate({
+            monthSelector: true,
+            yearSelector: true
+        })
+
+        $( '#picker_selectors_b' ).pickadate({
+            yearSelector: 4
         })
 
         $( '#picker_disable' ).pickadate({
@@ -933,18 +1036,18 @@ calendar.close()</code></pre>
 
         $( '#picker_dates_disabled_a' ).pickadate({
             datesDisabled: [
-                [ 2012, 12, 2],
-                [ 2012, 12, 5],
-                [ 2012, 12, 28]
+                [ 2012, 12, 2 ],
+                [ 2012, 12, 5 ],
+                [ 2012, 12, 28 ]
             ]
         })
 
         $( '#picker_dates_disabled_b' ).pickadate({
             datesDisabled: [
                 1, 7,
-                [ 2012, 12, 2],
-                [ 2012, 12, 5],
-                [ 2012, 12, 28]
+                [ 2012, 12, 2 ],
+                [ 2012, 12, 5 ],
+                [ 2012, 12, 28 ]
             ]
         })
 
@@ -952,9 +1055,9 @@ calendar.close()</code></pre>
             datesDisabled: [
                 true,
                 1, 7,
-                [ 2012, 12, 2],
-                [ 2012, 12, 5],
-                [ 2012, 12, 28]
+                [ 2012, 12, 2 ],
+                [ 2012, 12, 5 ],
+                [ 2012, 12, 28 ]
             ]
         })
 
@@ -1060,6 +1163,73 @@ calendar.close()</code></pre>
                     api_calendar_setDate_b.setDate( 2020, 2, 14, true )
                 }
             })
+
+
+        var
+            api_picker_getDateLimit = $( '#api_picker_getDateLimit' ).pickadate({
+                dateMin: -5,
+                dateMax: [2013,8,14]
+            }),
+            api_calendar_getDateLimit = api_picker_getDateLimit.data( 'pickadate' ),
+            api_button_getDateLimit_a = $( '#api_button_getDateLimit_a' ).on({
+                click: function() {
+                    alert( api_calendar_getDateLimit.getDateLimit() )
+                }
+            }),
+            api_button_getDateLimit_b = $( '#api_button_getDateLimit_b' ).on({
+                click: function() {
+                    alert( api_calendar_getDateLimit.getDateLimit( true, 'yyyy-mm-dd' ) )
+                }
+            })
+
+
+        var
+            api_picker_setDateLimit = $( '#api_picker_setDateLimit' ).pickadate(),
+            api_calendar_setDateLimit = api_picker_setDateLimit.data( 'pickadate' ),
+            api_button_setDateLimit_a = $( '#api_button_setDateLimit_a' ).on({
+                click: function() {
+                    api_calendar_setDateLimit.setDateLimit( 40 )
+                }
+            }),
+            api_button_setDateLimit_b = $( '#api_button_setDateLimit_b' ).on({
+                click: function() {
+                    api_calendar_setDateLimit.setDateLimit( [ 2013, 6, 23 ], true )
+                }
+            })
+
+
+
+        /**
+         * Picker "from" & "to"
+         */
+        var
+            picker_from = $( '#picker_from' ).pickadate({
+                onSelect: function() {
+
+                    // Get the date and split into an array
+                    var fromDate = createDateArray( this.getDate( 'yyyy-mm-dd' )  )
+
+                    // Set the lower limit of the "to" picker
+                    picker_to.data( 'pickadate' ).setDateLimit( fromDate )
+                }
+            }),
+
+            picker_to = $( '#picker_to' ).pickadate({
+                onSelect: function() {
+
+                    // Get the date and split into an array
+                    var toDate = createDateArray( this.getDate( 'yyyy-mm-dd' )  )
+
+                    // Set the upper limit of the "from" picker
+                    picker_from.data( 'pickadate' ).setDateLimit( toDate, 1 )
+                }
+            })
+
+
+        // Create an array from the date while parsing each date unit as an integer
+        function createDateArray( date ) {
+            return date.split( '-' ).map(function( value ) { return +value })
+        }
 
     </script>
 
