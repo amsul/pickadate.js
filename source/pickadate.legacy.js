@@ -277,7 +277,7 @@
                             DATE_MIN = createBoundaryDate( limit )
 
                             // If focused month is less than min date set it to min date
-                            if ( MONTH_FOCUSED.TIME < DATE_MAX.TIME ) {
+                            if ( MONTH_FOCUSED.TIME < DATE_MIN.TIME ) {
                                 MONTH_FOCUSED = DATE_MIN
                             }
                         }
