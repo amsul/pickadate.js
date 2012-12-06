@@ -51,316 +51,6 @@
                 Picker = function() {},
 
 
-                // The element node
-                ELEMENT = (function( element ) {
-
-                    // Check the autofocus state, convert the element into
-                    // a regular text input to remove user-agent stylings,
-                    // and then set the element as readonly
-                    element.autofocus = ( element == document.activeElement )
-                    element.type = 'text'
-                    element.readOnly = true
-                    return element
-                })( $ELEMENT[ 0 ] ), //ELEMENT
-
-
-                // The calendar object
-                CALENDAR = {
-                    id: ~~( Math.random() * 1e9 )
-                }, //CALENDAR
-
-
-                // The classes
-                CLASSES = SETTINGS.klass,
-
-
-                // Create calendar object for today
-                DATE_TODAY = createDate(),
-
-
-                // Set the min date
-                DATE_MIN = setDateMinOrMax( SETTINGS.dateMin ),
-
-
-                // Set the max date
-                // * A truthy second argument creates max date
-                DATE_MAX = setDateMinOrMax( SETTINGS.dateMax, 1 ),
-
-
-                // Create a collection of dates to disable
-                DATES_TO_DISABLE = (function( datesCollection ) {
-
-                    // If a collection was passed
-                    // we need to create a calendar date object
-                    if ( Array.isArray( datesCollection ) ) {
-
-                        // If the "all" flag is true,
-                        // remove the flag from the collection and
-                        // flip the condition of which dates to disable
-                        if ( datesCollection[ 0 ] === true ) {
-                            CALENDAR.disabled = datesCollection.shift()
-                        }
-
-                        // Map through the dates passed
-                        // and return the collection
-                        return datesCollection.map( function( date ) {
-
-                            // If the date is a number, return the date minus 1
-                            // for weekday 0index plus the first day of the week
-                            if ( !isNaN( date ) ) {
-                                return --date + SETTINGS.firstDay
-                            }
-
-                            // Otherwise assume it's an array and fix the month 0index
-                            --date[ 1 ]
-
-                            // Then create and return the date,
-                            // replacing it in the collection
-                            return createDate( date )
-                        })
-                    }
-                })( SETTINGS.datesDisabled ), //DATES_TO_DISABLE
-
-
-                // Create a function that will filter through the dates
-                // and return true if looped date is to be disabled
-                DISABLED_DATES = (function() {
-
-                    // Check if the looped date should be disabled
-                    // based on the time being the same as a disabled date
-                    // or the day index being within the collection
-                    var isDisabledDate = function( date ) {
-                        return this.TIME == date.TIME || DATES_TO_DISABLE.indexOf( this.DAY ) > -1
-                    }
-
-
-                    // If all calendar dates should be disabled,
-                    // return a function that maps each date
-                    // in the collection of dates to not disable.
-                    // Otherwise check if this date should be disabled
-                    return CALENDAR.disabled ? function( date, i, collection ) {
-
-                            // Map the array of disabled dates
-                            // and check if this is not one
-                            return ( collection.map( isDisabledDate, this ).indexOf( true ) < 0 )
-                        } : isDisabledDate
-                })(), //DISABLED_DATES
-
-
-                // Create calendar object for the highlighted day
-                DATE_HIGHLIGHTED = (function( dateDataValue, dateEntered ) {
-
-                    // If there a date `data-value`
-                    if ( dateDataValue ) {
-
-                        // Set the date entered to an empty object
-                        dateEntered = {}
-
-                        // Map through the submit format array
-                        DATE_FORMATS.toArray( SETTINGS.formatSubmit ).map( function( formatItem ) {
-
-                            // If the formatting length function exists, invoke it with the
-                            // the format length in the `data-value` and the date we are creating.
-                            // Otherwise it is the length of the formatting item being mapped
-                            var formattingLength = DATE_FORMATS[ formatItem ] ? DATE_FORMATS[ formatItem ]( dateDataValue, dateEntered ) : formatItem.length
-
-                            // If the formatting length function exists, slice up
-                            // the value and pass it into the date we're creating.
-                            if ( DATE_FORMATS[ formatItem ] ) {
-                                dateEntered[ formatItem ] = dateDataValue.slice( 0, formattingLength )
-                            }
-
-                            // Update the remainder of the string by slicing the format length
-                            dateDataValue = dateDataValue.slice( formattingLength )
-                        })
-
-                        // Finally, create an array with the date entered while
-                        // parsing each item as an integer and compensating for 0index
-                        dateEntered = [ +(dateEntered.yyyy || dateEntered.yy), +(dateEntered.mm || dateEntered.m) - 1, +(dateEntered.dd || dateEntered.d) ]
-                    }
-
-
-                    // Otherwise, try to parse the date in the input
-                    else {
-                        dateEntered = Date.parse( dateEntered )
-                    }
-
-
-                    // If there's a valid date in the input or the dateEntered
-                    // is now an array, create a validated date with it.
-                    // Otherwise set the highlighted date to today after validating.
-                    return createValidatedDate( !isNaN( dateEntered ) || Array.isArray( dateEntered ) ? dateEntered : DATE_TODAY )
-                })( ELEMENT.getAttribute( 'data-value' ), ELEMENT.value ),
-
-
-                // The date selected is initially the date highlighted
-                DATE_SELECTED = DATE_HIGHLIGHTED,
-
-
-                // Month focused is based on highlighted date
-                MONTH_FOCUSED = DATE_HIGHLIGHTED,
-
-
-                // If there's a format for the hidden input element, create the element
-                // using the name of the original input plus suffix and update the value
-                // with whatever is entered in the input on load. Otherwise set it to zero.
-                ELEMENT_HIDDEN = SETTINGS.formatSubmit ? $( '<input type=hidden name=' + ELEMENT.name + SETTINGS.hiddenSuffix + '>' ).val( ELEMENT.value ? P.getDate( SETTINGS.formatSubmit ) : '' )[ 0 ] : null,
-
-
-                // Create the calendar table head with weekday labels
-                // by "copying" the weekdays collection based on the settings.
-                // * We do a copy so we don't mutate the original array.
-                TABLE_HEAD = (function( weekdaysCollection ) {
-
-                    // If the first day should be Monday
-                    if ( SETTINGS.firstDay ) {
-
-                        // Grab Sunday and push it to the end of the collection
-                        weekdaysCollection.push( weekdaysCollection.splice( 0, 1 )[ 0 ] )
-                    }
-
-                    // Go through each day of the week
-                    // and return a wrapped header row.
-                    // Take the result and apply another
-                    // table head wrapper to group it all.
-                    return createNode( 'thead',
-                        createNode( 'tr',
-                            weekdaysCollection.map( function( weekday ) {
-                                return createNode( 'th', weekday, CLASSES.weekdays )
-                            })
-                        )
-                    )
-                })( ( SETTINGS.showWeekdaysShort ? SETTINGS.weekdaysShort : SETTINGS.weekdaysFull ).slice( 0 ) ), //TABLE_HEAD
-
-
-                // Create the calendar holder with a new wrapped calendar and bind the click
-                $HOLDER = $( createNode( STRING_DIV, createCalendarWrapped(), CLASSES.holder ) ).on( 'click', onClickCalendar ),
-
-
-                // Translate a keycode to a relative change in date
-                KEYCODE_TO_DATE = {
-
-                    // Down
-                    40: 7,
-
-                    // Up
-                    38: -7,
-
-                    // Right
-                    39: 1,
-
-                    // Left
-                    37: -1
-                }, //KEYCODE_TO_DATE
-
-
-                // The date in various formats
-                DATE_FORMATS = (function() {
-
-                    // Get the length of the first word
-                    function getFirstWordLength( string ) {
-                        return string.match( /\w+/ )[ 0 ].length
-                    }
-
-                    // If the second character is a digit, length is 2 otherwise 1.
-                    function getDigitsLength( string ) {
-                        return (/\d/).test( string[ 1 ] ) ? 2 : 1
-                    }
-
-                    // Get the length of the month from a string
-                    function getMonthLength( string, dateObj, collection ) {
-
-                        // Grab the first word
-                        var word = string.match( /\w+/ )[ 0 ]
-
-                        // If there's no index for the date object's month,
-                        // find it in the relevant months collection and add 1
-                        // because we subtract 1 when we create the date object
-                        if ( !dateObj.mm && !dateObj.m ) {
-                            dateObj.m = collection.indexOf( word ) + 1
-                        }
-
-                        // Return the length of the word
-                        return word.length
-                    }
-
-
-                    // Return the date formats object
-                    return {
-                        d: function( string ) {
-
-                            // If there's string, then get the digits length.
-                            // Otherwise return the selected date.
-                            return string ? getDigitsLength( string ) : DATE_SELECTED.DATE
-                        },
-                        dd: function( string ) {
-
-                            // If there's a string, then the length is always 2.
-                            // Otherwise return the selected date with a leading zero.
-                            return string ? 2 : leadZero( DATE_SELECTED.DATE )
-                        },
-                        ddd: function( string ) {
-
-                            // If there's a string, then get the length of the first word.
-                            // Otherwise return the short selected weekday.
-                            return string ? getFirstWordLength( string ) : SETTINGS.weekdaysShort[ DATE_SELECTED.DAY ]
-                        },
-                        dddd: function( string ) {
-
-                            // If there's a string, then get the length of the first word.
-                            // Otherwise return the full selected weekday.
-                            return string ? getFirstWordLength( string ) : SETTINGS.weekdaysFull[ DATE_SELECTED.DAY ]
-                        },
-                        m: function( string ) {
-
-                            // If there's a string, then get the length of the digits
-                            // Otherwise return the selected month with 0index compensation.
-                            return string ? getDigitsLength( string ) : DATE_SELECTED.MONTH + 1
-                        },
-                        mm: function( string ) {
-
-                            // If there's a string, then the length is always 2.
-                            // Otherwise return the selected month with 0index and leading zero.
-                            return string ? 2 : leadZero( DATE_SELECTED.MONTH + 1 )
-                        },
-                        mmm: function( string, dateObject ) {
-
-                            var collection = SETTINGS.monthsShort
-
-                            // If there's a string, get length of the relevant month string
-                            // from the short months collection. Otherwise return the
-                            // selected month from that collection.
-                            return string ? getMonthLength( string, dateObject, collection ) : collection[ DATE_SELECTED.MONTH ]
-                        },
-                        mmmm: function( string, dateObject ) {
-
-                            var collection = SETTINGS.monthsFull
-
-                            // If there's a string, get length of the relevant month string
-                            // from the full months collection. Otherwise return the
-                            // selected month from that collection.
-                            return string ? getMonthLength( string, dateObject, collection ) : collection[ DATE_SELECTED.MONTH ]
-                        },
-                        yy: function( string ) {
-
-                            // If there's a string, then the length is always 2.
-                            // Otherwise return the selected year by slicing out the first 2 digits.
-                            return string ? 2 : ( '' + DATE_SELECTED.YEAR ).slice( 2 )
-                        },
-                        yyyy: function( string ) {
-
-                            // If there's a string, then the length is always 4.
-                            // Otherwise return the selected year.
-                            return string ? 4 : DATE_SELECTED.YEAR
-                        },
-
-                        // Create an array by splitting the format passed
-                        toArray: function( format ) { return format.split( /(?=\b)(d{1,4}|m{1,4}|y{4}|yy)+(\b)/g ) }
-
-                    } //endreturn
-                })(), //DATE_FORMATS
-
-
                 // The picker prototype
                 P = Picker.prototype = {
 
@@ -557,9 +247,317 @@
 
                         return P
                     } //setDateLimit
+                }, //Picker.prototype
 
 
-                } //Picker.prototype
+                // The element node
+                ELEMENT = (function( element ) {
+
+                    // Check the autofocus state, convert the element into
+                    // a regular text input to remove user-agent stylings,
+                    // and then set the element as readonly
+                    element.autofocus = ( element == document.activeElement )
+                    element.type = 'text'
+                    element.readOnly = true
+                    return element
+                })( $ELEMENT[ 0 ] ), //ELEMENT
+
+
+                // The calendar object
+                CALENDAR = {
+                    id: ~~( Math.random() * 1e9 )
+                }, //CALENDAR
+
+
+                // The classes
+                CLASSES = SETTINGS.klass,
+
+
+                // The date in various formats
+                DATE_FORMATS = (function() {
+
+                    // Get the length of the first word
+                    function getFirstWordLength( string ) {
+                        return string.match( /\w+/ )[ 0 ].length
+                    }
+
+                    // If the second character is a digit, length is 2 otherwise 1.
+                    function getDigitsLength( string ) {
+                        return (/\d/).test( string[ 1 ] ) ? 2 : 1
+                    }
+
+                    // Get the length of the month from a string
+                    function getMonthLength( string, dateObj, collection ) {
+
+                        // Grab the first word
+                        var word = string.match( /\w+/ )[ 0 ]
+
+                        // If there's no index for the date object's month,
+                        // find it in the relevant months collection and add 1
+                        // because we subtract 1 when we create the date object
+                        if ( !dateObj.mm && !dateObj.m ) {
+                            dateObj.m = collection.indexOf( word ) + 1
+                        }
+
+                        // Return the length of the word
+                        return word.length
+                    }
+
+
+                    // Return the date formats object
+                    return {
+                        d: function( string ) {
+
+                            // If there's string, then get the digits length.
+                            // Otherwise return the selected date.
+                            return string ? getDigitsLength( string ) : DATE_SELECTED.DATE
+                        },
+                        dd: function( string ) {
+
+                            // If there's a string, then the length is always 2.
+                            // Otherwise return the selected date with a leading zero.
+                            return string ? 2 : leadZero( DATE_SELECTED.DATE )
+                        },
+                        ddd: function( string ) {
+
+                            // If there's a string, then get the length of the first word.
+                            // Otherwise return the short selected weekday.
+                            return string ? getFirstWordLength( string ) : SETTINGS.weekdaysShort[ DATE_SELECTED.DAY ]
+                        },
+                        dddd: function( string ) {
+
+                            // If there's a string, then get the length of the first word.
+                            // Otherwise return the full selected weekday.
+                            return string ? getFirstWordLength( string ) : SETTINGS.weekdaysFull[ DATE_SELECTED.DAY ]
+                        },
+                        m: function( string ) {
+
+                            // If there's a string, then get the length of the digits
+                            // Otherwise return the selected month with 0index compensation.
+                            return string ? getDigitsLength( string ) : DATE_SELECTED.MONTH + 1
+                        },
+                        mm: function( string ) {
+
+                            // If there's a string, then the length is always 2.
+                            // Otherwise return the selected month with 0index and leading zero.
+                            return string ? 2 : leadZero( DATE_SELECTED.MONTH + 1 )
+                        },
+                        mmm: function( string, dateObject ) {
+
+                            var collection = SETTINGS.monthsShort
+
+                            // If there's a string, get length of the relevant month string
+                            // from the short months collection. Otherwise return the
+                            // selected month from that collection.
+                            return string ? getMonthLength( string, dateObject, collection ) : collection[ DATE_SELECTED.MONTH ]
+                        },
+                        mmmm: function( string, dateObject ) {
+
+                            var collection = SETTINGS.monthsFull
+
+                            // If there's a string, get length of the relevant month string
+                            // from the full months collection. Otherwise return the
+                            // selected month from that collection.
+                            return string ? getMonthLength( string, dateObject, collection ) : collection[ DATE_SELECTED.MONTH ]
+                        },
+                        yy: function( string ) {
+
+                            // If there's a string, then the length is always 2.
+                            // Otherwise return the selected year by slicing out the first 2 digits.
+                            return string ? 2 : ( '' + DATE_SELECTED.YEAR ).slice( 2 )
+                        },
+                        yyyy: function( string ) {
+
+                            // If there's a string, then the length is always 4.
+                            // Otherwise return the selected year.
+                            return string ? 4 : DATE_SELECTED.YEAR
+                        },
+
+                        // Create an array by splitting the format passed
+                        toArray: function( format ) { return format.split( /(?=\b)(d{1,4}|m{1,4}|y{4}|yy)+(\b)/g ) }
+
+                    } //endreturn
+                })(), //DATE_FORMATS
+
+
+                // Create calendar object for today
+                DATE_TODAY = createDate(),
+
+
+                // Set the min date
+                DATE_MIN = setDateMinOrMax( SETTINGS.dateMin ),
+
+
+                // Set the max date
+                // * A truthy second argument creates max date
+                DATE_MAX = setDateMinOrMax( SETTINGS.dateMax, 1 ),
+
+
+                // Create a collection of dates to disable
+                DATES_TO_DISABLE = (function( datesCollection ) {
+
+                    // If a collection was passed
+                    // we need to create a calendar date object
+                    if ( Array.isArray( datesCollection ) ) {
+
+                        // If the "all" flag is true,
+                        // remove the flag from the collection and
+                        // flip the condition of which dates to disable
+                        if ( datesCollection[ 0 ] === true ) {
+                            CALENDAR.disabled = datesCollection.shift()
+                        }
+
+                        // Map through the dates passed
+                        // and return the collection
+                        return datesCollection.map( function( date ) {
+
+                            // If the date is a number, return the date minus 1
+                            // for weekday 0index plus the first day of the week
+                            if ( !isNaN( date ) ) {
+                                return --date + SETTINGS.firstDay
+                            }
+
+                            // Otherwise assume it's an array and fix the month 0index
+                            --date[ 1 ]
+
+                            // Then create and return the date,
+                            // replacing it in the collection
+                            return createDate( date )
+                        })
+                    }
+                })( SETTINGS.datesDisabled ), //DATES_TO_DISABLE
+
+
+                // Create a function that will filter through the dates
+                // and return true if looped date is to be disabled
+                DISABLED_DATES = (function() {
+
+                    // Check if the looped date should be disabled
+                    // based on the time being the same as a disabled date
+                    // or the day index being within the collection
+                    var isDisabledDate = function( date ) {
+                        return this.TIME == date.TIME || DATES_TO_DISABLE.indexOf( this.DAY ) > -1
+                    }
+
+
+                    // If all calendar dates should be disabled,
+                    // return a function that maps each date
+                    // in the collection of dates to not disable.
+                    // Otherwise check if this date should be disabled
+                    return CALENDAR.disabled ? function( date, i, collection ) {
+
+                            // Map the array of disabled dates
+                            // and check if this is not one
+                            return ( collection.map( isDisabledDate, this ).indexOf( true ) < 0 )
+                        } : isDisabledDate
+                })(), //DISABLED_DATES
+
+
+                // Create calendar object for the highlighted day
+                DATE_HIGHLIGHTED = (function( dateDataValue, dateEntered ) {
+
+                    // If there a date `data-value`
+                    if ( dateDataValue ) {
+
+                        // Set the date entered to an empty object
+                        dateEntered = {}
+
+                        // Map through the submit format array
+                        DATE_FORMATS.toArray( SETTINGS.formatSubmit ).map( function( formatItem ) {
+
+                            // If the formatting length function exists, invoke it with the
+                            // the format length in the `data-value` and the date we are creating.
+                            // Otherwise it is the length of the formatting item being mapped
+                            var formattingLength = DATE_FORMATS[ formatItem ] ? DATE_FORMATS[ formatItem ]( dateDataValue, dateEntered ) : formatItem.length
+
+                            // If the formatting length function exists, slice up
+                            // the value and pass it into the date we're creating.
+                            if ( DATE_FORMATS[ formatItem ] ) {
+                                dateEntered[ formatItem ] = dateDataValue.slice( 0, formattingLength )
+                            }
+
+                            // Update the remainder of the string by slicing the format length
+                            dateDataValue = dateDataValue.slice( formattingLength )
+                        })
+
+                        // Finally, create an array with the date entered while
+                        // parsing each item as an integer and compensating for 0index
+                        dateEntered = [ +(dateEntered.yyyy || dateEntered.yy), +(dateEntered.mm || dateEntered.m) - 1, +(dateEntered.dd || dateEntered.d) ]
+                    }
+
+
+                    // Otherwise, try to parse the date in the input
+                    else {
+                        dateEntered = Date.parse( dateEntered )
+                    }
+
+
+                    // If there's a valid date in the input or the dateEntered
+                    // is now an array, create a validated date with it.
+                    // Otherwise set the highlighted date to today after validating.
+                    return createValidatedDate( !isNaN( dateEntered ) || Array.isArray( dateEntered ) ? dateEntered : DATE_TODAY )
+                })( ELEMENT.getAttribute( 'data-value' ), ELEMENT.value ),
+
+
+                // The date selected is initially the date highlighted
+                DATE_SELECTED = DATE_HIGHLIGHTED,
+
+
+                // Month focused is based on highlighted date
+                MONTH_FOCUSED = DATE_HIGHLIGHTED,
+
+
+                // If there's a format for the hidden input element, create the element
+                // using the name of the original input plus suffix and update the value
+                // with whatever is entered in the input on load. Otherwise set it to zero.
+                ELEMENT_HIDDEN = SETTINGS.formatSubmit ? $( '<input type=hidden name=' + ELEMENT.name + SETTINGS.hiddenSuffix + '>' ).val( ELEMENT.value ? P.getDate( SETTINGS.formatSubmit ) : '' )[ 0 ] : null,
+
+
+                // Create the calendar table head with weekday labels
+                // by "copying" the weekdays collection based on the settings.
+                // * We do a copy so we don't mutate the original array.
+                TABLE_HEAD = (function( weekdaysCollection ) {
+
+                    // If the first day should be Monday
+                    if ( SETTINGS.firstDay ) {
+
+                        // Grab Sunday and push it to the end of the collection
+                        weekdaysCollection.push( weekdaysCollection.splice( 0, 1 )[ 0 ] )
+                    }
+
+                    // Go through each day of the week
+                    // and return a wrapped header row.
+                    // Take the result and apply another
+                    // table head wrapper to group it all.
+                    return createNode( 'thead',
+                        createNode( 'tr',
+                            weekdaysCollection.map( function( weekday ) {
+                                return createNode( 'th', weekday, CLASSES.weekdays )
+                            })
+                        )
+                    )
+                })( ( SETTINGS.showWeekdaysShort ? SETTINGS.weekdaysShort : SETTINGS.weekdaysFull ).slice( 0 ) ), //TABLE_HEAD
+
+
+                // Create the calendar holder with a new wrapped calendar and bind the click
+                $HOLDER = $( createNode( STRING_DIV, createCalendarWrapped(), CLASSES.holder ) ).on( 'click', onClickCalendar ),
+
+
+                // Translate a keycode to a relative change in date
+                KEYCODE_TO_DATE = {
+
+                    // Down
+                    40: 7,
+
+                    // Up
+                    38: -7,
+
+                    // Right
+                    39: 1,
+
+                    // Left
+                    37: -1
+                } //KEYCODE_TO_DATE
 
 
 
