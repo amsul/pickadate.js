@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v1.3.9 - 05 December, 2012
+ * pickadate.js v1.4.0 - 06 December, 2012
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
@@ -194,9 +194,10 @@
 
 
                     /**
-                     * Get the selected date in any format
+                     * Get a date in any format.
+                     * Defaults to getting the selected date
                      */
-                    getDate: function( format ) {
+                    getDate: function( format, date ) {
 
                         // Go through the date formats array and
                         // convert the format passed into an array to map
@@ -205,7 +206,7 @@
 
                             // Trigger the date formats function
                             // or just return value itself
-                            return triggerFunction( DATE_FORMATS[ value ] ) || value
+                            return triggerFunction( DATE_FORMATS[ value ], date || DATE_SELECTED ) || value
                         }).join( '' )
                     }, //getDate
 
@@ -219,6 +220,7 @@
                         // Compensate for month 0index and create a validated date.
                         // Then set it as the date selected
                         setDateSelected( createValidatedDate([ year, --month, date ]), isSuperficial )
+
                         return P
                     }, //setDate
 
@@ -227,8 +229,10 @@
                      * Get the min or max date based on
                      * the argument being truthy or falsey
                      */
-                    getDateLimit: function( upper ) {
-                        return upper ? DATE_MAX : DATE_MIN
+                    getDateLimit: function( upper, format ) {
+
+                        // Get the max or min date depending on the `upper` flag
+                        return P.getDate( format, upper ? DATE_MAX : DATE_MIN )
                     }, //getDateLimit
 
 
@@ -236,11 +240,31 @@
                      * Set the min or max date based on second
                      * argument being truthy or falsey.
                      */
-                    setDateLimit: function( date, upper ) {
+                    setDateLimit: function( limit, upper ) {
 
-                        // Set the relevant date
-                        if ( upper ) DATE_MAX = setDateMinOrMax( date, 1 )
-                        else DATE_MIN = setDateMinOrMax( date )
+                        // If it's the upper limit
+                        if ( upper ) {
+
+                            // Set the max date
+                            DATE_MAX = createBoundaryDate( limit, upper )
+
+                            // If focused month is more than max date set it to max date
+                            if ( MONTH_FOCUSED.MONTH > DATE_MAX.MONTH ) {
+                                MONTH_FOCUSED = DATE_MAX
+                            }
+                        }
+
+                        // Otherwise it's the lower limit
+                        else {
+
+                            // So set the min date
+                            DATE_MIN = createBoundaryDate( limit )
+
+                            // If focused month is less than min date set it to min date
+                            if ( MONTH_FOCUSED.MONTH < DATE_MAX.MONTH ) {
+                                MONTH_FOCUSED = DATE_MIN
+                            }
+                        }
 
                         // Render a new calendar
                         calendarRender()
@@ -310,37 +334,37 @@
 
                             // If there's string, then get the digits length.
                             // Otherwise return the selected date.
-                            return string ? getDigitsLength( string ) : DATE_SELECTED.DATE
+                            return string ? getDigitsLength( string ) : this.DATE
                         },
                         dd: function( string ) {
 
                             // If there's a string, then the length is always 2.
                             // Otherwise return the selected date with a leading zero.
-                            return string ? 2 : leadZero( DATE_SELECTED.DATE )
+                            return string ? 2 : leadZero( this.DATE )
                         },
                         ddd: function( string ) {
 
                             // If there's a string, then get the length of the first word.
                             // Otherwise return the short selected weekday.
-                            return string ? getFirstWordLength( string ) : SETTINGS.weekdaysShort[ DATE_SELECTED.DAY ]
+                            return string ? getFirstWordLength( string ) : SETTINGS.weekdaysShort[ this.DAY ]
                         },
                         dddd: function( string ) {
 
                             // If there's a string, then get the length of the first word.
                             // Otherwise return the full selected weekday.
-                            return string ? getFirstWordLength( string ) : SETTINGS.weekdaysFull[ DATE_SELECTED.DAY ]
+                            return string ? getFirstWordLength( string ) : SETTINGS.weekdaysFull[ this.DAY ]
                         },
                         m: function( string ) {
 
                             // If there's a string, then get the length of the digits
                             // Otherwise return the selected month with 0index compensation.
-                            return string ? getDigitsLength( string ) : DATE_SELECTED.MONTH + 1
+                            return string ? getDigitsLength( string ) : this.MONTH + 1
                         },
                         mm: function( string ) {
 
                             // If there's a string, then the length is always 2.
                             // Otherwise return the selected month with 0index and leading zero.
-                            return string ? 2 : leadZero( DATE_SELECTED.MONTH + 1 )
+                            return string ? 2 : leadZero( this.MONTH + 1 )
                         },
                         mmm: function( string, dateObject ) {
 
@@ -349,7 +373,7 @@
                             // If there's a string, get length of the relevant month string
                             // from the short months collection. Otherwise return the
                             // selected month from that collection.
-                            return string ? getMonthLength( string, dateObject, collection ) : collection[ DATE_SELECTED.MONTH ]
+                            return string ? getMonthLength( string, dateObject, collection ) : collection[ this.MONTH ]
                         },
                         mmmm: function( string, dateObject ) {
 
@@ -358,19 +382,19 @@
                             // If there's a string, get length of the relevant month string
                             // from the full months collection. Otherwise return the
                             // selected month from that collection.
-                            return string ? getMonthLength( string, dateObject, collection ) : collection[ DATE_SELECTED.MONTH ]
+                            return string ? getMonthLength( string, dateObject, collection ) : collection[ this.MONTH ]
                         },
                         yy: function( string ) {
 
                             // If there's a string, then the length is always 2.
                             // Otherwise return the selected year by slicing out the first 2 digits.
-                            return string ? 2 : ( '' + DATE_SELECTED.YEAR ).slice( 2 )
+                            return string ? 2 : ( '' + this.YEAR ).slice( 2 )
                         },
                         yyyy: function( string ) {
 
                             // If there's a string, then the length is always 4.
                             // Otherwise return the selected year.
-                            return string ? 4 : DATE_SELECTED.YEAR
+                            return string ? 4 : this.YEAR
                         },
 
                         // Create an array by splitting the format passed
@@ -384,13 +408,13 @@
                 DATE_TODAY = createDate(),
 
 
-                // Set the min date
-                DATE_MIN = setDateMinOrMax( SETTINGS.dateMin ),
+                // Create the min date
+                DATE_MIN = createBoundaryDate( SETTINGS.dateMin ),
 
 
-                // Set the max date
+                // Create the max date
                 // * A truthy second argument creates max date
-                DATE_MAX = setDateMinOrMax( SETTINGS.dateMax, 1 ),
+                DATE_MAX = createBoundaryDate( SETTINGS.dateMax, 1 ),
 
 
                 // Create a collection of dates to disable
@@ -812,9 +836,7 @@
                             'data-' + ( isDateDisabled ? 'disabled' : 'date' ) + '=' + [
                                 loopDate.YEAR,
                                 loopDate.MONTH,
-                                loopDate.DATE,
-                                loopDate.DAY,
-                                loopDate.TIME
+                                loopDate.DATE
                             ].join( '/' )
                         ]
                     } //createDateClassAndBinding
@@ -1052,10 +1074,10 @@
 
 
             /**
-             * Create the min or max date allowed on the calendar
-             * * A truthy second argument creates the max date
+             * Create a bounding date allowed on the calendar
+             * * A truthy second argument creates the upper boundary
              */
-            function setDateMinOrMax( limit, upper ) {
+            function createBoundaryDate( limit, upper ) {
 
                 // If the limit is set to true, just return today
                 if ( limit === true ) {
@@ -1076,13 +1098,8 @@
                 }
 
                 // Otherwise create an infinite date
-                limit = upper ? Infinity : -Infinity
-                return {
-                    YEAR: limit,
-                    MONTH: limit,
-                    TIME: limit
-                }
-            } //setDateMinOrMax
+                return createDate( 0, upper ? Infinity : -Infinity )
+            } //createBoundaryDate
 
 
             /**
@@ -1164,7 +1181,6 @@
                 // or the month itself
                 return inRangeValue != null ? inRangeValue : month
             } //getMonthInRange
-
 
 
             /**
@@ -1252,22 +1268,12 @@
                 // If there's a date provided
                 if ( targetData.date ) {
 
-                    // Split the target data into an array
-                    var dateToSelect = targetData.date.split( '/' )
+                    // Split the target data into an array while parsing each as integer
+                    var dateToSelect = targetData.date.split( '/' ).map( function( value ) { return +value })
 
-                    // Create the a calendar date object from the
-                    // array while floating the values
-                    dateToSelect = {
-                        YEAR: +dateToSelect[ 0 ],
-                        MONTH: +dateToSelect[ 1 ],
-                        DATE: +dateToSelect[ 2 ],
-                        DAY: +dateToSelect[ 3 ],
-                        TIME: +dateToSelect[ 4 ]
-                    }
-
-                    // Set the date as selected
+                    // Create a date from the date to select and set the date as selected
                     // * Falsy second argument updates the element values
-                    setDateSelected( dateToSelect, false, $target )
+                    setDateSelected( createDate( dateToSelect ), false, $target )
 
                     // Close the calendar
                     P.close()
@@ -1394,7 +1400,7 @@
     } //createNode
 
     // Create a calendar date
-    function createDate( datePassed ) {
+    function createDate( datePassed, unlimited ) {
 
         // If the date passed is an array
         if ( Array.isArray( datePassed ) ) {
@@ -1403,9 +1409,16 @@
             datePassed = new Date( datePassed[ 0 ], datePassed[ 1 ], datePassed[ 2 ] )
         }
 
+        // If the date passed is a number
+        else if ( !isNaN( datePassed ) ) {
 
-        // Otherwise
-        else {
+            // Create the date
+            datePassed = new Date( datePassed )
+        }
+
+
+        // Otherwise if it's not unlimited
+        else if ( !unlimited ) {
 
             // Set the date to today
             datePassed = new Date()
@@ -1417,11 +1430,11 @@
 
         // Return the calendar date object
         return {
-            YEAR: datePassed.getFullYear(),
-            MONTH: datePassed.getMonth(),
-            DATE: datePassed.getDate(),
-            DAY: datePassed.getDay(),
-            TIME: datePassed.getTime()
+            YEAR: unlimited || datePassed.getFullYear(),
+            MONTH: unlimited || datePassed.getMonth(),
+            DATE: unlimited || datePassed.getDate(),
+            DAY: unlimited || datePassed.getDay(),
+            TIME: unlimited || datePassed.getTime()
         }
     } //createDate
 
