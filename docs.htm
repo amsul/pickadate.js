@@ -412,14 +412,12 @@ klass: {
 
     <section class="holder" id="disable_everyday">
 
-        <h3><a class="link-anchor" href="#disable_everyday">&sect;</a><strong class="underline-highlight">Disable all dates.. except some</strong></h3>
+        <h3><a class="link-anchor" href="#disable_everyday">&sect;</a><strong class="underline-highlight">Enable arbitrary dates</strong></h3>
 
-        <p>Alternatively, disable <strong><i>all</i></strong> the dates in the calendar, <strong><i>except</i></strong> the ones specified if you set <code class="constant">true</code> as the first item in the array.</p>
+        <p>Alternatively, enable only the dates specified.</p>
 
         <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
-    datesDisabled: [
-        true,
-        1, 7,
+    datesEnabled: [
         [ 2012, 12, 2 ],
         [ 2012, 12, 5 ],
         [ 2012, 12, 28 ]
@@ -971,9 +969,7 @@ function&nbsp;createDateArray( date ) {
         })
 
         $( '#picker_dates_disabled_c' ).pickadate({
-            datesDisabled: [
-                true,
-                1, 7,
+            datesEnabled: [
                 [ 2012, 12, 2 ],
                 [ 2012, 12, 5 ],
                 [ 2012, 12, 28 ]
