@@ -74,6 +74,11 @@ input.pickadate__input--focused {
     border-bottom: 4px solid #0089ec;
 }
 
+h3 .underline-highlight {
+    border-bottom-width: 3px;
+    padding-bottom: 1px;
+}
+
 .holder {
     max-width: 540px;
     margin: 0 auto;
@@ -100,6 +105,24 @@ input.pickadate__input--focused {
 }
 
 
+.link-anchor {
+    position: absolute;
+    margin-left: -28px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #444;
+}
+
+.link-anchor:hover {
+    color: #0089ec;
+}
+
+h1 .link-anchor {
+    font-size: .6em;
+    margin-top: 16px;
+}
+
+
 
 .notification {
     background: #edffed;
@@ -113,4 +136,43 @@ input.pickadate__input--focused {
 }
 
 
+
+/**
+ * Syntax highlighting
+ */
+
+.string {
+    color: #68c244;
+}
+
+.selector,
+.function,
+.method {
+    color: #0069bc;
+}
+
+.comment,
+.comment a {
+    /*color: #8e69c9;*/
+    color: #0089ec;
+    font-style: italic;
+}
+
+.constant {
+    color: #d40;
+}
+
+.tag-name,
+.attribute {
+    color: #c50;
+}
+
+.keyword {
+    color: #b90690;
+}
+
+.rainbow,
+.operator {
+    color: #585856;
+}
 

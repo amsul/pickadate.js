@@ -2,7 +2,10 @@
 
 <meta charset="utf-8">
 
+<meta name="author" content="Amsul - http://amsul.ca">
 <meta name="viewport" content="width=device-width,maximum-scale=1">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="pragma" content="no-cache">
 
 <title>Pickadate.js</title>
 
@@ -32,7 +35,7 @@
             <input id="input_01" class="datepicker" type="text">
         </fieldset>
 
-        <p>As easy as: <code>$( '.datepicker' ).pickadate()</code></p>
+        <p>As easy as: <code data-language="javascript">$( '.datepicker' ).pickadate()</code></p>
 
     </section>
 
@@ -54,12 +57,12 @@
         </fieldset>
 
         <fieldset>
-            <h3><label for="input_03">Use the scary&#42; <code>type="date"</code>:</label></h3>
+            <h3><label for="input_03">Use the scary&#42; <code data-language="html">type="date"</code>:</label></h3>
             <input id="input_03" type="date" value="31 October, 2012" data-value="2012/10/31">
         </fieldset>
 
         <fieldset>
-            <h3><label for="input_04">Or, the friendly&#42;&#42; <code>type="text"</code>:</label></h3>
+            <h3><label for="input_04">Or, the friendly&#42;&#42; <code data-language="html">type="text"</code>:</label></h3>
             <input id="input_04" class="datepicker" type="text" value="25 December, 2012" data-value="2012/12/25">
         </fieldset>
 
@@ -94,7 +97,7 @@
     <section class="holder aligncenter">
 
         <p><a class="button-full" href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js</a></p>
-        <small class="dimmed"><p>Browser support: IE7+, Chrome, Firefox, Safari, Opera, iOS Safari, Android browser</p></small>
+        <small class="dimmed"><p>Browser support: <a class="dimmed" href="docs.htm#legacy">IE7+</a>, Chrome, Firefox, Safari, Opera, iOS Safari, Android browser</p></small>
         <p><a href="docs.htm">Read the docs</a> or <a href="https://github.com/amsul/pickadate.js">view it on Github</a></p>
 
     </section>
@@ -113,6 +116,7 @@
 
 
     <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+    <script src="demo/rainbow.js"></script>
     <script src="source/pickadate.legacy.js"></script>
 
     <script type="text/javascript">
