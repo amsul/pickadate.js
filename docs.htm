@@ -30,14 +30,15 @@
 
         <a href="https://github.com/amsul/pickadate.js"><img width="128" height="128" style="position:absolute;top:0;right:0;border:0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
 
-        <h4><a href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js</a> (<a href="#legacy">old browsers</a>) or <a href="https://github.com/amsul/pickadate.js">view it on Github</a></h4>
+        <h4><a href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js</a> (<a href="#legacy">for old browsers</a>) or <a href="https://github.com/amsul/pickadate.js">view it on Github</a></h4>
 
     </section>
 
 
     <section class="holder" id="options">
 
-        <h3>All the options and default settings:</h3>
+        <h3><a class="link-anchor" href="#options">&sect;</a><strong class="underline-highlight">Default options</strong></h3>
+
         <pre><code data-language="javascript">// <a href="#strings">Strings</a> and <a href="#translations">translations</a>
 monthsFull: [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ],
 monthsShort: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
@@ -107,9 +108,9 @@ klass: {
     </section>
 
 
-    <section class="holder">
+    <section class="holder" id="simple">
 
-        <h3><strong class="underline-highlight">Simple setup</strong></h3>
+        <h3><a class="link-anchor" href="#simple">&sect;</a><strong class="underline-highlight">Simple setup</strong></h3>
 
         <p>With the basic setup, you get all the default options listed above.</p>
 
@@ -124,11 +125,11 @@ klass: {
 
     <section class="holder" id="strings">
 
-        <h3><strong class="underline-highlight">Custom month and weekday tags</strong></h3>
+        <h3><a class="link-anchor" href="#strings">&sect;</a><strong class="underline-highlight">Custom month and weekday tags</strong></h3>
 
         <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
-    monthPrev: '&amp;amp;larr;',
-    monthNext: '&amp;amp;rarr;',
+    monthPrev: '&amp;larr;',
+    monthNext: '&amp;rarr;',
     weekdaysShort: [ 'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa' ],
     showMonthsFull: false
 })</code></pre>
@@ -142,7 +143,7 @@ klass: {
 
     <section class="holder" id="translations">
 
-        <h3><strong class="underline-highlight">Any language support</strong></h3>
+        <h3><a class="link-anchor" href="#translations">&sect;</a><strong class="underline-highlight">Any language support</strong></h3>
 
         <p>You can add support for any language in one of two ways.</p>
 
@@ -170,14 +171,14 @@ klass: {
 
         <p>There are <a href="https://github.com/amsul/pickadate.js/tree/gh-pages/translations">extensions for 26 languages</a> already available.</p>
 
-        <p class="notification notification--highlight">* The <code>data-value</code> attribute and <code>formatSubmit</code> option are both required to parse your dates correctly. <a href="#formats">Read more</a> &darr;</p>
+        <p class="notification notification--highlight">* The <code class="tag-name">data-value</code> attribute and <code>formatSubmit</code> option are both required to parse your dates correctly. <a href="#formats">Read more</a> &darr;</p>
 
     </section>
 
 
-    <section class="holder" id="formats">
+    <section class="holder holder-clean" id="formats">
 
-        <h3><strong class="underline-highlight">Custom date formats</strong></h3>
+        <h3><a class="link-anchor" href="#formats">&sect;</a><strong class="underline-highlight">Custom date formats</strong></h3>
 
         <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
     format: 'You selected: dddd, dd mmm, yyyy',
@@ -258,11 +259,15 @@ klass: {
             </tbody>
         </table>
 
-        <br>
 
-        <h3 id="formats_hidden"><strong class="underline-highlight">Default value formatting</strong></h3>
+    </section>
 
-        <p>If your <code>input</code> field has a custom date format or language that doesn't <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Date/parse" target="_blank">easily parse as a date</a>, you can specify the date using the <code>data-value</code> attribute:</p>
+
+    <section class="holder" id="formats_hidden">
+
+        <h3><a class="link-anchor" href="#formats_hidden">&sect;</a><strong class="underline-highlight">Default value formatting</strong></h3>
+
+        <p>If your <code class="tag-name">input</code> field has a custom date format or language that doesn't <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Date/parse" target="_blank">easily parse as a date</a>, you can specify the date using the <code class="attribute">data-value</code> attribute:</p>
 
         <pre><code data-language="html">&amp;lt;input&nbsp;value="August 14"&nbsp;data-value="1988/08/14"&nbsp;class="datepicker"&nbsp;type="text"&gt;</code></pre>
 
@@ -270,20 +275,19 @@ klass: {
             <input id="picker_formats_b" class="datepicker" type="text" value="August 14" data-value="1988/08/14">
         </fieldset>
 
-        <p>The <code>data-value</code> attribute must be formatted using the <code>formatSubmit</code> option:</p>
+        <p>The <code class="attribute">data-value</code> attribute must be formatted using the <code>formatSubmit</code> option:</p>
 
         <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
     format: 'mmmm dd',
     formatSubmit: 'yyyy/mm/dd'
 })</code></pre>
 
-
     </section>
 
 
     <section class="holder" id="first_day">
 
-        <h3><strong class="underline-highlight">Set Monday as the first day</strong></h3>
+        <h3><a class="link-anchor" href="#first_day">&sect;</a><strong class="underline-highlight">Set Monday as the first day</strong></h3>
 
         <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
     firstDay: 1
@@ -301,7 +305,7 @@ klass: {
 
     <section class="holder" id="selectors">
 
-        <h3><strong class="underline-highlight">Month and year dropdowns</strong></h3>
+        <h3><a class="link-anchor" href="#selectors">&sect;</a><strong class="underline-highlight">Month and year dropdowns</strong></h3>
 
         <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
     monthSelector: true,
@@ -329,7 +333,7 @@ klass: {
 
     <section class="holder" id="ranges">
 
-        <h3><strong class="underline-highlight">Minimum and maximum date range</strong></h3>
+        <h3><a class="link-anchor" href="#ranges">&sect;</a><strong class="underline-highlight">Minimum and maximum date range</strong></h3>
 
         <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
     dateMin: [ 2012, 10, 14 ],
@@ -363,9 +367,9 @@ klass: {
     </section>
 
 
-    <section class="holder" id="dates_disabled">
+    <section class="holder holder-clean" id="disable_dates">
 
-        <h3><strong class="underline-highlight">Disable arbitrary dates</strong></h3>
+        <h3><a class="link-anchor" href="#disable_dates">&sect;</a><strong class="underline-highlight">Disable arbitrary dates</strong></h3>
 
         <p>Pass an array of arbitrary dates (each formatted as <code>[ yyyy, mm, dd ]</code>) to disable them.</p>
 
@@ -381,7 +385,12 @@ klass: {
             <input id="picker_dates_disabled_a" class="datepicker" type="text">
         </fieldset>
 
-        <h3><strong class="underline-highlight">Disable days of the week</strong></h3>
+    </section>
+
+
+    <section class="holder holder-clean" id="disable_weekdays">
+
+        <h3><a class="link-anchor" href="#disable_weekdays">&sect;</a><strong class="underline-highlight">Disable days of the week</strong></h3>
 
         <p>Disable certain days of the week, such as all Saturdays (7<sup>th</sup> day of week) and Sundays (1<sup>st</sup> day of week), by passing an integer between 1 and 7:</p>
 
@@ -398,7 +407,12 @@ klass: {
             <input id="picker_dates_disabled_b" class="datepicker" type="text">
         </fieldset>
 
-        <h3><strong class="underline-highlight">Disable all dates.. except some</strong></h3>
+    </section>
+
+
+    <section class="holder" id="disable_everyday">
+
+        <h3><a class="link-anchor" href="#disable_everyday">&sect;</a><strong class="underline-highlight">Disable all dates.. except some</strong></h3>
 
         <p>Alternatively, disable <strong><i>all</i></strong> the dates in the calendar, <strong><i>except</i></strong> the ones specified if you set <code class="constant">true</code> as the first item in the array.</p>
 
@@ -421,7 +435,7 @@ klass: {
 
     <section class="holder" id="disable">
 
-        <h3><strong class="underline-highlight">Disable picker for native calendar</strong></h3>
+        <h3><a class="link-anchor" href="#disable">&sect;</a><strong class="underline-highlight">Disable picker for native calendar</strong></h3>
 
         <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
     disablePicker: true
@@ -439,7 +453,7 @@ klass: {
 
     <section class="holder" id="events">
 
-        <h3><strong class="underline-highlight">Do stuff on calendar events</strong></h3>
+        <h3><a class="link-anchor" href="#events">&sect;</a><strong class="underline-highlight">Do stuff on calendar events</strong></h3>
 
         <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
     onOpen: function() {
@@ -449,7 +463,7 @@ klass: {
         alert( 'Closed' )
     },
     onSelect: function() {
-        alert( 'Selected: '&nbsp;+&nbsp;this.getDate() )
+        alert( 'Selected: ' + this.getDate() )
     },
     onStart: function() {
         console.log( 'Hello there :)' )
@@ -584,132 +598,36 @@ klass: {
             }
         </style>
 
+        <h3><a class="link-anchor" href="#theme">&sect;</a><strong class="underline-highlight">Themed calendar</strong></h3>
+        <p>Go crazy.</p>
+
         <fieldset class="datepicker-themed">
-            <h3><strong class="underline-highlight">Themed calendar</strong></h3>
-            <p>Go crazy.</p>
             <input id="picker_themed" class="datepicker" type="text">
         </fieldset>
 
-        <pre><code>.datepicker-themed .datepicker:focus,
-.datepicker-themed input.pickadate__input--focused {
-    border-color: #5a4;
-}
-.datepicker-themed .pickadate__holder {
-    height: auto;
-    position: relative;
-    z-index: 10;
-}
-.datepicker-themed .pickadate__calendar--wrap {
-    max-width: 100%;
-    max-height: none;
-    top: .5em;
-}
-.datepicker-themed .pickadate__calendar--wrap {
-    box-shadow: none;
-}
-.datepicker-themed .pickadate__calendar {
-    border-color: #eee;
-    border-width: 4px;
-    border-radius: 0;
-}
-.datepicker-themed .pickadate__month--nav {
-    font-size: .8em;
-}
-.datepicker-themed .pickadate__month--wrap {
-    display: inline-block;
-    width: 30%;
-    margin-left: 24%;
-    margin-right: 2%;
-}
-.datepicker-themed .pickadate__year--wrap {
-    display: inline-block;
-    width: 20%;
-}
-.datepicker-themed .pickadate__month--prev,
-.datepicker-themed .pickadate__month--next {
-    line-height: 26px;
-    top: 3px;
-}
-.datepicker-themed .pickadate__day:hover,
-.datepicker-themed .pickadate__month--prev:hover,
-.datepicker-themed .pickadate__month--next:hover {
-    background: #ceb;
-    border-color: #ceb;
-    color: #000;
-}
-.datepicker-themed .pickadate__month--selector,
-.datepicker-themed .pickadate__year--selector {
-    width: 100%;
-}
-.datepicker-themed .pickadate__weekday {
-    font-size: .6em;
-    text-transform: uppercase;
-    font-weight: bold;
-    border-bottom: 1px solid #eee;
-    text-align: right;
-    padding-right: 10px;
-    padding-left: 10px;
-}
-.datepicker-themed .pickadate__day {
-    text-align: right;
-    padding-right: 8px;
-    padding-left: 8px;
-    border: 1px solid #fff;
-    border-radius: 0;
-}
-.datepicker-themed .pickadate__day--outfocus {
-    color: #ddd;
-}
-.datepicker-themed .pickadate__day--today {
-    color: #5a4;
-    position: relative;
-}
-.datepicker-themed .pickadate__day--today:before {
-    border-top-color: #270;
-}
-.datepicker-themed .pickadate__day--disabled:before {
-    border-top-color: #ccc;
-}
-.datepicker-themed .pickadate__day--selected,
-.datepicker-themed .pickadate__day--selected:hover {
-    background: #5a4;
-    color: #fff;
-    box-shadow: inset 0 1px 2px #7c6;
-}
-.datepicker-themed .pickadate__day--selected,
-.datepicker-themed .pickadate__day--selected:hover,
-.datepicker-themed .pickadate__day--highlighted {
-    border-color: #382;
-}
-.datepicker-themed .pickadate__day--disabled,
-.datepicker-themed .pickadate__day--disabled:hover {
-    background: #f5f5f5;
-    border-color: #f5f5f5;
-    color: #ddd;
-    box-shadow: none;
-}</code></pre>
+        <p><a href="http://github.com/amsul/pickadate.js/themes">View theme CSS</a> on Github.</p>
 
     </section>
 
 
     <section class="holder" id="api">
 
-        <h1><strong class="underline-highlight">api</strong></h1>
+        <h1><a class="link-anchor" href="#api">&sect;</a><strong class="underline-highlight">api</strong></h1>
 
         <p>There are 4 basic events in the options:</p>
 
         <ol>
-            <li><code>onStart</code>: invoked when the picker is triggered.</li>
-            <li><code>onOpen</code>: invoked when the picker opens.</li>
-            <li><code>onSelect</code>: invoked when a date is selected.</li>
-            <li><code>onClose</code>: invoked when the picker closes.</li>
+            <li><code class="method">onStart</code>: invoked when the picker is triggered.</li>
+            <li><code class="method">onOpen</code>: invoked when the picker opens.</li>
+            <li><code class="method">onSelect</code>: invoked when a date is selected.</li>
+            <li><code class="method">onClose</code>: invoked when the picker closes.</li>
         </ol>
 
         <p>Within the scope of these methods, <code class="keyword">this</code> refers to the calendar object.</p>
 
         <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
     onStart: function() {
-        var calendar =&nbsp;this
+        var calendar = this
     }
 })</code></pre>
 
@@ -734,7 +652,7 @@ var calendar = input.data( 'pickadate' )
 
     <section class="holder" id="api_open_close">
 
-        <h3><strong class="underline-highlight">Open &amp; close calendar</strong></h3>
+        <h3><a class="link-anchor" href="#api_open_close">&sect;</a><strong class="underline-highlight">Open &amp; close calendar</strong></h3>
 
         <pre><code data-language="javascript">calendar.open()
 calendar.close()</code></pre>
@@ -753,7 +671,7 @@ calendar.close()</code></pre>
 
     <section class="holder" id="api_show">
 
-        <h3><strong class="underline-highlight">Show a specific month</strong></h3>
+        <h3><a class="link-anchor" href="#api_show">&sect;</a><strong class="underline-highlight">Show a specific month</strong></h3>
 
         <pre><code data-language="javascript">calendar.show( month, year )</code></pre>
 
@@ -788,7 +706,7 @@ calendar.close()</code></pre>
 
     <section class="holder" id="api_getDate">
 
-        <h3><strong class="underline-highlight">Get the date</strong></h3>
+        <h3><a class="link-anchor" href="#api_getDate">&sect;</a><strong class="underline-highlight">Get the date</strong></h3>
 
         <pre><code data-language="javascript">calendar.getDate()</code></pre>
 
@@ -817,7 +735,7 @@ calendar.close()</code></pre>
 
     <section class="holder" id="api_setDate">
 
-        <h3><strong class="underline-highlight">Set the date</strong></h3>
+        <h3><a class="link-anchor" href="#api_setDate">&sect;</a><strong class="underline-highlight">Set the date</strong></h3>
 
         <pre><code data-language="javascript">calendar.setDate( year, month, date, highlight )</code></pre>
 
@@ -834,7 +752,7 @@ calendar.close()</code></pre>
         </fieldset>
 
 
-        <p><code>highlight</code> is optional. If <code>highlight</code> is <code class="constant">true</code>, the date will only be highlighted and not selected. This means the <code>input</code> value won't change.</p>
+        <p><code>highlight</code> is optional. If <code>highlight</code> is <code class="constant">true</code>, the date will only be highlighted and not selected. This means the <code class="tag-name">input</code> value won't change.</p>
 
         <pre><code data-language="javascript">calendar.setDate( 2020, 2, 14, true )</code></pre>
 
@@ -851,7 +769,7 @@ calendar.close()</code></pre>
 
     <section class="holder" id="api_getDateLimit">
 
-        <h3><strong class="underline-highlight">Get the min or max date</strong></h3>
+        <h3><a class="link-anchor" href="#api_getDateLimit">&sect;</a><strong class="underline-highlight">Get the min or max date</strong></h3>
 
         <pre><code data-language="javascript">calendar.getDateLimit( upper, format )</code></pre>
 
@@ -876,7 +794,7 @@ calendar.getDateLimit( true, 'yyyy-mm-dd' )</code></pre>
 
     <section class="holder" id="api_setDateLimit">
 
-        <h3><strong class="underline-highlight">Set the min or max date</strong></h3>
+        <h3><a class="link-anchor" href="#api_setDateLimit">&sect;</a><strong class="underline-highlight">Set the min or max date</strong></h3>
 
         <pre><code data-language="javascript">calendar.setDateLimit( date, upper )</code></pre>
 
@@ -901,7 +819,7 @@ calendar.setDateLimit( [ 2013, 6, 23 ], true )</code></pre>
 
     <section class="holder" id="api_from_to">
 
-        <h3><strong class="underline-highlight">From &amp; to calendars</strong></h3>
+        <h3><a class="link-anchor" href="#api_from_to">&sect;</a><strong class="underline-highlight">From &amp; to calendars</strong></h3>
 
         <p>Using the calendar API, you can create two calendars with a "from" and "to" interaction.</p>
 
@@ -915,28 +833,25 @@ calendar.setDateLimit( [ 2013, 6, 23 ], true )</code></pre>
             <input id="picker_to" class="datepicker" type="date">
         </fieldset>
 
-        <pre><code data-language="javascript">var
-    picker_from = $( '#picker_from' ).pickadate({
-        onSelect: function() {
+        <pre><code data-language="javascript">// When a date is selected on the "from" picker,<br>
+// get the date and split into an array.<br>
+// Then set the lower limit of the "to" picker.<br>
+var picker_from = $( '#picker_from' ).pickadate({
+    onSelect: function() {
+        var fromDate =&nbsp;createDateArray( this.getDate( 'yyyy-mm-dd' ) )
+        picker_to.data( 'pickadate' ).setDateLimit( fromDate )
+    }
+})
 
-            // Get the date and split into an array
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var fromDate =&nbsp;createDateArray( this.getDate( 'yyyy-mm-dd' ) )
-
-            // Set the lower limit of the "to" picker
-            picker_to.data( 'pickadate' ).setDateLimit( fromDate )
-        }
-    }),
-
-    picker_to = $( '#picker_to' ).pickadate({
-        onSelect: function() {
-
-            // Get the date and split into an array
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var toDate =&nbsp;createDateArray( this.getDate( 'yyyy-mm-dd' ) )
-
-            // Set the upper limit of the "from" picker
-            picker_from.data( 'pickadate' ).setDateLimit( toDate, 1 )
-        }
-    })
+// When a date is selected on the "to" picker,<br>
+// get the date and split into an array.<br>
+// Then set the upper limit of the "from" picker.<br>
+var picker_to = $( '#picker_to' ).pickadate({
+    onSelect: function() {
+        var toDate =&nbsp;createDateArray( this.getDate( 'yyyy-mm-dd' ) )
+        picker_from.data( 'pickadate' ).setDateLimit( toDate, 1 )
+    }
+})
 
 
 // Create an array from the date while parsing each date unit as an integer<br>
@@ -1207,24 +1122,23 @@ function&nbsp;createDateArray( date ) {
          * Picker "from" & "to"
          */
         var
+
+            // When a date is selected on the "from" picker,
+            // get the date and split into an array.
+            // Then set the lower limit of the "to" picker.
             picker_from = $( '#picker_from' ).pickadate({
                 onSelect: function() {
-
-                    // Get the date and split into an array
                     var fromDate = createDateArray( this.getDate( 'yyyy-mm-dd' )  )
-
-                    // Set the lower limit of the "to" picker
                     picker_to.data( 'pickadate' ).setDateLimit( fromDate )
                 }
             }),
 
+            // When a date is selected on the "to" picker,
+            // get the date and split into an array.
+            // Then set the upper limit of the "from" picker.
             picker_to = $( '#picker_to' ).pickadate({
                 onSelect: function() {
-
-                    // Get the date and split into an array
                     var toDate = createDateArray( this.getDate( 'yyyy-mm-dd' )  )
-
-                    // Set the upper limit of the "from" picker
                     picker_from.data( 'pickadate' ).setDateLimit( toDate, 1 )
                 }
             })

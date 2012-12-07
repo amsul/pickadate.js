@@ -1,0 +1,121 @@
+
+/**
+ * Inline calendar
+ * Demo: http://amsul.github.com/pickadate.js/docs.htm#theme
+ *
+ * This styling should be included after
+ * the default pickadate.css styling
+ */
+
+.datepicker:focus,
+.datepicker.pickadate__input--focused {
+    border-color: #5a4;
+}
+.pickadate__holder {
+    height: auto;
+    position: relative;
+    z-index: 10;
+}
+.pickadate__calendar--wrap {
+    max-width: 100%;
+    max-height: none;
+    top: .5em;
+}
+.pickadate__calendar--wrap {
+    -webkit-box-shadow: none;
+       -moz-box-shadow: none;
+            box-shadow: none;
+}
+.pickadate__calendar {
+    border-color: #eee;
+    border-width: 4px;
+
+    -webkit-border-radius: 0;
+       -moz-border-radius: 0;
+            border-radius: 0;
+}
+.pickadate__month--nav {
+    font-size: .8em;
+}
+.pickadate__month--wrap {
+    display: inline-block;
+    width: 30%;
+    margin-left: 24%;
+    margin-right: 2%;
+}
+.pickadate__year--wrap {
+    display: inline-block;
+    width: 20%;
+}
+.pickadate__month--prev,
+.pickadate__month--next {
+    line-height: 26px;
+    top: 3px;
+}
+.pickadate__day:hover,
+.pickadate__month--prev:hover,
+.pickadate__month--next:hover {
+    background: #ceb;
+    border-color: #ceb;
+    color: #000;
+}
+.pickadate__month--selector,
+.pickadate__year--selector {
+    width: 100%;
+}
+.pickadate__weekday {
+    font-size: .6em;
+    text-transform: uppercase;
+    font-weight: bold;
+    border-bottom: 1px solid #eee;
+    text-align: right;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+.pickadate__day {
+    text-align: right;
+    padding-right: 8px;
+    padding-left: 8px;
+    border: 1px solid #fff;
+
+    -webkit-border-radius: 0;
+       -moz-border-radius: 0;
+            border-radius: 0;
+}
+.pickadate__day--outfocus {
+    color: #ddd;
+}
+.pickadate__day--today {
+    color: #5a4;
+    position: relative;
+}
+.pickadate__day--today:before {
+    border-top-color: #270;
+}
+.pickadate__day--disabled:before {
+    border-top-color: #ccc;
+}
+.pickadate__day--selected,
+.pickadate__day--selected:hover {
+    background: #5a4;
+    color: #fff;
+
+    -webkit-box-shadow: inset 0 1px 2px #7c6;
+       -moz-box-shadow: inset 0 1px 2px #7c6;
+            box-shadow: inset 0 1px 2px #7c6;
+}
+.pickadate__day--selected,
+.pickadate__day--selected:hover,
+.pickadate__day--highlighted {
+    border-color: #382;
+}
+.pickadate__day--disabled,
+.pickadate__day--disabled:hover {
+    background: #f5f5f5;
+    border-color: #f5f5f5;
+    color: #ddd;
+
+    -webkit-box-shadow: none;
+       -moz-box-shadow: none;
+            box-shadow: none;
+}
