@@ -1,11 +1,41 @@
 
 
+
+.pickadate__wrap,
 .pickadate__holder {
+    position: absolute;
     width: 100%;
     height: 0;
-    position: absolute;
     z-index: 10000;
 }
+
+.pickadate__wrap {
+    text-align: right;
+}
+
+.pickadate__clear {
+    display: none;
+    cursor: pointer;
+    width: 2em;
+    height: 2em;
+    line-height: 2em;
+    background: #aaa;
+    color: #fff;
+    text-align: center;
+    position: relative;
+    top: -2.75em;
+    right: .75em;
+
+    -webkit-border-radius: 50%;
+       -moz-border-radius: 50%;
+            border-radius: 50%;
+}
+
+.pickadate__clear--visible {
+    display: inline-block;
+}
+
+
 
 .pickadate__calendar--wrap {
     position: relative;
