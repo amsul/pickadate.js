@@ -418,7 +418,8 @@
 
 
                 // Create a collection of dates to disable
-                DATES_TO_DISABLE = (function( datesCollection ) {
+                DATES_TO_DISABLE = (function( disabledDatesCollection, enabledDatesCollection ) {
+                    var datesCollection = disabledDatesCollection || enabledDatesCollection
 
                     // If a collection was passed
                     // we need to create a calendar date object
@@ -429,6 +430,10 @@
                         // flip the condition of which dates to disable
                         if ( datesCollection[ 0 ] === true ) {
                             CALENDAR.disabled = datesCollection.shift()
+                        }
+                        // Otherwise, user has informed a "datesEnabled" property.
+                        else if (enabledDatesCollection != undefined) {
+                            CALENDAR.disabled = true
                         }
 
                         // Map through the dates passed
@@ -449,7 +454,7 @@
                             return createDate( date )
                         })
                     }
-                })( SETTINGS.datesDisabled ), //DATES_TO_DISABLE
+                })( SETTINGS.datesDisabled, SETTINGS.datesEnabled ), //DATES_TO_DISABLE
 
 
                 // Create a function that will filter through the dates
