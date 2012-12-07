@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v1.4.0 - 06 December, 2012
+ * pickadate.js v1.4.1 - 07 December, 2012
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
@@ -82,8 +82,13 @@
                                     // Prevent it from propagating to document
                                     event.stopPropagation()
 
-                                    // Open the calendar if backspace wasn't pressed
-                                    if ( keycode != 8 ) {
+                                    // If backspace was pressed, clear the values
+                                    if ( keycode == 8 ) {
+                                        P.clear()
+                                    }
+
+                                    // Otherwise open the calendar
+                                    else {
                                         P.open()
                                     }
                                 }
@@ -207,6 +212,21 @@
                         showMonth( --month, year )
                         return P
                     }, //show
+
+
+                    /**
+                     * Clear the value of the input elements
+                     */
+                    clear: function() {
+
+                        // Clear the elements value
+                        setElementsValue( 0 )
+
+                        // Render a new calendar
+                        calendarRender()
+
+                        return P
+                    }, //clear
 
 
                     /**
@@ -913,8 +933,26 @@
              */
             function createCalendarWrapped() {
 
-                // Create a calendar wrapper node
+                // Create the clear button wrapper
                 return createNode( STRING_DIV,
+
+                    // Create the actual clear button
+                    createNode( STRING_DIV,
+
+                        // With the "×" character
+                        '&times;',
+
+                        // Add the clear button class and if the input has a value, make it visible.
+                        CLASSES.clear + ( ELEMENT.value ? ' ' + CLASSES.clearVisible : '' ),
+
+                        'data-clear=1'
+                    ),
+
+                    // With the wrapper class
+                    CLASSES.wrapItem
+
+                // Create a calendar wrapper node
+                ) + createNode( STRING_DIV,
 
                     // Create a calendar box node
                     createNode( STRING_DIV,
@@ -1006,16 +1044,13 @@
                 // Set the target as the focus
                 MONTH_FOCUSED = dateTargeted
 
-                // If it's just a highlight, render a new calendar
-                if ( isHighlight ) {
-                    calendarRender()
+                // If it's not just a highlight, update the input value
+                if ( !isHighlight ) {
+                    setElementsValue( dateTargeted )
                 }
 
-                // Otherwise set the element value as well
-                // * A truthy second argument renders new calendar
-                else {
-                    setElementsValue( dateTargeted, 1 )
-                }
+                // Then render a new calendar
+                calendarRender()
             } //setDateSelected
 
 
@@ -1023,23 +1058,19 @@
             /**
              * Set the date in the input element and hidden input
              */
-            function setElementsValue( dateTargeted, updateCalendar ) {
+            function setElementsValue( dateTargeted ) {
 
-                // Set the target as the selection
-                DATE_SELECTED = dateTargeted
+                // If there's a date targeted, update the selected date
+                DATE_SELECTED = dateTargeted || DATE_SELECTED
 
                 // Set the element value as the formatted date
-                ELEMENT.value = P.getDate()
+                // if the date targeted has a time. Otherwise clear it.
+                ELEMENT.value = dateTargeted ? P.getDate() : ''
 
-                // If there's a hidden input,
-                // set the value with the submit format
+                // If there's a hidden input, set the value with the submit format
+                // if the date targeted has a time. Otherwise clear it.
                 if ( ELEMENT_HIDDEN ) {
-                    ELEMENT_HIDDEN.value = P.getDate( SETTINGS.formatSubmit )
-                }
-
-                // If the calendar should be updated, render a new one
-                if ( updateCalendar ) {
-                    calendarRender()
+                    ELEMENT_HIDDEN.value = dateTargeted ? P.getDate( SETTINGS.formatSubmit ) : ''
                 }
 
                 // Trigger the onSelect method within scope of the picker
@@ -1277,12 +1308,30 @@
                 event.stopPropagation()
 
 
-                // Put focus back onto the element
-                $ELEMENT.focus()
+                // If a navigator button was clicked
+                if ( targetData.nav ) {
+
+                    // Put focus back onto the element
+                    $ELEMENT.focus()
+
+                    // Show the month according to the direction
+                    showMonth( MONTH_FOCUSED.MONTH + targetData.nav )
+
+                    // Don't go any further to avoid closing the calendar
+                    return
+                }
 
 
-                // If there's a date provided
-                if ( targetData.date ) {
+                // If a clear button was clicked
+                if ( targetData.clear ) {
+
+                    // Clear the elements value
+                    P.clear()
+                }
+
+
+                // If a date was clicked
+                else if ( targetData.date ) {
 
                     // Split the target data into an array while parsing each as integer
                     var dateToSelect = targetData.date.split( '/' ).map( function( value ) { return +value })
@@ -1290,18 +1339,14 @@
                     // Create a date from the date to select and set the date as selected
                     // * Falsy second argument updates the element values
                     setDateSelected( createDate( dateToSelect ), false, $target )
-
-                    // Close the calendar
-                    P.close()
                 }
 
 
-                // If there's a navigator provided
-                if ( targetData.nav ) {
+                // Put focus back onto the element
+                $ELEMENT.focus()
 
-                    // Show the month according to the direction
-                    showMonth( MONTH_FOCUSED.MONTH + targetData.nav )
-                }
+                // Close the calendar
+                P.close()
             } //onClickCalendar
 
 
@@ -1340,16 +1385,18 @@
 
                     // Prevent the default action if a "super" key
                     // is not held and the tab key isn't pressed,
+                    // and a function key isn't pressed,
                     // prevent the default action
-                    if ( !event.metaKey && keycode != 9 ) {
+                    if ( !event.metaKey && keycode != 9 && !( keycode > 111 && keycode < 124 ) ) {
                         event.preventDefault()
                     }
 
 
-                    // On enter, set the element value as the highlighted date
-                    // * Truthy second argument renders a new calendar
+                    // On enter, set the element value as the highlighted date,
+                    // then render a new calendar, and then close it
                     if ( keycode == 13 ) {
-                        setElementsValue( DATE_HIGHLIGHTED, 1 )
+                        setElementsValue( DATE_HIGHLIGHTED )
+                        calendarRender()
                         P.close()
                         return
                     }
@@ -1537,6 +1584,11 @@
 
             inputFocus: STRING_PREFIX_DATEPICKER + 'input--focused',
 
+            wrapItem: STRING_PREFIX_DATEPICKER + 'wrap',
+
+            clear: STRING_PREFIX_DATEPICKER + 'clear',
+            clearVisible: STRING_PREFIX_DATEPICKER + 'clear--visible',
+
             holder: STRING_PREFIX_DATEPICKER + 'holder',
             open: STRING_PREFIX_DATEPICKER + 'holder--opened',
 
@@ -1706,9 +1758,7 @@
 
 
 
-
 })( jQuery, window, document );
-
 
 
 

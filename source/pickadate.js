@@ -8,8 +8,6 @@
 /**
  * TODO: scroll calendar into view
  * TODO: click to close on iOS
- *
- * FIX: F5 on windows
  */
 
 /*jshint
@@ -1371,8 +1369,9 @@
 
                     // Prevent the default action if a "super" key
                     // is not held and the tab key isn't pressed,
+                    // and a function key isn't pressed,
                     // prevent the default action
-                    if ( !event.metaKey && keycode != 9 ) {
+                    if ( !event.metaKey && keycode != 9 && !( keycode > 111 && keycode < 124 ) ) {
                         event.preventDefault()
                     }
 

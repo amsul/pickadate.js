@@ -19,7 +19,7 @@
     width: 2em;
     height: 2em;
     line-height: 2em;
-    background: #aaa;
+    background: #ccc;
     color: #fff;
     text-align: center;
     position: relative;
@@ -29,6 +29,10 @@
     -webkit-border-radius: 50%;
        -moz-border-radius: 50%;
             border-radius: 50%;
+}
+
+.pickadate__clear:hover {
+    background: #666;
 }
 
 .pickadate__clear--visible {
