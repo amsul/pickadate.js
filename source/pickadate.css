@@ -1,7 +1,5 @@
 
 
-
-.pickadate__wrap,
 .pickadate__holder {
     position: absolute;
     width: 100%;
@@ -9,11 +7,7 @@
     z-index: 10000;
 }
 
-.pickadate__wrap {
-    text-align: right;
-}
-
-.pickadate__clear {
+/*.pickadate__clear {
     display: none;
     cursor: pointer;
     width: 2em;
@@ -37,7 +31,7 @@
 
 .pickadate__clear--visible {
     display: inline-block;
-}
+}*/
 
 
 
@@ -70,14 +64,21 @@
     background: #fff;
     border: 1px solid #ccc;
 
-    -webkit-border-radius: 6px;
-       -moz-border-radius: 6px;
-            border-radius: 6px;
-
     -webkit-box-sizing: border-box;
        -moz-box-sizing: border-box;
             box-sizing: border-box;
 }
+
+.pickadate__calendar,
+.pickadate__calendar--wrap {
+    /* We need radius on both to avoid white background */
+    -webkit-border-radius: 6px;
+       -moz-border-radius: 6px;
+            border-radius: 6px;
+}
+
+
+
 
 
 .pickadate__calendar--table {
@@ -86,13 +87,13 @@
     border-spacing: 0;
     table-layout: fixed;
     width: 100%;
-    margin-top: 1em;
+    margin-top: .75em;
 }
 
 .pickadate__weekday {
     width: 14.285714286%; /* 100/7 */
-    font-size: .8em;
-    padding-bottom: .5em;
+    font-size: .75em;
+    padding-bottom: .25em;
     color: #999;
     font-weight: 500;
 }
@@ -101,7 +102,9 @@
 .pickadate__day--infocus:hover,
 .pickadate__day--outfocus:hover,
 .pickadate__month--prev:hover,
-.pickadate__month--next:hover {
+.pickadate__month--next:hover,
+.pickadate__button--today:hover,
+.pickadate__button--clear:hover {
     cursor: pointer;
     color: #000;
     background: #b1dcfb;
@@ -131,19 +134,28 @@
     right: 0;
 }
 
-.pickadate__month--wrap,
-.pickadate__year--wrap {
+
+
+
+
+/**
+ * The header containing the month and year tags/selectors
+ */
+.pickadate__header {
     text-align: center;
 }
 
-.pickadate__month {
+.pickadate__month,
+.pickadate__year {
     font-weight: 500;
+    display: inline-block;
+    margin: 0 1.5%;
 }
 
 .pickadate__year {
-    font-size: .66em;
     color: #999;
-    font-weight: bold;
+    font-size: .8em;
+    font-style: italic;
 }
 
 .pickadate__month--selector,
@@ -154,14 +166,21 @@
 }
 
 .pickadate__month--selector {
-    margin-bottom: .5em;
-    width: 50%;
+    width: 35%;
 }
 
 .pickadate__year--selector {
-    width: 32%;
+    width: 22.5%;
+    margin-left: 2.5%;
 }
 
+
+
+
+
+/**
+ * The days on the calendar
+ */
 
 .pickadate__day {
     padding: .33em 0 .25em;
@@ -171,7 +190,12 @@
 }
 
 .pickadate__day--outfocus {
-    color: #ccc;
+    color: #ddd;
+
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=75)";
+    filter: alpha(opacity=75);
+    -moz-opacity: .75;
+         opacity: .75;
 }
 
 .pickadate__day--today {
@@ -216,5 +240,55 @@
 
 
 
+/**
+ * The footer containing the "today" and "clear" buttons
+ */
+
+.pickadate__footer {
+    text-align: center;
+    margin: .25em 0 -.75em;
+}
+
+.pickadate__button--today,
+.pickadate__button--clear {
+    border: 1px solid #fff;
+    background: #fff;
+    font-size: .8em;
+    padding: .75em 0;
+    margin: 0 2.5%;
+    font-weight: bold;
+    width: 40%;
+}
+
+.pickadate__button--today:before,
+.pickadate__button--clear:before {
+    position: relative;
+    display: inline-block;
+    height: 0;
+}
+
+.pickadate__button--today:before {
+    content: " ";
+    margin-right: .45em;
+    top: -1px;
+    width: 0;
+    border-top: 7px solid #0089ec;
+    border-left: 7px solid transparent;
+}
+
+.pickadate__button--clear:before {
+    content: "×";
+    margin-right: .35em;
+    top: -2px;
+    color: #e20;
+    vertical-align: top;
+    font-size: 1.1em;
+}
+
+.pickadate__button--today:focus,
+.pickadate__button--clear:focus {
+    border-color: #0089ec;
+    outline: none;
+}
 
 

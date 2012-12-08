@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v1.4.1 - 07 December, 2012
+ * pickadate.js v1.4.1 - 08 December, 2012
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
@@ -72,7 +72,7 @@
                                 // If backspace was pressed or if the calendar
                                 // is closed and the keycode warrants a date change,
                                 // prevent it from going any further.
-                                if ( keycode == 8 || !CALENDAR.isOpen && KEYCODE_TO_DATE[ keycode ] ) {
+                                if ( keycode == 8 || keycode == 46 || !CALENDAR.isOpen && KEYCODE_TO_DATE[ keycode ] ) {
 
                                     // Prevent it from moving the page
                                     event.preventDefault()
@@ -81,7 +81,7 @@
                                     event.stopPropagation()
 
                                     // If backspace was pressed, clear the values
-                                    if ( keycode == 8 ) {
+                                    if ( keycode == 8 || keycode == 46 ) {
                                         P.clear()
                                     }
 
@@ -140,6 +140,12 @@
                         if ( CALENDAR.selectYear ) {
                             CALENDAR.selectYear.tabIndex = 0
                         }
+                        if ( CALENDAR.today ) {
+                            CALENDAR.today.tabIndex = 0
+                        }
+                        if ( CALENDAR.clear ) {
+                            CALENDAR.clear.tabIndex = 0
+                        }
 
 
                         // Bind all the events to the document
@@ -175,6 +181,12 @@
                         }
                         if ( CALENDAR.selectYear ) {
                             CALENDAR.selectYear.tabIndex = -1
+                        }
+                        if ( CALENDAR.today ) {
+                            CALENDAR.today.tabIndex = -1
+                        }
+                        if ( CALENDAR.clear ) {
+                            CALENDAR.clear.tabIndex = -1
                         }
 
 
@@ -855,7 +867,7 @@
                             // with the value as a string
                             'data-' + ( isDateDisabled ? 'disabled' : 'date' ) + '=' + [
                                 loopDate.YEAR,
-                                loopDate.MONTH,
+                                loopDate.MONTH + 1, // add 1 to display an accurate date
                                 loopDate.DATE
                             ].join( '/' )
                         ]
@@ -911,32 +923,24 @@
 
 
             /**
+             * Create the "today" and "clear" buttons
+             */
+            function createTodayAndClear() {
+
+                // Create and return the button nodes
+                return createNode( 'button', SETTINGS.today, CLASSES.buttonToday, 'data-date=' + P.getDate( 'yyyy/mm/dd', DATE_TODAY ) + ' tabindex=' + ( CALENDAR.isOpen ? 0 : -1 ) ) + createNode( 'button', SETTINGS.clear, CLASSES.buttonClear, 'data-clear=1 tabindex=' + ( CALENDAR.isOpen ? 0 : -1 ) )
+            } //createTodayAndClear
+
+
+            /**
              * Create the wrapped calendar
              * using the collection of calendar items
              * and creating a new table body
              */
             function createCalendarWrapped() {
 
-                // Create the clear button wrapper
-                return createNode( STRING_DIV,
-
-                    // Create the actual clear button
-                    createNode( STRING_DIV,
-
-                        // With the "×" character
-                        '&times;',
-
-                        // Add the clear button class and if the input has a value, make it visible.
-                        CLASSES.clear + ( ELEMENT.value ? ' ' + CLASSES.clearVisible : '' ),
-
-                        'data-clear=1'
-                    ),
-
-                    // With the wrapper class
-                    CLASSES.wrapItem
-
                 // Create a calendar wrapper node
-                ) + createNode( STRING_DIV,
+                return createNode( STRING_DIV,
 
                     // Create a calendar box node
                     createNode( STRING_DIV,
@@ -945,15 +949,15 @@
                         // * Truthy argument creates "next" tag
                         createNode( STRING_DIV, createMonthNav() + createMonthNav( 1 ), CLASSES.monthNav ) +
 
-                        // The calendar month tag
-                        createNode( STRING_DIV, createMonthLabel( SETTINGS.showMonthsFull ? SETTINGS.monthsFull : SETTINGS.monthsShort ), CLASSES.monthWrap ) +
-
-                        // The calendar year tag
-                        createNode( STRING_DIV, createYearLabel(), CLASSES.yearWrap ) +
+                        // The calendar month and year tags
+                        createNode( STRING_DIV, createMonthLabel( SETTINGS.showMonthsFull ? SETTINGS.monthsFull : SETTINGS.monthsShort ) + createYearLabel(), CLASSES.headerWrap ) +
 
                         // The calendar table with table head
                         // and a new calendar table body
-                        createNode( 'table', [ TABLE_HEAD, createTableBody() ], CLASSES.calendarTable ),
+                        createNode( 'table', [ TABLE_HEAD, createTableBody() ], CLASSES.calendarTable ) +
+
+                        // Create the "today" and "clear" buttons
+                        createNode( STRING_DIV, createTodayAndClear(), CLASSES.footerWrap ),
 
                         // Calendar class
                         CLASSES.calendar
@@ -1268,6 +1272,12 @@
                         $findInHolder( CLASSES.yearSelector ).focus()
                     }
                 })[ 0 ]
+
+                // Find and store the today button
+                CALENDAR.today = $findInHolder( CLASSES.buttonToday )[ 0 ]
+
+                // Find and store the clear button
+                CALENDAR.clear = $findInHolder( CLASSES.buttonClear )[ 0 ]
             } //postRender
 
 
@@ -1288,8 +1298,10 @@
                     targetData = $target.data()
 
 
-                // Stop the event from bubbling up to the document
-                event.stopPropagation()
+                // If the clear button isn't pressed, stop the event from bubbling up to the document
+                if ( !targetData.clear ) {
+                    event.stopPropagation()
+                }
 
 
                 // If a navigator button was clicked
@@ -1300,14 +1312,14 @@
 
                     // Show the month according to the direction
                     showMonth( MONTH_FOCUSED.MONTH + targetData.nav )
-
-                    // Don't go any further to avoid closing the calendar
-                    return
                 }
 
 
                 // If a clear button was clicked
-                if ( targetData.clear ) {
+                else if ( targetData.clear ) {
+
+                    // Put focus back onto the element
+                    $ELEMENT.focus()
 
                     // Clear the elements value
                     P.clear()
@@ -1320,17 +1332,12 @@
                     // Split the target data into an array while parsing each as integer
                     var dateToSelect = targetData.date.split( '/' ).map( function( value ) { return +value })
 
-                    // Create a date from the date to select and set the date as selected
-                    // * Falsy second argument updates the element values
-                    setDateSelected( createDate( dateToSelect ), false, $target )
+                    // Put focus back onto the element
+                    $ELEMENT.focus()
+
+                    // Set the date and then close the calendar
+                    P.setDate( dateToSelect[ 0 ], dateToSelect[ 1 ], dateToSelect[ 2 ] ).close()
                 }
-
-
-                // Put focus back onto the element
-                $ELEMENT.focus()
-
-                // Close the calendar
-                P.close()
             } //onClickCalendar
 
 
@@ -1350,14 +1357,14 @@
 
                 // If target is not the element, nor the select
                 // menus, close the calendar.
-                if ( target != ELEMENT && target != CALENDAR.selectMonth && target != CALENDAR.selectYear ) {
+                if ( target != ELEMENT && target != CALENDAR.selectMonth && target != CALENDAR.selectYear && target != CALENDAR.today && target != CALENDAR.clear ) {
                     P.close()
                     return
                 }
 
                 // If the target is the select menu, remove the
                 // "focus" state from the input element
-                if ( target == CALENDAR.selectMonth || target == CALENDAR.selectYear ) {
+                if ( target == CALENDAR.selectMonth || target == CALENDAR.selectYear || target == CALENDAR.today || target == CALENDAR.clear ) {
                     $ELEMENT.removeClass( CLASSES.inputFocus )
                     return
                 }
@@ -1523,18 +1530,21 @@
         weekdaysFull: [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ],
         weekdaysShort: [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ],
 
+        today: 'Today',
+        clear: 'Clear',
+
         monthPrev: '&#9664;',
         monthNext: '&#9654;',
 
         // Display strings
-        showMonthsFull: true,
-        showWeekdaysShort: true,
+        showMonthsFull: 1,
+        showWeekdaysShort: 1,
 
         // Date format to show on the input element
         format: 'd mmmm, yyyy',
 
         // Date format to send to the server
-        formatSubmit: false,
+        formatSubmit: 0,
 
         // Hidden element name suffix
         hiddenSuffix: '_submit',
@@ -1543,35 +1553,30 @@
         firstDay: 0,
 
         // Month & year dropdown selectors
-        monthSelector: false,
-        yearSelector: false,
+        monthSelector: 0,
+        yearSelector: 0,
 
         // Date ranges
-        dateMin: false,
-        dateMax: false,
+        dateMin: 0,
+        dateMax: 0,
 
         // Dates to disable
-        datesDisabled: false,
+        datesDisabled: 0,
 
         // Disable for browsers with native date support
-        disablePicker: false,
+        disablePicker: 0,
 
         // Events
-        onOpen: null,
-        onClose: null,
-        onSelect: null,
-        onStart: null,
+        onOpen: 0,
+        onClose: 0,
+        onSelect: 0,
+        onStart: 0,
 
 
         // Classes
         klass: {
 
             inputFocus: STRING_PREFIX_DATEPICKER + 'input--focused',
-
-            wrapItem: STRING_PREFIX_DATEPICKER + 'wrap',
-
-            clear: STRING_PREFIX_DATEPICKER + 'clear',
-            clearVisible: STRING_PREFIX_DATEPICKER + 'clear--visible',
 
             holder: STRING_PREFIX_DATEPICKER + 'holder',
             open: STRING_PREFIX_DATEPICKER + 'holder--opened',
@@ -1581,16 +1586,18 @@
             calendarTable: STRING_PREFIX_DATEPICKER + 'calendar--table',
             calendarBody: STRING_PREFIX_DATEPICKER + 'calendar--body',
 
-            year: STRING_PREFIX_DATEPICKER + 'year',
-            yearWrap: STRING_PREFIX_DATEPICKER + 'year--wrap',
-            yearSelector: STRING_PREFIX_DATEPICKER + 'year--selector',
+
+            headerWrap: STRING_PREFIX_DATEPICKER + 'header',
 
             month: STRING_PREFIX_DATEPICKER + 'month',
-            monthWrap: STRING_PREFIX_DATEPICKER + 'month--wrap',
             monthSelector: STRING_PREFIX_DATEPICKER + 'month--selector',
             monthNav: STRING_PREFIX_DATEPICKER + 'month--nav',
             monthPrev: STRING_PREFIX_DATEPICKER + 'month--prev',
             monthNext: STRING_PREFIX_DATEPICKER + 'month--next',
+
+            year: STRING_PREFIX_DATEPICKER + 'year',
+            yearSelector: STRING_PREFIX_DATEPICKER + 'year--selector',
+
 
             week: STRING_PREFIX_DATEPICKER + 'week',
             weekdays: STRING_PREFIX_DATEPICKER + 'weekday',
@@ -1601,7 +1608,13 @@
             dayHighlighted: STRING_PREFIX_DATEPICKER + 'day--highlighted',
             dayToday: STRING_PREFIX_DATEPICKER + 'day--today',
             dayInfocus: STRING_PREFIX_DATEPICKER + 'day--infocus',
-            dayOutfocus: STRING_PREFIX_DATEPICKER + 'day--outfocus'
+            dayOutfocus: STRING_PREFIX_DATEPICKER + 'day--outfocus',
+
+
+            footerWrap: STRING_PREFIX_DATEPICKER + 'footer',
+
+            buttonClear: STRING_PREFIX_DATEPICKER + 'button--clear',
+            buttonToday: STRING_PREFIX_DATEPICKER + 'button--today'
         }
     } //$.fn.pickadate.defaults
 
