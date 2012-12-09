@@ -149,13 +149,13 @@
 .pickadate__year {
     font-weight: 500;
     display: inline-block;
-    margin: 0 1.5%;
 }
 
 .pickadate__year {
     color: #999;
     font-size: .8em;
     font-style: italic;
+    margin-left: .5em;
 }
 
 .pickadate__month--selector,
@@ -163,6 +163,7 @@
     font-size: .8em;
     border: 1px solid #ccc;
     height: 32px;
+    margin-top: -.25em;
 }
 
 .pickadate__month--selector {
@@ -171,7 +172,7 @@
 
 .pickadate__year--selector {
     width: 22.5%;
-    margin-left: 2.5%;
+    margin-left: .5em;
 }
 
 

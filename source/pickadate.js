@@ -1304,11 +1304,12 @@
                 }
 
 
+                // Put focus back onto the element
+                $ELEMENT.focus()
+
+
                 // If a navigator button was clicked
                 if ( targetData.nav ) {
-
-                    // Put focus back onto the element
-                    $ELEMENT.focus()
 
                     // Show the month according to the direction
                     showMonth( MONTH_FOCUSED.MONTH + targetData.nav )
@@ -1317,9 +1318,6 @@
 
                 // If a clear button was clicked
                 else if ( targetData.clear ) {
-
-                    // Put focus back onto the element
-                    $ELEMENT.focus()
 
                     // Clear the elements value
                     P.clear()
@@ -1331,9 +1329,6 @@
 
                     // Split the target data into an array while parsing each as integer
                     var dateToSelect = targetData.date.split( '/' ).map( function( value ) { return +value })
-
-                    // Put focus back onto the element
-                    $ELEMENT.focus()
 
                     // Set the date and then close the calendar
                     P.setDate( dateToSelect[ 0 ], dateToSelect[ 1 ], dateToSelect[ 2 ] ).close()
