@@ -74,7 +74,7 @@
                                 // If backspace was pressed or if the calendar
                                 // is closed and the keycode warrants a date change,
                                 // prevent it from going any further.
-                                if ( keycode == 8 || !CALENDAR.isOpen && KEYCODE_TO_DATE[ keycode ] ) {
+                                if ( keycode == 8 || keycode == 46 || !CALENDAR.isOpen && KEYCODE_TO_DATE[ keycode ] ) {
 
                                     // Prevent it from moving the page
                                     event.preventDefault()
@@ -83,7 +83,7 @@
                                     event.stopPropagation()
 
                                     // If backspace was pressed, clear the values
-                                    if ( keycode == 8 ) {
+                                    if ( keycode == 8 || keycode == 46 ) {
                                         P.clear()
                                     }
 

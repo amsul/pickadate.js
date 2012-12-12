@@ -1,13 +1,8 @@
 /*!
- * pickadate.js v1.4.1 - 08 December, 2012
+ * pickadate.js v1.4.2 - 11 December, 2012
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
- */
-
-/**
- * TODO: scroll calendar into view
- * TODO: click to close on iOS
  */
 
 /*jshint
@@ -38,6 +33,8 @@
         STRING_PREFIX_DATEPICKER = 'pickadate__',
 
         $document = $( document ),
+
+        $documentElement = $( document.documentElement ),
 
 
         /**
@@ -128,9 +125,11 @@
                         // Add the "focused" class to the element
                         $ELEMENT.addClass( CLASSES.inputFocus )
 
-
                         // Add the "opened" class to the calendar holder
                         $HOLDER.addClass( CLASSES.open )
+
+                        // Add the "active" class to the document element
+                        $documentElement.addClass( CLASSES.active )
 
 
                         // Allow month and year selectors to be focusable
@@ -149,7 +148,7 @@
 
 
                         // Bind all the events to the document
-                        $document.on( 'click.P' + CALENDAR.id + ' focusin.P' + CALENDAR.id + ' keydown.P' + CALENDAR.id, onDocumentEvent )
+                        $document.on( 'focusin.P' + CALENDAR.id + ' keydown.P' + CALENDAR.id, onDocumentEvent )
 
 
                         // Trigger the onOpen method within scope of the picker
@@ -173,6 +172,9 @@
 
                         // Remove the "opened" class from the calendar holder
                         $HOLDER.removeClass( CLASSES.open )
+
+                        // Add the "active" class to the document element
+                        $documentElement.removeClass( CLASSES.active )
 
 
                         // Disable month and year selectors from being focusable
@@ -942,29 +944,46 @@
                 // Create a calendar wrapper node
                 return createNode( STRING_DIV,
 
-                    // Create a calendar box node
+                    // Create a calendar frame
                     createNode( STRING_DIV,
 
-                        // The prev/next month tags
-                        // * Truthy argument creates "next" tag
-                        createNode( STRING_DIV, createMonthNav() + createMonthNav( 1 ), CLASSES.monthNav ) +
+                        // Create a calendar box node
+                        createNode( STRING_DIV,
 
-                        // The calendar month and year tags
-                        createNode( STRING_DIV, createMonthLabel( SETTINGS.showMonthsFull ? SETTINGS.monthsFull : SETTINGS.monthsShort ) + createYearLabel(), CLASSES.headerWrap ) +
+                            // The calendar header
+                            createNode( STRING_DIV,
 
-                        // The calendar table with table head
-                        // and a new calendar table body
-                        createNode( 'table', [ TABLE_HEAD, createTableBody() ], CLASSES.calendarTable ) +
+                                // The prev/next month tags
+                                // * Truthy argument creates "next" tag
+                                /*createNode( STRING_DIV, */createMonthNav() + createMonthNav( 1 )/*, CLASSES.monthNav )*/ +
 
-                        // Create the "today" and "clear" buttons
-                        createNode( STRING_DIV, createTodayAndClear(), CLASSES.footerWrap ),
+                                // Create the month label
+                                 createMonthLabel( SETTINGS.showMonthsFull ? SETTINGS.monthsFull : SETTINGS.monthsShort ) +
 
-                        // Calendar class
-                        CLASSES.calendar
+                                 // Create the year label
+                                 createYearLabel(),
+
+                                 // The header class
+                                 CLASSES.headerWrap
+                             ) +
+
+                            // The calendar table with table head
+                            // and a new calendar table body
+                            createNode( 'table', [ TABLE_HEAD, createTableBody() ], CLASSES.calendarTable ) +
+
+                            // Create the "today" and "clear" buttons
+                            createNode( STRING_DIV, createTodayAndClear(), CLASSES.footerWrap ),
+
+                            // Calendar class
+                            CLASSES.calendar
+                        ),
+
+                        // Calendar wrap class
+                        CLASSES.wrap
                     ),
 
-                    // Calendar wrap class
-                    CLASSES.calendarWrap
+                    // Calendar frame class
+                    CLASSES.frame
                 ) //endreturn
             } //calendarWrapped
 
@@ -1308,8 +1327,14 @@
                 $ELEMENT.focus()
 
 
+                // If the target it the holder, close the picker
+                if ( event.target == $HOLDER[ 0 ] ) {
+                    P.close()
+                }
+
+
                 // If a navigator button was clicked
-                if ( targetData.nav ) {
+                else if ( targetData.nav ) {
 
                     // Show the month according to the direction
                     showMonth( MONTH_FOCUSED.MONTH + targetData.nav )
@@ -1320,7 +1345,7 @@
                 else if ( targetData.clear ) {
 
                     // Clear the elements value
-                    P.clear()
+                    P.clear().close()
                 }
 
 
@@ -1365,7 +1390,7 @@
                 }
 
 
-                // If theres a keycode and the target is the element
+                // If the target is the element
                 if ( keycode && target == ELEMENT ) {
 
 
@@ -1571,10 +1596,15 @@
         // Classes
         klass: {
 
+            active: STRING_PREFIX_DATEPICKER + 'active',
+
             inputFocus: STRING_PREFIX_DATEPICKER + 'input--focused',
 
             holder: STRING_PREFIX_DATEPICKER + 'holder',
             open: STRING_PREFIX_DATEPICKER + 'holder--opened',
+
+            frame: STRING_PREFIX_DATEPICKER + 'frame',
+            wrap: STRING_PREFIX_DATEPICKER + 'wrap',
 
             calendar: STRING_PREFIX_DATEPICKER + 'calendar',
             calendarWrap: STRING_PREFIX_DATEPICKER + 'calendar--wrap',
@@ -1586,7 +1616,7 @@
 
             month: STRING_PREFIX_DATEPICKER + 'month',
             monthSelector: STRING_PREFIX_DATEPICKER + 'month--selector',
-            monthNav: STRING_PREFIX_DATEPICKER + 'month--nav',
+            // monthNav: STRING_PREFIX_DATEPICKER + 'month--nav',
             monthPrev: STRING_PREFIX_DATEPICKER + 'month--prev',
             monthNext: STRING_PREFIX_DATEPICKER + 'month--next',
 
