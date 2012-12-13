@@ -1,41 +1,44 @@
 
 
 /**
- * Mobile first
+ * Mobile-first, responsive styling for pickadate.js
  */
 
 
 /**
- * Prevent the page from scrolling
+ * Prevent the page from scrolling when the calendar is open
  */
-/*html*/.pickadate__active {
+/*body*/.pickadate__active {
     overflow: hidden;
 }
 
 
 
 /**
- * The calendar holder that fills the entire screen
+ * The holder that fills the entire screen
  */
 .pickadate__holder {
-    width: 100%;
-    height: 100%;
-    z-index: 10000;
+
+    /* The base font-size */
+    font-size: 16px;
+
+    line-height: 1.2;
+    color: #000;
 
     position: fixed;
-    top: 100%;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    z-index: 10000;
 
-    /* Fade out the background after the caledar's out of view, then immediately hide the holder */
+    width: 100%;
+    height: 100%;
+
+    /* Fade out the background, then immediately hide the holder */
     -webkit-transition: background .15s ease-out, top 0s .2s;
        -moz-transition: background .15s ease-out, top 0s .2s;
             transition: background .15s ease-out, top 0s .2s;
 }
 
 /**
- * The calendar frame
+ * The frame that bounds the calendar
  */
 .pickadate__frame {
     min-width: 256px;
@@ -43,42 +46,26 @@
     margin: 0 auto;
 
     position: absolute;
-    top: 100%;
-    bottom: 0;
-    left: 0;
-    right: 0;
 
-    overflow-y: scroll;
+    /* Allow the frame to be scrolled in case the screen is too small */
+    overflow: auto;
     -webkit-overflow-scrolling: touch;
 
+    /* Animate the frame in and out of view */
     -webkit-transition: all .15s ease-out;
        -moz-transition: all .15s ease-out;
             transition: all .15s ease-out;
 }
 
-
 /**
- * The calendar wrapper
+ * Make the calendar holder and frame fullscreen
  */
-.pickadate__wrap {
-    display: table;
-    width: 100%;
-    height: 100%;
-}
-
-
-/**
- * The calendar itself
- */
-.pickadate__calendar {
-    display: table-cell;
-    vertical-align: middle;
-
-    line-height: 1.2;
-    color: #000;
-
-    background: #fff;
-    padding: 1em;
+.pickadate__holder,
+.pickadate__frame {
+    top: 100%;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 
 
@@ -87,7 +74,7 @@
  */
 .pickadate__holder--opened {
 
-    /* Show a translucent black background (order is important) */
+    /* Show a translucent black background (order is important for IE) */
     background: transparent;
     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#1E000000,endColorstr=#1E000000)"; /* IE8 */
         filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#1E000000,endColorstr=#1E000000); /* IE6 & 7 */
@@ -100,7 +87,7 @@
             transition: background .15s ease-out;
 }
 
-/* Animate the calendar holder and frame into view */
+/* Bring the holder and frame into view */
 .pickadate__holder--opened,
 .pickadate__holder--opened .pickadate__frame {
     top: 0;
@@ -108,11 +95,35 @@
 
 
 
+
+
+
+
+/**
+ * The calendar wrapper
+ */
+.pickadate__wrap {
+    display: table;
+    width: 100%;
+    height: 100%;
+}
+
+/**
+ * The calendar itself
+ */
+.pickadate__calendar {
+    display: table-cell;
+    vertical-align: middle;
+    background: #fff;
+    padding: 1em;
+}
+
+
+
 /**
  * The calendar table of dates
  */
-
-.pickadate__calendar--table {
+.pickadate__table {
     text-align: center;
     border-collapse: collapse;
     border-spacing: 0;
@@ -122,43 +133,10 @@
     margin-top: .5em;
 }
 
-.pickadate__weekday {
-    width: 14.285714286%; /* 100/7 */
-    font-size: .75em;
-    padding-bottom: .25em;
-    color: #999;
-    font-weight: 500;
-}
-
-
-.pickadate__day--infocus:hover,
-.pickadate__day--outfocus:hover,
-.pickadate__month--prev:hover,
-.pickadate__month--next:hover,
-.pickadate__button--today:hover,
-.pickadate__button--clear:hover {
-    cursor: pointer;
-    color: #000;
-    background: #b1dcfb;
-}
-
-.pickadate__month--prev,
-.pickadate__month--next {
-    position: absolute;
-    top: -.15em;
-    padding: .5em;
-    margin: -.5em;
-    text-align: center;
-    min-width: 24px;
-    height: 24px;
-    line-height: 26px;
-}
-
-.pickadate__month--prev {
-    left: 0;
-}
-.pickadate__month--next {
-    right: 0;
+/* Remove browser stylings on a table cell */
+.pickadate__table td {
+    margin: 0;
+    padding: 0;
 }
 
 
@@ -171,12 +149,29 @@
     position: relative;
 }
 
+.pickadate__nav--prev,
+.pickadate__nav--next {
+    position: absolute;
+    top: -.1em;
+    padding: .5em;
+    margin: -.5em;
+    text-align: center;
+    min-width: 24px;
+    height: 24px;
+    line-height: 26px;
+}
+.pickadate__nav--prev {
+    left: 0;
+}
+.pickadate__nav--next {
+    right: 0;
+}
+
 .pickadate__month,
 .pickadate__year {
     font-weight: 500;
     display: inline-block;
 }
-
 .pickadate__year {
     color: #999;
     font-size: .8em;
@@ -184,50 +179,53 @@
     margin-left: .5em;
 }
 
-.pickadate__month--selector,
-.pickadate__year--selector {
+.pickadate__select--month,
+.pickadate__select--year {
     font-size: .8em;
     border: 1px solid #ccc;
     height: 2.5em;
-    margin-top: -.25em;
+    margin-top: -.5em;
 }
-
-.pickadate__month--selector {
+.pickadate__select--month {
     width: 35%;
 }
-
-.pickadate__year--selector {
+.pickadate__select--year {
     width: 22.5%;
     margin-left: .5em;
 }
 
 
 
+
+/**
+ * The weekday labels
+ */
+.pickadate__weekday {
+    width: 14.285714286%; /* 100/7 */
+    font-size: .75em;
+    padding-bottom: .25em;
+    color: #999;
+    font-weight: 500;
+}
+
+
 /**
  * The days on the calendar
  */
-
 .pickadate__day {
     padding: .33em 0 .25em;
     font-weight: 100;
     border: 1px solid #fff;
-    margin: -1px -1px 0;
+    margin-bottom: 1px;
 }
 
-.pickadate__day--outfocus {
-    color: #ddd;
-
-    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=75)";
-    filter: alpha(opacity=75);
-    -moz-opacity: .75;
-         opacity: .75;
-}
-
+/**
+ * The various states of a day
+ */
 .pickadate__day--today {
     color: #0089ec;
     position: relative;
 }
-
 .pickadate__day--today:before {
     content: " ";
     position: absolute;
@@ -238,27 +236,32 @@
     border-top: .5em solid #0059bc;
     border-left: .5em solid transparent;
 }
-
 .pickadate__day--selected,
 .pickadate__day--selected:hover {
     background: #0089ec;
     color: #fff;
 }
-
 .pickadate__day--highlighted,
 .pickadate__day--highlighted:hover {
     border-color: #0089ec;
 }
-
 .pickadate__day--disabled,
 .pickadate__day--disabled:hover {
     background: #f5f5f5;
+    border-color: #f5f5f5;
     color: #ddd;
     cursor: default;
 }
-
 .pickadate__day--disabled:before {
     border-top-color: #aaa;
+}
+.pickadate__day--outfocus {
+    color: #ddd;
+
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=75)";
+    filter: alpha(opacity=75);
+    -moz-opacity: .75;
+         opacity: .75;
 }
 
 
@@ -268,7 +271,6 @@
 /**
  * The footer containing the "today" and "clear" buttons
  */
-
 .pickadate__footer {
     text-align: center;
     margin: .25em 0 -.75em;
@@ -284,14 +286,12 @@
     font-weight: bold;
     width: 40%;
 }
-
 .pickadate__button--today:before,
 .pickadate__button--clear:before {
     position: relative;
     display: inline-block;
     height: 0;
 }
-
 .pickadate__button--today:before {
     content: " ";
     margin-right: .45em;
@@ -300,7 +300,6 @@
     border-top: .66em solid #0089ec;
     border-left: .66em solid transparent;
 }
-
 .pickadate__button--clear:before {
     content: "×";
     margin-right: .35em;
@@ -309,7 +308,6 @@
     vertical-align: top;
     font-size: 1.1em;
 }
-
 .pickadate__button--today:focus,
 .pickadate__button--clear:focus {
     border-color: #0089ec;
@@ -319,54 +317,102 @@
 
 
 
+/**
+ * The hover effect on any buttons
+ */
+.pickadate__day--infocus:hover,
+.pickadate__day--outfocus:hover,
+.pickadate__nav--prev:hover,
+.pickadate__nav--next:hover,
+.pickadate__button--today:hover,
+.pickadate__button--clear:hover {
+    cursor: pointer;
+    color: #000;
+    background: #b1dcfb;
+}
+
+
+
 
 /**
- * For bigger screens
+ * Adjust the calendar for not so tiny screens
+ * by just increasing the font size a bit
  */
-
 @media (min-height: 342px) {
-
     .pickadate__calendar {
         font-size: 1.25em;
     }
 }
 
+
+/**
+ * For bigger viewports, adjust the calendar
+ * to not cover the entire screen
+ */
 @media (min-height: 424px) {
 
+    /* Align the frame to the bottom, rather than top */
     .pickadate__frame {
-        overflow-y: visible;
-
+        overflow: visible;
         top: auto;
         bottom: -100%;
     }
-
     .pickadate__holder--opened .pickadate__frame {
         top: auto;
         bottom: 0;
     }
 
-    .pickadate__wrap {
-        display: block;
-    }
 
+    /* Remove the calendar middle-aligned styling */
+    .pickadate__wrap,
     .pickadate__calendar {
         display: block;
+    }
+    .pickadate__calendar {
+
+        /* Increase the font size a bit more */
         font-size: 1.33em;
 
-        border: 1px solid #777;
+        /* Add the borders except the bottom one */
+        border: 2px solid #777;
         border-top-color: #888;
         border-bottom-width: 0;
 
+        /* Make 'em rounded at the top corners */
         -webkit-border-radius: 6px 6px 0 0;
            -moz-border-radius: 6px 6px 0 0;
                 border-radius: 6px 6px 0 0;
 
-        -webkit-box-shadow: 0 12px 36px 12px rgba(0,0,0,.24);
-           -moz-box-shadow: 0 12px 36px 12px rgba(0,0,0,.24);
-                box-shadow: 0 12px 36px 12px rgba(0,0,0,.24);
+        /* And finally, add a nice shadow */
+        -webkit-box-shadow: 0 12px 36px 16px rgba(0,0,0,.24);
+           -moz-box-shadow: 0 12px 36px 16px rgba(0,0,0,.24);
+                box-shadow: 0 12px 36px 16px rgba(0,0,0,.24);
+    }
+
+    /* When the calendar is focused, show a "focused" state */
+    .pickadate__holder--focused .pickadate__calendar {
+        border-color: #0089ec;
+    }
+
+
+    /* Increase the spacing a tad */
+    .pickadate__table {
+        margin-top: .75em;
+    }
+    .pickadate__weekday {
+        padding-bottom: .5em;
+    }
+    .pickadate__footer {
+        margin: .5em 0 -.5em;
     }
 }
 
+
+/**
+ * For bigger monitors still, move it away
+ * from the bottom edge of the screen
+ * and round the bottom corners.
+ */
 @media (min-height: 542px) {
 
     .pickadate__frame {
@@ -375,7 +421,7 @@
 
     .pickadate__calendar {
         font-size: 1.5em;
-        border-bottom-width: 1px;
+        border-bottom-width: 2px;
 
         -webkit-border-radius: 6px;
            -moz-border-radius: 6px;
