@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v1.5.0 - 13 December, 2012
+ * pickadate.js v1.5.0 - 14 December, 2012
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
@@ -58,9 +58,10 @@
                      */
                     init: function() {
 
-                        // Insert everything after the element
-                        // while binding the events to the element
-                        $ELEMENT.on({
+                        // Add the `input` class to the element,
+                        // Bind all the events to the element,
+                        // and then insert everything after it
+                        $ELEMENT.addClass( CLASSES.input ).on({
                             'focus click': function() {
                                 $HOLDER.addClass( CLASSES.focused )
                                 P.open()
@@ -134,7 +135,7 @@
 
 
                         // Make sure the element has focus, and then
-                        // add the "focused" class to the element
+                        // add the "active" class to the element
                         $ELEMENT.focus()
 
                         // Add the "opened" class to the calendar holder
@@ -173,7 +174,6 @@
 
                         // Set calendar as closed
                         CALENDAR.isOpen = false
-
 
                         // Remove the "opened" class from the calendar holder
                         $HOLDER.removeClass( CLASSES.opened )
@@ -706,30 +706,23 @@
                         // the focused year and the number of years in the selector
                         lowestYear = yearFocused - yearsInSelector,
 
-                        // The first year is the lower of the two numbers.
-                        // The lowest year or the minimum year.
+                        // The first year is the lower of the two numbers:
+                        // the lowest year or the minimum year.
                         firstYear = getNumberInRange( lowestYear, DATE_MIN.YEAR ),
 
                         // The highest year is the sum of the focused year
                         // and the years in selector plus the left over years.
                         highestYear = yearFocused + yearsInSelector + ( firstYear - lowestYear ),
 
-                        // The last year is the higher of the two numbers.
-                        // The highest year or the maximum year.
+                        // The last year is the higher of the two numbers:
+                        // the highest year or the maximum year.
                         lastYear = getNumberInRange( highestYear, DATE_MAX.YEAR, 1 )
 
 
-                    // Check if there are left over years to put in the selector
-                    yearsInSelector = highestYear - lastYear
-
-
-                    // If there are left overs
-                    if ( yearsInSelector ) {
-
-                        // The first year is the lower of the two numbers.
-                        // The lowest year minus years in selector, or the minimum year
-                        firstYear = getNumberInRange( lowestYear - yearsInSelector, DATE_MIN.YEAR )
-                    }
+                    // In case there are leftover years to put in the selector,
+                    // we need to get the lower of the two numbers:
+                    // the lowest year minus leftovers, or the minimum year
+                    firstYear = getNumberInRange( lowestYear - ( highestYear - lastYear ), DATE_MIN.YEAR )
 
 
                     // Add the years to the collection by looping through the range
@@ -798,7 +791,10 @@
                     countMonthDays = createDate([ MONTH_FOCUSED.YEAR, MONTH_FOCUSED.MONTH + 1, 0 ]).DATE,
 
                     // Count the days to shift the start of the month
-                    countShiftby = getCountShiftDays( MONTH_FOCUSED.DATE, MONTH_FOCUSED.DAY ),
+                    // by getting the day the first of the month falls on
+                    // and subtracting 1 to compensate for day 1index
+                    // or 2 if "Monday" should be the first day.
+                    countShiftby = createDate([ MONTH_FOCUSED.YEAR, MONTH_FOCUSED.MONTH, 1 ]).DAY + ( SETTINGS.firstDay ? -2 : -1 ),
 
 
                     // Set the class and binding for each looped date.
@@ -893,7 +889,7 @@
 
                     // Set the date class and bindings on the looped date.
                     // If the pseudoIndex is greater than zero,
-                    // and less than the days in the month,
+                    // and less or equal to the days in the month,
                     // we need dates from the focused month.
                     classAndBinding = createDateClassAndBinding( loopDate, ( pseudoIndex > 0 && pseudoIndex <= countMonthDays ) )
 
@@ -952,16 +948,16 @@
 
                                 // The prev/next month tags
                                 // * Truthy argument creates "next" tag
-                                /*createNode( STRING_DIV, */createMonthNav() + createMonthNav( 1 )/*, CLASSES.monthNav )*/ +
+                                createMonthNav() + createMonthNav( 1 ) +
 
                                 // Create the month label
-                                 createMonthLabel( SETTINGS.showMonthsFull ? SETTINGS.monthsFull : SETTINGS.monthsShort ) +
+                                createMonthLabel( SETTINGS.showMonthsFull ? SETTINGS.monthsFull : SETTINGS.monthsShort ) +
 
-                                 // Create the year label
-                                 createYearLabel(),
+                                // Create the year label
+                                createYearLabel(),
 
-                                 // The header class
-                                 CLASSES.header
+                                // The header class
+                                CLASSES.header
                              ) +
 
                             // The calendar table with table head
@@ -988,7 +984,7 @@
             /**
              * Get the number that's allowed within an
              * upper or lower limit. A truthy third argument
-             * test against the upper limit.
+             * tests against the upper limit.
              */
             function getNumberInRange( number, limit, upper ) {
 
@@ -997,44 +993,8 @@
                 // or we need to test against the lower limit
                 // and number is more than the limit,
                 // return the number. Otherwise return the limit.
-                return ( ( upper && number < limit ) || ( !upper && number > limit ) ? number : limit )
+                return ( upper && number < limit ) || ( !upper && number > limit ) ? number : limit
             } //getNumberInRange
-
-
-            /**
-             * Get the count of the number of
-             * days to shift the month by,
-             * given the date and day of week
-             */
-            function getCountShiftDays( date, dayIndex ) {
-
-                var
-                    // Get the column index for the
-                    // day if month starts on 0
-                    dayColumnIndexAtZero = date % DAYS_IN_WEEK,
-
-                    // Get the difference between the actual
-                    // day index and the column index at zero.
-                    // Then, if the first day should be Monday,
-                    // reduce the difference by 1
-                    difference = dayIndex - dayColumnIndexAtZero + ( SETTINGS.firstDay ? -1 : 0 )
-
-
-                // Compare the day index if the
-                // month starts on the first day
-                // with the day index
-                // the date actually falls on
-                return dayIndex >= dayColumnIndexAtZero ?
-
-                    // If the actual position is greater
-                    // shift by the difference in the two
-                    difference :
-
-                    // Otherwise shift by the adding the negative
-                    // difference to the days in week
-                    DAYS_IN_WEEK + difference
-            } //getCountShiftDays
-
 
 
             /**
@@ -1056,7 +1016,6 @@
                 // Then render a new calendar
                 calendarRender()
             } //setDateSelected
-
 
 
             /**
@@ -1082,20 +1041,6 @@
             } //setElementsValue
 
 
-
-            /**
-             * Set the date that determines
-             * the month to show in focus
-             */
-            function setMonthFocused( month, year ) {
-
-                // Create and return the month focused
-                // * We set the date to first of month
-                //   because date doesn't matter here
-                return ( MONTH_FOCUSED = createDate([ year, month, 1 ]) )
-            } //setMonthFocused
-
-
             /**
              * Find something within the calendar holder
              */
@@ -1117,7 +1062,9 @@
                 month = getMonthInRange( month, year )
 
                 // Set the month to show in focus
-                setMonthFocused( month, year )
+                // * We set the date to 1st of the month
+                //   because date doesn't matter here
+                MONTH_FOCUSED = createDate([ year, month, 1 ])
 
                 // Then render a new calendar
                 calendarRender()
@@ -1212,24 +1159,27 @@
             /**
              * Return a month by comparing with the date range.
              * If outside the range, returns the value passed.
-             * Otherwise returns the in range value or the month itself.
+             * Otherwise returns the "in range" value or the month itself.
              */
-            function getMonthInRange( month, year, returnValue, inRangeValue ) {
+            function getMonthInRange( month, year, alternateValue, inRangeValue ) {
 
                 // If the month is less than the min month,
-                // then return the return value or min month
+                // then return the alternate value or min month.
                 if ( year <= DATE_MIN.YEAR && month < DATE_MIN.MONTH ) {
-                    return returnValue || DATE_MIN.MONTH
+                    return alternateValue || DATE_MIN.MONTH
                 }
 
                 // If the month is more than the max month,
-                // then return the return value or max month
+                // then return the alternate value or max month.
                 if ( year >= DATE_MAX.YEAR && month > DATE_MAX.MONTH ) {
-                    return returnValue || DATE_MAX.MONTH
+                    return alternateValue || DATE_MAX.MONTH
                 }
 
-                // Otherwise return the in range return value
-                // or the month itself
+                // Otherwise return the "in range" value
+                // or the month itself.
+                // * We test `inRangeValue` against null
+                //   because we need to test against null
+                //   and undefined. 0 should be allowed.
                 return inRangeValue != null ? inRangeValue : month
             } //getMonthInRange
 
@@ -1247,7 +1197,7 @@
 
                 // Otherwise it's 0, so set it to -1
                 else node.tabIndex = -1
-            }
+            } //toggleTabindex
 
 
             /**
@@ -1314,9 +1264,6 @@
 
 
 
-
-
-
             /**
              * Handle all delegated click events on the calendar holder
              */
@@ -1379,53 +1326,45 @@
                     // Get the keycode
                     keycode = event.keyCode,
 
+                    // Translate that to a date change
+                    keycodeToDate = KEYCODE_TO_DATE[ keycode ],
+
                     // Get the target
                     target = event.target
 
 
-                // If target isn't one of the calendar items, close the calendar
-                if ( [ ELEMENT, CALENDAR.selectMonth, CALENDAR.selectYear, CALENDAR.today, CALENDAR.clear ].indexOf( target ) < 0 ) {
+                // If escape is pressed or the target isn't a calendar item, close it
+                if ( keycode == 27 || [ ELEMENT, CALENDAR.selectMonth, CALENDAR.selectYear, CALENDAR.today, CALENDAR.clear ].indexOf( target ) < 0 ) {
                     P.close()
                     return
                 }
 
 
-                // If the target is the element and there's a keycode
-                if ( keycode && target == ELEMENT ) {
+                // If the target is the element
+                if ( target == ELEMENT ) {
 
-
-                    // Prevent the default action if a "super" key
-                    // is not held and the tab key isn't pressed,
-                    // and a function key isn't pressed,
-                    // prevent the default action
-                    if ( !event.metaKey && keycode != 9 && !( keycode > 111 && keycode < 124 ) ) {
-                        event.preventDefault()
-                    }
-
-
-                    // On enter, set the element value as the highlighted date,
-                    // then render a new calendar, and then close it
+                    // On enter
                     if ( keycode == 13 ) {
+
+                        // Set the element value as the highlighted date
                         setElementsValue( DATE_HIGHLIGHTED )
+
+                        // Render a new calendar
                         calendarRender()
+
+                        // And then close it
                         P.close()
                         return
                     }
 
+                    // If the keycode translates to a date change
+                    if ( keycodeToDate ) {
 
-                    // On escape, close the calendar
-                    if ( keycode == 27 ) {
-                        P.close()
-                        return
-                    }
-
-
-                    // If the keycode translates to a date change,
-                    // set the date as superficially selected by
-                    // creating new validated dates - incrementing by the date change.
-                    // * Truthy second argument makes it a superficial selection
-                    if ( KEYCODE_TO_DATE[ keycode ] ) {
-                        setDateSelected( createValidatedDate( [ MONTH_FOCUSED.YEAR, MONTH_FOCUSED.MONTH, DATE_HIGHLIGHTED.DATE + KEYCODE_TO_DATE[ keycode ] ], KEYCODE_TO_DATE[ keycode ] ), 1 )
+                        // Set the selected date by creating new validated
+                        // dates - incrementing by the date change.
+                        // And make this just a superficial selection.
+                        // * Truthy second argument makes it a superficial selection
+                        setDateSelected( createValidatedDate( [ MONTH_FOCUSED.YEAR, MONTH_FOCUSED.MONTH, DATE_HIGHLIGHTED.DATE + keycodeToDate ], keycodeToDate ), 1 )
                     }
 
                 } //if ELEMENT
@@ -1597,6 +1536,8 @@
         klass: {
 
             active: STRING_PREFIX_DATEPICKER + 'active',
+
+            input: STRING_PREFIX_DATEPICKER + 'input',
 
             holder: STRING_PREFIX_DATEPICKER + 'holder',
             opened: STRING_PREFIX_DATEPICKER + 'holder--opened',
