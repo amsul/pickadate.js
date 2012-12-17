@@ -6,10 +6,17 @@
 
 
 /**
- * Prevent the page from scrolling when the calendar is open
+ * When the calendar is open
  */
+
+/* Prevent the page from scrolling */
 /*body*/.pickadate__active {
     overflow: hidden;
+}
+
+/* An add the focused state to the input */
+.pickadate__active .pickadate__input {
+    border-color: #0089ec;
 }
 
 
@@ -81,7 +88,7 @@
           zoom: 1;
     background: rgba(0,0,0,.32); /* Normal browsers */
 
-    /* Animate in the background immediately */
+    /* Animate in the background */
     -webkit-transition: background .15s ease-out;
        -moz-transition: background .15s ease-out;
             transition: background .15s ease-out;
@@ -184,6 +191,7 @@
     font-size: .8em;
     border: 1px solid #ccc;
     height: 2.5em;
+    padding: .66em .25em; /* For firefox */
     margin-top: -.5em;
 }
 .pickadate__select--month {
@@ -192,6 +200,10 @@
 .pickadate__select--year {
     width: 22.5%;
     margin-left: .5em;
+}
+.pickadate__select--month:focus,
+.pickadate__select--year:focus {
+    border-color: #0089ec;
 }
 
 
@@ -238,19 +250,10 @@
 }
 .pickadate__day--selected,
 .pickadate__day--selected:hover {
-    background: #0089ec;
-    color: #fff;
-}
-.pickadate__day--highlighted,
-.pickadate__day--highlighted:hover {
     border-color: #0089ec;
 }
-.pickadate__day--disabled,
-.pickadate__day--disabled:hover {
-    background: #f5f5f5;
-    border-color: #f5f5f5;
-    color: #ddd;
-    cursor: default;
+.pickadate__day--highlighted {
+    background: #fff;
 }
 .pickadate__day--disabled:before {
     border-top-color: #aaa;
@@ -310,6 +313,7 @@
 }
 .pickadate__button--today:focus,
 .pickadate__button--clear:focus {
+    background: #b1dcfb;
     border-color: #0089ec;
     outline: none;
 }
@@ -329,6 +333,18 @@
     cursor: pointer;
     color: #000;
     background: #b1dcfb;
+}
+.pickadate__day--disabled,
+.pickadate__day--disabled:hover {
+    background: #f5f5f5;
+    border-color: #f5f5f5;
+    color: #ddd;
+    cursor: default;
+}
+.pickadate__day--highlighted:hover,
+.pickadate__holder--focused .pickadate__day--highlighted {
+    background: #0089ec;
+    color: #fff;
 }
 
 
@@ -374,7 +390,7 @@
         font-size: 1.33em;
 
         /* Add the borders except the bottom one */
-        border: 2px solid #777;
+        border: 1px solid #777;
         border-top-color: #888;
         border-bottom-width: 0;
 
@@ -387,11 +403,6 @@
         -webkit-box-shadow: 0 12px 36px 16px rgba(0,0,0,.24);
            -moz-box-shadow: 0 12px 36px 16px rgba(0,0,0,.24);
                 box-shadow: 0 12px 36px 16px rgba(0,0,0,.24);
-    }
-
-    /* When the calendar is focused, show a "focused" state */
-    .pickadate__holder--focused .pickadate__calendar {
-        border-color: #0089ec;
     }
 
 
@@ -411,7 +422,7 @@
 /**
  * For bigger monitors still, move it away
  * from the bottom edge of the screen
- * and round the bottom corners.
+ * and round the top and bottom corners.
  */
 @media (min-height: 542px) {
 
@@ -421,7 +432,7 @@
 
     .pickadate__calendar {
         font-size: 1.5em;
-        border-bottom-width: 2px;
+        border-bottom-width: 1px;
 
         -webkit-border-radius: 6px;
            -moz-border-radius: 6px;

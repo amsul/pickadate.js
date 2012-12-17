@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v1.5.0 - 14 December, 2012
+ * pickadate.js v1.5.0 - 16 December, 2012
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
@@ -130,13 +130,12 @@
                         if ( CALENDAR.isOpen ) return P
 
 
-                        // Set calendar as open
-                        CALENDAR.isOpen = true
+                        // Make sure the element has focus
+                        ELEMENT.focus()
 
+                        // Toggle the tabindex of "focusable" calendar items
+                        toggleCalendarElements()
 
-                        // Make sure the element has focus, and then
-                        // add the "active" class to the element
-                        $ELEMENT.focus()
 
                         // Add the "opened" class to the calendar holder
                         $HOLDER.addClass( CLASSES.opened )
@@ -145,15 +144,12 @@
                         $body.addClass( CLASSES.active )
 
 
-                        // Toggle the tabindex of "focusable" calendar items
-                        toggleTabindex( CALENDAR.selectMonth )
-                        toggleTabindex( CALENDAR.selectYear )
-                        toggleTabindex( CALENDAR.today )
-                        toggleTabindex( CALENDAR.clear )
-
-
                         // Bind all the events to the document
                         $document.on( 'focusin.P' + CALENDAR.id + ' keydown.P' + CALENDAR.id, onDocumentEvent )
+
+
+                        // Set calendar as open
+                        CALENDAR.isOpen = true
 
 
                         // Trigger the onOpen method within scope of the picker
@@ -172,8 +168,9 @@
                         if ( !CALENDAR.isOpen ) return P
 
 
-                        // Set calendar as closed
-                        CALENDAR.isOpen = false
+                        // Toggle the tabindex of "focusable" calendar items
+                        toggleCalendarElements()
+
 
                         // Remove the "opened" class from the calendar holder
                         $HOLDER.removeClass( CLASSES.opened )
@@ -182,15 +179,12 @@
                         $body.removeClass( CLASSES.active )
 
 
-                        // Toggle the tabindex of "focusable" calendar items
-                        toggleTabindex( CALENDAR.selectMonth )
-                        toggleTabindex( CALENDAR.selectYear )
-                        toggleTabindex( CALENDAR.today )
-                        toggleTabindex( CALENDAR.clear )
-
-
                         // Unbind the Picker events from the document
                         $document.off( '.P' + CALENDAR.id )
+
+
+                        // Set calendar as closed
+                        CALENDAR.isOpen = false
 
 
                         // Trigger the onClose method within scope of the picker
@@ -869,6 +863,10 @@
                     } //createDateClassAndBinding
 
 
+                // If the count to shift by is less than the first day
+                // of the month, then add a week.
+                countShiftby += countShiftby < -1 ? 7 : 0
+
 
                 // Go through all the days in the calendar
                 // and map a calendar date
@@ -1185,19 +1183,18 @@
 
 
             /**
-             * Toggle an element as "tab-able"
+             * Toggle the calendar elements as "tab-able"
              */
-            function toggleTabindex( node ) {
+            function toggleCalendarElements() {
 
-                // If there's no node, don't go further
-                if ( !node ) return
-
-                // If tabindex is -1, set it to 0
-                if ( node.tabIndex ) node.tabIndex = 0
-
-                // Otherwise it's 0, so set it to -1
-                else node.tabIndex = -1
-            } //toggleTabindex
+                // Grab the collection of calendar items and
+                // toggle the tabindex based on the calendar state
+                [ CALENDAR.selectMonth, CALENDAR.selectYear, CALENDAR.today, CALENDAR.clear ].map( function( item ) {
+                    if ( item ) {
+                        item.tabIndex = CALENDAR.isOpen ? 0 : -1
+                    }
+                })
+            } //toggleCalendarElements
 
 
             /**
@@ -1280,7 +1277,7 @@
 
 
                 // Put focus back onto the element
-                $ELEMENT.focus()
+                ELEMENT.focus()
 
 
                 // If the target is the holder, close the picker
@@ -1333,15 +1330,21 @@
                     target = event.target
 
 
-                // If escape is pressed or the target isn't a calendar item, close it
+                // If escape is pressed or the target isn't a calendar item
                 if ( keycode == 27 || [ ELEMENT, CALENDAR.selectMonth, CALENDAR.selectYear, CALENDAR.today, CALENDAR.clear ].indexOf( target ) < 0 ) {
+
+                    // If escape was pressed, focus back onto element
+                    if ( keycode == 27 ) {
+                        ELEMENT.focus()
+                    }
+
+                    // Then close the picker
                     P.close()
-                    return
                 }
 
 
                 // If the target is the element
-                if ( target == ELEMENT ) {
+                else if ( target == ELEMENT ) {
 
                     // On enter
                     if ( keycode == 13 ) {
@@ -1354,11 +1357,10 @@
 
                         // And then close it
                         P.close()
-                        return
                     }
 
                     // If the keycode translates to a date change
-                    if ( keycodeToDate ) {
+                    else if ( keycodeToDate ) {
 
                         // Set the selected date by creating new validated
                         // dates - incrementing by the date change.
