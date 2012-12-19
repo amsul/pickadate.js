@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v1.4.0 - 06 December, 2012
+ * pickadate.js v1.4.1 - 19 December, 2012
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
