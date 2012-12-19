@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v1.5.0 - 16 December, 2012
+ * pickadate.js v1.5.1 - 19 December, 2012
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
@@ -131,7 +131,7 @@
 
 
                         // Toggle the tabindex of "focusable" calendar items
-                        toggleCalendarElements()
+                        toggleCalendarElements( 0 )
 
 
                         // Set calendar as open
@@ -150,7 +150,70 @@
 
 
                         // Bind all the events to the document
-                        $document.on( 'focusin.P' + CALENDAR.id + ' keydown.P' + CALENDAR.id, onDocumentEvent )
+                        // while namespacing it with the calendar ID
+                        $document.on( 'focusin.P' + CALENDAR.id, function( event ) {
+
+                            // If the target is not within the holder,
+                            // and is not the element, then close the picker
+                            if ( !$HOLDER.find( event.target ).length && event.target != ELEMENT ) P.close()
+
+                        }).on( 'click.P' + CALENDAR.id, function( event ) {
+
+                            // If the target of the click is not the element,
+                            // then close the calendar picker
+                            // * We don't worry about clicks on the holder
+                            //   because those are stopped from bubbling to the doc
+                            if ( event.target != ELEMENT ) P.close()
+
+                        }).on( 'keydown.P' + CALENDAR.id, function( event ) {
+
+                            var
+                                // Get the keycode
+                                keycode = event.keyCode,
+
+                                // Translate that to a date change
+                                keycodeToDate = KEYCODE_TO_DATE[ keycode ]
+
+
+                            // On escape
+                            if ( keycode == 27 ) {
+
+                                // Focus back onto the element
+                                ELEMENT.focus()
+
+                                // Then close the picker
+                                P.close()
+                            }
+
+
+                            // If the target is the element
+                            else if ( event.target == ELEMENT ) {
+
+                                // On enter
+                                if ( keycode == 13 ) {
+
+                                    // Set the element value as the highlighted date
+                                    setElementsValue( DATE_HIGHLIGHTED )
+
+                                    // Render a new calendar
+                                    calendarRender()
+
+                                    // And then close it
+                                    P.close()
+                                }
+
+                                // If the keycode translates to a date change
+                                else if ( keycodeToDate ) {
+
+                                    // Set the selected date by creating new validated
+                                    // dates - incrementing by the date change.
+                                    // And make this just a superficial selection.
+                                    // * Truthy second argument makes it a superficial selection
+                                    setDateSelected( createValidatedDate( [ MONTH_FOCUSED.YEAR, MONTH_FOCUSED.MONTH, DATE_HIGHLIGHTED.DATE + keycodeToDate ], keycodeToDate ), 1 )
+                                }
+
+                            } //if ELEMENT
+                        })
 
 
                         // Trigger the onOpen method within scope of the picker
@@ -170,7 +233,7 @@
 
 
                         // Toggle the tabindex of "focusable" calendar items
-                        toggleCalendarElements()
+                        toggleCalendarElements( -1 )
 
 
                         // Set calendar as closed
@@ -1189,14 +1252,12 @@
             /**
              * Toggle the calendar elements as "tab-able"
              */
-            function toggleCalendarElements() {
+            function toggleCalendarElements( tabindex ) {
 
                 // Grab the collection of calendar items and
                 // toggle the tabindex based on the calendar state
                 [ CALENDAR.selectMonth, CALENDAR.selectYear, CALENDAR.today, CALENDAR.clear ].map( function( item ) {
-                    if ( item ) {
-                        item.tabIndex = CALENDAR.isOpen ? 0 : -1
-                    }
+                    item.tabIndex = tabindex
                 })
             } //toggleCalendarElements
 
@@ -1280,19 +1341,18 @@
                     targetData = $target.data()
 
 
+                // Stop the event from bubbling to the document
+                event.stopPropagation()
+
+
                 // Put focus back onto the element
                 ELEMENT.focus()
 
 
-                // If the target is the holder, close the picker
-                if ( $target[ 0 ] == $HOLDER[ 0 ] ) {
-                    P.close()
-                }
+                // If a navigator button was clicked
+                if ( targetData.nav ) {
 
-
-                // If a navigator button was clicked,
-                // show the month in the relative direction
-                else if ( targetData.nav ) {
+                    // Show the month in the relative direction
                     showMonth( MONTH_FOCUSED.MONTH + targetData.nav )
                 }
 
@@ -1302,7 +1362,6 @@
                 else if ( targetData.clear ) {
                     P.clear().close()
                 }
-
 
                 // If a date was clicked
                 else if ( targetData.date ) {
@@ -1314,67 +1373,13 @@
                     // Set the date and then close the calendar
                     P.setDate( dateToSelect[ 0 ], dateToSelect[ 1 ], dateToSelect[ 2 ] ).close()
                 }
-            } //onClickCalendar
 
-
-
-            /**
-             * Handle all document events when the calendar is open
-             */
-            function onDocumentEvent( event ) {
-
-                var
-                    // Get the keycode
-                    keycode = event.keyCode,
-
-                    // Translate that to a date change
-                    keycodeToDate = KEYCODE_TO_DATE[ keycode ],
-
-                    // Get the target
-                    target = event.target
-
-
-                // If escape is pressed or the target isn't a calendar item
-                if ( keycode == 27 || [ ELEMENT, CALENDAR.selectMonth, CALENDAR.selectYear, CALENDAR.today, CALENDAR.clear ].indexOf( target ) < 0 ) {
-
-                    // If escape was pressed, focus back onto element
-                    if ( keycode == 27 ) {
-                        ELEMENT.focus()
-                    }
-
-                    // Then close the picker
+                // If the target is the holder, close the picker
+                else if ( $target[ 0 ] == $HOLDER[ 0 ] ) {
                     P.close()
                 }
 
-
-                // If the target is the element
-                else if ( target == ELEMENT ) {
-
-                    // On enter
-                    if ( keycode == 13 ) {
-
-                        // Set the element value as the highlighted date
-                        setElementsValue( DATE_HIGHLIGHTED )
-
-                        // Render a new calendar
-                        calendarRender()
-
-                        // And then close it
-                        P.close()
-                    }
-
-                    // If the keycode translates to a date change
-                    else if ( keycodeToDate ) {
-
-                        // Set the selected date by creating new validated
-                        // dates - incrementing by the date change.
-                        // And make this just a superficial selection.
-                        // * Truthy second argument makes it a superficial selection
-                        setDateSelected( createValidatedDate( [ MONTH_FOCUSED.YEAR, MONTH_FOCUSED.MONTH, DATE_HIGHLIGHTED.DATE + keycodeToDate ], keycodeToDate ), 1 )
-                    }
-
-                } //if ELEMENT
-            } //onDocumentEvent
+            } //onClickCalendar
 
 
             // Return a new initialized picker
@@ -1589,6 +1594,7 @@
 
 
 })( jQuery, window, document );
+
 
 
 
