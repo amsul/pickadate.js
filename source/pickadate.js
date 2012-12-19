@@ -85,6 +85,8 @@
                                         P.open()
                                     }
                                 }
+                                if ( keycode == 116 )
+                                   P.close()
                             }
                         }).after( [ $HOLDER, ELEMENT_HIDDEN ] )
 
