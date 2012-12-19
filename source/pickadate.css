@@ -14,8 +14,8 @@
     overflow: hidden;
 }
 
-/* An add the focused state to the input */
-.pickadate__active .pickadate__input {
+/* And add the "active" state to the input */
+.pickadate__input--active {
     border-color: #0089ec;
 }
 

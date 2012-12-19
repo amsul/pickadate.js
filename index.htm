@@ -24,14 +24,12 @@
     <section class="holder holder-top holder-clean">
 
         <h1><strong title="Pick a Date" class="underline-highlight">pickadate.js</strong></h1>
-        <h2>A responsive and lightweight<br>jQuery dateinput picker <small>(<a title="Documentation" href="docs.htm">read the docs</a>)</small></h2>
-
-        <h3>Weighs 8.8kb (3.6kb gzipped)</h3>
+        <h2>A fully responsive and lightweight<br>jQuery dateinput picker<br><small class="dimmed"><small><small>9.1kb min, 3.8kb gzipped</small></small></small></h2>
 
         <a href="https://github.com/amsul/pickadate.js"><img width="124" height="124" style="position:absolute;top:0;right:0;border:0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
 
         <fieldset>
-            <h3><label for="input_01">Pick a date. Go ahead...</label></h3>
+            <h3><label for="input_01">Pick a date. Go ahead&hellip;</label></h3>
             <input id="input_01" class="datepicker" type="text">
         </fieldset>
 
@@ -42,73 +40,11 @@
 
     <section class="holder holder-clean aligncenter">
 
-        <p><a class="button-full" href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js</a></p>
+        <p><a class="button-full" href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js v2.0</a></p>
+        <p><a class="button-full--secondary" href="themes.htm">View calendar themes</a></p>
         <small class="dimmed"><p>Browser support: <a class="dimmed" href="docs.htm#legacy">IE7+</a>, Chrome, Firefox, Safari, Opera, iOS Safari, Android browser</p></small>
-        <p><a href="docs.htm">Read the docs</a> or <a href="https://github.com/amsul/pickadate.js">view it on Github</a></p>
+        <p><a href="docs.htm">Read the docs</a> (<a href="https://github.com/amsul/pickadate.js#readme">api changes in 2.0</a>) or <a href="https://github.com/amsul/pickadate.js">view project on Github</a></p>
 
-    </section>
-
-
-    <section class="holder holder-clean">
-
-        <fieldset>
-            <h3><label for="input_02">Here's one with the date already filled in:</label></h3>
-            <input id="input_02" class="datepicker" type="text" value="14 August, 2012" data-value="2012/08/14">
-        </fieldset>
-
-        <fieldset>
-            <h3><label for="input_03">Use the scary&#42; <code data-language="html">type="date"</code>:</label></h3>
-            <input id="input_03" type="date" value="31 October, 2012" data-value="2012/10/31">
-        </fieldset>
-
-        <fieldset>
-            <h3><label for="input_04">Or, the friendly&#42;&#42; <code data-language="html">type="text"</code>:</label></h3>
-            <input id="input_04" class="datepicker" type="text" value="25 December, 2012" data-value="2012/12/25">
-        </fieldset>
-
-        <fieldset>
-            <h3><label for="input_05">Did I mention it's excitingly lightweight?</label></h3>
-            <input id="input_05" class="datepicker" type="text" value="1 January, 2013" data-value="2013/01/01">
-        </fieldset>
-
-        <fieldset>
-            <h3><label for="input_06">You're in love with it now, aren't you?</label></h3>
-            <input id="input_06" class="datepicker" type="text" value="14 February, 2013" data-value="2013/02/14">
-        </fieldset>
-
-        <fieldset>
-            <h3><label for="input_07">I'm actually pretty unique.</label></h3>
-            <input id="input_07" class="datepicker" type="text" value="29 February, 2016" data-value="2016/02/29">
-        </fieldset>
-
-        <fieldset>
-            <h3><label for="input_08">Others will fool you into believing they're cool.</label></h3>
-            <input id="input_08" class="datepicker" type="text" value="1 April, 2013" data-value="2013/04/01">
-        </fieldset>
-
-        <fieldset>
-            <h3><label for="input_09">But honestly, who's the coolest around the house?</label></h3>
-            <input id="input_09" class="datepicker" type="text" value="12 May, 2013" data-value="2013/05/12">
-        </fieldset>
-
-    </section>
-
-
-    <section class="holder aligncenter">
-
-        <p><a class="button-full" href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js</a></p>
-        <small class="dimmed"><p>Browser support: <a class="dimmed" href="docs.htm#legacy">IE7+</a>, Chrome, Firefox, Safari, Opera, iOS Safari, Android browser</p></small>
-        <p><a href="docs.htm">Read the docs</a> or <a href="https://github.com/amsul/pickadate.js">view it on Github</a></p>
-
-    </section>
-
-
-    <section class="holder holder-clean">
-
-        <small class="dimmed">
-            <p>&#42; Scary, because there's a tiny height change on page load for <i>some</i> browsers. That's because the input element is changed from <code>type="date"</code> to <code>type="text"</code> to remove the default browser stylings.</p>
-            <p>&#42;&#42; Friendly, because.. well everyone loves Santa :)</p>
-        </small>
     </section>
 
 
@@ -120,9 +56,7 @@
     <script src="source/pickadate.legacy.js"></script>
 
     <script type="text/javascript">
-        $( '[type=date], .datepicker' ).pickadate({
-            formatSubmit: 'yyyy/mm/dd'
-        })
+        $( '[type=date], .datepicker' ).pickadate()
     </script>
 
 

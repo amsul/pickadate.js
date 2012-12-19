@@ -61,7 +61,7 @@
                         // Add the `input` class to the element,
                         // Bind all the events to the element,
                         // and then insert everything after it
-                        $ELEMENT.addClass( CLASSES.input ).on({
+                        $ELEMENT.on({
                             'focus click': function() {
                                 $HOLDER.addClass( CLASSES.focused )
                                 P.open()
@@ -130,26 +130,27 @@
                         if ( CALENDAR.isOpen ) return P
 
 
-                        // Make sure the element has focus
-                        ELEMENT.focus()
-
                         // Toggle the tabindex of "focusable" calendar items
                         toggleCalendarElements()
 
+
+                        // Set calendar as open
+                        CALENDAR.isOpen = true
+
+
+                        // Make sure the element has focus and then
+                        // add the "active" class to the element
+                        $ELEMENT.focus().addClass( CLASSES.inputActive )
 
                         // Add the "opened" class to the calendar holder
                         $HOLDER.addClass( CLASSES.opened )
 
                         // Add the "active" class to the body
-                        $body.addClass( CLASSES.active )
+                        $body.addClass( CLASSES.bodyActive )
 
 
                         // Bind all the events to the document
                         $document.on( 'focusin.P' + CALENDAR.id + ' keydown.P' + CALENDAR.id, onDocumentEvent )
-
-
-                        // Set calendar as open
-                        CALENDAR.isOpen = true
 
 
                         // Trigger the onOpen method within scope of the picker
@@ -172,19 +173,22 @@
                         toggleCalendarElements()
 
 
+                        // Set calendar as closed
+                        CALENDAR.isOpen = false
+
+
+                        // Remove the "active" class from the element
+                        $ELEMENT.removeClass( CLASSES.inputActive )
+
                         // Remove the "opened" class from the calendar holder
                         $HOLDER.removeClass( CLASSES.opened )
 
                         // Remove the "active" class from the body
-                        $body.removeClass( CLASSES.active )
+                        $body.removeClass( CLASSES.bodyActive )
 
 
                         // Unbind the Picker events from the document
                         $document.off( '.P' + CALENDAR.id )
-
-
-                        // Set calendar as closed
-                        CALENDAR.isOpen = false
 
 
                         // Trigger the onClose method within scope of the picker
@@ -1491,15 +1495,15 @@
         weekdaysFull: [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ],
         weekdaysShort: [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ],
 
-        today: 'Today',
-        clear: 'Clear',
-
+        // Display strings
         monthPrev: '&#9664;',
         monthNext: '&#9654;',
-
-        // Display strings
         showMonthsFull: 1,
         showWeekdaysShort: 1,
+
+        // Today and clear
+        today: 'Today',
+        clear: 'Clear',
 
         // Date format to show on the input element
         format: 'd mmmm, yyyy',
@@ -1537,9 +1541,9 @@
         // Classes
         klass: {
 
-            active: STRING_PREFIX_DATEPICKER + 'active',
+            bodyActive: STRING_PREFIX_DATEPICKER + 'active',
 
-            input: STRING_PREFIX_DATEPICKER + 'input',
+            inputActive: STRING_PREFIX_DATEPICKER + 'input--active',
 
             holder: STRING_PREFIX_DATEPICKER + 'holder',
             opened: STRING_PREFIX_DATEPICKER + 'holder--opened',

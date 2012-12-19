@@ -55,7 +55,8 @@ input[type=text]:focus {
 
 
 .button,
-.button-full {
+.button-full,
+.button-full--secondary {
     display: inline-block;
     border: 0;
     background: #0089ec;
@@ -64,11 +65,17 @@ input[type=text]:focus {
     padding: 8px 18px;
 }
 
-.button-full {
+.button-full,
+.button-full--secondary {
     padding: 15px 0;
     text-align: center;
     display: block;
     font-size: 1.4em;
+}
+
+.button-full--secondary {
+    font-size: 1em;
+    background: #b8c4ce;
 }
 
 
@@ -136,6 +143,8 @@ h1 .link-anchor {
     background: #ffd;
     border-color: #eec;
 }
+
+
 
 
 

@@ -63,7 +63,7 @@
                         // Add the `input` class to the element,
                         // Bind all the events to the element,
                         // and then insert everything after it
-                        $ELEMENT.addClass( CLASSES.input ).on({
+                        $ELEMENT.on({
                             'focus click': function() {
                                 $HOLDER.addClass( CLASSES.focused )
                                 P.open()
@@ -132,15 +132,23 @@
                         if ( CALENDAR.isOpen ) return P
 
 
-                        // Make sure the element has focus
-                        ELEMENT.focus()
+                        // Toggle the tabindex of "focusable" calendar items
+                        toggleCalendarElements()
 
+
+                        // Set calendar as open
+                        CALENDAR.isOpen = true
+
+
+                        // Make sure the element has focus and then
+                        // add the "active" class to the element
+                        $ELEMENT.focus().addClass( CLASSES.inputActive )
 
                         // Add the "opened" class to the calendar holder
                         $HOLDER.addClass( CLASSES.opened )
 
                         // Add the "active" class to the body
-                        $body.addClass( CLASSES.active )
+                        $body.addClass( CLASSES.bodyActive )
 
 
                         // If it's legacy IE
@@ -163,13 +171,6 @@
                         }
 
 
-                        // Set calendar as open
-                        CALENDAR.isOpen = true
-
-                        // Toggle the tabindex of "focusable" calendar items
-                        toggleCalendarElements()
-
-
                         // Trigger the onOpen method within scope of the picker
                         triggerFunction( SETTINGS.onOpen, P )
 
@@ -186,23 +187,26 @@
                         if ( !CALENDAR.isOpen ) return P
 
 
-                        // Remove the "opened" class from the calendar holder
-                        $HOLDER.removeClass( CLASSES.opened )
-
-                        // Remove the "active" class from the body
-                        $body.removeClass( CLASSES.active )
-
-
-                        // Unbind the Picker events from the document
-                        $document.off( '.P' + CALENDAR.id )
+                        // Toggle the tabindex of "focusable" calendar items
+                        toggleCalendarElements()
 
 
                         // Set calendar as closed
                         CALENDAR.isOpen = false
 
 
-                        // Toggle the tabindex of "focusable" calendar items
-                        toggleCalendarElements()
+                        // Remove the "active" class from the element
+                        $ELEMENT.removeClass( CLASSES.inputActive )
+
+                        // Remove the "opened" class from the calendar holder
+                        $HOLDER.removeClass( CLASSES.opened )
+
+                        // Remove the "active" class from the body
+                        $body.removeClass( CLASSES.bodyActive )
+
+
+                        // Unbind the Picker events from the document
+                        $document.off( '.P' + CALENDAR.id )
 
 
                         // Trigger the onClose method within scope of the picker
@@ -608,6 +612,8 @@
 
                 // Create the calendar holder with a new wrapped calendar and bind the click
                 $HOLDER = $( createNode( STRING_DIV, createCalendarWrapped(), CLASSES.holder ) ).on( 'click', onClickCalendar ),
+
+                ///// ^^^^^ MOVE ON CLICK event to the doc body
 
 
                 // Translate a keycode to a relative change in date
@@ -1556,9 +1562,9 @@
         // Classes
         klass: {
 
-            active: STRING_PREFIX_DATEPICKER + 'active',
+            bodyActive: STRING_PREFIX_DATEPICKER + 'active',
 
-            input: STRING_PREFIX_DATEPICKER + 'input',
+            inputActive: STRING_PREFIX_DATEPICKER + 'input--active',
 
             holder: STRING_PREFIX_DATEPICKER + 'holder',
             opened: STRING_PREFIX_DATEPICKER + 'holder--opened',

@@ -24,13 +24,13 @@
     <section class="holder holder-top holder-clean">
 
         <h1><a href="http://amsul.github.com/pickadate.js" class="link-inherit"><strong title="Pick a Date" class="underline-highlight">pickadate.js</strong></a></h1>
-        <h2>A responsive and lightweight<br>jQuery dateinput picker</h2>
-
-        <h3>Weighs 8.8kb (3.6kb gzipped)</h3>
+        <h2>A fully responsive and lightweight<br>jQuery dateinput picker<br><small class="dimmed"><small><small>9.1kb min, 3.8kb gzipped</small></small></small></h2>
 
         <a href="https://github.com/amsul/pickadate.js"><img width="128" height="128" style="position:absolute;top:0;right:0;border:0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
 
-        <h4><a href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js</a> (<a href="#legacy">for old browsers</a>) or <a href="https://github.com/amsul/pickadate.js">view it on Github</a></h4>
+        <h4><a href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js v2.0</a> (<a href="#legacy">for old browsers</a>) or <a href="themes.htm" id="theme">view the themes</a></h4>
+
+        <p class="notification notification--highlight">Read <a href="https://github.com/amsul/pickadate.js#readme">api changes in version 2.0</a></p>
 
     </section>
 
@@ -50,6 +50,10 @@ monthPrev: '&amp;amp;#9664;',
 monthNext: '&amp;amp;#9654;',
 showMonthsFull: true,
 showWeekdaysShort: true,
+
+// Today and clear
+today: 'Today',
+clear: 'Clear',
 
 // <a href="#formats">Date formats</a>
 format: 'd mmmm, yyyy',
@@ -79,30 +83,62 @@ onClose: null,
 onSelect: null,
 onChangeMonth: null,
 
-// <a href="#theme" id="classes">Classes</a>
+// <a href="themes.htm">Themes</a>
 klass: {
-    inputFocus: 'pickadate__input--focused',
-    pickerHolder: 'pickadate__holder',
-    pickerOpen: 'pickadate__holder--opened',
-    calendarBox: 'pickadate__calendar--box',
+    active: 'pickadate__active',
+    input: 'pickadate__input',
+
+    // Picker holder states
+    holder: 'pickadate__holder',
+    opened: 'pickadate__holder--opened',
+    focused: 'pickadate__holder--focused',
+
+    // Picker frame and wrapper
+    frame: 'pickadate__frame',
+    wrap: 'pickadate__wrap',
+
+    // Picker calendar
     calendar: 'pickadate__calendar',
-    calendarBody: 'pickadate__calendar--body',
-    calendarDate: 'pickadate__calendar--date',
-    year: 'pickadate__year',
+
+    // Picker header
+    header: 'pickadate__header',
+
+    // Month navigation
+    monthPrev: 'pickadate__nav--prev',
+    monthNext: 'pickadate__nav--next',
+
+    // Month &amp; year labels
     month: 'pickadate__month',
-    monthNav: 'pickadate__month--nav',
-    monthPrev: 'pickadate__month--prev',
-    monthNext: 'pickadate__month--next',
-    week: 'pickadate__week',
+    year: 'pickadate__year',
+
+    // Select menus
+    selectMonth: 'pickadate__select--month',
+    selectYear: 'pickadate__select--year',
+
+    // Picker table
+    table: 'pickadate__table',
+
+    // Weekday labels
     weekdays: 'pickadate__weekday',
+
+    // Calendar body
+    body: 'pickadate__body',
+
+    // Day states
+    day: 'pickadate__day',
     dayDisabled: 'pickadate__day--disabled',
     daySelected: 'pickadate__day--selected',
+    dayHighlighted: 'pickadate__day--highlighted',
     dayToday: 'pickadate__day--today',
     dayInfocus: 'pickadate__day--infocus',
     dayOutfocus: 'pickadate__day--outfocus',
-    boxMonths: 'pickadate__holder--months',
-    boxYears: 'pickadate__holder--years',
-    boxWeekdays: 'pickadate__holder--weekdays'
+
+    // Footer
+    footer: 'pickadate__footer',
+
+    // Today and clear buttons
+    buttonClear: 'pickadate__button--clear',
+    buttonToday: 'pickadate__button--today'
 }</code></pre>
 
     </section>
@@ -128,8 +164,8 @@ klass: {
         <h3><a class="link-anchor" href="#strings">&sect;</a><strong class="underline-highlight">Custom month and weekday tags</strong></h3>
 
         <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
-    monthPrev: '&amp;larr;',
-    monthNext: '&amp;rarr;',
+    monthPrev: '&amp;amp;larr;',
+    monthNext: '&amp;amp;rarr;',
     weekdaysShort: [ 'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa' ],
     showMonthsFull: false
 })</code></pre>
@@ -258,7 +294,6 @@ klass: {
                 </tr>
             </tbody>
         </table>
-
 
     </section>
 
@@ -457,13 +492,13 @@ klass: {
 
         <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
     onOpen: function() {
-        alert( 'Opened' )
+        console.log( 'Opened' )
     },
     onClose: function() {
-        alert( 'Closed' )
+        console.log( 'Closed' )
     },
     onSelect: function() {
-        alert( 'Selected: '&nbsp;+&nbsp;this.getDate() )
+        console.log( 'Selected: '&nbsp;+&nbsp;this.getDate() )
     },
     onStart: function() {
         console.log( 'Hello there :)' )
@@ -477,135 +512,6 @@ klass: {
         <fieldset>
             <input id="picker_events" class="datepicker" type="date">
         </fieldset>
-
-    </section>
-
-
-    <section class="holder" id="theme">
-
-        <style>
-            .datepicker-themed input[type=text]:focus,
-            .datepicker-themed input.pickadate__input--focused {
-                border-color: #5a4;
-            }
-            .datepicker-themed .pickadate__holder {
-                height: auto;
-                position: relative;
-                z-index: 10;
-            }
-            .datepicker-themed .pickadate__calendar--wrap {
-                max-width: 100%;
-                max-height: none;
-                top: .5em;
-            }
-            .datepicker-themed .pickadate__calendar--wrap {
-                -webkit-box-shadow: none;
-                   -moz-box-shadow: none;
-                        box-shadow: none;
-            }
-            .datepicker-themed .pickadate__calendar {
-                border-color: #eee;
-                border-width: 4px;
-
-                -webkit-border-radius: 0;
-                   -moz-border-radius: 0;
-                        border-radius: 0;
-            }
-            .datepicker-themed .pickadate__month--nav {
-                font-size: .8em;
-            }
-            .datepicker-themed .pickadate__month--wrap {
-                display: inline-block;
-                width: 30%;
-                margin-left: 24%;
-                margin-right: 2%;
-            }
-            .datepicker-themed .pickadate__year--wrap {
-                display: inline-block;
-                width: 20%;
-            }
-            .datepicker-themed .pickadate__month--prev,
-            .datepicker-themed .pickadate__month--next {
-                line-height: 26px;
-                top: 3px;
-            }
-            .datepicker-themed .pickadate__day:hover,
-            .datepicker-themed .pickadate__month--prev:hover,
-            .datepicker-themed .pickadate__month--next:hover {
-                background: #ceb;
-                border-color: #ceb;
-                color: #000;
-            }
-            .datepicker-themed .pickadate__month--selector,
-            .datepicker-themed .pickadate__year--selector {
-                width: 100%;
-            }
-            .datepicker-themed .pickadate__weekday {
-                font-size: .6em;
-                text-transform: uppercase;
-                font-weight: bold;
-                border-bottom: 1px solid #eee;
-                text-align: right;
-                padding-right: 10px;
-                padding-left: 10px;
-            }
-            .datepicker-themed .pickadate__day {
-                text-align: right;
-                padding-right: 8px;
-                padding-left: 8px;
-                border: 1px solid #fff;
-
-                -webkit-border-radius: 0;
-                   -moz-border-radius: 0;
-                        border-radius: 0;
-            }
-            .datepicker-themed .pickadate__day--outfocus {
-                color: #ddd;
-            }
-            .datepicker-themed .pickadate__day--today {
-                color: #5a4;
-                position: relative;
-            }
-            .datepicker-themed .pickadate__day--today:before {
-                border-top-color: #270;
-            }
-            .datepicker-themed .pickadate__day--disabled:before {
-                border-top-color: #ccc;
-            }
-            .datepicker-themed .pickadate__day--selected,
-            .datepicker-themed .pickadate__day--selected:hover {
-                background: #5a4;
-                color: #fff;
-
-                -webkit-box-shadow: inset 0 1px 2px #7c6;
-                   -moz-box-shadow: inset 0 1px 2px #7c6;
-                        box-shadow: inset 0 1px 2px #7c6;
-            }
-            .datepicker-themed .pickadate__day--selected,
-            .datepicker-themed .pickadate__day--selected:hover,
-            .datepicker-themed .pickadate__day--highlighted {
-                border-color: #382;
-            }
-            .datepicker-themed .pickadate__day--disabled,
-            .datepicker-themed .pickadate__day--disabled:hover {
-                background: #f5f5f5;
-                border-color: #f5f5f5;
-                color: #ddd;
-
-                -webkit-box-shadow: none;
-                   -moz-box-shadow: none;
-                        box-shadow: none;
-            }
-        </style>
-
-        <h3><a class="link-anchor" href="#theme">&sect;</a><strong class="underline-highlight">Themed calendar</strong></h3>
-        <p>Go crazy.</p>
-
-        <fieldset class="datepicker-themed">
-            <input id="picker_themed" class="datepicker" type="text">
-        </fieldset>
-
-        <p><a href="http://github.com/amsul/pickadate.js/blob/gh-pages/themes/pickadate.inline.css">View theme CSS</a> on Github.</p>
 
     </section>
 
@@ -864,9 +770,10 @@ function&nbsp;createDateArray( date ) {
 
     <section class="holder holder-clean aligncenter" id="legacy">
 
-        <p><a class="button-full" href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js</a></p>
+        <p><a class="button-full" href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js v2.0</a></p>
+        <p><a class="button-full--secondary" href="themes.htm">View calendar themes</a></p>
         <small class="dimmed"><p>Browser support: IE7+, Chrome, Firefox, Safari, Opera, iOS Safari, Android browser</p></small>
-        <p><a href="https://github.com/amsul/pickadate.js">View it on Github</a></p>
+        <p><a href="https://github.com/amsul/pickadate.js">View project on Github</a></p>
         <p class="notification notification--highlight">The <code>pickadate.js</code> script supports IE 9+ by default. To support IE 7+ and other old browsers, use the <code>pickadate.legacy.js</code> script instead.</p>
 
     </section>
@@ -928,13 +835,19 @@ function&nbsp;createDateArray( date ) {
 
         $( '#picker_events' ).pickadate({
             onOpen: function() {
-                alert( 'Opened' )
+                if ( window.console && window.console.log ) {
+                    window.console.log( 'Opened' )
+                }
             },
             onClose: function() {
-                alert( 'Closed' )
+                if ( window.console && window.console.log ) {
+                    window.console.log( 'Closed' )
+                }
             },
             onSelect: function() {
-                alert( 'Selected: ' + this.getDate() )
+                if ( window.console && window.console.log ) {
+                    window.console.log( 'Selected: ' + this.getDate() )
+                }
             },
             onStart: function() {
                 if ( window.console && window.console.log ) {
