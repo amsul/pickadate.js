@@ -12,7 +12,7 @@
 
 <link rel="stylesheet" href="demo/style.css">
 <link rel="stylesheet" href="demo/demo.css">
-<link rel="stylesheet" href="source/pickadate.css">
+<link rel="stylesheet" href="themes/pickadate.01.default.css">
 
 <!--[if lt IE 9]>
     <script>document.createElement('section')</script>
@@ -25,7 +25,7 @@
     <section class="holder holder-top holder-clean">
 
         <h1><a href="http://amsul.github.com/pickadate.js" class="link-inherit"><strong title="Pick a Date" class="underline-highlight">pickadate.js</strong></a></h1>
-        <h2>A fully responsive and lightweight<br>jQuery dateinput picker<br><small class="dimmed"><small><small>9.1kb min, 3.8kb gzipped</small></small></small></h2>
+        <h2>A fully responsive and lightweight<br>jQuery dateinput picker<br><small class="dimmed"><small><small>9.3kb min, 3.8kb gzipped</small></small></small></h2>
 
         <a href="https://github.com/amsul/pickadate.js"><img width="128" height="128" style="position:absolute;top:0;right:0;border:0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
 
@@ -52,7 +52,7 @@ monthNext: '&amp;amp;#9654;',
 showMonthsFull: true,
 showWeekdaysShort: true,
 
-// Today and clear
+// <a href="#buttons">Today and clear</a>
 today: 'Today',
 clear: 'Clear',
 
@@ -84,7 +84,7 @@ onClose: null,
 onSelect: null,
 onChangeMonth: null,
 
-// <a href="themes.htm">Themes</a>
+// <a href="themes.htm" id="options_styling">Themes</a>
 klass: {
     active: 'pickadate__active',
     input: 'pickadate__input',
@@ -178,6 +178,26 @@ klass: {
     </section>
 
 
+    <section class="holder" id="buttons">
+
+        <h3><a class="link-anchor" href="#buttons">&sect;</a><strong class="underline-highlight">Today and clear buttons</strong></h3>
+
+        <p>As a default, <code>today</code> is set to <code class="string">'Today'</code> and <code>clear</code> is set to <code class="string">'Clear'</code>.</p>
+
+        <p>If either of the options is <code class="constant">false</code>, the button is not displayed.</p>
+
+        <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
+    today: false,
+    clear: 'Clear date'
+})</code></pre>
+
+        <fieldset>
+            <input id="picker_buttons" class="datepicker" type="text">
+        </fieldset>
+
+    </section>
+
+
     <section class="holder" id="translations">
 
         <h3><a class="link-anchor" href="#translations">&sect;</a><strong class="underline-highlight">Any language support</strong></h3>
@@ -188,9 +208,11 @@ klass: {
 
         <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
     formatSubmit: 'dd/mm/yyyy',
-    weekdaysShort: [ 'Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam' ],
+    monthsFull: [ 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre' ],
     monthsShort: [ 'Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec' ],
-    monthsFull: [ 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre' ]
+    weekdaysShort: [ 'Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam' ],
+    today: 'aujourd\'hui',
+    clear: 'effacer'
 })</code></pre>
 
         <p>(2) Or by globally extending the default picker options for <i>all instances</i>:</p>
@@ -199,7 +221,9 @@ klass: {
     formatSubmit: 'dd/mm/yyyy',
     monthsFull: [ 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre' ],
     monthsShort: [ 'Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec' ],
-    weekdaysShort: [ 'Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam' ]
+    weekdaysShort: [ 'Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam' ],
+    today: 'aujourd\'hui',
+    clear: 'effacer'
 })</code></pre>
 
         <fieldset>
@@ -552,7 +576,14 @@ var calendar = input.data( 'pickadate' )
             <li><code><a href="#api_show">show</a></code></li>
             <li><code><a href="#api_getDate">getDate</a></code></li>
             <li><code><a href="#api_setDate">setDate</a></code></li>
+            <li><code><a href="#api_clear">clear</a></code></li>
         </ol>
+
+        <p id="api_$node">You can also grab the jQuery object of the input element from the calendar like this:</p>
+
+        <pre><code data-language="javascript">this.$node</code></pre>
+
+        <small class="dimmed"><p>&#42; The <code>$</code> prefix is used to signify a jQuery object.</p></small>
 
     </section>
 
@@ -572,6 +603,10 @@ calendar.close()</code></pre>
         <fieldset>
             <input id="api_picker_open" class="datepicker" type="text">
         </fieldset>
+
+        <p>If you want to open the calendar on page load, you can add the <code>autofocus</code> attribute to the <code class="tag-name">input</code> element:</p>
+
+        <pre><code data-language="html">&amp;lt;input&nbsp;autofocus&nbsp;class="datepicker"&nbsp;type="text"&gt;</code></pre>
 
     </section>
 
@@ -674,6 +709,58 @@ calendar.close()</code></pre>
     </section>
 
 
+    <section class="holder" id="api_clear">
+
+            <h3><a class="link-anchor" href="#api_clear">&sect;</a><strong class="underline-highlight">Clear the date</strong></h3>
+
+            <pre><code data-language="javascript">calendar.clear()</code></pre>
+
+            <p>Clears the selected date value from the <code class="tag-name">input</code> element.</p>
+
+            <p>
+                <button id="api_button_clear" class="button" type="button">Clear date</button>
+            </p>
+
+            <fieldset>
+                <input id="api_picker_clear" class="datepicker" value="15 October, 2010" data-value="2012-10-15" type="text">
+            </fieldset>
+
+            <p>With some custom stylings and api mastery, you can do something like this:</p>
+
+            <pre><code data-language="javascript">// Grab the clear button and bind the event<br>
+// to clear the input value on click<br>
+var clearButton = $( '#clearButton' ).on({
+    click: function() {
+        inputElement.data( 'pickadate' ).clear()
+    }
+})
+
+// Grab the input element and trigger the picker<br>
+// with the onStart and onSelect methods to<br>
+// toggle the clear button visibility<br>
+var inputElement = $( '.datepicker' ).pickadate({
+    format: 'dd mmmm, yyyy',
+    formatSubmit: 'yyyy-mm-dd',
+    clear: false,
+    onStart: showOrHideClear,
+    onSelect: showOrHideClear
+})
+
+// Check if the input element has a value<br>
+// and show or hide the button as needed<br>
+function&nbsp;showOrHideClear() {
+    if ( this.$node.val() ) clearButton.show()
+    else clearButton.hide()
+}</code></pre>
+
+            <fieldset>
+                <a id="api_button_clear_b" class="input-clear">&times;</a>
+                <input id="api_picker_clear_b" class="datepicker" value="15 October, 2010" data-value="2012-10-15" type="text">
+            </fieldset>
+
+        </section>
+
+
     <section class="holder" id="api_getDateLimit">
 
         <h3><a class="link-anchor" href="#api_getDateLimit">&sect;</a><strong class="underline-highlight">Get the min or max date</strong></h3>
@@ -774,7 +861,7 @@ function&nbsp;createDateArray( date ) {
         <p><a class="button-full" href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js v2.0</a></p>
         <p><a class="button-full--secondary" href="themes.htm">View calendar themes</a></p>
         <small class="dimmed"><p>Browser support: IE7+, Chrome, Firefox, Safari, Opera, iOS Safari, Android browser</p></small>
-        <p><a href="https://github.com/amsul/pickadate.js">View project on Github</a></p>
+        <p><a href="https://github.com/amsul/pickadate.js#readme">Read api changes in 2.0</a> or <a href="https://github.com/amsul/pickadate.js">view project on Github</a></p>
         <p class="notification notification--highlight">The <code>pickadate.js</code> script supports IE 9+ by default. To support IE 7+ and other old browsers, use the <code>pickadate.legacy.js</code> script instead.</p>
 
     </section>
@@ -802,9 +889,16 @@ function&nbsp;createDateArray( date ) {
 
         $( '#picker_strings_b' ).pickadate({
             formatSubmit: 'dd/mm/yyyy',
-            weekdaysShort: [ 'Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam' ],
+            monthsFull: [ 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre' ],
             monthsShort: [ 'Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc' ],
-            monthsFull: [ 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre' ]
+            weekdaysShort: [ 'Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam' ],
+            today: 'aujourd\'hui',
+            clear: 'effacer'
+        })
+
+        $( '#picker_buttons' ).pickadate({
+            today: false,
+            clear: 'Clear date'
         })
 
         var $custom_date = $( '#picker_formats' ).pickadate({
@@ -996,6 +1090,47 @@ function&nbsp;createDateArray( date ) {
                     api_calendar_setDate_b.setDate( 2020, 2, 14, true )
                 }
             })
+
+
+        var
+            api_picker_clear = $( '#api_picker_clear' ).pickadate({
+                format: 'dd mmmm, yyyy',
+                formatSubmit: 'yyyy-mm-dd'
+            }),
+            api_calendar_clear = api_picker_clear.data( 'pickadate' ),
+            api_button_clear = $( '#api_button_clear' ).on({
+                click: function() {
+                    api_calendar_clear.clear()
+                }
+            })
+
+
+        var
+            // Grab the clear button and bind the event
+            // to clear the input value on click
+            api_button_clear_b = $( '#api_button_clear_b' ).on({
+                click: function() {
+                    api_picker_clear_b.data( 'pickadate' ).clear()
+                }
+            }),
+
+            // Grab the input element and trigger the picker
+            // with the onStart and onSelect methods to
+            // toggle the clear button visibility
+            api_picker_clear_b = $( '#api_picker_clear_b' ).pickadate({
+                format: 'dd mmmm, yyyy',
+                formatSubmit: 'yyyy-mm-dd',
+                clear: 0,
+                onStart: showOrHideClear,
+                onSelect: showOrHideClear
+            })
+
+        // Check if the input element has a value
+        // and show or hide the button as needed
+        function showOrHideClear() {
+            if ( this.$node.val() ) api_button_clear_b.show()
+            else api_button_clear_b.hide()
+        }
 
 
         var

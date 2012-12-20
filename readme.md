@@ -1,20 +1,29 @@
-# pickadate.js v1.4.1
+# pickadate.js v2.0
 
 
-A lightweight jQuery dateinput picker: [demo](http://amsul.github.com/pickadate.js) & [docs](http://amsul.github.com/pickadate.js/docs.htm>).
+A fully responsive and lightweight jQuery dateinput picker.
+
+Check out the [demo](http://amsul.github.com/pickadate.js), [docs](http://amsul.github.com/pickadate.js/docs.htm>), & [themes](http://amsul.github.com/pickadate.js/themes>).
+
+[Read API changes in version 2.0](https://github.com/amsul/pickadate.js#20)
 
 
-```
-$( 'input[type=date]' ).pickadate()
-```
-
-### Browser support
+## Browser support
 IE7+, Chrome, Firefox, Safari, Opera, iOS Safari, Android browser.
 
-The `pickadate.js` script supports all modern browsers. To support all versions of IE 7+ and other old browsers, include `pickadate.legacy.js` instead.
+The `pickadate.js` script supports all modern browsers and IE 9+. To support IE 7+ and other old browsers, include `pickadate.legacy.js` instead.
 
 
-### Notable updates
+
+## Notable updates
+
+
+#### 2.0
+- A version bump due to changes in the [default layout and styling](http://amsul.github.com/pickadate.js/docs.htm#options_styling) that will cause _**old stylings to break.**_
+- [New themes](http://amsul.github.com/pickadate.js/themes.htm)
+- [Today & clear buttons](http://amsul.github.com/pickadate.js/docs.htm#buttons)
+- [Clear method](http://amsul.github.com/pickadate.js/docs.htm#api_clear)
+- [Grab input element from calendar object](http://amsul.github.com/pickadate.js/docs.htm#api_$node)
 
 #### 1.4.0
 - [Get min & max date](http://amsul.github.com/pickadate.js/docs.htm#api_getDateLimit)
@@ -47,9 +56,11 @@ The `pickadate.js` script supports all modern browsers. To support all versions 
 - [Classes option revised](http://amsul.github.com/pickadate.js/docs.htm#classes)
 
 
-### Contribute if you please :)
+## Contributing
 
-I encourage people to fork and send pull requests of their own custom `pickadate.css` file so we can build a repository of themes to select from.
+Fork away and send in pull requests of your own custom `pickadate.css` file so we can build [a repository of themes](https://github.com/amsul/pickadate.js/tree/gh-pages/themes).
+
+**Send all pull requests to the [dev](https://github.com/amsul/pickadate.js/tree/dev) branch**.
 
 ---
 

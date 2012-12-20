@@ -53,6 +53,8 @@
 
                     constructor: Picker,
 
+                    $node: $ELEMENT,
+
                     /**
                      * Initialize everything
                      */
@@ -1102,7 +1104,7 @@
                 ELEMENT.value = dateTargeted ? P.getDate() : ''
 
                 // If there's a hidden input, set the value with the submit format
-                // if the date targeted has a time. Otherwise clear it.
+                // if the date targeted. Otherwise clear it.
                 if ( ELEMENT_HIDDEN ) {
                     ELEMENT_HIDDEN.value = dateTargeted ? P.getDate( SETTINGS.formatSubmit ) : ''
                 }

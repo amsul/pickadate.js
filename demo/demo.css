@@ -6,6 +6,9 @@ body {
 a {
     color: #0089ec;
 }
+a:focus {
+    outline: 2px dotted #000;
+}
 
 body,
 h1,
@@ -64,15 +67,15 @@ input[type=text]:focus {
 
 .button-full,
 .button-full--secondary {
-    padding: 15px 0;
+    padding: .66em 0;
     text-align: center;
     display: block;
     font-size: 1.4em;
 }
 
 .button-full--secondary {
-    font-size: 1em;
-    background: #b8c4ce;
+    font-size: 1.15em;
+    background: #74c346;
 }
 
 
@@ -139,6 +142,30 @@ h1 .link-anchor {
 .notification--highlight {
     background: #ffd;
     border-color: #eec;
+}
+
+
+
+.input-clear {
+    width: 2em;
+    height: 2em;
+    line-height: 2em;
+    background: #ccc;
+    color: #fff;
+    text-align: center;
+    position: absolute;
+    top: .75em;
+    right: .75em;
+    display: inline-block;
+    text-decoration: none;
+
+    -webkit-border-radius: 50%;
+       -moz-border-radius: 50%;
+            border-radius: 50%;
+}
+
+.input-clear:hover {
+    background: #666;
 }
 
 
