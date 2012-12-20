@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v1.5.1 - 19 December, 2012
+ * pickadate.js v2.0 - 20 December, 2012
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
@@ -186,11 +186,27 @@
                             }
 
 
-                            // If the target is the element
-                            else if ( event.target == ELEMENT ) {
+                            // If the target is the element and there's
+                            // a keycode to date translation or the
+                            // enter key was pressed
+                            else if ( event.target == ELEMENT && ( keycodeToDate || keycode == 13 ) ) {
+
+                                // Prevent the default action to stop
+                                // it from moving the page
+                                event.preventDefault()
+
+                                // If the keycode translates to a date change
+                                if ( keycodeToDate ) {
+
+                                    // Set the selected date by creating new validated
+                                    // dates - incrementing by the date change.
+                                    // And make this just a superficial selection.
+                                    // * Truthy second argument makes it a superficial selection
+                                    setDateSelected( createValidatedDate( [ MONTH_FOCUSED.YEAR, MONTH_FOCUSED.MONTH, DATE_HIGHLIGHTED.DATE + keycodeToDate ], keycodeToDate ), 1 )
+                                }
 
                                 // On enter
-                                if ( keycode == 13 ) {
+                                else {
 
                                     // Set the element value as the highlighted date
                                     setElementsValue( DATE_HIGHLIGHTED )
@@ -200,16 +216,6 @@
 
                                     // And then close it
                                     P.close()
-                                }
-
-                                // If the keycode translates to a date change
-                                else if ( keycodeToDate ) {
-
-                                    // Set the selected date by creating new validated
-                                    // dates - incrementing by the date change.
-                                    // And make this just a superficial selection.
-                                    // * Truthy second argument makes it a superficial selection
-                                    setDateSelected( createValidatedDate( [ MONTH_FOCUSED.YEAR, MONTH_FOCUSED.MONTH, DATE_HIGHLIGHTED.DATE + keycodeToDate ], keycodeToDate ), 1 )
                                 }
 
                             } //if ELEMENT
@@ -1257,7 +1263,7 @@
                 // Grab the collection of calendar items and
                 // toggle the tabindex based on the calendar state
                 [ CALENDAR.selectMonth, CALENDAR.selectYear, CALENDAR.today, CALENDAR.clear ].map( function( item ) {
-                    item.tabIndex = tabindex
+                    if ( item ) item.tabIndex = tabindex
                 })
             } //toggleCalendarElements
 
