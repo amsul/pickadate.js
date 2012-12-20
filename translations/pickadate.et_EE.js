@@ -5,6 +5,8 @@ $.extend( $.fn.pickadate.defaults, {
     monthsShort: [ 'jaan', 'veebr', 'märts', 'apr', 'mai', 'juuni', 'juuli', 'aug', 'sept', 'okt', 'nov', 'dets' ],
     weekdaysFull: [ 'pühapäev', 'esmaspäev', 'teisipäev', 'kolmapäev', 'neljapäev', 'reede', 'laupäev' ],
     weekdaysShort: [ 'püh', 'esm', 'tei', 'kol', 'nel', 'ree', 'lau' ],
+    today: 'täna',
+    clear: 'kustutama',
     firstDay: 1,
     format: 'd. mmmm yyyy. a',
     formatSubmit: 'd.mm.yyyy'

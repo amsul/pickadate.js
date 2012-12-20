@@ -1416,6 +1416,9 @@
     // Create a dom node string
     function createNode( wrapper, item, klass, attribute ) {
 
+        // If the item is false-y, just return an empty string
+        if ( !item ) return ''
+
         // If the item is an array, do a join
         item = Array.isArray( item ) ? item.join( '' ) : item
 

@@ -5,6 +5,8 @@ $.extend( $.fn.pickadate.defaults, {
     monthsShort: [ 'led', 'úno', 'bře', 'dub', 'kvě', 'čer', 'čvc', 'srp', 'zář', 'říj', 'lis', 'pro' ],
     weekdaysFull: [ 'neděle', 'pondělí', 'úterý', 'středa', 'čtvrtek', 'pátek', 'sobota' ],
     weekdaysShort: [ 'ne', 'po', 'út', 'st', 'čt', 'pá', 'so' ],
+    today: 'dnes',
+    clear: 'vymazat',
     firstDay: 1,
     format: 'd. mmmm yyyy',
     formatSubmit: 'd. m. yyyy'

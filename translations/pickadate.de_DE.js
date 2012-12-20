@@ -5,6 +5,8 @@ $.extend( $.fn.pickadate.defaults, {
     monthsShort: [ 'Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez' ],
     weekdaysFull: [ 'Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag' ],
     weekdaysShort: [ 'So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa' ],
+    today: 'Heute',
+    clear: 'Löschen',
     firstDay: 1,
     format: 'dddd, dd. mmmm yyyy',
     formatSubmit: 'd.m.yyyy'

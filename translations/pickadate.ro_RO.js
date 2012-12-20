@@ -5,6 +5,8 @@ $.extend( $.fn.pickadate.defaults, {
     monthsShort: [ 'ian', 'feb', 'mar', 'apr', 'mai', 'iun', 'iul', 'aug', 'sep', 'oct', 'noi', 'dec' ],
     weekdaysFull: [ 'duminică', 'luni', 'marţi', 'miercuri', 'joi', 'vineri', 'sâmbătă' ],
     weekdaysShort: [ 'D', 'L', 'Ma', 'Mi', 'J', 'V', 'S' ],
+    today: 'azi',
+    clear: 'șterge',
     firstDay: 1,
     format: 'dd mmmm yyyy',
     formatSubmit: 'dd.mm.yyyy'
