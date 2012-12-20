@@ -1,0 +1,295 @@
+
+
+/**
+ * Classic styling for pickadate.js
+ * Demo: http://amsul.github.com/pickadate.js/themes.htm#classic
+ */
+
+/**
+ * The picker holder
+ */
+.pickadate__holder {
+
+    /* The base font-size */
+    font-size: 16px;
+
+    line-height: 1.2;
+    color: #000;
+
+    position: absolute;
+    z-index: 10000;
+
+    width: 100%;
+    height: 0;
+}
+
+
+/**
+ * The frame that bounds the calendar
+ */
+.pickadate__frame {
+    position: relative;
+    max-width: 420px;
+    min-width: 256px;
+    max-height: 0;
+    overflow-y: hidden;
+
+    -webkit-transition: all .15s ease-out;
+       -moz-transition: all .15s ease-out;
+            transition: all .15s ease-out;
+}
+
+
+/**
+ * When the calendar opens
+ */
+.pickadate__holder--opened .pickadate__frame {
+    top: .5em;
+    max-height: 25em;
+
+    -webkit-box-shadow: 0 6px 18px 1px rgba(0,0,0,.12);
+       -moz-box-shadow: 0 6px 18px 1px rgba(0,0,0,.12);
+            box-shadow: 0 6px 18px 1px rgba(0,0,0,.12);
+}
+
+
+/**
+ * The calendar itself
+ */
+
+.pickadate__calendar {
+    color: #000;
+    background: #fff;
+
+    padding: 1em;
+    font-size: 1em;
+
+    /* Add the borders */
+    border: 1px solid #ccc;
+
+    -webkit-border-radius: 6px;
+       -moz-border-radius: 6px;
+            border-radius: 6px;
+}
+
+
+
+/**
+ * The calendar table of dates
+ */
+.pickadate__table {
+    text-align: center;
+    border-collapse: collapse;
+    border-spacing: 0;
+    table-layout: fixed;
+    font-size: inherit;
+    width: 100%;
+    margin-top: .75em;
+}
+
+/* Remove browser stylings on a table cell */
+.pickadate__table td {
+    margin: 0;
+    padding: 0;
+}
+
+
+
+/**
+ * The header containing the month and year tags/selectors
+ */
+.pickadate__header {
+    text-align: center;
+    position: relative;
+}
+
+.pickadate__nav--prev,
+.pickadate__nav--next {
+    position: absolute;
+    top: -.1em;
+    padding: .5em;
+    margin: -.5em;
+    text-align: center;
+    min-width: 24px;
+    height: 24px;
+    line-height: 26px;
+}
+.pickadate__nav--prev {
+    left: 0;
+}
+.pickadate__nav--next {
+    right: 0;
+}
+
+
+.pickadate__month,
+.pickadate__year {
+    font-weight: 500;
+    display: inline-block;
+}
+.pickadate__year {
+    color: #999;
+    font-size: .8em;
+    font-style: italic;
+    margin-left: .5em;
+}
+
+
+
+.pickadate__select--month,
+.pickadate__select--year {
+    font-size: .8em;
+    border: 1px solid #ccc;
+    height: 2.5em;
+    margin-top: -.5em;
+}
+.pickadate__select--month {
+    width: 35%;
+}
+.pickadate__select--year {
+    width: 22.5%;
+    margin-left: .5em;
+}
+.pickadate__select--month:focus,
+.pickadate__select--year:focus {
+    border-color: #0089ec;
+}
+
+
+
+
+/**
+ * The weekday labels
+ */
+.pickadate__weekday {
+    width: 14.285714286%; /* 100/7 */
+    font-size: .75em;
+    padding-bottom: .5em;
+    color: #999;
+    font-weight: 500;
+}
+
+
+/**
+ * The days on the calendar
+ */
+.pickadate__day {
+    padding: .33em 0 .25em;
+    font-weight: 100;
+    border: 1px solid #fff;
+    margin-bottom: 1px;
+}
+
+/**
+ * The various states of a day
+ */
+.pickadate__day--today {
+    color: #0089ec;
+    position: relative;
+}
+.pickadate__day--today:before {
+    content: " ";
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 0;
+    height: 0;
+    border-top: .5em solid #0059bc;
+    border-left: .5em solid transparent;
+}
+.pickadate__day--selected,
+.pickadate__day--selected:hover {
+    border-color: #0089ec;
+}
+.pickadate__day--highlighted {
+    background: #fff;
+}
+.pickadate__day--disabled:before {
+    border-top-color: #aaa;
+}
+.pickadate__day--outfocus {
+    color: #ddd;
+
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=75)";
+    filter: alpha(opacity=75);
+    -moz-opacity: .75;
+         opacity: .75;
+}
+
+
+
+/**
+ * The footer containing the "today" and "clear" buttons
+ */
+.pickadate__footer {
+    text-align: center;
+    margin: .5em 0 -.5em;
+}
+
+.pickadate__button--today,
+.pickadate__button--clear {
+    border: 1px solid #fff;
+    background: #fff;
+    font-size: .8em;
+    padding: .66em 0;
+    margin: 0 2.5%;
+    font-weight: bold;
+    width: 40%;
+}
+.pickadate__button--today:before,
+.pickadate__button--clear:before {
+    position: relative;
+    display: inline-block;
+    height: 0;
+}
+.pickadate__button--today:before {
+    content: " ";
+    margin-right: .45em;
+    top: -.05em;
+    width: 0;
+    border-top: .66em solid #0089ec;
+    border-left: .66em solid transparent;
+}
+.pickadate__button--clear:before {
+    content: "×";
+    margin-right: .35em;
+    top: -.1em;
+    color: #e20;
+    vertical-align: top;
+    font-size: 1.1em;
+}
+.pickadate__button--today:focus,
+.pickadate__button--clear:focus {
+    background: #b1dcfb;
+    border-color: #0089ec;
+    outline: none;
+}
+
+
+
+
+/**
+ * The hover effect on any buttons
+ */
+.pickadate__day--infocus:hover,
+.pickadate__day--outfocus:hover,
+.pickadate__nav--prev:hover,
+.pickadate__nav--next:hover,
+.pickadate__button--today:hover,
+.pickadate__button--clear:hover {
+    cursor: pointer;
+    color: #000;
+    background: #b1dcfb;
+}
+.pickadate__day--disabled,
+.pickadate__day--disabled:hover {
+    background: #f5f5f5;
+    border-color: #f5f5f5;
+    color: #ddd;
+    cursor: default;
+}
+.pickadate__day--highlighted:hover,
+.pickadate__holder--focused .pickadate__day--highlighted {
+    background: #0089ec;
+    color: #fff;
+}

@@ -1,7 +1,8 @@
 
 
 /**
- * Mobile-first, responsive styling for pickadate.js
+ * Default mobile-first, responsive styling for pickadate.js
+ * Demo: http://amsul.github.com/pickadate.js/themes.htm#default
  */
 
 
@@ -191,6 +192,7 @@
     font-size: .8em;
     border: 1px solid #ccc;
     height: 2.5em;
+    padding: .66em .25em; /* For firefox */
     margin-top: -.5em;
 }
 .pickadate__select--month {
@@ -438,6 +440,3 @@
                 border-radius: 6px;
     }
 }
-
-
-
