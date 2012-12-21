@@ -650,6 +650,8 @@ calendar.close()</code></pre>
 
         <h3><a class="link-anchor" href="#api_getDate">&sect;</a><strong class="underline-highlight">Get the date</strong></h3>
 
+        <p>Get the date selected on the calendar:</p>
+
         <pre><code data-language="javascript">calendar.getDate()</code></pre>
 
         <p>
@@ -672,6 +674,18 @@ calendar.close()</code></pre>
             <input id="api_picker_getDate_b" class="datepicker" type="text" value="14 August, 1988">
         </fieldset>
 
+        <p>To get the underlying JavaScript Date object, set <code>format</code> to <code class="constant">true</code>:</p>
+
+        <pre><code data-language="javascript">calendar.getDate( true )</code></pre>
+
+        <p>
+            <button id="api_button_getDate_c" class="button" type="button">Get date object</button>
+        </p>
+
+        <fieldset>
+            <input id="api_picker_getDate_c" class="datepicker" type="text" value="14 August, 1988">
+        </fieldset>
+
     </section>
 
 
@@ -679,7 +693,7 @@ calendar.close()</code></pre>
 
         <h3><a class="link-anchor" href="#api_setDate">&sect;</a><strong class="underline-highlight">Set the date</strong></h3>
 
-        <pre><code data-language="javascript">calendar.setDate( year, month, date, highlight )</code></pre>
+        <pre><code data-language="javascript">calendar.setDate( year, month, date, superficial )</code></pre>
 
         <p><code>year</code>, <code>month</code>, <code>date</code> are required integers representing the date to select on the calendar.</p>
 
@@ -694,12 +708,12 @@ calendar.close()</code></pre>
         </fieldset>
 
 
-        <p><code>highlight</code> is optional. If <code>highlight</code> is <code class="constant">true</code>, the date will only be highlighted and not selected. This means the <code class="tag-name">input</code> value won't change.</p>
+        <p><code>superficial</code> is optional. If <code>superficial</code> is <code class="constant">true</code>, the date will only be superficially selected. This means the <code class="tag-name">input</code> value won't change.</p>
 
         <pre><code data-language="javascript">calendar.setDate( 2020, 2, 14, true )</code></pre>
 
         <p>
-            <button id="api_button_setDate_b" class="button" type="button">Set date highlighted</button>
+            <button id="api_button_setDate_b" class="button" type="button">Set date superficially</button>
         </p>
 
         <fieldset>
@@ -856,7 +870,7 @@ function&nbsp;createDateArray( date ) {
     </section>
 
 
-    <section class="holder holder-clean aligncenter" id="legacy">
+    <section class="holder aligncenter" id="legacy">
 
         <p><a class="button-full" href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js v2.0</a></p>
         <p><a class="button-full--secondary" href="themes.htm">View calendar themes</a></p>
@@ -867,8 +881,13 @@ function&nbsp;createDateArray( date ) {
     </section>
 
 
+    <footer class="holder holder-clean aligncenter">
 
-    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><small><small><a href="https://www.youtube.com/watch?v=__dUlY0JpSc" target="_blank" class="dimmed">wassup kids!</a></small></small>
+        <small class="dimmed">
+            <p>Made by <a class="dimmed" href="https://twitter.com/amsul_" target="_blank">Amsul</a></p>
+        </small>
+
+    </footer>
 
 
     <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
@@ -1068,6 +1087,15 @@ function&nbsp;createDateArray( date ) {
             api_button_getDate_b = $( '#api_button_getDate_b' ).on({
                 click: function() {
                     alert( api_calendar_getDate_b.getDate( 'yyyy-mm-dd' ) )
+                }
+            })
+
+        var
+            api_picker_getDate_c = $( '#api_picker_getDate_c' ).pickadate(),
+            api_calendar_getDate_c = api_picker_getDate_c.data( 'pickadate' ),
+            api_button_getDate_c = $( '#api_button_getDate_c' ).on({
+                click: function() {
+                    alert( api_calendar_getDate_c.getDate( true ) )
                 }
             })
 

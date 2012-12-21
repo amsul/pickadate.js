@@ -1337,6 +1337,25 @@
     </section>
 
 
+    <section class="holder">
+
+        <p>For all the themes below, you can scroll the picker into view with something like this:</p>
+
+        <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
+    onOpen: function() {
+        scrollPageTo( this.$node )
+    }
+})
+
+function&nbsp;scrollPageTo( $node ) {
+    $( 'body' ).animate({
+        scrollTop: ~~$node.offset().top -&nbsp;60
+    }, 150)
+}</code></pre>
+
+    </section>
+
+
     <section class="holder" id="classic">
 
         <h3><a class="link-anchor" href="#classic">&sect;</a><strong class="underline-highlight">Classic</strong></h3>
@@ -1370,7 +1389,7 @@
     </section>
 
 
-    <section class="holder holder-clean aligncenter">
+    <section class="holder aligncenter">
 
         <p><a class="button-full" href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js v2.0</a></p>
         <small class="dimmed"><p>Browser support: <a class="dimmed" href="docs.htm#legacy">IE7+</a>, Chrome, Firefox, Safari, Opera, iOS Safari, Android browser</p></small>
@@ -1379,7 +1398,13 @@
     </section>
 
 
-    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <footer class="holder holder-clean aligncenter">
+
+        <small class="dimmed">
+            <p>Made by <a class="dimmed" href="https://twitter.com/amsul_" target="_blank">Amsul</a></p>
+        </small>
+
+    </footer>
 
 
     <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
@@ -1390,34 +1415,32 @@
         $( '#picker_default' ).pickadate()
         $( '#picker_classic' ).pickadate({
             onOpen: function() {
-                $('body').animate({
-                    scrollTop: ~~$( '#picker_classic' ).offset().top - 60
-                }, 150).css( 'overflow', 'auto' )
+                scrollPageTo( this.$node )
             },
-            onClose: function() {
-                $('body').css( 'overflow', '' )
-            }
+            onClose: initialBodyState
         })
         $( '#picker_inline' ).pickadate({
             onOpen: function() {
-                $('body').animate({
-                    scrollTop: ~~$( '#picker_inline' ).offset().top - 60
-                }, 150).css( 'overflow', 'auto' )
+                scrollPageTo( this.$node )
             },
-            onClose: function() {
-                $('body').css( 'overflow', '' )
-            }
+            onClose: initialBodyState
         })
         $( '#picker_inline_fixed' ).pickadate({
             onOpen: function() {
-                $('body').animate({
-                    scrollTop: ~~$( '#picker_inline_fixed' ).offset().top - 60
-                }, 150).css( 'overflow', 'auto' )
+                scrollPageTo( this.$node )
             },
-            onClose: function() {
-                $('body').css( 'overflow', '' )
-            }
+            onClose: initialBodyState
         })
+
+        function scrollPageTo( $node ) {
+            $( 'body' ).animate({
+                scrollTop: ~~$node.offset().top - 60
+            }, 150).css( 'overflow', 'auto' )
+        }
+
+        function initialBodyState() {
+            $( 'body' ).css( 'overflow', '' )
+        }
     </script>
 
 

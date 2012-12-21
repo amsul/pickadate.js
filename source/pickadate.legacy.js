@@ -297,17 +297,22 @@
                      * Get a date in any format.
                      * Defaults to getting the selected date
                      */
-                    getDate: function( format, date ) {
+                    getDate: function( format ) {
 
-                        // Go through the date formats array and
-                        // convert the format passed into an array to map
-                        // which we join into a string at the end
-                        return DATE_FORMATS.toArray( format || SETTINGS.format ).map( function( value ) {
+                        // If the element has no value,
+                        // just return an empty string
+                        if ( !ELEMENT.value ) {
+                            return ''
+                        }
 
-                            // Trigger the date formats function
-                            // or just return value itself
-                            return triggerFunction( DATE_FORMATS[ value ], date || DATE_SELECTED ) || value
-                        }).join( '' )
+                        // If the format is a literal true,
+                        // return the underlying JS Date object
+                        if ( format === true ) {
+                            return DATE_SELECTED.OBJ
+                        }
+
+                        // Otherwise return the formatted date
+                        return getDateFormatted( format )
                     }, //getDate
 
 
@@ -332,7 +337,7 @@
                     getDateLimit: function( upper, format ) {
 
                         // Get the max or min date depending on the `upper` flag
-                        return P.getDate( format, upper ? DATE_MAX : DATE_MIN )
+                        return getDateFormatted( format, upper ? DATE_MAX : DATE_MIN )
                     }, //getDateLimit
 
 
@@ -634,7 +639,7 @@
                 // If there's a format for the hidden input element, create the element
                 // using the name of the original input plus suffix and update the value
                 // with whatever is entered in the input on load. Otherwise set it to null.
-                ELEMENT_HIDDEN = SETTINGS.formatSubmit ? $( '<input type=hidden name=' + ELEMENT.name + SETTINGS.hiddenSuffix + '>' ).val( ELEMENT.value ? P.getDate( SETTINGS.formatSubmit ) : '' )[ 0 ] : null,
+                ELEMENT_HIDDEN = SETTINGS.formatSubmit ? $( '<input type=hidden name=' + ELEMENT.name + SETTINGS.hiddenSuffix + '>' ).val( ELEMENT.value ? getDateFormatted( SETTINGS.formatSubmit ) : '' )[ 0 ] : null,
 
 
                 // Create the calendar table head with weekday labels
@@ -996,7 +1001,7 @@
             function createTodayAndClear() {
 
                 // Create and return the button nodes
-                return createNode( 'button', SETTINGS.today, CLASSES.buttonToday, 'data-date=' + P.getDate( 'yyyy/mm/dd', DATE_TODAY ) + ' tabindex=' + ( CALENDAR.isOpen ? 0 : -1 ) ) + createNode( 'button', SETTINGS.clear, CLASSES.buttonClear, 'data-clear=1 tabindex=' + ( CALENDAR.isOpen ? 0 : -1 ) )
+                return createNode( 'button', SETTINGS.today, CLASSES.buttonToday, 'data-date=' + getDateFormatted( 'yyyy/mm/dd', DATE_TODAY ) + ' tabindex=' + ( CALENDAR.isOpen ? 0 : -1 ) ) + createNode( 'button', SETTINGS.clear, CLASSES.buttonClear, 'data-clear=1 tabindex=' + ( CALENDAR.isOpen ? 0 : -1 ) )
             } //createTodayAndClear
 
 
@@ -1071,9 +1076,28 @@
 
 
             /**
-             * Set a date as selected or only highlighted
+             * Get any date in any format.
+             * Defaults to getting the superficially
+             * selected date.
              */
-            function setDateSelected( dateTargeted, isHighlight ) {
+            function getDateFormatted( format, date ) {
+
+                // Otherwise go through the date formats array and
+                // convert the format passed into an array to map
+                // which we join into a string at the end.
+                return DATE_FORMATS.toArray( format || SETTINGS.format ).map( function( value ) {
+
+                    // Trigger the date formats function
+                    // or just return value itself.
+                    return triggerFunction( DATE_FORMATS[ value ], date || DATE_SELECTED ) || value
+                }).join( '' )
+            } //getDateFormatted
+
+
+            /**
+             * Set a date as selected or superficially selected
+             */
+            function setDateSelected( dateTargeted, isSuperficial ) {
 
                 // Set the target as the highlight
                 DATE_HIGHLIGHTED = dateTargeted
@@ -1081,8 +1105,9 @@
                 // Set the target as the focus
                 MONTH_FOCUSED = dateTargeted
 
-                // If it's not just a highlight, update the input value
-                if ( !isHighlight ) {
+                // If it's not just a superficial selection,
+                // update the input elements values
+                if ( !isSuperficial ) {
                     setElementsValue( dateTargeted )
                 }
 
@@ -1100,13 +1125,13 @@
                 DATE_SELECTED = dateTargeted || DATE_SELECTED
 
                 // Set the element value as the formatted date
-                // if the date targeted has a time. Otherwise clear it.
-                ELEMENT.value = dateTargeted ? P.getDate() : ''
+                // if there was a date targeted. Otherwise clear it.
+                ELEMENT.value = dateTargeted ? getDateFormatted() : ''
 
                 // If there's a hidden input, set the value with the submit format
                 // if there's a date targeted. Otherwise clear it.
                 if ( ELEMENT_HIDDEN ) {
-                    ELEMENT_HIDDEN.value = dateTargeted ? P.getDate( SETTINGS.formatSubmit ) : ''
+                    ELEMENT_HIDDEN.value = dateTargeted ? getDateFormatted( SETTINGS.formatSubmit ) : ''
                 }
 
                 // Trigger the onSelect method within scope of the picker
@@ -1469,7 +1494,8 @@
             MONTH: unlimited || datePassed.getMonth(),
             DATE: unlimited || datePassed.getDate(),
             DAY: unlimited || datePassed.getDay(),
-            TIME: unlimited || datePassed.getTime()
+            TIME: unlimited || datePassed.getTime(),
+            OBJ: unlimited || datePassed
         }
     } //createDate
 
