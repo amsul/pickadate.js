@@ -20,7 +20,8 @@ The `pickadate.js` script supports all modern browsers and IE 9+. To support IE 
 
 #### 2.0
 - A version bump due to changes in the [default layout and styling](http://amsul.github.com/pickadate.js/docs.htm#options_styling) that will cause _**old stylings to break.**_
-- [New themes](http://amsul.github.com/pickadate.js/themes.htm)
+- [New fully responsive default theme](http://amsul.github.com/pickadate.js)
+- [4 themes to chose from](http://amsul.github.com/pickadate.js/themes.htm)
 - [Today & clear buttons](http://amsul.github.com/pickadate.js/docs.htm#buttons)
 - [Clear method](http://amsul.github.com/pickadate.js/docs.htm#api_clear)
 - [Grab input element from calendar object](http://amsul.github.com/pickadate.js/docs.htm#api_$node)
