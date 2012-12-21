@@ -24,6 +24,7 @@ The `pickadate.js` script supports all modern browsers and IE 9+. To support IE 
 - [Today & clear buttons](http://amsul.github.com/pickadate.js/docs.htm#buttons)
 - [Clear method](http://amsul.github.com/pickadate.js/docs.htm#api_clear)
 - [Grab input element from calendar object](http://amsul.github.com/pickadate.js/docs.htm#api_$node)
+- As well as several bug fixes and improvements (especially for iOS and IE)
 
 #### 1.4.0
 - [Get min & max date](http://amsul.github.com/pickadate.js/docs.htm#api_getDateLimit)
