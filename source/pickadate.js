@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v2.0 - 20 December, 2012
+ * pickadate.js v2.0 - 21 December, 2012
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
@@ -60,7 +60,6 @@
                      */
                     init: function() {
 
-                        // Add the `input` class to the element,
                         // Bind all the events to the element,
                         // and then insert everything after it
                         $ELEMENT.on({
@@ -92,8 +91,9 @@
                                     event.stopPropagation()
 
                                     // If backspace was pressed, clear the values
+                                    // and then close the picker
                                     if ( isKeycodeDelete ) {
-                                        P.clear()
+                                        P.clear().close()
                                     }
 
                                     // Otherwise open the calendar
@@ -132,12 +132,12 @@
                         if ( CALENDAR.isOpen ) return P
 
 
-                        // Toggle the tabindex of "focusable" calendar items
-                        toggleCalendarElements( 0 )
-
-
                         // Set calendar as open
                         CALENDAR.isOpen = true
+
+
+                        // Toggle the tabindex of "focusable" calendar items
+                        toggleCalendarElements( 0 )
 
 
                         // Make sure the element has focus and then
@@ -240,12 +240,12 @@
                         if ( !CALENDAR.isOpen ) return P
 
 
-                        // Toggle the tabindex of "focusable" calendar items
-                        toggleCalendarElements( -1 )
-
-
                         // Set calendar as closed
                         CALENDAR.isOpen = false
+
+
+                        // Toggle the tabindex of "focusable" calendar items
+                        toggleCalendarElements( -1 )
 
 
                         // Remove the "active" class from the element
@@ -412,7 +412,7 @@
 
                     // If the second character is a digit, length is 2 otherwise 1.
                     function getDigitsLength( string ) {
-                        return (/\d/).test( string[ 1 ] ) ? 2 : 1
+                        return ( /\d/ ).test( string[ 1 ] ) ? 2 : 1
                     }
 
                     // Get the length of the month from a string
@@ -669,7 +669,56 @@
 
 
                 // Create the calendar holder with a new wrapped calendar and bind the click
-                $HOLDER = $( createNode( STRING_DIV, createCalendarWrapped(), CLASSES.holder ) ).on( 'click', onClickCalendar ),
+                $HOLDER = $( createNode( STRING_DIV, createCalendarWrapped(), CLASSES.holder ) ).on( 'click', function( event ) {
+
+                    var
+                        dateToSelect,
+
+                        // Get the jQuery target
+                        $target = $( event.target ),
+
+                        // Get the target data
+                        targetData = $target.data()
+
+
+                    // Stop the event from bubbling to the document
+                    event.stopPropagation()
+
+
+                    // Put focus back onto the element
+                    ELEMENT.focus()
+
+
+                    // If a navigator button was clicked
+                    if ( targetData.nav ) {
+
+                        // Show the month in the relative direction
+                        showMonth( MONTH_FOCUSED.MONTH + targetData.nav )
+                    }
+
+
+                    // If a clear button was clicked,
+                    // clear the elements value and then close it
+                    else if ( targetData.clear ) {
+                        P.clear().close()
+                    }
+
+                    // If a date was clicked
+                    else if ( targetData.date ) {
+
+                        // Split the target data into an array
+                        // while parsing each item as an integer
+                        dateToSelect = targetData.date.split( '/' ).map( function( value ) { return +value })
+
+                        // Set the date and then close the calendar
+                        P.setDate( dateToSelect[ 0 ], dateToSelect[ 1 ], dateToSelect[ 2 ] ).close()
+                    }
+
+                    // If the target is the holder, close the picker
+                    else if ( $target[ 0 ] == $HOLDER[ 0 ] ) {
+                        P.close()
+                    }
+                }), // $HOLDER
 
 
                 // Translate a keycode to a relative change in date
@@ -689,6 +738,90 @@
                 } //KEYCODE_TO_DATE
 
 
+
+            /**
+             * Create a bounding date allowed on the calendar
+             * * A truthy second argument creates the upper boundary
+             */
+            function createBoundaryDate( limit, upper ) {
+
+                // If the limit is set to true, just return today
+                if ( limit === true ) {
+                    return DATE_TODAY
+                }
+
+                // If the limit is an array, construct the date
+                // while fixing month 0index
+                if ( Array.isArray( limit ) ) {
+                    --limit[ 1 ]
+                    return createDate( limit )
+                }
+
+                // If there is a limit and its a number, create a
+                // calendar date relative to today by adding the limit
+                if ( limit && !isNaN( limit ) ) {
+                    return createDate([ DATE_TODAY.YEAR, DATE_TODAY.MONTH, DATE_TODAY.DATE + limit ])
+                }
+
+                // Otherwise create an infinite date
+                return createDate( 0, upper ? Infinity : -Infinity )
+            } //createBoundaryDate
+
+
+            /**
+             * Create a validated date
+             */
+            function createValidatedDate( datePassed, direction ) {
+
+
+                // If the date passed isn't a date, create one
+                datePassed = !datePassed.TIME ? createDate( datePassed ) : datePassed
+
+
+                // If there are disabled dates
+                if ( DATES_TO_DISABLE ) {
+
+                    // Create a reference to the original date passed
+                    var originalDate = datePassed
+
+                    // Check if this date is disabled. If it is,
+                    // then keep adding the direction (or 1) to the date
+                    // until we get to a date that's enabled.
+                    while ( DATES_TO_DISABLE.filter( DISABLED_DATES, datePassed ).length ) {
+
+                        // Create the next date based on the direction
+                        datePassed = createDate([ datePassed.YEAR, datePassed.MONTH, datePassed.DATE + ( direction || 1 ) ])
+
+                        // If we've looped through to another month,
+                        // then increase/decrease the date by one and
+                        // continue looping with the new original date
+                        if ( datePassed.MONTH != originalDate.MONTH ) {
+                            datePassed = createDate([ originalDate.YEAR, originalDate.MONTH, direction > 0 ? ++originalDate.DATE : --originalDate.DATE ])
+                            originalDate = datePassed
+                        }
+                    }
+                }
+
+
+                // If it's less that min date, set it to min date
+                // by creating a validated date by adding one
+                // until we find an enabled date
+                if ( datePassed.TIME < DATE_MIN.TIME ) {
+                    datePassed = createValidatedDate( DATE_MIN )
+                }
+
+
+                // If it's more than max date, set it to max date
+                // by creating a validated date by subtracting one
+                // until we find an enabled date
+                else if ( datePassed.TIME > DATE_MAX.TIME ) {
+                    datePassed = createValidatedDate( DATE_MAX, -1 )
+                }
+
+
+                // Finally, return the date
+                return datePassed
+            } //createValidatedDate
 
 
             /**
@@ -746,7 +879,7 @@
                         CLASSES.selectMonth,
 
                         // And some tabindex
-                        'tabindex=' + ( CALENDAR.isOpen ? 0 : -1 )
+                        getTabindexState()
 
                     // Otherwise just return the month focused
                     ) : createNode( STRING_DIV, monthsCollection[ MONTH_FOCUSED.MONTH ], CLASSES.month )
@@ -826,7 +959,7 @@
                         CLASSES.selectYear,
 
                         // And some tabindex
-                        'tabindex=' + ( CALENDAR.isOpen ? 0 : -1 )
+                        getTabindexState()
                     )
                 }
 
@@ -878,8 +1011,8 @@
                     createDateClassAndBinding = function( loopDate, isMonthFocused ) {
 
                         var
-                            // Boolean check for date state
-                            isDateDisabled = false,
+                            // State check for date
+                            isDateDisabled,
 
                             // Create a collection for the classes
                             // with the default classes already included
@@ -899,8 +1032,8 @@
                         // and this looped date is one of them
                         if ( loopDate.TIME < DATE_MIN.TIME || loopDate.TIME > DATE_MAX.TIME || ( DATES_TO_DISABLE && DATES_TO_DISABLE.filter( DISABLED_DATES, loopDate ).length ) ) {
 
-                            // Flip the boolen
-                            isDateDisabled = true
+                            // Make the state truthy
+                            isDateDisabled = 1
 
                             // Add the disabled class
                             klassCollection.push( CLASSES.dayDisabled )
@@ -1001,7 +1134,7 @@
             function createTodayAndClear() {
 
                 // Create and return the button nodes
-                return createNode( 'button', SETTINGS.today, CLASSES.buttonToday, 'data-date=' + getDateFormatted( 'yyyy/mm/dd', DATE_TODAY ) + ' tabindex=' + ( CALENDAR.isOpen ? 0 : -1 ) ) + createNode( 'button', SETTINGS.clear, CLASSES.buttonClear, 'data-clear=1 tabindex=' + ( CALENDAR.isOpen ? 0 : -1 ) )
+                return createNode( 'button', SETTINGS.today, CLASSES.buttonToday, 'data-date=' + getDateFormatted( 'yyyy/mm/dd', DATE_TODAY ) + ' ' + getTabindexState() ) + createNode( 'button', SETTINGS.clear, CLASSES.buttonClear, 'data-clear=1 ' + getTabindexState() )
             } //createTodayAndClear
 
 
@@ -1073,6 +1206,43 @@
                 // return the number. Otherwise return the limit.
                 return ( upper && number < limit ) || ( !upper && number > limit ) ? number : limit
             } //getNumberInRange
+
+
+            /**
+             * Return a month by comparing with the date range.
+             * If outside the range, returns the value passed.
+             * Otherwise returns the "in range" value or the month itself.
+             */
+            function getMonthInRange( month, year, alternateValue, inRangeValue ) {
+
+                // If the month is less than the min month,
+                // then return the alternate value or min month.
+                if ( year <= DATE_MIN.YEAR && month < DATE_MIN.MONTH ) {
+                    return alternateValue || DATE_MIN.MONTH
+                }
+
+                // If the month is more than the max month,
+                // then return the alternate value or max month.
+                if ( year >= DATE_MAX.YEAR && month > DATE_MAX.MONTH ) {
+                    return alternateValue || DATE_MAX.MONTH
+                }
+
+                // Otherwise return the "in range" value
+                // or the month itself.
+                // * We test `inRangeValue` against null
+                //   because we need to test against null
+                //   and undefined. 0 should be allowed.
+                return inRangeValue != null ? inRangeValue : month
+            } //getMonthInRange
+
+
+            /**
+             * Get the tabindex based on the calendar
+             * open/closed state
+             */
+            function getTabindexState() {
+                return 'tabindex=' + ( CALENDAR.isOpen ? 0 : -1 )
+            }
 
 
             /**
@@ -1170,126 +1340,18 @@
 
 
             /**
-             * Create a bounding date allowed on the calendar
-             * * A truthy second argument creates the upper boundary
-             */
-            function createBoundaryDate( limit, upper ) {
-
-                // If the limit is set to true, just return today
-                if ( limit === true ) {
-                    return DATE_TODAY
-                }
-
-                // If the limit is an array, construct the date
-                // while fixing month 0index
-                if ( Array.isArray( limit ) ) {
-                    --limit[ 1 ]
-                    return createDate( limit )
-                }
-
-                // If there is a limit and its a number, create a
-                // calendar date relative to today by adding the limit
-                if ( limit && !isNaN( limit ) ) {
-                    return createDate([ DATE_TODAY.YEAR, DATE_TODAY.MONTH, DATE_TODAY.DATE + limit ])
-                }
-
-                // Otherwise create an infinite date
-                return createDate( 0, upper ? Infinity : -Infinity )
-            } //createBoundaryDate
-
-
-            /**
-             * Create a validated date
-             */
-            function createValidatedDate( datePassed, direction ) {
-
-
-                // If the date passed isn't a date, create one
-                datePassed = !datePassed.TIME ? createDate( datePassed ) : datePassed
-
-
-                // If there are disabled dates
-                if ( DATES_TO_DISABLE ) {
-
-                    // Create a reference to the original date passed
-                    var originalDate = datePassed
-
-                    // Check if this date is disabled. If it is,
-                    // then keep adding the direction (or 1) to the date
-                    // until we get to a date that's enabled.
-                    while ( DATES_TO_DISABLE.filter( DISABLED_DATES, datePassed ).length ) {
-
-                        // Create the next date based on the direction
-                        datePassed = createDate([ datePassed.YEAR, datePassed.MONTH, datePassed.DATE + ( direction || 1 ) ])
-
-                        // If we've looped through to another month,
-                        // then increase/decrease the date by one and
-                        // continue looping with the new original date
-                        if ( datePassed.MONTH != originalDate.MONTH ) {
-                            datePassed = createDate([ originalDate.YEAR, originalDate.MONTH, direction > 0 ? ++originalDate.DATE : --originalDate.DATE ])
-                            originalDate = datePassed
-                        }
-                    }
-                }
-
-
-                // If it's less that min date, set it to min date
-                // by creating a validated date by adding one
-                // until we find an enabled date
-                if ( datePassed.TIME < DATE_MIN.TIME ) {
-                    datePassed = createValidatedDate( DATE_MIN )
-                }
-
-
-                // If it's more than max date, set it to max date
-                // by creating a validated date by subtracting one
-                // until we find an enabled date
-                else if ( datePassed.TIME > DATE_MAX.TIME ) {
-                    datePassed = createValidatedDate( DATE_MAX, -1 )
-                }
-
-
-                // Finally, return the date
-                return datePassed
-            } //createValidatedDate
-
-
-            /**
-             * Return a month by comparing with the date range.
-             * If outside the range, returns the value passed.
-             * Otherwise returns the "in range" value or the month itself.
-             */
-            function getMonthInRange( month, year, alternateValue, inRangeValue ) {
-
-                // If the month is less than the min month,
-                // then return the alternate value or min month.
-                if ( year <= DATE_MIN.YEAR && month < DATE_MIN.MONTH ) {
-                    return alternateValue || DATE_MIN.MONTH
-                }
-
-                // If the month is more than the max month,
-                // then return the alternate value or max month.
-                if ( year >= DATE_MAX.YEAR && month > DATE_MAX.MONTH ) {
-                    return alternateValue || DATE_MAX.MONTH
-                }
-
-                // Otherwise return the "in range" value
-                // or the month itself.
-                // * We test `inRangeValue` against null
-                //   because we need to test against null
-                //   and undefined. 0 should be allowed.
-                return inRangeValue != null ? inRangeValue : month
-            } //getMonthInRange
-
-
-            /**
              * Toggle the calendar elements as "tab-able"
              */
             function toggleCalendarElements( tabindex ) {
 
-                // Grab the collection of calendar items and
-                // toggle the tabindex based on the calendar state
-                [ CALENDAR.selectMonth, CALENDAR.selectYear, CALENDAR.today, CALENDAR.clear ].map( function( item ) {
+                // Create a collection of calendar items and
+                // set each items tabindex
+                [
+                    CALENDAR.selectMonth,
+                    CALENDAR.selectYear,
+                    $findInHolder( CLASSES.buttonToday )[ 0 ],
+                    $findInHolder( CLASSES.buttonClear )[ 0 ]
+                ].map( function( item ) {
                     if ( item ) item.tabIndex = tabindex
                 })
             } //toggleCalendarElements
@@ -1349,70 +1411,7 @@
                         $findInHolder( CLASSES.selectYear ).focus()
                     }
                 })[ 0 ]
-
-                // Find and store the today button
-                CALENDAR.today = $findInHolder( CLASSES.buttonToday )[ 0 ]
-
-                // Find and store the clear button
-                CALENDAR.clear = $findInHolder( CLASSES.buttonClear )[ 0 ]
             } //postRender
-
-
-
-            /**
-             * Handle all delegated click events on the calendar holder
-             */
-            function onClickCalendar( event ) {
-
-                var
-                    dateToSelect,
-
-                    // Get the jQuery target
-                    $target = $( event.target ),
-
-                    // Get the target data
-                    targetData = $target.data()
-
-
-                // Stop the event from bubbling to the document
-                event.stopPropagation()
-
-
-                // Put focus back onto the element
-                ELEMENT.focus()
-
-
-                // If a navigator button was clicked
-                if ( targetData.nav ) {
-
-                    // Show the month in the relative direction
-                    showMonth( MONTH_FOCUSED.MONTH + targetData.nav )
-                }
-
-
-                // If a clear button was clicked,
-                // clear the elements value and then close it
-                else if ( targetData.clear ) {
-                    P.clear().close()
-                }
-
-                // If a date was clicked
-                else if ( targetData.date ) {
-
-                    // Split the target data into an array
-                    // while parsing each item as an integer
-                    dateToSelect = targetData.date.split( '/' ).map( function( value ) { return +value })
-
-                    // Set the date and then close the calendar
-                    P.setDate( dateToSelect[ 0 ], dateToSelect[ 1 ], dateToSelect[ 2 ] ).close()
-                }
-
-                // If the target is the holder, close the picker
-                else if ( $target[ 0 ] == $HOLDER[ 0 ] ) {
-                    P.close()
-                }
-
-            } //onClickCalendar
 
 
             // Return a new initialized picker
