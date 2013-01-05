@@ -3,7 +3,7 @@
 
 A fully responsive and lightweight jQuery dateinput picker.
 
-Check out the [demo](http://amsul.github.com/pickadate.js), [docs](http://amsul.github.com/pickadate.js/docs.htm>), & [themes](http://amsul.github.com/pickadate.js/themes>).
+Check out the [demo](http://amsul.github.com/pickadate.js), [docs](http://amsul.github.com/pickadate.js/docs.htm>), & [themes](http://amsul.github.com/pickadate.js/themes.htm>).
 
 [Read API changes in version 2.0](https://github.com/amsul/pickadate.js#20)
 
