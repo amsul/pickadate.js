@@ -712,6 +712,9 @@
 
                         // Set the date and then close the calendar
                         P.setDate( dateToSelect[ 0 ], dateToSelect[ 1 ], dateToSelect[ 2 ] ).close()
+
+                        // Broadcast the change event on the actual input element
+                        $ELEMENT.trigger('change')
                     }
 
                     // If the target is the holder, close the picker
