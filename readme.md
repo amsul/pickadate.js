@@ -5,7 +5,7 @@ A fully responsive and lightweight jQuery dateinput picker.
 
 Check out the [demo](http://amsul.github.com/pickadate.js), [docs](http://amsul.github.com/pickadate.js/docs.htm>), & [themes](http://amsul.github.com/pickadate.js/themes.htm>).
 
-[Read API changes in version 2.0](https://github.com/amsul/pickadate.js#20)
+[Read API changes in v2+](https://github.com/amsul/pickadate.js#20)
 
 
 ## Browser support
@@ -17,6 +17,8 @@ The `pickadate.js` script supports all modern browsers and IE 9+. To support IE 
 
 ## Notable updates
 
+#### 2.0.1
+- [Broadcast the `input` change event](https://github.com/amsul/pickadate.js/issues/63)
 
 #### 2.0
 - A version bump due to changes in the [default layout and styling](http://amsul.github.com/pickadate.js/docs.htm#options_styling) that will cause _**old stylings to break.**_
@@ -66,4 +68,4 @@ Fork away and send in pull requests of your own custom `pickadate.css` file so w
 
 ---
 
-&copy; Amsul - Licensed under MIT ("expat" flavour) license.
+&copy; [Amsul](http://twitter.com/amsul_) - Licensed under MIT ("expat" flavour) license.
