@@ -305,7 +305,7 @@
     border-left: .66em solid transparent;
 }
 .pickadate__button--clear:before {
-    content: "×";
+    content: "\D7";
     margin-right: .35em;
     top: -.1em;
     color: #e20;
