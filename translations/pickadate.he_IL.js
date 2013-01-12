@@ -8,5 +8,5 @@ $.extend( $.fn.pickadate.defaults, {
     today: 'היום',
     clear: 'למחוק',
     format: 'yyyy mmmmב d dddd',
-    formatSubmit: 'd/mm/yyyy'
+    formatSubmit: 'yyyy/mm/dd'
 })

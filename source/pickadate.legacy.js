@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v2.0 - 21 December, 2012
+ * pickadate.js v2.0.1 - 12 January, 2013
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
@@ -712,9 +712,6 @@
 
                         // Set the date and then close the calendar
                         P.setDate( dateToSelect[ 0 ], dateToSelect[ 1 ], dateToSelect[ 2 ] ).close()
-
-                        // Broadcast the change event on the actual input element
-                        $ELEMENT.trigger('change')
                     }
 
                     // If the target is the holder, close the picker
@@ -1299,7 +1296,8 @@
 
                 // Set the element value as the formatted date
                 // if there was a date targeted. Otherwise clear it.
-                ELEMENT.value = dateTargeted ? getDateFormatted() : ''
+                // And then broadcast a change event.
+                $ELEMENT.val( dateTargeted ? getDateFormatted() : '' ).trigger( 'change' )
 
                 // If there's a hidden input, set the value with the submit format
                 // if there's a date targeted. Otherwise clear it.

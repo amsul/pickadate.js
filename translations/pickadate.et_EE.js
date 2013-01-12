@@ -9,5 +9,5 @@ $.extend( $.fn.pickadate.defaults, {
     clear: 'kustutama',
     firstDay: 1,
     format: 'd. mmmm yyyy. a',
-    formatSubmit: 'd.mm.yyyy'
+    formatSubmit: 'yyyy/mm/dd'
 })

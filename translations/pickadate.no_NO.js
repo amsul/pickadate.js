@@ -9,5 +9,5 @@ $.extend( $.fn.pickadate.defaults, {
     clear: 'slette',
     firstDay: 1,
     format: 'dd. mmm. yyyy',
-    formatSubmit: 'dd.mm.yyyy'
+    formatSubmit: 'yyyy/mm/dd'
 })

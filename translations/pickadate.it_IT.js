@@ -9,5 +9,5 @@ $.extend( $.fn.pickadate.defaults, {
     clear: 'cancellare',
     firstDay: 1,
     format: 'dddd d mmmm yyyy',
-    formatSubmit: 'dd/mm/yyyy'
+    formatSubmit: 'yyyy/mm/dd'
 })

@@ -169,6 +169,19 @@ h1 .link-anchor {
 }
 
 
+.peace {
+    position: relative;
+}
+.peace:after {
+    content: "\270C";
+    font-size: 50px;
+    color: #ddd;
+    position: absolute;
+    top: -32px;
+    right: -32px;
+}
+
+
 
 
 

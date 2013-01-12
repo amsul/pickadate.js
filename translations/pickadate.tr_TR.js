@@ -9,5 +9,5 @@ $.extend( $.fn.pickadate.defaults, {
     clear: 'silmek',
     firstDay: 1,
     format: 'dd mmmm yyyy dddd',
-    formatSubmit: 'dd.mm.yyyy'
+    formatSubmit: 'yyyy/mm/dd'
 })
