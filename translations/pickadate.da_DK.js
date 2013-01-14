@@ -6,7 +6,7 @@ $.extend( $.fn.pickadate.defaults, {
     weekdaysFull: [ 'søndag', 'mandag', 'tirsdag', 'onsdag', 'torsdag', 'fredag', 'lørdag' ],
     weekdaysShort: [ 'søn', 'man', 'tir', 'ons', 'tor', 'fre', 'lør' ],
     today: 'i dag',
-    clear: 'slette',
+    clear: 'slet',
     firstDay: 1,
     format: 'd. mmmm yyyy',
     formatSubmit: 'yyyy/mm/dd'
