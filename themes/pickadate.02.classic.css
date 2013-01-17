@@ -5,6 +5,18 @@
  * Demo: http://amsul.github.com/pickadate.js/themes.htm#classic
  */
 
+
+/**
+ * When the calendar is open
+ */
+
+/* And add the "active" state to the input */
+/*input*/.pickadate__input--active {
+    border-color: #0089ec !important;
+}
+
+
+
 /**
  * The picker holder
  */

@@ -16,8 +16,8 @@
 }
 
 /* And add the "active" state to the input */
-.pickadate__input--active {
-    border-color: #0089ec;
+/*input*/.pickadate__input--active {
+    border-color: #0089ec !important;
 }
 
 
