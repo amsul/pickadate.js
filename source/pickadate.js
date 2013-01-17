@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v2.0.1 - 12 January, 2013
+ * pickadate.js v2.0.5 - 17 January, 2013
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
@@ -16,7 +16,7 @@
 
 
 
-;(function( $, window, document, undefined ) {
+;(function( $, document, undefined ) {
 
     'use strict';
 
@@ -31,6 +31,8 @@
 
         STRING_DIV = 'div',
         STRING_PREFIX_DATEPICKER = 'pickadate__',
+
+        isIE = navigator.userAgent.match( /MSIE/ ),
 
         $document = $( document ),
 
@@ -60,12 +62,22 @@
                      */
                     init: function() {
 
+
                         // Bind all the events to the element,
                         // and then insert everything after it
                         $ELEMENT.on({
                             'focus click': function() {
-                                $HOLDER.addClass( CLASSES.focused )
-                                P.open()
+
+                                // If it's not IE or it is IE and the
+                                // calendar is not being force closed,
+                                // then open the calendar
+                                if ( !isIE || ( isIE && !CALENDAR.ieForce ) ) {
+                                    $HOLDER.addClass( CLASSES.focused )
+                                    P.open()
+                                }
+
+                                // Set IE force close to false
+                                CALENDAR.ieForce = false
                             },
                             blur: function() {
                                 $HOLDER.removeClass( CLASSES.focused )
@@ -687,6 +699,10 @@
 
                     // Put focus back onto the element
                     ELEMENT.focus()
+
+                    // For IE, set the calendar to force close
+                    // * This needs to be after `ELEMENT.focus()`
+                    CALENDAR.ieForce = true
 
 
                     // If a navigator button was clicked
@@ -1630,7 +1646,7 @@
 
 
 
-})( jQuery, window, document );
+})( jQuery, document );
 
 
 
