@@ -1,11 +1,11 @@
-# pickadate.js v2.0.1
+# pickadate.js v2.0.5
 
 
 A fully responsive and lightweight jQuery dateinput picker.
 
 Check out the [demo](http://amsul.github.com/pickadate.js), [docs](http://amsul.github.com/pickadate.js/docs.htm>), & [themes](http://amsul.github.com/pickadate.js/themes.htm>).
 
-[Read API changes in v2+](https://github.com/amsul/pickadate.js#20)
+[Read API changes in v2+](https://github.com/amsul/pickadate.js#notable-updates)
 
 
 ## Browser support
@@ -16,6 +16,10 @@ The `pickadate.js` script supports all modern browsers and IE 9+. To support IE 
 
 
 ## Notable updates
+
+#### 2.0.5
+- [IE click-to-close bug fix](https://github.com/amsul/pickadate.js/issues/67)
+- [IE styling fix where calendar appears left-aligned](https://github.com/amsul/pickadate.js/issues/67#issuecomment-12367491)
 
 #### 2.0.1
 - [Broadcast the `input` change event](https://github.com/amsul/pickadate.js/issues/63)

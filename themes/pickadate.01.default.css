@@ -5,6 +5,30 @@
  * Demo: http://amsul.github.com/pickadate.js/themes.htm#default
  */
 
+/**
+ * Colors used:
+ *
+ * #0089ec -> Base blue
+ * #b1dcfb -> Hover blue bg
+ *
+ * #0059bc -> Dark blue for "today" tag
+ * #aaa    -> Light grey for "today" tag if disabled
+ *
+ * #f5f5f5 -> Dimmed grey bg for disabled days
+ * #ddd    -> Less dimmed grey for text in disabled & outfocus days
+ *
+ * #777    -> Grey for calendar border
+ * #888    -> Slightly lighter grey for calendar top border
+ *
+ * #999    -> Medium grey used for year & weekday labels
+ *
+ * #e20    -> Red used for "clear" icon
+ *
+ * #000    -> Black
+ * #fff    -> White
+ *
+ */
+
 
 /**
  * When the calendar is open
@@ -302,7 +326,7 @@
     margin-right: .45em;
     top: -.05em;
     width: 0;
-    border-top: .66em solid #0089ec;
+    border-top: .66em solid #0059bc;
     border-left: .66em solid transparent;
 }
 .pickadate__button--clear:before {

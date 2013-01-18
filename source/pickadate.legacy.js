@@ -154,8 +154,7 @@
 
                         // Make sure the element has focus and then
                         // add the "active" class to the element
-                        $ELEMENT.triggerHandler("focus")
-                        $ELEMENT.addClass( CLASSES.inputActive )
+                        $ELEMENT.focus().addClass( CLASSES.inputActive )
 
                         // Add the "opened" class to the calendar holder
                         $HOLDER.addClass( CLASSES.opened )
@@ -194,7 +193,7 @@
                             if ( keycode == 27 ) {
 
                                 // Focus back onto the element
-                                $ELEMENT.triggerHandler("focus")
+                                ELEMENT.focus()
 
                                 // Then close the picker
                                 P.close()
@@ -699,7 +698,7 @@
 
 
                     // Put focus back onto the element
-                    $ELEMENT.triggerHandler("focus")
+                    ELEMENT.focus()
 
                     // For IE, set the calendar to force close
                     // * This needs to be after `ELEMENT.focus()`
@@ -1408,7 +1407,7 @@
                         showMonth( +this.value )
 
                         // Find the new month selector and focus back on it
-                        $findInHolder( CLASSES.selectMonth ).triggerHandler("focus")
+                        $findInHolder( CLASSES.selectMonth ).focus()
                     }
                 })[ 0 ]
 
@@ -1426,7 +1425,7 @@
                         showMonth( MONTH_FOCUSED.MONTH, +this.value )
 
                         // Find the new year selector and focus back on it
-                        $findInHolder( CLASSES.selectYear ).triggerHandler("focus")
+                        $findInHolder( CLASSES.selectYear ).focus()
                     }
                 })[ 0 ]
             } //postRender
