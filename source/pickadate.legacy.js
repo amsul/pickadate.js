@@ -16,7 +16,7 @@
 
 
 
-;(function( $, document, undefined ) {
+;(function( $, window, document, undefined ) {
 
     'use strict';
 
@@ -31,8 +31,6 @@
 
         STRING_DIV = 'div',
         STRING_PREFIX_DATEPICKER = 'pickadate__',
-
-        isIE = navigator.userAgent.match( /MSIE/ ),
 
         $document = $( document ),
 
@@ -62,22 +60,12 @@
                      */
                     init: function() {
 
-
                         // Bind all the events to the element,
                         // and then insert everything after it
                         $ELEMENT.on({
                             'focus click': function() {
-
-                                // If it's not IE or it is IE and the
-                                // calendar is not being force closed,
-                                // then open the calendar
-                                if ( !isIE || ( isIE && !CALENDAR.ieForce ) ) {
-                                    $HOLDER.addClass( CLASSES.focused )
-                                    P.open()
-                                }
-
-                                // Set IE force close to false
-                                CALENDAR.ieForce = false
+                                $HOLDER.addClass( CLASSES.focused )
+                                P.open()
                             },
                             blur: function() {
                                 $HOLDER.removeClass( CLASSES.focused )
@@ -139,7 +127,6 @@
                      * Open the calendar
                      */
                     open: function() {
-
                         // If it's already open, do nothing
                         if ( CALENDAR.isOpen ) return P
 
@@ -154,7 +141,10 @@
 
                         // Make sure the element has focus and then
                         // add the "active" class to the element
-                        $ELEMENT.focus().addClass( CLASSES.inputActive )
+                        $ELEMENT.triggerHandler("focus")
+
+                        $ELEMENT.addClass( CLASSES.inputActive )
+
 
                         // Add the "opened" class to the calendar holder
                         $HOLDER.addClass( CLASSES.opened )
@@ -165,13 +155,19 @@
 
                         // Bind all the events to the document
                         // while namespacing it with the calendar ID
-                        $document.on( 'focusin.P' + CALENDAR.id, function( event ) {
+                        $document.on( 'focus.P' + CALENDAR.id, function( event ) {
 
                             // If the target is not within the holder,
                             // and is not the element, then close the picker
                             if ( !$HOLDER.find( event.target ).length && event.target != ELEMENT ) P.close()
 
-                        }).on( 'click.P' + CALENDAR.id, function( event ) {
+
+                        }).on('mousedown.P' + CALENDAR.id,function(event){
+                                if ( event.target != ELEMENT ){
+                                    event.preventDefault()
+                                    event.stopPropagation()
+                                }
+                        } ).on( 'click.P' + CALENDAR.id, function( event ) {
 
                             // If the target of the click is not the element,
                             // then close the calendar picker
@@ -699,10 +695,6 @@
 
                     // Put focus back onto the element
                     ELEMENT.focus()
-
-                    // For IE, set the calendar to force close
-                    // * This needs to be after `ELEMENT.focus()`
-                    CALENDAR.ieForce = true
 
 
                     // If a navigator button was clicked
@@ -1407,7 +1399,7 @@
                         showMonth( +this.value )
 
                         // Find the new month selector and focus back on it
-                        $findInHolder( CLASSES.selectMonth ).focus()
+                        $findInHolder( CLASSES.selectMonth ).triggerHandler("focus")
                     }
                 })[ 0 ]
 
@@ -1426,6 +1418,7 @@
 
                         // Find the new year selector and focus back on it
                         $findInHolder( CLASSES.selectYear ).focus()
+                        $findInHolder( CLASSES.selectYear ).triggerHandler("focus")
                     }
                 })[ 0 ]
             } //postRender
@@ -1781,7 +1774,7 @@
 
 
 
-})( jQuery, document );
+})( jQuery, window, document );
 
 
 
