@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v2.0.5 - 17 January, 2013
+ * pickadate.js v2.0.5 - 18 January, 2013
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
@@ -68,16 +68,17 @@
                         $ELEMENT.on({
                             'focus click': function() {
 
-                                // If it's not IE or it is IE and the
-                                // calendar is not being force closed,
-                                // then open the calendar
-                                if ( !isIE || ( isIE && !CALENDAR.ieForce ) ) {
-                                    $HOLDER.addClass( CLASSES.focused )
+                                // If it's not IE or it is IE and the calendar is not
+                                // being force closed, then open the calendar
+                                if ( !isIE || ( isIE && !CALENDAR._IE ) ) {
                                     P.open()
                                 }
 
-                                // Set IE force close to false
-                                CALENDAR.ieForce = false
+                                // Add the focused state to the holder
+                                $HOLDER.addClass( CLASSES.focused )
+
+                                // Then flip the IE force close to false
+                                CALENDAR._IE = 0
                             },
                             blur: function() {
                                 $HOLDER.removeClass( CLASSES.focused )
@@ -680,8 +681,16 @@
                 })( ( SETTINGS.showWeekdaysShort ? SETTINGS.weekdaysShort : SETTINGS.weekdaysFull ).slice( 0 ) ), //TABLE_HEAD
 
 
-                // Create the calendar holder with a new wrapped calendar and bind the click
-                $HOLDER = $( createNode( STRING_DIV, createCalendarWrapped(), CLASSES.holder ) ).on( 'click', function( event ) {
+                // Create the calendar holder with a new wrapped calendar and bind the events
+                $HOLDER = $( createNode( STRING_DIV, createCalendarWrapped(), CLASSES.holder ) ).on( 'mousedown', function( event ) {
+
+                    // If the target of the event is not one of the calendar items,
+                    // prevent default action to keep focus on the input element
+                    if ( getCalendarItems().indexOf( event.target ) < 0 ) {
+                        event.preventDefault()
+                    }
+
+                }).on( 'click', function( event ) {
 
                     var
                         dateToSelect,
@@ -702,16 +711,14 @@
 
                     // For IE, set the calendar to force close
                     // * This needs to be after `ELEMENT.focus()`
-                    CALENDAR.ieForce = true
+                    CALENDAR._IE = 1
 
 
-                    // If a navigator button was clicked
+                    // If a navigator button was clicked,
+                    // show the month in the relative direction
                     if ( targetData.nav ) {
-
-                        // Show the month in the relative direction
                         showMonth( MONTH_FOCUSED.MONTH + targetData.nav )
                     }
-
 
                     // If a clear button was clicked,
                     // clear the elements value and then close it
@@ -723,11 +730,10 @@
                     else if ( targetData.date ) {
 
                         // Split the target data into an array
-                        // while parsing each item as an integer
-                        dateToSelect = targetData.date.split( '/' ).map( function( value ) { return +value })
+                        dateToSelect = targetData.date.split( '/' )
 
                         // Set the date and then close the calendar
-                        P.setDate( dateToSelect[ 0 ], dateToSelect[ 1 ], dateToSelect[ 2 ] ).close()
+                        P.setDate( +dateToSelect[ 0 ], +dateToSelect[ 1 ], +dateToSelect[ 2 ] ).close()
                     }
 
                     // If the target is the holder, close the picker
@@ -1101,16 +1107,13 @@
                 // and map a calendar date
                 for ( var index = 0; index < DAYS_IN_CALENDAR; index += 1 ) {
 
-                    // Get the distance between the index
-                    // and the count to shift by.
-                    // This will serve as the separator
-                    // between the previous, current,
-                    // and next months.
+                    // Get the distance between the index and the count
+                    // to shift by. This will serve as the separator
+                    // between the previous, current, and next months.
                     pseudoIndex = index - countShiftby
 
 
-                    // Create a calendar date with
-                    // a negative or positive pseudoIndex
+                    // Create a calendar date with a negative or positive pseudoIndex
                     loopDate = createDate([ MONTH_FOCUSED.YEAR, MONTH_FOCUSED.MONTH, pseudoIndex ])
 
 
@@ -1253,8 +1256,7 @@
 
 
             /**
-             * Get the tabindex based on the calendar
-             * open/closed state
+             * Get the tabindex based on the calendar open/closed state
              */
             function getTabindexState() {
                 return 'tabindex=' + ( CALENDAR.isOpen ? 0 : -1 )
@@ -1262,9 +1264,8 @@
 
 
             /**
-             * Get any date in any format.
-             * Defaults to getting the superficially
-             * selected date.
+             * Get any date in any format. Defaults to getting
+             * the superficially selected date.
              */
             function getDateFormatted( format, date ) {
 
@@ -1363,15 +1364,23 @@
 
                 // Create a collection of calendar items and
                 // set each items tabindex
-                [
+                getCalendarItems().map( function( item ) {
+                    if ( item ) item.tabIndex = tabindex
+                })
+            } //toggleCalendarElements
+
+
+            /**
+             * Return a collection of all the calendar items
+             */
+            function getCalendarItems() {
+                return [
                     CALENDAR.selectMonth,
                     CALENDAR.selectYear,
                     $findInHolder( CLASSES.buttonToday )[ 0 ],
                     $findInHolder( CLASSES.buttonClear )[ 0 ]
-                ].map( function( item ) {
-                    if ( item ) item.tabIndex = tabindex
-                })
-            } //toggleCalendarElements
+                ]
+            } //getCalendarItems
 
 
             /**
@@ -1443,8 +1452,7 @@
      * Helper functions
      */
 
-    // Check if a value is a function
-    // and trigger it, if that
+    // Check if a value is a function and trigger it, if that
     function triggerFunction( callback, scope ) {
         if ( typeof callback == 'function' ) {
             return callback.call( scope )
@@ -1647,7 +1655,6 @@
 
 
 })( jQuery, document );
-
 
 
 
