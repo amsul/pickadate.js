@@ -1,0 +1,32 @@
+{
+
+    "name": "pickadate",
+    "version": "2.0.5",
+    "title": "pickadate.js",
+    "author": {
+        "name" : "Amsul",
+        "email" : "reach@amsul.ca",
+        "url" : "http://amsul.ca"
+    },
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "http://opensource.org/licenses/MIT"
+        }
+    ],
+    "description": "A fully responsive and lightweight jQuery dateinput picker.",
+    "keywords": [
+        "datepicker",
+        "dateinput",
+        "input",
+        "date",
+        "responsive"
+    ],
+    "homepage": "http://amsul.github.com/pickadate.js/",
+    "docs": "http://amsul.github.com/pickadate.js/docs.htm",
+    "demo": "http://amsul.github.com/pickadate.js/themes.htm",
+    "bugs": "https://github.com/amsul/pickadate.js/issues",
+    "dependencies": {
+        "jquery": ">=1.7"
+    }
+}
