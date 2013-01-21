@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v2.0.5 - 18 January, 2013
+ * pickadate.js v2.0.6 - 20 January, 2013
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
@@ -637,7 +637,7 @@
                     // If there's a valid date in the input or the dateEntered
                     // is now an array, create a validated date with it.
                     // Otherwise set the highlighted date to today after validating.
-                    return createValidatedDate( !isNaN( dateEntered ) || Array.isArray( dateEntered ) ? dateEntered : DATE_TODAY )
+                    return createValidatedDate( dateEntered && ( !isNaN( dateEntered ) || Array.isArray( dateEntered ) ) ? dateEntered : DATE_TODAY )
                 })( ELEMENT.getAttribute( 'data-value' ), ELEMENT.value ),
 
 
