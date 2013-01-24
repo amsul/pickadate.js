@@ -1,4 +1,4 @@
-# pickadate.js v2.0.6
+# pickadate.js v2.0.7
 
 
 A fully responsive and lightweight jQuery dateinput picker.
@@ -16,6 +16,9 @@ The `pickadate.js` script supports all modern browsers and IE 9+. To support IE 
 
 
 ## Notable updates
+
+#### 2.0.7
+- ["Enter" key default action allowed when calendar is closed](https://github.com/amsul/pickadate.js/issues/72)
 
 #### 2.0.5
 - [IE click-to-close bug fix](https://github.com/amsul/pickadate.js/issues/67)
