@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v2.0.6 - 23 January, 2013
+ * pickadate.js v2.0.7 - 23 January, 2013
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
@@ -694,7 +694,7 @@
 
                     // If the calendar is closed, do nothing
                     // * This is done to prevent the "enter" key propagating as a click
-                    // if ( !CALENDAR.isOpen ) { return }
+                    if ( !CALENDAR.isOpen ) { return }
 
                     var
                         dateToSelect,
