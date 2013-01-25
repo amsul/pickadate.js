@@ -8,6 +8,6 @@ $.extend( $.fn.pickadate.defaults, {
     today: 'tänään',
     clear: 'tyhjennä',
     firstDay: 1,
-    format: 'd. mmmm yyyy. a',
+    format: 'd.m.yyyy',
     formatSubmit: 'yyyy/mm/dd'
 })
