@@ -624,7 +624,8 @@
 
                         // Finally, create an array with the date entered while
                         // parsing each item as an integer and compensating for 0index
-                        dateEntered = [ +(dateEntered.yyyy || dateEntered.yy), +(dateEntered.mm || dateEntered.m) - 1, +(dateEntered.dd || dateEntered.d) ]
+                        var year = dateEntered.yyyy || 2000 + parseInt(dateEntered.yy, 10);
+                        dateEntered = [ +(year), +(dateEntered.mm || dateEntered.m) - 1, +(dateEntered.dd || dateEntered.d) ]
                     }
 
 
