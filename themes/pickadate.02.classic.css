@@ -79,7 +79,7 @@
 /**
  * When the calendar opens
  */
-.pickadate__holder--opened .pickadate__frame {
+/*.pickadate__holder--opened */.pickadate__frame {
     top: .5em;
     max-height: 25em;
 
@@ -92,8 +92,8 @@
 /**
  * The calendar itself
  */
-
-.pickadate__calendar {
+.pickadate__calendar,
+.pickadate__clock {
     color: #000;
     background: #fff;
 
@@ -102,11 +102,39 @@
 
     /* Add the borders */
     border: 1px solid #ccc;
+}
 
+/* The frame and calendar need to have the same `border-radius` */
+.pickadate__frame,
+.pickadate__calendar,
+.pickadate__clock {
     -webkit-border-radius: 6px;
        -moz-border-radius: 6px;
             border-radius: 6px;
 }
+
+.pickadate__clock {
+    padding: .66em 0 3.2em;
+    background: #f2f2f2;
+    max-height: 12em;
+    overflow-y: scroll;
+}
+
+.pickadate__list {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+.pickadate__list-item {
+    padding: .66em;
+    background: #fff;
+    border-bottom: 1px solid #ddd;
+    border-top: 1px solid #ddd;
+    margin-bottom: -1px;
+    position: relative;
+}
+
+
 
 
 
@@ -312,7 +340,7 @@
 .pickadate__nav--prev:hover,
 .pickadate__nav--next:hover,
 .pickadate__button--today:hover,
-.pickadate__button--clear:hover {
+.pickadate__list-item:hover {
     cursor: pointer;
     color: #000;
     background: #b1dcfb;
@@ -328,4 +356,8 @@
 .pickadate__holder--focused .pickadate__day--highlighted {
     background: #0089ec;
     color: #fff;
+}
+.pickadate__list-item:hover {
+    border-color: #0089ec;
+    z-index: 10;
 }
