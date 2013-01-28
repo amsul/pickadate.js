@@ -721,9 +721,11 @@
 
                 }).on( 'click', function( event ) {
 
-                    // If the calendar is closed, do nothing
+                    // If the calendar is closed and there appears to be no click, do nothing
                     // * This is done to prevent the "enter" key propagating as a click
-                    if ( !CALENDAR.isOpen ) { return }
+                    if ( !CALENDAR.isOpen && !event.clientX && !event.clientY ) {
+                        return
+                    }
 
                     var
                         dateToSelect,

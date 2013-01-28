@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v2.0.7 - 23 January, 2013
+ * pickadate.js v2.1.0 - 28 January, 2013
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
@@ -535,6 +535,12 @@
                 DATE_MAX = createBoundaryDate( SETTINGS.dateMax, 1 ),
 
 
+                // Create a pseudo min and max date for disabled
+                // calendars as the respective opposite limit
+                PSEUDO_DATE_MIN = DATE_MAX,
+                PSEUDO_DATE_MAX = DATE_MIN,
+
+
                 // Create a collection of dates to disable
                 DATES_TO_DISABLE = (function( datesCollection ) {
 
@@ -553,9 +559,11 @@
                         // and return the collection
                         return datesCollection.map( function( date ) {
 
-                            // If the date is a number, return the date minus 1
-                            // for weekday 0index plus the first day of the week
+                            // If the date is a number, flip the weekdays boolean
+                            // and return the date minus 1 for weekday 0index
+                            // plus the first day of the week
                             if ( !isNaN( date ) ) {
+                                CALENDAR.weekdays = 1
                                 return --date + SETTINGS.firstDay
                             }
 
@@ -582,16 +590,37 @@
                     }
 
 
-                    // If all calendar dates should be disabled,
-                    // return a function that maps each date
-                    // in the collection of dates to not disable.
-                    // Otherwise check if this date should be disabled
-                    return CALENDAR.disabled ? function( date, i, collection ) {
+                    // If all calendar dates should be disabled
+                    if ( CALENDAR.disabled ) {
 
-                            // Map the array of disabled dates
-                            // and check if this is not one
+                        // Map through all the dates to disable
+                        DATES_TO_DISABLE.map( function( loopDate ) {
+
+                            // If the looped date is less than the latest lowest date
+                            // and greater than the minimum date, then set it as the lowest date
+                            if ( loopDate.TIME < PSEUDO_DATE_MIN.TIME && loopDate.TIME > DATE_MIN.TIME ) {
+                                PSEUDO_DATE_MIN = loopDate
+                            }
+
+                            // If the looped date is more than the latest highest date
+                            // and less than the maximum date, then set it as the highest date
+                            if ( loopDate.TIME > PSEUDO_DATE_MAX.TIME && loopDate.TIME < DATE_MAX.TIME ) {
+                                PSEUDO_DATE_MAX = loopDate
+                            }
+                        })
+
+                        // Finally, return a function that maps each date
+                        // in the collection of dates to not disable.
+                        return function( date, i, collection ) {
+
+                            // Map the array of disabled dates and check if this is not one
                             return ( collection.map( isDisabledDate, this ).indexOf( true ) < 0 )
-                        } : isDisabledDate
+                        }
+                    }
+
+
+                    // Otherwise just return the function that checks if a date is disabled
+                    return isDisabledDate
                 })(), //DISABLED_DATES
 
 
@@ -692,9 +721,11 @@
 
                 }).on( 'click', function( event ) {
 
-                    // If the calendar is closed, do nothing
+                    // If the calendar is closed and there appears to be no click, do nothing
                     // * This is done to prevent the "enter" key propagating as a click
-                    if ( !CALENDAR.isOpen ) { return }
+                    if ( !CALENDAR.isOpen && !event.clientX && !event.clientY ) {
+                        return
+                    }
 
                     var
                         dateToSelect,
@@ -815,7 +846,19 @@
                     // until we get to a date that's enabled.
                     while ( DATES_TO_DISABLE.filter( DISABLED_DATES, datePassed ).length ) {
 
-                        // Create the next date based on the direction
+                        // If the calendar "disabled" flag is truthy and the weekdays are also disabled
+                        if ( CALENDAR.disabled && !CALENDAR.weekdays ) {
+
+                            // If the date is less than the pseudo min date or greater than pseudo max date,
+                            // set it as the pseudo date limit. Otherwise keep it the same.
+                            datePassed = datePassed.TIME < PSEUDO_DATE_MIN.TIME ? PSEUDO_DATE_MIN : datePassed
+                            datePassed = datePassed.TIME > PSEUDO_DATE_MAX.TIME ? PSEUDO_DATE_MAX : datePassed
+
+                            // Break out to avoid infinite loop
+                            break
+                        }
+
+                        // Otherwise create the next date based on the direction
                         datePassed = createDate([ datePassed.YEAR, datePassed.MONTH, datePassed.DATE + ( direction || 1 ) ])
 
                         // If we've looped through to another month,
