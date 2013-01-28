@@ -24,11 +24,11 @@
     <section class="holder holder-top holder-clean">
 
         <h1><a href="http://amsul.github.com/pickadate.js" class="link-inherit"><strong title="Pick a Date" class="underline-highlight">pickadate.js</strong></a></h1>
-        <h2>A fully responsive and lightweight<br>jQuery dateinput picker<br><small class="dimmed"><small><small>9.4kb min, 3.9kb gzipped</small></small></small></h2>
+        <h2>A mobile-friendly, responsive, and lightweight jQuery dateinput picker<br><small class="dimmed"><small><small>9.6kb min, 4.0kb gzipped</small></small></small></h2>
 
         <a href="https://github.com/amsul/pickadate.js"><img width="128" height="128" style="position:absolute;top:0;right:0;border:0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
 
-        <h4><a href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js v2.0.7</a> (<a href="#legacy">for old browsers</a>) or <a href="themes.htm" id="theme">view the themes</a></h4>
+        <h4><a href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js v2.1.0</a> (<a href="#legacy">for old browsers</a>) or <a href="themes.htm" id="theme">view the themes</a></h4>
         <h4><a href="#api">Jump to api documentation</a> &darr;</h4>
 
         <p class="notification notification--highlight">Read <a href="https://github.com/amsul/pickadate.js#notable-updates">api changes in v2+</a></p>
@@ -157,6 +157,10 @@ klass: {
             <input id="picker_simple" class="datepicker" type="text">
         </fieldset>
 
+        <p>A core behaviour is to give the <code>input</code> field a <code>readonly</code> attribute. This is done to maintain &ldquo;pretty&rdquo; dates that are simple to handle and also to prevent the keyboard from popping up on smartphones.</p>
+
+        <p class="notification"><b>If you require the input to be editable</b>, I would suggest using a date parsing library (such as <a href="http://www.datejs.com/" target="_blank">datejs</a>) along with the <a href="#api">pickadate.js api</a> to achieve <a href="http://codepen.io/amsul/pen/sJuqa" target="_blank">this effect</a>.</p>
+
     </section>
 
 
@@ -230,7 +234,7 @@ klass: {
             <input id="picker_strings_b" class="datepicker" type="text">
         </fieldset>
 
-        <p>There are <a href="https://github.com/amsul/pickadate.js/tree/gh-pages/translations">extensions for 26 languages</a> already available.</p>
+        <p>There are <a href="https://github.com/amsul/pickadate.js/tree/gh-pages/translations">extensions for 28 languages</a> already available.</p>
 
         <p class="notification notification--highlight">* The <code class="tag-name">data-value</code> attribute and <code>formatSubmit</code> option are both required to parse your dates correctly. <a href="#formats">Read more</a> &darr;</p>
 
@@ -617,7 +621,7 @@ calendar.close()</code></pre>
 
         <pre><code data-language="javascript">calendar.show( month, year )</code></pre>
 
-        <p>Month and year have to be integers representing the month and year to show on the calendar.</p>
+        <p><code>month</code> and <code>year</code> have to be integers representing the month and year to show on the calendar.</p>
 
         <p><code>year</code> is optional. If none is specified, it shows the month of the year already in focus.</p>
 
@@ -872,7 +876,7 @@ function&nbsp;createDateArray( date ) {
 
     <section class="holder aligncenter" id="legacy">
 
-        <p><a class="button-full" href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js v2.0.7</a></p>
+        <p><a class="button-full" href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js v2.1.0</a></p>
         <p><a class="button-full--secondary" href="themes.htm">View calendar themes</a></p>
         <small class="dimmed"><p>Browser support: IE7+, Chrome, Firefox, Safari, Opera, iOS Safari, Android browser</p></small>
         <p><a href="https://github.com/amsul/pickadate.js#notable-updates">Read api changes in v2+</a> or <a href="https://github.com/amsul/pickadate.js">view project on Github</a></p>

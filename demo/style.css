@@ -763,6 +763,32 @@ pre > code {
    $DEMO-STUFF
    ========================================================================== */
 
+.list-inline {
+    padding: 0;
+    list-style: none;
+}
+.list-inline > li {
+    margin-right: .5em;
+    margin-bottom: .33em;
+    float: left;
+}
+
+.button-pill {
+    text-decoration: none;
+    background: #aaa;
+    color: #fff;
+    font-size: .75em;
+    padding: 3px 6px 2px;
+
+    -webkit-border-radius: 3px;
+       -moz-border-radius: 3px;
+            border-radius: 3px;
+}
+.button-pill:hover {
+    background: #0089ec;
+}
+
+
 .input-clear {
     width: 2em;
     height: 2em;

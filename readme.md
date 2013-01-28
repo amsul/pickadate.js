@@ -1,7 +1,7 @@
-# pickadate.js v2.0.7
+# pickadate.js v2.1.0
 
 
-A fully responsive and lightweight jQuery dateinput picker.
+A mobile-friendly, responsive, and lightweight jQuery dateinput picker.
 
 Check out the [demo](http://amsul.github.com/pickadate.js), [docs](http://amsul.github.com/pickadate.js/docs.htm>), & [themes](http://amsul.github.com/pickadate.js/themes.htm>).
 
@@ -16,6 +16,10 @@ The `pickadate.js` script supports all modern browsers and IE 9+. To support IE 
 
 
 ## Notable updates
+
+#### 2.1.0
+- [Disabled calendar loops infinitely](https://github.com/amsul/pickadate.js/issues/73)
+- Bug fix for "click" not propagating to calendar holder
 
 #### 2.0.7
 - ["Enter" key default action allowed when calendar is closed](https://github.com/amsul/pickadate.js/issues/72)
