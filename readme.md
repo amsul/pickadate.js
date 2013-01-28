@@ -18,7 +18,7 @@ The `pickadate.js` script supports all modern browsers and IE 9+. To support IE 
 ## Notable updates
 
 #### 2.1.0
-- [Disabled calendar loops infinitely](https://github.com/amsul/pickadate.js/issues/73)
+- [Fix for disabled calendar that loops infinitely](https://github.com/amsul/pickadate.js/issues/73)
 - Bug fix for "click" not propagating to calendar holder
 
 #### 2.0.7
