@@ -64,6 +64,9 @@ hiddenSuffix: '_submit',
 // <a href="#first_day">First day of week</a>
 firstDay: 0,
 
+// <a href="#year_first">Show the year before the month in the header</a>
+yearFirst: true,
+
 // <a href="#selectors">Month &amp; year dropdown selectors</a>
 monthSelector: false,
 yearSelector: false,
@@ -366,6 +369,23 @@ klass: {
 
     </section>
 
+
+    <section class="holder" id="year_first">
+
+        <h3><a class="link-anchor" href="#year_first">&sect;</a><strong
+            class="underline-highlight">Show the year before the month in the
+            calendar header</strong></h3>
+
+        <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
+    yearFirst: true
+})
+</code></pre>
+
+        <fieldset>
+            <input id="picker_dates_year_first" class="datepicker" type="text">
+        </fieldset>
+
+    </section>
 
     <section class="holder" id="selectors">
 
@@ -896,7 +916,7 @@ function&nbsp;createDateArray( date ) {
 
     <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
     <script src="demo/rainbow.js"></script>
-    <script src="source/pickadate.legacy.js"></script>
+    <script src="source/pickadate.js"></script>
 
 
     <script type="text/javascript">
@@ -1013,6 +1033,10 @@ function&nbsp;createDateArray( date ) {
 
         $( '#picker_dates_first_day' ).pickadate({
             firstDay: 1
+        })
+
+        $( '#picker_dates_year_first' ).pickadate({
+            yearFirst: true
         })
 
         $( '#picker_themed' ).pickadate({
