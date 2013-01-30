@@ -1,6 +1,6 @@
 {
     "name": "pickadate",
-    "version": "2.1.0",
+    "version": "2.1.1",
     "title": "pickadate.js",
     "author": {
         "name" : "Amsul",
@@ -13,7 +13,7 @@
             "url": "http://opensource.org/licenses/MIT"
         }
     ],
-    "description": "A fully responsive and lightweight jQuery dateinput picker.",
+    "description": "A mobile-friendly, responsive, and lightweight jQuery dateinput picker.",
     "keywords": [
         "datepicker",
         "dateinput",
