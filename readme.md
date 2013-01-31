@@ -1,4 +1,4 @@
-# pickadate.js v2.1.1
+# pickadate.js v2.1.2
 
 
 A mobile-friendly, responsive, and lightweight jQuery dateinput picker.
@@ -16,6 +16,10 @@ The `pickadate.js` script supports all modern browsers and IE 9+. To support IE 
 
 
 ## Notable updates
+
+### 2.1.2
+- [Fix for infinite loop on stream of disabled dates](https://github.com/amsul/pickadate.js/issues/77)
+- Faster search for enabled dates
 
 #### 2.1.0
 - [Fix for disabled calendar that loops infinitely](https://github.com/amsul/pickadate.js/issues/73)

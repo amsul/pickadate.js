@@ -1314,13 +1314,11 @@
     <section class="holder holder-top holder-clean">
 
         <h1><a href="http://amsul.github.com/pickadate.js" class="link-inherit"><strong title="Pick a Date" class="underline-highlight">pickadate.js</strong></a></h1>
-        <h2>A mobile-friendly, responsive, and lightweight jQuery dateinput picker<br><small class="dimmed"><small><small>9.6kb min, 4.0kb gzipped</small></small></small></h2>
+        <h2>A mobile-friendly, responsive, and lightweight jQuery dateinput picker<br><small class="dimmed"><small><small>9.7kb min, 4.0kb gzipped</small></small></small></h2>
 
         <a href="https://github.com/amsul/pickadate.js"><img width="128" height="128" style="position:absolute;top:0;right:0;border:0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
 
-        <h4><a href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js v2.1.1</a> (<a href="docs.htm#legacy">for old browsers</a>) or <a href="docs.htm">read the docs</a></h4>
-
-        <p class="notification notification--highlight">Read <a href="https://github.com/amsul/pickadate.js#notable-updates">api changes in v2+</a></p>
+        <h4><a href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js v2.1.2</a> (<a href="docs.htm#legacy">for old browsers</a>) or <a href="docs.htm">read the docs</a></h4>
 
     </section>
 
@@ -1389,20 +1387,15 @@ function&nbsp;scrollPageTo( $node ) {
 
 
     <section class="holder aligncenter">
-
-        <p><a class="button-full" href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js v2.1.1</a></p>
+        <p><a class="button-full" href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js v2.1.2</a></p>
         <small class="dimmed"><p>Browser support: <a class="dimmed" href="docs.htm#legacy">IE7+</a>, Chrome, Firefox, Safari, Opera, iOS Safari, Android browser</p></small>
-        <p><a href="docs.htm">Read the docs</a> (<a href="https://github.com/amsul/pickadate.js#notable-updates">api changes in v2+</a>) or <a href="https://github.com/amsul/pickadate.js">view project on Github</a></p>
-
+        <p><a href="docs.htm">Read the docs</a> or <a href="https://github.com/amsul/pickadate.js">view project on Github</a></p>
     </section>
 
 
     <section class="holder holder-clean aligncenter">
-
-        <small class="dimmed">
-            <p>Made by <a class="dimmed" href="https://twitter.com/amsul_" target="_blank">Amsul</a><span class="peace"></span></p>
-        </small>
-
+        <h2><a href="http://blog.teamtreehouse.com/" target="_blank"><img width="158" height="33" src="demo/TreehouseShowFeature.png" alt="Featured on The Treehouse Show"></a></h2>
+        <p class="dimmed"><small>Made by <a class="dimmed" href="https://twitter.com/amsul_" target="_blank">Amsul</a><span class="peace"></span></small></p>
     </section>
 
 
@@ -1416,18 +1409,36 @@ function&nbsp;scrollPageTo( $node ) {
             onOpen: function() {
                 scrollPageTo( this.$node )
             },
+
+            /**
+             * This is just for demo purposes. You should change
+             * the styling for `.pickadate__active` in your stylesheet
+             * to handle the "scrollability" of the page.
+             */
             onClose: initialBodyState
         })
         $( '#picker_inline' ).pickadate({
             onOpen: function() {
                 scrollPageTo( this.$node )
             },
+
+            /**
+             * This is just for demo purposes. You should change
+             * the styling for `.pickadate__active` in your stylesheet
+             * to handle the "scrollability" of the page.
+             */
             onClose: initialBodyState
         })
         $( '#picker_inline_fixed' ).pickadate({
             onOpen: function() {
                 scrollPageTo( this.$node )
             },
+
+            /**
+             * This is just for demo purposes. You should change
+             * the styling for `.pickadate__active` in your stylesheet
+             * to handle the "scrollability" of the page.
+             */
             onClose: initialBodyState
         })
 
@@ -1436,9 +1447,19 @@ function&nbsp;scrollPageTo( $node ) {
                 scrollTop: ~~$node.offset().top - 60
             }, 150)
 
+            /**
+             * This is just for demo purposes. You should change
+             * the styling for `.pickadate__active` in your stylesheet
+             * to handle the "scrollability" of the page.
+             */
             $( 'body' ).css( 'overflow', 'auto' )
         }
 
+        /**
+         * This is just for demo purposes. You should change
+         * the styling for `.pickadate__active` in your stylesheet
+         * to handle the "scrollability" of the page.
+         */
         function initialBodyState() {
             $( 'body' ).css( 'overflow', '' )
         }
