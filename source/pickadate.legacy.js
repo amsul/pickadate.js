@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v2.1.1 - 30 January, 2013
+ * pickadate.js v2.1.2 - 31 January, 2013
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
@@ -722,7 +722,8 @@
                 }).on( 'click', function( event ) {
 
                     // If the calendar is closed and there appears to be no click, do nothing
-                    // * This is done to prevent the "enter" key propagating as a click
+                    // * This is done to prevent the "enter" key propagating as a click.
+                    //   On all browsers (except old IEs) the client click x & y are 0.
                     if ( !CALENDAR.isOpen && !event.clientX && !event.clientY ) {
                         return
                     }
@@ -828,7 +829,7 @@
             /**
              * Create a validated date
              */
-            function createValidatedDate( datePassed, direction ) {
+            function createValidatedDate( datePassed, direction, skipMonthCheck ) {
 
 
                 // If the date passed isn't a date, create one
@@ -851,8 +852,7 @@
 
                             // If the date is less than the pseudo min date or greater than pseudo max date,
                             // set it as the pseudo date limit. Otherwise keep it the same.
-                            datePassed = datePassed.TIME < PSEUDO_DATE_MIN.TIME ? PSEUDO_DATE_MIN : datePassed
-                            datePassed = datePassed.TIME > PSEUDO_DATE_MAX.TIME ? PSEUDO_DATE_MAX : datePassed
+                            datePassed = datePassed.TIME < PSEUDO_DATE_MIN.TIME ? PSEUDO_DATE_MIN : datePassed.TIME > PSEUDO_DATE_MAX.TIME ? PSEUDO_DATE_MAX : datePassed
 
                             // Break out to avoid infinite loop
                             break
@@ -861,12 +861,12 @@
                         // Otherwise create the next date based on the direction
                         datePassed = createDate([ datePassed.YEAR, datePassed.MONTH, datePassed.DATE + ( direction || 1 ) ])
 
-                        // If we've looped through to another month,
-                        // then increase/decrease the date by one and
-                        // continue looping with the new original date
-                        if ( datePassed.MONTH != originalDate.MONTH ) {
-                            datePassed = createDate([ originalDate.YEAR, originalDate.MONTH, direction > 0 ? ++originalDate.DATE : --originalDate.DATE ])
-                            originalDate = datePassed
+                        // Check if the month check should be skipped to avoid extra loops.
+                        // Otherwise if we've gone through to another month, create a new
+                        // date based on the direction being less than zero (rather than more).
+                        // Then set this new date as the original and looped date.
+                        if ( !skipMonthCheck && datePassed.MONTH != originalDate.MONTH ) {
+                            originalDate = datePassed = createDate([ originalDate.YEAR, originalDate.MONTH, direction < 0 ? --originalDate.DATE : ++originalDate.DATE ])
                         }
                     }
                 }
@@ -875,16 +875,18 @@
                 // If it's less that min date, set it to min date
                 // by creating a validated date by adding one
                 // until we find an enabled date
+                // * A truthy third argument skips the month check
                 if ( datePassed.TIME < DATE_MIN.TIME ) {
-                    datePassed = createValidatedDate( DATE_MIN )
+                    datePassed = createValidatedDate( DATE_MIN, 1, 1 )
                 }
 
 
                 // If it's more than max date, set it to max date
                 // by creating a validated date by subtracting one
                 // until we find an enabled date
+                // * A truthy third argument skips the month check
                 else if ( datePassed.TIME > DATE_MAX.TIME ) {
-                    datePassed = createValidatedDate( DATE_MAX, -1 )
+                    datePassed = createValidatedDate( DATE_MAX, -1, 1 )
                 }
 
 
