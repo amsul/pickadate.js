@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v2.1.2 - 31 January, 2013
+ * pickadate.js v2.1.3 - 01 February, 2013
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
@@ -552,19 +552,23 @@
                         // remove the flag from the collection and
                         // flip the condition of which dates to disable
                         if ( datesCollection[ 0 ] === true ) {
-                            CALENDAR.disabled = datesCollection.shift()
+                            CALENDAR.off = datesCollection.shift()
                         }
 
                         // Map through the dates passed
                         // and return the collection
                         return datesCollection.map( function( date ) {
 
-                            // If the date is a number, flip the weekdays boolean
-                            // and return the date minus 1 for weekday 0index
-                            // plus the first day of the week
+                            // If the date is a number, we need to disable weekdays
                             if ( !isNaN( date ) ) {
-                                CALENDAR.weekdays = 1
-                                return --date + SETTINGS.firstDay
+
+                                // So flip the "off days" boolean
+                                CALENDAR.offDays = 1
+
+                                // If the first day flag is truthy, we maintain the
+                                // 0index of the date. If the date is 7, reset it to 0.
+                                // Otherwise return the date with 0index compensation.
+                                return SETTINGS.firstDay ? date == 7 ? 0 : date : --date
                             }
 
                             // Otherwise assume it's an array and fix the month 0index
@@ -591,7 +595,7 @@
 
 
                     // If all calendar dates should be disabled
-                    if ( CALENDAR.disabled ) {
+                    if ( CALENDAR.off ) {
 
                         // Map through all the dates to disable
                         DATES_TO_DISABLE.map( function( loopDate ) {
@@ -848,7 +852,7 @@
                     while ( DATES_TO_DISABLE.filter( DISABLED_DATES, datePassed ).length ) {
 
                         // If the calendar "disabled" flag is truthy and the weekdays are also disabled
-                        if ( CALENDAR.disabled && !CALENDAR.weekdays ) {
+                        if ( CALENDAR.off && !CALENDAR.offDays ) {
 
                             // If the date is less than the pseudo min date or greater than pseudo max date,
                             // set it as the pseudo date limit. Otherwise keep it the same.
