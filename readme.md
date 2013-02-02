@@ -1,4 +1,4 @@
-# pickadate.js v2.1.2
+# pickadate.js v2.1.3
 
 
 A mobile-friendly, responsive, and lightweight jQuery dateinput picker.
@@ -11,11 +11,16 @@ Check out the [demo](http://amsul.github.com/pickadate.js), [docs](http://amsul
 ## Browser support
 IE7+, Chrome, Firefox, Safari, Opera, iOS Safari, Android browser.
 
-The `pickadate.js` script supports all modern browsers and IE 9+. To support IE 7+ and other old browsers, include `pickadate.legacy.js` instead.
+The `pickadate.js` script supports all modern browsers and IE 9+.
+
+To support IE 7+ and other old browsers, include `pickadate.legacy.js` instead.
 
 
 
 ## Notable updates
+
+### 2.1.3
+- [Patch up for Sunday not disabling with `firstday: 1`](https://github.com/amsul/pickadate.js/issues/80)
 
 ### 2.1.2
 - [Fix for infinite loop on stream of disabled dates](https://github.com/amsul/pickadate.js/issues/77)
