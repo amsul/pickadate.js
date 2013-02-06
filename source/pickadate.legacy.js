@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v2.2.0 early unstable pre-pre-pre-aplha build - 25 January, 2013
+ * pickadate.js v3.0.0 early unstable pre-pre-aplha build - 06 February, 2013
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
@@ -28,6 +28,10 @@
         DAYS_IN_WEEK = 7,
         WEEKS_IN_CALENDAR = 6,
         DAYS_IN_CALENDAR = WEEKS_IN_CALENDAR * DAYS_IN_WEEK,
+
+        MINUTES_IN_HOUR = 60,
+        HOURS_IN_DAY = 24,
+        MINUTES_IN_DAY = HOURS_IN_DAY * MINUTES_IN_HOUR,
 
         STRING_DIV = 'div',
         STRING_PREFIX_DATEPICKER = 'pickadate__',
@@ -61,7 +65,7 @@
                 TIME_MIN = createTime( 0 ),
 
                 // Create the max time
-                TIME_MAX = createTime( 2400 ),
+                TIME_MAX = createTime( MINUTES_IN_DAY ),
 
 
                 // The element node
@@ -90,7 +94,61 @@
 
 
                 // Create the picker holder with a wrapped calendar or clock and bind the events
-                $HOLDER = $( createNode( STRING_DIV, createWrappedPicker(), CLASSES.holder ) ),
+                $HOLDER = $( createNode( STRING_DIV, createWrappedPicker(), CLASSES.holder ) ).on( 'click', function( event ) {
+
+                    // If the calendar is closed, do nothing
+                    // * This is done to prevent the "enter" key propagating as a click
+                    // if ( !PICKER.isOpen ) { return }
+
+                    var
+                        timeToSelect,
+
+                        // Get the jQuery target
+                        $target = $( event.target ),
+
+                        // Get the target data
+                        targetData = $target.data()
+
+
+                    // Stop the event from bubbling to the document
+                    event.stopPropagation()
+
+
+                    // Put focus back onto the element
+                    ELEMENT.focus()
+
+                    // For IE, set the calendar to force close
+                    // * This needs to be after `ELEMENT.focus()`
+                    PICKER._IE = 1
+
+
+                    // If a navigator button was clicked, show the relative month
+                    if ( targetData.nav ) {
+                        showMonth( MONTH_FOCUSED.MONTH + targetData.nav )
+                    }
+
+                    // If a clear button was clicked, clear the values and then close it
+                    else if ( targetData.clear ) {
+                        P.clear().close()
+                    }
+
+                    // If a date was clicked, split the target data into an array,
+                    // set the date while floating the values, and then close it
+                    else if ( targetData.date ) {
+                        timeToSelect = targetData.date.split( '/' )
+                        P.setDate( +timeToSelect[ 0 ], +timeToSelect[ 1 ], +timeToSelect[ 2 ] ).close()
+                    }
+
+                    // If a time was picked, set the time
+                    else if ( targetData.pick ) {
+                        P.set( targetData.pick.split( ':' ) )
+                    }
+
+                    // If the target is the holder, close the picker
+                    else if ( $target[ 0 ] == $HOLDER[ 0 ] ) {
+                        P.close()
+                    }
+                }),
 
 
                 // Pseudo picker constructor
@@ -103,49 +161,65 @@
                     // Link up the constructor
                     constructor: Picker,
 
+                    // Easy access to the settings
+                    settings: SETTINGS,
+
                     // Easy access to the element
                     $node: $ELEMENT,
 
-                    // Initialize everything
+
+                    /**
+                     * Initialize everything
+                     */
                     init: function() {
 
                         // Bind all the events to the element,
                         // and then insert everything after it
                         $ELEMENT.on({
                             'focus click': function() {
-                                console.log( 'yay' )
+                                // console.log( 'yay' )
                             }
                         }).after( [ $HOLDER, ELEMENT_HIDDEN ] )
 
                         return P
-                    } //init
+                    }, //init
+
+
+                    /**
+                     * Set the time
+                     */
+                    set: function( timeArray ) {
+
+                        // If there are 2 units of time, set the time
+                        if ( timeArray.length == 2 ) {
+                            setTimeSelected( timeArray, 0, 1 )
+                        }
+
+                        return P
+                    }
                 } //P
 
 
             /**
-             * Create the list of times
+             * Create the list of times with a certain interval
              */
-            function createClockList() {
+            function createClockList( interval ) {
 
-                var list = '',
-                    interval = SETTINGS.timeStep,
-                    timeobj
+                var timeobj, loopTime, classAndBinding,
+                    list = ''
 
-
-                for ( var loopTime = TIME_MIN.TIME; loopTime < TIME_MAX.TIME; loopTime += interval ) {
-
-                    // console.log( timeobj, loopTime )
-                    console.log( createTime( loopTime ) )
-
-                    /*
+                for ( loopTime = TIME_MIN.TIME; loopTime < TIME_MAX.TIME; loopTime += interval ) {
+                    timeobj = createTime( loopTime )
+                    classAndBinding = createNodeClassAndBinding( timeobj, TIME_MIN, TIME_MAX, CLASSES.listItem, 1, IS_TIME )
                     list += createNode( 'li',
                         leadZero( timeobj.HOUR ) + ':' + leadZero( timeobj.MINS ),
-                        CLASSES.listItem
-                    )*/
+                        classAndBinding[ 0 ],
+                        classAndBinding[ 1 ]
+                    )
                 }
 
                 return list
-            }
+            } //createClockList
 
 
             /**
@@ -156,7 +230,7 @@
                 // Create the clock list of times
                 return createNode( 'ul',
 
-                    createClockList(),
+                    createClockList( SETTINGS.timeStep ),
 
                     CLASSES.list
                 )//endreturn
@@ -192,6 +266,49 @@
                     CLASSES.frame
                 ) //endreturn
             } //createWrappedPicker
+
+
+            /**
+             * Set a time node as selected
+             */
+            function setTimeSelected( timeArray, isSuperficial, isTimeSelection ) {
+
+                // If it's not just a superficial selection, update the `input` values
+                if ( !isSuperficial ) {
+                    setElementsValue( timeArray, isTimeSelection )
+                }
+            } //setTimeSelected
+
+
+            /**
+             * Set the time in the text `input` and hidden `input` nodes
+             */
+            function setElementsValue( timeArray, isTimeSelection ) {
+
+                // Set the `input` node value and broadcast a "change" event
+                $ELEMENT.val( timeArray ? getTimeFormatted( timeArray, isTimeSelection ) : '' ).trigger( 'change' )
+            } //setElementsValue
+
+
+            /**
+             * Get a time nicely formatted for display
+             */
+            function getTimeFormatted( timeArray, isTimeSelection ) {
+
+                if ( isTimeSelection ) {
+                    var timeObj = createTime( timeArray )
+                    return leadZero( timeObj.HOUR ) + ':' + leadZero( timeObj.MINS )
+                }
+
+                // Go through all the date formats and convert the format passed
+                // into an array to map which we join into a string at the end.
+                return DATE_FORMATS.toArray( format || SETTINGS.format ).map( function( value ) {
+
+                    // Trigger the date formats function
+                    // or just return value itself.
+                    return triggerFunction( DATE_FORMATS[ value ], date || DATE_SELECTED ) || value
+                }).join( '' )
+            } //getTimeFormatted
 
 
 
@@ -239,6 +356,84 @@
         return '<' + wrapper + klass + attribute + '>' + item + '</' + wrapper + '>'
     } //createNode
 
+    // Create the class and binding for a looped date or time node.
+    // Returns an array with 2 items:
+    // 1) The classes as a string
+    // 2) The data binding as a string
+    function createNodeClassAndBinding( timeObj, minTimeObj, maxTimeObj, defaultKlasses, isInFocus, isTime ) {
+
+        var
+            // Check for time being enabled/disabled
+            isTimeDisabled,
+
+            dataBinding,
+
+            // Create a collection for the classes with the defaults
+            klassCollection = [ defaultKlasses ]
+
+
+        // If the time object is for time, then we need those conditionals
+        if ( isTime ) {
+
+            //this will never happen because they will always be in range
+            if ( timeObj.TIME < minTimeObj.TIME || timeObj.TIME > maxTimeObj.TIME ) {
+
+            }
+
+            // I can probably move this one level up
+            dataBinding = [
+                timeObj.HOUR,
+                timeObj.MINS
+            ].join( ':' )
+        }
+
+        else {
+
+            // If the time object falls within the min/max range,
+            // or there are disabled dates and this is one of them,
+            // flip the "disabled" state to truthy and add the relevant class.
+            if ( timeObj.TIME < minTimeObj.TIME || timeObj.TIME > maxTimeObj.TIME || ( DATES_TO_DISABLE && DATES_TO_DISABLE.filter( DISABLED_DATES, timeObj ).length ) ) {
+                isTimeDisabled = 1
+                klassCollection.push( CLASSES.dayDisabled )
+            }
+
+
+            // If it's today, add the class
+            if ( timeObj.TIME == DATE_TODAY.TIME ) {
+                klassCollection.push( CLASSES.dayToday )
+            }
+
+
+            // If it's the highlighted date, add the class
+            if ( timeObj.TIME == DATE_HIGHLIGHTED.TIME ) {
+                klassCollection.push( CLASSES.dayHighlighted )
+            }
+
+
+            // If it's the selected date, add the class
+            if ( timeObj.TIME == DATE_SELECTED.TIME ) {
+                klassCollection.push( CLASSES.daySelected )
+            }
+
+            dataBinding = [
+                timeObj.YEAR,
+                timeObj.MONTH + 1, // add 1 to display an accurate date
+                timeObj.DATE
+            ].join( '/' )
+        }
+
+
+        // Return an array with the classes and data binding
+        return [
+
+            // The classes joined by a single whitespace
+            klassCollection.join( ' ' ),
+
+            // And the data binding based on its "disabled" state
+            'data-' + ( isTimeDisabled ? 'disabled' : 'pick' ) + '=' + dataBinding
+        ]
+    } //createNodeClassAndBinding
+
     // Create a calendar date
     function createDate( datePassed, unlimited ) {
 
@@ -282,18 +477,21 @@
     // Create a clock time
     function createTime( timePassed ) {
 
+        // If we have an array to deal with, float the values and convert into minutes.
+        timePassed = Array.isArray( timePassed ) ? +timePassed[ 0 ] * MINUTES_IN_HOUR + (+timePassed[ 1 ]) : timePassed
+
         return {
 
-            // Divide by a hundred and floor to get the hour
-            HOUR: ~~( timePassed / 100 ) + ~~( timePassed / 60 ),
+            // Divide to get hours from minutes.
+            HOUR: ~~( timePassed / MINUTES_IN_HOUR ),
 
-            // The remainder is the minutes
-            MINS: timePassed % 100,
+            // The remainder is the minutes.
+            MINS: timePassed % MINUTES_IN_HOUR,
 
-            // Reference to the original time passed
+            // Reference to total minutes.
             TIME: timePassed
         }
-    }
+    } //createTime
 
 
 
@@ -324,7 +522,7 @@
         var pickatime = 'pickatime'
 
         // Merge the options with a deep copy
-        options = $.extend( true, {}, $.fn.pickadate.defaults, options )
+        options = $.extend( true, {}, $.fn.pickatime.defaults, options )
 
         // Check if it should be disabled
         // for browsers that natively support `type=date`
@@ -381,10 +579,6 @@
         dateMin: 0,
         dateMax: 0,
 
-        // timeMin: 0,
-        // timeMax: 24,
-        timeStep: 30,
-
         // Dates to disable
         datesDisabled: 0,
 
@@ -413,10 +607,6 @@
             wrap: STRING_PREFIX_DATEPICKER + 'wrap',
 
             calendar: STRING_PREFIX_DATEPICKER + 'calendar',
-            clock: STRING_PREFIX_DATEPICKER + 'clock',
-
-            list: STRING_PREFIX_DATEPICKER + 'list',
-            listItem: STRING_PREFIX_DATEPICKER + 'list-item',
 
             table: STRING_PREFIX_DATEPICKER + 'table',
 
@@ -449,6 +639,55 @@
             buttonToday: STRING_PREFIX_DATEPICKER + 'button--today'
         }
     } //$.fn.pickadate.defaults
+
+
+    /**
+     * Default options for the date picker
+     */
+    $.fn.pickatime.defaults = {
+
+        // Date format to show on the input element
+        format: 'h:iA',
+
+        // Date format to send to the server
+        formatSubmit: 0,
+
+        // Hidden element name suffix
+        hiddenSuffix: '_submit',
+
+        // timeMin: 0,
+        // timeMax: 24,
+        timeStep: 30,
+
+        // Events
+        onOpen: 0,
+        onClose: 0,
+        onSelect: 0,
+        onStart: 0,
+
+
+        // Classes
+        klass: {
+
+            bodyActive: STRING_PREFIX_DATEPICKER + 'active',
+
+            inputActive: STRING_PREFIX_DATEPICKER + 'input--active',
+
+            holder: STRING_PREFIX_DATEPICKER + 'holder',
+            opened: STRING_PREFIX_DATEPICKER + 'holder--opened',
+            focused: STRING_PREFIX_DATEPICKER + 'holder--focused',
+
+            frame: STRING_PREFIX_DATEPICKER + 'frame',
+            wrap: STRING_PREFIX_DATEPICKER + 'wrap',
+
+            clock: STRING_PREFIX_DATEPICKER + 'clock',
+
+            list: STRING_PREFIX_DATEPICKER + 'list',
+            listItem: STRING_PREFIX_DATEPICKER + 'list-item'
+        }
+    } //$.fn.pickatime.defaults
+
+
 
 
 
