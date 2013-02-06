@@ -10,7 +10,7 @@
     "licenses": [
         {
             "type": "MIT",
-            "url": "http://opensource.org/licenses/MIT"
+            "url": "http://amsul.ca/MIT"
         }
     ],
     "description": "A mobile-friendly, responsive, and lightweight jQuery dateinput picker.",
