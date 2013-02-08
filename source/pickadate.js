@@ -1211,6 +1211,27 @@
 
 
             /**
+             * Create the Calendar header
+             */
+            function createCalendarHeaderText() {
+              // Create the month label
+              var monthLabel = createMonthLabel( SETTINGS.showMonthsFull ? SETTINGS.monthsFull : SETTINGS.monthsShort )
+
+              // Create the year label
+              var yearLabel = createYearLabel()
+
+              // The default month + year label
+              var header = monthLabel + yearLabel
+
+              // The year + month label
+              if ( SETTINGS.yearFirst ) {
+                header = yearLabel + monthLabel
+              }
+
+              return header
+            }
+
+            /**
              * Create the wrapped calendar
              * using the collection of calendar items
              * and creating a new table body
@@ -1233,11 +1254,8 @@
                                 // * Truthy argument creates "next" tag
                                 createMonthNav() + createMonthNav( 1 ) +
 
-                                // Create the month label
-                                createMonthLabel( SETTINGS.showMonthsFull ? SETTINGS.monthsFull : SETTINGS.monthsShort ) +
-
-                                // Create the year label
-                                createYearLabel(),
+                                // Create the header text
+                                createCalendarHeaderText(),
 
                                 // The header class
                                 CLASSES.header
