@@ -1,11 +1,11 @@
-# pickadate.js v2.1.3
+# pickadate.js v2.1.4
 
 
 A mobile-friendly, responsive, and lightweight jQuery dateinput picker.
 
-Check out the [demo](http://amsul.github.com/pickadate.js), [docs](http://amsul.github.com/pickadate.js/docs.htm>), & [themes](http://amsul.github.com/pickadate.js/themes.htm>).
+##### Check out the [demo](http://amsul.github.com/pickadate.js), [docs](http://amsul.github.com/pickadate.js/docs.htm>), & [themes](http://amsul.github.com/pickadate.js/themes.htm>)
 
-[Read API changes in v2+](https://github.com/amsul/pickadate.js#notable-updates)
+*[Read API changes in v2+](https://github.com/amsul/pickadate.js#notable-updates)*
 
 
 ## Browser support
@@ -18,6 +18,10 @@ To support IE 7+ and other old browsers, include `pickadate.legacy.js` instead.
 
 
 ## Notable updates
+
+### 2.1.4
+- Improved mirroring of hidden `input` value
+- Some under the hood stuff
 
 ### 2.1.3
 - [Patch up for Sunday not disabling with `firstday: 1`](https://github.com/amsul/pickadate.js/issues/80)

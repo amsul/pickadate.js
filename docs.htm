@@ -24,11 +24,11 @@
     <section class="holder holder-top holder-clean">
 
         <h1><a href="http://amsul.github.com/pickadate.js" class="link-inherit"><strong title="Pick a Date" class="underline-highlight">pickadate.js</strong></a></h1>
-        <h2>A mobile-friendly, responsive, and lightweight jQuery dateinput picker<br><small class="dimmed"><small><small>9.7kb min, 4.0kb gzipped</small></small></small></h2>
+        <h2>A mobile-friendly, responsive, and lightweight jQuery dateinput picker<br><small class="dimmed"><small><small>9.6kb min, 4.0kb gzipped</small></small></small></h2>
 
         <a href="https://github.com/amsul/pickadate.js"><img width="128" height="128" style="position:absolute;top:0;right:0;border:0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
 
-        <h4><a href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js v2.1.3</a> (<a href="#legacy">for old browsers</a>) or <a href="themes.htm" id="theme">view the themes</a></h4>
+        <h4><a href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js v2.1.4</a> (<a href="#legacy">for old browsers</a>) or <a href="themes.htm" id="theme">view the themes</a></h4>
         <h4><a href="#api">Jump to api documentation</a> &darr;</h4>
 
     </section>
@@ -155,7 +155,7 @@ klass: {
             <input id="picker_simple" class="datepicker" type="text">
         </fieldset>
 
-        <p>A core behaviour is to give the <code>input</code> field a <code>readonly</code> attribute. This is done to maintain &ldquo;pretty&rdquo; dates that are simple to handle and also to prevent the keyboard from popping up on smartphones.</p>
+        <p>A core behaviour is to give the <code>input</code> field a <code class="attribute">readonly</code> attribute. This is done to prevent the keyboard from popping up on smartphones and also to maintain &ldquo;pretty&rdquo; dates that are simple to handle.</p>
 
         <p class="notification"><b>If you require the input to be editable</b>, I would suggest using a date parsing library (such as <a href="http://www.datejs.com/" target="_blank">datejs</a>) along with the <a href="#api">pickadate.js api</a> to achieve <a href="http://codepen.io/amsul/pen/sJuqa" target="_blank">this effect</a>.</p>
 
@@ -197,6 +197,8 @@ klass: {
             <input id="picker_buttons" class="datepicker" type="text">
         </fieldset>
 
+        <p>For a custom &ldquo;clear&rdquo; button, check out the <a href="#api_clear">clear api</a>.</p>
+
     </section>
 
 
@@ -206,7 +208,7 @@ klass: {
 
         <p>You can add support for any language in one of two ways.</p>
 
-        <p>(1) By passing the months and weekdays as an array for <i>each invocation</i>:</p>
+        <p><b>(1)</b> By passing the months and weekdays as an array for <i>each invocation</i>:</p>
 
         <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
     formatSubmit: 'dd/mm/yyyy',
@@ -217,7 +219,7 @@ klass: {
     clear: 'effacer'
 })</code></pre>
 
-        <p>(2) Or by globally extending the default picker options for <i>all instances</i>:</p>
+        <p><b>(2)</b> Or by globally extending the default picker options for <i>all instances</i>:</p>
 
         <pre><code data-language="javascript">$.extend( $.fn.pickadate.defaults, {
     formatSubmit: 'dd/mm/yyyy',
@@ -234,7 +236,7 @@ klass: {
 
         <p>There are <a href="https://github.com/amsul/pickadate.js/tree/gh-pages/translations">extensions for 28 languages</a> already available.</p>
 
-        <p class="notification notification--highlight">* The <code class="tag-name">data-value</code> attribute and <code>formatSubmit</code> option are both required to parse your dates correctly. <a href="#formats">Read more</a> &darr;</p>
+        <p class="notification notification--highlight">The <code class="tag-name">data-value</code> attribute and <code>formatSubmit</code> option are both required to parse your dates correctly. <a href="#formats">Read more</a> &darr;</p>
 
     </section>
 
@@ -254,7 +256,7 @@ klass: {
             <input id="picker_formats" class="datepicker" name="custom_date" type="text">
         </fieldset>
 
-        <p>This is done by creating a hidden input field using the <code>name</code> attribute of the original input element <i>plus</i> the string set in the <code>hiddenSuffix</code> option.</p>
+        <p>This is done by creating a hidden input field using the <code class="attribute">name</code> attribute of the original input element <i>plus</i> the string set in the <code>hiddenSuffix</code> option.</p>
 
         <p>As a default, <code>hiddenSuffix</code> is <code class="string">'_submit'</code>.</p>
 
@@ -311,7 +313,7 @@ klass: {
                 </tr>
                 <tr>
                     <td><code>yy</code></td>
-                    <td>Year &ndash; short</td>
+                    <td>Year &ndash; short *</td>
                     <td>00-99</td>
                 </tr>
                 <tr>
@@ -322,12 +324,15 @@ klass: {
             </tbody>
         </table>
 
+
+        <p class="notification notification--highlight"><b>&#42;</b> The &ldquo;short&rdquo; year ( <code>yy</code> ) format is quite vague and <b>should be avoided</b> within <code>formatSubmit</code> so dates can be accurately parsed.</p>
+
     </section>
 
 
     <section class="holder" id="formats_hidden">
 
-        <h3><a class="link-anchor" href="#formats_hidden">&sect;</a><strong class="underline-highlight">Default value formatting</strong></h3>
+        <h3><a class="link-anchor" href="#formats_hidden">&sect;</a><strong class="underline-highlight">Custom format parsing</strong></h3>
 
         <p>If your <code class="tag-name">input</code> field has a custom date format or language that doesn't <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Date/parse" target="_blank">easily parse as a date</a>, you can specify the date using the <code class="attribute">data-value</code> attribute:</p>
 
@@ -337,7 +342,7 @@ klass: {
             <input id="picker_formats_b" class="datepicker" type="text" value="August 14" data-value="1988/08/14">
         </fieldset>
 
-        <p>The <code class="attribute">data-value</code> attribute must be formatted using the <code>formatSubmit</code> option:</p>
+        <p>The <code class="attribute">data-value</code> attribute must be <a href="#formats">formatted</a> using the <code>formatSubmit</code> option:</p>
 
         <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
     format: 'mmmm dd',
@@ -415,6 +420,8 @@ klass: {
 
         <p>If <code>dateMax</code> or <code>dateMin</code> is <code class="constant">true</code>, the range limit is set to today.</p>
 
+        <p>If <code>dateMax</code> or <code>dateMin</code> is <code class="constant">false</code>, the range limit is removed.</p>
+
         <p>If <code>dateMax</code> or <code>dateMin</code> is an integer, it represents the relative number of days till the min or max date.</p>
 
         <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
@@ -437,9 +444,9 @@ klass: {
 
         <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
     datesDisabled: [
-        [ 2012, 12, 2 ],
-        [ 2012, 12, 5 ],
-        [ 2012, 12, 28 ]
+        [ 2013, 3, 2 ],
+        [ 2013, 3, 5 ],
+        [ 2013, 3, 28 ]
     ]
 })</code></pre>
 
@@ -459,9 +466,9 @@ klass: {
         <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
     datesDisabled: [
         1, 7,
-        [ 2012, 12, 2 ],
-        [ 2012, 12, 5 ],
-        [ 2012, 12, 28 ]
+        [ 2013, 3, 2 ],
+        [ 2013, 3, 5 ],
+        [ 2013, 3, 28 ]
     ]
 })</code></pre>
 
@@ -482,9 +489,9 @@ klass: {
     datesDisabled: [
         true,
         1, 7,
-        [ 2012, 12, 2 ],
-        [ 2012, 12, 5 ],
-        [ 2012, 12, 28 ]
+        [ 2013, 3, 2 ],
+        [ 2013, 3, 5 ],
+        [ 2013, 3, 28 ]
     ]
 })</code></pre>
 
@@ -534,7 +541,7 @@ klass: {
 
         <p>Have events trigger as the user interacts with the picker.</p>
 
-        <p>Within scope of these methods, <code class="keyword">this</code> refers to the <a href="#api">calendar picker</a>. Pick a date:</p>
+        <p>Within scope of these methods, <code class="keyword">this</code> refers to the <a href="#api">calendar picker</a>. Open up your console and pick a date:</p>
 
         <fieldset>
             <input id="picker_events" class="datepicker" type="date">
@@ -550,10 +557,10 @@ klass: {
         <p>There are 4 basic events in the options:</p>
 
         <ol>
-            <li><code class="method">onStart</code>: invoked when the picker is triggered.</li>
-            <li><code class="method">onOpen</code>: invoked when the picker opens.</li>
-            <li><code class="method">onSelect</code>: invoked when a date is selected.</li>
-            <li><code class="method">onClose</code>: invoked when the picker closes.</li>
+            <li><code class="method">onStart</code>: invoked when the picker is initiated.</li>
+            <li><code class="method">onOpen</code>: invoked when the picker is opened.</li>
+            <li><code class="method">onSelect</code>: invoked when a date is selected or cleared.</li>
+            <li><code class="method">onClose</code>: invoked when the picker is closed.</li>
         </ol>
 
         <p>Within the scope of these methods, <code class="keyword">this</code> refers to the calendar object.</p>
@@ -570,22 +577,24 @@ klass: {
 var calendar = input.data( 'pickadate' )
 </code></pre>
 
-        <p>The following methods are available on the calendar:</p>
+        <p>The following methods are available on the calendar object:</p>
 
         <ol>
             <li><code><a href="#api_open_close">open</a></code></li>
             <li><code><a href="#api_open_close">close</a></code></li>
             <li><code><a href="#api_show">show</a></code></li>
+            <li><code><a href="#api_clear">clear</a></code></li>
             <li><code><a href="#api_getDate">getDate</a></code></li>
             <li><code><a href="#api_setDate">setDate</a></code></li>
-            <li><code><a href="#api_clear">clear</a></code></li>
+            <li><code><a href="#api_getDateLimit">getDateLimit</a></code></li>
+            <li><code><a href="#api_setDateLimit">setDateLimit</a></code></li>
         </ol>
 
         <p id="api_$node">You can also grab the jQuery object of the input element from the calendar like this:</p>
 
         <pre><code data-language="javascript">this.$node</code></pre>
 
-        <small class="dimmed"><p>&#42; The <code>$</code> prefix is used to signify a jQuery object.</p></small>
+        <small class="dimmed"><p>The <code>$</code> prefix is used to signify a jQuery object.</p></small>
 
     </section>
 
@@ -643,6 +652,58 @@ calendar.close()</code></pre>
 
         <fieldset>
             <input id="api_picker_show_open" class="datepicker" type="text">
+        </fieldset>
+
+    </section>
+
+
+    <section class="holder" id="api_clear">
+
+        <h3><a class="link-anchor" href="#api_clear">&sect;</a><strong class="underline-highlight">Clear the date</strong></h3>
+
+        <pre><code data-language="javascript">calendar.clear()</code></pre>
+
+        <p>Clears the selected date value from the <code class="tag-name">input</code> element.</p>
+
+        <p>
+            <button id="api_button_clear" class="button" type="button">Clear date</button>
+        </p>
+
+        <fieldset>
+            <input id="api_picker_clear" class="datepicker" value="15 October, 2010" data-value="2012-10-15" type="text">
+        </fieldset>
+
+        <p>With some custom stylings and api mastery, you can do something like this:</p>
+
+        <pre><code data-language="javascript">// Grab the clear button and bind the event<br>
+// to clear the input value on click<br>
+var clearButton = $( '#clearButton' ).on({
+    click: function() {
+        inputElement.data( 'pickadate' ).clear()
+    }
+})
+
+// Grab the input element and trigger the picker<br>
+// with the onStart and onSelect methods to<br>
+// toggle the clear button visibility<br>
+var inputElement = $( '.datepicker' ).pickadate({
+    format: 'dd mmmm, yyyy',
+    formatSubmit: 'yyyy-mm-dd',
+    clear: false,
+    onStart: showOrHideClear,
+    onSelect: showOrHideClear
+})
+
+// Check if the input element has a value<br>
+// and show or hide the button as needed<br>
+function&nbsp;showOrHideClear() {
+    if ( this.$node.val() ) clearButton.show()
+    else clearButton.hide()
+}</code></pre>
+
+        <fieldset>
+            <a id="api_button_clear_b" class="input-clear">&times;</a>
+            <input id="api_picker_clear_b" class="datepicker" value="15 October, 2010" data-value="2012-10-15" type="text">
         </fieldset>
 
     </section>
@@ -723,58 +784,6 @@ calendar.close()</code></pre>
         </fieldset>
 
     </section>
-
-
-    <section class="holder" id="api_clear">
-
-            <h3><a class="link-anchor" href="#api_clear">&sect;</a><strong class="underline-highlight">Clear the date</strong></h3>
-
-            <pre><code data-language="javascript">calendar.clear()</code></pre>
-
-            <p>Clears the selected date value from the <code class="tag-name">input</code> element.</p>
-
-            <p>
-                <button id="api_button_clear" class="button" type="button">Clear date</button>
-            </p>
-
-            <fieldset>
-                <input id="api_picker_clear" class="datepicker" value="15 October, 2010" data-value="2012-10-15" type="text">
-            </fieldset>
-
-            <p>With some custom stylings and api mastery, you can do something like this:</p>
-
-            <pre><code data-language="javascript">// Grab the clear button and bind the event<br>
-// to clear the input value on click<br>
-var clearButton = $( '#clearButton' ).on({
-    click: function() {
-        inputElement.data( 'pickadate' ).clear()
-    }
-})
-
-// Grab the input element and trigger the picker<br>
-// with the onStart and onSelect methods to<br>
-// toggle the clear button visibility<br>
-var inputElement = $( '.datepicker' ).pickadate({
-    format: 'dd mmmm, yyyy',
-    formatSubmit: 'yyyy-mm-dd',
-    clear: false,
-    onStart: showOrHideClear,
-    onSelect: showOrHideClear
-})
-
-// Check if the input element has a value<br>
-// and show or hide the button as needed<br>
-function&nbsp;showOrHideClear() {
-    if ( this.$node.val() ) clearButton.show()
-    else clearButton.hide()
-}</code></pre>
-
-            <fieldset>
-                <a id="api_button_clear_b" class="input-clear">&times;</a>
-                <input id="api_picker_clear_b" class="datepicker" value="15 October, 2010" data-value="2012-10-15" type="text">
-            </fieldset>
-
-        </section>
 
 
     <section class="holder" id="api_getDateLimit">
@@ -874,7 +883,7 @@ function&nbsp;createDateArray( date ) {
 
     <section class="holder aligncenter" id="legacy">
 
-        <p><a class="button-full" href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js v2.1.3</a></p>
+        <p><a class="button-full" href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js v2.1.4</a></p>
         <p><a class="button-full--secondary" href="themes.htm">View calendar themes</a></p>
         <small class="dimmed"><p>Browser support: IE7+, Chrome, Firefox, Safari, Opera, iOS Safari, Android browser</p></small>
         <p class="notification notification--highlight"><b>Note on browser support</b><br>The <code>pickadate.js</code> script supports IE 9+ by default. To support IE 7+ and other old browsers, use the <code>pickadate.legacy.js</code> script instead.</p>
@@ -981,18 +990,18 @@ function&nbsp;createDateArray( date ) {
 
         $( '#picker_dates_disabled_a' ).pickadate({
             datesDisabled: [
-                [ 2012, 12, 2 ],
-                [ 2012, 12, 5 ],
-                [ 2012, 12, 28 ]
+                [ 2013, 3, 2 ],
+                [ 2013, 3, 5 ],
+                [ 2013, 3, 28 ]
             ]
         })
 
         $( '#picker_dates_disabled_b' ).pickadate({
             datesDisabled: [
                 1, 7,
-                [ 2012, 12, 2 ],
-                [ 2012, 12, 5 ],
-                [ 2012, 12, 28 ]
+                [ 2013, 3, 2 ],
+                [ 2013, 3, 5 ],
+                [ 2013, 3, 28 ]
             ]
         })
 
@@ -1000,9 +1009,9 @@ function&nbsp;createDateArray( date ) {
             datesDisabled: [
                 true,
                 1, 7,
-                [ 2012, 12, 2 ],
-                [ 2012, 12, 5 ],
-                [ 2012, 12, 28 ]
+                [ 2013, 3, 2 ],
+                [ 2013, 3, 5 ],
+                [ 2013, 3, 28 ]
             ]
         })
 
@@ -1072,6 +1081,34 @@ function&nbsp;createDateArray( date ) {
 
 
         var
+            // Grab the clear button and bind the event
+            // to clear the input value on click
+            api_button_clear_b = $( '#api_button_clear_b' ).on({
+                click: function() {
+                    api_picker_clear_b.data( 'pickadate' ).clear()
+                }
+            }),
+
+            // Grab the input element and trigger the picker
+            // with the onStart and onSelect methods to
+            // toggle the clear button visibility
+            api_picker_clear_b = $( '#api_picker_clear_b' ).pickadate({
+                format: 'dd mmmm, yyyy',
+                formatSubmit: 'yyyy-mm-dd',
+                clear: 0,
+                onStart: showOrHideClear,
+                onSelect: showOrHideClear
+            })
+
+        // Check if the input element has a value
+        // and show or hide the button as needed
+        function showOrHideClear() {
+            if ( this.$node.val() ) api_button_clear_b.show()
+            else api_button_clear_b.hide()
+        }
+
+
+        var
             api_picker_getDate = $( '#api_picker_getDate' ).pickadate(),
             api_calendar_getDate = api_picker_getDate.data( 'pickadate' ),
             api_button_getDate = $( '#api_button_getDate' ).on({
@@ -1130,34 +1167,6 @@ function&nbsp;createDateArray( date ) {
                     api_calendar_clear.clear()
                 }
             })
-
-
-        var
-            // Grab the clear button and bind the event
-            // to clear the input value on click
-            api_button_clear_b = $( '#api_button_clear_b' ).on({
-                click: function() {
-                    api_picker_clear_b.data( 'pickadate' ).clear()
-                }
-            }),
-
-            // Grab the input element and trigger the picker
-            // with the onStart and onSelect methods to
-            // toggle the clear button visibility
-            api_picker_clear_b = $( '#api_picker_clear_b' ).pickadate({
-                format: 'dd mmmm, yyyy',
-                formatSubmit: 'yyyy-mm-dd',
-                clear: 0,
-                onStart: showOrHideClear,
-                onSelect: showOrHideClear
-            })
-
-        // Check if the input element has a value
-        // and show or hide the button as needed
-        function showOrHideClear() {
-            if ( this.$node.val() ) api_button_clear_b.show()
-            else api_button_clear_b.hide()
-        }
 
 
         var
