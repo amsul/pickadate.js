@@ -92,4 +92,4 @@ Fork away and send in pull requests of your own custom `pickadate.css` file so w
 
 ---
 
-&copy; 2013 [Amsul](http://twitter.com/amsul_) - Licensed under [MIT](https://amsul.ca/MIT).
+&copy; 2013 [Amsul](http://twitter.com/amsul_) - Licensed under [MIT](http://amsul.ca/MIT).
