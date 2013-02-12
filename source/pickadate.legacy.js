@@ -34,7 +34,7 @@
         MINUTES_IN_DAY = HOURS_IN_DAY * MINUTES_IN_HOUR,
 
         STRING_DIV = 'div',
-        STRING_PREFIX_DATEPICKER = 'pickadate__',
+        STRING_PREFIX_PICKER = 'pickadate__',
 
         isIE = navigator.userAgent.match( /MSIE/ ),
 
@@ -131,7 +131,7 @@
 
 
                         // Update the calendar items
-                        PICKER.items = getUpdatedCalendarItems()
+                        PICKER.items = getUpdatedPickerItems()
 
 
                         // Trigger the `onStart` method within scope of the picker
@@ -143,7 +143,7 @@
 
 
                     /**
-                     * Open the calendar
+                     * Open the picker
                      */
                     open: function() {
 
@@ -151,24 +151,24 @@
                         if ( PICKER.isOpen ) return P
 
 
-                        // Set calendar as open
+                        // Set picker as open
                         PICKER.isOpen = 1
 
 
-                        // Toggle the tabindex of "focusable" calendar items
-                        toggleCalendarElements( 0 )
+                        // Toggle the tabindex of "focusable" picker items
+                        togglePickerElements( 0 )
 
 
                         // Make sure the element has focus and then
                         // add the "active" class to the element
                         $ELEMENT.focus().addClass( CLASSES.inputActive )
 
-                        // Add the "opened" class to the calendar holder
+                        // Add the "opened" class to the picker holder
                         $HOLDER.addClass( CLASSES.opened )
 
 
                         // Bind all the events to the document
-                        // while namespacing it with the calendar ID
+                        // while namespacing it with the picker ID
                         $document.on( 'focusin.P' + PICKER.id, function( event ) {
 
                             // If the target is not within the holder,
@@ -178,7 +178,7 @@
                         }).on( 'click.P' + PICKER.id, function( event ) {
 
                             // If the target of the click is not the element,
-                            // then close the calendar picker
+                            // then close the picker picker
                             // * We don't worry about clicks on the holder
                             //   because those are stopped from bubbling to the doc
                             if ( event.target != ELEMENT ) P.close()
@@ -211,14 +211,21 @@
                                 // the time by incrementally (based on time change) creating new validated times.
                                 // * Truthy second argument makes it a superficial selection
                                 if ( keycodeToMove ) {
-                                    setTimeSelected( createValidatedTime( [ TIME_FOCUSED.YEAR, TIME_FOCUSED.MONTH, TIME_HIGHLIGHTED.DATE + keycodeToMove ], keycodeToMove ), 1 )
+                                    setTimeSelected(
+                                        createValidatedTime(
+                                            IS_TIME_PICKER ?
+                                                TIME_HIGHLIGHTED.TIME + SETTINGS.timeStep * ( keycodeToMove > 0 ? 1 : -1 ) :
+                                                [ TIME_HIGHLIGHTED.YEAR, TIME_HIGHLIGHTED.MONTH, TIME_HIGHLIGHTED.DATE + keycodeToMove ],
+                                            keycodeToMove
+                                        ),
+                                    1 )
                                 }
 
                                 // Otherwise it's the enter key so set the element value as the
-                                // highlighted time, render a new calendar, and then close it
+                                // highlighted time, render a new picker, and then close it
                                 else {
                                     setElementsValue( TIME_HIGHLIGHTED )
-                                    calendarRender()
+                                    renderPicker()
                                     P.close()
                                 }
 
@@ -234,7 +241,7 @@
 
 
                     /**
-                     * Close the calendar
+                     * Close the picker
                      */
                     close: function() {
 
@@ -242,18 +249,18 @@
                         if ( !PICKER.isOpen ) return P
 
 
-                        // Set calendar as closed
+                        // Set picker as closed
                         PICKER.isOpen = 0
 
 
-                        // Toggle the tabindex of "focusable" calendar items
-                        toggleCalendarElements( -1 )
+                        // Toggle the tabindex of "focusable" picker items
+                        togglePickerElements( -1 )
 
 
                         // Remove the "active" class from the element
                         $ELEMENT.removeClass( CLASSES.inputActive )
 
-                        // Remove the "opened" class from the calendar holder
+                        // Remove the "opened" class from the picker holder
                         $HOLDER.removeClass( CLASSES.opened )
 
 
@@ -285,8 +292,8 @@
                         // Clear the elements value
                         setElementsValue( 0 )
 
-                        // Render a new calendar
-                        calendarRender()
+                        // Render a new picker
+                        renderPicker()
 
                         return P
                     }, //clear
@@ -367,8 +374,8 @@
                             }
                         }
 
-                        // Render a new calendar
-                        calendarRender()
+                        // Render a new picker
+                        renderPicker()
 
                         return P
                     } //setLimit
@@ -435,14 +442,14 @@
 
                             // If there's string, then get the digits length.
                             // Otherwise return the selected hour in "standard" format.
-                            return string ? getDigitsLength( string ) : this.HOUR ? this.HOUR % 12 : 12
+                            return string ? getDigitsLength( string ) : this.HOUR % 12 || 12
                         },
 
                         hh: function( string ) {
 
                             // If there's a string, then the length is always 2.
                             // Otherwise return the selected hour in "standard" format with a leading zero.
-                            return string ? 2 : leadZero( this.HOUR ? this.HOUR % 12 : 12 )
+                            return string ? 2 : leadZero( this.HOUR % 12 || 12 )
                         },
 
                         H: function( string ) {
@@ -555,7 +562,7 @@
 
 
                 // Create time object for now
-                NOW = createTimeObj(),
+                NOW = IS_TIME_PICKER ? 0 : createTimeObj(),
 
 
                 // Create the min limit time object
@@ -568,7 +575,7 @@
 
 
                 // Create a pseudo min and max limit for disabled
-                // calendars as the respective opposite limit
+                // pickers as the respective opposite limit
                 PSEUDO_LIMIT_MIN = LIMIT_MAX,
                 PSEUDO_LIMIT_MAX = LIMIT_MIN,
 
@@ -622,7 +629,7 @@
                     }
 
 
-                    // If all calendar times should be disabled
+                    // If all picker times should be disabled
                     if ( PICKER.off ) {
 
                         // Map through all the times to disable
@@ -654,7 +661,7 @@
                 })(), //DISABLED_TIMES
 
 
-                // Create calendar object for the highlighted day
+                // Create time object for the highlighted time
                 TIME_HIGHLIGHTED = (function( elemDataValue, elemValue ) {
 
                     // If there an element `data-value`
@@ -664,7 +671,7 @@
                         elemValue = {}
 
                         // Map through the submit format array
-                        TIME_FORMATS.toArray( SETTINGS.formatSubmit ).map( function( formatItem ) {
+                        TIME_FORMATS.toArray( SETTINGS.formatSubmit || SETTINGS.format ).map( function( formatItem ) {
 
                             // If the formatting length function exists, invoke it
                             // with the `data-value` and the time object we are creating.
@@ -683,12 +690,22 @@
 
                         // Finally, create an array with the time object while
                         // parsing each item as an integer and compensating for 0index
-                        elemValue = [ +(elemValue.yyyy || elemValue.yy), +(elemValue.mm || elemValue.m) - 1, +(elemValue.dd || elemValue.d) ]
+                        elemValue = IS_TIME_PICKER ?
+                            [
+                                ( elemValue.HH || elemValue.H ) || +( elemValue.hh || elemValue.h ) + ( /^p/i.test( elemValue.A || elemValue.a ) ? 12 : 0 ),
+                                elemValue.i
+                            ] :
+                            [
+                                +(elemValue.yyyy || elemValue.yy),
+                                +(elemValue.mm || elemValue.m) - 1,
+                                +(elemValue.dd || elemValue.d)
+                            ]
                     }
 
 
                     // Otherwise, try to natively parse the value in the input
                     else {
+                        console.log( 'here<<<<<<<<' )
                         elemValue = Date.parse( elemValue )
                     }
 
@@ -713,8 +730,8 @@
                 ELEMENT_HIDDEN = SETTINGS.formatSubmit ? $( '<input type=hidden name=' + ELEMENT.name + SETTINGS.hiddenSuffix + '>' ).val( ELEMENT.value ? getTimeFormatted( SETTINGS.formatSubmit ) : '' )[ 0 ] : null,
 
 
-                // Create the calendar table head with weekday labels
-                // by "copying" the weekdays collection based on the settings.
+                // If it's not a time picker, then create the calendar table head with
+                // weekday labels by "copying" the weekdays collection based on the settings.
                 // * We do a copy so we don't mutate the original array.
                 TABLE_HEAD = IS_TIME_PICKER ? 0 : (function( weekdaysCollection ) {
 
@@ -736,17 +753,17 @@
                 })( ( SETTINGS.showWeekdaysShort ? SETTINGS.weekdaysShort : SETTINGS.weekdaysFull ).slice( 0 ) ), //TABLE_HEAD
 
 
-                // Create the calendar holder with a new wrapped calendar and bind the events
+                // Create the picker holder with a new wrapped picker and bind the events
                 $HOLDER = $( createNode( STRING_DIV, createWrappedPicker(), CLASSES.holder ) ).on( 'mousedown', function( event ) {
 
-                    // If the target of the event is not one of the calendar items,
+                    // If the target of the event is not one of the picker items,
                     // prevent default action to keep focus on the input element
                     if ( PICKER.items.indexOf( event.target ) < 0 ) {
                         event.preventDefault()
                     }
                 }).on( 'click', function( event ) {
 
-                    // If the calendar is closed and there appears to be no click, do nothing
+                    // If the picker is closed and there appears to be no click, do nothing
                     // * This is done to prevent the "enter" key propagating as a click.
                     //   On all browsers (except old IEs) the client click x & y are 0.
                     if ( !PICKER.isOpen && !event.clientX && !event.clientY ) {
@@ -770,7 +787,7 @@
                     // Put focus back onto the element
                     ELEMENT.focus()
 
-                    // For IE, set the calendar to force close
+                    // For IE, set the picker to force close
                     // * This needs to be after `ELEMENT.focus()`
                     PICKER._IE = 1
 
@@ -818,7 +835,6 @@
 
 
 
-
             // Create a time object
             function createTimeObj( timePassed, unlimited ) {
 
@@ -826,7 +842,8 @@
                 if ( IS_TIME_PICKER ) {
 
                     // If we have an array to deal with, float the values and convert into total minutes.
-                    timePassed = Array.isArray( timePassed ) ? +timePassed[ 0 ] * MINUTES_IN_HOUR + (+timePassed[ 1 ]) : timePassed
+                    // Otherwise just leave it as the time passed (defaults to 0).
+                    timePassed = Array.isArray( timePassed ) ? +timePassed[ 0 ] * MINUTES_IN_HOUR + (+timePassed[ 1 ]) : timePassed || 0
 
                     return {
 
@@ -859,7 +876,7 @@
                     timePassed.setHours( 0, 0, 0, 0 )
                 }
 
-                // Return the calendar time object
+                // Return the time object
                 return {
                     YEAR: unlimited || timePassed.getFullYear(),
                     MONTH: unlimited || timePassed.getMonth(),
@@ -872,7 +889,7 @@
 
 
             /**
-             * Create a bounding time allowed on the calendar
+             * Create a bounding time allowed on the picker
              * * A truthy second argument creates the upper boundary
              */
             function createTimeBoundaryObj( limit, upper ) {
@@ -894,7 +911,7 @@
                 }
 
                 // If there is a limit and its a number, create a
-                // calendar time relative to today by adding the limit
+                // time object relative to today by adding the limit.
                 if ( limit && !isNaN( limit ) ) {
                     return createTimeObj([ NOW.YEAR, NOW.MONTH, NOW.DATE + limit ])
                 }
@@ -909,11 +926,11 @@
              */
             function createValidatedTime( timeObj, direction, skipMonthCheck ) {
 
-                // If the time passed isn't a time object, create one
-                timeObj = !timeObj.TIME ? createTimeObj( timeObj ) : timeObj
+                // If the time object does not have a time property, create a time object
+                timeObj = isNaN( timeObj.TIME ) ? createTimeObj( timeObj ) : timeObj
 
 
-                // If the calendar "disabled" flag is truthy and there are only disabled weekdays
+                // If the picker "disabled" flag is truthy and there are only disabled weekdays
                 if ( PICKER.off && !PICKER.offDays ) {
 
                     // If the time is less than the pseudo min limit or greater than pseudo max limit,
@@ -946,10 +963,17 @@
                 }
 
 
+                // If it's a time picker and the time has reached the max limit,
+                // then we need to reduce the time object by one time step.
+                if ( IS_TIME_PICKER && timeObj.TIME == LIMIT_MAX.TIME ) {
+                    timeObj = createValidatedTime( timeObj.TIME - SETTINGS.timeStep )
+                }
+
+
                 // If it's less that min limit, set it to min limit by creating
                 // a validated time while adding one until we find an enabled time.
                 // * A truthy third argument skips the month check.
-                if ( timeObj.TIME < LIMIT_MIN.TIME ) {
+                else if ( timeObj.TIME < LIMIT_MIN.TIME ) {
                     timeObj = createValidatedTime( LIMIT_MIN, 1, 1 )
                 }
 
@@ -1154,7 +1178,7 @@
                     pseudoIndex = index - countShiftby
 
 
-                    // Create a calendar date with a negative or positive pseudoIndex
+                    // Create a time object with a negative or positive pseudoIndex
                     timeObj = createTimeObj([ TIME_FOCUSED.YEAR, TIME_FOCUSED.MONTH, pseudoIndex ])
 
 
@@ -1162,7 +1186,7 @@
                     // If the pseudoIndex is greater than zero,
                     // and less or equal to the days in the month,
                     // we need dates from the focused month.
-                    classAndBinding = createNodeClassAndBinding( timeObj, [ CLASSES.day, pseudoIndex > 0 && pseudoIndex <= countMonthDays ? CLASSES.dayInfocus : CLASSES.dayOutfocus ] )
+                    classAndBinding = createNodeClassAndBinding( timeObj, [ CLASSES.day, pseudoIndex > 0 && pseudoIndex <= countMonthDays ? CLASSES.infocus : CLASSES.outfocus ] )
 
 
                     // Create the looped date wrapper,
@@ -1208,53 +1232,44 @@
                     klassCollection = defaultKlasses || []
 
 
-                // If the time object is for time, then we need those conditionals
+                // If it's less than the minimum limit or greater than the maximum limit,
+                // or if there are times to disable and this time object is one of them,
+                // flip the "disabled" state to truthy and add the "disabled" class
+                if ( timeObj.TIME < LIMIT_MIN.TIME || timeObj.TIME > LIMIT_MAX.TIME || ( TIMES_TO_DISABLE && TIMES_TO_DISABLE.filter( DISABLED_TIMES, timeObj ).length ) ) {
+                    isTimeDisabled = 1
+                    klassCollection.push( CLASSES.disabled )
+                }
+
+
+                // If it's the highlighted time, add the class
+                if ( timeObj.TIME == TIME_HIGHLIGHTED.TIME ) {
+                    klassCollection.push( CLASSES.highlighted )
+                }
+
+
+                // If it's the selected time, add the class
+                if ( timeObj.TIME == TIME_SELECTED.TIME ) {
+                    klassCollection.push( CLASSES.selected )
+                }
+
+
+                // The time data binding
                 if ( IS_TIME_PICKER ) {
-
-                    console.log( 'here' )
-
-                    //this will never happen because they will always be in range
-                    if ( timeObj.TIME < LIMIT_MIN.TIME || timeObj.TIME > LIMIT_MAX.TIME ) {
-
-                    }
-
-                    // The time data binding
                     dataBinding = [
                         timeObj.HOUR,
                         timeObj.MINS
                     ].join( ':' )
                 }
 
+
                 else {
-
-                    // If it's less than the minimum limit or greater than the maximum limit,
-                    // or if there are times to disable and this time object is one of them,
-                    // flip the "disabled" state to truthy and add the "disabled" class
-                    if ( timeObj.TIME < LIMIT_MIN.TIME || timeObj.TIME > LIMIT_MAX.TIME || ( TIMES_TO_DISABLE && TIMES_TO_DISABLE.filter( DISABLED_TIMES, timeObj ).length ) ) {
-                        isTimeDisabled = 1
-                        klassCollection.push( CLASSES.dayDisabled )
-                    }
-
 
                     // If it's today, add the class
                     if ( timeObj.TIME == NOW.TIME ) {
-                        klassCollection.push( CLASSES.dayToday )
+                        klassCollection.push( CLASSES.now )
                     }
 
-
-                    // If it's the highlighted time, add the class
-                    if ( timeObj.TIME == TIME_HIGHLIGHTED.TIME ) {
-                        klassCollection.push( CLASSES.dayHighlighted )
-                    }
-
-
-                    // If it's the selected time, add the class
-                    if ( timeObj.TIME == TIME_SELECTED.TIME ) {
-                        klassCollection.push( CLASSES.daySelected )
-                    }
-
-
-                    // The time data binding
+                    // The date data binding
                     dataBinding = [
                         timeObj.YEAR,
                         timeObj.MONTH + 1, // add 1 to display an accurate date
@@ -1348,18 +1363,18 @@
 
 
             /**
-             * Create the wrapped calendar using the collection
-             * of all calendar items and a new table body
+             * Create the wrapped picker using the collection
+             * of all picker items and a new clock or calendar
              */
             function createWrappedPicker() {
 
-                // Create a calendar wrapper node
+                // Create a picker wrapper node
                 return createNode( STRING_DIV,
 
-                    // Create a calendar frame
+                    // Create a picker frame
                     createNode( STRING_DIV,
 
-                        // Create a calendar box node
+                        // Create a picker box node
                         createNode( STRING_DIV,
 
                             IS_TIME_PICKER ? createClock() : createCalendar(),
@@ -1368,14 +1383,14 @@
                             CLASSES.item
                         ),
 
-                        // Calendar wrap class
+                        // Picker wrap class
                         CLASSES.wrap
                     ),
 
-                    // Calendar frame class
+                    // Picker frame class
                     CLASSES.frame
                 ) //endreturn
-            } //calendarWrapped
+            } //createWrappedPicker
 
 
             /**
@@ -1420,7 +1435,7 @@
 
 
             /**
-             * Get the tabindex based on the calendar open/closed state
+             * Get the tabindex based on the picker open/closed state
              */
             function getTabindexState() {
                 return 'tabindex=' + ( PICKER.isOpen ? 0 : -1 )
@@ -1460,8 +1475,8 @@
                     setElementsValue( timeObj )
                 }
 
-                // Then render a new calendar
-                calendarRender()
+                // Then render a new picker
+                renderPicker()
             } //setTimeSelected
 
 
@@ -1484,7 +1499,7 @@
 
 
             /**
-             * Find something within the calendar holder
+             * Find something within the picker holder
              */
             function $findInHolder( klass ) {
                 return $HOLDER.find( '.' + klass )
@@ -1492,7 +1507,7 @@
 
 
             /**
-             * Show the month visible on the calendar
+             * Show the month visible on the picker
              */
             function showMonth( month, year ) {
 
@@ -1506,29 +1521,41 @@
                 // * We set the date to 1st of the month because date doesn't matter here
                 TIME_FOCUSED = createTimeObj([ year, month, 1 ])
 
-                // Then render a new calendar
-                calendarRender()
+                // Then render a new picker
+                renderPicker()
             } //showMonth
 
 
             /**
-             * Toggle the calendar elements as "tab-able" by mapping
-             * through the calendar items and updating the tabindex.
+             * Toggle the picker elements as "tab-able" by mapping
+             * through the picker items and updating the tabindex.
              */
-            function toggleCalendarElements( tabindex ) {
+            function togglePickerElements( tabindex ) {
                 PICKER.items.map( function( item ) {
                     if ( item ) item.tabIndex = tabindex
                 })
-            } //toggleCalendarElements
+            } //togglePickerElements
 
 
             /**
-             * Get an updated collection of calendar items.
+             * Get an updated collection of picker items.
              * The time picker has no items so returns an empty array.
              */
-            function getUpdatedCalendarItems() {
+            function getUpdatedPickerItems() {
 
-                return IS_TIME_PICKER ? [] : [
+                // If it's a time picker, make sure the selected node is in view
+                if ( IS_TIME_PICKER ) {
+                    var pickerNode = $findInHolder( CLASSES.item )[ 0 ]
+                    pickerNode.scrollTop = $findInHolder( CLASSES.highlighted ).position().top - ~~( pickerNode.clientHeight / 3 )
+                }
+
+                return [
+
+                    // The "today" button
+                    $findInHolder( CLASSES.buttonToday )[ 0 ],
+
+                    // The "clear" button
+                    $findInHolder( CLASSES.buttonClear )[ 0 ],
 
                     // The month selector
                     $findInHolder( CLASSES.selectMonth ).on({
@@ -1562,28 +1589,22 @@
                             // Find the new year selector and focus back on it
                             $findInHolder( CLASSES.selectYear ).focus()
                         }
-                    })[ 0 ],
-
-                    // The "today" button
-                    $findInHolder( CLASSES.buttonToday )[ 0 ],
-
-                    // The "clear" button
-                    $findInHolder( CLASSES.buttonClear )[ 0 ]
+                    })[ 0 ]
                 ]
-            } //getUpdatedCalendarItems
+            } //getUpdatedPickerItems
 
 
             /**
-             * Render a new calendar
+             * Render a new picker
              */
-            function calendarRender() {
+            function renderPicker() {
 
                 // Create a new wrapped calendar and place it within the holder
                 $HOLDER.html( createWrappedPicker() )
 
                 // Update the calendar items
-                PICKER.items = getUpdatedCalendarItems()
-            } //calendarRender
+                PICKER.items = getUpdatedPickerItems()
+            } //renderPicker
 
 
             /**
@@ -1722,46 +1743,46 @@
         // Classes
         klass: {
 
-            inputActive: STRING_PREFIX_DATEPICKER + 'input--active',
+            inputActive: STRING_PREFIX_PICKER + 'input--active',
 
-            holder: STRING_PREFIX_DATEPICKER + 'holder',
-            opened: STRING_PREFIX_DATEPICKER + 'holder--opened',
-            focused: STRING_PREFIX_DATEPICKER + 'holder--focused',
+            holder: STRING_PREFIX_PICKER + 'holder',
+            opened: STRING_PREFIX_PICKER + 'holder--opened',
+            focused: STRING_PREFIX_PICKER + 'holder--focused',
 
-            frame: STRING_PREFIX_DATEPICKER + 'frame',
-            wrap: STRING_PREFIX_DATEPICKER + 'wrap',
+            frame: STRING_PREFIX_PICKER + 'frame',
+            wrap: STRING_PREFIX_PICKER + 'wrap',
 
-            item: STRING_PREFIX_DATEPICKER + 'calendar',
+            item: STRING_PREFIX_PICKER + 'calendar',
 
-            table: STRING_PREFIX_DATEPICKER + 'table',
+            table: STRING_PREFIX_PICKER + 'table',
 
-            header: STRING_PREFIX_DATEPICKER + 'header',
+            header: STRING_PREFIX_PICKER + 'header',
 
-            monthPrev: STRING_PREFIX_DATEPICKER + 'nav--prev',
-            monthNext: STRING_PREFIX_DATEPICKER + 'nav--next',
+            monthPrev: STRING_PREFIX_PICKER + 'nav--prev',
+            monthNext: STRING_PREFIX_PICKER + 'nav--next',
 
-            month: STRING_PREFIX_DATEPICKER + 'month',
-            year: STRING_PREFIX_DATEPICKER + 'year',
+            month: STRING_PREFIX_PICKER + 'month',
+            year: STRING_PREFIX_PICKER + 'year',
 
-            selectMonth: STRING_PREFIX_DATEPICKER + 'select--month',
-            selectYear: STRING_PREFIX_DATEPICKER + 'select--year',
+            selectMonth: STRING_PREFIX_PICKER + 'select--month',
+            selectYear: STRING_PREFIX_PICKER + 'select--year',
 
-            weekdays: STRING_PREFIX_DATEPICKER + 'weekday',
+            weekdays: STRING_PREFIX_PICKER + 'weekday',
 
-            body: STRING_PREFIX_DATEPICKER + 'body',
+            body: STRING_PREFIX_PICKER + 'body',
 
-            day: STRING_PREFIX_DATEPICKER + 'day',
-            dayDisabled: STRING_PREFIX_DATEPICKER + 'day--disabled',
-            daySelected: STRING_PREFIX_DATEPICKER + 'day--selected',
-            dayHighlighted: STRING_PREFIX_DATEPICKER + 'day--highlighted',
-            dayToday: STRING_PREFIX_DATEPICKER + 'day--today',
-            dayInfocus: STRING_PREFIX_DATEPICKER + 'day--infocus',
-            dayOutfocus: STRING_PREFIX_DATEPICKER + 'day--outfocus',
+            day: STRING_PREFIX_PICKER + 'day',
+            disabled: STRING_PREFIX_PICKER + 'day--disabled',
+            selected: STRING_PREFIX_PICKER + 'day--selected',
+            highlighted: STRING_PREFIX_PICKER + 'day--highlighted',
+            now: STRING_PREFIX_PICKER + 'day--today',
+            infocus: STRING_PREFIX_PICKER + 'day--infocus',
+            outfocus: STRING_PREFIX_PICKER + 'day--outfocus',
 
-            footer: STRING_PREFIX_DATEPICKER + 'footer',
+            footer: STRING_PREFIX_PICKER + 'footer',
 
-            buttonClear: STRING_PREFIX_DATEPICKER + 'button--clear',
-            buttonToday: STRING_PREFIX_DATEPICKER + 'button--today'
+            buttonClear: STRING_PREFIX_PICKER + 'button--clear',
+            buttonToday: STRING_PREFIX_PICKER + 'button--today'
         }
     } //$.fn.pickadate.defaults
 
@@ -1795,19 +1816,24 @@
         // Classes
         klass: {
 
-            inputActive: STRING_PREFIX_DATEPICKER + 'input--active',
+            inputActive: STRING_PREFIX_PICKER + 'input--active',
 
-            holder: STRING_PREFIX_DATEPICKER + 'holder',
-            opened: STRING_PREFIX_DATEPICKER + 'holder--opened',
-            focused: STRING_PREFIX_DATEPICKER + 'holder--focused',
+            holder: STRING_PREFIX_PICKER + 'holder ' + STRING_PREFIX_PICKER + 'holder--time',
+            opened: STRING_PREFIX_PICKER + 'holder--opened',
+            focused: STRING_PREFIX_PICKER + 'holder--focused',
 
-            frame: STRING_PREFIX_DATEPICKER + 'frame',
-            wrap: STRING_PREFIX_DATEPICKER + 'wrap',
+            frame: STRING_PREFIX_PICKER + 'frame',
+            wrap: STRING_PREFIX_PICKER + 'wrap',
 
-            item: STRING_PREFIX_DATEPICKER + 'clock',
+            item: STRING_PREFIX_PICKER + 'clock',
 
-            list: STRING_PREFIX_DATEPICKER + 'list',
-            listItem: STRING_PREFIX_DATEPICKER + 'list-item'
+            list: STRING_PREFIX_PICKER + 'list',
+            listItem: STRING_PREFIX_PICKER + 'list-item',
+
+            disabled: STRING_PREFIX_PICKER + 'list-item--disabled',
+            selected: STRING_PREFIX_PICKER + 'list-item--selected',
+            highlighted: STRING_PREFIX_PICKER + 'list-item--highlighted',
+            now: STRING_PREFIX_PICKER + 'list-item--now'
         }
     } //$.fn.pickatime.defaults
 
