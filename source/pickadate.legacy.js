@@ -101,8 +101,8 @@
                                     isKeycodeDelete = keycode == 8 || keycode == 46
 
                                 // If backspace was pressed or the calendar is closed and the keycode
-                                // warrants a date change, prevent it from going any further.
-                                if ( isKeycodeDelete || !PICKER.isOpen && KEYCODE_TO_DATE[ keycode ] ) {
+                                // warrants a selection move, prevent it from going any further.
+                                if ( isKeycodeDelete || !PICKER.isOpen && KEYCODE_TO_MOVE[ keycode ] ) {
 
                                     // Prevent it from moving the page
                                     event.preventDefault()
@@ -189,8 +189,8 @@
                                 // Get the keycode
                                 keycode = event.keyCode,
 
-                                // Translate that to a date change
-                                keycodeToDate = KEYCODE_TO_DATE[ keycode ]
+                                // Translate that to a selection change
+                                keycodeToMove = KEYCODE_TO_MOVE[ keycode ]
 
 
                             // On escape, focus back onto the element and close the picker
@@ -200,22 +200,22 @@
                             }
 
 
-                            // If the target is the element and there's a keycode to date
+                            // If the target is the element and there's a keycode to selection
                             // translation or the enter key was pressed
-                            else if ( event.target == ELEMENT && ( keycodeToDate || keycode == 13 ) ) {
+                            else if ( event.target == ELEMENT && ( keycodeToMove || keycode == 13 ) ) {
 
                                 // Prevent the default action to stop it from moving the page
                                 event.preventDefault()
 
-                                // If the keycode translates to a date change, superficially select
-                                // the date by incrementally (by date change) creating new validated dates.
+                                // If the keycode translates to a selection change, superficially select
+                                // the time by incrementally (based on time change) creating new validated times.
                                 // * Truthy second argument makes it a superficial selection
-                                if ( keycodeToDate ) {
-                                    setTimeSelected( createValidatedDate( [ TIME_FOCUSED.YEAR, TIME_FOCUSED.MONTH, TIME_HIGHLIGHTED.DATE + keycodeToDate ], keycodeToDate ), 1 )
+                                if ( keycodeToMove ) {
+                                    setTimeSelected( createValidatedTime( [ TIME_FOCUSED.YEAR, TIME_FOCUSED.MONTH, TIME_HIGHLIGHTED.DATE + keycodeToMove ], keycodeToMove ), 1 )
                                 }
 
                                 // Otherwise it's the enter key so set the element value as the
-                                // highlighted date, render a new calendar, and then close it
+                                // highlighted time, render a new calendar, and then close it
                                 else {
                                     setElementsValue( TIME_HIGHLIGHTED )
                                     calendarRender()
@@ -293,15 +293,15 @@
 
 
                     /**
-                     * Get the selected date in any format.
+                     * Get the selected time in any format.
                      */
-                    getDate: function( format ) {
+                    get: function( format ) {
 
                         // If the format is a literal true, return the underlying JS Date object.
                         // If the element has no value, just return an empty string.
-                        // Otherwise return the formatted date.
+                        // Otherwise return the formatted time.
                         return format === true ? TIME_SELECTED.OBJ : !ELEMENT.value ? '' : getTimeFormatted( format )
-                    }, //getDate
+                    }, //get
 
 
                     /**
@@ -314,16 +314,16 @@
                             setTimeSelected( createTimeObj( timeArray ), isSuperficial )
                         }
 
-                        // If there are 2 units of time, set the time
-                        else if ( timeArray.length == 2 ) {
+                        // If it's a time picker, create the time object and set the time
+                        else if ( IS_TIME_PICKER ) {
                             setTimeSelected( createTimeObj( timeArray ), isSuperficial )
                         }
 
+                        // Otherwise it's a date picker, so compensate for month 0index
+                        // and then create and set a validated date.
                         else {
-                            // Compensate for month 0index and create a validated date.
-                            // Then set it as the date selected
                             --timeArray[ 1 ]
-                            setTimeSelected( createValidatedDate( timeArray ), isSuperficial )
+                            setTimeSelected( createValidatedTime( timeArray ), isSuperficial )
                         }
 
                         return P
@@ -331,25 +331,25 @@
 
 
                     /**
-                     * Get the min or max date based on `upper` being truthy or falsey
+                     * Get the min or max limit based on `upper` being truthy or falsey
                      */
-                    getDateLimit: function( upper, format ) {
+                    getLimit: function( upper, format ) {
                         return getTimeFormatted( format, upper ? LIMIT_MAX : LIMIT_MIN )
-                    }, //getDateLimit
+                    }, //getLimit
 
 
                     /**
-                     * Set the min or max date based on `upper` being truthy or falsey.
+                     * Set the min or max limit based on `upper` being truthy or falsey.
                      */
-                    setDateLimit: function( limit, upper ) {
+                    setLimit: function( limit, upper ) {
 
                         // If it's the upper limit
                         if ( upper ) {
 
-                            // Set the max date
+                            // Set the max time
                             LIMIT_MAX = createTimeBoundaryObj( limit, upper )
 
-                            // If focused month is more than max date set it to max date
+                            // If focused month is more than max time set it to max time
                             if ( TIME_FOCUSED.TIME > LIMIT_MAX.TIME ) {
                                 TIME_FOCUSED = LIMIT_MAX
                             }
@@ -358,10 +358,10 @@
                         // Otherwise it's the lower limit
                         else {
 
-                            // So set the min date
+                            // So set the min time
                             LIMIT_MIN = createTimeBoundaryObj( limit )
 
-                            // If focused month is less than min date set it to min date
+                            // If focused month is less than min time set it to min time
                             if ( TIME_FOCUSED.TIME < LIMIT_MIN.TIME ) {
                                 TIME_FOCUSED = LIMIT_MIN
                             }
@@ -371,7 +371,7 @@
                         calendarRender()
 
                         return P
-                    } //setDateLimit
+                    } //setLimit
                 }, //Picker.prototype
 
 
@@ -398,7 +398,7 @@
                 CLASSES = SETTINGS.klass,
 
 
-                // The date in various formats
+                // The time in various formats
                 TIME_FORMATS = (function() {
 
                     // Get the length of the first word
@@ -412,7 +412,7 @@
                     }
 
                     // Get the length of the month from a string
-                    function getMonthLength( string, dateObj, collection ) {
+                    function getMonthLength( string, date, collection ) {
 
                         // Grab the first word
                         var word = string.match( /\w+/ )[ 0 ]
@@ -420,8 +420,8 @@
                         // If there's no index for the date object's month,
                         // find it in the relevant months collection and add 1
                         // because we subtract 1 when we create the date object
-                        if ( !dateObj.mm && !dateObj.m ) {
-                            dateObj.m = collection.indexOf( word ) + 1
+                        if ( !date.mm && !date.m ) {
+                            date.m = collection.indexOf( word ) + 1
                         }
 
                         // Return the length of the word
@@ -429,7 +429,7 @@
                     }
 
 
-                    // Return the date formats object
+                    // Return the time formats object
                     return {
                         h: function( string ) {
 
@@ -516,23 +516,23 @@
                             // Otherwise return the selected month with 0index and leading zero.
                             return string ? 2 : leadZero( this.MONTH + 1 )
                         },
-                        mmm: function( string, dateObject ) {
+                        mmm: function( string, date ) {
 
                             var collection = SETTINGS.monthsShort
 
                             // If there's a string, get length of the relevant month string
                             // from the short months collection. Otherwise return the
                             // selected month from that collection.
-                            return string ? getMonthLength( string, dateObject, collection ) : collection[ this.MONTH ]
+                            return string ? getMonthLength( string, date, collection ) : collection[ this.MONTH ]
                         },
-                        mmmm: function( string, dateObject ) {
+                        mmmm: function( string, date ) {
 
                             var collection = SETTINGS.monthsFull
 
                             // If there's a string, get length of the relevant month string
                             // from the full months collection. Otherwise return the
                             // selected month from that collection.
-                            return string ? getMonthLength( string, dateObject, collection ) : collection[ this.MONTH ]
+                            return string ? getMonthLength( string, date, collection ) : collection[ this.MONTH ]
                         },
                         yy: function( string ) {
 
@@ -567,147 +567,143 @@
                 LIMIT_MAX = createTimeBoundaryObj( SETTINGS.maxLimit, 1 ),
 
 
-                // Create a pseudo min and max date for disabled
+                // Create a pseudo min and max limit for disabled
                 // calendars as the respective opposite limit
                 PSEUDO_LIMIT_MIN = LIMIT_MAX,
                 PSEUDO_LIMIT_MAX = LIMIT_MIN,
 
 
                 // Create a collection of times to disable
-                TIMES_TO_DISABLE = (function( datesCollection ) {
+                TIMES_TO_DISABLE = (function( timesCollection ) {
 
-                    // If a collection was passed, we need to create calendar date objects
-                    if ( Array.isArray( datesCollection ) ) {
+                    // If a collection was passed, we need to create time objects
+                    if ( Array.isArray( timesCollection ) ) {
 
                         // If the "all" flag is true, remove the flag from the collection
-                        // and flip the condition of which dates to disable
-                        if ( datesCollection[ 0 ] === true ) {
-                            PICKER.off = datesCollection.shift()
+                        // and flip the condition of which times to disable
+                        if ( timesCollection[ 0 ] === true ) {
+                            PICKER.off = timesCollection.shift()
                         }
 
-                        // Map through the dates passed and return the collection
-                        return datesCollection.map( function( date ) {
+                        // Map through the times passed and return the collection
+                        return timesCollection.map( function( time ) {
 
-                            // If the date is a number, we need to disable weekdays
-                            if ( !isNaN( date ) ) {
+                            // If the time is a number, we need to disable weekdays
+                            if ( !isNaN( time ) ) {
 
                                 // So flip the "off days" boolean
                                 PICKER.offDays = 1
 
                                 // If the first day flag is truthy, we maintain the
-                                // 0index of the date by getting the remainder from 7.
-                                // Otherwise return the date with 0index compensation.
-                                return SETTINGS.firstDay ? date % DAYS_IN_WEEK : --date
+                                // 0index of the weekday by getting the remainder from 7.
+                                // Otherwise return the weekday with 0index compensation.
+                                return SETTINGS.firstDay ? time % DAYS_IN_WEEK : --time
                             }
 
                             // Otherwise assume it's an array and fix the month 0index
-                            --date[ 1 ]
+                            --time[ 1 ]
 
-                            // Then create and return the date,
-                            // replacing it in the collection
-                            return createTimeObj( date )
+                            // Then create and return the time object, replacing it in the collection
+                            return createTimeObj( time )
                         })
                     }
-                })( SETTINGS.datesDisabled ), //TIMES_TO_DISABLE
+                })( SETTINGS.timesDisabled ), //TIMES_TO_DISABLE
 
 
-                // Create a function that will filter through the dates
-                // and return true if looped date is to be disabled
+                // Create a function that will filter through the times
+                // and return true if the looped time is to be disabled
                 DISABLED_TIMES = (function() {
 
-                    // Check if the looped date should be disabled
-                    // based on the time being the same as a disabled date
+                    // Check if the looped time should be disabled
+                    // based on the time being the same as a disabled time
                     // or the day index being within the collection
-                    var isDisabledDate = function( date ) {
-                        return this.TIME == date.TIME || TIMES_TO_DISABLE.indexOf( this.DAY ) > -1
+                    var isDisabledTime = function( timeObj ) {
+                        return this.TIME == timeObj.TIME || TIMES_TO_DISABLE.indexOf( this.DAY ) > -1
                     }
 
 
-                    // If all calendar dates should be disabled
+                    // If all calendar times should be disabled
                     if ( PICKER.off ) {
 
-                        // Map through all the dates to disable
-                        TIMES_TO_DISABLE.map( function( loopDate ) {
+                        // Map through all the times to disable
+                        TIMES_TO_DISABLE.map( function( timeObj ) {
 
-                            // If the looped date is less than the latest lowest date
-                            // and greater than the minimum date, then set it as the lowest date
-                            if ( loopDate.TIME < PSEUDO_LIMIT_MIN.TIME && loopDate.TIME > LIMIT_MIN.TIME ) {
-                                PSEUDO_LIMIT_MIN = loopDate
+                            // If the looped time is less than the latest lowest time
+                            // and greater than the minimum time, then set it as the lower limit
+                            if ( timeObj.TIME < PSEUDO_LIMIT_MIN.TIME && timeObj.TIME > LIMIT_MIN.TIME ) {
+                                PSEUDO_LIMIT_MIN = timeObj
                             }
 
-                            // If the looped date is more than the latest highest date
-                            // and less than the maximum date, then set it as the highest date
-                            if ( loopDate.TIME > PSEUDO_LIMIT_MAX.TIME && loopDate.TIME <= LIMIT_MAX.TIME ) {
-                                PSEUDO_LIMIT_MAX = loopDate
+                            // If the looped time is more than the latest highest time
+                            // and less than the maximum time, then set it as the upper limit
+                            if ( timeObj.TIME > PSEUDO_LIMIT_MAX.TIME && timeObj.TIME <= LIMIT_MAX.TIME ) {
+                                PSEUDO_LIMIT_MAX = timeObj
                             }
                         })
 
-                        // Finally, return a function that maps each date
-                        // in the collection of dates to not disable.
-                        return function( date, i, collection ) {
-
-                            // Map the array of disabled dates and check if this is not one
-                            return ( collection.map( isDisabledDate, this ).indexOf( true ) < 0 )
+                        // Finally, return a function that maps each time in the collection
+                        // of times to disable and checks if this is not one.
+                        return function( time, i, collection ) {
+                            return ( collection.map( isDisabledTime, this ).indexOf( true ) < 0 )
                         }
                     }
 
 
-                    // Otherwise just return the function that checks if a date is disabled
-                    return isDisabledDate
+                    // Otherwise just return the function that checks if a time is disabled
+                    return isDisabledTime
                 })(), //DISABLED_TIMES
 
 
                 // Create calendar object for the highlighted day
-                TIME_HIGHLIGHTED = (function( dateDataValue, dateEntered ) {
+                TIME_HIGHLIGHTED = (function( elemDataValue, elemValue ) {
 
-                    // If there a date `data-value`
-                    if ( dateDataValue ) {
+                    // If there an element `data-value`
+                    if ( elemDataValue ) {
 
-                        // Set the date entered to an empty object
-                        dateEntered = {}
+                        // Set the element value entered to an empty object
+                        elemValue = {}
 
                         // Map through the submit format array
                         TIME_FORMATS.toArray( SETTINGS.formatSubmit ).map( function( formatItem ) {
 
                             // If the formatting length function exists, invoke it
-                            // with the `data-value` and the date we are creating.
+                            // with the `data-value` and the time object we are creating.
                             // Otherwise it's the length of the formatting item being mapped
-                            var formattingLength = TIME_FORMATS[ formatItem ] ? TIME_FORMATS[ formatItem ]( dateDataValue, dateEntered ) : formatItem.length
+                            var formattingLength = TIME_FORMATS[ formatItem ] ? TIME_FORMATS[ formatItem ]( elemDataValue, elemValue ) : formatItem.length
 
                             // If the formatting length function exists, slice up
-                            // the value and pass it into the date we're creating.
+                            // the value and pass it into the time object we're creating.
                             if ( TIME_FORMATS[ formatItem ] ) {
-                                dateEntered[ formatItem ] = dateDataValue.slice( 0, formattingLength )
+                                elemValue[ formatItem ] = elemDataValue.slice( 0, formattingLength )
                             }
 
                             // Update the remainder of the string by slicing away the format length
-                            dateDataValue = dateDataValue.slice( formattingLength )
+                            elemDataValue = elemDataValue.slice( formattingLength )
                         })
 
-                        // Finally, create an array with the date entered while
+                        // Finally, create an array with the time object while
                         // parsing each item as an integer and compensating for 0index
-                        dateEntered = [ +(dateEntered.yyyy || dateEntered.yy), +(dateEntered.mm || dateEntered.m) - 1, +(dateEntered.dd || dateEntered.d) ]
+                        elemValue = [ +(elemValue.yyyy || elemValue.yy), +(elemValue.mm || elemValue.m) - 1, +(elemValue.dd || elemValue.d) ]
                     }
 
 
-                    // Otherwise, try to natively parse the date in the input
+                    // Otherwise, try to natively parse the value in the input
                     else {
-                        dateEntered = Date.parse( dateEntered )
+                        elemValue = Date.parse( elemValue )
                     }
 
 
-                    // If there's a valid date in the input or the dateEntered
-                    // is now an array, create a validated date with it.
-                    // Otherwise set the highlighted date to today after validating.
-                    return createValidatedDate( dateEntered && ( !isNaN( dateEntered ) || Array.isArray( dateEntered ) ) ? dateEntered : NOW )
+                    // If there's a valid time in the `input` or the `elemValue` is now an array,
+                    // create a validated time with it. Otherwise set the highlighted time to "now" after validating.
+                    return createValidatedTime( elemValue && ( !isNaN( elemValue ) || Array.isArray( elemValue ) ) ? elemValue : NOW )
                 })( ELEMENT.getAttribute( 'data-value' ), ELEMENT.value ),
 
 
-                // The date selected is initially the date highlighted
+                // The time selected is initially the time highlighted
                 TIME_SELECTED = TIME_HIGHLIGHTED,
 
 
-                // Month focused is based on highlighted date
+                // The time focused is based on highlighted time
                 TIME_FOCUSED = TIME_HIGHLIGHTED,
 
 
@@ -804,8 +800,8 @@
                 }), // $HOLDER
 
 
-                // Translate a keycode to a relative change in date
-                KEYCODE_TO_DATE = {
+                // Translate a keycode to a relative change in time
+                KEYCODE_TO_MOVE = {
 
                     // Down
                     40: 7,
@@ -818,7 +814,7 @@
 
                     // Left
                     37: -1
-                } //KEYCODE_TO_DATE
+                } //KEYCODE_TO_MOVE
 
 
 
@@ -846,24 +842,24 @@
                 }
 
 
-                // If the date passed is an array, create the date by splitting the items
+                // If the time passed is an array, create the time by splitting the items
                 if ( Array.isArray( timePassed ) ) {
                     timePassed = new Date( timePassed[ 0 ], timePassed[ 1 ], timePassed[ 2 ] )
                 }
 
-                // If the date passed is a number, create the date with the number
+                // If the time passed is a number, create the time with the number
                 else if ( !isNaN( timePassed ) ) {
                     timePassed = new Date( timePassed )
                 }
 
-                // Otherwise if it's not unlimited, set the date to today and
+                // Otherwise if it's not unlimited, set the time to today and
                 // set the time to midnight (for comparison purposes)
                 else if ( !unlimited ) {
                     timePassed = new Date()
                     timePassed.setHours( 0, 0, 0, 0 )
                 }
 
-                // Return the calendar date object
+                // Return the calendar time object
                 return {
                     YEAR: unlimited || timePassed.getFullYear(),
                     MONTH: unlimited || timePassed.getMonth(),
@@ -876,7 +872,7 @@
 
 
             /**
-             * Create a bounding date allowed on the calendar
+             * Create a bounding time allowed on the calendar
              * * A truthy second argument creates the upper boundary
              */
             function createTimeBoundaryObj( limit, upper ) {
@@ -891,86 +887,84 @@
                     return NOW
                 }
 
-                // If the limit is an array, construct the date by fixing month 0index
+                // If the limit is an array, construct the time by fixing month 0index
                 if ( Array.isArray( limit ) ) {
                     --limit[ 1 ]
                     return createTimeObj( limit )
                 }
 
                 // If there is a limit and its a number, create a
-                // calendar date relative to today by adding the limit
+                // calendar time relative to today by adding the limit
                 if ( limit && !isNaN( limit ) ) {
                     return createTimeObj([ NOW.YEAR, NOW.MONTH, NOW.DATE + limit ])
                 }
 
-                // Otherwise create an infinite date
+                // Otherwise create an infinite time
                 return createTimeObj( 0, upper ? Infinity : -Infinity )
             } //createTimeBoundaryObj
 
 
             /**
-             * Create a validated date
+             * Create a validated time
              */
-            function createValidatedDate( datePassed, direction, skipMonthCheck ) {
+            function createValidatedTime( timeObj, direction, skipMonthCheck ) {
 
-                // If the date passed isn't a date, create one
-                datePassed = !datePassed.TIME ? createTimeObj( datePassed ) : datePassed
+                // If the time passed isn't a time object, create one
+                timeObj = !timeObj.TIME ? createTimeObj( timeObj ) : timeObj
 
 
                 // If the calendar "disabled" flag is truthy and there are only disabled weekdays
                 if ( PICKER.off && !PICKER.offDays ) {
 
-                    // If the date is less than the pseudo min date or greater than pseudo max date,
-                    // set it as the pseudo date limit. Otherwise keep it the same.
-                    datePassed = datePassed.TIME < PSEUDO_LIMIT_MIN.TIME ? PSEUDO_LIMIT_MIN : datePassed.TIME > PSEUDO_LIMIT_MAX.TIME ? PSEUDO_LIMIT_MAX : datePassed
+                    // If the time is less than the pseudo min limit or greater than pseudo max limit,
+                    // set it as the pseudo time limit. Otherwise keep it the same.
+                    timeObj = timeObj.TIME < PSEUDO_LIMIT_MIN.TIME ? PSEUDO_LIMIT_MIN : timeObj.TIME > PSEUDO_LIMIT_MAX.TIME ? PSEUDO_LIMIT_MAX : timeObj
                 }
 
-                // Otherwise if there are disabled dates
+                // Otherwise if there are disabled times
                 else if ( TIMES_TO_DISABLE ) {
 
-                    // Create a reference to the original date passed
-                    var originalDate = datePassed
+                    // Create a reference to the original time passed
+                    var originalTime = timeObj
 
-                    // Check if this date is disabled. If it is,
-                    // then keep adding the direction (or 1) to the date
-                    // until we get to a date that's enabled.
-                    while ( TIMES_TO_DISABLE.filter( DISABLED_TIMES, datePassed ).length ) {
+                    // Check if this time is disabled. If it is,
+                    // then keep adding the direction (or 1) to the time
+                    // until we get to a time that's enabled.
+                    while ( TIMES_TO_DISABLE.filter( DISABLED_TIMES, timeObj ).length ) {
 
-                        // Otherwise create the next date based on the direction
-                        datePassed = createTimeObj([ datePassed.YEAR, datePassed.MONTH, datePassed.DATE + ( direction || 1 ) ])
+                        // Otherwise create the next time based on the direction
+                        timeObj = createTimeObj([ timeObj.YEAR, timeObj.MONTH, timeObj.DATE + ( direction || 1 ) ])
 
                         // Check if the month check should be skipped to avoid extra loops.
                         // Otherwise if we've gone through to another month, create a new
-                        // date based on the direction being less than zero (rather than more).
-                        // Then set this new date as the original and looped date.
-                        if ( !skipMonthCheck && datePassed.MONTH != originalDate.MONTH ) {
-                            originalDate = datePassed = createTimeObj([ originalDate.YEAR, originalDate.MONTH, direction < 0 ? --originalDate.DATE : ++originalDate.DATE ])
+                        // time based on the direction being less than zero (rather than more).
+                        // Then set this new time as the original and looped time.
+                        if ( !skipMonthCheck && timeObj.MONTH != originalTime.MONTH ) {
+                            originalTime = timeObj = createTimeObj([ originalTime.YEAR, originalTime.MONTH, direction < 0 ? --originalTime.DATE : ++originalTime.DATE ])
                         }
                     }
                 }
 
 
-                // If it's less that min date, set it to min date
-                // by creating a validated date by adding one
-                // until we find an enabled date
-                // * A truthy third argument skips the month check
-                if ( datePassed.TIME < LIMIT_MIN.TIME ) {
-                    datePassed = createValidatedDate( LIMIT_MIN, 1, 1 )
+                // If it's less that min limit, set it to min limit by creating
+                // a validated time while adding one until we find an enabled time.
+                // * A truthy third argument skips the month check.
+                if ( timeObj.TIME < LIMIT_MIN.TIME ) {
+                    timeObj = createValidatedTime( LIMIT_MIN, 1, 1 )
                 }
 
 
-                // If it's more than max date, set it to max date
-                // by creating a validated date by subtracting one
-                // until we find an enabled date
-                // * A truthy third argument skips the month check
-                else if ( datePassed.TIME > LIMIT_MAX.TIME ) {
-                    datePassed = createValidatedDate( LIMIT_MAX, -1, 1 )
+                // If it's more than max limit, set it to max limit by creating
+                // a validated time while subtracting one until we find an enabled time.
+                // * A truthy third argument skips the month check.
+                else if ( timeObj.TIME > LIMIT_MAX.TIME ) {
+                    timeObj = createValidatedTime( LIMIT_MAX, -1, 1 )
                 }
 
 
-                // Finally, return the date
-                return datePassed
-            } //createValidatedDate
+                // Finally, return the time object
+                return timeObj
+            } //createValidatedTime
 
 
             /**
@@ -1118,7 +1112,7 @@
 
                 var
                     // The loop date object
-                    loopDate,
+                    timeObj,
 
                     // A pseudo index will be the divider between
                     // the previous month and the focused month
@@ -1151,8 +1145,7 @@
                 countShiftby += countShiftby < -1 ? 7 : 0
 
 
-                // Go through all the days in the calendar
-                // and map a calendar date
+                // Go through all the days in the calendar and map a calendar date
                 for ( var index = 0; index < DAYS_IN_CALENDAR; index += 1 ) {
 
                     // Get the distance between the index and the count
@@ -1162,20 +1155,20 @@
 
 
                     // Create a calendar date with a negative or positive pseudoIndex
-                    loopDate = createTimeObj([ TIME_FOCUSED.YEAR, TIME_FOCUSED.MONTH, pseudoIndex ])
+                    timeObj = createTimeObj([ TIME_FOCUSED.YEAR, TIME_FOCUSED.MONTH, pseudoIndex ])
 
 
                     // Set the date class and bindings on the looped date.
                     // If the pseudoIndex is greater than zero,
                     // and less or equal to the days in the month,
                     // we need dates from the focused month.
-                    classAndBinding = createNodeClassAndBinding( loopDate, [ CLASSES.day, pseudoIndex > 0 && pseudoIndex <= countMonthDays ? CLASSES.dayInfocus : CLASSES.dayOutfocus ] )
+                    classAndBinding = createNodeClassAndBinding( timeObj, [ CLASSES.day, pseudoIndex > 0 && pseudoIndex <= countMonthDays ? CLASSES.dayInfocus : CLASSES.dayOutfocus ] )
 
 
                     // Create the looped date wrapper,
                     // and then create the table cell wrapper
                     // and finally pass it to the calendar array
-                    calendarDates.push( createNode( 'td', createNode( STRING_DIV, loopDate.DATE, classAndBinding[ 0 ], classAndBinding[ 1 ] ) ) )
+                    calendarDates.push( createNode( 'td', createNode( STRING_DIV, timeObj.DATE, classAndBinding[ 0 ], classAndBinding[ 1 ] ) ) )
 
 
                     // Check if it's the end of a week.
@@ -1196,7 +1189,7 @@
 
 
             /**
-             * Create the class and data binding for a looped date node.
+             * Create the class and data binding for a time object of a node.
              * Returns an array with 2 items:
              * 1) The classes string
              * 2) The data binding string
@@ -1218,6 +1211,8 @@
                 // If the time object is for time, then we need those conditionals
                 if ( IS_TIME_PICKER ) {
 
+                    console.log( 'here' )
+
                     //this will never happen because they will always be in range
                     if ( timeObj.TIME < LIMIT_MIN.TIME || timeObj.TIME > LIMIT_MAX.TIME ) {
 
@@ -1232,8 +1227,8 @@
 
                 else {
 
-                    // If it's less than the minimum date or greater than the maximum date,
-                    // or if there are dates to disable and this looped date is one of them,
+                    // If it's less than the minimum limit or greater than the maximum limit,
+                    // or if there are times to disable and this time object is one of them,
                     // flip the "disabled" state to truthy and add the "disabled" class
                     if ( timeObj.TIME < LIMIT_MIN.TIME || timeObj.TIME > LIMIT_MAX.TIME || ( TIMES_TO_DISABLE && TIMES_TO_DISABLE.filter( DISABLED_TIMES, timeObj ).length ) ) {
                         isTimeDisabled = 1
@@ -1247,19 +1242,19 @@
                     }
 
 
-                    // If it's the highlighted date, add the class
+                    // If it's the highlighted time, add the class
                     if ( timeObj.TIME == TIME_HIGHLIGHTED.TIME ) {
                         klassCollection.push( CLASSES.dayHighlighted )
                     }
 
 
-                    // If it's the selected date, add the class
+                    // If it's the selected time, add the class
                     if ( timeObj.TIME == TIME_SELECTED.TIME ) {
                         klassCollection.push( CLASSES.daySelected )
                     }
 
 
-                    // The date data binding
+                    // The time data binding
                     dataBinding = [
                         timeObj.YEAR,
                         timeObj.MONTH + 1, // add 1 to display an accurate date
@@ -1284,7 +1279,7 @@
              * Create the "today" and "clear" buttons
              */
             function createTodayAndClear() {
-                return createNode( 'button', SETTINGS.today, CLASSES.buttonToday, 'data-date=' + getTimeFormatted( 'yyyy/mm/dd', NOW ) + ' ' + getTabindexState() ) + createNode( 'button', SETTINGS.clear, CLASSES.buttonClear, 'data-clear=1 ' + getTabindexState() )
+                return createNode( 'button', SETTINGS.today, CLASSES.buttonToday, 'data-pick=' + getTimeFormatted( 'yyyy/mm/dd', NOW ) + ' ' + getTabindexState() ) + createNode( 'button', SETTINGS.clear, CLASSES.buttonClear, 'data-clear=1 ' + getTabindexState() )
             } //createTodayAndClear
 
 
@@ -1433,16 +1428,15 @@
 
 
             /**
-             * Get any date in any format. Defaults to getting
-             * the superficially selected date.
+             * Get a time object in any format. Defaults to getting the superficially selected time.
              */
             function getTimeFormatted( format, timeObj ) {
 
-                // Go through all the date formats and convert the format passed
+                // Go through all the time formats and convert the format passed
                 // into an array to map which we join into a string at the end.
                 return TIME_FORMATS.toArray( format || SETTINGS.format ).map( function( value ) {
 
-                    // Trigger the date formats function
+                    // Trigger the time formats function
                     // or just return value itself.
                     return triggerFunction( TIME_FORMATS[ value ], timeObj || TIME_SELECTED ) || value.replace( /^!/, '' )
                 }).join( '' )
@@ -1450,7 +1444,7 @@
 
 
             /**
-             * Set a date as selected or superficially selected
+             * Set a time as selected or superficially selected
              */
             function setTimeSelected( timeObj, isSuperficial ) {
 
@@ -1472,15 +1466,15 @@
 
 
             /**
-             * Set the date in the input element and trigger a change event
+             * Set the time in the input element and trigger a change event
              */
             function setElementsValue( timeObj ) {
 
-                // If there's a date targeted, update the selected date
+                // If there's a time targeted, update the selected time
                 TIME_SELECTED = timeObj || TIME_SELECTED
 
-                // Set the element value as the formatted date
-                // if there was a date targeted. Otherwise clear it.
+                // Set the element value as the formatted time
+                // if there was a time targeted. Otherwise clear it.
                 // And then broadcast a change event.
                 $ELEMENT.val( timeObj ? getTimeFormatted() : '' ).trigger( 'change' )
 
@@ -1505,13 +1499,11 @@
                 // Ensure we have a year to work with
                 year = year || TIME_FOCUSED.YEAR
 
-                // Get the month to be within
-                // the minimum and maximum date limits
+                // Get the month to be within the minimum and maximum time limits
                 month = getMonthInRange( month, year )
 
                 // Set the month to show in focus
-                // * We set the date to 1st of the month
-                //   because date doesn't matter here
+                // * We set the date to 1st of the month because date doesn't matter here
                 TIME_FOCUSED = createTimeObj([ year, month, 1 ])
 
                 // Then render a new calendar
@@ -1532,10 +1524,11 @@
 
             /**
              * Get an updated collection of calendar items.
+             * The time picker has no items so returns an empty array.
              */
             function getUpdatedCalendarItems() {
 
-                return [
+                return IS_TIME_PICKER ? [] : [
 
                     // The month selector
                     $findInHolder( CLASSES.selectMonth ).on({
@@ -1693,10 +1686,10 @@
         today: 'Today',
         clear: 'Clear',
 
-        // Date format to show on the input element
+        // The format to show on the `input` element
         format: 'd mmmm, yyyy',
 
-        // Date format to send to the server
+        // The format to send to the server
         formatSubmit: 0,
 
         // Hidden element name suffix
@@ -1709,12 +1702,12 @@
         monthSelector: 0,
         yearSelector: 0,
 
-        // Date ranges
+        // The time limits
         minLimit: 0,
         maxLimit: 0,
 
-        // Dates to disable
-        datesDisabled: 0,
+        // Times to disable
+        timesDisabled: 0,
 
         // Disable for browsers with native date support
         disablePicker: 0,
@@ -1779,10 +1772,10 @@
      */
     $.fn.pickatime.defaults = {
 
-        // Date format to show on the input element
+        // The format to show on the `input` element
         format: 'h:i A',
 
-        // Date format to send to the server
+        // The format to send to the server
         formatSubmit: 0,
 
         // Hidden element name suffix
