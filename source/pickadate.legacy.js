@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v3.0.0 early unstable pre-aplha build - 11 February, 2013
+ * pickadate.js v3.0.0 early unstable aplha build - 12 February, 2013
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
@@ -31,6 +31,7 @@
 
         MINUTES_IN_HOUR = 60,
         HOURS_IN_DAY = 24,
+        HOURS_TO_NOON = 12,
         MINUTES_IN_DAY = HOURS_IN_DAY * MINUTES_IN_HOUR,
 
         STRING_DIV = 'div',
@@ -442,14 +443,14 @@
 
                             // If there's string, then get the digits length.
                             // Otherwise return the selected hour in "standard" format.
-                            return string ? getDigitsLength( string ) : this.HOUR % 12 || 12
+                            return string ? getDigitsLength( string ) : this.HOUR % HOURS_TO_NOON || HOURS_TO_NOON
                         },
 
                         hh: function( string ) {
 
                             // If there's a string, then the length is always 2.
                             // Otherwise return the selected hour in "standard" format with a leading zero.
-                            return string ? 2 : leadZero( this.HOUR % 12 || 12 )
+                            return string ? 2 : leadZero( this.HOUR % HOURS_TO_NOON || HOURS_TO_NOON )
                         },
 
                         H: function( string ) {
@@ -592,29 +593,35 @@
                             PICKER.off = timesCollection.shift()
                         }
 
+
                         // Map through the times passed and return the collection
-                        return timesCollection.map( function( time ) {
+                        return timesCollection.map( function( timeToDisable ) {
 
-                            // If the time is a number, we need to disable weekdays
-                            if ( !isNaN( time ) ) {
+                            // If the time is a number, we have to disable hours/weekdays
+                            if ( !isNaN( timeToDisable ) ) {
 
-                                // So flip the "off days" boolean
+                                // If it's the time picker, just return the time as the "hour"
+                                if ( IS_TIME_PICKER ) return timeToDisable
+
+                                // Otherwise we need to disable weekdays, so flip the "off days" boolean
                                 PICKER.offDays = 1
 
                                 // If the first day flag is truthy, we maintain the
                                 // 0index of the weekday by getting the remainder from 7.
                                 // Otherwise return the weekday with 0index compensation.
-                                return SETTINGS.firstDay ? time % DAYS_IN_WEEK : --time
+                                return SETTINGS.firstDay ? timeToDisable % DAYS_IN_WEEK : --timeToDisable
                             }
 
-                            // Otherwise assume it's an array and fix the month 0index
-                            --time[ 1 ]
+                            // Otherwise if it's not a time picker, it's a date array so fix the month 0index
+                            if ( !IS_TIME_PICKER ) {
+                                --timeToDisable[ 1 ]
+                            }
 
                             // Then create and return the time object, replacing it in the collection
-                            return createTimeObj( time )
+                            return createTimeObj( timeToDisable )
                         })
                     }
-                })( SETTINGS.timesDisabled ), //TIMES_TO_DISABLE
+                })( SETTINGS.disable ), //TIMES_TO_DISABLE
 
 
                 // Create a function that will filter through the times
@@ -625,7 +632,7 @@
                     // based on the time being the same as a disabled time
                     // or the day index being within the collection
                     var isDisabledTime = function( timeObj ) {
-                        return this.TIME == timeObj.TIME || TIMES_TO_DISABLE.indexOf( this.DAY ) > -1
+                        return this.TIME == timeObj.TIME || TIMES_TO_DISABLE.indexOf( this.DAY || this.HOUR ) > -1
                     }
 
 
@@ -676,7 +683,8 @@
                             // If the formatting length function exists, invoke it
                             // with the `data-value` and the time object we are creating.
                             // Otherwise it's the length of the formatting item being mapped
-                            var formattingLength = TIME_FORMATS[ formatItem ] ? TIME_FORMATS[ formatItem ]( elemDataValue, elemValue ) : formatItem.length
+                            // (while removing escaped characters).
+                            var formattingLength = TIME_FORMATS[ formatItem ] ? TIME_FORMATS[ formatItem ]( elemDataValue, elemValue ) : formatItem.replace( /^!/, '' ).length
 
                             // If the formatting length function exists, slice up
                             // the value and pass it into the time object we're creating.
@@ -688,11 +696,12 @@
                             elemDataValue = elemDataValue.slice( formattingLength )
                         })
 
-                        // Finally, create an array with the time object while
-                        // parsing each item as an integer and compensating for 0index
+                        // Finally, create an array with the time object units while parsing each item
+                        // as an integer. If it's not a time picker, compensate for 0index month.
                         elemValue = IS_TIME_PICKER ?
                             [
-                                ( elemValue.HH || elemValue.H ) || +( elemValue.hh || elemValue.h ) + ( /^p/i.test( elemValue.A || elemValue.a ) ? 12 : 0 ),
+                                // If no "military" format, get the "standard" format and add 12 based on AM/PM
+                                ( elemValue.HH || elemValue.H ) || +( elemValue.hh || elemValue.h ) + ( /^p/i.test( elemValue.A || elemValue.a ) ? HOURS_TO_NOON : 0 ),
                                 elemValue.i
                             ] :
                             [
@@ -705,7 +714,6 @@
 
                     // Otherwise, try to natively parse the value in the input
                     else {
-                        console.log( 'here<<<<<<<<' )
                         elemValue = Date.parse( elemValue )
                     }
 
@@ -1543,10 +1551,11 @@
              */
             function getUpdatedPickerItems() {
 
-                // If it's a time picker, make sure the selected node is in view
+                // If it's a time picker, make sure the highlighted node is in view
+                // and then return an empty array because it has no picker items.
                 if ( IS_TIME_PICKER ) {
-                    var pickerNode = $findInHolder( CLASSES.item )[ 0 ]
-                    pickerNode.scrollTop = $findInHolder( CLASSES.highlighted ).position().top - ~~( pickerNode.clientHeight / 3 )
+                    $HOLDER[ 0 ].scrollTop = $findInHolder( CLASSES.highlighted ).position().top - ~~( $HOLDER[ 0 ].clientHeight / 3 )
+                    return []
                 }
 
                 return [
@@ -1691,9 +1700,9 @@
      */
     $.fn.pickadate.defaults = {
 
+        // Strings (with translation support) for months and weekdays
         monthsFull: [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ],
         monthsShort: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
-
         weekdaysFull: [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ],
         weekdaysShort: [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ],
 
@@ -1713,7 +1722,7 @@
         // The format to send to the server
         formatSubmit: 0,
 
-        // Hidden element name suffix
+        // Hidden `input` element name suffix
         hiddenSuffix: '_submit',
 
         // First day of the week: 0 = Sunday, 1 = Monday
@@ -1728,7 +1737,7 @@
         maxLimit: 0,
 
         // Times to disable
-        timesDisabled: 0,
+        disable: 0,
 
         // Disable for browsers with native date support
         disablePicker: 0,
@@ -1793,6 +1802,9 @@
      */
     $.fn.pickatime.defaults = {
 
+        // The interval between each time
+        timeStep: 30,
+
         // The format to show on the `input` element
         format: 'h:i A',
 
@@ -1802,9 +1814,15 @@
         // Hidden element name suffix
         hiddenSuffix: '_submit',
 
+        // The time limits
         minLimit: 0,
         maxLimit: MINUTES_IN_DAY,
-        timeStep: 30,
+
+        // Times to disable
+        disable: 0,
+
+        // Disable for browsers with native date support
+        disablePicker: 0,
 
         // Events
         onOpen: 0,
