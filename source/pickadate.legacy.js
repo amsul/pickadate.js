@@ -642,16 +642,34 @@
                         // Map through all the times to disable
                         TIMES_TO_DISABLE.map( function( timeObj ) {
 
-                            // If the looped time is less than the latest lowest time
-                            // and greater than the minimum time, then set it as the lower limit
-                            if ( timeObj.TIME < PSEUDO_LIMIT_MIN.TIME && timeObj.TIME > LIMIT_MIN.TIME ) {
-                                PSEUDO_LIMIT_MIN = timeObj
+                            if ( IS_TIME_PICKER && !isNaN( timeObj ) ) {
+
+                                // If the looped time is less than the latest lowest hour
+                                // and greater than the minimum hour, then set it as the lower limit
+                                if ( timeObj < PSEUDO_LIMIT_MIN.HOUR && timeObj > LIMIT_MIN.HOUR ) {
+                                    PSEUDO_LIMIT_MIN = createTimeObj([ timeObj, 0 ])
+                                }
+
+                                // If the looped time is more than the latest highest hour and less
+                                // than or equal to the maximum hour, then set it as the upper limit
+                                if ( timeObj > PSEUDO_LIMIT_MAX.HOUR && timeObj <= LIMIT_MAX.HOUR ) {
+                                    PSEUDO_LIMIT_MAX = createTimeObj([ timeObj, LIMIT_MAX.MINS ])
+                                }
                             }
 
-                            // If the looped time is more than the latest highest time
-                            // and less than the maximum time, then set it as the upper limit
-                            if ( timeObj.TIME > PSEUDO_LIMIT_MAX.TIME && timeObj.TIME <= LIMIT_MAX.TIME ) {
-                                PSEUDO_LIMIT_MAX = timeObj
+                            else {
+
+                                // If the looped time is less than the latest lowest time
+                                // and greater than the minimum time, then set it as the lower limit
+                                if ( timeObj.TIME < PSEUDO_LIMIT_MIN.TIME && timeObj.TIME > LIMIT_MIN.TIME ) {
+                                    PSEUDO_LIMIT_MIN = timeObj
+                                }
+
+                                // If the looped time is more than the latest highest time and less
+                                // than or equal to the maximum time, then set it as the upper limit
+                                if ( timeObj.TIME > PSEUDO_LIMIT_MAX.TIME && timeObj.TIME <= LIMIT_MAX.TIME ) {
+                                    PSEUDO_LIMIT_MAX = timeObj
+                                }
                             }
                         })
 
@@ -704,9 +722,9 @@
                                 +elemValue.i
                             ] :
                             [
-                                +(elemValue.yyyy || elemValue.yy),
-                                +(elemValue.mm || elemValue.m) - 1, // Compensate for month 0index
-                                +(elemValue.dd || elemValue.d)
+                                +( elemValue.yyyy || elemValue.yy ),
+                                +( elemValue.mm || elemValue.m ) - 1, // Compensate for month 0index
+                                +( elemValue.dd || elemValue.d )
                             ]
                     }
 
@@ -840,7 +858,9 @@
 
 
 
-            // Create a time object
+            /**
+             * Create a time object
+             */
             function createTimeObj( timePassed, unlimited ) {
 
                 // If it's a time picker
@@ -944,7 +964,7 @@
                         // time object passed. Then get the remainder based on the time interval. Subtract that
                         // from the time interval and we have the "minutes" needed to increase the time by to get to
                         // the next "reachable" time. Yeah... I think this gets most edge cases.
-                        createTimeObj( timeObj.TIME + ( SETTINGS.timeStep - ((timeObj.TIME-LIMIT_MIN.TIME)%SETTINGS.timeStep) ) )
+                        createTimeObj( timeObj.TIME + ( SETTINGS.timeStep - (( timeObj.TIME - LIMIT_MIN.TIME ) % SETTINGS.timeStep) ) )
                 }
 
                 // If the picker "disabled" flag is truthy and there are only disabled weekdays
@@ -971,7 +991,7 @@
                         // Otherwise create the next time based on the direction
                         timeObj = createTimeObj(
                             IS_TIME_PICKER ?
-                                [ timeObj.HOUR, direction * SETTINGS.timeStep + timeObj.MINS ] :
+                                [ timeObj.HOUR, ( direction > 0 ? 1 : -1 ) * SETTINGS.timeStep + timeObj.MINS ] :
                                 [ timeObj.YEAR, timeObj.MONTH, direction + timeObj.DATE ]
                         )
 
@@ -979,24 +999,17 @@
                         // Otherwise if we've gone through to another month, create a new
                         // time based on the direction being less than zero (rather than more).
                         // Then set this new time as the original and looped time.
-                        if ( !skipMonthCheck && timeObj.MONTH != originalTime.MONTH ) {
+                        if ( !IS_TIME_PICKER && !skipMonthCheck && timeObj.MONTH != originalTime.MONTH ) {
                             originalTime = timeObj = createTimeObj([ originalTime.YEAR, originalTime.MONTH, direction < 0 ? --originalTime.DATE : ++originalTime.DATE ])
                         }
                     }
                 }
 
 
-                // If it's a time picker and the time has reached the max limit,
-                // then we need to reduce the time object by one time step.
-                if ( IS_TIME_PICKER && timeObj.TIME == LIMIT_MAX.TIME ) {
-                    timeObj = createValidatedTime( timeObj.TIME - SETTINGS.timeStep )
-                }
-
-
                 // If it's less that min limit, set it to min limit by creating
                 // a validated time while adding one until we find an enabled time.
                 // * A truthy third argument skips the month check.
-                else if ( timeObj.TIME < LIMIT_MIN.TIME ) {
+                if ( timeObj.TIME < LIMIT_MIN.TIME ) {
                     timeObj = createValidatedTime( LIMIT_MIN, 1, 1 )
                 }
 
@@ -1516,8 +1529,8 @@
                 // And then broadcast a change event.
                 $ELEMENT.val( timeObj ? getTimeFormatted() : '' ).trigger( 'change' )
 
-                // Trigger the onSelect method within scope of the picker
-                triggerFunction( SETTINGS.onSelect, P )
+                // Trigger the onSet method within scope of the picker
+                triggerFunction( SETTINGS.onSet, P )
             } //setElementsValue
 
 
@@ -1760,7 +1773,7 @@
         // Events
         onOpen: 0,
         onClose: 0,
-        onSelect: 0,
+        onSet: 0,
         onStart: 0,
 
 
@@ -1842,7 +1855,7 @@
         // Events
         onOpen: 0,
         onClose: 0,
-        onSelect: 0,
+        onSet: 0,
         onStart: 0,
 
 
