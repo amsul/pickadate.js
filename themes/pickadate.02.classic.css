@@ -75,11 +75,16 @@
             transition: all .15s ease-out;
 }
 
+/* A smaller `max-width` for the time picker */
+.pickadate__holder--time .pickadate__frame {
+    max-width: 320px;
+}
+
 
 /**
  * When the calendar opens
  */
-/*.pickadate__holder--opened */.pickadate__frame {
+.pickadate__holder--opened .pickadate__frame {
     top: .5em;
     max-height: 25em;
 
@@ -90,7 +95,7 @@
 
 
 /**
- * The calendar itself
+ * The calendar and clock
  */
 .pickadate__calendar,
 .pickadate__clock {
@@ -103,6 +108,12 @@
     /* Add the borders */
     border: 1px solid #ccc;
 }
+.pickadate__clock {
+    padding: 0;
+    background: #f2f2f2;
+    max-height: 20em;
+    overflow-y: scroll;
+}
 
 /* The frame and calendar need to have the same `border-radius` */
 .pickadate__frame,
@@ -113,29 +124,23 @@
             border-radius: 6px;
 }
 
-.pickadate__clock {
-    padding: .66em 0 3.2em;
-    background: #f2f2f2;
-    max-height: 12em;
-    overflow-y: scroll;
-}
 
+/**
+ * The clock list of times
+ */
 .pickadate__list {
-    padding: 0;
+    padding: .75em 0 4.2em;
     margin: 0;
     list-style: none;
 }
 .pickadate__list-item {
-    padding: .66em;
+    padding: .75em 1em;
     background: #fff;
     border-bottom: 1px solid #ddd;
     border-top: 1px solid #ddd;
     margin-bottom: -1px;
     position: relative;
 }
-
-
-
 
 
 /**
@@ -238,7 +243,7 @@
  * The days on the calendar
  */
 .pickadate__day {
-    padding: .33em 0 .25em;
+    padding: .3125em 0 .25em;
     font-weight: 100;
     border: 1px solid #fff;
     margin-bottom: 1px;
@@ -247,11 +252,13 @@
 /**
  * The various states of a day
  */
-.pickadate__day--today {
+.pickadate__day--today,
+.pickadate__list-item--now {
     color: #0089ec;
     position: relative;
 }
-.pickadate__day--today:before {
+.pickadate__day--today:before,
+.pickadate__list-item--now:before {
     content: " ";
     position: absolute;
     top: 2px;
@@ -262,10 +269,17 @@
     border-left: .5em solid transparent;
 }
 .pickadate__day--selected,
-.pickadate__day--selected:hover {
+.pickadate__day--selected:hover,
+.pickadate__list-item--selected,
+.pickadate__list-item--selected:hover {
     border-color: #0089ec;
 }
-.pickadate__day--highlighted {
+.pickadate__list-item--selected,
+.pickadate__list-item--selected:hover {
+    z-index: 10;
+}
+.pickadate__day--highlighted,
+.pickadate__list-item--highlighted {
     background: #fff;
 }
 .pickadate__day--disabled:before {
@@ -353,11 +367,14 @@
     cursor: default;
 }
 .pickadate__day--highlighted:hover,
-.pickadate__holder--focused .pickadate__day--highlighted {
+.pickadate__list-item--highlighted:hover,
+.pickadate__holder--focused .pickadate__day--highlighted,
+.pickadate__holder--focused .pickadate__list-item--highlighted {
     background: #0089ec;
     color: #fff;
 }
-.pickadate__list-item:hover {
+.pickadate__list-item:hover,
+.pickadate__holder--focused .pickadate__list-item--highlighted {
     border-color: #0089ec;
     z-index: 10;
 }
