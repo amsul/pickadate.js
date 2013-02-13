@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v3.0.0 early unstable aplha build - 12 February, 2013
+ * pickadate.js v3.0.0 early aplha build - 13 February, 2013
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
@@ -696,17 +696,16 @@
                             elemDataValue = elemDataValue.slice( formattingLength )
                         })
 
-                        // Finally, create an array with the time object units while parsing each item
-                        // as an integer. If it's not a time picker, compensate for 0index month.
+                        // Create an array with the time object units while parsing each item as an integer.
                         elemValue = IS_TIME_PICKER ?
                             [
                                 // If no "military" format, get the "standard" format and add 12 based on AM/PM
-                                ( elemValue.HH || elemValue.H ) || +( elemValue.hh || elemValue.h ) + ( /^p/i.test( elemValue.A || elemValue.a ) ? HOURS_TO_NOON : 0 ),
-                                elemValue.i
+                                +( elemValue.HH || elemValue.H ) || +( elemValue.hh || elemValue.h ) + ( /^p/i.test( elemValue.A || elemValue.a ) ? HOURS_TO_NOON : 0 ),
+                                +elemValue.i
                             ] :
                             [
                                 +(elemValue.yyyy || elemValue.yy),
-                                +(elemValue.mm || elemValue.m) - 1,
+                                +(elemValue.mm || elemValue.m) - 1, // Compensate for month 0index
                                 +(elemValue.dd || elemValue.d)
                             ]
                     }
@@ -721,7 +720,7 @@
                     // If there's a valid time in the `input` or the `elemValue` is now an array,
                     // create a validated time with it. Otherwise set the highlighted time to "now" after validating.
                     return createValidatedTime( elemValue && ( !isNaN( elemValue ) || Array.isArray( elemValue ) ) ? elemValue : NOW )
-                })( ELEMENT.getAttribute( 'data-value' ), ELEMENT.value ),
+                })( ELEMENT.getAttribute( 'data-value' ), ELEMENT.value ), //TIME_HIGHLIGHTED
 
 
                 // The time selected is initially the time highlighted
@@ -779,8 +778,6 @@
                     }
 
                     var
-                        timeToSelect,
-
                         // Get the jQuery target
                         $target = $( event.target ),
 
@@ -937,6 +934,18 @@
                 // If the time object does not have a time property, create a time object
                 timeObj = isNaN( timeObj.TIME ) ? createTimeObj( timeObj ) : timeObj
 
+                // If it's a time picker, make sure the minutes are "reachable" based on the interval
+                if ( IS_TIME_PICKER && LIMIT_MIN ) {
+
+                    // If we can "reach" a date based on the lower limit and interval, then do nothing
+                    timeObj = timeObj.TIME % SETTINGS.timeStep == LIMIT_MIN.TIME % SETTINGS.timeStep ? timeObj :
+
+                        // Otherwise, create a time object by first getting the difference between the lower limit and
+                        // time object passed. Then get the remainder based on the time interval. Subtract that
+                        // from the time interval and we have the "minutes" needed to increase the time by to get to
+                        // the next "reachable" time. Yeah... I think this gets most edge cases.
+                        createTimeObj( timeObj.TIME + ( SETTINGS.timeStep - ((timeObj.TIME-LIMIT_MIN.TIME)%SETTINGS.timeStep) ) )
+                }
 
                 // If the picker "disabled" flag is truthy and there are only disabled weekdays
                 if ( PICKER.off && !PICKER.offDays ) {
@@ -946,19 +955,25 @@
                     timeObj = timeObj.TIME < PSEUDO_LIMIT_MIN.TIME ? PSEUDO_LIMIT_MIN : timeObj.TIME > PSEUDO_LIMIT_MAX.TIME ? PSEUDO_LIMIT_MAX : timeObj
                 }
 
-                // Otherwise if there are disabled times
-                else if ( TIMES_TO_DISABLE ) {
+                // If there are disabled times
+                if ( TIMES_TO_DISABLE ) {
 
                     // Create a reference to the original time passed
                     var originalTime = timeObj
 
-                    // Check if this time is disabled. If it is,
-                    // then keep adding the direction (or 1) to the time
-                    // until we get to a time that's enabled.
+                    // Confirm we have a direction to work with
+                    direction = direction || 1
+
+                    // Check if this time is disabled. If it is, then keep creating
+                    // new the time objects until we get to a time that's enabled.
                     while ( TIMES_TO_DISABLE.filter( DISABLED_TIMES, timeObj ).length ) {
 
                         // Otherwise create the next time based on the direction
-                        timeObj = createTimeObj([ timeObj.YEAR, timeObj.MONTH, timeObj.DATE + ( direction || 1 ) ])
+                        timeObj = createTimeObj(
+                            IS_TIME_PICKER ?
+                                [ timeObj.HOUR, direction * SETTINGS.timeStep + timeObj.MINS ] :
+                                [ timeObj.YEAR, timeObj.MONTH, direction + timeObj.DATE ]
+                        )
 
                         // Check if the month check should be skipped to avoid extra loops.
                         // Otherwise if we've gone through to another month, create a new
@@ -1345,7 +1360,7 @@
                 var timeObj, loopTime, classAndBinding,
                     list = ''
 
-                for ( loopTime = LIMIT_MIN.TIME; loopTime < LIMIT_MAX.TIME; loopTime += interval ) {
+                for ( loopTime = LIMIT_MIN.TIME; loopTime <= LIMIT_MAX.TIME; loopTime += interval ) {
                     timeObj = createTimeObj( loopTime )
                     classAndBinding = createNodeClassAndBinding( timeObj, [ CLASSES.listItem ] )
                     list += createNode( 'li',
@@ -1554,7 +1569,7 @@
                 // If it's a time picker, make sure the highlighted node is in view
                 // and then return an empty array because it has no picker items.
                 if ( IS_TIME_PICKER ) {
-                    $HOLDER[ 0 ].scrollTop = $findInHolder( CLASSES.highlighted ).position().top - ~~( $HOLDER[ 0 ].clientHeight / 3 )
+                    $HOLDER[ 0 ].scrollTop = $findInHolder( CLASSES.highlighted ).position().top - ~~( $HOLDER[ 0 ].clientHeight / 4 )
                     return []
                 }
 
@@ -1816,7 +1831,7 @@
 
         // The time limits
         minLimit: 0,
-        maxLimit: MINUTES_IN_DAY,
+        maxLimit: MINUTES_IN_DAY - 1,
 
         // Times to disable
         disable: 0,
