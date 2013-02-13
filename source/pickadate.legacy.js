@@ -215,7 +215,7 @@
                                     setTimeSelected(
                                         createValidatedTime(
                                             IS_TIME_PICKER ?
-                                                TIME_HIGHLIGHTED.TIME + SETTINGS.timeStep * ( keycodeToMove > 0 ? 1 : -1 ) :
+                                                TIME_HIGHLIGHTED.TIME + SETTINGS.interval * ( keycodeToMove > 0 ? 1 : -1 ) :
                                                 [ TIME_HIGHLIGHTED.YEAR, TIME_HIGHLIGHTED.MONTH, TIME_HIGHLIGHTED.DATE + keycodeToMove ],
                                             keycodeToMove
                                         ),
@@ -277,10 +277,12 @@
 
 
                     /**
-                     * Show a month in focus with 0index compensation
+                     * Show a time in view on the picker
                      */
-                    show: function( month, year ) {
-                        showMonth( --month, year )
+                    show: function( timeUnit1, timeUnit2 ) {
+
+                        // If it's a date picker, compensate for month 0index
+                        showInView( IS_TIME_PICKER ? timeUnit1 : --timeUnit1, timeUnit2 )
                         return P
                     }, //show
 
@@ -313,24 +315,22 @@
 
 
                     /**
-                     * Set the time with an options to do a superficial selection
+                     * Set the time with an option to do a superficial selection
                      */
                     set: function( timeArray, isSuperficial ) {
 
                         // If there's no time, we need to clear the value
                         if ( !timeArray ) {
-                            setTimeSelected( createTimeObj( timeArray ), isSuperficial )
+                            P.clear()
                         }
 
-                        // If it's a time picker, create the time object and set the time
-                        else if ( IS_TIME_PICKER ) {
-                            setTimeSelected( createTimeObj( timeArray ), isSuperficial )
-                        }
+                        // Confirm that the time passed is an array
+                        else if ( Array.isArray( timeArray ) ) {
 
-                        // Otherwise it's a date picker, so compensate for month 0index
-                        // and then create and set a validated date.
-                        else {
-                            --timeArray[ 1 ]
+                            // If it's a date picker, compensate for month 0index
+                            if ( !IS_TIME_PICKER ) { --timeArray[ 1 ] }
+
+                            // Set the validated time as selected.
                             setTimeSelected( createValidatedTime( timeArray ), isSuperficial )
                         }
 
@@ -654,7 +654,7 @@
                                 // than or equal to the maximum hour, then set it as the upper limit by
                                 // adding an hour and subtracting the interval to get last "reachable" time.
                                 if ( timeObj > PSEUDO_LIMIT_MAX.HOUR && timeObj <= LIMIT_MAX.HOUR ) {
-                                    PSEUDO_LIMIT_MAX = createTimeObj([ timeObj + 1, -SETTINGS.timeStep ])
+                                    PSEUDO_LIMIT_MAX = createTimeObj([ timeObj + 1, -SETTINGS.interval ])
                                 }
                             }
 
@@ -819,7 +819,7 @@
                     // If a navigator button was clicked,
                     // show the month in the relative direction
                     if ( targetData.nav ) {
-                        showMonth( TIME_FOCUSED.MONTH + targetData.nav )
+                        showInView( TIME_FOCUSED.MONTH + targetData.nav )
                     }
 
                     // If a clear button was clicked,
@@ -959,13 +959,13 @@
                 if ( IS_TIME_PICKER && LIMIT_MIN ) {
 
                     // If we can "reach" a date based on the lower limit and interval, then do nothing
-                    timeObj = timeObj.TIME % SETTINGS.timeStep == LIMIT_MIN.TIME % SETTINGS.timeStep ? timeObj :
+                    timeObj = timeObj.TIME % SETTINGS.interval == LIMIT_MIN.TIME % SETTINGS.interval ? timeObj :
 
                         // Otherwise, create a time object by first getting the difference between the lower limit and
                         // time object passed. Then get the remainder based on the time interval. Subtract that
                         // from the time interval and we have the "minutes" needed to increase the time by to get to
                         // the next "reachable" time. Yeah... I think this gets most edge cases.
-                        createTimeObj( timeObj.TIME + ( SETTINGS.timeStep - (( timeObj.TIME - LIMIT_MIN.TIME ) % SETTINGS.timeStep) ) )
+                        createTimeObj( timeObj.TIME + ( SETTINGS.interval - (( timeObj.TIME - LIMIT_MIN.TIME ) % SETTINGS.interval) ) )
                 }
 
                 // If the picker "disabled" flag is truthy and there are only disabled weekdays
@@ -992,7 +992,7 @@
                         // Otherwise create the next time based on the direction
                         timeObj = createTimeObj(
                             IS_TIME_PICKER ?
-                                [ timeObj.HOUR, ( direction > 0 ? 1 : -1 ) * SETTINGS.timeStep + timeObj.MINS ] :
+                                [ timeObj.HOUR, ( direction > 0 ? 1 : -1 ) * SETTINGS.interval + timeObj.MINS ] :
                                 [ timeObj.YEAR, timeObj.MONTH, direction + timeObj.DATE ]
                         )
 
@@ -1067,8 +1067,8 @@
                                 // Set the value and selected index
                                 'value=' + monthIndex + ( TIME_FOCUSED.MONTH == monthIndex ? ' selected' : '' ) +
 
-                                // Plus the disabled attribute if it's outside the range
-                                getMonthInRange( monthIndex, TIME_FOCUSED.YEAR, ' disabled', '' )
+                                // Plus the disabled attribute if month is disabled
+                                ( isMonthDisabled( monthIndex, TIME_FOCUSED.YEAR ) ? ' disabled' : '' )
                             )
                         }),
 
@@ -1290,15 +1290,22 @@
                 }
 
 
-                // The time data binding
+                // Only for the time picker
                 if ( IS_TIME_PICKER ) {
+
+                    // If it's the viewset time for focus, add the class
+                    if ( timeObj.TIME == TIME_FOCUSED.TIME ) {
+                        klassCollection.push( CLASSES.viewset )
+                    }
+
+                    // The time data binding
                     dataBinding = [
                         timeObj.HOUR,
                         timeObj.MINS
                     ].join( ':' )
                 }
 
-
+                // Only for the date picker
                 else {
 
                     // If it's today, add the class
@@ -1367,14 +1374,14 @@
 
 
             /**
-             * Create the list of times with a certain interval
+             * Create the list of times using the interval
              */
-            function createClockList( interval ) {
+            function createClockList() {
 
                 var timeObj, loopTime, classAndBinding,
                     list = ''
 
-                for ( loopTime = LIMIT_MIN.TIME; loopTime <= LIMIT_MAX.TIME; loopTime += interval ) {
+                for ( loopTime = LIMIT_MIN.TIME; loopTime <= LIMIT_MAX.TIME; loopTime += SETTINGS.interval ) {
                     timeObj = createTimeObj( loopTime )
                     classAndBinding = createNodeClassAndBinding( timeObj, [ CLASSES.listItem ] )
                     list += createNode( 'li',
@@ -1393,7 +1400,7 @@
              */
             function createClock() {
                 return createNode( 'ul',
-                    createClockList( SETTINGS.timeStep ),
+                    createClockList(),
                     CLASSES.list
                 ) //endreturn
             } //createClock
@@ -1446,29 +1453,13 @@
 
 
             /**
-             * Return a month by comparing with the date range.
-             * If outside the range, returns the "alternate" or "range" value.
-             * Otherwise returns the "in range" value or the month itself.
+             * Check if the month is within the time limits.
              */
-            function getMonthInRange( month, year, alternateValue, inRangeValue ) {
+            function isMonthDisabled( month, year ) {
 
-                // If the month is less than the min month,
-                // then return the alternate value or min month.
-                if ( year <= LIMIT_MIN.YEAR && month < LIMIT_MIN.MONTH ) {
-                    return alternateValue || LIMIT_MIN.MONTH
-                }
-
-                // If the month is more than the max month,
-                // then return the alternate value or max month.
-                if ( year >= LIMIT_MAX.YEAR && month > LIMIT_MAX.MONTH ) {
-                    return alternateValue || LIMIT_MAX.MONTH
-                }
-
-                // Otherwise return the "in range" value or the month itself.
-                // * We test `inRangeValue` against null because we need to
-                //   test against null and undefined. 0 should be allowed.
-                return inRangeValue != null ? inRangeValue : month
-            } //getMonthInRange
+                // True if the month is less than the min limit or greater than the max limit
+                return ( year <= LIMIT_MIN.YEAR && month < LIMIT_MIN.MONTH ) || ( year >= LIMIT_MAX.YEAR && month > LIMIT_MAX.MONTH )
+            } //isMonthDisabled
 
 
             /**
@@ -1499,6 +1490,9 @@
              * Set a time as selected or superficially selected
              */
             function setTimeSelected( timeObj, isSuperficial ) {
+
+                // Stop if it's not a valid time object
+                if ( isNaN( timeObj.TIME ) ) return
 
                 // Set the target as the highlight
                 TIME_HIGHLIGHTED = timeObj
@@ -1544,23 +1538,21 @@
 
 
             /**
-             * Show the month visible on the picker
+             * Show a time in view on the picker.
              */
-            function showMonth( month, year ) {
+            function showInView( timeUnit1, timeUnit2 ) {
 
-                // Ensure we have a year to work with
-                year = year || TIME_FOCUSED.YEAR
+                // Ensure we have minutes or a year to work with
+                timeUnit2 = timeUnit2 || IS_TIME_PICKER ? 0 : TIME_FOCUSED.YEAR
 
-                // Get the month to be within the minimum and maximum time limits
-                month = getMonthInRange( month, year )
-
-                // Set the month to show in focus
+                // Create a validated time and set it as focused time
                 // * We set the date to 1st of the month because date doesn't matter here
-                TIME_FOCUSED = createTimeObj([ year, month, 1 ])
+                //   and for a time picker, it's just ignored.
+                TIME_FOCUSED = createValidatedTime([ timeUnit2, timeUnit1, 1 ])
 
                 // Then render a new picker
                 renderPicker()
-            } //showMonth
+            } //showInView
 
 
             /**
@@ -1580,10 +1572,10 @@
              */
             function getUpdatedPickerItems() {
 
-                // If it's a time picker, make sure the highlighted node is in view
+                // If it's a time picker, make sure the "viewset" node is in view
                 // and then return an empty array because it has no picker items.
                 if ( IS_TIME_PICKER ) {
-                    $HOLDER[ 0 ].scrollTop = $findInHolder( CLASSES.highlighted ).position().top - ~~( $HOLDER[ 0 ].clientHeight / 4 )
+                    $HOLDER[ 0 ].scrollTop = $findInHolder( CLASSES.viewset ).position().top - ~~( $HOLDER[ 0 ].clientHeight / 4 )
                     return []
                 }
 
@@ -1605,7 +1597,7 @@
                         change: function() {
 
                             // Show the month by floating the option selected
-                            showMonth( +this.value )
+                            showInView( +this.value )
 
                             // Find the new month selector and focus back on it
                             $findInHolder( CLASSES.selectMonth ).focus()
@@ -1622,7 +1614,7 @@
                         change: function() {
 
                             // Show the year by floating the option selected and month in focus
-                            showMonth( TIME_FOCUSED.MONTH, +this.value )
+                            showInView( TIME_FOCUSED.MONTH, +this.value )
 
                             // Find the new year selector and focus back on it
                             $findInHolder( CLASSES.selectYear ).focus()
@@ -1832,7 +1824,7 @@
     $.fn.pickatime.defaults = {
 
         // The interval between each time
-        timeStep: 30,
+        interval: 30,
 
         // The format to show on the `input` element
         format: 'h:i A',
@@ -1880,6 +1872,7 @@
             disabled: STRING_PREFIX_PICKER + 'list-item--disabled',
             selected: STRING_PREFIX_PICKER + 'list-item--selected',
             highlighted: STRING_PREFIX_PICKER + 'list-item--highlighted',
+            viewset: STRING_PREFIX_PICKER + 'list-item--viewset',
             now: STRING_PREFIX_PICKER + 'list-item--now'
         }
     } //$.fn.pickatime.defaults
