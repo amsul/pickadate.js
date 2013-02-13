@@ -691,7 +691,10 @@
                 TIME_HIGHLIGHTED = (function( elemDataValue, elemValue ) {
 
                     // If there an element `data-value`
-                    if ( elemDataValue ) {
+                    if ( elemDataValue || IS_TIME_PICKER ) {
+
+                        // If there's no data value, replace it with the elem value
+                        elemDataValue = elemDataValue || elemValue
 
                         // Set the element value entered to an empty object
                         elemValue = {}
@@ -736,9 +739,22 @@
                     }
 
 
-                    // If there's a valid time in the `input` or the `elemValue` is now an array,
-                    // create a validated time with it. Otherwise set the highlighted time to "now" after validating.
-                    return createValidatedTime( elemValue && ( !isNaN( elemValue ) || Array.isArray( elemValue ) ) ? elemValue : NOW )
+                    // Return a validated time object.
+                    return createValidatedTime(
+
+                        // If elem value parsed as a native Date Object
+                        elemValue && ( !isNaN( elemValue ) ||
+
+                        // Or it is now an array with valid integer time units
+                        Array.isArray( elemValue ) && !elemValue.filter( function( timeUnit ) { return isNaN( timeUnit ) }).length ) ?
+
+                            // Then use the elem value
+                            elemValue :
+
+                            // Otherwise use today
+                            NOW
+                    ) //endreturn
+
                 })( ELEMENT.getAttribute( 'data-value' ), ELEMENT.value ), //TIME_HIGHLIGHTED
 
 
