@@ -357,9 +357,20 @@
                             // Set the max time
                             LIMIT_MAX = createTimeBoundaryObj( limit, upper )
 
-                            // If focused month is more than max time set it to max time
-                            if ( TIME_FOCUSED.TIME > LIMIT_MAX.TIME ) {
-                                TIME_FOCUSED = LIMIT_MAX
+                            if ( IS_TIME_PICKER ) {
+
+                                // If highlighted time is more than max time set it to max time
+                                if ( TIME_HIGHLIGHTED.TIME > LIMIT_MAX.TIME ) {
+                                    TIME_FOCUSED = TIME_HIGHLIGHTED = createValidatedTime( LIMIT_MAX, -1 )
+                                }
+                            }
+
+                            else {
+
+                                // If focused month is more than max time set it to max time
+                                if ( TIME_FOCUSED.TIME > LIMIT_MAX.TIME ) {
+                                    TIME_FOCUSED = createValidatedTime( LIMIT_MAX, -1 )
+                                }
                             }
                         }
 
@@ -369,9 +380,20 @@
                             // So set the min time
                             LIMIT_MIN = createTimeBoundaryObj( limit )
 
-                            // If focused month is less than min time set it to min time
-                            if ( TIME_FOCUSED.TIME < LIMIT_MIN.TIME ) {
-                                TIME_FOCUSED = LIMIT_MIN
+                            if ( IS_TIME_PICKER ) {
+
+                                // If highlighted time is less than min time set it to min time
+                                if ( TIME_HIGHLIGHTED.TIME < LIMIT_MIN.TIME ) {
+                                    TIME_FOCUSED = TIME_HIGHLIGHTED = createValidatedTime( LIMIT_MIN )
+                                }
+                            }
+
+                            else {
+
+                                // If focused month is less than min time set it to min time
+                                if ( TIME_FOCUSED.TIME < LIMIT_MIN.TIME ) {
+                                    TIME_FOCUSED = createValidatedTime( LIMIT_MIN )
+                                }
                             }
                         }
 
@@ -563,7 +585,7 @@
 
 
                 // Create time object for now
-                NOW = IS_TIME_PICKER ? 0 : createTimeObj(),
+                NOW = createTimeObj(),
 
 
                 // Create the min limit time object
@@ -751,7 +773,7 @@
                             // Then use the elem value
                             elemValue :
 
-                            // Otherwise use today
+                            // Otherwise use the current time object
                             NOW
                     ) //endreturn
 
@@ -883,9 +905,18 @@
                 // If it's a time picker
                 if ( IS_TIME_PICKER ) {
 
-                    // If we have an array to deal with, float the values and convert into total minutes.
-                    // Otherwise just leave it as the time passed (defaults to 0).
-                    timePassed = Array.isArray( timePassed ) ? +timePassed[ 0 ] * MINUTES_IN_HOUR + (+timePassed[ 1 ]) : timePassed || 0
+                    // If the time passed is an array, float the values and convert into total minutes.
+                    if ( Array.isArray( timePassed ) ) {
+                        timePassed = +timePassed[ 0 ] * MINUTES_IN_HOUR + (+timePassed[ 1 ])
+                    }
+
+                    // If the time passed is not a number, create the time for "now".
+                    else if ( isNaN( timePassed ) ) {
+                        timePassed = new Date()
+                        timePassed = timePassed.getHours() * MINUTES_IN_HOUR /*+ timePassed.getMinutes()*/
+                        // console.log( timePassed.getHours() , timePassed.getMinutes(), SETTINGS.interval )
+                    }
+
 
                     return {
 
@@ -936,6 +967,15 @@
              */
             function createTimeBoundaryObj( limit, upper ) {
 
+                // If there is a limit and its a number, create a
+                // time object relative to today by adding the limit.
+                if ( limit && !isNaN( limit ) ) {
+                    return createTimeObj( IS_TIME_PICKER ?
+                        [ NOW.HOUR, SETTINGS.interval * ( limit + Math.ceil( NOW.MINS / SETTINGS.interval ) ) ] :
+                        [ NOW.YEAR, NOW.MONTH, NOW.DATE + limit ]
+                    ) //endreturn
+                }
+
                 // If it's a time picker, just create a time object
                 if ( IS_TIME_PICKER ) {
                     return createTimeObj( limit )
@@ -950,12 +990,6 @@
                 if ( Array.isArray( limit ) ) {
                     --limit[ 1 ]
                     return createTimeObj( limit )
-                }
-
-                // If there is a limit and its a number, create a
-                // time object relative to today by adding the limit.
-                if ( limit && !isNaN( limit ) ) {
-                    return createTimeObj([ NOW.YEAR, NOW.MONTH, NOW.DATE + limit ])
                 }
 
                 // Otherwise create an infinite time
@@ -985,6 +1019,7 @@
                 }
 
                 // If the picker "disabled" flag is truthy and there are only disabled weekdays
+                // ^ This is some confusing shit right here.
                 if ( PICKER.off && !PICKER.offDays ) {
 
                     // If the time is less than the pseudo min limit or greater than pseudo max limit,
@@ -1556,15 +1591,13 @@
             /**
              * Show a time in view on the picker.
              */
-            function showInView( timeUnit1, timeUnit2 ) {
+            function showInView( monthOrHour, yearOrMinutes ) {
 
-                // Ensure we have minutes or a year to work with
-                timeUnit2 = timeUnit2 || IS_TIME_PICKER ? 0 : TIME_FOCUSED.YEAR
+                // Ensure we have a year or minutes to work with.
+                yearOrMinutes = yearOrMinutes || IS_TIME_PICKER ? 0 : TIME_FOCUSED.YEAR
 
-                // Create a validated time and set it as focused time
-                // * We set the date to 1st of the month because date doesn't matter here
-                //   and for a time picker, it's just ignored.
-                TIME_FOCUSED = createValidatedTime([ timeUnit2, timeUnit1, 1 ])
+                // Create a validated time and set it as focused time.
+                TIME_FOCUSED = createValidatedTime( IS_TIME_PICKER ? [ monthOrHour, yearOrMinutes ] : [ yearOrMinutes, monthOrHour, 1 ] )
 
                 // Then render a new picker
                 renderPicker()
@@ -1853,7 +1886,7 @@
 
         // The time limits
         minLimit: 0,
-        maxLimit: MINUTES_IN_DAY - 1,
+        maxLimit: [ HOURS_IN_DAY , -1 ],
 
         // Times to disable
         disable: 0,
