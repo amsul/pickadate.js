@@ -651,9 +651,10 @@
                                 }
 
                                 // If the looped time is more than the latest highest hour and less
-                                // than or equal to the maximum hour, then set it as the upper limit
+                                // than or equal to the maximum hour, then set it as the upper limit by
+                                // adding an hour and subtracting the interval to get last "reachable" time.
                                 if ( timeObj > PSEUDO_LIMIT_MAX.HOUR && timeObj <= LIMIT_MAX.HOUR ) {
-                                    PSEUDO_LIMIT_MAX = createTimeObj([ timeObj, LIMIT_MAX.MINS ])
+                                    PSEUDO_LIMIT_MAX = createTimeObj([ timeObj + 1, -SETTINGS.timeStep ])
                                 }
                             }
 
