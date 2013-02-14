@@ -62,7 +62,11 @@
     <script src="source/pickadate.legacy.js"></script>
 
     <script type="text/javascript">
-        $( '[type=date], .datepicker' ).pickadate()
+        $( '[type=date], .datepicker' ).pickatime({
+            interval: 15,
+            minLimit: [9,30],
+            maxLimit: [14,30]
+        })
     </script>
 
 
