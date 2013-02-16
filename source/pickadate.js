@@ -488,7 +488,23 @@
                         },
 
                         // Create an array by splitting the format passed
-                        toArray: function( format ) { return format.split( /(?=\b)(d{1,4}|m{1,4}|y{4}|yy)+(\b)/g ) }
+                        //toArray: function( format ) { return format.split( /(?=\b)(d{1,4}|m{1,4}|y{4}|yy)+(\b)/g ) }
+                        // IE8 String.split doesn't like regex.
+                        toArray: function( format ) {
+                            var tmpMatches = format.match( /(?=\b)(d{1,4}|m{1,4}|y{4}|yy)+(\b)/g);
+                            // insert "/" in the array in between methods
+                            var nMatches = tmpMatches.length;
+                            var ii = 0;
+                            var matches = [];
+                            for(;ii<nMatches;++ii) {
+                                matches.push(tmpMatches[ii]);
+                                if (ii<(nMatches-1)) {
+                                   matches.push("/");
+                                }
+                            }
+                            return matches;
+                        }
+
 
                     } //endreturn
                 })(), //DATE_FORMATS
@@ -685,9 +701,13 @@
 
                     // If the target of the event is not one of the calendar items,
                     // prevent default action to keep focus on the input element
-                    if ( CALENDAR.items.indexOf( event.target ) < 0 ) {
-                        event.preventDefault()
-                    }
+                    // IE8 doesn't seem to like CALENDAR.items.indexOf
+                    // try skipping that method it doesn't work.
+                    try {
+                      if ( CALENDAR.items.indexOf( event.target ) < 0 ) {
+                          event.preventDefault();
+                      }
+                    } catch(ex){}
                 }).on( 'click', function( event ) {
 
                     // If the calendar is closed and there appears to be no click, do nothing
