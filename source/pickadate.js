@@ -701,9 +701,13 @@
 
                     // If the target of the event is not one of the calendar items,
                     // prevent default action to keep focus on the input element
-                    if ( CALENDAR.items.indexOf( event.target ) < 0 ) {
-                        event.preventDefault()
-                    }
+                    // IE8 doesn't seem to like CALENDAR.items.indexOf
+                    // try skipping that method it doesn't work.
+                    try {
+                      if ( CALENDAR.items.indexOf( event.target ) < 0 ) {
+                          event.preventDefault();
+                      }
+                    } catch(ex){}
                 }).on( 'click', function( event ) {
 
                     // If the calendar is closed and there appears to be no click, do nothing
