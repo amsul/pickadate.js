@@ -488,7 +488,23 @@
                         },
 
                         // Create an array by splitting the format passed
-                        toArray: function( format ) { return format.split( /(?=\b)(d{1,4}|m{1,4}|y{4}|yy)+(\b)/g ) }
+                        //toArray: function( format ) { return format.split( /(?=\b)(d{1,4}|m{1,4}|y{4}|yy)+(\b)/g ) }
+                        // IE8 String.split doesn't like regex.
+                        toArray: function( format ) {
+                            var tmpMatches = format.match( /(?=\b)(d{1,4}|m{1,4}|y{4}|yy)+(\b)/g);
+                            // insert "/" in the array in between methods
+                            var nMatches = tmpMatches.length;
+                            var ii = 0;
+                            var matches = [];
+                            for(;ii<nMatches;++ii) {
+                                matches.push(tmpMatches[ii]);
+                                if (ii<(nMatches-1)) {
+                                   matches.push("/");
+                                }
+                            }
+                            return matches;
+                        }
+
 
                     } //endreturn
                 })(), //DATE_FORMATS
