@@ -197,7 +197,7 @@ klass: {
             <input id="picker_buttons" class="datepicker" type="text">
         </fieldset>
 
-        <p>For a custom &ldquo;clear&rdquo; button, check out the <a href="#api_clear">clear api</a>.</p>
+        <p>For a custom &ldquo;clear&rdquo; button, check out the api for the <a href="#api_clear"><code>clear</code></a> method.</p>
 
     </section>
 
@@ -840,15 +840,15 @@ calendar.setDateLimit( [ 2013, 6, 23 ], true )</code></pre>
 
         <h3><a class="link-anchor" href="#api_from_to">&sect;</a><strong class="underline-highlight">From &amp; to calendars</strong></h3>
 
-        <p>Using the calendar API, you can create two calendars with a "from" and "to" interaction.</p>
+        <p>Using the calendar API, you can create two calendars with a &ldquo;from&rdquo; and &ldquo;to&rdquo; interaction.</p>
 
         <fieldset>
-            <p><strong><label for="picker_from">Select a "from" date:</label></strong></p>
+            <p><strong><label for="picker_from">Select a &ldquo;from&rdquo; date:</label></strong></p>
             <input id="picker_from" class="datepicker" type="date">
         </fieldset>
 
         <fieldset>
-            <p><strong><label for="picker_to">Select a "to" date:</label></strong></p>
+            <p><strong><label for="picker_to">Select a &ldquo;to&rdquo; date:</label></strong></p>
             <input id="picker_to" class="datepicker" type="date">
         </fieldset>
 
@@ -932,7 +932,7 @@ function&nbsp;createDateArray( date ) {
             format: 'You selected: dddd, dd mmm, yyyy',
             formatSubmit: 'yyyy/mm/dd',
             onSelect: function() {
-                $custom_date.next().after( '<p class="notification">Date to submit: <code>' + $picker.getDate( 'yyyy-mm-dd' ) + '</code></p>' )
+                $custom_date.next().after( '<p class="notification">Date to submit: <code>' + $picker.getDate( 'yyyy/mm/dd' ) + '</code></p>' )
             }
         })
         var $picker = $custom_date.data( 'pickadate' )
