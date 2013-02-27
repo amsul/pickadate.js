@@ -160,7 +160,9 @@
 
                         // Make sure the element has focus and then
                         // add the "active" class to the element
-                        $ELEMENT.focus().addClass( CLASSES.inputActive )
+                        if ( $ELEMENT.is( ':visible' ) ) {
+                            $ELEMENT.focus().addClass( CLASSES.inputActive )
+                        }
 
                         // Add the "opened" class to the calendar holder
                         $HOLDER.addClass( CLASSES.opened )
@@ -197,7 +199,10 @@
 
                             // On escape, focus back onto the element and close the picker
                             if ( keycode == 27 ) {
-                                ELEMENT.focus()
+                                if ( $ELEMENT.is( ':visible' ) ) {
+                                    ELEMENT.focus()
+                                }
+
                                 P.close()
                             }
 
@@ -712,7 +717,9 @@
 
 
                     // Put focus back onto the element
-                    ELEMENT.focus()
+                    if ( $ELEMENT.is( ':visible' ) ) {
+                        ELEMENT.focus()
+                    }
 
                     // For IE, set the calendar to force close
                     // * This needs to be after `ELEMENT.focus()`
