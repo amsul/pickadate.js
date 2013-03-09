@@ -45,7 +45,7 @@
         /**
          * The picker constructor that creates and returns a new date or time picker
          */
-        Picker = function( $ELEMENT, SETTINGS, IS_TIME_PICKER ) {
+        Picker = function( $ELEMENT, SETTINGS ) {
 
             var
                 // Pseudo picker constructor
@@ -214,9 +214,7 @@
                                 if ( keycodeToMove ) {
                                     setTimeSelected(
                                         createValidatedTime(
-                                            IS_TIME_PICKER ?
-                                                TIME_HIGHLIGHTED.TIME + SETTINGS.interval * ( keycodeToMove > 0 ? 1 : -1 ) :
-                                                [ TIME_HIGHLIGHTED.YEAR, TIME_HIGHLIGHTED.MONTH, TIME_HIGHLIGHTED.DATE + keycodeToMove ],
+                                            TIME_HIGHLIGHTED.TIME + SETTINGS.interval * ( keycodeToMove > 0 ? 1 : -1 ),
                                             keycodeToMove
                                         ),
                                     1 )
@@ -282,7 +280,7 @@
                     show: function( timeUnit1, timeUnit2 ) {
 
                         // If it's a date picker, compensate for month 0index
-                        showInView( IS_TIME_PICKER ? timeUnit1 : --timeUnit1, timeUnit2 )
+                        showInView( timeUnit1 )
                         return P
                     }, //show
 
@@ -327,9 +325,6 @@
                         // Confirm that the time passed is an array
                         else if ( Array.isArray( timeArray ) ) {
 
-                            // If it's a date picker, compensate for month 0index
-                            if ( !IS_TIME_PICKER ) { --timeArray[ 1 ] }
-
                             // Set the validated time as selected.
                             setTimeSelected( createValidatedTime( timeArray ), isSuperficial )
                         }
@@ -357,20 +352,9 @@
                             // Set the max time
                             LIMIT_MAX = createTimeBoundaryObj( limit, upper )
 
-                            if ( IS_TIME_PICKER ) {
-
-                                // If highlighted time is more than max time set it to max time
-                                if ( TIME_HIGHLIGHTED.TIME > LIMIT_MAX.TIME ) {
-                                    TIME_FOCUSED = TIME_HIGHLIGHTED = createValidatedTime( LIMIT_MAX, -1 )
-                                }
-                            }
-
-                            else {
-
-                                // If focused month is more than max time set it to max time
-                                if ( TIME_FOCUSED.TIME > LIMIT_MAX.TIME ) {
-                                    TIME_FOCUSED = createValidatedTime( LIMIT_MAX, -1 )
-                                }
+                            // If highlighted time is more than max time set it to max time
+                            if ( TIME_HIGHLIGHTED.TIME > LIMIT_MAX.TIME ) {
+                                TIME_FOCUSED = TIME_HIGHLIGHTED = createValidatedTime( LIMIT_MAX, -1 )
                             }
                         }
 
@@ -380,20 +364,9 @@
                             // So set the min time
                             LIMIT_MIN = createTimeBoundaryObj( limit )
 
-                            if ( IS_TIME_PICKER ) {
-
-                                // If highlighted time is less than min time set it to min time
-                                if ( TIME_HIGHLIGHTED.TIME < LIMIT_MIN.TIME ) {
-                                    TIME_FOCUSED = TIME_HIGHLIGHTED = createValidatedTime( LIMIT_MIN )
-                                }
-                            }
-
-                            else {
-
-                                // If focused month is less than min time set it to min time
-                                if ( TIME_FOCUSED.TIME < LIMIT_MIN.TIME ) {
-                                    TIME_FOCUSED = createValidatedTime( LIMIT_MIN )
-                                }
+                            // If highlighted time is less than min time set it to min time
+                            if ( TIME_HIGHLIGHTED.TIME < LIMIT_MIN.TIME ) {
+                                TIME_FOCUSED = TIME_HIGHLIGHTED = createValidatedTime( LIMIT_MIN )
                             }
                         }
 
@@ -578,7 +551,7 @@
                         },
 
                         // Create an array by splitting the format passed
-                        toArray: function( format ) { return format.split( IS_TIME_PICKER ? /(h{1,2}|H{1,2}|i|a|A|!.)/g : /(d{1,4}|m{1,4}|y{4}|yy|!.)/g ) }
+                        toArray: function( format ) { return format.split( /(h{1,2}|H{1,2}|i|a|A|!.)/g ) }
 
                     } //endreturn
                 })(), //TIME_FORMATS
@@ -623,20 +596,7 @@
                             if ( !isNaN( timeToDisable ) ) {
 
                                 // If it's the time picker, just return the time as the "hour"
-                                if ( IS_TIME_PICKER ) return timeToDisable
-
-                                // Otherwise we need to disable weekdays, so flip the "off days" boolean
-                                PICKER.offDays = 1
-
-                                // If the first day flag is truthy, we maintain the
-                                // 0index of the weekday by getting the remainder from 7.
-                                // Otherwise return the weekday with 0index compensation.
-                                return SETTINGS.firstDay ? timeToDisable % DAYS_IN_WEEK : --timeToDisable
-                            }
-
-                            // Otherwise if it's not a time picker, it's a date array so fix the month 0index
-                            if ( !IS_TIME_PICKER ) {
-                                --timeToDisable[ 1 ]
+                                return timeToDisable
                             }
 
                             // Then create and return the time object, replacing it in the collection
@@ -664,7 +624,7 @@
                         // Map through all the times to disable
                         TIMES_TO_DISABLE.map( function( timeObj ) {
 
-                            if ( IS_TIME_PICKER && !isNaN( timeObj ) ) {
+                            if ( !isNaN( timeObj ) ) {
 
                                 // If the looped time is less than the latest lowest hour
                                 // and greater than the minimum hour, then set it as the lower limit
@@ -712,53 +672,37 @@
                 // Create time object for the highlighted time
                 TIME_HIGHLIGHTED = (function( elemDataValue, elemValue ) {
 
-                    // If there an element `data-value`
-                    if ( elemDataValue || IS_TIME_PICKER ) {
+                    // If there's no data value, replace it with the elem value
+                    elemDataValue = elemDataValue || elemValue
 
-                        // If there's no data value, replace it with the elem value
-                        elemDataValue = elemDataValue || elemValue
+                    // Set the element value entered to an empty object
+                    elemValue = {}
 
-                        // Set the element value entered to an empty object
-                        elemValue = {}
+                    // Map through the submit format array
+                    TIME_FORMATS.toArray( SETTINGS.formatSubmit || SETTINGS.format ).map( function( formatItem ) {
 
-                        // Map through the submit format array
-                        TIME_FORMATS.toArray( SETTINGS.formatSubmit || SETTINGS.format ).map( function( formatItem ) {
+                        // If the formatting length function exists, invoke it
+                        // with the `data-value` and the time object we are creating.
+                        // Otherwise it's the length of the formatting item being mapped
+                        // (while removing escaped characters).
+                        var formattingLength = TIME_FORMATS[ formatItem ] ? TIME_FORMATS[ formatItem ]( elemDataValue, elemValue ) : formatItem.replace( /^!/, '' ).length
 
-                            // If the formatting length function exists, invoke it
-                            // with the `data-value` and the time object we are creating.
-                            // Otherwise it's the length of the formatting item being mapped
-                            // (while removing escaped characters).
-                            var formattingLength = TIME_FORMATS[ formatItem ] ? TIME_FORMATS[ formatItem ]( elemDataValue, elemValue ) : formatItem.replace( /^!/, '' ).length
+                        // If the formatting length function exists, slice up
+                        // the value and pass it into the time object we're creating.
+                        if ( TIME_FORMATS[ formatItem ] ) {
+                            elemValue[ formatItem ] = elemDataValue.slice( 0, formattingLength )
+                        }
 
-                            // If the formatting length function exists, slice up
-                            // the value and pass it into the time object we're creating.
-                            if ( TIME_FORMATS[ formatItem ] ) {
-                                elemValue[ formatItem ] = elemDataValue.slice( 0, formattingLength )
-                            }
+                        // Update the remainder of the string by slicing away the format length
+                        elemDataValue = elemDataValue.slice( formattingLength )
+                    })
 
-                            // Update the remainder of the string by slicing away the format length
-                            elemDataValue = elemDataValue.slice( formattingLength )
-                        })
-
-                        // Create an array with the time object units while parsing each item as an integer.
-                        elemValue = IS_TIME_PICKER ?
-                            [
-                                // If no "military" format, get the "standard" format and add 12 based on AM/PM
-                                +( elemValue.HH || elemValue.H ) || +( elemValue.hh || elemValue.h ) + ( /^p/i.test( elemValue.A || elemValue.a ) ? HOURS_TO_NOON : 0 ),
-                                +elemValue.i
-                            ] :
-                            [
-                                +( elemValue.yyyy || elemValue.yy ),
-                                +( elemValue.mm || elemValue.m ) - 1, // Compensate for month 0index
-                                +( elemValue.dd || elemValue.d )
-                            ]
-                    }
-
-
-                    // Otherwise, try to natively parse the value in the input
-                    else {
-                        elemValue = Date.parse( elemValue )
-                    }
+                    // Create an array with the time object units while parsing each item as an integer.
+                    elemValue = [
+                        // If no "military" format, get the "standard" format and add 12 based on AM/PM
+                        +( elemValue.HH || elemValue.H ) || +( elemValue.hh || elemValue.h ) + ( /^p/i.test( elemValue.A || elemValue.a ) ? HOURS_TO_NOON : 0 ),
+                        +elemValue.i
+                    ]
 
 
                     // Return a validated time object.
@@ -792,29 +736,6 @@
                 // using the name of the original input plus suffix and update the value
                 // with whatever is entered in the input on load. Otherwise set it to null.
                 ELEMENT_HIDDEN = SETTINGS.formatSubmit ? $( '<input type=hidden name=' + ELEMENT.name + SETTINGS.hiddenSuffix + '>' ).val( ELEMENT.value ? getTimeFormatted( SETTINGS.formatSubmit ) : '' )[ 0 ] : null,
-
-
-                // If it's not a time picker, then create the calendar table head with
-                // weekday labels by "copying" the weekdays collection based on the settings.
-                // * We do a copy so we don't mutate the original array.
-                TABLE_HEAD = IS_TIME_PICKER ? 0 : (function( weekdaysCollection ) {
-
-                    // If the first day should be Monday, then grab
-                    // Sunday and push it to the end of the collection
-                    if ( SETTINGS.firstDay ) {
-                        weekdaysCollection.push( weekdaysCollection.splice( 0, 1 )[ 0 ] )
-                    }
-
-                    // Go through each day of the week and return a wrapped header row.
-                    // Take the result and apply anoth table head wrapper to group it all.
-                    return createNode( 'thead',
-                        createNode( 'tr',
-                            weekdaysCollection.map( function( weekday ) {
-                                return createNode( 'th', weekday, CLASSES.weekdays )
-                            })
-                        )
-                    )
-                })( ( SETTINGS.showWeekdaysShort ? SETTINGS.weekdaysShort : SETTINGS.weekdaysFull ).slice( 0 ) ), //TABLE_HEAD
 
 
                 // Create the picker holder with a new wrapped picker and bind the events
@@ -869,7 +790,7 @@
                     // If a date or time was clicked, split it into an array
                     // of time units, set the time, and then close the picker.
                     else if ( targetData.pick ) {
-                        P.set( targetData.pick.split( IS_TIME_PICKER ? ':' : '/' ) ).close()
+                        P.set( targetData.pick.split( ':' ) ).close()
                     }
 
                     // If the target is the holder, close the picker
@@ -902,61 +823,29 @@
              */
             function createTimeObj( timePassed, unlimited ) {
 
-                // If it's a time picker
-                if ( IS_TIME_PICKER ) {
-
-                    // If the time passed is an array, float the values and convert into total minutes.
-                    if ( Array.isArray( timePassed ) ) {
-                        timePassed = +timePassed[ 0 ] * MINUTES_IN_HOUR + (+timePassed[ 1 ])
-                    }
-
-                    // If the time passed is not a number, create the time for "now".
-                    else if ( isNaN( timePassed ) ) {
-                        timePassed = new Date()
-                        timePassed = timePassed.getHours() * MINUTES_IN_HOUR /*+ timePassed.getMinutes()*/
-                        // console.log( timePassed.getHours() , timePassed.getMinutes(), SETTINGS.interval )
-                    }
-
-
-                    return {
-
-                        // Divide to get hours from minutes.
-                        HOUR: ~~( timePassed / MINUTES_IN_HOUR ),
-
-                        // The remainder is the minutes.
-                        MINS: timePassed % MINUTES_IN_HOUR,
-
-                        // Reference to total minutes.
-                        TIME: timePassed
-                    }
-                }
-
-
-                // If the time passed is an array, create the time by splitting the items
+                // If the time passed is an array, float the values and convert into total minutes.
                 if ( Array.isArray( timePassed ) ) {
-                    timePassed = new Date( timePassed[ 0 ], timePassed[ 1 ], timePassed[ 2 ] )
+                    timePassed = +timePassed[ 0 ] * MINUTES_IN_HOUR + (+timePassed[ 1 ])
                 }
 
-                // If the time passed is a number, create the time with the number
-                else if ( !isNaN( timePassed ) ) {
-                    timePassed = new Date( timePassed )
-                }
-
-                // Otherwise if it's not unlimited, set the time to today and
-                // set the time to midnight (for comparison purposes)
-                else if ( !unlimited ) {
+                // If the time passed is not a number, create the time for "now".
+                else if ( isNaN( timePassed ) ) {
                     timePassed = new Date()
-                    timePassed.setHours( 0, 0, 0, 0 )
+                    timePassed = timePassed.getHours() * MINUTES_IN_HOUR /*+ timePassed.getMinutes()*/
+                    // console.log( timePassed.getHours() , timePassed.getMinutes(), SETTINGS.interval )
                 }
 
-                // Return the time object
+
                 return {
-                    YEAR: unlimited || timePassed.getFullYear(),
-                    MONTH: unlimited || timePassed.getMonth(),
-                    DATE: unlimited || timePassed.getDate(),
-                    DAY: unlimited || timePassed.getDay(),
-                    TIME: unlimited || timePassed.getTime(),
-                    OBJ: unlimited || timePassed
+
+                    // Divide to get hours from minutes.
+                    HOUR: ~~( timePassed / MINUTES_IN_HOUR ),
+
+                    // The remainder is the minutes.
+                    MINS: timePassed % MINUTES_IN_HOUR,
+
+                    // Reference to total minutes.
+                    TIME: timePassed
                 }
             } //createTimeObj
 
@@ -970,30 +859,11 @@
                 // If there is a limit and its a number, create a
                 // time object relative to today by adding the limit.
                 if ( limit && !isNaN( limit ) ) {
-                    return createTimeObj( IS_TIME_PICKER ?
-                        [ NOW.HOUR, SETTINGS.interval * ( limit + Math.ceil( NOW.MINS / SETTINGS.interval ) ) ] :
-                        [ NOW.YEAR, NOW.MONTH, NOW.DATE + limit ]
-                    ) //endreturn
+                    return createTimeObj([ NOW.HOUR, SETTINGS.interval * ( limit + Math.ceil( NOW.MINS / SETTINGS.interval ) ) ])
                 }
 
                 // If it's a time picker, just create a time object
-                if ( IS_TIME_PICKER ) {
-                    return createTimeObj( limit )
-                }
-
-                // If the limit is set to true, just return today
-                if ( limit === true ) {
-                    return NOW
-                }
-
-                // If the limit is an array, construct the time by fixing month 0index
-                if ( Array.isArray( limit ) ) {
-                    --limit[ 1 ]
-                    return createTimeObj( limit )
-                }
-
-                // Otherwise create an infinite time
-                return createTimeObj( 0, upper ? Infinity : -Infinity )
+                return createTimeObj( limit )
             } //createTimeBoundaryObj
 
 
@@ -1007,7 +877,7 @@
 
 
                 // If it's a time picker, make sure the minutes are "reachable" based on the interval
-                if ( IS_TIME_PICKER && LIMIT_MIN ) {
+                if ( LIMIT_MIN ) {
 
                     // If we can "reach" a date based on the lower limit and interval, then do nothing
                     timeObj = timeObj.TIME % SETTINGS.interval == LIMIT_MIN.TIME % SETTINGS.interval ? timeObj :
@@ -1017,16 +887,6 @@
                         // from the time interval and we have the "minutes" needed to increase the time by to get to
                         // the next "reachable" time. Yeah... I think this gets most edge cases.
                         createTimeObj( timeObj.TIME + ( SETTINGS.interval - (( timeObj.TIME - LIMIT_MIN.TIME ) % SETTINGS.interval) ) )
-                }
-
-
-                // If the picker "disabled" flag is truthy and there are only disabled weekdays
-                // ^ This is some confusing shit right here.
-                if ( PICKER.off && !PICKER.offDays ) {
-
-                    // If the time is less than the pseudo min limit or greater than pseudo max limit,
-                    // set it as the pseudo time limit. Otherwise keep it the same.
-                    timeObj = timeObj.TIME < PSEUDO_LIMIT_MIN.TIME ? PSEUDO_LIMIT_MIN : timeObj.TIME > PSEUDO_LIMIT_MAX.TIME ? PSEUDO_LIMIT_MAX : timeObj
                 }
 
 
@@ -1044,19 +904,7 @@
                     while ( TIMES_TO_DISABLE.filter( DISABLED_TIMES, timeObj ).length ) {
 
                         // Otherwise create the next time based on the direction
-                        timeObj = createTimeObj(
-                            IS_TIME_PICKER ?
-                                [ timeObj.HOUR, ( direction > 0 ? 1 : -1 ) * SETTINGS.interval + timeObj.MINS ] :
-                                [ timeObj.YEAR, timeObj.MONTH, direction + timeObj.DATE ]
-                        )
-
-                        // Check if the month check should be skipped to avoid extra loops.
-                        // Otherwise if we've gone through to another month, create a new
-                        // time based on the direction being less than zero (rather than more).
-                        // Then set this new time as the original and looped time.
-                        if ( !IS_TIME_PICKER && !skipMonthCheck && timeObj.MONTH != originalTime.MONTH ) {
-                            originalTime = timeObj = createTimeObj([ originalTime.YEAR, originalTime.MONTH, direction < 0 ? --originalTime.DATE : ++originalTime.DATE ])
-                        }
+                        timeObj = createTimeObj([ timeObj.HOUR, ( direction > 0 ? 1 : -1 ) * SETTINGS.interval + timeObj.MINS ])
                     }
                 }
 
@@ -1073,7 +921,7 @@
                 // a validated time while subtracting one until we find an enabled time.
                 // * A truthy third argument skips the month check.
                 else if ( timeObj.TIME > LIMIT_MAX.TIME ) {
-                    timeObj = createValidatedTime( IS_TIME_PICKER ? LIMIT_MAX.TIME - 1 : LIMIT_MAX, -1, 1 )
+                    timeObj = createValidatedTime( LIMIT_MAX.TIME - 1, -1, 1 )
                 }
 
 
@@ -1344,36 +1192,16 @@
                 }
 
 
-                // Only for the time picker
-                if ( IS_TIME_PICKER ) {
-
-                    // If it's the viewset time for focus, add the class
-                    if ( timeObj.TIME == TIME_FOCUSED.TIME ) {
-                        klassCollection.push( CLASSES.viewset )
-                    }
-
-                    // The time data binding
-                    dataBinding = [
-                        timeObj.HOUR,
-                        timeObj.MINS
-                    ].join( ':' )
+                // If it's the viewset time for focus, add the class
+                if ( timeObj.TIME == TIME_FOCUSED.TIME ) {
+                    klassCollection.push( CLASSES.viewset )
                 }
 
-                // Only for the date picker
-                else {
-
-                    // If it's today, add the class
-                    if ( timeObj.TIME == NOW.TIME ) {
-                        klassCollection.push( CLASSES.now )
-                    }
-
-                    // The date data binding
-                    dataBinding = [
-                        timeObj.YEAR,
-                        timeObj.MONTH + 1, // add 1 to display an accurate date
-                        timeObj.DATE
-                    ].join( '/' )
-                }
+                // The time data binding
+                dataBinding = [
+                    timeObj.HOUR,
+                    timeObj.MINS
+                ].join( ':' )
 
 
                 // Return an array with the classes and data binding
@@ -1475,7 +1303,7 @@
                         // Create a picker box node
                         createNode( STRING_DIV,
 
-                            IS_TIME_PICKER ? createClock() : createCalendar(),
+                            createClock(),
 
                             // The picker item class
                             CLASSES.item
@@ -1594,13 +1422,13 @@
             /**
              * Show a time in view on the picker.
              */
-            function showInView( monthOrHour, yearOrMinutes ) {
+            function showInView( hour, minutes ) {
 
                 // Ensure we have a year or minutes to work with.
-                yearOrMinutes = yearOrMinutes || IS_TIME_PICKER ? 0 : TIME_FOCUSED.YEAR
+                minutes = minutes || 0
 
                 // Create a validated time and set it as focused time.
-                TIME_FOCUSED = createValidatedTime( IS_TIME_PICKER ? [ monthOrHour, yearOrMinutes ] : [ yearOrMinutes, monthOrHour, 1 ] )
+                TIME_FOCUSED = createValidatedTime([ hour, minutes ])
 
                 // Then render a new picker
                 renderPicker()
@@ -1626,53 +1454,9 @@
 
                 // If it's a time picker, make sure the "viewset" node is in view
                 // and then return an empty array because it has no picker items.
-                if ( IS_TIME_PICKER ) {
-                    $HOLDER[ 0 ].scrollTop = $findInHolder( CLASSES.viewset ).position().top - ~~( $HOLDER[ 0 ].clientHeight / 4 )
-                    return []
-                }
+                $HOLDER[ 0 ].scrollTop = $findInHolder( CLASSES.viewset ).position().top - ~~( $HOLDER[ 0 ].clientHeight / 4 )
 
-                return [
-
-                    // The "today" button
-                    $findInHolder( CLASSES.buttonToday )[ 0 ],
-
-                    // The "clear" button
-                    $findInHolder( CLASSES.buttonClear )[ 0 ],
-
-                    // The month selector
-                    $findInHolder( CLASSES.selectMonth ).on({
-
-                        // *** For iOS ***
-                        click: eventPreventPropagation,
-
-                        // Bind the change event
-                        change: function() {
-
-                            // Show the month by floating the option selected
-                            showInView( +this.value )
-
-                            // Find the new month selector and focus back on it
-                            $findInHolder( CLASSES.selectMonth ).focus()
-                        }
-                    })[ 0 ],
-
-                    // The year selector
-                    $findInHolder( CLASSES.selectYear ).on({
-
-                        // *** For iOS ***
-                        click: eventPreventPropagation,
-
-                        // Bind the change event
-                        change: function() {
-
-                            // Show the year by floating the option selected and month in focus
-                            showInView( TIME_FOCUSED.MONTH, +this.value )
-
-                            // Find the new year selector and focus back on it
-                            $findInHolder( CLASSES.selectYear ).focus()
-                        }
-                    })[ 0 ]
-                ]
+                return []
             } //getUpdatedPickerItems
 
 
