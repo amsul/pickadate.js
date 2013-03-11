@@ -31,7 +31,7 @@ module.exports = function( grunt ) {
                         ' */\n\n'
             },
             scripts: {
-                src: '_source/time3.js',
+                src: '_source/*.js',
                 dest: 'build/pickadate.js'
             }
         },

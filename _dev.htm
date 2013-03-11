@@ -1,0 +1,170 @@
+<!doctype html>
+
+<meta charset="utf-8">
+
+<meta name="author" content="Amsul - http://amsul.ca">
+<meta name="viewport" content="width=device-width,maximum-scale=1">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+<title>Pickadate.js</title>
+
+<link rel="stylesheet" href="_demo/style.css">
+<link rel="stylesheet" href="build/themes/pickadate.01.default.css">
+
+<!--[if lt IE 9]>
+    <script>document.createElement('section')</script>
+    <style type="text/css">
+        .holder {
+            position: relative;
+            z-index: 10000;
+        }
+        .datepicker {
+            display: block;
+        }
+    </style>
+<![endif]-->
+
+
+<body>
+
+    <section class="holder holder-top holder-clean">
+
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+        <fieldset>
+            <input type="text">
+        </fieldset>
+
+        <form>
+            <fieldset>
+                <h3><label for="input_01">Pick a date. Go ahead...</label></h3>
+                <input id="input_01" class="datepicker" name="date" type="text" value="1:00 AM" data-valuee="02:00" data-valuee="2012/05/22">
+                <br><br><br><br><br>
+                <input type="submit">
+            </fieldset>
+        </form>
+
+        <fieldset>
+            <input type="text">
+        </fieldset>
+
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+    </section>
+
+
+    <script src="_demo/jquery.js"></script>
+    <script src="_demo/rainbow.js"></script>
+    <script src="build/pickadate.js"></script>
+
+    <script type="text/javascript">
+        // var $input = $( '.datepicker' ).pickadate({
+            // firstDay: 1,
+            // format: 'he!y!y!y!y yyyy,mm,dd',
+            // monthSelector: true,
+            // yearSelector: true,
+        var $input = $( '.datepicker' ).pickatime({
+
+            // format: '<b>h</b>:i <!i>a</!i>',
+            // formatSubmit: 'HH:i',
+
+            // disable: [
+            //     2, 3,
+            //     [ 5, 30 ]
+            // ],
+            // disable: function( loopedTime ) {
+            //     return loopedTime.HOUR > 5
+            // }
+            // interval: 10,
+            // min: -4,
+            // min: [ 14, 20 ],
+            // max: 2,
+            // max: [ 18, 30 ]
+        }
+
+        /*{
+            // interval: 10,
+            disable: [
+                // true,
+                [9,30],
+                // 13,
+                // 14,
+                15
+            ],
+            // maxLimit: 4,
+            // maxLimit: [18,30],
+            onStart: function() {
+                this.open()
+            },
+            onSet: function() {
+                this.$node.val( 'From: ' + this.get( 'h:i a' ) )
+            },
+            monthSelector: true,
+            datesDisabled: [
+                // true,
+                // 7,
+                // [2013, 1, 21],
+                // [2013, 1, 22],
+                // [2013, 1, 23],
+                // [2013, 1, 24],
+                // [2013, 1, 25],
+                // [2013, 1, 26],
+                // [2013, 1, 27],
+                // [2013, 1, 28],
+                // [2013, 1, 29],
+                // [2013, 1, 30],
+                // [2013, 1, 31],
+                // [2013, 2, 01],
+                // [2013, 2, 02],
+                // [2013, 2, 03],
+                // [2013, 2, 04],
+                // [2013, 2, 05],
+                // [2013, 2, 06],
+                // [2013, 2, 07],
+                // [2013, 2, 08],
+                // [2013, 2, 09],
+                // [2013, 2, 10],
+                // [2013, 2, 11],
+                // [2013, 2, 12],
+                // [2013, 2, 13],
+                // [2013, 2, 14],
+                // [2013, 2, 15],
+                // [2013, 2, 16],
+                // [2013, 2, 17],
+                // [2013, 2, 18],
+                // [2013, 2, 19],
+                // [2013, 2, 20],
+                // [2013, 2, 21],
+                // [2013, 2, 22],
+                // [2013, 2, 23],
+                // [2013, 2, 24],
+                // [2013, 2, 25],
+                // [2013, 2, 26],
+                // [2013, 2, 27],
+                // [2013, 2, 28],
+                // [2013, 2, 29],
+                // [2013, 2, 30],
+                // [2013, 2, 31],
+                [2013,3,20],
+                [2013,3,21],
+                [2013,3,22],
+                [2013,3,23],
+                [2013,3,24],
+                [2013,3,25]
+            ],
+            // dateMin: [2013, 1, 14],
+            // dateMax: [2013, 3, 25]
+        }*/)
+        // var calendar = $input.data( 'pickadate' ).open()
+        // var calendar = $input.data( 'pickatime' ).open()
+    </script>
+
+
+</body>
+
+
+

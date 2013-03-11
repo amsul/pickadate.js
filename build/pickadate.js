@@ -1,10 +1,140 @@
 /*!
- * pickadate.js v3.0.0.alpha, 2013-03-03
+ * pickadate.js v3.0.0.alpha, 2013-03-11
  * By Amsul (http://amsul.ca)
  * Hosted on http://amsul.github.com/pickadate.js/
  * Licensed under MIT ("expat" flavour) license.
  */
 
+/**
+ * Legacy browser support
+ */
+
+/**
+ * Cross-Browser Split 1.1.1
+ * Copyright 2007-2012 Steven Levithan <stevenlevithan.com>
+ * Available under the MIT License
+ * http://blog.stevenlevithan.com/archives/cross-browser-split
+ */
+var nativeSplit = String.prototype.split, compliantExecNpcg = /()??/.exec('')[1] === undefined
+String.prototype.split = function(separator, limit) {
+    var str = this
+    if (Object.prototype.toString.call(separator) !== '[object RegExp]') {
+        return nativeSplit.call(str, separator, limit)
+    }
+    var output = [],
+        flags = (separator.ignoreCase ? 'i' : '') +
+                (separator.multiline  ? 'm' : '') +
+                (separator.extended   ? 'x' : '') +
+                (separator.sticky     ? 'y' : ''),
+        lastLastIndex = 0,
+        separator2, match, lastIndex, lastLength
+    separator = new RegExp(separator.source, flags + 'g')
+    str += ''
+    if (!compliantExecNpcg) {
+        separator2 = new RegExp('^' + separator.source + '$(?!\\s)', flags)
+    }
+    limit = limit === undefined ? -1 >>> 0 : limit >>> 0
+    while (match = separator.exec(str)) {
+        lastIndex = match.index + match[0].length
+        if (lastIndex > lastLastIndex) {
+            output.push(str.slice(lastLastIndex, match.index))
+            if (!compliantExecNpcg && match.length > 1) {
+                match[0].replace(separator2, function () {
+                    for (var i = 1; i < arguments.length - 2; i++) {
+                        if (arguments[i] === undefined) {
+                            match[i] = undefined
+                        }
+                    }
+                })
+            }
+            if (match.length > 1 && match.index < str.length) {
+                Array.prototype.push.apply(output, match.slice(1))
+            }
+            lastLength = match[0].length
+            lastLastIndex = lastIndex
+            if (output.length >= limit) {
+                break
+            }
+        }
+        if (separator.lastIndex === match.index) {
+            separator.lastIndex++
+        }
+    }
+    if (lastLastIndex === str.length) {
+        if (lastLength || !separator.test('')) {
+            output.push('')
+        }
+    } else {
+        output.push(str.slice(lastLastIndex))
+    }
+    return output.length > limit ? output.slice(0, limit) : output
+}
+
+
+// isArray support
+if ( !Array.isArray ) {
+    Array.isArray = function( value ) {
+        return {}.toString.call( value ) == '[object Array]'
+    }
+}
+
+
+// Map array support
+if ( ![].map ) {
+    Array.prototype.map = function ( callback, self ) {
+        var array = this, len = array.length, newArray = new Array( len )
+        for ( var i = 0; i < len; i++ ) {
+            if ( i in array ) {
+                newArray[ i ] = callback.call( self, array[ i ], i, array )
+            }
+        }
+        return newArray
+    }
+}
+
+
+// Filter array support
+if ( ![].filter ) {
+    Array.prototype.filter = function( callback ) {
+        if ( this == null ) throw new TypeError()
+        var t = Object( this ), len = t.length >>> 0
+        if ( typeof callback != 'function' ) throw new TypeError()
+        var newArray = [], thisp = arguments[ 1 ]
+        for ( var i = 0; i < len; i++ ) {
+          if ( i in t ) {
+            var val = t[ i ]
+            if ( callback.call( thisp, val, i, t ) ) newArray.push( val )
+          }
+        }
+        return newArray
+    }
+}
+
+
+// Index of array support
+if ( ![].indexOf ) {
+    Array.prototype.indexOf = function( searchElement ) {
+        if ( this == null ) throw new TypeError()
+        var t = Object( this ), len = t.length >>> 0
+        if ( len === 0 ) return -1
+        var n = 0
+        if ( arguments.length > 1 ) {
+            n = Number( arguments[ 1 ] )
+            if ( n != n ) {
+                n = 0
+            }
+            else if ( n != 0 && n != Infinity && n != -Infinity ) {
+                n = ( n > 0 || -1 ) * Math.floor( Math.abs( n ) )
+            }
+        }
+        if ( n >= len ) return -1
+        var k = n >= 0 ? n : Math.max( len - Math.abs( n ), 0 )
+        for ( ; k < len; k++ ) {
+            if ( k in t && t[ k ] === searchElement ) return k
+        }
+        return -1
+    }
+}
 
 /*jshint
    debug: true,
@@ -36,7 +166,9 @@
         WEEKS_IN_CALENDAR = 6,
 
         STRING_DIV = 'div',
-        STRING_PREFIX_PICKER = 'pickadate__'
+        STRING_PREFIX_PICKER = 'pickadate__',
+
+        $document = $( document )
 
 
 
@@ -63,10 +195,29 @@
             max: clock.max,
             now: clock.validate,
             settings: settings,
+            keyMove: {
+
+                // Down
+                40: 7,
+
+                // Up
+                38: -7,
+
+                // Right
+                39: 1,
+
+                // Left
+                37: -1
+            }, //keyMove
             onRender: function( $picker ) {
-                console.log( 'here i was' )
-                // if ( this.VIEWSET )
+                if ( !this.VIEWSET ) throw "No viewset"
                 $picker[ 0 ].scrollTop = $picker.find( '.' + settings.klass.viewset ).position().top - ~~( $picker[ 0 ].clientHeight / 4 )
+            },
+            onOpen: function() {
+                console.log( 'openeed' )
+            },
+            onClose: function() {
+                console.log( 'closed' )
             }
         }
     } //ClockPicker
@@ -329,10 +480,11 @@
         return {
             holder: calendar.holder,
             object: calendar.object,
+            validate: calendar.validate,
+            parse: calendar.parse,
             now: calendar.validate,
             min: calendar.min,
             max: calendar.max,
-            parse: calendar.parse,
             settings: settings
         }
     } //CalendarPicker
@@ -621,17 +773,150 @@
 
                 $node: $ELEMENT,
 
+
                 /**
                  * Initialize everything
                  */
                 init: function() {
 
-                    $ELEMENT.after( [ $HOLDER, ELEMENT_HIDDEN ] )
+                    // Bind the events on the `input` element and then
+                    // insert the holder and hidden element after the element.
+                    $ELEMENT.on({
+                        'focus click': function() {
 
+                            // Open the calendar.
+                            P.open()
+
+                            // Add the "focused" state onto the holder.
+                            $HOLDER.addClass( CLASSES.focused )
+                        },
+                        keydown: function() {
+
+                            var
+                                // Grab the keycode
+                                keycode = event.keyCode,
+
+                                // Check if one of the delete keys was pressed
+                                isKeycodeDelete = keycode == 8 || keycode == 46
+
+                            // Check if delete was pressed or the calendar is closed and there is a key movement
+                            if ( isKeycodeDelete || !PICKER.isOpen && PICKER.keyMove[ keycode ] ) {
+
+                                // Prevent it from moving the page.
+                                event.preventDefault()
+
+                                // Prevent it from bubbling to doc.
+                                event.stopPropagation()
+
+                                // If backspace was pressed, clear the values and close the picker
+                                if ( isKeycodeDelete ) {
+                                    P.clear().close()
+                                }
+
+                                // Otherwise open the calendar
+                                else {
+                                    P.open()
+                                }
+                            }
+                        }
+                    }).after( [ $HOLDER, ELEMENT_HIDDEN ] )
+
+                    // Trigger the on render event within scope of the picker.
                     triggerFunction( PICKER.onRender, PICKER, [ $HOLDER ] )
 
                     return P
-                } //init
+                }, //init
+
+
+                /**
+                 * Open up the picker
+                 */
+                open: function() {
+
+                    // If it's already open, do nothing
+                    if ( PICKER.isOpen ) return P
+
+                    // Set it as open
+                    PICKER.isOpen = 1
+
+                    // Make sure the element has focus then add the "active" class.
+                    $ELEMENT.focus().addClass( CLASSES.inputActive )
+
+                    // Add the "opened" class to the picker holder.
+                    $HOLDER.addClass( CLASSES.opened )
+
+                    // Bind the document events.
+                    $document.on( 'click.P' + PICKER.ID + ' focusin.P' + PICKER.ID, function( event ) {
+
+                        // If the target of the event is not the element, close the picker picker.
+                        // * Don't worry about clicks or focusins on the holder
+                        //   because those are stopped from bubbling up.
+                        if ( event.target != ELEMENT ) P.close()
+
+                    }).on( 'mousedown.P' + PICKER.ID, function( event ) {
+
+                        // Prevent the default action to keep focus on the `input` field.
+                        event.preventDefault()
+
+                    }).on( 'keydown.P' + PICKER.ID, function( event ) {
+
+                        var
+                            // Get the keycode
+                            keycode = event.keyCode,
+
+                            // Translate that to a selection change
+                            keycodeToMove = PICKER.keyMove[ keycode ]
+
+
+                        // On escape, focus back onto the element and close the picker
+                        if ( keycode == 27 ) {
+                            ELEMENT.focus()
+                            P.close()
+                        }
+
+                    })
+
+                    // Trigger the on open event within scope of the picker.
+                    triggerFunction( PICKER.onOpen, PICKER, [ $HOLDER ] )
+
+                    return P
+                }, //open
+
+
+                /**
+                 * Close the picker
+                 */
+                close: function() {
+
+                    // If it's already closed, do nothing
+                    if ( !PICKER.isOpen ) return P
+
+                    // Set it as closed
+                    PICKER.isOpen = 0
+
+                    // Remove the "active" class.
+                    $ELEMENT.removeClass( CLASSES.inputActive )
+
+                    // Remove the "opened" class from the picker holder.
+                    $HOLDER.removeClass( CLASSES.opened )
+
+                    // Bind the document events.
+                    $document.off( '.P' + PICKER.ID )
+
+                    // Trigger the on close event within scope of the picker.
+                    triggerFunction( PICKER.onClose, PICKER, [ $HOLDER ] )
+
+                    return P
+                }, //close
+
+
+                /**
+                 * Clear the values
+                 */
+                clear: function() {
+
+                    console.log( 'clear the damn values' )
+                }
 
             }, //Picker.prototype
 
@@ -686,8 +971,8 @@
                     // If there is a date to select, set it
                     PICKER.SELECT.length ?
 
-                        // If there's a `data-value`, format it with the submit format.
-                        "FUNK.format( SETTINGS.formatSubmit, $ELEMENT.data( 'value' ) )" :
+                        // If there's a `data-value`, parse it with the submit format.
+                        "PICKER.parse( SETTINGS.formatSubmit, $ELEMENT.data( 'value' ) )" :
 
                         // Otherwise leave it empty.
                         ''
@@ -699,8 +984,29 @@
             CLASSES = SETTINGS.klass,
 
 
-            // Create the picker holder with a new wrapped picker and bind the events
-            $HOLDER = $( createNode( STRING_DIV, createWrappedPicker(), CLASSES.holder ) )
+            // Create the picker holder with a new wrapped picker and bind the events.
+            $HOLDER = $( createNode( STRING_DIV, createWrappedPicker(), CLASSES.holder ) ).on({
+
+                // When something within the holder is focused, make it appear so.
+                focusin: function( event ) {
+
+                    // Remove the holder "focused" state from the holder.
+                    $HOLDER.removeClass( CLASSES.focused )
+
+                    // Prevent the event from propagating to the doc.
+                    event.stopPropagation()
+                },
+
+                // When something within the holder is clicked, handle the various event.
+                click: function( event ) {
+
+                    // If the click is within the holder, stop it from propagating to the doc.
+                    if ( $HOLDER.find( event.target ).length ) {
+                        event.stopPropagation()
+                        // ELEMENT.focus()
+                    }
+                }
+            })
 
 
 
@@ -912,11 +1218,13 @@
             // If there's a format length,
             if ( formattingLength ) {
 
-                var asdf = timeString.substr( 0, formattingLength )
+                // Split the time string up to the format length.
+                var tempString = timeString.substr( 0, formattingLength )
 
+                // Update the time string as the substring from format length to end.
                 timeString = timeString.substr( formattingLength )
 
-                return asdf
+                return tempString
             }
 
             return value.replace( /^!/, '' )
@@ -1013,7 +1321,7 @@
 
             inputActive: STRING_PREFIX_PICKER + 'input--active',
 
-            holder: STRING_PREFIX_PICKER + 'holder ' + STRING_PREFIX_PICKER + 'holder--opened ' + STRING_PREFIX_PICKER + 'holder--focused',
+            holder: STRING_PREFIX_PICKER + 'holder',
             opened: STRING_PREFIX_PICKER + 'holder--opened',
             focused: STRING_PREFIX_PICKER + 'holder--focused',
 
@@ -1064,7 +1372,7 @@
         format: 'h:i A',
 
         // The format to send to the server
-        formatSubmit: 'HH:i',
+        formatSubmit: '',
 
         // Hidden element name suffix
         hiddenSuffix: '_submit',
@@ -1087,7 +1395,7 @@
 
             inputActive: STRING_PREFIX_PICKER + 'input--active',
 
-            holder: STRING_PREFIX_PICKER + 'holder ' + STRING_PREFIX_PICKER + 'holder--time ' + STRING_PREFIX_PICKER + 'holder--opened ' + STRING_PREFIX_PICKER + 'holder--focused',
+            holder: STRING_PREFIX_PICKER + 'holder ' + STRING_PREFIX_PICKER + 'holder--time',
             opened: STRING_PREFIX_PICKER + 'holder--opened',
             focused: STRING_PREFIX_PICKER + 'holder--focused',
 

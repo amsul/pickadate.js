@@ -29,7 +29,9 @@
         WEEKS_IN_CALENDAR = 6,
 
         STRING_DIV = 'div',
-        STRING_PREFIX_PICKER = 'pickadate__'
+        STRING_PREFIX_PICKER = 'pickadate__',
+
+        $document = $( document )
 
 
 
@@ -56,10 +58,29 @@
             max: clock.max,
             now: clock.validate,
             settings: settings,
+            keyMove: {
+
+                // Down
+                40: 7,
+
+                // Up
+                38: -7,
+
+                // Right
+                39: 1,
+
+                // Left
+                37: -1
+            }, //keyMove
             onRender: function( $picker ) {
-                console.log( 'here i was' )
-                // if ( this.VIEWSET )
+                if ( !this.VIEWSET ) throw "No viewset"
                 $picker[ 0 ].scrollTop = $picker.find( '.' + settings.klass.viewset ).position().top - ~~( $picker[ 0 ].clientHeight / 4 )
+            },
+            onOpen: function() {
+                console.log( 'openeed' )
+            },
+            onClose: function() {
+                console.log( 'closed' )
             }
         }
     } //ClockPicker
@@ -322,10 +343,11 @@
         return {
             holder: calendar.holder,
             object: calendar.object,
+            validate: calendar.validate,
+            parse: calendar.parse,
             now: calendar.validate,
             min: calendar.min,
             max: calendar.max,
-            parse: calendar.parse,
             settings: settings
         }
     } //CalendarPicker
@@ -614,17 +636,150 @@
 
                 $node: $ELEMENT,
 
+
                 /**
                  * Initialize everything
                  */
                 init: function() {
 
-                    $ELEMENT.after( [ $HOLDER, ELEMENT_HIDDEN ] )
+                    // Bind the events on the `input` element and then
+                    // insert the holder and hidden element after the element.
+                    $ELEMENT.on({
+                        'focus click': function() {
 
+                            // Open the calendar.
+                            P.open()
+
+                            // Add the "focused" state onto the holder.
+                            $HOLDER.addClass( CLASSES.focused )
+                        },
+                        keydown: function() {
+
+                            var
+                                // Grab the keycode
+                                keycode = event.keyCode,
+
+                                // Check if one of the delete keys was pressed
+                                isKeycodeDelete = keycode == 8 || keycode == 46
+
+                            // Check if delete was pressed or the calendar is closed and there is a key movement
+                            if ( isKeycodeDelete || !PICKER.isOpen && PICKER.keyMove[ keycode ] ) {
+
+                                // Prevent it from moving the page.
+                                event.preventDefault()
+
+                                // Prevent it from bubbling to doc.
+                                event.stopPropagation()
+
+                                // If backspace was pressed, clear the values and close the picker
+                                if ( isKeycodeDelete ) {
+                                    P.clear().close()
+                                }
+
+                                // Otherwise open the calendar
+                                else {
+                                    P.open()
+                                }
+                            }
+                        }
+                    }).after( [ $HOLDER, ELEMENT_HIDDEN ] )
+
+                    // Trigger the on render event within scope of the picker.
                     triggerFunction( PICKER.onRender, PICKER, [ $HOLDER ] )
 
                     return P
-                } //init
+                }, //init
+
+
+                /**
+                 * Open up the picker
+                 */
+                open: function() {
+
+                    // If it's already open, do nothing
+                    if ( PICKER.isOpen ) return P
+
+                    // Set it as open
+                    PICKER.isOpen = 1
+
+                    // Make sure the element has focus then add the "active" class.
+                    $ELEMENT.focus().addClass( CLASSES.inputActive )
+
+                    // Add the "opened" class to the picker holder.
+                    $HOLDER.addClass( CLASSES.opened )
+
+                    // Bind the document events.
+                    $document.on( 'click.P' + PICKER.ID + ' focusin.P' + PICKER.ID, function( event ) {
+
+                        // If the target of the event is not the element, close the picker picker.
+                        // * Don't worry about clicks or focusins on the holder
+                        //   because those are stopped from bubbling up.
+                        if ( event.target != ELEMENT ) P.close()
+
+                    }).on( 'mousedown.P' + PICKER.ID, function( event ) {
+
+                        // Prevent the default action to keep focus on the `input` field.
+                        event.preventDefault()
+
+                    }).on( 'keydown.P' + PICKER.ID, function( event ) {
+
+                        var
+                            // Get the keycode
+                            keycode = event.keyCode,
+
+                            // Translate that to a selection change
+                            keycodeToMove = PICKER.keyMove[ keycode ]
+
+
+                        // On escape, focus back onto the element and close the picker
+                        if ( keycode == 27 ) {
+                            ELEMENT.focus()
+                            P.close()
+                        }
+
+                    })
+
+                    // Trigger the on open event within scope of the picker.
+                    triggerFunction( PICKER.onOpen, PICKER, [ $HOLDER ] )
+
+                    return P
+                }, //open
+
+
+                /**
+                 * Close the picker
+                 */
+                close: function() {
+
+                    // If it's already closed, do nothing
+                    if ( !PICKER.isOpen ) return P
+
+                    // Set it as closed
+                    PICKER.isOpen = 0
+
+                    // Remove the "active" class.
+                    $ELEMENT.removeClass( CLASSES.inputActive )
+
+                    // Remove the "opened" class from the picker holder.
+                    $HOLDER.removeClass( CLASSES.opened )
+
+                    // Bind the document events.
+                    $document.off( '.P' + PICKER.ID )
+
+                    // Trigger the on close event within scope of the picker.
+                    triggerFunction( PICKER.onClose, PICKER, [ $HOLDER ] )
+
+                    return P
+                }, //close
+
+
+                /**
+                 * Clear the values
+                 */
+                clear: function() {
+
+                    console.log( 'clear the damn values' )
+                }
 
             }, //Picker.prototype
 
@@ -679,8 +834,8 @@
                     // If there is a date to select, set it
                     PICKER.SELECT.length ?
 
-                        // If there's a `data-value`, format it with the submit format.
-                        "FUNK.format( SETTINGS.formatSubmit, $ELEMENT.data( 'value' ) )" :
+                        // If there's a `data-value`, parse it with the submit format.
+                        "PICKER.parse( SETTINGS.formatSubmit, $ELEMENT.data( 'value' ) )" :
 
                         // Otherwise leave it empty.
                         ''
@@ -692,8 +847,29 @@
             CLASSES = SETTINGS.klass,
 
 
-            // Create the picker holder with a new wrapped picker and bind the events
-            $HOLDER = $( createNode( STRING_DIV, createWrappedPicker(), CLASSES.holder ) )
+            // Create the picker holder with a new wrapped picker and bind the events.
+            $HOLDER = $( createNode( STRING_DIV, createWrappedPicker(), CLASSES.holder ) ).on({
+
+                // When something within the holder is focused, make it appear so.
+                focusin: function( event ) {
+
+                    // Remove the holder "focused" state from the holder.
+                    $HOLDER.removeClass( CLASSES.focused )
+
+                    // Prevent the event from propagating to the doc.
+                    event.stopPropagation()
+                },
+
+                // When something within the holder is clicked, handle the various event.
+                click: function( event ) {
+
+                    // If the click is within the holder, stop it from propagating to the doc.
+                    if ( $HOLDER.find( event.target ).length ) {
+                        event.stopPropagation()
+                        // ELEMENT.focus()
+                    }
+                }
+            })
 
 
 
@@ -905,11 +1081,13 @@
             // If there's a format length,
             if ( formattingLength ) {
 
-                var asdf = timeString.substr( 0, formattingLength )
+                // Split the time string up to the format length.
+                var tempString = timeString.substr( 0, formattingLength )
 
+                // Update the time string as the substring from format length to end.
                 timeString = timeString.substr( formattingLength )
 
-                return asdf
+                return tempString
             }
 
             return value.replace( /^!/, '' )
@@ -1006,7 +1184,7 @@
 
             inputActive: STRING_PREFIX_PICKER + 'input--active',
 
-            holder: STRING_PREFIX_PICKER + 'holder ' + STRING_PREFIX_PICKER + 'holder--opened ' + STRING_PREFIX_PICKER + 'holder--focused',
+            holder: STRING_PREFIX_PICKER + 'holder',
             opened: STRING_PREFIX_PICKER + 'holder--opened',
             focused: STRING_PREFIX_PICKER + 'holder--focused',
 
@@ -1057,7 +1235,7 @@
         format: 'h:i A',
 
         // The format to send to the server
-        formatSubmit: 'HH:i',
+        formatSubmit: '',
 
         // Hidden element name suffix
         hiddenSuffix: '_submit',
@@ -1080,7 +1258,7 @@
 
             inputActive: STRING_PREFIX_PICKER + 'input--active',
 
-            holder: STRING_PREFIX_PICKER + 'holder ' + STRING_PREFIX_PICKER + 'holder--time ' + STRING_PREFIX_PICKER + 'holder--opened ' + STRING_PREFIX_PICKER + 'holder--focused',
+            holder: STRING_PREFIX_PICKER + 'holder ' + STRING_PREFIX_PICKER + 'holder--time',
             opened: STRING_PREFIX_PICKER + 'holder--opened',
             focused: STRING_PREFIX_PICKER + 'holder--focused',
 
