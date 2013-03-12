@@ -8,6 +8,11 @@
    eqnull: true
  */
 
+/**
+ * Todo:
+ * – Fix `validate` methods. Selection goes outside bounds.
+ */
+
 
 
 ;(function( $, document, undefined ) {
@@ -60,16 +65,62 @@
             now: clock.validate,
             settings: settings,
             keyMove: {
-
-                40: 7, // Down
-                38: -7, // Up
+                40: 1, // Down
+                38: -1, // Up
                 39: 1, // Right
                 37: -1 // Left
             },
-            onStart: function( $picker ) {
+            formats: {
+                h: function( string ) {
+
+                    // If there's string, then get the digits length.
+                    // Otherwise return the selected hour in "standard" format.
+                    return string ? getDigitsLength( string ) : this.HOUR % HOURS_TO_NOON || HOURS_TO_NOON
+                },
+                hh: function( string ) {
+
+                    // If there's a string, then the length is always 2.
+                    // Otherwise return the selected hour in "standard" format with a leading zero.
+                    return string ? 2 : leadZero( this.HOUR % HOURS_TO_NOON || HOURS_TO_NOON )
+                },
+                H: function( string ) {
+
+                    // If there's string, then get the digits length.
+                    // Otherwise return the selected hour in "military" format as a string.
+                    return string ? getDigitsLength( string ) : '' + this.HOUR
+                },
+                HH: function( string ) {
+
+                    // If there's string, then get the digits length.
+                    // Otherwise return the selected hour in "military" format with a leading zero.
+                    return string ? getDigitsLength( string ) : leadZero( this.HOUR )
+                },
+                i: function( string ) {
+
+                    // If there's a string, then the length is always 2.
+                    // Otherwise return the selected minutes.
+                    return string ? 2 : leadZero( this.MINS )
+                },
+                a: function( string ) {
+
+                    // If there's a string, then the length is always 4.
+                    // Otherwise check if it's more than "noon" and return either am/pm.
+                    return string ? 4 : MINUTES_IN_DAY / 2 > this.TIME ? 'a.m.' : 'p.m.'
+                },
+                A: function( string ) {
+
+                    // If there's a string, then the length is always 2.
+                    // Otherwise check if it's more than "noon" and return either am/pm.
+                    return string ? 2 : MINUTES_IN_DAY / 2 > this.TIME ? 'AM' : 'PM'
+                },
+
+                // Create an array by splitting the formatting string passed.
+                toArray: function( formatString ) { return formatString.split( /(h{1,2}|H{1,2}|i|a|A|!.)/g ) }
+            },
+            onRender: function( $picker ) {
                 // if ( !this.VIEWSET ) throw "No viewset"
                 // $picker[ 0 ].scrollTop = $picker.find( '.' + settings.klass.viewset ).position().top - ~~( $picker[ 0 ].clientHeight / 4 )
-                $picker[ 0 ].scrollTop = $picker.find( '.' + settings.klass.selected ).position().top - ~~( $picker[ 0 ].clientHeight / 4 )
+                $picker[ 0 ].scrollTop = $picker.find( '.' + settings.klass.highlighted ).position().top - ~~( $picker[ 0 ].clientHeight / 4 )
             },
             onOpen: function() {
                 // console.log( 'openeed' )
@@ -100,7 +151,7 @@
             item: function( loopedTime ) {
                 loopedTime = clock.object( loopedTime % MINUTES_IN_DAY )
                 return [
-                    formatObjectToString( settings.format, loopedTime ),
+                    formatObjectToString( clock.formats, settings.format, loopedTime ),
                     (function( klasses, timeMinutes ) {
 
                         if ( clock.SELECT.length && clock.SELECT[ 0 ].TIME == timeMinutes ) {
@@ -111,9 +162,9 @@
                             klasses.push( settings.klass.highlighted )
                         }
 
-                        if ( clock.VIEWSET && clock.VIEWSET.TIME == timeMinutes ) {
-                            klasses.push( settings.klass.viewset )
-                        }
+                        // if ( clock.VIEWSET && clock.VIEWSET.TIME == timeMinutes ) {
+                        //     klasses.push( settings.klass.viewset )
+                        // }
 
                         if ( toDisable && clock.disable( clock.object( timeMinutes ) ).length ) {
                             klasses.push( settings.klass.disabled )
@@ -195,7 +246,7 @@
             ) +
 
             // And then add an interval because this time has passed
-            interval
+            0// interval
         ) //endreturn
     } //ClockPicker.prototype.validate
 
@@ -320,17 +371,19 @@
      */
     ClockPicker.prototype.parse = function( format, string ) {
 
-        var parsingObject = {}
+        var parsingObject = {},
+            formattings = this.formats
 
-        timeFormattingObject.toArray( format ).map( function( label ) {
+        // Convert the format into an array and then map through it.
+        formattings.toArray( format ).map( function( label ) {
 
             // The format length is from the formatting function or the label
             // length without the escaping exclamation (!) mark.
-            var formatLength = timeFormattingObject[ label ] ? timeFormattingObject[ label ]( string ) : label.replace( /^!/, '' ).length
+            var formatLength = formattings[ label ] ? formattings[ label ]( string ) : label.replace( /^!/, '' ).length
 
             // If there's a format length, split the string up to the format length.
             // Then add it to the parsing object with appropriate label.
-            if ( timeFormattingObject[ label ] ) {
+            if ( formattings[ label ] ) {
                 parsingObject[ label ] = string.substr( 0, formatLength )
             }
 
@@ -357,7 +410,25 @@
        ========================================================================== */
 
     function CalendarPicker( settings ) {
-        var calendar = this
+
+        var
+            calendar = this,
+
+            // Return the length of the first word in a collection.
+            getWordLengthFromCollection = function( string, collection, dateObject ) {
+
+                // Grab the first word from the string.
+                var word = string.match( /\w+/ )[ 0 ]
+
+                // If there's no month index, add it to the date object
+                if ( !dateObject.mm && !dateObject.m ) {
+                    dateObject.m = collection.indexOf( word )
+                }
+
+                // Return the length of the word.
+                return word.length
+            }
+
         return {
             holder: calendar.holder,
             object: calendar.object,
@@ -366,7 +437,82 @@
             now: calendar.validate,
             min: calendar.min,
             max: calendar.max,
-            settings: settings
+            settings: settings,
+            keyMove: {
+                40: 7, // Down
+                38: -7, // Up
+                39: 1, // Right
+                37: -1 // Left
+            },
+            formats: {
+                d: function( string ) {
+
+                    // If there's string, then get the digits length.
+                    // Otherwise return the selected date.
+                    return string ? getDigitsLength( string ) : this.DATE
+                },
+                dd: function( string ) {
+
+                    // If there's a string, then the length is always 2.
+                    // Otherwise return the selected date with a leading zero.
+                    return string ? 2 : leadZero( this.DATE )
+                },
+                ddd: function( string ) {
+
+                    // If there's a string, then get the length of the first word.
+                    // Otherwise return the short selected weekday.
+                    return string ? getFirstWordLength( string ) : settings.weekdaysShort[ this.DAY ]
+                },
+                dddd: function( string ) {
+
+                    // If there's a string, then get the length of the first word.
+                    // Otherwise return the full selected weekday.
+                    return string ? getFirstWordLength( string ) : settings.weekdaysFull[ this.DAY ]
+                },
+                m: function( string ) {
+
+                    // If there's a string, then get the length of the digits
+                    // Otherwise return the selected month with 0index compensation.
+                    return string ? getDigitsLength( string ) : this.MONTH + 1
+                },
+                mm: function( string ) {
+
+                    // If there's a string, then the length is always 2.
+                    // Otherwise return the selected month with 0index and leading zero.
+                    return string ? 2 : leadZero( this.MONTH + 1 )
+                },
+                mmm: function( string, dateObject ) {
+
+                    var collection = settings.monthsShort
+
+                    // If there's a string, get length of the relevant month from the short
+                    // months collection. Otherwise return the selected month from that collection.
+                    return string ? getWordLengthFromCollection( string, collection, dateObject ) : collection[ this.MONTH ]
+                },
+                mmmm: function( string, dateObject ) {
+
+                    var collection = settings.monthsFull
+
+                    // If there's a string, get length of the relevant month from the full
+                    // months collection. Otherwise return the selected month from that collection.
+                    return string ? getWordLengthFromCollection( string, collection, dateObject ) : collection[ this.MONTH ]
+                },
+                yy: function( string ) {
+
+                    // If there's a string, then the length is always 2.
+                    // Otherwise return the selected year by slicing out the first 2 digits.
+                    return string ? 2 : ( '' + this.YEAR ).slice( 2 )
+                },
+                yyyy: function( string ) {
+
+                    // If there's a string, then the length is always 4.
+                    // Otherwise return the selected year.
+                    return string ? 4 : this.YEAR
+                },
+
+                // Create an array by splitting the formatting string passed.
+                toArray: function( formatString ) { return formatString.split( /(d{1,4}|m{1,4}|y{4}|yy|!.)/g ) }
+            } //formats
         }
     } //CalendarPicker
 
@@ -398,7 +544,7 @@
             createMonthLabel = function( monthsCollection ) {
 
                 // If there's a need for a month selector
-                return createNode( STRING_DIV, monthsCollection[ calendar.VIEWSET.MONTH ], settings.klass.month )
+                return createNode( STRING_DIV, monthsCollection[ calendar.HIGHLIGHT.MONTH ], settings.klass.month )
             }, //createMonthLabel
 
 
@@ -406,7 +552,7 @@
             createYearLabel = function() {
 
                 // Otherwise just return the year focused
-                return createNode( STRING_DIV, calendar.VIEWSET.YEAR, settings.klass.year )
+                return createNode( STRING_DIV, calendar.HIGHLIGHT.YEAR, settings.klass.year )
             }, //createYearLabel
 
 
@@ -459,14 +605,14 @@
 
                         return [
                             createGroupOfNodes({
-                                min: DAYS_IN_WEEK * rowCounter - calendar.VIEWSET.DAY + 1,
+                                min: DAYS_IN_WEEK * rowCounter - calendar.HIGHLIGHT.DAY + 1,
                                 max: function() {
                                     return this.min + DAYS_IN_WEEK - 1
                                 },
                                 i: 1,
                                 node: 'td',
                                 item: function( timeDate ) {
-                                    timeDate = calendar.object([ calendar.VIEWSET.YEAR, calendar.VIEWSET.MONTH, timeDate + settings.firstDay ])
+                                    timeDate = calendar.object([ calendar.HIGHLIGHT.YEAR, calendar.HIGHLIGHT.MONTH, timeDate + settings.firstDay ])
                                     return [
                                         createNode(
                                             STRING_DIV,
@@ -481,7 +627,7 @@
                                                     klasses.push( settings.klass.highlighted )
                                                 }
 
-                                                if ( calendar.VIEWSET.MONTH == timeDate.MONTH ) {
+                                                if ( calendar.HIGHLIGHT.MONTH == timeDate.MONTH ) {
                                                     klasses.push( settings.klass.infocus )
                                                 }
                                                 else {
@@ -623,7 +769,28 @@
      * Create a time object from a format.
      */
     CalendarPicker.prototype.parse = function( format, string ) {
-        return this.object( getReformattedString( format, string ).split( '/' ) )
+
+        var parsingObject = {},
+            formattings = this.formats
+
+        // Convert the format into an array and then map through it.
+        formattings.toArray( format ).map( function( label ) {
+
+            // The format length is from the formatting function or the label
+            // length without the escaping exclamation (!) mark.
+            var formatLength = formattings[ label ] ? formattings[ label ]( string, parsingObject ) : label.replace( /^!/, '' ).length
+
+            // If there's a format length, split the string up to the format length.
+            // Then add it to the parsing object with appropriate label.
+            if ( formattings[ label ] ) {
+                parsingObject[ label ] = string.substr( 0, formatLength )
+            }
+
+            // Update the time string as the substring from format length to end.
+            string = string.substr( formatLength )
+        })
+
+        return this.object([ parsingObject.yyyy || parsingObject.yy, parsingObject.mm || parsingObject.m, parsingObject.dd || parsingObject.d ])
     }
 
 
@@ -686,7 +853,7 @@
 
             // If there's a format for the hidden input element, create the element
             // using the name of the original input plus suffix. Otherwise set it to null.
-            ELEMENT_HIDDEN = SETTINGS.formatSubmit ? $( '<input type=hidden name=' + ELEMENT.name + SETTINGS.hiddenSuffix + ( PICKER.SELECT.length ? ' value=' + formatObjectToString( SETTINGS.formatSubmit, PICKER.SELECT[ 0 ] ) : '' ) + '>' )[ 0 ] : null,
+            ELEMENT_HIDDEN = SETTINGS.formatSubmit ? $( '<input type=hidden name=' + ELEMENT.name + SETTINGS.hiddenSuffix + ( PICKER.SELECT.length ? ' value=' + formatObjectToString( PICKER.formats, SETTINGS.formatSubmit, PICKER.SELECT[ 0 ] ) : '' ) + '>' )[ 0 ] : null,
 
 
             // Create the picker holder with a new wrapped picker and bind the events.
@@ -757,7 +924,7 @@
 
                             // If there's a hidden input, update the value with formatting or clear it
                             if ( ELEMENT_HIDDEN ) {
-                                ELEMENT_HIDDEN.value = ELEMENT.value ? formatObjectToString( SETTINGS.formatSubmit, PICKER.SELECT[ 0 ] ) : ''
+                                ELEMENT_HIDDEN.value = ELEMENT.value ? formatObjectToString( PICKER.formats, SETTINGS.formatSubmit, PICKER.SELECT[ 0 ] ) : ''
                             }
                         },
                         keydown: function() {
@@ -791,8 +958,8 @@
                         }
                     }).after( [ $HOLDER, ELEMENT_HIDDEN ] )
 
-                    // Trigger the on start event within scope of the picker.
-                    triggerFunction( PICKER.onStart, PICKER, [ $HOLDER ] )
+                    // Trigger the "render" event within scope of the picker.
+                    triggerFunction( PICKER.onRender, PICKER, [ $HOLDER ] )
 
                     return P
                 }, //init
@@ -838,12 +1005,31 @@
                             keycodeToMove = PICKER.keyMove[ keycode ]
 
 
-                        // On escape, focus back onto the element and close the picker
+                        // On escape, focus back onto the element and close the picker.
                         if ( keycode == 27 ) {
                             ELEMENT.focus()
                             P.close()
                         }
 
+                        // Check if the target is the element and there's a key movement or enter key is pressed.
+                        else if ( event.target == ELEMENT && ( keycodeToMove || keycode == 13 ) ) {
+
+                            // Prevent the default action to stop it from moving the page.
+                            event.preventDefault()
+
+                            // If the keycode translates to a move, superficially set the time.
+                            // * Truthy second argument makes it a superficial selection.
+                            if ( keycodeToMove ) {
+                                console.log( keycodeToMove )
+                                P.set( keycodeToMove * SETTINGS.interval + PICKER.HIGHLIGHT.TIME, 1 )
+                            }
+
+                            // Otherwise it's the enter key so set the highlighted time and then close it.
+                            else {
+                                P.set( PICKER.HIGHLIGHT ).close()
+                            }
+
+                        } //if ELEMENT
                     })
 
                     // Trigger the on open event within scope of the picker.
@@ -902,8 +1088,8 @@
                     // Otherwise set the validated object as selected.
                     else {
 
-                        // Create a time object.
-                        var timeObject = PICKER.object( timePassed )
+                        // Validate and create a time object.
+                        var timeObject = PICKER.validate( timePassed )
 
                         // Stop if there isn't a valid object.
                         if ( isNaN( timeObject.TIME ) ) {
@@ -917,7 +1103,7 @@
                             PICKER.SELECT = [ timeObject ]
 
                             // Update the element value
-                            $ELEMENT.val( formatObjectToString( SETTINGS.format, timeObject ) ).trigger( 'change' )
+                            $ELEMENT.val( formatObjectToString( PICKER.formats, SETTINGS.format, timeObject ) ).trigger( 'change' )
                         }
 
                         // Highlight the time object
@@ -969,7 +1155,12 @@
          * Create a new picker within the holder.
          */
         function createNewPicker() {
+
+            // Insert a new picker in the holder.
             $HOLDER.html( createWrappedPicker() )
+
+            // Trigger the "render" event within scope of the picker.
+            triggerFunction( PICKER.onRender, PICKER, [ $HOLDER ] )
         } //createNewPicker
 
 
@@ -1076,96 +1267,18 @@
 
 
     /**
-     * Get the time in various formats
+     * If the second character is a digit, length is 2 otherwise 1.
      */
-    var timeFormattingObject = {
-
-        h: function( string ) {
-
-            // If there's string, then get the digits length.
-            // Otherwise return the selected hour in "standard" format.
-            return string ? getDigitsLength( string ) : this.HOUR % HOURS_TO_NOON || HOURS_TO_NOON
-        },
-
-        hh: function( string ) {
-
-            // If there's a string, then the length is always 2.
-            // Otherwise return the selected hour in "standard" format with a leading zero.
-            return string ? 2 : leadZero( this.HOUR % HOURS_TO_NOON || HOURS_TO_NOON )
-        },
-
-        H: function( string ) {
-
-            // If there's string, then get the digits length.
-            // Otherwise return the selected hour in "military" format as a string.
-            return string ? getDigitsLength( string ) : '' + this.HOUR
-        },
-
-        HH: function( string ) {
-
-            // If there's string, then get the digits length.
-            // Otherwise return the selected hour in "military" format with a leading zero.
-            return string ? getDigitsLength( string ) : leadZero( this.HOUR )
-        },
-
-        i: function( string ) {
-
-            // If there's a string, then the length is always 2.
-            // Otherwise return the selected minutes.
-            return string ? 2 : leadZero( this.MINS )
-        },
-
-        a: function( string ) {
-
-            // If there's a string, then the length is always 4.
-            // Otherwise check if it's more than "noon" and return either am/pm.
-            return string ? 4 : MINUTES_IN_DAY / 2 > this.TIME ? 'a.m.' : 'p.m.'
-        },
-
-        A: function( string ) {
-
-            // If there's a string, then the length is always 2.
-            // Otherwise check if it's more than "noon" and return either am/pm.
-            return string ? 2 : MINUTES_IN_DAY / 2 > this.TIME ? 'AM' : 'PM'
-        },
-
-        // Create an array by splitting the formatting string passed.
-        toArray: function( formatString ) { return formatString.split( /(h{1,2}|H{1,2}|i|a|A|!.)/g ) }
-    }
-
-    // If the second character is a digit, length is 2 otherwise 1.
     function getDigitsLength( string ) {
         return ( /\d/ ).test( string[ 1 ] ) ? 2 : 1
     }
 
-    function getReformattedString( format, timeString ) {
-
-        return timeFormattingObject.toArray( format ).map( function( value ) {
-
-            // If the formatting length function exists, invoke it.
-            // Otherwise it's the length of the formatting item being mapped
-            // (while removing escaped characters).
-            var formattingLength = timeFormattingObject[ value ] ? timeFormattingObject[ value ]( timeString ) : value.replace( /^!/, '' ).length
-
-            // If there's a format length,
-            if ( formattingLength ) {
-
-                // Split the time string up to the format length.
-                var tempString = timeString.substr( 0, formattingLength )
-
-                // Update the time string as the substring from format length to end.
-                timeString = timeString.substr( formattingLength )
-
-                return tempString
-            }
-
-            return value.replace( /^!/, '' )
-        }).join( '' )
-    }
-
-    function formatObjectToString( format, timeObject ) {
-        return timeFormattingObject.toArray( format ).map( function( value ) {
-            return triggerFunction( timeFormattingObject[ value ], timeObject ) || value.replace( /^!/, '' )
+    /**
+     * Format an object into a string using the formatting options.
+     */
+    function formatObjectToString( formattings, format, itemObject ) {
+        return formattings.toArray( format ).map( function( value ) {
+            return triggerFunction( formattings[ value ], itemObject ) || value.replace( /^!/, '' )
         }).join( '' )
     }
 
