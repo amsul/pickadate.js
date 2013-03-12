@@ -185,6 +185,7 @@ if ( ![].indexOf ) {
     function ClockPicker( settings ) {
         var clock = this
         return {
+            div: ':',
             holder: clock.holder,
             object: clock.object,
             validate: clock.validate,
@@ -197,27 +198,21 @@ if ( ![].indexOf ) {
             settings: settings,
             keyMove: {
 
-                // Down
-                40: 7,
-
-                // Up
-                38: -7,
-
-                // Right
-                39: 1,
-
-                // Left
-                37: -1
-            }, //keyMove
-            onRender: function( $picker ) {
-                if ( !this.VIEWSET ) throw "No viewset"
-                $picker[ 0 ].scrollTop = $picker.find( '.' + settings.klass.viewset ).position().top - ~~( $picker[ 0 ].clientHeight / 4 )
+                40: 7, // Down
+                38: -7, // Up
+                39: 1, // Right
+                37: -1 // Left
+            },
+            onStart: function( $picker ) {
+                // if ( !this.VIEWSET ) throw "No viewset"
+                // $picker[ 0 ].scrollTop = $picker.find( '.' + settings.klass.viewset ).position().top - ~~( $picker[ 0 ].clientHeight / 4 )
+                $picker[ 0 ].scrollTop = $picker.find( '.' + settings.klass.selected ).position().top - ~~( $picker[ 0 ].clientHeight / 4 )
             },
             onOpen: function() {
-                console.log( 'openeed' )
+                // console.log( 'openeed' )
             },
             onClose: function() {
-                console.log( 'closed' )
+                // console.log( 'closed' )
             }
         }
     } //ClockPicker
@@ -239,18 +234,18 @@ if ( ![].indexOf ) {
             max: clock.max().TIME,
             i: clock.settings.interval,
             node: 'li',
-            item: function( timeMinutes ) {
-                timeMinutes = timeMinutes % MINUTES_IN_DAY
+            item: function( loopedTime ) {
+                loopedTime = clock.object( loopedTime % MINUTES_IN_DAY )
                 return [
-                    formatObjectToString( settings.format, clock.object( timeMinutes ) ),
-                    (function( klasses ) {
-
-                        if ( clock.HIGHLIGHT.length && clock.HIGHLIGHT[ 0 ].TIME == timeMinutes ) {
-                            klasses.push( settings.klass.highlighted )
-                        }
+                    formatObjectToString( settings.format, loopedTime ),
+                    (function( klasses, timeMinutes ) {
 
                         if ( clock.SELECT.length && clock.SELECT[ 0 ].TIME == timeMinutes ) {
                             klasses.push( settings.klass.selected )
+                        }
+
+                        if ( clock.HIGHLIGHT && clock.HIGHLIGHT.TIME == timeMinutes ) {
+                            klasses.push( settings.klass.highlighted )
                         }
 
                         if ( clock.VIEWSET && clock.VIEWSET.TIME == timeMinutes ) {
@@ -262,8 +257,8 @@ if ( ![].indexOf ) {
                         }
 
                         return klasses.join( ' ' )
-                    })([ settings.klass.listItem ]),
-                    'data-pick=' + timeMinutes
+                    })([ settings.klass.listItem ], loopedTime.TIME ),
+                    'data-pick=' + loopedTime.HOUR + clock.div + loopedTime.MINS
                 ]
             }
         }), settings.klass.list )
@@ -461,8 +456,31 @@ if ( ![].indexOf ) {
      * Create a time object from a format.
      */
     ClockPicker.prototype.parse = function( format, string ) {
-        return this.object( getReformattedString( format, string ).split( ':' ) )
-    }
+
+        var parsingObject = {}
+
+        timeFormattingObject.toArray( format ).map( function( label ) {
+
+            // The format length is from the formatting function or the label
+            // length without the escaping exclamation (!) mark.
+            var formatLength = timeFormattingObject[ label ] ? timeFormattingObject[ label ]( string ) : label.replace( /^!/, '' ).length
+
+            // If there's a format length, split the string up to the format length.
+            // Then add it to the parsing object with appropriate label.
+            if ( timeFormattingObject[ label ] ) {
+                parsingObject[ label ] = string.substr( 0, formatLength )
+            }
+
+            // Update the time string as the substring from format length to end.
+            string = string.substr( formatLength )
+        })
+
+        return parsingObject.H || parsingObject.HH || (
+
+            +( parsingObject.h || parsingObject.hh ) + ( /^p/i.test( parsingObject.A || parsingObject.a ) ? 12 : 0 )
+
+        ) * MINUTES_IN_HOUR + ( +parsingObject.i )
+    } //ClockPicker.prototype.parse
 
 
 
@@ -592,12 +610,12 @@ if ( ![].indexOf ) {
                                             timeDate.DATE,
                                             (function( klasses ) {
 
-                                                if ( calendar.HIGHLIGHT.length && calendar.HIGHLIGHT[ 0 ].TIME == timeDate.TIME ) {
-                                                    klasses.push( settings.klass.highlighted )
-                                                }
-
                                                 if ( calendar.SELECT.length && calendar.SELECT[ 0 ].TIME == timeDate.TIME ) {
                                                     klasses.push( settings.klass.selected )
+                                                }
+
+                                                if ( calendar.HIGHLIGHT && calendar.HIGHLIGHT.TIME == timeDate.TIME ) {
+                                                    klasses.push( settings.klass.highlighted )
                                                 }
 
                                                 if ( calendar.VIEWSET.MONTH == timeDate.MONTH ) {
@@ -762,6 +780,88 @@ if ( ![].indexOf ) {
     var Picker = function( $ELEMENT, SETTINGS, FUNK ) {
 
         var
+            // Shorthand for the classes
+            CLASSES = SETTINGS.klass,
+
+
+            // The element node
+            ELEMENT = (function( element ) {
+
+                // Confirm the focus state, convert the element into
+                // a regular text input to remove user-agent stylings,
+                // and then set it as readonly to prevent keyboard popup
+                element.autofocus = ( element == document.activeElement )
+                element.type = 'text'
+                element.readOnly = true
+                return element
+            })( $ELEMENT[ 0 ] ), //ELEMENT
+
+
+            // The picker object
+            PICKER = (function( pickerObject, elementDataValue ) {
+
+                pickerObject.ID = ~~( Math.random() * 1e9 )
+                pickerObject.I = SETTINGS.interval || 1
+                pickerObject.DISABLE = []
+
+                pickerObject.SELECT = [
+                    pickerObject.validate(
+                        pickerObject.parse( elementDataValue ? SETTINGS.formatSubmit : SETTINGS.format, elementDataValue || ELEMENT.value )
+                    )
+                ]
+
+                // Add a default superficial selection as the "selected" item or the "default" one.
+                pickerObject.HIGHLIGHT = pickerObject.SELECT[ 0 ] || pickerObject.validate()
+
+                // // If there is an item value selected, set it as the viewset
+                // pickerObject.VIEWSET = pickerObject.SELECT[ 0 ] || pickerObject.validate()
+
+                // Return the picker object
+                return pickerObject
+            })( new FUNK( SETTINGS ), $ELEMENT.data( 'value' ) ), //PICKER
+
+
+            // If there's a format for the hidden input element, create the element
+            // using the name of the original input plus suffix. Otherwise set it to null.
+            ELEMENT_HIDDEN = SETTINGS.formatSubmit ? $( '<input type=hidden name=' + ELEMENT.name + SETTINGS.hiddenSuffix + ( PICKER.SELECT.length ? ' value=' + formatObjectToString( SETTINGS.formatSubmit, PICKER.SELECT[ 0 ] ) : '' ) + '>' )[ 0 ] : null,
+
+
+            // Create the picker holder with a new wrapped picker and bind the events.
+            $HOLDER = $( createNode( STRING_DIV, createWrappedPicker(), CLASSES.holder ) ).on({
+
+                // When something within the holder is focused, make it appear so.
+                focusin: function( event ) {
+
+                    // Remove the holder "focused" state from the holder.
+                    $HOLDER.removeClass( CLASSES.focused )
+
+                    // Prevent the event from propagating to the doc.
+                    event.stopPropagation()
+                },
+
+                // When something within the holder is clicked, handle the various event.
+                click: function( event ) {
+
+                    var target = event.target,
+                        targetData = $( target ).data()
+
+                    // Check if the click is within the holder.
+                    if ( $HOLDER.find( target ).length ) {
+
+                        // Stop it from propagating to the doc.
+                        event.stopPropagation()
+
+                        // ELEMENT.focus()
+
+                        // Set and close the picker if something is getting picked.
+                        if ( targetData.pick ) {
+                            P.set( targetData.pick.split( PICKER.div ) ).close()
+                        }
+                    }
+                }
+            }),
+
+
             // Pseudo picker constructor
             Picker = function() {},
 
@@ -789,6 +889,13 @@ if ( ![].indexOf ) {
 
                             // Add the "focused" state onto the holder.
                             $HOLDER.addClass( CLASSES.focused )
+                        },
+                        change: function() {
+
+                            // If there's a hidden input, update the value with formatting or clear it
+                            if ( ELEMENT_HIDDEN ) {
+                                ELEMENT_HIDDEN.value = ELEMENT.value ? formatObjectToString( SETTINGS.formatSubmit, PICKER.SELECT[ 0 ] ) : ''
+                            }
                         },
                         keydown: function() {
 
@@ -821,8 +928,8 @@ if ( ![].indexOf ) {
                         }
                     }).after( [ $HOLDER, ELEMENT_HIDDEN ] )
 
-                    // Trigger the on render event within scope of the picker.
-                    triggerFunction( PICKER.onRender, PICKER, [ $HOLDER ] )
+                    // Trigger the on start event within scope of the picker.
+                    triggerFunction( PICKER.onStart, PICKER, [ $HOLDER ] )
 
                     return P
                 }, //init
@@ -914,99 +1021,53 @@ if ( ![].indexOf ) {
                  * Clear the values
                  */
                 clear: function() {
-
-                    console.log( 'clear the damn values' )
-                }
-
-            }, //Picker.prototype
+                    $ELEMENT.val( '' ).trigger( 'change' )
+                    return P
+                }, //clear
 
 
-            // The picker object
-            PICKER = (function( pickerObject, dataValue ) {
+                /**
+                 * Set the values
+                 */
+                set: function( timePassed, isSuperficial ) {
 
-                pickerObject.ID = ~~( Math.random() * 1e9 )
-                pickerObject.I = SETTINGS.interval || 1
-                pickerObject.DISABLE = []
-                pickerObject.SELECT = []
-                pickerObject.HIGHLIGHT = []
-
-
-                // If there's a `data-value`, set the value while parsing with the submit format and then validating.
-                if ( dataValue ) {
-                    pickerObject.SELECT.push( pickerObject.validate( pickerObject.parse( SETTINGS.formatSubmit, dataValue ) ) )
-                }
-
-
-                // Add a default superficial selection as the "selected" item or the "default" one.
-                pickerObject.HIGHLIGHT.push( pickerObject.SELECT[ 0 ] || pickerObject.validate() )
-
-                // If there is an item value selected, set it as the viewset
-                pickerObject.VIEWSET = pickerObject.SELECT[ 0 ] || pickerObject.validate()
-
-
-                return pickerObject
-            })( new FUNK( SETTINGS ), $ELEMENT.data( 'value' ) ), //PICKER
-
-
-            // The element node
-            ELEMENT = (function( element ) {
-
-                // Confirm the focus state, convert the element into
-                // a regular text input to remove user-agent stylings,
-                // and then set it as readonly to prevent keyboard popup
-                element.autofocus = ( element == document.activeElement )
-                element.type = 'text'
-                element.readOnly = true
-                return element
-            })( $ELEMENT[ 0 ] ), //ELEMENT
-
-
-            // If there's a format for the hidden input element, create the element
-            // using the name of the original input plus suffix and update the value
-            // with whatever is entered in the input on load. Otherwise set it to null.
-            ELEMENT_HIDDEN = SETTINGS.formatSubmit ?
-
-                $( '<input type=hidden name=' + ELEMENT.name + SETTINGS.hiddenSuffix + '>' ).val(
-
-                    // If there is a date to select, set it
-                    PICKER.SELECT.length ?
-
-                        // If there's a `data-value`, parse it with the submit format.
-                        "PICKER.parse( SETTINGS.formatSubmit, $ELEMENT.data( 'value' ) )" :
-
-                        // Otherwise leave it empty.
-                        ''
-                )[ 0 ] :
-                null,
-
-
-            // The classes
-            CLASSES = SETTINGS.klass,
-
-
-            // Create the picker holder with a new wrapped picker and bind the events.
-            $HOLDER = $( createNode( STRING_DIV, createWrappedPicker(), CLASSES.holder ) ).on({
-
-                // When something within the holder is focused, make it appear so.
-                focusin: function( event ) {
-
-                    // Remove the holder "focused" state from the holder.
-                    $HOLDER.removeClass( CLASSES.focused )
-
-                    // Prevent the event from propagating to the doc.
-                    event.stopPropagation()
-                },
-
-                // When something within the holder is clicked, handle the various event.
-                click: function( event ) {
-
-                    // If the click is within the holder, stop it from propagating to the doc.
-                    if ( $HOLDER.find( event.target ).length ) {
-                        event.stopPropagation()
-                        // ELEMENT.focus()
+                    // Clear the values if there is no time.
+                    if ( !timePassed ) {
+                        P.clear()
                     }
-                }
-            })
+
+                    // Otherwise set the validated object as selected.
+                    else {
+
+                        // Create a time object.
+                        var timeObject = PICKER.object( timePassed )
+
+                        // Stop if there isn't a valid object.
+                        if ( isNaN( timeObject.TIME ) ) {
+                            return P
+                        }
+
+                        // Check it's not just a superficial selection
+                        if ( !isSuperficial ) {
+
+                            // Select the time object
+                            PICKER.SELECT = [ timeObject ]
+
+                            // Update the element value
+                            $ELEMENT.val( formatObjectToString( SETTINGS.format, timeObject ) ).trigger( 'change' )
+                        }
+
+                        // Highlight the time object
+                        PICKER.HIGHLIGHT = timeObject
+
+                        // Then render a new picker
+                        createNewPicker()
+                    }
+
+                    return P
+                } //set
+
+            } //Picker.prototype
 
 
 
@@ -1039,6 +1100,14 @@ if ( ![].indexOf ) {
                 CLASSES.frame
             ) //endreturn
         } //createWrappedPicker
+
+
+        /**
+         * Create a new picker within the holder.
+         */
+        function createNewPicker() {
+            $HOLDER.html( createWrappedPicker() )
+        } //createNewPicker
 
 
         // Return a new initialized picker
