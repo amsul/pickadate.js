@@ -11,6 +11,8 @@
 /**
  * Todo:
  * – Fix `validate` methods. Selection goes outside bounds.
+ * – Fix `viewset`. Goes to prev/next months.
+ * – Min & max.
  */
 
 
@@ -30,6 +32,7 @@
         HOURS_TO_NOON = 12,
         MINUTES_IN_HOUR = 60,
         MINUTES_IN_DAY = HOURS_IN_DAY * MINUTES_IN_HOUR,
+        MILLISECONDS_IN_DAY = MINUTES_IN_DAY * 60000,
         DAYS_IN_WEEK = 7,
         WEEKS_IN_CALENDAR = 6,
 
@@ -37,8 +40,6 @@
         STRING_PREFIX_PICKER = 'pickadate__',
 
         $document = $( document )
-
-
 
 
 
@@ -118,8 +119,6 @@
                 toArray: function( formatString ) { return formatString.split( /(h{1,2}|H{1,2}|i|a|A|!.)/g ) }
             },
             onRender: function( $picker ) {
-                // if ( !this.VIEWSET ) throw "No viewset"
-                // $picker[ 0 ].scrollTop = $picker.find( '.' + settings.klass.viewset ).position().top - ~~( $picker[ 0 ].clientHeight / 4 )
                 $picker[ 0 ].scrollTop = $picker.find( '.' + settings.klass.highlighted ).position().top - ~~( $picker[ 0 ].clientHeight / 4 )
             },
             onOpen: function() {
@@ -162,9 +161,9 @@
                             klasses.push( settings.klass.highlighted )
                         }
 
-                        // if ( clock.VIEWSET && clock.VIEWSET.TIME == timeMinutes ) {
-                        //     klasses.push( settings.klass.viewset )
-                        // }
+                        if ( clock.VIEWSET && clock.VIEWSET.TIME == timeMinutes ) {
+                            klasses.push( settings.klass.viewset )
+                        }
 
                         if ( toDisable && clock.disable( clock.object( timeMinutes ) ).length ) {
                             klasses.push( settings.klass.disabled )
@@ -439,10 +438,10 @@
             max: calendar.max,
             settings: settings,
             keyMove: {
-                40: 7, // Down
-                38: -7, // Up
-                39: 1, // Right
-                37: -1 // Left
+                40: 7 * MILLISECONDS_IN_DAY, // Down
+                38: -7 * MILLISECONDS_IN_DAY, // Up
+                39: 1 * MILLISECONDS_IN_DAY, // Right
+                37: -1 * MILLISECONDS_IN_DAY // Left
             },
             formats: {
                 d: function( string ) {
@@ -544,7 +543,7 @@
             createMonthLabel = function( monthsCollection ) {
 
                 // If there's a need for a month selector
-                return createNode( STRING_DIV, monthsCollection[ calendar.HIGHLIGHT.MONTH ], settings.klass.month )
+                return createNode( STRING_DIV, monthsCollection[ calendar.VIEWSET.MONTH ], settings.klass.month )
             }, //createMonthLabel
 
 
@@ -552,7 +551,7 @@
             createYearLabel = function() {
 
                 // Otherwise just return the year focused
-                return createNode( STRING_DIV, calendar.HIGHLIGHT.YEAR, settings.klass.year )
+                return createNode( STRING_DIV, calendar.VIEWSET.YEAR, settings.klass.year )
             }, //createYearLabel
 
 
@@ -605,14 +604,14 @@
 
                         return [
                             createGroupOfNodes({
-                                min: DAYS_IN_WEEK * rowCounter - calendar.HIGHLIGHT.DAY + 1,
+                                min: DAYS_IN_WEEK * rowCounter - calendar.VIEWSET.DAY + 1,
                                 max: function() {
                                     return this.min + DAYS_IN_WEEK - 1
                                 },
                                 i: 1,
                                 node: 'td',
                                 item: function( timeDate ) {
-                                    timeDate = calendar.object([ calendar.HIGHLIGHT.YEAR, calendar.HIGHLIGHT.MONTH, timeDate + settings.firstDay ])
+                                    timeDate = calendar.object([ calendar.VIEWSET.YEAR, calendar.VIEWSET.MONTH, timeDate + settings.firstDay ])
                                     return [
                                         createNode(
                                             STRING_DIV,
@@ -627,7 +626,7 @@
                                                     klasses.push( settings.klass.highlighted )
                                                 }
 
-                                                if ( calendar.HIGHLIGHT.MONTH == timeDate.MONTH ) {
+                                                if ( calendar.VIEWSET.MONTH == timeDate.MONTH ) {
                                                     klasses.push( settings.klass.infocus )
                                                 }
                                                 else {
@@ -843,8 +842,8 @@
                 // Add a default superficial selection as the "selected" item or the "default" one.
                 pickerObject.HIGHLIGHT = pickerObject.SELECT[ 0 ] || pickerObject.validate()
 
-                // // If there is an item value selected, set it as the viewset
-                // pickerObject.VIEWSET = pickerObject.SELECT[ 0 ] || pickerObject.validate()
+                // If there is an item value selected, set it as the viewset
+                pickerObject.VIEWSET = pickerObject.HIGHLIGHT || pickerObject.validate()
 
                 // Return the picker object
                 return pickerObject
@@ -1020,8 +1019,7 @@
                             // If the keycode translates to a move, superficially set the time.
                             // * Truthy second argument makes it a superficial selection.
                             if ( keycodeToMove ) {
-                                console.log( keycodeToMove )
-                                P.set( keycodeToMove * SETTINGS.interval + PICKER.HIGHLIGHT.TIME, 1 )
+                                P.set( keycodeToMove * PICKER.I + PICKER.HIGHLIGHT.TIME, 1 )
                             }
 
                             // Otherwise it's the enter key so set the highlighted time and then close it.

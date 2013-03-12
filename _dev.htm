@@ -40,7 +40,7 @@
         <form>
             <fieldset>
                 <h3><label for="input_01">Pick a date. Go ahead...</label></h3>
-                <input id="input_01" class="datepicker" name="date" type="text" valuee="10:31 AM" data-valuee="02:00" value="14 January, 2012" data-valuee="2012/05/22">
+                <input id="input_01" class="datepicker" name="date" type="text" value="10:31 AM" data-valuee="02:00" valuee="14 January, 2012" data-valuee="2012/05/22">
                 <br><br><br><br><br>
                 <input type="submit">
             </fieldset>
@@ -62,12 +62,12 @@
     <script src="build/pickadate.js"></script>
 
     <script type="text/javascript">
-        var $input = $( '.datepicker' ).pickadate({
+        // var $input = $( '.datepicker' ).pickadate({
             // firstDay: 1,
             // format: 'he!y!y!y!y yyyy,mm,dd',
             // monthSelector: true,
             // yearSelector: true,
-        // var $input = $( '.datepicker' ).pickatime({
+        var $input = $( '.datepicker' ).pickatime({
 
             // format: '<b>h</b>:i <!i>a</!i>',
             // formatSubmit: 'HH:i',
