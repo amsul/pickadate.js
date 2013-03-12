@@ -147,9 +147,11 @@ if ( ![].indexOf ) {
 
 /**
  * Todo:
+ * – Do: `data-value` stuff with `formatSubmit`
  * – Fix `validate` methods. Selection goes outside bounds.
  * – Fix `viewset`. Goes to prev/next months.
  * – Min & max.
+ * – WAI-ARIA support
  */
 
 
@@ -507,6 +509,8 @@ if ( ![].indexOf ) {
      */
     ClockPicker.prototype.parse = function( format, string ) {
 
+        if ( !format ) throw "Need a format"
+
         var parsingObject = {},
             formattings = this.formats
 
@@ -527,11 +531,12 @@ if ( ![].indexOf ) {
             string = string.substr( formatLength )
         })
 
-        return parsingObject.H || parsingObject.HH || (
+        return +parsingObject.i + MINUTES_IN_HOUR * (
 
-            +( parsingObject.h || parsingObject.hh ) + ( /^p/i.test( parsingObject.A || parsingObject.a ) ? 12 : 0 )
+            +( parsingObject.H || parsingObject.HH ) ||
 
-        ) * MINUTES_IN_HOUR + ( +parsingObject.i )
+            ( +( parsingObject.h || parsingObject.hh ) + ( /^p/i.test( parsingObject.A || parsingObject.a ) ? 12 : 0 ) )
+        )
     } //ClockPicker.prototype.parse
 
 
@@ -566,6 +571,7 @@ if ( ![].indexOf ) {
             }
 
         return {
+            div: '/',
             holder: calendar.holder,
             object: calendar.object,
             validate: calendar.validate,
@@ -748,7 +754,10 @@ if ( ![].indexOf ) {
                                 i: 1,
                                 node: 'td',
                                 item: function( timeDate ) {
+
+                                    // Convert the time date from a relative date to a date object
                                     timeDate = calendar.object([ calendar.VIEWSET.YEAR, calendar.VIEWSET.MONTH, timeDate + settings.firstDay ])
+
                                     return [
                                         createNode(
                                             STRING_DIV,
@@ -772,7 +781,7 @@ if ( ![].indexOf ) {
 
                                                 return klasses.join( ' ' )
                                             })([ settings.klass.day ]),
-                                            'data-pick=' + timeDate.YEAR + '/' + ( timeDate.MONTH + 1 ) + '/' + timeDate.DATE
+                                            'data-pick=' + timeDate.YEAR + '/' + timeDate.MONTH + '/' + timeDate.DATE
                                         )
                                     ] //endreturn
                                 }
@@ -970,6 +979,7 @@ if ( ![].indexOf ) {
                 pickerObject.I = SETTINGS.interval || 1
                 pickerObject.DISABLE = []
 
+                // The default selection is based on the `value` or `data-value` of the element.
                 pickerObject.SELECT = [
                     pickerObject.validate(
                         pickerObject.parse( elementDataValue ? SETTINGS.formatSubmit : SETTINGS.format, elementDataValue || ELEMENT.value )
@@ -1043,62 +1053,91 @@ if ( ![].indexOf ) {
                 /**
                  * Initialize everything
                  */
-                init: function() {
+                start: function() {
 
                     // Bind the events on the `input` element and then
                     // insert the holder and hidden element after the element.
-                    $ELEMENT.on({
-                        'focus click': function() {
+                    $ELEMENT.on( 'focus.P' + PICKER.ID + ' click.P' + PICKER.ID, function() {
 
-                            // Open the calendar.
-                            P.open()
+                        // Open the calendar.
+                        P.open()
 
-                            // Add the "focused" state onto the holder.
-                            $HOLDER.addClass( CLASSES.focused )
-                        },
-                        change: function() {
+                        // Add the "focused" state onto the holder.
+                        $HOLDER.addClass( CLASSES.focused )
 
-                            // If there's a hidden input, update the value with formatting or clear it
-                            if ( ELEMENT_HIDDEN ) {
-                                ELEMENT_HIDDEN.value = ELEMENT.value ? formatObjectToString( PICKER.formats, SETTINGS.formatSubmit, PICKER.SELECT[ 0 ] ) : ''
+                    }).on( 'change.P' + PICKER.ID, function() {
+
+                        // If there's a hidden input, update the value with formatting or clear it
+                        if ( ELEMENT_HIDDEN ) {
+                            ELEMENT_HIDDEN.value = ELEMENT.value ? formatObjectToString( PICKER.formats, SETTINGS.formatSubmit, PICKER.SELECT[ 0 ] ) : ''
+                        }
+
+                    }).on( 'keydown.P' + PICKER.ID, function() {
+
+                        var
+                            // Grab the keycode
+                            keycode = event.keyCode,
+
+                            // Check if one of the delete keys was pressed
+                            isKeycodeDelete = keycode == 8 || keycode == 46
+
+                        // Check if delete was pressed or the calendar is closed and there is a key movement
+                        if ( isKeycodeDelete || !PICKER.isOpen && PICKER.keyMove[ keycode ] ) {
+
+                            // Prevent it from moving the page.
+                            event.preventDefault()
+
+                            // Prevent it from bubbling to doc.
+                            event.stopPropagation()
+
+                            // If backspace was pressed, clear the values and close the picker
+                            if ( isKeycodeDelete ) {
+                                P.clear().close()
                             }
-                        },
-                        keydown: function() {
 
-                            var
-                                // Grab the keycode
-                                keycode = event.keyCode,
-
-                                // Check if one of the delete keys was pressed
-                                isKeycodeDelete = keycode == 8 || keycode == 46
-
-                            // Check if delete was pressed or the calendar is closed and there is a key movement
-                            if ( isKeycodeDelete || !PICKER.isOpen && PICKER.keyMove[ keycode ] ) {
-
-                                // Prevent it from moving the page.
-                                event.preventDefault()
-
-                                // Prevent it from bubbling to doc.
-                                event.stopPropagation()
-
-                                // If backspace was pressed, clear the values and close the picker
-                                if ( isKeycodeDelete ) {
-                                    P.clear().close()
-                                }
-
-                                // Otherwise open the calendar
-                                else {
-                                    P.open()
-                                }
+                            // Otherwise open the calendar
+                            else {
+                                P.open()
                             }
                         }
-                    }).after( [ $HOLDER, ELEMENT_HIDDEN ] )
+
+                    }).after([ $HOLDER, ELEMENT_HIDDEN ])
+
+                    // Trigger the "start" event within scope of the picker.
+                    triggerFunction( PICKER.onStart, PICKER, [ $HOLDER ] )
 
                     // Trigger the "render" event within scope of the picker.
                     triggerFunction( PICKER.onRender, PICKER, [ $HOLDER ] )
 
                     return P
-                }, //init
+                }, //start
+
+
+                /**
+                 * Destroy everything
+                 */
+                stop: function() {
+
+                    // Unbind the events on the `input` element.
+                    $ELEMENT.off( '.P' + PICKER.ID )
+
+                    // Restore the element state
+                    ELEMENT.type = 'need this type'
+                    ELEMENT.readOnly = false
+
+                    // Remove the holder.
+                    $HOLDER.remove()
+
+                    // Remove the hidden field.
+                    if ( ELEMENT_HIDDEN ) {
+                        ELEMENT_HIDDEN.parentNode.removeChild( ELEMENT_HIDDEN )
+                    }
+
+                    // Trigger the "stop" event within scope of the picker.
+                    triggerFunction( PICKER.onStop, PICKER, [ $HOLDER ] )
+
+                    return P
+                }, //stop
 
 
                 /**
@@ -1300,7 +1339,7 @@ if ( ![].indexOf ) {
 
 
         // Return a new initialized picker
-        return new P.init()
+        return new P.start()
     } //Picker
 
 
