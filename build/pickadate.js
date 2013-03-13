@@ -171,7 +171,6 @@ if ( ![].indexOf ) {
         HOURS_TO_NOON = 12,
         MINUTES_IN_HOUR = 60,
         MINUTES_IN_DAY = HOURS_IN_DAY * MINUTES_IN_HOUR,
-        MILLISECONDS_IN_DAY = MINUTES_IN_DAY * 60000,
         DAYS_IN_WEEK = 7,
         WEEKS_IN_CALENDAR = 6,
 
@@ -589,7 +588,20 @@ if ( ![].indexOf ) {
                 39: 1, // Right
                 37: -1, // Left
                 go: function( dateChange ) {
-                    return calendar.object([ this.HIGHLIGHT.YEAR, this.HIGHLIGHT.MONTH, this.HIGHLIGHT.DATE + dateChange ])
+
+                    var
+                        picker = this,
+
+                        // Create the target date object with the relative date change.
+                        targetDateObject = calendar.object([ picker.HIGHLIGHT.YEAR, picker.HIGHLIGHT.MONTH, picker.HIGHLIGHT.DATE + dateChange ])
+
+                    // If there's a month change, update the viewset.
+                    if ( targetDateObject.MONTH != picker.VIEWSET.MONTH ) {
+                        picker.VIEWSET = targetDateObject
+                    }
+
+                    // Return the targetted date object to "go" to.
+                    return targetDateObject
                 }
             },
             formats: {
@@ -704,6 +716,7 @@ if ( ![].indexOf ) {
 
 
             // Create the calendar table head using a copy of weekday labels collection.
+            // * We do a copy so we don't mutate the original array.
             tableHead = (function( collection ) {
 
                 // If the first day should be Monday, move Sunday to the end.
@@ -727,9 +740,14 @@ if ( ![].indexOf ) {
                         }
                     })
                 ) //endreturn
-            })( settings.showWeekdaysShort ? settings.weekdaysShort : settings.weekdaysFull ) //tableHead
+            })( ( settings.showWeekdaysShort ? settings.weekdaysShort : settings.weekdaysFull ).slice( 0 ) ) //tableHead
 
 
+        // Update the viewset to the first day of the month.
+        calendar.VIEWSET = calendar.object([ calendar.VIEWSET.YEAR, calendar.VIEWSET.MONTH, 1 ])
+
+
+        // Create and return the entire calendar.
         return createNode(
             STRING_DIV,
             createMonthNav() + createMonthNav( 1 ) +
@@ -752,7 +770,7 @@ if ( ![].indexOf ) {
 
                         return [
                             createGroupOfNodes({
-                                min: DAYS_IN_WEEK * rowCounter - calendar.VIEWSET.DAY + 1,
+                                min: DAYS_IN_WEEK * rowCounter - calendar.VIEWSET.DAY + 1, // Add 1 for weekday 0index
                                 max: function() {
                                     return this.min + DAYS_IN_WEEK - 1
                                 },
@@ -1529,13 +1547,13 @@ if ( ![].indexOf ) {
         weekdaysFull: [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ],
         weekdaysShort: [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ],
 
-        // Today and clear
-        today: 'Today',
-        clear: 'Clear',
-
         // Display strings
         showMonthsFull: 1,
         showWeekdaysShort: 1,
+
+        // Today and clear
+        today: 'Today',
+        clear: 'Clear',
 
         // First day of the week: 0 = Sunday, 1 = Monday
         firstDay: 0,
