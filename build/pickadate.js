@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v3.0.0.alpha, 2013-03-12
+ * pickadate.js v3.0.0alpha, 2013-03-13
  * By Amsul (http://amsul.ca)
  * Hosted on http://amsul.github.com/pickadate.js/
  * Licensed under MIT ("expat" flavour) license.
@@ -208,7 +208,10 @@ if ( ![].indexOf ) {
                 40: 1, // Down
                 38: -1, // Up
                 39: 1, // Right
-                37: -1 // Left
+                37: -1, // Left
+                go: function( timeChange ) {
+                    return clock.object( this.HIGHLIGHT.TIME + timeChange * this.I )
+                }
             },
             formats: {
                 h: function( string ) {
@@ -581,10 +584,13 @@ if ( ![].indexOf ) {
             max: calendar.max,
             settings: settings,
             keyMove: {
-                40: 7 * MILLISECONDS_IN_DAY, // Down
-                38: -7 * MILLISECONDS_IN_DAY, // Up
-                39: 1 * MILLISECONDS_IN_DAY, // Right
-                37: -1 * MILLISECONDS_IN_DAY // Left
+                40: 7, // Down
+                38: -7, // Up
+                39: 1, // Right
+                37: -1, // Left
+                go: function( dateChange ) {
+                    return calendar.object([ this.HIGHLIGHT.YEAR, this.HIGHLIGHT.MONTH, this.HIGHLIGHT.DATE + dateChange ])
+                }
             },
             formats: {
                 d: function( string ) {
@@ -676,9 +682,8 @@ if ( ![].indexOf ) {
                 //     return ''
                 // }
 
-                // Otherwise, return the created month tag
-                var monthTag = 'month' + ( next ? 'Next' : 'Prev' )
-                return createNode( STRING_DIV, settings[ monthTag ], settings.klass[ monthTag ], 'data-nav=' + ( next || -1 ) )
+                // Otherwise, return the created month tag.
+                return createNode( STRING_DIV, ' ', settings.klass[ 'month' + ( next ? 'Next' : 'Prev' ) ], 'data-nav=' + ( next || -1 ) )
             }, //createMonthNav
 
 
@@ -846,12 +851,12 @@ if ( ![].indexOf ) {
         // Make sure we have a date object to work with.
         datePassed = datePassed && datePassed.TIME ? datePassed : calendar.object( datePassed )
 
-        if ( datePassed.TIME < this.min.TIME ) {
-            return this.min
+        if ( datePassed.TIME < calendar.min.TIME ) {
+            return calendar.min
         }
 
-        if ( datePassed.TIME > this.max.TIME ) {
-            return this.max
+        if ( datePassed.TIME > calendar.max.TIME ) {
+            return calendar.max
         }
 
         // If there are times to disable, make sure this isn't one of them.
@@ -915,6 +920,8 @@ if ( ![].indexOf ) {
      */
     CalendarPicker.prototype.parse = function( format, string ) {
 
+        if ( !format ) throw "Need a format"
+
         var parsingObject = {},
             formattings = this.formats
 
@@ -962,10 +969,11 @@ if ( ![].indexOf ) {
             // The element node
             ELEMENT = (function( element ) {
 
-                // Confirm the focus state, convert the element into
-                // a regular text input to remove user-agent stylings,
-                // and then set it as readonly to prevent keyboard popup
+                // Confirm the focus state, save the original type, convert into
+                // a regular text input to remove user-agent stylings, and
+                // set it as readonly to prevent keyboard popup.
                 element.autofocus = ( element == document.activeElement )
+                $ELEMENT._type = element.type
                 element.type = 'text'
                 element.readOnly = true
                 return element
@@ -1118,23 +1126,26 @@ if ( ![].indexOf ) {
                  */
                 stop: function() {
 
+                    // Firstly, close it.
+                    P.close()
+
                     // Unbind the events on the `input` element.
                     $ELEMENT.off( '.P' + PICKER.ID )
 
                     // Restore the element state
-                    ELEMENT.type = 'need this type'
+                    ELEMENT.type = $ELEMENT._type
                     ELEMENT.readOnly = false
-
-                    // Remove the holder.
-                    $HOLDER.remove()
 
                     // Remove the hidden field.
                     if ( ELEMENT_HIDDEN ) {
                         ELEMENT_HIDDEN.parentNode.removeChild( ELEMENT_HIDDEN )
                     }
 
+                    // Remove the holder.
+                    $HOLDER.remove()
+
                     // Trigger the "stop" event within scope of the picker.
-                    triggerFunction( PICKER.onStop, PICKER, [ $HOLDER ] )
+                    triggerFunction( PICKER.onStop, PICKER )
 
                     return P
                 }, //stop
@@ -1195,7 +1206,7 @@ if ( ![].indexOf ) {
                             // If the keycode translates to a move, superficially set the time.
                             // * Truthy second argument makes it a superficial selection.
                             if ( keycodeToMove ) {
-                                P.set( keycodeToMove * PICKER.I + PICKER.HIGHLIGHT.TIME, 1 )
+                                P.set( triggerFunction( PICKER.keyMove.go, PICKER, [ keycodeToMove ] ), 1 )
                             }
 
                             // Otherwise it's the enter key so set the highlighted time and then close it.
@@ -1475,16 +1486,23 @@ if ( ![].indexOf ) {
 
         $.fn[ picker ] = function( options ) {
 
-            // Merge the options with a deep copy
-            options = $.extend( true, {}, $.fn[ picker ].defaults, options )
+            // Merge the options and defaults with a deep copy.
+            var settings = $.extend( true, {}, $.fn[ picker ].defaults, options )
 
-            // Just stop if the picker should be disabled
-            if ( options.disablePicker ) return this
+            // Just stop if the picker should be disabled.
+            if ( settings.disablePicker ) return this
 
             return this.each( function() {
                 var $this = $( this )
+
+                // If the picker hasn't been attached, do it.
                 if ( !$this.data( picker ) ) {
-                    $this.data( picker, new Picker( $this, options, index ? ClockPicker : CalendarPicker ) )
+                    $this.data( picker, new Picker( $this, settings, index ? ClockPicker : CalendarPicker ) )
+                }
+
+                //
+                if ( typeof options == 'string' ) {
+                    triggerFunction( $this.data( picker )[ options ] )
                 }
             })
         }
@@ -1500,7 +1518,7 @@ if ( ![].indexOf ) {
         format: 'd mmmm, yyyy',
 
         // The format to send to the server
-        formatSubmit: 'yyyy/mm/dd',
+        formatSubmit: '',
 
         // Hidden `input` element name suffix
         hiddenSuffix: '_submit',
@@ -1516,8 +1534,6 @@ if ( ![].indexOf ) {
         clear: 'Clear',
 
         // Display strings
-        monthPrev: '&#9664;',
-        monthNext: '&#9654;',
         showMonthsFull: 1,
         showWeekdaysShort: 1,
 

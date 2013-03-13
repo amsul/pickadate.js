@@ -227,16 +227,29 @@
     top: -.1em;
     padding: .5em;
     margin: -.5em;
-    text-align: center;
-    min-width: 24px;
-    height: 24px;
-    line-height: 26px;
+    width: 1em;
+    height: 1em;
 }
 .pickadate__nav--prev {
     left: 0;
 }
 .pickadate__nav--next {
     right: 0;
+}
+.pickadate__nav--prev:before,
+.pickadate__nav--next:before {
+    content: " ";
+    border-top: .5em solid transparent;
+    border-bottom: .5em solid transparent;
+    border-right: .75em solid #000;
+    width: 0;
+    height: 0;
+    display: block;
+    margin: 0 auto;
+}
+.pickadate__nav--next:before {
+    border-right: 0;
+    border-left: .75em solid #000;
 }
 
 .pickadate__month,

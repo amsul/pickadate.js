@@ -40,14 +40,14 @@
         <form>
             <fieldset>
                 <h3><label for="input_01">Pick a date. Go ahead...</label></h3>
-                <input id="input_01" class="datepicker" name="date" type="text" valuee="8:00 a.m." data-valuee="08:00" value="14 January, 2012" data-valuee="2012/05/22">
+                <input id="input_01" class="datepicker" name="date" type="date" valuee="8:00 a.m." data-valuee="08:00" valuee="14 January, 2012" data-valuee="2012/05/22">
                 <br><br><br><br><br>
                 <input type="submit">
             </fieldset>
         </form>
 
         <fieldset>
-            <input type="text">
+            <input type="text" class="datepickerr">
         </fieldset>
 
         <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
@@ -160,7 +160,7 @@
             // dateMin: [2013, 1, 14],
             // dateMax: [2013, 3, 25]
         }*/)
-        // var calendar = $input.data( 'pickadate' ).stop()
+        var calendar = $input.data( 'pickadate' ).open()
         // var calendar = $input.data( 'pickatime' ).open()
     </script>
 
