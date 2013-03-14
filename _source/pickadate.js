@@ -169,7 +169,7 @@
                             klasses.push( settings.klass.viewset )
                         }
 
-                        if ( toDisable && clock.disable( clock.object( timeMinutes ) ).length ) {
+                        if ( toDisable && clock.disable( clock.object( timeMinutes ) ) ) {
                             klasses.push( settings.klass.disabled )
                         }
 
@@ -229,7 +229,7 @@
 
         // If there are times to disable and this is one of them,
         // shift using the interval until we reach an enabled time.
-        if ( clock.settings.disable && clock.disable( timePassed ).length ) {
+        if ( clock.settings.disable && clock.disable( timePassed ) ) {
             return clock.shift( timePassed )
         }
 
@@ -283,7 +283,7 @@
 
         var clock = this
 
-        while ( clock.disable( timeObject ).length ) {
+        while ( clock.disable( timeObject ) ) {
 
             // Increase by the interval and keep looping.
             timeObject = clock.object( timeObject.TIME += clock.settings.interval )
@@ -441,6 +441,8 @@
             object: calendar.object,
             validate: calendar.validate,
             parse: calendar.parse,
+            disable: calendar.disable,
+            shift: calendar.shift,
             now: calendar.validate,
             min: calendar.min,
             max: calendar.max,
@@ -455,8 +457,8 @@
                     var
                         picker = this,
 
-                        // Create the target date object with the relative date change.
-                        targetDateObject = calendar.object([ picker.HIGHLIGHT.YEAR, picker.HIGHLIGHT.MONTH, picker.HIGHLIGHT.DATE + dateChange ])
+                        // Create a validated target object with the relative date change.
+                        targetDateObject = picker.validate( [ picker.HIGHLIGHT.YEAR, picker.HIGHLIGHT.MONTH, picker.HIGHLIGHT.DATE + dateChange ], dateChange )
 
                     // If there's a month change, update the viewset.
                     if ( targetDateObject.MONTH != picker.VIEWSET.MONTH ) {
@@ -642,7 +644,7 @@
                                 item: function( timeDate ) {
 
                                     // Convert the time date from a relative date to a date object
-                                    timeDate = calendar.object([ calendar.VIEWSET.YEAR, calendar.VIEWSET.MONTH, timeDate + settings.firstDay ])
+                                    timeDate = calendar.object([ calendar.VIEWSET.YEAR, calendar.VIEWSET.MONTH, timeDate + ( settings.firstDay ? 1 : 0 ) ])
 
                                     return [
                                         createNode(
@@ -650,24 +652,27 @@
                                             timeDate.DATE,
                                             (function( klasses ) {
 
+                                                // Add the `infocus` or `outfocus` classes based on month in view.
+                                                klasses.push( calendar.VIEWSET.MONTH == timeDate.MONTH ? settings.klass.infocus : settings.klass.outfocus )
+
+                                                // Add the `selected` class if something's selected and the time matches.
                                                 if ( calendar.SELECT.length && calendar.SELECT[ 0 ].TIME == timeDate.TIME ) {
                                                     klasses.push( settings.klass.selected )
                                                 }
 
+                                                // Add the `highlighted` class if something's highlighted and the time matches.
                                                 if ( calendar.HIGHLIGHT && calendar.HIGHLIGHT.TIME == timeDate.TIME ) {
                                                     klasses.push( settings.klass.highlighted )
                                                 }
 
-                                                if ( calendar.VIEWSET.MONTH == timeDate.MONTH ) {
-                                                    klasses.push( settings.klass.infocus )
-                                                }
-                                                else {
-                                                    klasses.push( settings.klass.outfocus )
+                                                // Add the `disabled` class if something's disabled and the object matches.
+                                                if ( calendar.DISABLE && calendar.disable( timeDate ) ) {
+                                                    klasses.push( settings.klass.disabled )
                                                 }
 
                                                 return klasses.join( ' ' )
                                             })([ settings.klass.day ]),
-                                            'data-pick=' + timeDate.YEAR + '/' + timeDate.MONTH + '/' + timeDate.DATE
+                                            'data-pick=' + timeDate.YEAR + calendar.div + timeDate.MONTH + calendar.div + timeDate.DATE
                                         )
                                     ] //endreturn
                                 }
@@ -725,24 +730,27 @@
     /**
      * Create a date object by validating it can be "reached".
      */
-    CalendarPicker.prototype.validate = function( datePassed ) {
+    CalendarPicker.prototype.validate = function( datePassed, keyMovement ) {
 
-        var calendar = this
+        var calendar = this,
+            minLimitObject = calendar.min(),
+            maxLimitObject = calendar.max()
 
         // Make sure we have a date object to work with.
         datePassed = datePassed && datePassed.TIME ? datePassed : calendar.object( datePassed )
 
-        if ( datePassed.TIME < calendar.min.TIME ) {
-            return calendar.min
+        if ( datePassed.TIME < minLimitObject.TIME ) {
+            return minLimitObject
         }
 
-        if ( datePassed.TIME > calendar.max.TIME ) {
-            return calendar.max
+        if ( datePassed.TIME > maxLimitObject.TIME ) {
+            return maxLimitObject
         }
 
-        // If there are times to disable, make sure this isn't one of them.
-        if ( calendar.settings.disable && clock.disable( datePassed ).length ) {
-            console.log( calendar.settings.disable, datePassed )
+        // If there are times to disable and this is one of them,
+        // shift using the interval until we reach an enabled time.
+        if ( calendar.settings.disable && calendar.disable( datePassed ) ) {
+            return calendar.shift( datePassed, datePassed.TIME > maxLimitObject.TIME ? -1 : keyMovement || 1 )
         }
 
         return datePassed
@@ -750,10 +758,86 @@
 
 
     /**
+     * Check if a date is disabled or not.
+     */
+    CalendarPicker.prototype.disable = function( dateObject ) {
+
+        var calendar = this,
+
+            // Filter through the disabled dates to check if this is one.
+            isDisabledDate = calendar.DISABLE.filter( function( dateToDisable ) {
+
+                // If the date is a number, match the weekday with 0index and `firstDay` check.
+                if ( !isNaN( dateToDisable ) ) {
+                    return dateObject.DAY == ( calendar.settings.firstDay ? dateToDisable : dateToDisable - 1 ) % 7
+                }
+
+                // If it's an array, create the object and match the times.
+                if ( Array.isArray( dateToDisable ) ) {
+                    return dateObject.TIME == calendar.object( dateToDisable ).TIME
+                }
+            }).length
+
+
+        // If the calendar is off, flip the condition.
+        return calendar.OFF ? !isDisabledDate : isDisabledDate
+    } // CalendarPicker.prototype.disable
+
+
+    /**
+     * Shift a date by a certain interval until we reach an enabled one.
+     */
+    CalendarPicker.prototype.shift = function( dateObject, interval ) {
+
+        var calendar = this,
+            originalDateObject = dateObject
+
+        // Keep looping as long as the date is disabled.
+        while ( calendar.disable( dateObject ) ) {
+
+            // Increase/decrease the date by the interval and keep looping.
+            dateObject = calendar.object([ dateObject.YEAR, dateObject.MONTH, dateObject.DATE + ( interval || 1 ) ])
+
+            // If we've looped through to the next month, break out of the loop.
+            if ( dateObject.MONTH != originalDateObject.MONTH ) {
+                break
+            }
+        }
+
+        // Do a final validation check to make sure it's within bounds.
+        return calendar.validate( dateObject )
+    } //CalendarPicker.prototype.shift
+
+
+    /**
      * Create the lower bounding date object.
      */
     CalendarPicker.prototype.min = function() {
-        return this.bounds()
+
+        var
+            calendar = this,
+            limit = calendar.settings.min
+
+        // If there is a limit and its a number, create a
+        // time object relative to today by adding the limit.
+        if ( limit && !isNaN( limit ) ) {
+            return calendar.object([ NOW.YEAR, NOW.MONTH, NOW.DATE + limit ])
+        }
+
+        // If the limit is set to true, just return today
+        if ( limit === true ) {
+            return NOW
+        }
+
+        // If the limit is an array, construct the time by fixing month 0index
+        if ( Array.isArray( limit ) ) {
+            --limit[ 1 ]
+            console.log( '^^ should this happen?' )
+            return calendar.object( limit )
+        }
+
+        // Otherwise create an infinite time
+        return calendar.object( 0, -Infinity )
     }
 
 
@@ -761,7 +845,31 @@
      * Create the upper bounding date object.
      */
     CalendarPicker.prototype.max = function() {
-        return this.bounds( 1 )
+
+        var
+            calendar = this,
+            limit = calendar.settings.max
+
+        // If there is a limit and its a number, create a
+        // time object relative to today by adding the limit.
+        if ( limit && !isNaN( limit ) ) {
+            return calendar.object([ NOW.YEAR, NOW.MONTH, NOW.DATE + limit ])
+        }
+
+        // If the limit is set to true, just return today
+        if ( limit === true ) {
+            return NOW
+        }
+
+        // If the limit is an array, construct the time by fixing month 0index
+        if ( Array.isArray( limit ) ) {
+            --limit[ 1 ]
+            console.log( '^^ should this happen?' )
+            return calendar.object( limit )
+        }
+
+        // Otherwise create an infinite time
+        return calendar.object( 0, Infinity )
     }
 
 
@@ -770,9 +878,11 @@
      */
     CalendarPicker.prototype.bounds = function( upper ) {
 
+        console.log( 'fix this' )
+
         var
             calendar = this,
-            limit = upper ? this.settings.max : this.settings.min
+            limit = upper ? calendar.settings.max : calendar.settings.min
 
         // If there is a limit and its a number, create a
         // time object relative to today by adding the limit.
@@ -866,7 +976,15 @@
 
                 pickerObject.ID = ~~( Math.random() * 1e9 )
                 pickerObject.I = SETTINGS.interval || 1
-                pickerObject.DISABLE = []
+
+                // If the first item is a literal `true`, we need to disabled all the items.
+                // Remove the flag from the collection and flip the condition of which items to disable.
+                if ( Array.isArray( SETTINGS.disable ) && SETTINGS.disable[ 0 ] === true ) {
+                    pickerObject.OFF = SETTINGS.disable.shift()
+                }
+
+                // Store the disabled items.
+                pickerObject.DISABLE = SETTINGS.disable
 
                 // The default selection is based on the `value` or `data-value` of the element.
                 pickerObject.SELECT = [
@@ -875,11 +993,8 @@
                     )
                 ]
 
-                // Add a default superficial selection as the "selected" item or the "default" one.
-                pickerObject.HIGHLIGHT = pickerObject.SELECT[ 0 ] || pickerObject.validate()
-
-                // If there is an item value selected, set it as the viewset
-                pickerObject.VIEWSET = pickerObject.HIGHLIGHT || pickerObject.validate()
+                // The default highlight and viewset are based on the "selected" or "default" item.
+                pickerObject.VIEWSET = pickerObject.HIGHLIGHT = pickerObject.SELECT[ 0 ] || pickerObject.validate()
 
                 // Return the picker object
                 return pickerObject
