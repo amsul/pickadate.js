@@ -40,7 +40,7 @@
         <form>
             <fieldset>
                 <h3><label for="input_01">Pick a date. Go ahead...</label></h3>
-                <input id="input_01" class="datepicker" name="date" type="date" valuee="8:00 a.m." data-valuee="08:00" valuee="14 January, 2012" data-valuee="2012/05/22">
+                <input id="input_01" class="datepicker" name="date" type="date" valuee="1:30 a.m." data-valuee="01:30" valuee="14 January, 2012" data-valuee="2012/05/22">
                 <br><br><br><br><br>
                 <input type="submit">
             </fieldset>
@@ -62,27 +62,29 @@
     <script src="build/pickadate.js"></script>
 
     <script type="text/javascript">
-        var $input = $( '.datepicker' ).pickadate({
-            firstDay: 1,
+        // var $input = $( '.datepicker' ).pickadate({
+            // firstDay: 1,
             // format: 'he!y!y!y!y yyyy,mm,dd',
             // monthSelector: true,
             // yearSelector: true,
-        // var $input = $( '.datepicker' ).pickatime({
+        var $input = $( '.datepicker' ).pickatime({
 
             // format: '<b>h</b>:i <!i>a</!i>',
             // format: 'h:i a',
             // formatSubmit: 'HH:i',
 
+            // interval: 240,
             // disable: [
-            //     2, 3,
+            //     // true,
+            //     2, 3, 8,
             //     [ 5, 30 ]
             // ],
-            disable: [
-                true,
-                7,
-                [ 2013, 2, 6 ],
-                // 14,
-            ],
+            // disable: [
+            //     true,
+            //     7,
+            //     [ 2013, 2, 6 ],
+            //     // 14,
+            // ],
             // disable: function( loopedTime ) {
             //     return loopedTime.HOUR > 5
             // }
@@ -94,7 +96,6 @@
         }
 
         /*{
-            // interval: 10,
             // maxLimit: 4,
             // maxLimit: [18,30],
             onStart: function() {
@@ -159,8 +160,8 @@
             // dateMin: [2013, 1, 14],
             // dateMax: [2013, 3, 25]
         }*/)
-        var calendar = $input.pickadate( 'open' )
-        // var calendar = $input.pickatime( 'open' )
+        // var calendar = $input.pickadate( 'open' )
+        var calendar = $input.pickatime( 'open' )
     </script>
 
 

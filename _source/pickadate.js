@@ -11,8 +11,8 @@
 /**
  * Todo:
  * – Do: `data-value` stuff with `formatSubmit`
- * – Fix `validate` methods. Selection goes outside bounds.
  * – Fix `viewset`. Goes to prev/next months.
+ * – Disable/enable dates.
  * – Min & max.
  * – WAI-ARIA support
  */
@@ -72,7 +72,14 @@
                 39: 1, // Right
                 37: -1, // Left
                 go: function( timeChange ) {
-                    return clock.object( this.HIGHLIGHT.TIME + timeChange * this.I )
+
+                    var picker = this,
+
+                        // Create a validated target object with the relative date change.
+                        targetDateObject = picker.validate( picker.HIGHLIGHT.TIME + timeChange * picker.I, timeChange )
+
+                    // Return the targetted time object to "go" to.
+                    return targetDateObject
                 }
             },
             formats: {
@@ -216,41 +223,50 @@
     /**
      * Create a clock time object by validating it can be "reached".
      */
-    ClockPicker.prototype.validate = function( timePassed ) {
+    ClockPicker.prototype.validate = function( timePassed, keyMovement ) {
 
         var clock = this,
-            minLimit = clock.min().TIME,
-            interval = clock.settings.interval
+            minLimitObject = clock.min(),
+            maxLimitObject = clock.max(),
 
+            // Make sure we have a time object to work with.
+            timePassedObject = timePassed && !isNaN( timePassed.TIME ) ? timePassed : clock.object( timePassed )
 
-        // Make sure we have a time object to work with.
-        timePassed = timePassed && timePassed.TIME ? timePassed : clock.object( timePassed )
+        // If no time was passed, normalize the time object into a "reachable" time.
+        if ( !timePassed ) {
 
+            timePassedObject = clock.object(
+
+                // From the time passed, subtract the amount needed to get it within interval "reach"
+                timePassedObject.TIME - (
+
+                    // Get the remainder between the min and time passed and then get the remainder
+                    // of that divided by the interval to get amount to decrease by.
+                    (
+                        minLimitObject.TIME ? timePassedObject.TIME % minLimitObject.TIME : timePassedObject.TIME
+                    ) % clock.I
+
+                // And then if there's a key movement, do nothing.
+                // Otherwise add an interval because this time has passed.
+                ) + ( keyMovement ? 0 : clock.I )
+            )
+        }
+
+        if ( timePassedObject.TIME <= minLimitObject.TIME ) {
+            return minLimitObject
+        }
+
+        if ( timePassedObject.TIME >= maxLimitObject.TIME ) {
+            return maxLimitObject
+        }
 
         // If there are times to disable and this is one of them,
         // shift using the interval until we reach an enabled time.
-        if ( clock.settings.disable && clock.disable( timePassed ) ) {
-            return clock.shift( timePassed )
+        if ( clock.settings.disable && clock.disable( timePassedObject ) ) {
+            return clock.shift( timePassedObject, timePassedObject.TIME > maxLimitObject.TIME ? -1 : keyMovement || 1 )
         }
 
-
-        // Create and return a clock object.
-        return clock.object(
-
-            // From the time passed, subtract the amount needed to get it within interval "reach"
-            timePassed.TIME - (
-
-                // Get the remainder between the min and time passed and then get the remainder
-                // of that divided by the interval to get amount to decrease by.
-                (
-                    minLimit ? timePassed.TIME % minLimit : timePassed.TIME
-                ) % interval
-
-            ) +
-
-            // And then add an interval because this time has passed
-            0// interval
-        ) //endreturn
+        return timePassedObject
     } //ClockPicker.prototype.validate
 
 
@@ -259,37 +275,57 @@
      */
     ClockPicker.prototype.disable = function( timeObject ) {
 
-        var clock = this
+        var clock = this,
 
-        return clock.settings.disable.filter( function( timeToDisable ) {
+            // Filter through the disabled times to check if this is one.
+            isDisabledTime = clock.DISABLE.filter( function( timeToDisable ) {
 
-            // If the time is a number, match the hours.
-            if ( !isNaN( timeToDisable ) ) {
-                return timeObject.HOUR == timeToDisable
-            }
+                // If the time is a number, match the hours.
+                if ( !isNaN( timeToDisable ) ) {
+                    return timeObject.HOUR == timeToDisable
+                }
 
-            // If it's an array, create the object and match the times.
-            if ( Array.isArray( timeToDisable ) ) {
-                return timeObject.TIME == clock.object( timeToDisable ).TIME
-            }
-        })
+                // If it's an array, create the object and match the times.
+                if ( Array.isArray( timeToDisable ) ) {
+                    return timeObject.TIME == clock.object( timeToDisable ).TIME
+                }
+            }).length
+
+        // If the clock is off, flip the condition.
+        return clock.OFF ? !isDisabledTime : isDisabledTime
     } // ClockPicker.prototype.disable
 
 
     /**
      * Shift a time by a certain interval until we reach an enabled one.
      */
-    ClockPicker.prototype.shift = function( timeObject ) {
+    ClockPicker.prototype.shift = function( timeObject, interval ) {
 
-        var clock = this
+        var clock = this,
+            originalTimeObject = timeObject,
+            minLimit = clock.min().TIME,
+            maxLimit = clock.max().TIME
 
+        // Keep looping as long as the time is disabled.
         while ( clock.disable( timeObject ) ) {
 
-            // Increase by the interval and keep looping.
-            timeObject = clock.object( timeObject.TIME += clock.settings.interval )
+            // Increase/decrease the time by the interval and keep looping.
+            timeObject = clock.object( timeObject.TIME += ( interval || clock.I ) * clock.settings.interval )
+
+            // If we've looped beyond the limits, break out of the loop.
+            if ( timeObject.TIME <= minLimit ) {
+                interval = 1
+                timeObject = originalTimeObject
+                break
+            }
+            if ( timeObject.TIME >= maxLimit ) {
+                interval = -1
+                break
+            }
         }
 
-        return timeObject
+        // Do a final validation check to make sure it's within bounds.
+        return clock.validate( timeObject, interval )
     } //ClockPicker.prototype.shift
 
 
@@ -737,7 +773,7 @@
             maxLimitObject = calendar.max()
 
         // Make sure we have a date object to work with.
-        datePassed = datePassed && datePassed.TIME ? datePassed : calendar.object( datePassed )
+        datePassed = datePassed && !isNaN( datePassed.TIME ) ? datePassed : calendar.object( datePassed )
 
         if ( datePassed.TIME < minLimitObject.TIME ) {
             return minLimitObject
@@ -777,7 +813,6 @@
                     return dateObject.TIME == calendar.object( dateToDisable ).TIME
                 }
             }).length
-
 
         // If the calendar is off, flip the condition.
         return calendar.OFF ? !isDisabledDate : isDisabledDate
@@ -1022,11 +1057,11 @@
                 // When something within the holder is clicked, handle the various event.
                 click: function( event ) {
 
-                    var target = event.target,
-                        targetData = $( target ).data()
+                    var $target = $( event.target ),
+                        targetData = $target.data()
 
                     // Check if the click is within the holder.
-                    if ( $HOLDER.find( target ).length ) {
+                    if ( $HOLDER.find( $target[ 0 ] ).length ) {
 
                         // Stop it from propagating to the doc.
                         event.stopPropagation()
@@ -1034,7 +1069,7 @@
                         // ELEMENT.focus()
 
                         // Set and close the picker if something is getting picked.
-                        if ( targetData.pick ) {
+                        if ( targetData.pick && !$target.hasClass( CLASSES.disabled ) ) {
                             P.set( targetData.pick.split( PICKER.div ) ).close()
                         }
                     }
