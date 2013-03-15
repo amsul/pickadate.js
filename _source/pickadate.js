@@ -13,7 +13,7 @@
  * – Do: `data-value` stuff with `formatSubmit`
  * – Fix `viewset`. Goes to prev/next months.
  * – Disable/enable dates.
- * – Min & max as array, number, and boolean.
+ * – Fix for max/min disabled & keymovement.
  * – WAI-ARIA support
  */
 
@@ -152,10 +152,9 @@
             settings = clock.settings,
             toDisable = clock.settings.disable
 
-
         return createNode( 'ul', createGroupOfNodes({
-            min: clock.min().TIME,
-            max: clock.max().TIME,
+            min: clock.MIN.TIME,
+            max: clock.MAX.TIME,
             i: clock.settings.interval,
             node: 'li',
             item: function( loopedTime ) {
@@ -226,8 +225,8 @@
     ClockPicker.prototype.validate = function( timePassed, keyMovement ) {
 
         var clock = this,
-            minLimitObject = clock.min(),
-            maxLimitObject = clock.max(),
+            minLimitObject = clock.MIN,
+            maxLimitObject = clock.MAX,
 
             // Make sure we have a time object to work with.
             timePassedObject = timePassed && !isNaN( timePassed.TIME ) ? timePassed : clock.object( timePassed )
@@ -303,8 +302,8 @@
 
         var clock = this,
             originalTimeObject = timeObject,
-            minLimit = clock.min().TIME,
-            maxLimit = clock.max().TIME
+            minLimit = clock.MIN.TIME,
+            maxLimit = clock.MAX.TIME
 
         // Keep looping as long as the time is disabled.
         while ( clock.disable( timeObject ) ) {
@@ -337,31 +336,27 @@
         var
             clock = this,
             limit = clock.settings.min,
-            interval = clock.settings.interval,
+            interval = clock.I,
             nowObject = clock.object()
 
         // If there's no limit, just create min as midnight.
         if ( !limit ) {
-            limit = clock.object( 0 )
+            return clock.object( 0 )
+        }
+
+        // If the limit is set to true, just return a normalized "now"
+        // plus one interval because this time has passed.
+        if ( limit === true ) {
+            return clock.object( nowObject.TIME - ( ( limit.TIME ? nowObject.TIME % limit.TIME : nowObject.TIME ) % interval ) + interval )
         }
 
         // If the limit is a number, create a validated "now" object for a relative min object.
-        else if ( !isNaN( limit ) ) {
-            limit = clock.object([ nowObject.HOUR, ( nowObject.MINS - nowObject.MINS % interval ) + ( limit + 1 ) * interval ])
+        if ( !isNaN( limit ) ) {
+            return clock.object([ nowObject.HOUR, ( nowObject.MINS - nowObject.MINS % interval ) + ( limit + 1 ) * interval ])
         }
 
-        // If it's an array, just create the time.
-        else if ( Array.isArray( limit ) ) {
-            limit = clock.object( limit )
-        }
-
-        else {
-            console.log( limit )
-            throw 'now??'
-        }
-
-
-        return limit
+        // Otherwise create the object with whatever the limit is.
+        return clock.object( limit )
     } //ClockPicker.prototype.min
 
 
@@ -373,14 +368,18 @@
         var
             clock = this,
             limit = clock.settings.max,
-            interval = clock.settings.interval,
+            interval = clock.I,
             nowObject = clock.object()
 
-        // If there's no limit, ....
+        // If there's no limit, set it as a minute before next midnight.
         if ( !limit ) {
-            limit = clock.object( 0 )
-            throw "now what?"
-            // return clock.object( 0 )
+            limit = clock.object( MINUTES_IN_DAY - 1 )
+        }
+
+        // If the limit is set to true, just return a normalized "now"
+        // plus one interval because this time has passed.
+        else if ( limit === true ) {
+            limit = clock.object( nowObject.TIME - ( ( limit.TIME ? nowObject.TIME % limit.TIME : nowObject.TIME ) % interval ) + interval )
         }
 
         // If the limit is a number, create a max limit relative to "now".
@@ -397,11 +396,11 @@
         // If the max is less than min, add a day
         if ( limit.TIME < clock.min.TIME ) {
             limit = clock.object( limit.TIME + MINUTES_IN_DAY )
-            console.log( limit )
         }
 
-        // Finally, make sure the max time is "reachable" using the interval.
-        return clock.object( limit.TIME - ( limit.TIME % interval ) )
+
+        // Finally, make sure the max time is "reachable" using the interval and min limit.
+        return clock.object( limit.TIME - ( ( clock.MIN.TIME ? limit.TIME % clock.MIN.TIME : limit.TIME ) % clock.I ) )
     } //ClockPicker.prototype.max
 
 
@@ -479,7 +478,7 @@
             parse: calendar.parse,
             disable: calendar.disable,
             shift: calendar.shift,
-            now: calendar.validate,
+            now: calendar.object,
             min: calendar.min,
             max: calendar.max,
             settings: settings,
@@ -597,8 +596,8 @@
                     settings.klass[ 'nav' + ( next ? 'Next' : 'Prev' ) ] + (
 
                         // If the focused month is outside the range, disabled the button.
-                        ( next && calendar.VIEWSET.YEAR >= calendar.max().YEAR && calendar.VIEWSET.MONTH >= calendar.max().MONTH ) ||
-                        ( !next && calendar.VIEWSET.YEAR <= calendar.min().YEAR && calendar.VIEWSET.MONTH <= calendar.min().MONTH ) ?
+                        ( next && calendar.VIEWSET.YEAR >= calendar.MAX.YEAR && calendar.VIEWSET.MONTH >= calendar.MAX.MONTH ) ||
+                        ( !next && calendar.VIEWSET.YEAR <= calendar.MIN.YEAR && calendar.VIEWSET.MONTH <= calendar.MIN.MONTH ) ?
                         ' ' + settings.klass.navDisabled : ''
                     ),
                     'data-nav=' + ( next || -1 )
@@ -703,7 +702,7 @@
                                                 }
 
                                                 // Add the `today` class if needed.
-                                                if ( calendar.now().TIME == timeDate.TIME ) {
+                                                if ( calendar.NOW.TIME == timeDate.TIME ) {
                                                     klasses.push( settings.klass.now )
                                                 }
 
@@ -713,7 +712,7 @@
                                                 }
 
                                                 // Add the `disabled` class if something's disabled and the object matches.
-                                                if ( calendar.DISABLE && calendar.disable( timeDate ) || timeDate.TIME < calendar.min().TIME || timeDate.TIME > calendar.max().TIME ) {
+                                                if ( calendar.DISABLE && calendar.disable( timeDate ) || timeDate.TIME < calendar.MIN.TIME || timeDate.TIME > calendar.MAX.TIME ) {
                                                     klasses.push( settings.klass.disabled )
                                                 }
 
@@ -780,8 +779,8 @@
     CalendarPicker.prototype.validate = function( datePassed, keyMovement ) {
 
         var calendar = this,
-            minLimitObject = calendar.min(),
-            maxLimitObject = calendar.max()
+            minLimitObject = calendar.MIN,
+            maxLimitObject = calendar.MAX
 
         // Make sure we have a date object to work with.
         datePassed = datePassed && !isNaN( datePassed.TIME ) ? datePassed : calendar.object( datePassed )
@@ -862,17 +861,18 @@
 
         var
             calendar = this,
-            limit = calendar.settings.min
+            limit = calendar.settings.min,
+            nowObject = calendar.object()
 
         // If the limit is set to true, just return today.
         if ( limit === true ) {
-            return NOW
+            return nowObject
         }
 
         // If there is a limit and its a number, create a
         // time object relative to today by adding the limit.
         if ( limit && !isNaN( limit ) ) {
-            return calendar.object([ NOW.YEAR, NOW.MONTH, NOW.DATE + limit ])
+            return calendar.object([ nowObject.YEAR, nowObject.MONTH, nowObject.DATE + limit ])
         }
 
         // If the limit is an array, construct the time object.
@@ -892,17 +892,18 @@
 
         var
             calendar = this,
-            limit = calendar.settings.max
+            limit = calendar.settings.max,
+            nowObject = calendar.object()
 
         // If the limit is set to true, just return today.
         if ( limit === true ) {
-            return NOW
+            return nowObject
         }
 
         // If there is a limit and its a number, create a
         // time object relative to today by adding the limit.
         if ( limit && !isNaN( limit ) ) {
-            return calendar.object([ NOW.YEAR, NOW.MONTH, NOW.DATE + limit ])
+            return calendar.object([ nowObject.YEAR, nowObject.MONTH, nowObject.DATE + limit ])
         }
 
         // If the limit is an array, construct the time object.
@@ -1019,6 +1020,10 @@
                 pickerObject.ID = ~~( Math.random() * 1e9 )
                 pickerObject.I = SETTINGS.interval || 1
 
+                // Store the `min` and `max` bounding limits.
+                pickerObject.MIN = pickerObject.min()
+                pickerObject.MAX = pickerObject.max()
+
                 // If the first item is a literal `true`, we need to disabled all the items.
                 // Remove the flag from the collection and flip the condition of which items to disable.
                 if ( Array.isArray( SETTINGS.disable ) && SETTINGS.disable[ 0 ] === true ) {
@@ -1027,6 +1032,9 @@
 
                 // Store the disabled items.
                 pickerObject.DISABLE = SETTINGS.disable
+
+                // The `now` time object.
+                pickerObject.NOW = pickerObject.now()
 
                 // The default selection is based on the `value` or `data-value` of the element.
                 pickerObject.SELECT = [
@@ -1661,7 +1669,7 @@
 
         // The time limits
         min: 0,
-        max: [ HOURS_IN_DAY, -1 ],
+        max: 0,
 
         // Times to disable
         disable: 0,
