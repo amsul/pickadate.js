@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v3.0.0alpha, 2013-03-14
+ * pickadate.js v3.0.0alpha, 2013-03-15
  * By Amsul (http://amsul.ca)
  * Hosted on http://amsul.github.com/pickadate.js/
  * Licensed under MIT ("expat" flavour) license.
@@ -150,7 +150,7 @@ if ( ![].indexOf ) {
  * – Do: `data-value` stuff with `formatSubmit`
  * – Fix `viewset`. Goes to prev/next months.
  * – Disable/enable dates.
- * – Min & max.
+ * – Min & max as array, number, and boolean.
  * – WAI-ARIA support
  */
 
@@ -374,7 +374,7 @@ if ( ![].indexOf ) {
 
             timePassedObject = clock.object(
 
-                // From the time passed, subtract the amount needed to get it within interval "reach"
+                // From the time passed, subtract the amount needed to get it within interval "reach".
                 timePassedObject.TIME - (
 
                     // Get the remainder between the min and time passed and then get the remainder
@@ -727,13 +727,19 @@ if ( ![].indexOf ) {
             // Create the nav for next/prev month.
             createMonthNav = function( next ) {
 
-                // If the focused month is outside the range, return an empty string.
-                // if ( ( next && calendar.now.YEAR >= LIMIT_MAX.YEAR && calendar.now.MONTH >= LIMIT_MAX.MONTH ) || ( !next && calendar.now.YEAR <= LIMIT_MIN.YEAR && calendar.now.MONTH <= LIMIT_MIN.MONTH ) ) {
-                //     return ''
-                // }
-
                 // Otherwise, return the created month tag.
-                return createNode( STRING_DIV, ' ', settings.klass[ 'month' + ( next ? 'Next' : 'Prev' ) ], 'data-nav=' + ( next || -1 ) )
+                return createNode(
+                    STRING_DIV,
+                    ' ',
+                    settings.klass[ 'nav' + ( next ? 'Next' : 'Prev' ) ] + (
+
+                        // If the focused month is outside the range, disabled the button.
+                        ( next && calendar.VIEWSET.YEAR >= calendar.max().YEAR && calendar.VIEWSET.MONTH >= calendar.max().MONTH ) ||
+                        ( !next && calendar.VIEWSET.YEAR <= calendar.min().YEAR && calendar.VIEWSET.MONTH <= calendar.min().MONTH ) ?
+                        ' ' + settings.klass.navDisabled : ''
+                    ),
+                    'data-nav=' + ( next || -1 )
+                ) //endreturn
             }, //createMonthNav
 
 
@@ -833,13 +839,18 @@ if ( ![].indexOf ) {
                                                     klasses.push( settings.klass.selected )
                                                 }
 
+                                                // Add the `today` class if needed.
+                                                if ( calendar.now().TIME == timeDate.TIME ) {
+                                                    klasses.push( settings.klass.now )
+                                                }
+
                                                 // Add the `highlighted` class if something's highlighted and the time matches.
                                                 if ( calendar.HIGHLIGHT && calendar.HIGHLIGHT.TIME == timeDate.TIME ) {
                                                     klasses.push( settings.klass.highlighted )
                                                 }
 
                                                 // Add the `disabled` class if something's disabled and the object matches.
-                                                if ( calendar.DISABLE && calendar.disable( timeDate ) ) {
+                                                if ( calendar.DISABLE && calendar.disable( timeDate ) || timeDate.TIME < calendar.min().TIME || timeDate.TIME > calendar.max().TIME ) {
                                                     klasses.push( settings.klass.disabled )
                                                 }
 
@@ -990,25 +1001,23 @@ if ( ![].indexOf ) {
             calendar = this,
             limit = calendar.settings.min
 
+        // If the limit is set to true, just return today.
+        if ( limit === true ) {
+            return NOW
+        }
+
         // If there is a limit and its a number, create a
         // time object relative to today by adding the limit.
         if ( limit && !isNaN( limit ) ) {
             return calendar.object([ NOW.YEAR, NOW.MONTH, NOW.DATE + limit ])
         }
 
-        // If the limit is set to true, just return today
-        if ( limit === true ) {
-            return NOW
-        }
-
-        // If the limit is an array, construct the time by fixing month 0index
+        // If the limit is an array, construct the time object.
         if ( Array.isArray( limit ) ) {
-            --limit[ 1 ]
-            console.log( '^^ should this happen?' )
             return calendar.object( limit )
         }
 
-        // Otherwise create an infinite time
+        // Otherwise create an infinite time.
         return calendar.object( 0, -Infinity )
     }
 
@@ -1022,25 +1031,23 @@ if ( ![].indexOf ) {
             calendar = this,
             limit = calendar.settings.max
 
+        // If the limit is set to true, just return today.
+        if ( limit === true ) {
+            return NOW
+        }
+
         // If there is a limit and its a number, create a
         // time object relative to today by adding the limit.
         if ( limit && !isNaN( limit ) ) {
             return calendar.object([ NOW.YEAR, NOW.MONTH, NOW.DATE + limit ])
         }
 
-        // If the limit is set to true, just return today
-        if ( limit === true ) {
-            return NOW
-        }
-
-        // If the limit is an array, construct the time by fixing month 0index
+        // If the limit is an array, construct the time object.
         if ( Array.isArray( limit ) ) {
-            --limit[ 1 ]
-            console.log( '^^ should this happen?' )
             return calendar.object( limit )
         }
 
-        // Otherwise create an infinite time
+        // Otherwise create an infinite time.
         return calendar.object( 0, Infinity )
     }
 
@@ -1208,6 +1215,11 @@ if ( ![].indexOf ) {
                         // Set and close the picker if something is getting picked.
                         if ( targetData.pick && !$target.hasClass( CLASSES.disabled ) ) {
                             P.set( targetData.pick.split( PICKER.div ) ).close()
+                        }
+
+                        // If something is superficially changed, set the picker.
+                        else if ( targetData.nav && !$target.hasClass( CLASSES.navDisabled ) ) {
+                            P.set( [ PICKER.HIGHLIGHT.YEAR, PICKER.HIGHLIGHT.MONTH + targetData.nav, PICKER.HIGHLIGHT.DATE ], 1 )
                         }
                     }
                 }
@@ -1460,7 +1472,7 @@ if ( ![].indexOf ) {
                         }
 
                         // Highlight the time object
-                        PICKER.HIGHLIGHT = timeObject
+                        PICKER.VIEWSET = PICKER.HIGHLIGHT = timeObject
 
                         // Then render a new picker
                         createNewPicker()
@@ -1737,8 +1749,9 @@ if ( ![].indexOf ) {
 
             header: STRING_PREFIX_PICKER + 'header',
 
-            monthPrev: STRING_PREFIX_PICKER + 'nav--prev',
-            monthNext: STRING_PREFIX_PICKER + 'nav--next',
+            navPrev: STRING_PREFIX_PICKER + 'nav--prev',
+            navNext: STRING_PREFIX_PICKER + 'nav--next',
+            navDisabled: STRING_PREFIX_PICKER + 'nav--disabled',
 
             month: STRING_PREFIX_PICKER + 'month',
             year: STRING_PREFIX_PICKER + 'year',

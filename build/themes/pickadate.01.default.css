@@ -452,6 +452,19 @@
     color: #fff;
 }
 
+.pickadate__nav--disabled,
+.pickadate__nav--disabled:hover,
+.pickadate__nav--disabled:before,
+.pickadate__nav--disabled:before:hover {
+    border-right-color: #f5f5f5;
+    background: none;
+    cursor: default;
+}
+.pickadate__nav--next.pickadate__nav--disabled:before,
+.pickadate__nav--next.pickadate__nav--disabled:before:hover {
+    border-left-color: #f5f5f5;
+}
+
 
 
 

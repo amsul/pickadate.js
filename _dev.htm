@@ -62,12 +62,12 @@
     <script src="build/pickadate.js"></script>
 
     <script type="text/javascript">
-        // var $input = $( '.datepicker' ).pickadate({
+        var $input = $( '.datepicker' ).pickadate({
             // firstDay: 1,
             // format: 'he!y!y!y!y yyyy,mm,dd',
             // monthSelector: true,
             // yearSelector: true,
-        var $input = $( '.datepicker' ).pickatime({
+        // var $input = $( '.datepicker' ).pickatime({
 
             // format: '<b>h</b>:i <!i>a</!i>',
             // format: 'h:i a',
@@ -89,6 +89,8 @@
             //     return loopedTime.HOUR > 5
             // }
             // interval: 120,
+            min: [2013, 2, 10],
+            // max: [2013, 2, 25]
             // min: -4,
             // min: [ 14, 20 ],
             // max: 2,
@@ -157,11 +159,9 @@
                 [2013,3,24],
                 [2013,3,25]
             ],
-            // dateMin: [2013, 1, 14],
-            // dateMax: [2013, 3, 25]
         }*/)
-        // var calendar = $input.pickadate( 'open' )
-        var calendar = $input.pickatime( 'open' )
+        var calendar = $input.pickadate( 'open' )
+        // var calendar = $input.pickatime( 'open' )
     </script>
 
 
