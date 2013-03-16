@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v3.0.0alpha, 2013-03-15
+ * pickadate.js v3.0.0alpha, 2013-03-16
  * By Amsul (http://amsul.ca)
  * Hosted on http://amsul.github.com/pickadate.js/
  * Licensed under MIT ("expat" flavour) license.
@@ -148,9 +148,8 @@ if ( ![].indexOf ) {
 /**
  * Todo:
  * – Do: `data-value` stuff with `formatSubmit`
- * – Fix `viewset`. Goes to prev/next months.
  * – Disable/enable dates.
- * – Fix for max/min disabled & keymovement.
+ * – Fix for edge max/min disabled & keymovement.
  * – WAI-ARIA support
  */
 
@@ -287,12 +286,12 @@ if ( ![].indexOf ) {
         var
             clock = this,
             settings = clock.settings,
-            toDisable = clock.settings.disable
+            toDisable = clock.DISABLE
 
         return createNode( 'ul', createGroupOfNodes({
             min: clock.MIN.TIME,
             max: clock.MAX.TIME,
-            i: clock.settings.interval,
+            i: clock.I,
             node: 'li',
             item: function( loopedTime ) {
                 loopedTime = clock.object( loopedTime % MINUTES_IN_DAY )
@@ -361,7 +360,8 @@ if ( ![].indexOf ) {
      */
     ClockPicker.prototype.validate = function( timePassed, keyMovement ) {
 
-        var clock = this,
+        var
+            clock = this,
             minLimitObject = clock.MIN,
             maxLimitObject = clock.MAX,
 
@@ -388,18 +388,18 @@ if ( ![].indexOf ) {
             )
         }
 
-        if ( timePassedObject.TIME <= minLimitObject.TIME ) {
-            return minLimitObject
+        if ( timePassedObject.TIME < minLimitObject.TIME ) {
+            timePassedObject = minLimitObject
         }
 
-        if ( timePassedObject.TIME >= maxLimitObject.TIME ) {
-            return maxLimitObject
+        else if ( timePassedObject.TIME > maxLimitObject.TIME ) {
+            timePassedObject = maxLimitObject
         }
 
         // If there are times to disable and this is one of them,
         // shift using the interval until we reach an enabled time.
-        if ( clock.settings.disable && clock.disable( timePassedObject ) ) {
-            return clock.shift( timePassedObject, timePassedObject.TIME > maxLimitObject.TIME ? -1 : keyMovement || 1 )
+        if ( clock.DISABLE && clock.disable( timePassedObject ) ) {
+            timePassedObject = clock.shift( timePassedObject, timePassedObject.TIME > maxLimitObject.TIME ? -1 : keyMovement || 1 )
         }
 
         return timePassedObject
@@ -435,7 +435,7 @@ if ( ![].indexOf ) {
     /**
      * Shift a time by a certain interval until we reach an enabled one.
      */
-    ClockPicker.prototype.shift = function( timeObject, interval ) {
+    ClockPicker.prototype.shift = function( timeObject, keyMovement ) {
 
         var clock = this,
             originalTimeObject = timeObject,
@@ -445,23 +445,24 @@ if ( ![].indexOf ) {
         // Keep looping as long as the time is disabled.
         while ( clock.disable( timeObject ) ) {
 
-            // Increase/decrease the time by the interval and keep looping.
-            timeObject = clock.object( timeObject.TIME += ( interval || clock.I ) * clock.settings.interval )
+            // Increase/decrease the time by the key movement and keep looping.
+            timeObject = clock.object( timeObject.TIME += ( keyMovement || clock.I ) * clock.I )
 
             // If we've looped beyond the limits, break out of the loop.
             if ( timeObject.TIME <= minLimit ) {
-                interval = 1
+                keyMovement = 1
                 timeObject = originalTimeObject
                 break
             }
             if ( timeObject.TIME >= maxLimit ) {
-                interval = -1
+                keyMovement = -1
+                timeObject = originalTimeObject
                 break
             }
         }
 
         // Do a final validation check to make sure it's within bounds.
-        return clock.validate( timeObject, interval )
+        return clock.validate( timeObject, keyMovement )
     } //ClockPicker.prototype.shift
 
 
@@ -917,26 +918,27 @@ if ( ![].indexOf ) {
 
         var calendar = this,
             minLimitObject = calendar.MIN,
-            maxLimitObject = calendar.MAX
+            maxLimitObject = calendar.MAX,
 
-        // Make sure we have a date object to work with.
-        datePassed = datePassed && !isNaN( datePassed.TIME ) ? datePassed : calendar.object( datePassed )
+            // Make sure we have a date object to work with.
+            datePassedObject = datePassed && !isNaN( datePassed.TIME ) ? datePassed : calendar.object( datePassed )
 
-        if ( datePassed.TIME < minLimitObject.TIME ) {
-            return minLimitObject
+        if ( datePassedObject.TIME < minLimitObject.TIME ) {
+            datePassedObject = minLimitObject
         }
 
-        if ( datePassed.TIME > maxLimitObject.TIME ) {
-            return maxLimitObject
+        else if ( datePassedObject.TIME > maxLimitObject.TIME ) {
+            keyMovement = -1
+            datePassedObject = maxLimitObject
         }
 
         // If there are times to disable and this is one of them,
         // shift using the interval until we reach an enabled time.
-        if ( calendar.settings.disable && calendar.disable( datePassed ) ) {
-            return calendar.shift( datePassed, datePassed.TIME > maxLimitObject.TIME ? -1 : keyMovement || 1 )
+        if ( calendar.DISABLE && calendar.disable( datePassedObject ) ) {
+            datePassedObject = calendar.shift( datePassedObject, datePassedObject.TIME > maxLimitObject.TIME ? -1 : keyMovement || 1 )
         }
 
-        return datePassed
+        return datePassedObject
     } //CalendarPicker.prototype.validate
 
 
@@ -969,7 +971,7 @@ if ( ![].indexOf ) {
     /**
      * Shift a date by a certain interval until we reach an enabled one.
      */
-    CalendarPicker.prototype.shift = function( dateObject, interval ) {
+    CalendarPicker.prototype.shift = function( dateObject, keyMovement ) {
 
         var calendar = this,
             originalDateObject = dateObject
@@ -977,8 +979,8 @@ if ( ![].indexOf ) {
         // Keep looping as long as the date is disabled.
         while ( calendar.disable( dateObject ) ) {
 
-            // Increase/decrease the date by the interval and keep looping.
-            dateObject = calendar.object([ dateObject.YEAR, dateObject.MONTH, dateObject.DATE + ( interval || 1 ) ])
+            // Increase/decrease the date by the key movement and keep looping.
+            dateObject = calendar.object([ dateObject.YEAR, dateObject.MONTH, dateObject.DATE + ( keyMovement || 1 ) ])
 
             // If we've looped through to the next month, break out of the loop.
             if ( dateObject.MONTH != originalDateObject.MONTH ) {
@@ -987,7 +989,7 @@ if ( ![].indexOf ) {
         }
 
         // Do a final validation check to make sure it's within bounds.
-        return calendar.validate( dateObject )
+        return calendar.validate( dateObject, keyMovement )
     } //CalendarPicker.prototype.shift
 
 

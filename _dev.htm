@@ -62,12 +62,12 @@
     <script src="build/pickadate.js"></script>
 
     <script type="text/javascript">
-        // var $input = $( '.datepicker' ).pickadate({
+        var $input = $( '.datepicker' ).pickadate({
             // firstDay: 1,
             // format: 'he!y!y!y!y yyyy,mm,dd',
             // monthSelector: true,
             // yearSelector: true,
-        var $input = $( '.datepicker' ).pickatime({
+        // var $input = $( '.datepicker' ).pickatime({
 
             // format: '<b>h</b>:i <!i>a</!i>',
             // format: 'h:i a',
@@ -76,25 +76,27 @@
             // interval: 240,
             // disable: [
             //     // true,
-            //     2, 3, 8,
+            //     16,
+            //     [ 14, 0 ],
             //     [ 5, 30 ]
             // ],
-            disable: [
-            //     true,
-            //     7,
-            //     [ 2013, 2, 6 ],
-                22,
-            ],
+            // disable: [
+            // //     true,
+            // //     7,
+            // //     [ 2013, 2, 6 ],
+            //     0,
+            //     22,
+            // ],
             // disable: function( loopedTime ) {
             //     return loopedTime.HOUR > 5
             // }
-            interval: 60,
+            // interval: 20,
             // min: [2013, 2, 10],
-            // max: [2013, 2, 25]
+            // max: [2013, 3, 25]
             // min: true,
             // min: [ 12, 0 ],
             // max: false,
-            max: [ 22, 30 ]
+            // max: [ 16, 0 ]
         }
 
         /*{
@@ -159,9 +161,9 @@
                 [2013,3,24],
                 [2013,3,25]
             ],
-        }*/)
-        // var calendar = $input.pickadate( 'open' )
-        var calendar = $input.pickatime( 'open' )
+        }*/).
+        data( 'pickadate' ).open()
+        // data( 'pickatime' ).open()
     </script>
 
 
