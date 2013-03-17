@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v3.0.0alpha, 2013-03-16
+ * pickadate.js v3.0.0alpha, 2013-03-17
  * By Amsul (http://amsul.ca)
  * Hosted on http://amsul.github.com/pickadate.js/
  * Licensed under MIT ("expat" flavour) license.
@@ -149,7 +149,7 @@ if ( ![].indexOf ) {
  * Todo:
  * – Do: `data-value` stuff with `formatSubmit`
  * – Disable/enable dates.
- * – Fix for edge max/min disabled & keymovement.
+ * – Fix for max limit later than midnight.
  * – WAI-ARIA support
  */
 
@@ -189,18 +189,18 @@ if ( ![].indexOf ) {
 
 
     function ClockPicker( settings ) {
-        var clock = this
+        var picker = this
         return {
             div: ':',
-            holder: clock.holder,
-            object: clock.object,
-            validate: clock.validate,
-            parse: clock.parse,
-            disable: clock.disable,
-            shift: clock.shift,
-            min: clock.min,
-            max: clock.max,
-            now: clock.validate,
+            holder: picker.holder,
+            object: picker.object,
+            validate: picker.validate,
+            parse: picker.parse,
+            disable: picker.disable,
+            shift: picker.shift,
+            min: picker.min,
+            max: picker.max,
+            now: picker.validate,
             settings: settings,
             keyMove: {
                 40: 1, // Down
@@ -209,10 +209,10 @@ if ( ![].indexOf ) {
                 37: -1, // Left
                 go: function( timeChange ) {
 
-                    var picker = this,
+                    var clock = this,
 
                         // Create a validated target object with the relative date change.
-                        targetDateObject = picker.validate( picker.HIGHLIGHT.TIME + timeChange * picker.I, timeChange )
+                        targetDateObject = clock.validate( timeChange * clock.I + clock.HIGHLIGHT.TIME, timeChange )
 
                     // Return the targetted time object to "go" to.
                     return targetDateObject
@@ -289,8 +289,8 @@ if ( ![].indexOf ) {
             toDisable = clock.DISABLE
 
         return createNode( 'ul', createGroupOfNodes({
-            min: clock.MIN.TIME,
-            max: clock.MAX.TIME,
+            min: clock.min().TIME,
+            max: clock.max().TIME,
             i: clock.I,
             node: 'li',
             item: function( loopedTime ) {
@@ -449,12 +449,12 @@ if ( ![].indexOf ) {
             timeObject = clock.object( timeObject.TIME += ( keyMovement || clock.I ) * clock.I )
 
             // If we've looped beyond the limits, break out of the loop.
-            if ( timeObject.TIME <= minLimit ) {
+            if ( timeObject.TIME < minLimit ) {
                 keyMovement = 1
                 timeObject = originalTimeObject
                 break
             }
-            if ( timeObject.TIME >= maxLimit ) {
+            if ( timeObject.TIME > maxLimit ) {
                 keyMovement = -1
                 timeObject = originalTimeObject
                 break
@@ -591,7 +591,7 @@ if ( ![].indexOf ) {
     function CalendarPicker( settings ) {
 
         var
-            calendar = this,
+            picker = this,
 
             // Return the length of the first word in a collection.
             getWordLengthFromCollection = function( string, collection, dateObject ) {
@@ -610,15 +610,15 @@ if ( ![].indexOf ) {
 
         return {
             div: '/',
-            holder: calendar.holder,
-            object: calendar.object,
-            validate: calendar.validate,
-            parse: calendar.parse,
-            disable: calendar.disable,
-            shift: calendar.shift,
-            now: calendar.object,
-            min: calendar.min,
-            max: calendar.max,
+            holder: picker.holder,
+            object: picker.object,
+            validate: picker.validate,
+            parse: picker.parse,
+            disable: picker.disable,
+            shift: picker.shift,
+            now: picker.object,
+            min: picker.min,
+            max: picker.max,
             settings: settings,
             keyMove: {
                 40: 7, // Down
@@ -628,14 +628,14 @@ if ( ![].indexOf ) {
                 go: function( dateChange ) {
 
                     var
-                        picker = this,
+                        calendar = this,
 
                         // Create a validated target object with the relative date change.
-                        targetDateObject = picker.validate( [ picker.HIGHLIGHT.YEAR, picker.HIGHLIGHT.MONTH, picker.HIGHLIGHT.DATE + dateChange ], dateChange )
+                        targetDateObject = calendar.validate( [ calendar.HIGHLIGHT.YEAR, calendar.HIGHLIGHT.MONTH, calendar.HIGHLIGHT.DATE + dateChange ], dateChange )
 
                     // If there's a month change, update the viewset.
-                    if ( targetDateObject.MONTH != picker.VIEWSET.MONTH ) {
-                        picker.VIEWSET = targetDateObject
+                    if ( targetDateObject.MONTH != calendar.VIEWSET.MONTH ) {
+                        calendar.VIEWSET = targetDateObject
                     }
 
                     // Return the targetted date object to "go" to.
@@ -710,7 +710,13 @@ if ( ![].indexOf ) {
 
                 // Create an array by splitting the formatting string passed.
                 toArray: function( formatString ) { return formatString.split( /(d{1,4}|m{1,4}|y{4}|yy|!.)/g ) }
-            } //formats
+            }, //formats
+            onOpen: function( $holder ) {
+                $holder.find( 'button' ).attr( 'tabindex', 0 )
+            },
+            onClose: function( $holder ) {
+                $holder.find( 'button' ).attr( 'tabindex', -1 )
+            }
         }
     } //CalendarPicker
 
@@ -723,6 +729,11 @@ if ( ![].indexOf ) {
         var
             calendar = this,
             settings = calendar.settings,
+
+            // Get the tab index state picker opened/closed.
+            getTabindexState = function() {
+                return 'tabindex=' + ( calendar.isOpen ? 0 : -1 )
+            },
 
             // Create the nav for next/prev month.
             createMonthNav = function( next ) {
@@ -871,7 +882,7 @@ if ( ![].indexOf ) {
 
         createNode(
             STRING_DIV,
-            createNode( 'button', settings.today, settings.klass.buttonToday, 'data-pick=' + "getTimeFormatted( 'yyyy/mm/dd', NOW )" + ' ' + "getTabindexState()" ) + createNode( 'button', settings.clear, settings.klass.buttonClear, 'data-clear=1 ' + "getTabindexState()" ),
+            createNode( 'button', settings.today, settings.klass.buttonToday, 'data-pick=' + calendar.NOW.YEAR + calendar.div + calendar.NOW.MONTH + calendar.div + calendar.NOW.DATE + ' ' + getTabindexState() ) + createNode( 'button', settings.clear, settings.klass.buttonClear, 'data-clear=1 ' + getTabindexState() ),
             settings.klass.footer
         ) //endreturn
     } //CalendarPicker.prototype.holder
@@ -1213,6 +1224,9 @@ if ( ![].indexOf ) {
 
                     var $target = $( event.target ),
                         targetData = $target.data()
+
+                    // Prevent the default action.
+                    event.preventDefault()
 
                     // Check if the click is within the holder.
                     if ( $HOLDER.find( $target[ 0 ] ).length ) {

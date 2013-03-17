@@ -40,9 +40,9 @@
         <form>
             <fieldset>
                 <h3><label for="input_01">Pick a date. Go ahead...</label></h3>
-                <input id="input_01" class="datepicker" name="date" type="date" valuee="1:30 a.m." data-valuee="01:30" valuee="14 January, 2012" data-valuee="2012/05/22">
+                <input id="input_01" class="datepicker" name="date" type="date" valuee="1:30 a.m." data-valuee="01:30" valuee="14 January, 2012" data-value="2012/05/22">
                 <br><br><br><br><br>
-                <input type="submit">
+                <input class="button" type="submit" value="open">
             </fieldset>
         </form>
 
@@ -62,24 +62,26 @@
     <script src="build/pickadate.js"></script>
 
     <script type="text/javascript">
-        var $input = $( '.datepicker' ).pickadate({
+        // var $input = $( '.datepicker' ).pickadate({
             // firstDay: 1,
             // format: 'he!y!y!y!y yyyy,mm,dd',
+            // formatSubmit: 'yyyy/mm/dd',
             // monthSelector: true,
             // yearSelector: true,
-        // var $input = $( '.datepicker' ).pickatime({
+        var $input = $( '.datepicker' ).pickatime({
 
             // format: '<b>h</b>:i <!i>a</!i>',
             // format: 'h:i a',
-            // formatSubmit: 'HH:i',
+            formatSubmit: 'HH:i',
 
             // interval: 240,
-            // disable: [
-            //     // true,
-            //     16,
-            //     [ 14, 0 ],
-            //     [ 5, 30 ]
-            // ],
+            disable: [
+                // true,
+                16,
+                [ 20, 0 ],
+                [ 23, 30 ],
+                // [ 5, 30 ]
+            ],
             // disable: [
             // //     true,
             // //     7,
@@ -94,9 +96,9 @@
             // min: [2013, 2, 10],
             // max: [2013, 3, 25]
             // min: true,
-            // min: [ 12, 0 ],
+            min: [ 20, 0 ],
             // max: false,
-            // max: [ 16, 0 ]
+            // max: [ 28, 0 ]
         }
 
         /*{
@@ -162,8 +164,14 @@
                 [2013,3,25]
             ],
         }*/).
-        data( 'pickadate' ).open()
-        // data( 'pickatime' ).open()
+        // data( 'pickadate' ).open()
+        data( 'pickatime' ).open()
+        var $button = $( '.button' ).on( 'click', function( event ) {
+            event.preventDefault()
+            event.stopPropagation()
+            // $input.pickadate( 'open' )
+            $input.pickatime( 'open' )
+        })
     </script>
 
 
