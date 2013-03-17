@@ -148,8 +148,7 @@ if ( ![].indexOf ) {
 /**
  * Todo:
  * – Do: `data-value` stuff with `formatSubmit`
- * – Disable/enable dates.
- * – Fix for max limit later than midnight.
+ * – `min()` vs `.MIN` & `max()` vs `.MAX`
  * – WAI-ARIA support
  */
 
@@ -253,13 +252,13 @@ if ( ![].indexOf ) {
 
                     // If there's a string, then the length is always 4.
                     // Otherwise check if it's more than "noon" and return either am/pm.
-                    return string ? 4 : MINUTES_IN_DAY / 2 > this.TIME ? 'a.m.' : 'p.m.'
+                    return string ? 4 : MINUTES_IN_DAY / 2 > this.TIME % MINUTES_IN_DAY ? 'a.m.' : 'p.m.'
                 },
                 A: function( string ) {
 
                     // If there's a string, then the length is always 2.
                     // Otherwise check if it's more than "noon" and return either am/pm.
-                    return string ? 2 : MINUTES_IN_DAY / 2 > this.TIME ? 'AM' : 'PM'
+                    return string ? 2 : MINUTES_IN_DAY / 2 > this.TIME % MINUTES_IN_DAY ? 'AM' : 'PM'
                 },
 
                 // Create an array by splitting the formatting string passed.
@@ -294,7 +293,7 @@ if ( ![].indexOf ) {
             i: clock.I,
             node: 'li',
             item: function( loopedTime ) {
-                loopedTime = clock.object( loopedTime % MINUTES_IN_DAY )
+                loopedTime = clock.object( loopedTime )
                 return [
                     formatObjectToString( clock.formats, settings.format, loopedTime ),
                     (function( klasses, timeMinutes ) {
@@ -362,8 +361,8 @@ if ( ![].indexOf ) {
 
         var
             clock = this,
-            minLimitObject = clock.MIN,
-            maxLimitObject = clock.MAX,
+            minLimitObject = clock.min(),
+            maxLimitObject = clock.max(),
 
             // Make sure we have a time object to work with.
             timePassedObject = timePassed && !isNaN( timePassed.TIME ) ? timePassed : clock.object( timePassed )
@@ -532,7 +531,7 @@ if ( ![].indexOf ) {
 
 
         // If the max is less than min, add a day
-        if ( limit.TIME < clock.min.TIME ) {
+        if ( limit.TIME < clock.MIN.TIME ) {
             limit = clock.object( limit.TIME + MINUTES_IN_DAY )
         }
 
