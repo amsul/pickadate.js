@@ -40,7 +40,7 @@
         <form>
             <fieldset>
                 <h3><label for="input_01">Pick a date. Go ahead...</label></h3>
-                <input id="input_01" class="datepicker" name="date" type="date" valuee="1:30 a.m." data-valuee="01:30" valuee="14 January, 2012" data-value="2012/05/22">
+                <input id="input_01" class="datepicker" name="date" type="date" valuee="1:30 a.m." data-valuee="01:30" valuee="14 January, 2012" data-valuee="2012/05/22">
                 <br><br><br><br><br>
                 <input class="button" type="submit" value="open">
             </fieldset>
@@ -72,47 +72,19 @@
 
             // format: '<b>h</b>:i <!i>a</!i>',
             // format: 'h:i a',
-            formatSubmit: 'HH:i',
+            // formatSubmit: 'HH:i',
 
-            // interval: 240,
-            // disable: [
-            //     // true,
-            //     16,
-            //     [ 20, 0 ],
-            //     [ 23, 30 ],
-            //     // [ 5, 30 ]
-            // ],
-            // disable: [
-            // //     true,
-            // //     7,
-            // //     [ 2013, 2, 6 ],
-            //     0,
-            //     22,
-            // ],
-            // disable: function( loopedTime ) {
-            //     return loopedTime.HOUR > 5
-            // }
-            interval: 45,
-            // min: [2013, 2, 10],
-            // max: [2013, 3, 25]
-            // min: true,
-            min: [ 23, 30 ],
-            // max: false,
-            max: [ 4, 0 ]
-        }
-
-        /*{
-            // maxLimit: 4,
-            // maxLimit: [18,30],
-            onStart: function() {
-                this.open()
-            },
-            onSet: function() {
-                this.$node.val( 'From: ' + this.get( 'h:i a' ) )
-            },
-            monthSelector: true,
-            datesDisabled: [
+            interval: 1,
+            disable: [
                 // true,
+                // 22, 23, 24, 25, 26,
+                // [ 20, 0 ],
+                // [ 23, 30 ],
+                // [ 5, 30 ]
+            ],
+            // disable: [
+            //     true,
+                // 1,
                 // 7,
                 // [2013, 1, 21],
                 // [2013, 1, 22],
@@ -156,21 +128,42 @@
                 // [2013, 2, 29],
                 // [2013, 2, 30],
                 // [2013, 2, 31],
-                [2013,3,20],
-                [2013,3,21],
-                [2013,3,22],
-                [2013,3,23],
-                [2013,3,24],
-                [2013,3,25]
-            ],
+                // [2013,3,1],
+                // [2013,3,2],
+                // [2013,3,3],
+                // [2013,3,4],
+                // [2013,3,5]
+            // ],
+            // disable: function( loopedTime ) {
+            //     return loopedTime.HOUR > 5
+            // }
+            // interval: 45,
+            // min: [2013, 2, 10],
+            // max: [2013, 3, 25]
+            min: true,
+            // min: [ 23, 30 ],
+            max: 5,
+            // max: [ 4, 0 ]
+        }
+
+        /*{
+            // maxLimit: 4,
+            // maxLimit: [18,30],
+            onStart: function() {
+                this.open()
+            },
+            onSet: function() {
+                this.$node.val( 'From: ' + this.get( 'h:i a' ) )
+            },
+            monthSelector: true
         }*/).
         // data( 'pickadate' ).open()
         data( 'pickatime' ).open()
         var $button = $( '.button' ).on( 'click', function( event ) {
             event.preventDefault()
             event.stopPropagation()
-            // $input.pickadate( 'open' )
-            $input.pickatime( 'open' )
+            $input.open()
+            // $input.pickatime( 'open' )
         })
     </script>
 

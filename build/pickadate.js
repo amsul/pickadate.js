@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v3.0.0alpha, 2013-03-17
+ * pickadate.js v3.0.0alpha, 2013-03-18
  * By Amsul (http://amsul.ca)
  * Hosted on http://amsul.github.com/pickadate.js/
  * Licensed under MIT ("expat" flavour) license.
@@ -147,8 +147,8 @@ if ( ![].indexOf ) {
 
 /**
  * Todo:
- * – Do: `data-value` stuff with `formatSubmit`
- * – `min()` vs `.MIN` & `max()` vs `.MAX`
+ * – Fix for all times disabled.
+ * – If time passed, list should update?
  * – WAI-ARIA support
  */
 
@@ -933,20 +933,37 @@ if ( ![].indexOf ) {
             // Make sure we have a date object to work with.
             datePassedObject = datePassed && !isNaN( datePassed.TIME ) ? datePassed : calendar.object( datePassed )
 
+
+        // If we passed the lower bound, set the key movement upwards,
+        // flip our "reached min" flag, and set the date to the lower bound.
         if ( datePassedObject.TIME < minLimitObject.TIME ) {
+            keyMovement = 1
+            calendar.doneMin = 1
             datePassedObject = minLimitObject
         }
 
+        // Otherwise if we passed the upper bound, set the key movement downwards,
+        // flip our "reached max" flag, and set the date to the upper bound.
         else if ( datePassedObject.TIME > maxLimitObject.TIME ) {
             keyMovement = -1
+            calendar.doneMax = 1
             datePassedObject = maxLimitObject
         }
 
-        // If there are times to disable and this is one of them,
-        // shift using the interval until we reach an enabled time.
-        if ( calendar.DISABLE && calendar.disable( datePassedObject ) ) {
+        // If we've hit the upper and lower bounds, set the date to now and move on.
+        if ( calendar.doneMin && calendar.doneMax ) {
+            datePassedObject = calendar.NOW
+        }
+
+        // Otherwise if there are dates to disable and this is one of them,
+        // shift using the interval until we reach an enabled date.
+        else if ( calendar.DISABLE && calendar.disable( datePassedObject ) ) {
             datePassedObject = calendar.shift( datePassedObject, datePassedObject.TIME > maxLimitObject.TIME ? -1 : keyMovement || 1 )
         }
+
+        // Reset the check for if we reached the min and max bounds.
+        calendar.doneMin = 0
+        calendar.doneMax = 0
 
         return datePassedObject
     } //CalendarPicker.prototype.validate
@@ -1233,16 +1250,22 @@ if ( ![].indexOf ) {
                         // Stop it from propagating to the doc.
                         event.stopPropagation()
 
-                        // ELEMENT.focus()
+                        // Maintain the focus on the `input` element.
+                        ELEMENT.focus()
 
                         // Set and close the picker if something is getting picked.
                         if ( targetData.pick && !$target.hasClass( CLASSES.disabled ) ) {
                             P.set( targetData.pick.split( PICKER.div ) ).close()
                         }
 
-                        // If something is superficially changed, set the picker.
+                        // If something is superficially changed, navigate the picker.
                         else if ( targetData.nav && !$target.hasClass( CLASSES.navDisabled ) ) {
                             P.set( [ PICKER.HIGHLIGHT.YEAR, PICKER.HIGHLIGHT.MONTH + targetData.nav, PICKER.HIGHLIGHT.DATE ], 1 )
+                        }
+
+                        // If a "clear" button is pressed, empty the values and close it.
+                        else if ( targetData.clear ) {
+                            P.clear().close()
                         }
                     }
                 }
@@ -1384,6 +1407,11 @@ if ( ![].indexOf ) {
                         // Prevent the default action to keep focus on the `input` field.
                         event.preventDefault()
 
+                        // Put focus back onto the element if needed.
+                        if ( document.activeElement != ELEMENT ) {
+                            ELEMENT.focus()
+                        }
+
                     }).on( 'keydown.P' + PICKER.ID, function( event ) {
 
                         var
@@ -1412,7 +1440,7 @@ if ( ![].indexOf ) {
                                 P.set( triggerFunction( PICKER.keyMove.go, PICKER, [ keycodeToMove ] ), 1 )
                             }
 
-                            // Otherwise it's the enter key so set the highlighted time and then close it.
+                            // Otherwise it's the enter key so select the highlighted or selected time and then close it.
                             else {
                                 P.set( PICKER.HIGHLIGHT ).close()
                             }
@@ -1477,10 +1505,10 @@ if ( ![].indexOf ) {
                     else {
 
                         // Validate and create a time object.
-                        var timeObject = PICKER.validate( timePassed )
+                        var timeObject = timePassed && !isNaN( timePassed.TIME ) ? timePassed : PICKER.object( timePassed )
 
-                        // Stop if there isn't a valid object.
-                        if ( isNaN( timeObject.TIME ) ) {
+                        // Stop if it's not a superficial selection and the time is disabled.
+                        if ( !isSuperficial && PICKER.DISABLE.length && triggerFunction( PICKER.disable, PICKER, [ timeObject ] ) ) {
                             return P
                         }
 

@@ -34,11 +34,6 @@
  * When the calendar is open
  */
 
-/* And add the "active" state to the body */
-/*body*/.pickadate__body--active {
-    overflow: hidden;
-}
-
 /* And add the "active" state to the input */
 /*input*/.pickadate__input--active {
     border-color: #0089ec !important;
@@ -166,7 +161,7 @@
     display: table-cell;
     vertical-align: middle;
     background: #fff;
-    padding: 1em;
+    padding: 0 1em;
 }
 .pickadate__clock {
     padding: 0;
@@ -202,7 +197,8 @@
     table-layout: fixed;
     font-size: inherit;
     width: 100%;
-    margin-top: .5em;
+    margin-top: .75em;
+    margin-bottom: .5em;
 }
 
 /* Remove browser stylings on a table cell */
@@ -219,22 +215,24 @@
 .pickadate__header {
     text-align: center;
     position: relative;
+    margin-top: .75em;
 }
 
 .pickadate__nav--prev,
 .pickadate__nav--next {
     position: absolute;
-    top: -.1em;
-    padding: .5em;
-    margin: -.33em;
+    top: -.33em;
+    padding: .5em 1.33em;
     width: 1em;
     height: 1em;
 }
 .pickadate__nav--prev {
-    left: 0;
+    left: -1em;
+    padding-right: 1.5em;
 }
 .pickadate__nav--next {
-    right: 0;
+    right: -1em;
+    padding-left: 1.5em;
 }
 .pickadate__nav--prev:before,
 .pickadate__nav--next:before {
@@ -362,7 +360,6 @@
  */
 .pickadate__footer {
     text-align: center;
-    margin: .25em 0 -.75em;
 }
 
 .pickadate__button--today,
@@ -371,9 +368,10 @@
     background: #fff;
     font-size: .8em;
     padding: .66em 0;
-    margin: 0 2.5%;
     font-weight: bold;
-    width: 40%;
+    width: 50%;
+    display: inline-block;
+    vertical-align: bottom;
 }
 .pickadate__button--today:before,
 .pickadate__button--clear:before {
@@ -397,6 +395,10 @@
     vertical-align: top;
     font-size: 1.1em;
 }
+.pickadate__button--today:hover,
+.pickadate__button--clear:hover {
+    border-bottom-color: #b1dcfb;
+}
 .pickadate__button--today:focus,
 .pickadate__button--clear:focus {
     background: #b1dcfb;
@@ -415,9 +417,12 @@
     border-color: #0089ec;
     z-index: 10;
 }
-.pickadate__list-item--disabled,
-.pickadate__list-item--disabled:hover {
-    border-color: #ddd;
+.pickadate__day--highlighted:hover,
+.pickadate__list-item--highlighted:hover,
+.pickadate__holder--focused .pickadate__day--highlighted,
+.pickadate__holder--focused .pickadate__list-item--highlighted {
+    background: #0089ec;
+    color: #fff;
 }
 .pickadate__day--infocus:hover,
 .pickadate__day--outfocus:hover,
@@ -430,10 +435,22 @@
     color: #000;
     background: #b1dcfb;
 }
-.pickadate__day--disabled,
-.pickadate__day--disabled:hover,
+
+
+
+/**
+ * The disabled buttons
+ */
 .pickadate__list-item--disabled,
 .pickadate__list-item--disabled:hover {
+    border-color: #ddd;
+}
+.pickadate__day--disabled,
+.pickadate__day--disabled:hover,
+.pickadate__holder--focused .pickadate__day--disabled,
+.pickadate__list-item--disabled,
+.pickadate__list-item--disabled:hover,
+.pickadate__holder--focused .pickadate__list-item--disabled {
     background: #f5f5f5;
     border-color: #f5f5f5;
     color: #ddd;
@@ -443,13 +460,6 @@
 .pickadate__list-item--disabled:hover {
     border-color: #ddd;
     z-index: auto;
-}
-.pickadate__day--highlighted:hover,
-.pickadate__list-item--highlighted:hover,
-.pickadate__holder--focused .pickadate__day--highlighted,
-.pickadate__holder--focused .pickadate__list-item--highlighted {
-    background: #0089ec;
-    color: #fff;
 }
 
 .pickadate__nav--disabled,
@@ -534,13 +544,10 @@
 
     /* Increase the spacing a tad */
     .pickadate__table {
-        margin-top: .75em;
+        margin-bottom: .75em;
     }
     .pickadate__weekday {
         padding-bottom: .5em;
-    }
-    .pickadate__footer {
-        margin: .5em 0 -.5em;
     }
 }
 
