@@ -62,26 +62,26 @@
     <script src="build/pickadate.js"></script>
 
     <script type="text/javascript">
-        // var $input = $( '.datepicker' ).pickadate({
+        var $input = $( '.datepicker' ).pickadate({
             // firstDay: 1,
             // format: 'he!y!y!y!y yyyy,mm,dd',
             // formatSubmit: 'yyyy/mm/dd',
-            // monthSelector: true,
-            // yearSelector: true,
-        var $input = $( '.datepicker' ).pickatime({
+            monthSelector: true,
+            yearSelector: true,
+        // var $input = $( '.datepicker' ).pickatime({
 
             // format: '<b>h</b>:i <!i>a</!i>',
             // format: 'h:i a',
             // formatSubmit: 'HH:i',
 
-            interval: 1,
-            disable: [
+            // interval: 1,
+            // disable: [
                 // true,
                 // 22, 23, 24, 25, 26,
                 // [ 20, 0 ],
                 // [ 23, 30 ],
                 // [ 5, 30 ]
-            ],
+            // ],
             // disable: [
             //     true,
                 // 1,
@@ -140,9 +140,9 @@
             // interval: 45,
             // min: [2013, 2, 10],
             // max: [2013, 3, 25]
-            min: true,
+            // min: true,
             // min: [ 23, 30 ],
-            max: 5,
+            // max: 5,
             // max: [ 4, 0 ]
         }
 
@@ -155,10 +155,9 @@
             onSet: function() {
                 this.$node.val( 'From: ' + this.get( 'h:i a' ) )
             },
-            monthSelector: true
         }*/).
-        // data( 'pickadate' ).open()
-        data( 'pickatime' ).open()
+        data( 'pickadate' ).open()
+        // data( 'pickatime' ).open()
         var $button = $( '.button' ).on( 'click', function( event ) {
             event.preventDefault()
             event.stopPropagation()

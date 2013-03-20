@@ -10,6 +10,7 @@
 
 /**
  * Todo:
+ * – Month & year selectors.
  * – Fix for all times disabled.
  * – If time passed, list should update?
  * – WAI-ARIA support
