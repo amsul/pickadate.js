@@ -17,7 +17,7 @@ To support IE 7+ and other old browsers, include `pickadate.legacy.js` instead.
 
 ## Contributing
 
-If you're sending in a pull request, to keep life simpler, send it in to the [dev](https://github.com/amsul/pickadate.js/tree/dev) branch.
+If you're sending in a pull request, send it in to the [dev](https://github.com/amsul/pickadate.js/tree/dev) branch. The minifier used is this [online YUI compressor](http://refresh-sf.com/yui/).
 
 ### Roadmap ahead
 

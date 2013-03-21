@@ -1,7 +1,8 @@
 ## Changelog
 
 ### 2.1.6
-- Added `onRender` callback
+- [Added `onRender` callback](http://amsul.github.com/pickadate.js/docs.htm#events)
+- [Swedish translation fix](https://github.com/amsul/pickadate.js/pull/105)
 
 ### 2.1.5
 - [Turkish translation fix](https://github.com/amsul/pickadate.js/issues/103)
