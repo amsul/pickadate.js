@@ -81,6 +81,7 @@ onStart: null,
 onOpen: null,
 onClose: null,
 onSelect: null,
+onRender: null,
 
 // <a href="themes.htm" id="options_styling">Themes</a>
 klass: {
@@ -536,6 +537,9 @@ klass: {
     },
     onStart: function() {
         console.log( 'Hello there :)' )
+    },
+    onRender: function() {
+      console.log( 'New Calendar Rendered!' )
     }
 })</code></pre>
 
@@ -561,6 +565,7 @@ klass: {
             <li><code class="method">onOpen</code>: invoked when the picker is opened.</li>
             <li><code class="method">onSelect</code>: invoked when a date is selected or cleared.</li>
             <li><code class="method">onClose</code>: invoked when the picker is closed.</li>
+            <li><code class="method">onRender</code>: invoked when the picker is rendered, including month changes.</li>
         </ol>
 
         <p>Within the scope of these methods, <code class="keyword">this</code> refers to the calendar object.</p>
@@ -978,7 +983,13 @@ function&nbsp;createDateArray( date ) {
                 if ( window.console && window.console.log ) {
                     window.console.log( 'Hello there :)' )
                 }
+            },
+            onRender: function() {
+                if ( window.console && window.console.log ) {
+                  window.console.log( 'New Calendar Rendered!' )
+                }
             }
+
         })
 
         $( '#picker_ranges_a' ).pickadate({
