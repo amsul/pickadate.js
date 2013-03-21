@@ -28,7 +28,7 @@
 
         <a href="https://github.com/amsul/pickadate.js"><img width="128" height="128" style="position:absolute;top:0;right:0;border:0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
 
-        <h4><a href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js v2.1.5</a> (<a href="#legacy">for old browsers</a>) or <a href="themes.htm" id="theme">view the themes</a></h4>
+        <h4><a href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js v2.1.6</a> (<a href="#legacy">for old browsers</a>) or <a href="themes.htm" id="theme">view the themes</a></h4>
         <h4><a href="#api">Jump to api documentation</a> &darr;</h4>
 
     </section>
@@ -81,6 +81,7 @@ onStart: null,
 onOpen: null,
 onClose: null,
 onSelect: null,
+onRender: null,
 
 // <a href="themes.htm" id="options_styling">Themes</a>
 klass: {
@@ -536,6 +537,9 @@ klass: {
     },
     onStart: function() {
         console.log( 'Hello there :)' )
+    },
+    onRender: function() {
+      console.log( 'New Calendar Rendered!' )
     }
 })</code></pre>
 
@@ -561,6 +565,7 @@ klass: {
             <li><code class="method">onOpen</code>: invoked when the picker is opened.</li>
             <li><code class="method">onSelect</code>: invoked when a date is selected or cleared.</li>
             <li><code class="method">onClose</code>: invoked when the picker is closed.</li>
+            <li><code class="method">onRender</code>: invoked when the picker is rendered, including month changes.</li>
         </ol>
 
         <p>Within the scope of these methods, <code class="keyword">this</code> refers to the calendar object.</p>
@@ -883,7 +888,7 @@ function&nbsp;createDateArray( date ) {
 
     <section class="holder aligncenter" id="legacy">
 
-        <p><a class="button-full" href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js v2.1.5</a></p>
+        <p><a class="button-full" href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js v2.1.6</a></p>
         <p><a class="button-full--secondary" href="themes.htm">View calendar themes</a></p>
         <small class="dimmed">
             <p>Browser support: IE7+, Chrome, Firefox, Safari, Opera, iOS Safari, Android browser</p>
@@ -978,7 +983,13 @@ function&nbsp;createDateArray( date ) {
                 if ( window.console && window.console.log ) {
                     window.console.log( 'Hello there :)' )
                 }
+            },
+            onRender: function() {
+                if ( window.console && window.console.log ) {
+                  window.console.log( 'New Calendar Rendered!' )
+                }
             }
+
         })
 
         $( '#picker_ranges_a' ).pickadate({

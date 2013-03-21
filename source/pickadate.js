@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v2.1.4 - 09 February, 2013
+ * pickadate.js v2.1.6 - 20 March, 2013
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
@@ -136,6 +136,8 @@
                         // Trigger the `onStart` method within scope of the picker
                         triggerFunction( SETTINGS.onStart, P )
 
+                        // Trigger the `onRender` method within scope of the picker
+                        triggerFunction( SETTINGS.onRender, P )
 
                         return P
                     }, //init
@@ -688,6 +690,7 @@
                     if ( CALENDAR.items.indexOf( event.target ) < 0 ) {
                         event.preventDefault()
                     }
+
                 }).on( 'click', function( event ) {
 
                     // If the calendar is closed and there appears to be no click, do nothing
@@ -746,7 +749,6 @@
                         P.close()
                     }
                 }), // $HOLDER
-
 
                 // Translate a keycode to a relative change in date
                 KEYCODE_TO_DATE = {
@@ -1416,12 +1418,14 @@
              * Render a new calendar
              */
             function calendarRender() {
-
                 // Create a new wrapped calendar and place it within the holder
                 $HOLDER.html( createCalendarWrapped() )
 
                 // Update the calendar items
                 CALENDAR.items = getUpdatedCalendarItems()
+
+                // Trigger the onRender method within scope of the picker
+                triggerFunction( SETTINGS.onRender, P )
             } //calendarRender
 
 
@@ -1595,6 +1599,7 @@
         onClose: 0,
         onSelect: 0,
         onStart: 0,
+        onRender: 0,
 
 
         // Classes

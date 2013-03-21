@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v2.1.4 - 09 February, 2013
+ * pickadate.js v2.1.6 - 20 March, 2013
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
@@ -136,6 +136,8 @@
                         // Trigger the `onStart` method within scope of the picker
                         triggerFunction( SETTINGS.onStart, P )
 
+                        // Trigger the `onRender` method within scope of the picker
+                        triggerFunction( SETTINGS.onRender, P )
 
                         return P
                     }, //init
@@ -1422,6 +1424,9 @@
 
                 // Update the calendar items
                 CALENDAR.items = getUpdatedCalendarItems()
+
+                // Trigger the onRender method within scope of the picker
+                triggerFunction( SETTINGS.onRender, P )
             } //calendarRender
 
 
@@ -1595,6 +1600,7 @@
         onClose: 0,
         onSelect: 0,
         onStart: 0,
+        onRender: 0,
 
 
         // Classes
