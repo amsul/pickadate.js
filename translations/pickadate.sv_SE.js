@@ -9,5 +9,5 @@ $.extend( $.fn.pickadate.defaults, {
     clear: 'rensa',
     firstDay: 1,
     format: 'd mmmmm yyyy',
-    formatSubmit: 'yyyy-mm-dd'
+    formatSubmit: 'yyyy/mm/dd'
 })
