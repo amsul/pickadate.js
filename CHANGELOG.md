@@ -1,5 +1,8 @@
 ## Changelog
 
+### 2.1.6
+- Added `onRender` callback
+
 ### 2.1.5
 - [Turkish translation fix](https://github.com/amsul/pickadate.js/issues/103)
 
