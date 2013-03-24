@@ -62,19 +62,22 @@
     <script src="build/pickadate.js"></script>
 
     <script type="text/javascript">
-        var $input = $( '.datepicker' ).pickadate({
+        // var $input = $( '.datepicker' ).pickadate({
+            // onRender: function( $holder ) {
+                // $holder.find( '.pickadate__month' ).before( $holder.find( '.pickadate__year' ).detach().css({ marginLeft: 0, marginRight: '.5em' }) )
+            // },
             // firstDay: 1,
             // format: 'he!y!y!y!y yyyy,mm,dd',
             // formatSubmit: 'yyyy/mm/dd',
-            monthSelector: true,
-            yearSelector: true,
-        // var $input = $( '.datepicker' ).pickatime({
+            // selectMonths: true,
+            // selectYears: 20,
+        var $input = $( '.datepicker' ).pickatime({
 
             // format: '<b>h</b>:i <!i>a</!i>',
             // format: 'h:i a',
             // formatSubmit: 'HH:i',
 
-            // interval: 1,
+            interval: 180,
             // disable: [
                 // true,
                 // 22, 23, 24, 25, 26,
@@ -138,8 +141,8 @@
             //     return loopedTime.HOUR > 5
             // }
             // interval: 45,
-            // min: [2013, 2, 10],
-            // max: [2013, 3, 25]
+            // min: [2013, 1, 10],
+            // max: [2014, 3, 25]
             // min: true,
             // min: [ 23, 30 ],
             // max: 5,
@@ -156,8 +159,8 @@
                 this.$node.val( 'From: ' + this.get( 'h:i a' ) )
             },
         }*/).
-        data( 'pickadate' ).open()
-        // data( 'pickatime' ).open()
+        // data( 'pickadate' ).open()
+        data( 'pickatime' ).open()
         var $button = $( '.button' ).on( 'click', function( event ) {
             event.preventDefault()
             event.stopPropagation()

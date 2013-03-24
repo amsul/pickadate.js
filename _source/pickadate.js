@@ -13,6 +13,7 @@
  * – Month & year selectors.
  * – Fix for all times disabled.
  * – If time passed, list should update?
+ * – Adjust `PICKER` and `P`.
  * – WAI-ARIA support
  */
 
@@ -575,10 +576,26 @@
                 toArray: function( formatString ) { return formatString.split( /(d{1,4}|m{1,4}|y{4}|yy|!.)/g ) }
             }, //formats
             onOpen: function( $holder ) {
-                $holder.find( 'button' ).attr( 'tabindex', 0 )
+                $holder.find( 'button, select' ).attr( 'tabindex', 0 )
             },
             onClose: function( $holder ) {
-                $holder.find( 'button' ).attr( 'tabindex', -1 )
+                $holder.find( 'button, select' ).attr( 'tabindex', -1 )
+            },
+            onRender: function( $holder, pickerObject ) {
+
+                var calendar = this
+
+                $holder.find( '.' + settings.klass.selectMonth ).on( 'change', function() {
+                    pickerObject.set( [ calendar.VIEWSET.YEAR, this.value, calendar.SELECT[ 0 ].DATE ], 1 )
+                    $holder.find( '.' + settings.klass.selectMonth ).focus()
+                })
+
+                $holder.find( '.' + settings.klass.selectYear ).on( 'change', function() {
+                    pickerObject.set( [ this.value, calendar.VIEWSET.MONTH, calendar.SELECT[ 0 ].DATE ], 1 )
+                    $holder.find( '.' + settings.klass.selectYear ).focus()
+                })
+
+                triggerFunction( settings.onRender, calendar, [ $holder ] )
             }
         }
     } //CalendarPicker
@@ -620,16 +637,100 @@
             // Create the month label
             createMonthLabel = function( monthsCollection ) {
 
+                var focusedMonth = calendar.VIEWSET.MONTH
+
+                // If there are months to select, add a dropdown menu.
+                if ( settings.selectMonths ) {
+
+                    return createNode( 'select', createGroupOfNodes({
+                        min: 0,
+                        max: 11,
+                        i: 1,
+                        node: 'option',
+                        item: function( loopedMonth ) {
+
+                            return [
+
+                                // The looped month and no classes.
+                                monthsCollection[ loopedMonth ], 0,
+
+                                // Set the value and selected index.
+                                'value=' + loopedMonth +
+                                ( focusedMonth == loopedMonth ? ' selected' : '' ) +
+                                (
+                                    (
+                                        ( calendar.VIEWSET.YEAR == calendar.MIN.YEAR && loopedMonth < calendar.MIN.MONTH ) ||
+                                        ( calendar.VIEWSET.YEAR == calendar.MAX.YEAR && loopedMonth > calendar.MAX.MONTH )
+                                    ) ?
+                                    ' disabled' : ''
+                                )
+                            ]
+                        }
+                    }), settings.klass.selectMonth )
+                }
+
                 // If there's a need for a month selector
-                return createNode( STRING_DIV, monthsCollection[ calendar.VIEWSET.MONTH ], settings.klass.month )
+                return createNode( STRING_DIV, monthsCollection[ focusedMonth ], settings.klass.month )
             }, //createMonthLabel
 
 
             // Create the year label
             createYearLabel = function() {
 
+                var focusedYear = calendar.VIEWSET.YEAR,
+
+                // If years selector is set to a literal "true", set it to 5. Otherwise
+                // divide in half to get half before and half after focused year.
+                numberYears = settings.selectYears === true ? 5 : ~~( settings.selectYears / 2 )
+
+                // If there are years to select, add a dropdown menu.
+                if ( numberYears ) {
+
+                    var
+                        minYear = calendar.MIN.YEAR,
+                        maxYear = calendar.MAX.YEAR,
+                        lowestYear = focusedYear - numberYears,
+                        highestYear = focusedYear + numberYears
+
+                    // If the min year is greater than the lowest year, increase the highest year
+                    // by the difference and set the lowest year to the min year.
+                    if ( minYear > lowestYear ) {
+                        highestYear += minYear - lowestYear
+                        lowestYear = minYear
+                    }
+
+                    // If the max year is less than the highest year, decrease the lowest year
+                    // by the lower of the two: available and needed years. Then set the
+                    // highest year to the max year.
+                    if ( maxYear < highestYear ) {
+
+                        var availableYears = lowestYear - minYear,
+                            neededYears = highestYear - maxYear
+
+                        lowestYear -= availableYears > neededYears ? neededYears : availableYears
+                        highestYear = maxYear
+                    }
+
+                    return createNode( 'select', createGroupOfNodes({
+                        min: lowestYear,
+                        max: highestYear,
+                        i: 1,
+                        node: 'option',
+                        item: function( loopedYear ) {
+                            return [
+
+                                // The looped year and no classes.
+                                loopedYear, 0,
+
+                                // Set the value and selected index.
+                                'value=' + loopedYear + ( focusedYear == loopedYear ? ' selected' : '' )
+                            ]
+                        }
+                    }), settings.klass.selectYear )
+                }
+
                 // Otherwise just return the year focused
-                return createNode( STRING_DIV, calendar.VIEWSET.YEAR, settings.klass.year )
+                return createNode( STRING_DIV, focusedYear, settings.klass.year )
             }, //createYearLabel
 
 
@@ -1099,6 +1200,13 @@
                     event.stopPropagation()
                 },
 
+                // Prevent any mousedowns within the holder from bubbling to the doc.
+                mousedown: function( event ) {
+                    if ( $HOLDER.find( event.target ).length ) {
+                        event.stopPropagation()
+                    }
+                },
+
                 // When something within the holder is clicked, handle the various event.
                 click: function( event ) {
 
@@ -1205,7 +1313,7 @@
                     triggerFunction( PICKER.onStart, PICKER, [ $HOLDER ] )
 
                     // Trigger the "render" event within scope of the picker.
-                    triggerFunction( PICKER.onRender, PICKER, [ $HOLDER ] )
+                    triggerFunction( PICKER.onRender, PICKER, [ $HOLDER, P ] )
 
                     return P
                 }, //start
@@ -1268,13 +1376,11 @@
 
                     }).on( 'mousedown.P' + PICKER.ID, function( event ) {
 
+                        // Maintain the focus on the `input` element.
+                        ELEMENT.focus()
+
                         // Prevent the default action to keep focus on the `input` field.
                         event.preventDefault()
-
-                        // Put focus back onto the element if needed.
-                        if ( document.activeElement != ELEMENT ) {
-                            ELEMENT.focus()
-                        }
 
                     }).on( 'keydown.P' + PICKER.ID, function( event ) {
 
@@ -1440,7 +1546,7 @@
             $HOLDER.html( createWrappedPicker() )
 
             // Trigger the "render" event within scope of the picker.
-            triggerFunction( PICKER.onRender, PICKER, [ $HOLDER ] )
+            triggerFunction( PICKER.onRender, PICKER, [ $HOLDER, P ] )
         } //createNewPicker
 
 
@@ -1627,6 +1733,10 @@
         // Display strings
         showMonthsFull: 1,
         showWeekdaysShort: 1,
+
+        // Selectors
+        selectYears: 0,
+        selectMonths: 0,
 
         // Today and clear
         today: 'Today',

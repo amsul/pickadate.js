@@ -336,7 +336,7 @@
 }
 .pickadate__day--highlighted,
 .pickadate__list-item--highlighted {
-    background: #fff;
+    background: #b1dcfb;
 }
 .pickadate__day--disabled:before,
 .pickadate__list-item--disabled:before {
@@ -373,6 +373,17 @@
     display: inline-block;
     vertical-align: bottom;
 }
+.pickadate__button--today:hover,
+.pickadate__button--clear:hover {
+    border-bottom-color: #b1dcfb;
+}
+.pickadate__button--today:focus,
+.pickadate__button--clear:focus {
+    background: #b1dcfb;
+    border-color: #0089ec;
+    outline: none;
+}
+
 .pickadate__button--today:before,
 .pickadate__button--clear:before {
     position: relative;
@@ -394,16 +405,6 @@
     color: #e20;
     vertical-align: top;
     font-size: 1.1em;
-}
-.pickadate__button--today:hover,
-.pickadate__button--clear:hover {
-    border-bottom-color: #b1dcfb;
-}
-.pickadate__button--today:focus,
-.pickadate__button--clear:focus {
-    background: #b1dcfb;
-    border-color: #0089ec;
-    outline: none;
 }
 
 
