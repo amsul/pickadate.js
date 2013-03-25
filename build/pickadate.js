@@ -703,8 +703,6 @@ if ( ![].indexOf ) {
                 },
                 mmmm: function( string, dateObject ) {
 
-                    console.log( this, string, dateObject )
-
                     var collection = this.settings.monthsFull
 
                     // If there's a string, get length of the relevant month from the full
@@ -1338,8 +1336,8 @@ if ( ![].indexOf ) {
                     picker.OFF = SETTINGS.disable.shift()
                 }
 
-                // Store the disabled items.
-                picker.DISABLE = SETTINGS.disable
+                // Store the disabled items array.
+                picker.DISABLE = SETTINGS.disable || []
 
                 // The `now` time object.
                 picker.NOW = triggerFunction( COMPONENT.now, picker )
@@ -1434,6 +1432,21 @@ if ( ![].indexOf ) {
 
                     return P
                 }, //start
+
+
+                /**
+                 * Render a new picker within the holder
+                 */
+                render: function() {
+
+                    // Insert a new picker in the holder.
+                    $HOLDER.html( createWrappedPicker() )
+
+                    // Trigger the "render" event within scope of the picker.
+                    triggerFunction( PICKER.onRender, PICKER, [ $HOLDER ] )
+
+                    return P
+                }, //render
 
 
                 /**
@@ -1613,11 +1626,35 @@ if ( ![].indexOf ) {
                         PICKER.VIEWSET = PICKER.HIGHLIGHT = timeObject
 
                         // Then render a new picker
-                        createNewPicker()
+                        P.render()
                     }
 
                     return P
-                } //set
+                }, //set
+
+
+                /**
+                 * Disable a picker item
+                 */
+                disableItem: function( timePassed ) {
+
+                    // Add or remove from collection based on "off" status.
+                    triggerFunction( PICKER.OFF ? removeFromCollection : addToCollection, P, [ PICKER.DISABLE, timePassed ] )
+
+                    return P
+                }, //disableItem
+
+
+                /**
+                 * Enable a picker item
+                 */
+                enableItem: function( timePassed ) {
+
+                    // Add or remove from collection based on "off" status.
+                    triggerFunction( PICKER.OFF ? addToCollection : removeFromCollection, P, [ PICKER.DISABLE, timePassed ] )
+
+                    return P
+                } //enableItem
 
             }, //PickerInstance.prototype
 
@@ -1720,16 +1757,58 @@ if ( ![].indexOf ) {
 
 
         /**
-         * Create a new picker within the holder.
+         * Add an item to a collection.
          */
-        function createNewPicker() {
+        function addToCollection( disabledItems, timePassed ) {
 
-            // Insert a new picker in the holder.
-            $HOLDER.html( createWrappedPicker() )
+            if ( timePassed && disabledItems.indexOf( timePassed ) < 0 ) {
 
-            // Trigger the "render" event within scope of the picker.
-            triggerFunction( PICKER.onRender, PICKER, [ $HOLDER ] )
-        } //createNewPicker
+                // Add the item passed to the collection.
+                disabledItems.push( timePassed )
+
+                // Update the picker disabled items collection.
+                PICKER.DISABLE = disabledItems
+
+                // Revalidate the selected item.
+                PICKER.SELECT = [
+                    triggerFunction(
+                        PICKER.validate, PICKER, [ PICKER.SELECT[ 0 ] ]
+                    )
+                ]
+
+                // Update the highlight and viewset based on the "selected" or current viewset.
+                PICKER.VIEWSET = PICKER.HIGHLIGHT = PICKER.SELECT[ 0 ] || PICKER.VIEWSET
+
+                // Then render a new picker.
+                P.render()
+            }
+        } //addToCollection
+
+
+        /**
+         * Remove an item from a collection.
+         */
+        function removeFromCollection( disabledItems, timePassed ) {
+
+            if ( timePassed && disabledItems.indexOf( timePassed ) > -1 ) {
+
+                // Update the picker disabled items collection.
+                PICKER.DISABLE = disabledItems.splice( 0, disabledItems.indexOf( timePassed ) ).concat( disabledItems.splice( disabledItems.indexOf( timePassed ) + 1 ) )
+
+                // Revalidate the selected item.
+                PICKER.SELECT = [
+                    triggerFunction(
+                        PICKER.validate, PICKER, [ PICKER.SELECT[ 0 ] ]
+                    )
+                ]
+
+                // Update the highlight and viewset based on the "selected" or current viewset.
+                PICKER.VIEWSET = PICKER.HIGHLIGHT = PICKER.SELECT[ 0 ] || PICKER.VIEWSET
+
+                // Then render a new picker.
+                P.render()
+            }
+        } //removeFromCollection
 
 
         // Return a new initialized picker.

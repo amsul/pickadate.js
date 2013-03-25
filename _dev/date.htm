@@ -72,10 +72,11 @@
             // formatSubmit: 'yyyy/mm/dd',
             // selectMonths: true,
             // selectYears: 20,
-            // disable: [
-            //     true,
-                // 1,
-                // 7,
+            disable: [
+                // true,
+                1,
+                4,
+                7,
                 // [2013, 1, 21],
                 // [2013, 1, 22],
                 // [2013, 1, 23],
@@ -123,12 +124,12 @@
                 // [2013,3,3],
                 // [2013,3,4],
                 // [2013,3,5]
-            // ],
+            ],
             // min: [2013, 1, 10],
             // max: [2014, 3, 25]
             // min: true,
             // max: 5,
-        }).data( 'pickadate' ).open()
+        }).data( 'pickadate' ).open()//.disableItem(2)
 
         var $button = $( '.button' ).on( 'click', function( event ) {
             event.preventDefault()
