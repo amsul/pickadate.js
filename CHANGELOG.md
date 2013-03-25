@@ -1,5 +1,8 @@
 ## Changelog
 
+### 2.1.7
+- [Added `isOpen` method](http://amsul.ca/pickadate.js/docs.htm#api_open_close)
+
 ### 2.1.6
 - [Added `onRender` callback](http://amsul.github.com/pickadate.js/docs.htm#events)
 - [Swedish translation fix](https://github.com/amsul/pickadate.js/pull/105)
