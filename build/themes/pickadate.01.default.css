@@ -383,9 +383,22 @@
     border-color: #0089ec;
     outline: none;
 }
+.pickadate__list-item--clear {
+    text-align: center;
+    text-transform: uppercase;
+    font-size: .67em;
+    color: #666;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    background: #eee;
+    margin-top: 1em;
+    padding: 1em 1.25em;
+    font-weight: 500;
+}
 
 .pickadate__button--today:before,
-.pickadate__button--clear:before {
+.pickadate__button--clear:before,
+.pickadate__list-item--clear:before {
     position: relative;
     display: inline-block;
     height: 0;
@@ -398,13 +411,20 @@
     border-top: .66em solid #0059bc;
     border-left: .66em solid transparent;
 }
-.pickadate__button--clear:before {
+.pickadate__button--clear:before,
+.pickadate__list-item--clear:before {
     content: "\D7";
     margin-right: .35em;
     top: -.1em;
     color: #e20;
     vertical-align: top;
     font-size: 1.1em;
+}
+.pickadate__list-item--clear:before {
+    top: -.25em;
+    color: #666;
+    font-size: 1.25em;
+    font-weight: bold;
 }
 
 
@@ -435,6 +455,11 @@
     cursor: pointer;
     color: #000;
     background: #b1dcfb;
+}
+.pickadate__list-item--clear:hover {
+    background: #ddd;
+    border-color: #ccc;
+    cursor: pointer;
 }
 
 
