@@ -1,0 +1,101 @@
+<!doctype html>
+
+<meta charset="utf-8">
+
+<meta name="author" content="Amsul - http://amsul.ca">
+<meta name="viewport" content="width=device-width,maximum-scale=1">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+<title>Pickadate.js</title>
+
+<link rel="stylesheet" href="../_demo/style.css">
+<link rel="stylesheet" href="../build/themes/pickadate.01.default.css">
+
+<!--[if lt IE 9]>
+    <script>document.createElement('section')</script>
+    <style type="text/css">
+        .holder {
+            position: relative;
+            z-index: 10000;
+        }
+        .datepicker {
+            display: block;
+        }
+    </style>
+<![endif]-->
+
+
+<body>
+
+    <section class="holder holder-top holder-clean">
+
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+        <fieldset>
+            <input type="text">
+        </fieldset>
+
+        <form>
+            <fieldset>
+                <h3><label for="input_01">Pick a date. Go ahead...</label></h3>
+                <input id="input_01" class="datepicker" name="date" type="date" valuee="1:30 a.m." data-valuee="01:30">
+                <br><br><br><br><br>
+                <input class="button" type="submit" value="open">
+            </fieldset>
+        </form>
+
+        <fieldset>
+            <input type="text" class="datepickerr">
+        </fieldset>
+
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+    </section>
+
+
+    <script src="../_demo/jquery.js"></script>
+    <script src="../_demo/rainbow.js"></script>
+    <script src="../build/pickadate.js"></script>
+
+    <script type="text/javascript">
+
+        var $input = $( '.datepicker' ).pickatime({
+
+            // format: '<b>h</b>:i <!i>a</!i>',
+            // format: 'h:i a',
+            // formatSubmit: 'HH:i',
+
+            interval: 180,
+            // disable: [
+                // true,
+                // 22, 23, 24, 25, 26,
+                // [ 20, 0 ],
+                // [ 23, 30 ],
+                // [ 5, 30 ]
+            // ],
+            // disable: function( loopedTime ) {
+            //     return loopedTime.HOUR > 5
+            // }
+            // min: true,
+            // min: [ 23, 30 ],
+            // max: 5,
+            // max: [ 4, 0 ]
+        }).data( 'pickatime' ).open()
+
+        var $button = $( '.button' ).on( 'click', function( event ) {
+            event.preventDefault()
+            event.stopPropagation()
+            $input.open()
+        })
+
+    </script>
+
+
+</body>
+
+
+
