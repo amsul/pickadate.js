@@ -656,7 +656,7 @@
                 // If there's a format for the hidden input element, create the element
                 // using the name of the original input plus suffix and update the value
                 // with whatever is entered in the input on load. Otherwise set it to null.
-                ELEMENT_HIDDEN = SETTINGS.formatSubmit ? $( '<input type=hidden name=' + ELEMENT.name + SETTINGS.hiddenSuffix + '>' ).val( ELEMENT.value ? getDateFormatted( SETTINGS.formatSubmit ) : '' )[ 0 ] : null,
+                ELEMENT_HIDDEN = SETTINGS.formatSubmit ? $( '<input type=hidden id=' + SETTINGS.hiddenIdSuffix + ' name=' + ELEMENT.name + SETTINGS.hiddenSuffix + '>' ).val( ELEMENT.value ? getDateFormatted( SETTINGS.formatSubmit ) : '' )[ 0 ] : null,
 
 
                 // Create the calendar table head with weekday labels
@@ -1577,6 +1577,9 @@
 
         // Hidden element name suffix
         hiddenSuffix: '_submit',
+
+        // Hidden element id suffix
+        hiddenIdSuffix: '_ident',
 
         // First day of the week: 0 = Sunday, 1 = Monday
         firstDay: 0,
