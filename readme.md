@@ -1,4 +1,4 @@
-# pickadate.js v2.1.6
+# pickadate.js v2.1.7
 
 
 A mobile-friendly, responsive, and lightweight jQuery dateinput picker.
