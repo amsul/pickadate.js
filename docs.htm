@@ -587,7 +587,7 @@ var calendar = input.data( 'pickadate' )
         <ol>
             <li><code><a href="#api_open_close">open</a></code></li>
             <li><code><a href="#api_open_close">close</a></code></li>
-            <li><code><a href="#api_open_close">isOpen</a></code></li>
+            <li><code><a href="#api_isOpen">isOpen</a></code></li>
             <li><code><a href="#api_show">show</a></code></li>
             <li><code><a href="#api_clear">clear</a></code></li>
             <li><code><a href="#api_getDate">getDate</a></code></li>
@@ -610,8 +610,7 @@ var calendar = input.data( 'pickadate' )
         <h3><a class="link-anchor" href="#api_open_close">&sect;</a><strong class="underline-highlight">Open &amp; close calendar</strong></h3>
 
         <pre><code data-language="javascript">calendar.open()
-calendar.close()
-calendar.isOpen()</code></pre>
+calendar.close()</code></pre>
 
         <p>
             <button id="api_button_open" class="button" type="button">Open</button>
@@ -625,6 +624,25 @@ calendar.isOpen()</code></pre>
         <p>If you want to open the calendar on page load, you can add the <code>autofocus</code> attribute to the <code class="tag-name">input</code> element:</p>
 
         <pre><code data-language="html">&amp;lt;input&nbsp;autofocus&nbsp;class="datepicker"&nbsp;type="text"&gt;</code></pre>
+
+    </section>
+
+
+    <section class="holder" id="api_isOpen">
+
+        <h3><a class="link-anchor" href="#api_isOpen">&sect;</a><strong class="underline-highlight">Check if calendar is open</strong></h3>
+
+        <pre><code data-language="javascript">calendar.isOpen()</code></pre>
+
+        <p>This method returns a <code class="constant">true</code> or <code class="constant">false</code> based on the state of the calendar.</p>
+
+        <p>
+            <button id="api_button_isOpen" class="button" type="button">Check if open</button>
+        </p>
+
+        <fieldset>
+            <input id="api_picker_isOpen" class="datepicker" type="text">
+        </fieldset>
 
     </section>
 
@@ -1070,6 +1088,21 @@ function&nbsp;createDateArray( date ) {
             api_button_close = $( '#api_button_close' ).on({
                 click: function() {
                     api_calendar_open.close()
+                }
+            })
+
+        var
+            api_picker_isOpen = $( '#api_picker_isOpen' ).pickadate({
+                onOpen: function() {
+                    alert( 'Calendar opened: ' + this.isOpen() )
+                }
+            }),
+            api_calendar_isOpen = api_picker_isOpen.data( 'pickadate' ),
+            api_button_isOpen = $( '#api_button_isOpen' ).on({
+                click: function() {
+                    setTimeout( function() {
+                        alert( 'Calendar opened: ' + api_calendar_isOpen.isOpen() )
+                    }, 0)
                 }
             })
 

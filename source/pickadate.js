@@ -698,7 +698,6 @@
                     if ( CALENDAR.items.indexOf( event.target ) < 0 ) {
                         event.preventDefault()
                     }
-
                 }).on( 'click', function( event ) {
 
                     // If the calendar is closed and there appears to be no click, do nothing
@@ -757,6 +756,7 @@
                         P.close()
                     }
                 }), // $HOLDER
+
 
                 // Translate a keycode to a relative change in date
                 KEYCODE_TO_DATE = {
@@ -1426,6 +1426,7 @@
              * Render a new calendar
              */
             function calendarRender() {
+
                 // Create a new wrapped calendar and place it within the holder
                 $HOLDER.html( createCalendarWrapped() )
 
