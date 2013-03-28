@@ -345,10 +345,10 @@
 .pickadate__day--outfocus {
     color: #ddd;
 
-    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=75)";
-    filter: alpha(opacity=75);
-    -moz-opacity: .75;
-         opacity: .75;
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=66)";
+    filter: alpha(opacity=66);
+    -moz-opacity: .66;
+         opacity: .66;
 }
 
 
@@ -484,7 +484,6 @@
 }
 .pickadate__list-item--disabled,
 .pickadate__list-item--disabled:hover {
-    border-color: #ddd;
     z-index: auto;
 }
 
