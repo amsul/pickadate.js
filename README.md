@@ -1,5 +1,6 @@
+# pickadate.js [![pickadate.js build status](https://travis-ci.org/amsul/pickadate.js.png)](https://travis-ci.org/amsul/pickadate.js)
 
-[![Build Status](https://travis-ci.org/amsul/pickadate.js.png)](https://travis-ci.org/amsul/pickadate.js)
+A mobile-friendly, responsive, and lightweight jQuery datetime input picker.
 
 
 Common events:
@@ -96,3 +97,10 @@ Date picker options:
 - `disablePicker`
 
 
+
+
+<br>
+
+---
+
+&copy; 2013 [Amsul](http://twitter.com/amsul_) - Licensed under [MIT](http://amsul.ca/MIT).

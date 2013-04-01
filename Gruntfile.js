@@ -32,7 +32,7 @@ module.exports = function( grunt ) {
             },
             scripts: {
                 src: '_source/*.js',
-                dest: 'pickadate.js'
+                dest: 'build/pickadate.js'
             }
         },
 
@@ -40,6 +40,12 @@ module.exports = function( grunt ) {
         // Lint the build files.
         jshint: {
             files: [ '_source/pickadate.js' ]
+        },
+
+
+        // Unit test the build files.
+        qunit: {
+            all: [ '_tests/qunit.htm' ]
         },
 
 
@@ -55,11 +61,12 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks( 'grunt-contrib-concat' )
     grunt.loadNpmTasks( 'grunt-contrib-watch' )
     grunt.loadNpmTasks( 'grunt-contrib-jshint' )
+    grunt.loadNpmTasks( 'grunt-contrib-qunit' )
 
 
     // Register the default tasks.
-    grunt.registerTask( 'default', [ 'concat', 'jshint' ] )
-    grunt.registerTask( 'travis', [ 'jshint' ] )
+    grunt.registerTask( 'default', [ 'concat', 'jshint', 'qunit' ] )
+    grunt.registerTask( 'travis', [ 'jshint', 'qunit' ] )
 
 
     // Copy the package settings into a jquery package.
