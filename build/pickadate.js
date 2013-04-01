@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v3.0.0alpha, 2013-03-31
+ * pickadate.js v3.0.0alpha, 2013-04-01
  * By Amsul (http://amsul.ca)
  * Hosted on http://amsul.github.com/pickadate.js/
  * Licensed under MIT ("expat" flavour) license.
@@ -147,9 +147,7 @@ if ( ![].indexOf ) {
 
 /**
  * Todo:
- * – Unit testing!!!!
- * – Be able to restart picker after stopping.
- * – Check trigger functions
+ * – Restart picker after stopping.
  * – If time passed, list should update?
  * – Fix time "clear" button.
  * – WAI-ARIA support
@@ -1694,7 +1692,7 @@ if ( ![].indexOf ) {
                     viewsetObject = highlightedObject
 
                 return {
-                    id: Math.abs( ~~( Math.random() * 1e11 ) ),
+                    id: Math.abs( ~~( Math.random() * 1e9 ) ),
                     disable: disabledCollection,
                     off: pickerIsOff,
                     min: minLimitObject,
@@ -1709,7 +1707,7 @@ if ( ![].indexOf ) {
 
             // If there's a format for the hidden input element, create the element
             // using the name of the original input plus suffix. Otherwise set it to null.
-            ELEMENT_HIDDEN = SETTINGS.formatSubmit ? $( '<input type=hidden name=' + ELEMENT.name + ( SETTINGS.hiddenSuffix || '_submit' ) + ( ELEMENT.value ? ' value=' + triggerFunction( PICKER.formats.toString, COMPONENT, [ SETTINGS.formatSubmit, PICKER.select[ 0 ] ] ) : '' ) + '>' )[ 0 ] : undefined,
+            ELEMENT_HIDDEN = SETTINGS.formatSubmit ? $( '<input type=hidden name=' + ELEMENT.name + ( SETTINGS.hiddenSuffix || '_submit' ) + ( ELEMENT.value || $ELEMENT.data( 'value' ) ? ' value=' + triggerFunction( COMPONENT.formats.toString, COMPONENT, [ SETTINGS.formatSubmit, PICKER.select[ 0 ] ] ) : '' ) + '>' )[ 0 ] : undefined,
 
 
             // Create the picker holder with a new wrapped picker and bind the events.

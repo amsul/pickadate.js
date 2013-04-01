@@ -8,9 +8,7 @@
  */
 
 
-var
-    MINUTES_IN_DAY = 1440,
-    $DOM = $( '#qunit-fixture' )
+var $DOM = $( '#qunit-fixture' )
 
 
 
@@ -27,14 +25,27 @@ module( 'Time picker stage setup', {
 })
 
 test( 'Input element attributes', function() {
-    ok( this.$input[ 0 ].type == 'text', 'Input type updated.' )
-    ok( this.$input[ 0 ].readOnly === true, 'Input is readonly.' )
-    ok( this.$input.pickatime( '$node' )._type == 'time', 'Original input type is saved.' )
-    ok( this.$input.pickatime( 'get', 'select' )[ 0 ].TIME == this.$input.pickatime( 'get', 'now' ).TIME, 'Default selected time is correct.' )
+    ok( this.$input[ 0 ].type == 'text', 'Input type updated' )
+    ok( this.$input[ 0 ].readOnly === true, 'Input is readonly' )
+    ok( this.$input.pickatime( '$node' )._type == 'time', 'Original input type is saved' )
+    ok( this.$input.pickatime( 'get', 'select' )[ 0 ].TIME == this.$input.pickatime( 'get', 'now' ).TIME, 'Default selected time is correct' )
 })
 
 test( 'Holder is present', function() {
-    ok( this.$input.next( '.' + $.fn.pickatime.defaults.klass.holder.split( ' ' )[ 0 ] ).length, 'There is a picker holder right after the input element.' )
+    var $holder = this.$input.next( '.' + $.fn.pickatime.defaults.klass.holder.split( ' ' )[ 0 ] )
+    ok( $holder.length, 'There is a picker holder right after the input element' )
+    ok( $holder.find( '[data-pick]' ).length == 48, 'There are 48 selectable times at 30 minute intervals' )
+})
+
+test( 'Picker stage', function() {
+    var nowDateObject = new Date(),
+        nowTimeMinutes = nowDateObject.getHours() * 60 + nowDateObject.getMinutes(),
+        interval = $.fn.pickatime.defaults.interval
+    ok( this.$input.pickatime( 'get', 'now' ).TIME === interval + nowTimeMinutes - ( nowTimeMinutes % interval ), 'Now time is correct at ' + this.$input.pickatime( 'get', 'now' ).HOUR + ':' + this.$input.pickatime( 'get', 'now' ).MINS )
+    ok( !this.$input.pickatime( 'get', 'disable' ).length, 'No disabled times' )
+    ok( !this.$input.pickatime( 'get', 'off' ), 'The times are not all off' )
+    ok( this.$input.pickatime( 'get', 'min' ).TIME === 0, 'Min time is midnight' )
+    ok( this.$input.pickatime( 'get', 'max' ).TIME == 1410, 'Max time is 23:30' )
 })
 
 
@@ -42,7 +53,7 @@ test( 'Holder is present', function() {
 
 module( 'Time picker with a value', {
     setup: function() {
-        this.$input = $( '<input type=time value="2:00 a.m.">' )
+        this.$input = $( '<input type=time value="2:00 p.m.">' )
         $DOM.append( this.$input )
         this.$input.pickatime()
     },
@@ -53,10 +64,10 @@ module( 'Time picker with a value', {
 })
 
 test( 'Input element values', function() {
+    ok( this.$input.pickatime( 'get', 'select' )[ 0 ].TIME == 840, 'Element value sets correct time' )
+    ok( this.$input.pickatime( 'get', 'highlight' ).TIME == 840, 'Element value sets correct highlight' )
+    ok( this.$input.pickatime( 'get', 'view' ).TIME == 840, 'Element value sets correct view' )
     ok( !this.$input.next().next().length, 'There is no hidden input' )
-    ok( this.$input.pickatime( 'get', 'select' )[ 0 ].TIME == 120, 'Element value sets correct time' )
-    ok( this.$input.pickatime( 'get', 'view' ).TIME == 120, 'Element value sets correct view' )
-    ok( this.$input.pickatime( 'get', 'highlight' ).TIME == 120, 'Element value sets correct highlight' )
 })
 
 
@@ -64,7 +75,7 @@ test( 'Input element values', function() {
 
 module( 'Time picker with a data value', {
     setup: function() {
-        this.$input = $( '<input type=time data-value="04:00">' )
+        this.$input = $( '<input type=time data-value="14:00">' )
         $DOM.append( this.$input )
         this.$input.pickatime({
             formatSubmit: 'HH:i'
@@ -77,67 +88,11 @@ module( 'Time picker with a data value', {
 })
 
 test( 'Input element data values', function() {
+    ok( this.$input.pickatime( 'get', 'select' )[ 0 ].TIME == 840, 'Selects correct time' )
+    ok( this.$input.pickatime( 'get', 'highlight' ).TIME == 840, 'Highlights correct time' )
+    ok( this.$input.pickatime( 'get', 'view' ).TIME == 840, 'Viewsets correct time' )
     ok( this.$input.next().next()[ 0 ].type == 'hidden', 'There is a hidden input' )
-    ok( this.$input.pickatime( 'get', 'select' )[ 0 ].TIME == 240, 'Element value sets correct time' )
-    ok( this.$input.pickatime( 'get', 'view' ).TIME == 240, 'Element value sets correct view' )
-    ok( this.$input.pickatime( 'get', 'highlight' ).TIME == 240, 'Element value sets correct highlight' )
+    ok( this.$input.next().next()[ 0 ].value == '14:00', 'The hidden input has correct value' )
 })
-
-
-
-
-
-
-
-// module( 'Hidden input is present', {
-//     setup: function() {
-//         $DOM.append( $input )
-//         $input.pickatime({
-//             formatSubmit: 'g:iA'
-//         })
-//     },
-//     teardown: function() {
-//         $DOM.empty()
-//     }
-// })
-
-// test( 'Hidden input status 2', function() {
-//     ok( $input.data( 'pickatime' ).settings.formatSubmit && $DOM.find( 'input[type=hidden]' ).length, 'There is a hidden input.' )
-// })
-
-
-
-// module( 'Time intervals', {
-//     setup: function() {
-//         $DOM.append( $input )
-//         $input.pickatime()
-//     },
-//     teardown: function() {
-//         $DOM.empty()
-//     }
-// })
-
-// test( 'Default time interval', function() {
-//     ok( $input.data( 'pickatime' ).settings.timeStep * $input.data( 'pickatime' ).$node.next().find( '.pickadate__list-item' ).length == MINUTES_IN_DAY, 'Correct number of items.' )
-// })
-
-
-
-// module( 'Time intervals', {
-//     setup: function() {
-//         $DOM.append( $input )
-//         $input.pickatime({
-//             timeStep: 10
-//         })
-//     },
-//     teardown: function() {
-//         $DOM.empty()
-//     }
-// })
-
-// test( '10 minute time interval', function() {
-//     ok( $input.data( 'pickatime' ).settings.timeStep * $input.data( 'pickatime' ).$node.next().find( '.pickadate__list-item' ).length == MINUTES_IN_DAY, 'Correct number of items.' )
-// })
-
 
 

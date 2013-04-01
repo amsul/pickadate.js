@@ -22,19 +22,17 @@ module.exports = function( grunt ) {
 
         // Concatenate the files and add banners.
         concat: {
-            javascripts: {
-                options: {
-                    banner: '/*!\n' +
-                            ' * <%= pkg.title %> v<%= pkg.version %>, <%= grunt.template.today("yyyy-mm-dd") %>\n' +
-                            ' * By <%= pkg.author.name %> (<%= pkg.author.url %>)\n' +
-                            ' * Hosted on <%= pkg.homepage %>\n' +
-                            ' * Licensed under MIT ("expat" flavour) license.\n' +
-                            ' */\n\n'
-                },
-                scripts: {
-                    src: '_source/*.js',
-                    dest: 'build/pickadate.js'
-                }
+            options: {
+                banner: '/*!\n' +
+                        ' * <%= pkg.title %> v<%= pkg.version %>, <%= grunt.template.today("yyyy-mm-dd") %>\n' +
+                        ' * By <%= pkg.author.name %> (<%= pkg.author.url %>)\n' +
+                        ' * Hosted on <%= pkg.homepage %>\n' +
+                        ' * Licensed under MIT ("expat" flavour) license.\n' +
+                        ' */\n\n'
+            },
+            scripts: {
+                src: '_source/*.js',
+                dest: 'pickadate.js'
             }
         },
 

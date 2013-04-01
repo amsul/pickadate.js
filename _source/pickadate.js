@@ -1555,7 +1555,7 @@
                     viewsetObject = highlightedObject
 
                 return {
-                    id: Math.abs( ~~( Math.random() * 1e11 ) ),
+                    id: Math.abs( ~~( Math.random() * 1e9 ) ),
                     disable: disabledCollection,
                     off: pickerIsOff,
                     min: minLimitObject,
@@ -1570,7 +1570,7 @@
 
             // If there's a format for the hidden input element, create the element
             // using the name of the original input plus suffix. Otherwise set it to null.
-            ELEMENT_HIDDEN = SETTINGS.formatSubmit ? $( '<input type=hidden name=' + ELEMENT.name + ( SETTINGS.hiddenSuffix || '_submit' ) + ( ELEMENT.value ? ' value=' + triggerFunction( PICKER.formats.toString, COMPONENT, [ SETTINGS.formatSubmit, PICKER.select[ 0 ] ] ) : '' ) + '>' )[ 0 ] : undefined,
+            ELEMENT_HIDDEN = SETTINGS.formatSubmit ? $( '<input type=hidden name=' + ELEMENT.name + ( SETTINGS.hiddenSuffix || '_submit' ) + ( ELEMENT.value || $ELEMENT.data( 'value' ) ? ' value=' + triggerFunction( COMPONENT.formats.toString, COMPONENT, [ SETTINGS.formatSubmit, PICKER.select[ 0 ] ] ) : '' ) + '>' )[ 0 ] : undefined,
 
 
             // Create the picker holder with a new wrapped picker and bind the events.
