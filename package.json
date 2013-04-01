@@ -28,15 +28,19 @@
     "dependencies": {
         "jquery": ">=1.7"
     },
-    "devDependencies": {
-        "grunt": "~0.4.0",
-        "grunt-contrib-concat": "~0.1.1",
-        "grunt-contrib-sass": "~0.2.1",
-        "grunt-contrib-watch": "~0.1.4"
-    },
     "jam": {
         "dependencies": {
             "jquery": ">=1.7"
         }
+    },
+    "devDependencies": {
+        "grunt": "~0.4.0",
+        "grunt-contrib-concat": "~0.1.1",
+        "grunt-contrib-sass": "~0.2.1",
+        "grunt-contrib-watch": "~0.1.4",
+        "grunt-contrib-jshint": "~0.3.0"
+    },
+    "scripts": {
+        "test": "grunt travis --verbose"
     }
 }

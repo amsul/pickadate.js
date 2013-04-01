@@ -338,8 +338,7 @@
 .pickadate__list-item--highlighted {
     background: #b1dcfb;
 }
-.pickadate__day--disabled:before,
-.pickadate__list-item--disabled:before {
+.pickadate__day--disabled:before {
     border-top-color: #aaa;
 }
 .pickadate__day--outfocus {
@@ -467,10 +466,6 @@
 /**
  * The disabled buttons
  */
-.pickadate__list-item--disabled,
-.pickadate__list-item--disabled:hover {
-    border-color: #ddd;
-}
 .pickadate__day--disabled,
 .pickadate__day--disabled:hover,
 .pickadate__holder--focused .pickadate__day--disabled,
@@ -483,7 +478,9 @@
     cursor: default;
 }
 .pickadate__list-item--disabled,
-.pickadate__list-item--disabled:hover {
+.pickadate__list-item--disabled:hover,
+.pickadate__holder--focused .pickadate__list-item--disabled {
+    border-color: #ddd;
     z-index: auto;
 }
 

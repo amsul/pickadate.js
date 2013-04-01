@@ -1,4 +1,7 @@
 
+[![Build Status](https://travis-ci.org/amsul/pickadate.js.png)](https://travis-ci.org/amsul/pickadate.js)
+
+
 Common events:
 ---------------
 
@@ -7,6 +10,31 @@ Common events:
 - `onOpen`
 - `onClose`
 - `onSelect`
+
+
+
+Time picker options:
+--------------------
+
+### Clear
+
+- `clear`: 'Clear'
+
+
+### The format to show on the `input` element
+
+- `format`: 'h:i A'
+
+
+### The interval between each time
+
+- `interval`: 30
+
+
+### Limits
+
+- `min`
+- `max`
 
 
 

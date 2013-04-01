@@ -16,28 +16,36 @@ module.exports = function( grunt ) {
     grunt.initConfig({
 
 
-        // Read the package manifest
+        // Read the package manifest.
         pkg: grunt.file.readJSON( 'package.json' ),
 
 
-        // Concatenate the JS files and add a banner
+        // Concatenate the files and add banners.
         concat: {
-            options: {
-                banner: '/*!\n' +
-                        ' * <%= pkg.title %> v<%= pkg.version %>, <%= grunt.template.today("yyyy-mm-dd") %>\n' +
-                        ' * By <%= pkg.author.name %> (<%= pkg.author.url %>)\n' +
-                        ' * Hosted on <%= pkg.homepage %>\n' +
-                        ' * Licensed under MIT ("expat" flavour) license.\n' +
-                        ' */\n\n'
-            },
-            scripts: {
-                src: '_source/*.js',
-                dest: 'build/pickadate.js'
+            javascripts: {
+                options: {
+                    banner: '/*!\n' +
+                            ' * <%= pkg.title %> v<%= pkg.version %>, <%= grunt.template.today("yyyy-mm-dd") %>\n' +
+                            ' * By <%= pkg.author.name %> (<%= pkg.author.url %>)\n' +
+                            ' * Hosted on <%= pkg.homepage %>\n' +
+                            ' * Licensed under MIT ("expat" flavour) license.\n' +
+                            ' */\n\n'
+                },
+                scripts: {
+                    src: '_source/*.js',
+                    dest: 'build/pickadate.js'
+                }
             }
         },
 
 
-        // Watch the project JS and SCSS files
+        // Lint the build files.
+        jshint: {
+            files: [ '_source/pickadate.js' ]
+        },
+
+
+        // Watch the project files.
         watch: {
             files: [ '_source/*.js' ],
             tasks: [ 'default' ]
@@ -45,13 +53,19 @@ module.exports = function( grunt ) {
     }) //grunt.initConfig
 
 
-    // Load the NPM tasks
+    // Load the NPM tasks.
     grunt.loadNpmTasks( 'grunt-contrib-concat' )
     grunt.loadNpmTasks( 'grunt-contrib-watch' )
+    grunt.loadNpmTasks( 'grunt-contrib-jshint' )
 
 
-    // Register the default tasks
-    grunt.registerTask( 'default', [ 'concat' ] )
+    // Register the default tasks.
+    grunt.registerTask( 'default', [ 'concat', 'jshint' ] )
+    grunt.registerTask( 'travis', [ 'jshint' ] )
+
+
+    // Copy the package settings into a jquery package.
+    grunt.file.copy( 'package.json', 'pickadate.jquery.json' )
 
 } //module.exports
 

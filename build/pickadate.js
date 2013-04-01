@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v3.0.0alpha, 2013-03-28
+ * pickadate.js v3.0.0alpha, 2013-03-31
  * By Amsul (http://amsul.ca)
  * Hosted on http://amsul.github.com/pickadate.js/
  * Licensed under MIT ("expat" flavour) license.
@@ -147,7 +147,9 @@ if ( ![].indexOf ) {
 
 /**
  * Todo:
- * – Get the month in view.
+ * – Unit testing!!!!
+ * – Be able to restart picker after stopping.
+ * – Check trigger functions
  * – If time passed, list should update?
  * – Fix time "clear" button.
  * – WAI-ARIA support
@@ -188,31 +190,23 @@ if ( ![].indexOf ) {
        ========================================================================== */
 
 
-    function ClockPicker() {
-        var picker = this
-        return {
+    function ClockPicker( settings ) {
+
+        var clock = this
+
+        $.extend( clock, {
+            settings: settings,
+            i: settings.interval || 30,
             div: ':',
-            holder: picker.holder,
-            object: picker.object,
-            validate: picker.validate,
-            parse: picker.parse,
-            disable: picker.disable,
-            shift: picker.shift,
-            min: picker.min,
-            max: picker.max,
-            now: picker.validate,
             keyMove: {
                 40: 1, // Down
                 38: -1, // Up
                 39: 1, // Right
                 37: -1, // Left
-                go: function( timeChange ) {
-
-                    var clock = this,
-                        highlightedTime = clock.HIGHLIGHT
+                go: function( highlightedTimeObject, timeChange ) {
 
                     // Create and return a validated target object with the relative date change to "go" to.
-                    return highlightedTime ? clock.validate( timeChange * clock.I + highlightedTime.TIME, timeChange ) : undefined
+                    return highlightedTimeObject ? clock.validate( timeChange * clock.i + highlightedTimeObject.TIME, timeChange ) : undefined
                 }
             },
             formats: {
@@ -274,16 +268,19 @@ if ( ![].indexOf ) {
             onStart: function( $holder ) {
                 triggerFunction( this.settings.onStart, this, [ $holder ] )
             },
-            onRender: function( $picker ) {
-                var clock = this,
-                    $highlighted = $picker.find( '.' + clock.settings.klass.highlighted )
+            onRender: function( $holder ) {
+
+                var picker = this,
+                    $highlighted = $holder.find( '.' + picker.settings.klass.highlighted )
 
                 if ( $highlighted.length ) {
-                    $picker[ 0 ].scrollTop = $highlighted.position().top - ~~( $picker[ 0 ].clientHeight / 4 )
+                    $holder[ 0 ].scrollTop = $highlighted.position().top - ~~( $holder[ 0 ].clientHeight / 4 )
                 }
                 else {
                     console.warn( 'Nothing to highlight' )
                 }
+
+                triggerFunction( picker.settings.onRender, picker, [ $holder ] )
             },
             onOpen: function( $holder ) {
                 // $holder.find( 'button, select' ).attr( 'tabindex', 0 )
@@ -296,24 +293,28 @@ if ( ![].indexOf ) {
             onSet: function( $holder ) {
                 triggerFunction( this.settings.onSet, this, [ $holder ] )
             }
-        }
+        })
     } //ClockPicker
 
 
     /**
      * Create a clock holder node.
      */
-    ClockPicker.prototype.holder = function() {
+    ClockPicker.prototype.holder = function( picker ) {
 
         var
             clock = this,
             settings = clock.settings,
-            toDisable = clock.DISABLE
+            pickerSelected = picker.get( 'select' )[ 0 ],
+            pickerHighlighted = picker.get( 'highlight' ),
+            pickerViewset = picker.get( 'view' ),
+            pickerDisabledCollection = picker.get( 'disable' )
+
 
         return createNode( 'ul', createGroupOfNodes({
-            min: clock.min().TIME,
-            max: clock.max().TIME,
-            i: clock.I,
+            min: picker.get( 'min' ).TIME,
+            max: picker.get( 'max' ).TIME,
+            i: clock.i,
             node: 'li',
             item: function( loopedTime ) {
                 loopedTime = clock.object( loopedTime )
@@ -321,24 +322,24 @@ if ( ![].indexOf ) {
                     triggerFunction( clock.formats.toString, clock, [ settings.format, loopedTime ] ),
                     (function( klasses, timeMinutes ) {
 
-                        if ( clock.SELECT[ 0 ] && clock.SELECT[ 0 ].TIME == timeMinutes ) {
+                        if ( pickerSelected && pickerSelected.TIME == timeMinutes ) {
                             klasses.push( settings.klass.selected )
                         }
 
-                        if ( clock.HIGHLIGHT && clock.HIGHLIGHT.TIME == timeMinutes ) {
+                        if ( pickerHighlighted && pickerHighlighted.TIME == timeMinutes ) {
                             klasses.push( settings.klass.highlighted )
                         }
 
-                        if ( clock.VIEWSET && clock.VIEWSET.TIME == timeMinutes ) {
+                        if ( pickerViewset && pickerViewset.TIME == timeMinutes ) {
                             klasses.push( settings.klass.viewset )
                         }
 
-                        if ( toDisable && clock.disable( clock.object( timeMinutes ) ) ) {
+                        if ( pickerDisabledCollection && clock.disable( pickerDisabledCollection, clock.object( timeMinutes ) ) ) {
                             klasses.push( settings.klass.disabled )
                         }
 
                         return klasses.join( ' ' )
-                    })([ settings.klass.listItem ], loopedTime.TIME ),
+                    })( [ settings.klass.listItem ], loopedTime.TIME ),
                     'data-pick=' + loopedTime.HOUR + clock.div + loopedTime.MINS
                 ]
             }
@@ -402,11 +403,11 @@ if ( ![].indexOf ) {
                     // of that divided by the interval to get amount to decrease by.
                     (
                         minLimitObject.TIME ? timePassedObject.TIME % minLimitObject.TIME : timePassedObject.TIME
-                    ) % clock.I
+                    ) % clock.i
 
                 // And then if there's a key movement, do nothing.
                 // Otherwise add an interval because this time has passed.
-                ) + ( keyMovement ? 0 : clock.I )
+                ) + ( keyMovement ? 0 : clock.i )
             )
         }
 
@@ -428,12 +429,12 @@ if ( ![].indexOf ) {
 
         // If we've hit the upper and lower bounds, set the time to now and move on.
         if ( clock.doneMin && clock.doneMax ) {
-            timePassedObject = clock.NOW
+            timePassedObject = clock.now()
         }
 
         // Otherwise if there are times to disable and this is one of them,
         // shift using the interval until we reach an enabled time.
-        else if ( clock.DISABLE && clock.disable( timePassedObject ) ) {
+        else if ( clock.settings.disable && clock.disable( clock.settings.disable, timePassedObject ) ) {
             timePassedObject = clock.shift( timePassedObject, timePassedObject.TIME > maxLimitObject.TIME ? -1 : keyMovement || 1 )
         }
 
@@ -445,15 +446,19 @@ if ( ![].indexOf ) {
     } //ClockPicker.prototype.validate
 
 
+    /////// like this??
+    ClockPicker.prototype.now = ClockPicker.prototype.validate
+
+
     /**
      * Check if a time is disabled or not.
      */
-    ClockPicker.prototype.disable = function( timeObject ) {
+    ClockPicker.prototype.disable = function( collection, timeObject ) {
 
         var clock = this,
 
             // Filter through the disabled times to check if this is one.
-            isDisabledTime = clock.DISABLE.filter( function( timeToDisable ) {
+            isDisabledTime = collection.filter( function( timeToDisable ) {
 
                 // If the time is a number, match the hours.
                 if ( !isNaN( timeToDisable ) ) {
@@ -477,15 +482,14 @@ if ( ![].indexOf ) {
     ClockPicker.prototype.shift = function( timeObject, keyMovement ) {
 
         var clock = this,
-            originalTimeObject = timeObject,
-            minLimit = clock.MIN.TIME,
-            maxLimit = clock.MAX.TIME
+            minLimit = clock.min().TIME,
+            maxLimit = clock.max().TIME
 
         // Keep looping as long as the time is disabled.
-        while ( clock.disable( timeObject ) ) {
+        while ( clock.disable( clock.settings.disable, timeObject ) ) {
 
             // Increase/decrease the time by the key movement and keep looping.
-            timeObject = clock.object( timeObject.TIME += ( keyMovement || clock.I ) * clock.I )
+            timeObject = clock.object( timeObject.TIME += ( keyMovement || clock.i ) * clock.i )
 
             // If we've looped beyond the limits, break out of the loop.
             if ( timeObject.TIME < minLimit || timeObject.TIME > maxLimit ) {
@@ -506,7 +510,7 @@ if ( ![].indexOf ) {
         var
             clock = this,
             limit = clock.settings.min,
-            interval = clock.I,
+            interval = clock.i,
             nowObject = clock.object()
 
         // If there's no limit, just create min as midnight.
@@ -537,8 +541,9 @@ if ( ![].indexOf ) {
 
         var
             clock = this,
-            limit = clock.settings.max,
-            interval = clock.I,
+            settings = clock.settings,
+            limit = settings.max,
+            interval = clock.i,
             nowObject = clock.object()
 
         // If there's no limit, set it as a minute before next midnight.
@@ -564,13 +569,13 @@ if ( ![].indexOf ) {
 
 
         // If the max is less than min, add a day
-        if ( limit.TIME < clock.min().TIME ) {
+        if ( limit.TIME < clock.min( settings ).TIME ) {
             limit = clock.object( limit.TIME + MINUTES_IN_DAY )
         }
 
 
         // Finally, make sure the max time is "reachable" using the interval and min limit.
-        return clock.object( limit.TIME - ( ( clock.min().TIME ? limit.TIME % clock.min().TIME : limit.TIME ) % clock.I ) )
+        return clock.object( limit.TIME - ( ( clock.min( settings ).TIME ? limit.TIME % clock.min( settings ).TIME : limit.TIME ) % interval ) )
     } //ClockPicker.prototype.max
 
 
@@ -626,7 +631,7 @@ if ( ![].indexOf ) {
        Build date picker components
        ========================================================================== */
 
-    function CalendarPicker() {
+    function CalendarPicker( settings ) {
 
         var
             picker = this,
@@ -648,6 +653,7 @@ if ( ![].indexOf ) {
 
         return {
             div: '/',
+            settings: settings,
             holder: picker.holder,
             object: picker.object,
             validate: picker.validate,
@@ -662,13 +668,15 @@ if ( ![].indexOf ) {
                 38: -7, // Up
                 39: 1, // Right
                 37: -1, // Left
-                go: function( dateChange ) {
+                go: function( picker, dateChange ) {
 
                     var
                         calendar = this,
 
+                        highlighted = picker.get( 'highlight' ),
+
                         // Create a validated target object with the relative date change.
-                        targetDateObject = calendar.validate( [ calendar.HIGHLIGHT.YEAR, calendar.HIGHLIGHT.MONTH, calendar.HIGHLIGHT.DATE + dateChange ], dateChange )
+                        targetDateObject = calendar.validate( [ highlighted.YEAR, highlighted.MONTH, highlighted.DATE + dateChange ], dateChange )
 
                     // If there's a month change, update the viewset.
                     if ( targetDateObject.MONTH != calendar.VIEWSET.MONTH ) {
@@ -757,21 +765,24 @@ if ( ![].indexOf ) {
                     }).join( '' )
                 }
             }, //formats
-            onStart: function( $holder ) {
+            onStart: function( picker, $holder ) {
+                // console.log( 'what is ', this )
                 triggerFunction( this.settings.onStart, this, [ $holder ] )
             },
-            onRender: function( $holder, pickerObject ) {
+            onRender: function( picker, $holder ) {
 
                 var calendar = this,
                     settings = calendar.settings
 
                 $holder.find( '.' + settings.klass.selectMonth ).on( 'change', function() {
-                    pickerObject.set( [ calendar.VIEWSET.YEAR, this.value, calendar.SELECT[ 0 ].DATE ], 1 )
+                    console.log( 'set how n what?' )
+                    picker.set( [ calendar.VIEWSET.YEAR, this.value, calendar.SELECT[ 0 ].DATE ], 1 )
                     $holder.find( '.' + settings.klass.selectMonth ).focus()
                 })
 
                 $holder.find( '.' + settings.klass.selectYear ).on( 'change', function() {
-                    pickerObject.set( [ this.value, calendar.VIEWSET.MONTH, calendar.SELECT[ 0 ].DATE ], 1 )
+                    console.log( 'set how n what?' )
+                    picker.set( [ this.value, calendar.VIEWSET.MONTH, calendar.SELECT[ 0 ].DATE ], 1 )
                     $holder.find( '.' + settings.klass.selectYear ).focus()
                 })
 
@@ -787,6 +798,9 @@ if ( ![].indexOf ) {
             },
             onSet: function( $holder ) {
                 triggerFunction( this.settings.onSet, this, [ $holder ] )
+            },
+            onStop: function( $holder ) {
+                triggerFunction( this.settings.onStop, this, [ $holder ] )
             }
         }
     } //CalendarPicker
@@ -795,15 +809,22 @@ if ( ![].indexOf ) {
     /**
      * Create a calendar holder node.
      */
-    CalendarPicker.prototype.holder = function() {
+    CalendarPicker.prototype.holder = function( picker ) {
 
         var
             calendar = this,
             settings = calendar.settings,
+            maxLimitObject = calendar.max(),
+            minLimitObject = calendar.min(),
+            now = picker.get( 'now' ),
+            selected = picker.get( 'select' ),
+            highlighted = picker.get( 'highlight' ),
+            viewset = picker.get( 'view' ),
+            disabled = picker.get( 'disable' ),
 
             // Get the tab index state picker opened/closed.
             getTabindexState = function() {
-                return 'tabindex=' + ( calendar.isOpen ? 0 : -1 )
+                return 'tabindex=' + ( calendar.OPEN ? 0 : -1 )
             },
 
             // Create the nav for next/prev month.
@@ -816,8 +837,8 @@ if ( ![].indexOf ) {
                     settings.klass[ 'nav' + ( next ? 'Next' : 'Prev' ) ] + (
 
                         // If the focused month is outside the range, disabled the button.
-                        ( next && calendar.VIEWSET.YEAR >= calendar.MAX.YEAR && calendar.VIEWSET.MONTH >= calendar.MAX.MONTH ) ||
-                        ( !next && calendar.VIEWSET.YEAR <= calendar.MIN.YEAR && calendar.VIEWSET.MONTH <= calendar.MIN.MONTH ) ?
+                        ( next && viewset.YEAR >= maxLimitObject.YEAR && viewset.MONTH >= maxLimitObject.MONTH ) ||
+                        ( !next && viewset.YEAR <= minLimitObject.YEAR && viewset.MONTH <= minLimitObject.MONTH ) ?
                         ' ' + settings.klass.navDisabled : ''
                     ),
                     'data-nav=' + ( next || -1 )
@@ -827,8 +848,6 @@ if ( ![].indexOf ) {
 
             // Create the month label
             createMonthLabel = function( monthsCollection ) {
-
-                var focusedMonth = calendar.VIEWSET.MONTH
 
                 // If there are months to select, add a dropdown menu.
                 if ( settings.selectMonths ) {
@@ -847,11 +866,11 @@ if ( ![].indexOf ) {
 
                                 // Set the value and selected index.
                                 'value=' + loopedMonth +
-                                ( focusedMonth == loopedMonth ? ' selected' : '' ) +
+                                ( viewset.MONTH == loopedMonth ? ' selected' : '' ) +
                                 (
                                     (
-                                        ( calendar.VIEWSET.YEAR == calendar.MIN.YEAR && loopedMonth < calendar.MIN.MONTH ) ||
-                                        ( calendar.VIEWSET.YEAR == calendar.MAX.YEAR && loopedMonth > calendar.MAX.MONTH )
+                                        ( viewset.YEAR == minLimitObject.YEAR && loopedMonth < minLimitObject.MONTH ) ||
+                                        ( viewset.YEAR == maxLimitObject.YEAR && loopedMonth > maxLimitObject.MONTH )
                                     ) ?
                                     ' disabled' : ''
                                 )
@@ -861,14 +880,14 @@ if ( ![].indexOf ) {
                 }
 
                 // If there's a need for a month selector
-                return createNode( STRING_DIV, monthsCollection[ focusedMonth ], settings.klass.month )
+                return createNode( STRING_DIV, monthsCollection[ viewset.MONTH ], settings.klass.month )
             }, //createMonthLabel
 
 
             // Create the year label
             createYearLabel = function() {
 
-                var focusedYear = calendar.VIEWSET.YEAR,
+                var focusedYear = viewset.YEAR,
 
                 // If years selector is set to a literal "true", set it to 5. Otherwise
                 // divide in half to get half before and half after focused year.
@@ -878,8 +897,8 @@ if ( ![].indexOf ) {
                 if ( numberYears ) {
 
                     var
-                        minYear = calendar.MIN.YEAR,
-                        maxYear = calendar.MAX.YEAR,
+                        minYear = minLimitObject.YEAR,
+                        maxYear = maxLimitObject.YEAR,
                         lowestYear = focusedYear - numberYears,
                         highestYear = focusedYear + numberYears
 
@@ -953,8 +972,8 @@ if ( ![].indexOf ) {
             })( ( settings.showWeekdaysShort ? settings.weekdaysShort : settings.weekdaysFull ).slice( 0 ) ) //tableHead
 
 
-        // Update the viewset to the first day of the month.
-        calendar.VIEWSET = calendar.object([ calendar.VIEWSET.YEAR, calendar.VIEWSET.MONTH, 1 ])
+        // Update the viewset to the first day of the month so we can get an offset for the days.
+        viewset = picker.setView([ viewset.YEAR, viewset.MONTH, 1 ]).get( 'view' )
 
 
         // Create and return the entire calendar.
@@ -980,7 +999,7 @@ if ( ![].indexOf ) {
 
                         return [
                             createGroupOfNodes({
-                                min: DAYS_IN_WEEK * rowCounter - calendar.VIEWSET.DAY + 1, // Add 1 for weekday 0index
+                                min: DAYS_IN_WEEK * rowCounter - viewset.DAY + 1, // Add 1 for weekday 0index
                                 max: function() {
                                     return this.min + DAYS_IN_WEEK - 1
                                 },
@@ -989,7 +1008,7 @@ if ( ![].indexOf ) {
                                 item: function( timeDate ) {
 
                                     // Convert the time date from a relative date to a date object
-                                    timeDate = calendar.object([ calendar.VIEWSET.YEAR, calendar.VIEWSET.MONTH, timeDate + ( settings.firstDay ? 1 : 0 ) ])
+                                    timeDate = calendar.object([ viewset.YEAR, viewset.MONTH, timeDate + ( settings.firstDay ? 1 : 0 ) ])
 
                                     return [
                                         createNode(
@@ -998,25 +1017,25 @@ if ( ![].indexOf ) {
                                             (function( klasses ) {
 
                                                 // Add the `infocus` or `outfocus` classes based on month in view.
-                                                klasses.push( calendar.VIEWSET.MONTH == timeDate.MONTH ? settings.klass.infocus : settings.klass.outfocus )
-
-                                                // Add the `selected` class if something's selected and the time matches.
-                                                if ( calendar.SELECT.length && calendar.SELECT[ 0 ].TIME == timeDate.TIME ) {
-                                                    klasses.push( settings.klass.selected )
-                                                }
+                                                klasses.push( viewset.MONTH == timeDate.MONTH ? settings.klass.infocus : settings.klass.outfocus )
 
                                                 // Add the `today` class if needed.
-                                                if ( calendar.NOW.TIME == timeDate.TIME ) {
+                                                if ( now.TIME == timeDate.TIME ) {
                                                     klasses.push( settings.klass.now )
                                                 }
 
+                                                // Add the `selected` class if something's selected and the time matches.
+                                                if ( selected && selected.TIME == timeDate.TIME ) {
+                                                    klasses.push( settings.klass.selected )
+                                                }
+
                                                 // Add the `highlighted` class if something's highlighted and the time matches.
-                                                if ( calendar.HIGHLIGHT && calendar.HIGHLIGHT.TIME == timeDate.TIME ) {
+                                                if ( highlighted && highlighted.TIME == timeDate.TIME ) {
                                                     klasses.push( settings.klass.highlighted )
                                                 }
 
                                                 // Add the `disabled` class if something's disabled and the object matches.
-                                                if ( calendar.DISABLE && calendar.disable( timeDate ) || timeDate.TIME < calendar.MIN.TIME || timeDate.TIME > calendar.MAX.TIME ) {
+                                                if ( disabled && calendar.disable( picker, timeDate ) || timeDate.TIME < minLimitObject.TIME || timeDate.TIME > maxLimitObject.TIME ) {
                                                     klasses.push( settings.klass.disabled )
                                                 }
 
@@ -1036,7 +1055,7 @@ if ( ![].indexOf ) {
 
         createNode(
             STRING_DIV,
-            createNode( 'button', settings.today, settings.klass.buttonToday, 'data-pick=' + calendar.NOW.YEAR + calendar.div + calendar.NOW.MONTH + calendar.div + calendar.NOW.DATE + ' ' + getTabindexState() ) + createNode( 'button', settings.clear, settings.klass.buttonClear, 'data-clear=1 ' + getTabindexState() ),
+            createNode( 'button', settings.today, settings.klass.buttonToday, 'data-pick=' + now.YEAR + calendar.div + now.MONTH + calendar.div + now.DATE + ' ' + getTabindexState() ) + createNode( 'button', settings.clear, settings.klass.buttonClear, 'data-clear=1 ' + getTabindexState() ),
             settings.klass.footer
         ) //endreturn
     } //CalendarPicker.prototype.holder
@@ -1082,8 +1101,8 @@ if ( ![].indexOf ) {
     CalendarPicker.prototype.validate = function( datePassed, keyMovement ) {
 
         var calendar = this,
-            minLimitObject = calendar.MIN,
-            maxLimitObject = calendar.MAX,
+            minLimitObject = calendar.min(),
+            maxLimitObject = calendar.max(),
 
             // Make sure we have a date object to work with.
             datePassedObject = datePassed && !isNaN( datePassed.TIME ) ? datePassed : calendar.object( datePassed )
@@ -1127,12 +1146,12 @@ if ( ![].indexOf ) {
     /**
      * Check if a date is disabled or not.
      */
-    CalendarPicker.prototype.disable = function( dateObject ) {
+    CalendarPicker.prototype.disable = function( picker, dateObject ) {
 
         var calendar = this,
 
             // Filter through the disabled dates to check if this is one.
-            isDisabledDate = calendar.DISABLE.filter( function( dateToDisable ) {
+            isDisabledDate = picker.get( 'disable' ).filter( function( dateToDisable ) {
 
                 // If the date is a number, match the weekday with 0index and `firstDay` check.
                 if ( !isNaN( dateToDisable ) ) {
@@ -1238,39 +1257,6 @@ if ( ![].indexOf ) {
 
 
     /**
-     * Create the upper or lower bounding date object.
-     */
-    CalendarPicker.prototype.bounds = function( upper ) {
-
-        console.log( 'fix this' )
-
-        var
-            calendar = this,
-            limit = upper ? calendar.settings.max : calendar.settings.min
-
-        // If there is a limit and its a number, create a
-        // time object relative to today by adding the limit.
-        if ( limit && !isNaN( limit ) ) {
-            return calendar.object([ NOW.YEAR, NOW.MONTH, NOW.DATE + limit ])
-        }
-
-        // If the limit is set to true, just return today
-        if ( limit === true ) {
-            return NOW
-        }
-
-        // If the limit is an array, construct the time by fixing month 0index
-        if ( Array.isArray( limit ) ) {
-            --limit[ 1 ]
-            return calendar.object( limit )
-        }
-
-        // Otherwise create an infinite time
-        return calendar.object( 0, upper ? Infinity : -Infinity )
-    }
-
-
-    /**
      * Create a time object from a format.
      */
     CalendarPicker.prototype.parse = function( format, string ) {
@@ -1342,53 +1328,7 @@ if ( ![].indexOf ) {
 
 
             // Pseudo picker constructor
-            PickerInstance = function() {
-
-                var
-                    // Grab the element `data-value`.
-                    elementDataValue = $ELEMENT.data( 'value' ),
-
-                    // Extend the picker to get the component methods.
-                    picker = $.extend( this, COMPONENT )
-
-
-                picker.ID = ~~( Math.random() * 1e9 )
-                picker.I = SETTINGS.interval || 1
-
-                // Store the `min` and `max` bounding limits.
-                picker.MIN = triggerFunction( COMPONENT.min, picker )
-                picker.MAX = triggerFunction( COMPONENT.max, picker )
-
-                // If there are items to disable and the first item is a literal `true`,
-                // we need to disabled all the items. Remove the flag from the collection
-                // and flip the condition of which items to disable.
-                if ( Array.isArray( SETTINGS.disable ) && SETTINGS.disable[ 0 ] === true ) {
-                    picker.OFF = SETTINGS.disable.shift()
-                }
-
-                // Store the disabled items array.
-                picker.DISABLE = SETTINGS.disable || []
-
-                // The `now` time object.
-                picker.NOW = triggerFunction( COMPONENT.now, picker )
-
-                // The default selection is based on the `value` or `data-value` of the element.
-                picker.SELECT = [
-                    triggerFunction(
-                        COMPONENT.validate, picker, [
-                            triggerFunction(
-                                COMPONENT.parse, picker, [ elementDataValue ? SETTINGS.formatSubmit : SETTINGS.format, elementDataValue || ELEMENT.value ]
-                            )
-                        ]
-                    )
-                ]
-
-                // The default highlight and viewset are based on the "selected" or "default" item.
-                picker.VIEWSET = picker.HIGHLIGHT = picker.SELECT[ 0 ] || triggerFunction( COMPONENT.validate, picker )
-
-                // Return the picker object
-                return picker
-            }, //PickerInstance
+            PickerInstance = function() {},
 
 
             // The picker prototype
@@ -1420,7 +1360,7 @@ if ( ![].indexOf ) {
 
                         // If there's a hidden input, update the value with formatting or clear it
                         if ( ELEMENT_HIDDEN ) {
-                            ELEMENT_HIDDEN.value = ELEMENT.value ? triggerFunction( PICKER.formats.toString, PICKER, [ SETTINGS.formatSubmit, PICKER.SELECT[ 0 ] ] ) : ''
+                            ELEMENT_HIDDEN.value = ELEMENT.value ? triggerFunction( COMPONENT.formats.toString, COMPONENT, [ SETTINGS.formatSubmit, PICKER.select[ 0 ] ] ) : ''
                         }
 
                     }).on( 'keydown.P' + PICKER.ID, function() {
@@ -1433,7 +1373,7 @@ if ( ![].indexOf ) {
                             isKeycodeDelete = keycode == 8 || keycode == 46
 
                         // Check if delete was pressed or the calendar is closed and there is a key movement
-                        if ( isKeycodeDelete || !PICKER.isOpen && PICKER.keyMove[ keycode ] ) {
+                        if ( isKeycodeDelete || !PICKER.OPEN && COMPONENT.keyMove[ keycode ] ) {
 
                             // Prevent it from moving the page.
                             event.preventDefault()
@@ -1455,10 +1395,15 @@ if ( ![].indexOf ) {
                     }).after([ $HOLDER, ELEMENT_HIDDEN ])
 
                     // Trigger the "start" event within scope of the picker.
-                    triggerFunction( PICKER.onStart, PICKER, [ $HOLDER ] )
+                    triggerFunction( COMPONENT.onStart, P, [ $HOLDER ] )
 
                     // Trigger the "render" event within scope of the picker.
-                    triggerFunction( PICKER.onRender, PICKER, [ $HOLDER ] )
+                    triggerFunction( COMPONENT.onRender, P, [ $HOLDER ] )
+
+                    // If the element has autofocus, open the calendar
+                    if ( ELEMENT.autofocus ) {
+                        P.open()
+                    }
 
                     return P
                 }, //start
@@ -1473,7 +1418,7 @@ if ( ![].indexOf ) {
                     $HOLDER.html( createWrappedPicker() )
 
                     // Trigger the "render" event within scope of the picker.
-                    triggerFunction( PICKER.onRender, PICKER, [ $HOLDER ] )
+                    triggerFunction( COMPONENT.onRender, P, [ $HOLDER ] )
 
                     return P
                 }, //render
@@ -1503,7 +1448,7 @@ if ( ![].indexOf ) {
                     $HOLDER.remove()
 
                     // Trigger the "stop" event within scope of the picker.
-                    triggerFunction( PICKER.onStop, PICKER )
+                    triggerFunction( COMPONENT.onStop, COMPONENT )
 
                     return P
                 }, //stop
@@ -1515,10 +1460,10 @@ if ( ![].indexOf ) {
                 open: function() {
 
                     // If it's already open, do nothing
-                    if ( PICKER.isOpen ) return P
+                    if ( PICKER.OPEN ) return P
 
                     // Set it as open
-                    PICKER.isOpen = 1
+                    PICKER.OPEN = 1
 
                     // Make sure the element has focus then add the "active" class.
                     $ELEMENT.focus().addClass( CLASSES.inputActive )
@@ -1549,7 +1494,7 @@ if ( ![].indexOf ) {
                             keycode = event.keyCode,
 
                             // Translate that to a selection change
-                            keycodeToMove = PICKER.keyMove[ keycode ]
+                            keycodeToMove = COMPONENT.keyMove[ keycode ]
 
 
                         // On escape, focus back onto the element and close the picker.
@@ -1567,19 +1512,19 @@ if ( ![].indexOf ) {
                             // If the keycode translates to a move, superficially set the time.
                             // * Truthy second argument makes it a superficial selection.
                             if ( keycodeToMove ) {
-                                P.set( triggerFunction( PICKER.keyMove.go, PICKER, [ keycodeToMove ] ), 1 )
+                                P.set( triggerFunction( COMPONENT.keyMove.go, COMPONENT, [ PICKER.highlight, keycodeToMove ] ), 1 )
                             }
 
                             // Otherwise it's the enter key so select the highlighted or selected time and then close it.
                             else {
-                                P.set( PICKER.HIGHLIGHT ).close()
+                                P.set( PICKER.highlight ).close()
                             }
 
                         } //if ELEMENT
                     })
 
                     // Trigger the on open event within scope of the picker.
-                    triggerFunction( PICKER.onOpen, PICKER, [ $HOLDER ] )
+                    triggerFunction( COMPONENT.onOpen, COMPONENT, [ $HOLDER ] )
 
                     return P
                 }, //open
@@ -1591,10 +1536,10 @@ if ( ![].indexOf ) {
                 close: function() {
 
                     // If it's already closed, do nothing
-                    if ( !PICKER.isOpen ) return P
+                    if ( !PICKER.OPEN ) return P
 
                     // Set it as closed
-                    PICKER.isOpen = 0
+                    PICKER.OPEN = 0
 
                     // Remove the "active" class.
                     $ELEMENT.removeClass( CLASSES.inputActive )
@@ -1606,7 +1551,7 @@ if ( ![].indexOf ) {
                     $document.off( '.P' + PICKER.ID )
 
                     // Trigger the on close event within scope of the picker.
-                    triggerFunction( PICKER.onClose, PICKER, [ $HOLDER ] )
+                    triggerFunction( COMPONENT.onClose, COMPONENT, [ $HOLDER ] )
 
                     return P
                 }, //close
@@ -1635,10 +1580,10 @@ if ( ![].indexOf ) {
                     else {
 
                         // Validate and create a time object.
-                        var timeObject = timePassed && !isNaN( timePassed.TIME ) ? timePassed : PICKER.object( timePassed )
+                        var timeObject = timePassed && !isNaN( timePassed.TIME ) ? timePassed : COMPONENT.object( timePassed )
 
                         // Stop if it's not a superficial selection and the time is disabled.
-                        if ( !isSuperficial && PICKER.DISABLE.length && triggerFunction( PICKER.disable, PICKER, [ timeObject ] ) ) {
+                        if ( !isSuperficial && PICKER.disable.length && triggerFunction( PICKER.disable, COMPONENT, [ timeObject ] ) ) {
                             return P
                         }
 
@@ -1646,24 +1591,32 @@ if ( ![].indexOf ) {
                         if ( !isSuperficial ) {
 
                             // Select the time object
-                            PICKER.SELECT = [ timeObject ]
+                            PICKER.select = [ timeObject ]
 
                             // Update the element value
-                            $ELEMENT.val( triggerFunction( PICKER.formats.toString, PICKER, [ SETTINGS.format, timeObject ] ) ).trigger( 'change' )
+                            $ELEMENT.val( triggerFunction( COMPONENT.formats.toString, COMPONENT, [ SETTINGS.format, timeObject ] ) ).trigger( 'change' )
                         }
 
                         // Highlight the time object
-                        PICKER.VIEWSET = PICKER.HIGHLIGHT = timeObject
+                        PICKER.view = PICKER.highlight = timeObject
 
                         // Then render a new picker
                         P.render()
 
                         // Trigger the on set event within scope of the picker.
-                        triggerFunction( PICKER.onSet, PICKER, [ $HOLDER ] )
+                        triggerFunction( PICKER.onSet, COMPONENT, [ $HOLDER ] )
                     }
 
                     return P
                 }, //set
+
+
+                /**
+                 * Get the values
+                 */
+                get: function( whatToGet ) {
+                    return PICKER[ whatToGet ]
+                },
 
 
                 /**
@@ -1672,13 +1625,13 @@ if ( ![].indexOf ) {
                 disableItem: function( timePassed ) {
 
                     // Add or remove from collection based on "off" status.
-                    PICKER.DISABLE = PICKER.OFF ? removeFromCollection( PICKER.DISABLE, timePassed ) : addToCollection( PICKER.DISABLE, timePassed )
+                    PICKER.disable = PICKER.OFF ? removeFromCollection( PICKER.disable, timePassed ) : addToCollection( PICKER.disable, timePassed )
 
                     // Revalidate the selected item.
-                    PICKER.SELECT = [ triggerFunction( PICKER.validate, PICKER, PICKER.SELECT ) ]
+                    PICKER.select = [ triggerFunction( PICKER.validate, COMPONENT, PICKER.select ) ]
 
                     // Update the highlight and viewset based on the "selected" item.
-                    PICKER.VIEWSET = PICKER.HIGHLIGHT = PICKER.SELECT[ 0 ]
+                    PICKER.view = PICKER.highlight = PICKER.select[ 0 ]
 
                     // Then render a new picker.
                     return P.render()
@@ -1691,13 +1644,13 @@ if ( ![].indexOf ) {
                 enableItem: function( timePassed ) {
 
                     // Add or remove from collection based on "off" status.
-                    PICKER.DISABLE = PICKER.OFF ? addToCollection( PICKER.DISABLE, timePassed ) : removeFromCollection( PICKER.DISABLE, timePassed )
+                    PICKER.disable = PICKER.OFF ? addToCollection( PICKER.disable, timePassed ) : removeFromCollection( PICKER.disable, timePassed )
 
                     // Revalidate the selected item.
-                    PICKER.SELECT = [ triggerFunction( PICKER.validate, PICKER, PICKER.SELECT ) ]
+                    PICKER.select = [ triggerFunction( PICKER.validate, COMPONENT, PICKER.select ) ]
 
                     // Update the highlight and viewset based on the "selected" item.
-                    PICKER.VIEWSET = PICKER.HIGHLIGHT = PICKER.SELECT[ 0 ]
+                    PICKER.view = PICKER.highlight = PICKER.select[ 0 ]
 
                     // Then render a new picker.
                     return P.render()
@@ -1706,13 +1659,57 @@ if ( ![].indexOf ) {
             }, //PickerInstance.prototype
 
 
-            // Create a new picker instance.
-            PICKER = new PickerInstance(),
+            // Create a new picker component out of this instance and settings.
+            PICKER = (function( elementDataValue ) {
+
+                var
+                    // The disabled items collection.
+                    disabledCollection = SETTINGS.disable || [],
+
+                    // If there are items to disable and the first item is a literal `true`,
+                    // we need to disabled all the items. Remove the flag from the collection
+                    // and flip the condition of which items to disable.
+                    pickerIsOff = ( Array.isArray( disabledCollection ) && disabledCollection[ 0 ] === true ) ? disabledCollection.shift() : undefined,
+
+                    // The `min` and `max` bounding limits.
+                    minLimitObject = triggerFunction( COMPONENT.min, COMPONENT ),
+                    maxLimitObject = triggerFunction( COMPONENT.max, COMPONENT ),
+
+                    // The `now` time object.
+                    nowObject = triggerFunction( COMPONENT.now, COMPONENT ),
+
+                    // The initial selection is based on the `value` or `data-value` of the element.
+                    selectedCollection = [
+                        triggerFunction(
+                            COMPONENT.validate, COMPONENT, [
+                                triggerFunction(
+                                    COMPONENT.parse, COMPONENT, [ elementDataValue ? SETTINGS.formatSubmit : SETTINGS.format, elementDataValue || ELEMENT.value ]
+                                )
+                            ]
+                        )
+                    ],
+
+                    // The default highlight and viewset are based on the "selected" or "default" item.
+                    highlightedObject = selectedCollection[ 0 ] || triggerFunction( COMPONENT.validate, COMPONENT ),
+                    viewsetObject = highlightedObject
+
+                return {
+                    id: Math.abs( ~~( Math.random() * 1e11 ) ),
+                    disable: disabledCollection,
+                    off: pickerIsOff,
+                    min: minLimitObject,
+                    max: maxLimitObject,
+                    now: nowObject,
+                    select: selectedCollection,
+                    highlight: highlightedObject,
+                    view: viewsetObject
+                }
+            })( $ELEMENT.data( 'value' ) ),
 
 
             // If there's a format for the hidden input element, create the element
             // using the name of the original input plus suffix. Otherwise set it to null.
-            ELEMENT_HIDDEN = SETTINGS.formatSubmit ? $( '<input type=hidden name=' + ELEMENT.name + ( SETTINGS.hiddenSuffix || '_submit' ) + ( ELEMENT.value ? ' value=' + triggerFunction( PICKER.formats.toString, PICKER, [ SETTINGS.formatSubmit, PICKER.SELECT[ 0 ] ] ) : '' ) + '>' )[ 0 ] : undefined,
+            ELEMENT_HIDDEN = SETTINGS.formatSubmit ? $( '<input type=hidden name=' + ELEMENT.name + ( SETTINGS.hiddenSuffix || '_submit' ) + ( ELEMENT.value ? ' value=' + triggerFunction( PICKER.formats.toString, COMPONENT, [ SETTINGS.formatSubmit, PICKER.select[ 0 ] ] ) : '' ) + '>' )[ 0 ] : undefined,
 
 
             // Create the picker holder with a new wrapped picker and bind the events.
@@ -1755,12 +1752,12 @@ if ( ![].indexOf ) {
 
                         // Set and close the picker if something is getting picked.
                         if ( targetData.pick && !$target.hasClass( CLASSES.disabled ) ) {
-                            P.set( targetData.pick.split( PICKER.div ) ).close()
+                            P.set( targetData.pick.split( COMPONENT.div ) ).close()
                         }
 
                         // If something is superficially changed, navigate the picker.
                         else if ( targetData.nav && !$target.hasClass( CLASSES.navDisabled ) ) {
-                            P.set( [ PICKER.HIGHLIGHT.YEAR, PICKER.HIGHLIGHT.MONTH + targetData.nav, PICKER.HIGHLIGHT.DATE ], 1 )
+                            P.set( [ PICKER.highlight.YEAR, PICKER.highlight.MONTH + targetData.nav, PICKER.highlight.DATE ], 1 )
                         }
 
                         // If a "clear" button is pressed, empty the values and close it.
@@ -1787,7 +1784,7 @@ if ( ![].indexOf ) {
                     createNode( STRING_DIV,
 
                         // Create the components using the settings and picker
-                        triggerFunction( COMPONENT.holder, PICKER ),
+                        triggerFunction( COMPONENT.holder, COMPONENT, [ P ] ),
 
                         // The picker item class
                         CLASSES.item
@@ -1960,26 +1957,27 @@ if ( ![].indexOf ) {
 
         var PickerComponent = index ? ClockPicker : CalendarPicker
 
-        $.fn[ picker ] = function( options ) {
+        $.fn[ picker ] = function( options, action ) {
 
-            // Merge the options and defaults with a deep copy.
-            var settings = $.extend( true, {}, $.fn[ picker ].defaults, options )
+            var
+                // Merge the options and defaults with a deep copy.
+                settings = $.extend( true, {}, $.fn[ picker ].defaults, options ),
+
+                // Check if this already has a picker
+                thisPicker = this.data( picker )
 
             // Just stop if the picker should be disabled.
-            if ( settings.disablePicker ) return this
+            ///////// if ( settings.disablePicker ) return this
+
+            //
+            if ( typeof options == 'string' && thisPicker ) {
+                return triggerFunction( thisPicker[ options ], thisPicker, [ action ] )
+            }
 
             return this.each( function() {
-
                 var $this = $( this )
-
-                // If the picker hasn't been attached, do it.
                 if ( !$this.data( picker ) ) {
-                    $this.data( picker, new Picker( $this, settings, new PickerComponent() ) )
-                }
-
-                //
-                if ( typeof options == 'string' ) {
-                    triggerFunction( $this.data( picker )[ options ] )
+                    $this.data( picker, new Picker( $this, settings, new PickerComponent( settings ) ) )
                 }
             })
         }
@@ -2059,24 +2057,14 @@ if ( ![].indexOf ) {
      */
     $.fn.pickatime.defaults = {
 
-        // The format to show on the `input` element
-        format: 'h:i A',
-
         // Clear
         clear: 'Clear',
 
+        // The format to show on the `input` element
+        format: 'h:i A',
+
         // The interval between each time
         interval: 30,
-
-        // The time limits
-        min: 0,
-        max: 0,
-
-        // Times to disable
-        disable: 0,
-
-        // Disable for browsers with native date support
-        disablePicker: 0,
 
         // Classes
         klass: {
