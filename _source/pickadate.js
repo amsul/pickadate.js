@@ -11,8 +11,6 @@
 /**
  * Todo:
  * – Restart picker after stopping.
- * – Fix highlight changes to first of month on nav.
- * – Fix get/set methods.
  * – Fix for "now" disabled.
  * – If time passed, list should update?
  * – Fix time "clear" button.
@@ -339,8 +337,8 @@
                 }
             }).length
 
-        // If the clock is off, flip the condition.
-        return clock.OFF ? !isDisabledTime : isDisabledTime
+        // If the clock is flipped, flip the condition.
+        return clock.props.get( 'flip' ) ? !isDisabledTime : isDisabledTime
     } // ClockPicker.prototype.disable
 
 
@@ -630,12 +628,12 @@
                 var picker = this
 
                 $holder.find( '.' + settings.klass.selectMonth ).on( 'change', function() {
-                    picker.set( 'view', [ calendar.props.get( 'view' ).YEAR, this.value, calendar.props.get( 'select' ).DATE ] )
+                    picker.set( 'view', [ calendar.props.get( 'view' ).YEAR, this.value, calendar.props.get( 'highlight' ).DATE ] )
                     $holder.find( '.' + settings.klass.selectMonth ).focus()
                 })
 
                 $holder.find( '.' + settings.klass.selectYear ).on( 'change', function() {
-                    picker.set( 'view', [ this.value, calendar.props.get( 'view' ).MONTH, calendar.props.get( 'select' ).DATE ] )
+                    picker.set( 'view', [ this.value, calendar.props.get( 'view' ).MONTH, calendar.props.get( 'highlight' ).DATE ] )
                     $holder.find( '.' + settings.klass.selectYear ).focus()
                 })
 
@@ -1022,8 +1020,8 @@
                 }
             }).length
 
-        // If the calendar is off, flip the condition.
-        return calendar.OFF ? !isDisabledDate : isDisabledDate
+        // If the calendar is flipped, flip the condition.
+        return calendar.props.get( 'flip' ) ? !isDisabledDate : isDisabledDate
     } // CalendarPicker.prototype.disable
 
 
@@ -1050,6 +1048,14 @@
         // Do a final validation check to make sure it's within bounds.
         return calendar.validate( dateObject, keyMovement )
     } //CalendarPicker.prototype.shift
+
+
+    /**
+     * Move to another month
+     */
+    CalendarPicker.prototype.move = function( datePassed, monthChange ) {
+        return this.create([ datePassed.YEAR, datePassed.MONTH + monthChange, datePassed.DATE ])
+    } //CalendarPicker.prototype.move
 
 
     // /**
@@ -1282,7 +1288,7 @@
 
                                 // If something is superficially changed, navigate the picker.
                                 else if ( targetData.nav && !$target.hasClass( CLASSES.navDisabled ) ) {
-                                    P.set( 'view', [ CACHE_OBJECT.get( 'view' ).YEAR, CACHE_OBJECT.get( 'view' ).MONTH + targetData.nav, 1 ] )
+                                    P.set( 'view', COMPONENT.move( CACHE_OBJECT.get( 'highlight' ), targetData.nav ) )
                                 }
 
                                 // If a "clear" button is pressed, empty the values and close it.
@@ -1571,7 +1577,7 @@
                             CACHE_OBJECT.set( 'highlight', objectToSet )
 
                             // Update the viewset.
-                            CACHE_OBJECT.set( 'view', function( cacheObject ) { return COMPONENT.view( objectToSet ) })
+                            CACHE_OBJECT.set( 'view', function() { return COMPONENT.view( objectToSet ) })
                         }
 
                         else {
@@ -1604,8 +1610,8 @@
                  */
                 disableItem: function( timePassed ) {
 
-                    // Add or remove from collection based on "off" status.
-                    PICKER.disable = PICKER.OFF ? removeFromCollection( PICKER.disable, timePassed ) : addToCollection( PICKER.disable, timePassed )
+                    // Add or remove from collection based on the flipped status.
+                    PICKER.disable = CACHE_OBJECT.get( 'flip' ) ? removeFromCollection( PICKER.disable, timePassed ) : addToCollection( PICKER.disable, timePassed )
 
                     // Revalidate the selected item.
                     PICKER.select = triggerFunction( PICKER.validate, P, PICKER.select )
@@ -1623,8 +1629,8 @@
                  */
                 enableItem: function( timePassed ) {
 
-                    // Add or remove from collection based on "off" status.
-                    PICKER.disable = PICKER.OFF ? addToCollection( PICKER.disable, timePassed ) : removeFromCollection( PICKER.disable, timePassed )
+                    // Add or remove from collection based on the flipped status.
+                    PICKER.disable = CACHE_OBJECT.get( 'flip' ) ? addToCollection( PICKER.disable, timePassed ) : removeFromCollection( PICKER.disable, timePassed )
 
                     // Revalidate the selected item.
                     PICKER.select = triggerFunction( PICKER.validate, P, PICKER.select )
@@ -1640,21 +1646,27 @@
 
 
 
+        /**
+         * Create a hidden object for caching.
+         */
         function createCacheObject() {
 
-            var collectionDisabled = SETTINGS.disable || [],
-                hiddenCacheObject = {}
+            var
+                collectionDisabled = SETTINGS.disable || [],
+
+                hiddenCacheObject = {
+
+                    // Flip and adjust the disabled collection, if that.
+                    flip: ( Array.isArray( collectionDisabled ) && collectionDisabled[ 0 ] === true ) ? collectionDisabled.shift() : undefined,
+
+                    // Copy the collection of disabled items.
+                    disable: collectionDisabled
+                }
 
             return {
 
                 // The unique ID.
                 id: Math.abs( ~~( Math.random() * 1e9 ) ),
-
-                // Flip and adjust the disabled collection, if that.
-                flip: ( Array.isArray( collectionDisabled ) && collectionDisabled[ 0 ] === true ) ? collectionDisabled.shift() : undefined,
-
-                // Copy the collection of disabled items.
-                disable: collectionDisabled,
 
                 set: function( thing, value ) {
                     hiddenCacheObject[ thing ] = triggerFunction( value, this, [ hiddenCacheObject ] )
