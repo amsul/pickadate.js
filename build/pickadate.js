@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v3.0.0alpha, 2013-04-03
+ * pickadate.js v3.0.0alpha, 2013-04-04
  * By Amsul (http://amsul.ca)
  * Hosted on http://amsul.github.com/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
@@ -148,8 +148,10 @@ if ( ![].indexOf ) {
 /**
  * Todo:
  * – Restart picker after stopping.
- * – Fix for "now" disabled.
+ * – Min & max with `object.create` method
  * – If time passed, list should update?
+ * – Disabled date/time highlighted should get validated.
+ * – Key to "after" max time.
  * – Fix time "clear" button.
  * – WAI-ARIA support
  * – Lots more...
@@ -197,6 +199,8 @@ if ( ![].indexOf ) {
         $.extend( clock, {
             settings: settings,
             i: settings.interval || 30,
+            first: 0,
+            last: MINUTES_IN_DAY - 1,
             div: ':',
             keyMove: {
                 40: 1, // Down
@@ -257,21 +261,19 @@ if ( ![].indexOf ) {
                 toArray: function( formatString ) { return formatString.split( /(h{1,2}|H{1,2}|i|a|A|!.)/g ) },
 
                 // Format an object into a string using the formatting options.
-                toString: function ( format, itemObject ) {
-                    var clock = this,
-                        formattings = clock.formats
-                    return formattings.toArray( format ).map( function( label ) {
-                        return triggerFunction( formattings[ label ], clock, [ 0, itemObject ] ) || label.replace( /^!/, '' )
+                toString: function ( formatString, itemObject ) {
+                    return clock.formats.toArray( formatString ).map( function( label ) {
+                        return triggerFunction( clock.formats[ label ], clock, [ 0, itemObject ] ) || label.replace( /^!/, '' )
                     }).join( '' )
                 }
             },
             onStart: function( $holder ) {
-                triggerFunction( this.settings.onStart, this, [ $holder ] )
+                triggerFunction( settings.onStart, this, [ $holder ] )
             },
             onRender: function( $holder ) {
 
                 var picker = this,
-                    $highlighted = $holder.find( '.' + picker.settings.klass.highlighted )
+                    $highlighted = $holder.find( '.' + settings.klass.highlighted )
 
                 if ( $highlighted.length ) {
                     $holder[ 0 ].scrollTop = $highlighted.position().top - ~~( $holder[ 0 ].clientHeight / 4 )
@@ -280,21 +282,21 @@ if ( ![].indexOf ) {
                     console.warn( 'Nothing to highlight' )
                 }
 
-                triggerFunction( picker.settings.onRender, picker, [ $holder ] )
+                triggerFunction( settings.onRender, picker, [ $holder ] )
             },
             onOpen: function( $holder ) {
                 // $holder.find( 'button, select' ).attr( 'tabindex', 0 )
-                triggerFunction( this.settings.onOpen, this, [ $holder ] )
+                triggerFunction( settings.onOpen, this, [ $holder ] )
             },
             onClose: function( $holder ) {
                 // $holder.find( 'button, select' ).attr( 'tabindex', -1 )
-                triggerFunction( this.settings.onClose, this, [ $holder ] )
+                triggerFunction( settings.onClose, this, [ $holder ] )
             },
             onSet: function( $holder ) {
-                triggerFunction( this.settings.onSet, this, [ $holder ] )
+                triggerFunction( settings.onSet, this, [ $holder ] )
             },
             onStop: function( $holder ) {
-                triggerFunction( this.settings.onStop, this, [ $holder ] )
+                triggerFunction( settings.onStop, this, [ $holder ] )
             }
         })
     } //ClockPicker
@@ -303,41 +305,45 @@ if ( ![].indexOf ) {
     /**
      * Create a clock holder node.
      */
-    ClockPicker.prototype.holder = function( picker ) {
+    ClockPicker.prototype.holder = function( picker, properties ) {
 
         var
-            clock = this,
+            clock = this
+
+        clock.props = properties
+
+        var
             settings = clock.settings,
-            pickerSelected = picker.get( 'select' ),
-            pickerHighlighted = picker.get( 'highlight' ),
-            pickerViewset = picker.get( 'view' ),
-            pickerDisabledCollection = picker.get( 'disable' )
+            selected = properties.get( 'select' ),
+            highlighted = properties.get( 'highlight' ),
+            viewset = properties.get( 'view' ),
+            disabledCollection = properties.get( 'disable' )
 
 
         return createNode( 'ul', createGroupOfNodes({
-            min: picker.get( 'min' ).TIME,
-            max: picker.get( 'max' ).TIME,
+            min: properties.get( 'min' ).TIME,
+            max: properties.get( 'max' ).TIME,
             i: clock.i,
             node: 'li',
             item: function( loopedTime ) {
-                loopedTime = clock.object( loopedTime )
+                loopedTime = clock.create( loopedTime )
                 return [
                     triggerFunction( clock.formats.toString, clock, [ settings.format, loopedTime ] ),
                     (function( klasses, timeMinutes ) {
 
-                        if ( pickerSelected && pickerSelected.TIME == timeMinutes ) {
+                        if ( selected && selected.TIME == timeMinutes ) {
                             klasses.push( settings.klass.selected )
                         }
 
-                        if ( pickerHighlighted && pickerHighlighted.TIME == timeMinutes ) {
+                        if ( highlighted && highlighted.TIME == timeMinutes ) {
                             klasses.push( settings.klass.highlighted )
                         }
 
-                        if ( pickerViewset && pickerViewset.TIME == timeMinutes ) {
+                        if ( viewset && viewset.TIME == timeMinutes ) {
                             klasses.push( settings.klass.viewset )
                         }
 
-                        if ( pickerDisabledCollection && clock.disable( pickerDisabledCollection, clock.object( timeMinutes ) ) ) {
+                        if ( disabledCollection && clock.disable( disabledCollection, loopedTime ) ) {
                             klasses.push( settings.klass.disabled )
                         }
 
@@ -351,9 +357,19 @@ if ( ![].indexOf ) {
 
 
     /**
-     * Create a clock item object.
+     * Create clock component objects.
      */
-    ClockPicker.prototype.object = function( timePassed ) {
+    ClockPicker.prototype.create = function( timePassed, defaultValue ) {
+
+        // Use the default value if there is one.
+        if ( !isNaN( defaultValue ) ) {
+            timePassed = defaultValue
+        }
+
+        // If the time passed already has a time, just return it.
+        if ( timePassed && !isNaN( timePassed.TIME ) ) {
+            return timePassed
+        }
 
         // If the time passed is an array, float the values and convert into total minutes.
         if ( Array.isArray( timePassed ) ) {
@@ -378,7 +394,7 @@ if ( ![].indexOf ) {
             // Reference to total minutes.
             TIME: timePassed
         }
-    } //ClockPicker.prototype.object
+    } //ClockPicker.prototype.create
 
 
     /**
@@ -388,30 +404,15 @@ if ( ![].indexOf ) {
 
         var
             clock = this,
-            minLimitObject = clock.min(),
-            maxLimitObject = clock.max(),
+            minLimitObject = clock.create( this.first ),
+            maxLimitObject = clock.create( this.last ),
 
             // Make sure we have a time object to work with.
-            timePassedObject = timePassed && !isNaN( timePassed.TIME ) ? timePassed : clock.object( timePassed )
+            timePassedObject = timePassed && !isNaN( timePassed.TIME ) ? timePassed : clock.create( timePassed )
 
         // If no time was passed or there was a key movement, normalize the time object into a "reachable" time.
         if ( !timePassed || keyMovement ) {
-
-            timePassedObject = clock.object(
-
-                // From the time passed, subtract the amount needed to get it within interval "reach".
-                timePassedObject.TIME - (
-
-                    // Get the remainder between the min and time passed and then get the remainder
-                    // of that divided by the interval to get amount to decrease by.
-                    (
-                        minLimitObject.TIME ? timePassedObject.TIME % minLimitObject.TIME : timePassedObject.TIME
-                    ) % clock.i
-
-                // And then if there's a key movement, do nothing.
-                // Otherwise add an interval because this time has passed.
-                ) + ( keyMovement ? 0 : clock.i )
-            )
+            timePassedObject = clock.normalize( minLimitObject.TIME, timePassedObject.TIME, keyMovement )
         }
 
         // If we passed the lower bound, set the key movement upwards,
@@ -419,7 +420,7 @@ if ( ![].indexOf ) {
         if ( timePassedObject.TIME < minLimitObject.TIME ) {
             keyMovement = 1
             clock.doneMin = 1
-            timePassedObject = clock.object( minLimitObject.TIME )
+            timePassedObject = clock.create( minLimitObject.TIME )
         }
 
         // Otherwise if we passed the upper bound, set the key movement downwards,
@@ -427,12 +428,12 @@ if ( ![].indexOf ) {
         else if ( timePassedObject.TIME > maxLimitObject.TIME ) {
             keyMovement = -1
             clock.doneMax = 1
-            timePassedObject = clock.object( maxLimitObject.TIME )
+            timePassedObject = clock.create( maxLimitObject.TIME )
         }
 
         // If we've hit the upper and lower bounds, set the time to now and move on.
         if ( clock.doneMin && clock.doneMax ) {
-            timePassedObject = clock.now()
+            timePassedObject = clock.create()
         }
 
         // Otherwise if there are times to disable and this is one of them,
@@ -447,10 +448,6 @@ if ( ![].indexOf ) {
 
         return timePassedObject
     } //ClockPicker.prototype.validate
-
-
-    /////// like this??
-    ClockPicker.prototype.now = ClockPicker.prototype.validate
 
 
     /**
@@ -470,7 +467,7 @@ if ( ![].indexOf ) {
 
                 // If it's an array, create the object and match the times.
                 if ( Array.isArray( timeToDisable ) ) {
-                    return timeObject.TIME == clock.object( timeToDisable ).TIME
+                    return timeObject.TIME == clock.create( timeToDisable ).TIME
                 }
             }).length
 
@@ -485,14 +482,14 @@ if ( ![].indexOf ) {
     ClockPicker.prototype.shift = function( timeObject, keyMovement ) {
 
         var clock = this,
-            minLimit = clock.min().TIME,
-            maxLimit = clock.max().TIME
+            minLimit = clock.props.get( 'min' ).TIME,
+            maxLimit = clock.props.get( 'max' ).TIME
 
         // Keep looping as long as the time is disabled.
-        while ( clock.disable( timeObject ) ) {
+        while ( clock.disable( clock.props.get( 'disable' ), timeObject ) ) {
 
             // Increase/decrease the time by the key movement and keep looping.
-            timeObject = clock.object( timeObject.TIME += ( keyMovement || clock.i ) * clock.i )
+            timeObject = clock.create( timeObject.TIME += ( keyMovement || clock.i ) * clock.i )
 
             // If we've looped beyond the limits, break out of the loop.
             if ( timeObject.TIME < minLimit || timeObject.TIME > maxLimit ) {
@@ -506,80 +503,111 @@ if ( ![].indexOf ) {
 
 
     /**
-     * Create the lower bounding time object.
+     * Normalize a time to be within "reachable" scope.
      */
-    ClockPicker.prototype.min = function() {
+    ClockPicker.prototype.normalize = function( baseTime, timeMinutes, keyMovement ) {
+        var clock = this
+        return clock.create(
+            (
+                // From the minutes, subtract the amount needed to get it within interval "reach".
+                timeMinutes - (
 
-        var
-            clock = this,
-            limit = clock.settings.min,
-            interval = clock.i,
-            nowObject = clock.object()
+                    // Get the remainder between the base and time passed and then get the remainder
+                    // of that divided by the interval to get amount to decrease by.
+                    (
+                        baseTime ? timeMinutes % baseTime : timeMinutes
+                    ) % clock.i
+                )
 
-        // If there's no limit, just create min as midnight.
-        if ( !limit ) {
-            return clock.object( 0 )
-        }
-
-        // If the limit is set to true, just return a normalized "now"
-        // plus one interval because this time has passed.
-        if ( limit === true ) {
-            return clock.object( nowObject.TIME - ( ( limit.TIME ? nowObject.TIME % limit.TIME : nowObject.TIME ) % interval ) + interval )
-        }
-
-        // If the limit is a number, create a validated "now" object for a relative min object.
-        if ( !isNaN( limit ) ) {
-            return clock.object([ nowObject.HOUR, ( nowObject.MINS - nowObject.MINS % interval ) + ( limit + 1 ) * interval ])
-        }
-
-        // Otherwise create the object with whatever the limit is.
-        return clock.object( limit )
-    } //ClockPicker.prototype.min
+            // And then if there's a key movement, do nothing.
+            // Otherwise add an interval because this time has passed.
+            ) + ( keyMovement ? 0 : clock.i ) )
+    } //ClockPicker.prototype.normalize
 
 
     /**
-     * Create the upper bounding time object.
+     * Create the lower bounding time object.
      */
-    ClockPicker.prototype.max = function() {
+    // ClockPicker.prototype.min = function() {
 
-        var
-            clock = this,
-            settings = clock.settings,
-            limit = settings.max,
-            interval = clock.i,
-            nowObject = clock.object()
+    //     var
+    //         clock = this,
+    //         limit = clock.settings.min,
+    //         interval = clock.i,
+    //         nowObject = clock.object()
 
-        // If there's no limit, set it as a minute before next midnight.
-        if ( !limit ) {
-            limit = clock.object( MINUTES_IN_DAY - 1 )
-        }
+    //     // If there's no limit, just create min as midnight.
+    //     if ( !limit ) {
+    //         return clock.object( 0 )
+    //     }
 
-        // If the limit is set to true, just return a normalized "now"
-        // plus one interval because this time has passed.
-        else if ( limit === true ) {
-            limit = clock.object( nowObject.TIME - ( ( limit.TIME ? nowObject.TIME % limit.TIME : nowObject.TIME ) % interval ) + interval )
-        }
+    //     // If the limit is set to true, just return a normalized "now"
+    //     // plus one interval because this time has passed.
+    //     if ( limit === true ) {
+    //         return clock.object( nowObject.TIME - ( ( limit.TIME ? nowObject.TIME % limit.TIME : nowObject.TIME ) % interval ) + interval )
+    //     }
 
-        // If the limit is a number, create a max limit relative to "now".
-        else if ( !isNaN( limit ) ) {
-            limit = clock.object([ nowObject.HOUR, ( nowObject.MINS - nowObject.MINS % interval ) + ( limit + 1 ) * interval ])
-        }
+    //     // If the limit is a number, create a validated "now" object for a relative min object.
+    //     if ( !isNaN( limit ) ) {
+    //         return clock.object([ nowObject.HOUR, ( nowObject.MINS - nowObject.MINS % interval ) + ( limit + 1 ) * interval ])
+    //     }
 
-        // If it's an array, just create the time.
-        else if ( Array.isArray( limit ) ) {
-            limit = clock.object( limit )
-        }
+    //     // Otherwise create the object with whatever the limit is.
+    //     return clock.object( limit )
+    // } //ClockPicker.prototype.min
 
 
-        // If the max is less than min, add a day
-        if ( limit.TIME < clock.min( settings ).TIME ) {
-            limit = clock.object( limit.TIME + MINUTES_IN_DAY )
-        }
+    // /**
+    //  * Create the upper bounding time object.
+    //  */
+    // ClockPicker.prototype.max = function() {
+
+    //     var
+    //         clock = this,
+    //         settings = clock.settings,
+    //         limit = settings.max,
+    //         interval = clock.i,
+    //         nowObject = clock.object()
+
+    //     // If there's no limit, set it as a minute before next midnight.
+    //     if ( !limit ) {
+    //         limit = clock.object( MINUTES_IN_DAY - 1 )
+    //     }
+
+    //     // If the limit is set to true, just return a normalized "now"
+    //     // plus one interval because this time has passed.
+    //     else if ( limit === true ) {
+    //         limit = clock.object( nowObject.TIME - ( ( limit.TIME ? nowObject.TIME % limit.TIME : nowObject.TIME ) % interval ) + interval )
+    //     }
+
+    //     // If the limit is a number, create a max limit relative to "now".
+    //     else if ( !isNaN( limit ) ) {
+    //         limit = clock.object([ nowObject.HOUR, ( nowObject.MINS - nowObject.MINS % interval ) + ( limit + 1 ) * interval ])
+    //     }
+
+    //     // If it's an array, just create the time.
+    //     else if ( Array.isArray( limit ) ) {
+    //         limit = clock.object( limit )
+    //     }
 
 
-        // Finally, make sure the max time is "reachable" using the interval and min limit.
-        return clock.object( limit.TIME - ( ( clock.min( settings ).TIME ? limit.TIME % clock.min( settings ).TIME : limit.TIME ) % interval ) )
-    } //ClockPicker.prototype.max
+    //     // If the max is less than min, add a day
+    //     if ( limit.TIME < clock.min( settings ).TIME ) {
+    //         limit = clock.object( limit.TIME + MINUTES_IN_DAY )
+    //     }
+
+
+    //     // Finally, make sure the max time is "reachable" using the interval and min limit.
+    //     return clock.object( limit.TIME - ( ( clock.min( settings ).TIME ? limit.TIME % clock.min( settings ).TIME : limit.TIME ) % interval ) )
+    // } //ClockPicker.prototype.max
+
+
+    /**
+     * Create a view object.
+     */
+    ClockPicker.prototype.view = function( timePassed ) {
+        return timePassed
+    }
 
 
     /**
@@ -657,6 +685,8 @@ if ( ![].indexOf ) {
         $.extend( calendar, {
             settings: settings,
             i: 1,
+            first: -Infinity,
+            last: Infinity,
             div: '/',
             keyMove: {
                 40: 7, // Down
@@ -813,7 +843,7 @@ if ( ![].indexOf ) {
             selected = properties.get( 'select' ),
             highlighted = properties.get( 'highlight' ),
             viewset = properties.get( 'view' ),
-            disabled = properties.get( 'disable' ),
+            disabledCollection = properties.get( 'disable' ),
 
             // Get the tab index state picker opened/closed.
             getTabindexState = function() {
@@ -1024,7 +1054,7 @@ if ( ![].indexOf ) {
                                                 }
 
                                                 // Add the `disabled` class if something's disabled and the object matches.
-                                                if ( disabled && calendar.disable( disabled, timeDate ) || timeDate.TIME < minLimitObject.TIME || timeDate.TIME > maxLimitObject.TIME ) {
+                                                if ( disabledCollection && calendar.disable( disabledCollection, timeDate ) || timeDate.TIME < minLimitObject.TIME || timeDate.TIME > maxLimitObject.TIME ) {
                                                     klasses.push( settings.klass.disabled )
                                                 }
 
@@ -1051,7 +1081,7 @@ if ( ![].indexOf ) {
 
 
     /**
-     * Create picker component objects.
+     * Create calendar component objects.
      */
     CalendarPicker.prototype.create = function( datePassed, defaultValue ) {
 
@@ -1061,7 +1091,7 @@ if ( ![].indexOf ) {
         }
 
         // If the date passed is an array, create the time by splitting the items.
-        else if ( Array.isArray( datePassed ) ) {
+        if ( Array.isArray( datePassed ) ) {
             datePassed = new Date( datePassed[ 0 ], datePassed[ 1 ], datePassed[ 2 ] )
         }
 
@@ -1153,7 +1183,7 @@ if ( ![].indexOf ) {
 
                 // If it's an array, create the object and match the times.
                 if ( Array.isArray( dateToDisable ) ) {
-                    return dateObject.TIME == calendar.object( dateToDisable ).TIME
+                    return dateObject.TIME == calendar.create( dateToDisable ).TIME
                 }
             }).length
 
@@ -1174,7 +1204,7 @@ if ( ![].indexOf ) {
         while ( calendar.disable( dateObject ) ) {
 
             // Increase/decrease the date by the key movement and keep looping.
-            dateObject = calendar.object([ dateObject.YEAR, dateObject.MONTH, dateObject.DATE + ( keyMovement || 1 ) ])
+            dateObject = calendar.create([ dateObject.YEAR, dateObject.MONTH, dateObject.DATE + ( keyMovement || 1 ) ])
 
             // If we've looped through to the next month, break out of the loop.
             if ( dateObject.MONTH != originalDateObject.MONTH ) {
@@ -1364,8 +1394,8 @@ if ( ![].indexOf ) {
                     CACHE_OBJECT = createCacheObject().
 
                         // Create the "min" and "max" objects.
-                        set( 'min', COMPONENT.create( SETTINGS.min, -Infinity ) ).
-                        set( 'max', COMPONENT.create( SETTINGS.max, Infinity ) ).
+                        set( 'min', COMPONENT.create( SETTINGS.min, COMPONENT.first ) ).
+                        set( 'max', COMPONENT.create( SETTINGS.max, COMPONENT.last ) ).
 
                         // Create the "now" time object.
                         set( 'now', COMPONENT.create() ).
@@ -1373,8 +1403,10 @@ if ( ![].indexOf ) {
                         // Create a selection based on the `value` or `data-value` of the element.
                         set( 'select', COMPONENT.create( COMPONENT.parse( elementDataValue ? SETTINGS.formatSubmit : SETTINGS.format, elementDataValue || ELEMENT.value ) ) ).
 
-                        // Create a highlight based on the "selected" object.
-                        set( 'highlight', function( cacheObject ) { return cacheObject.select }).
+                        // Create a highlight based on the "selected" object and normalize if provided.
+                        set( 'highlight', function( cacheObject ) {
+                            return COMPONENT.normalize ? COMPONENT.normalize( cacheObject.min.TIME, cacheObject.select.TIME ) : cacheObject.select
+                        }).
 
                         // Create a view set based on the "highlighted" object.
                         set( 'view', function( cacheObject ) { return COMPONENT.view( cacheObject.highlight ) })
@@ -1691,7 +1723,7 @@ if ( ![].indexOf ) {
                             }
 
                             // Stop if the time is disabled.
-                            if ( CACHE_OBJECT.disable.length && COMPONENT.disable( CACHE_OBJECT.disable, objectToSet ) ) {
+                            if ( CACHE_OBJECT.get( 'disable' ).length && COMPONENT.disable( CACHE_OBJECT.get( 'disable' ), objectToSet ) ) {
                                 objectToSet = COMPONENT.validate( objectToSet )
                             }
 

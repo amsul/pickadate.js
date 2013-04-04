@@ -28,7 +28,7 @@ test( 'Input element attributes', function() {
     ok( this.$input[ 0 ].type == 'text', 'Input type updated' )
     ok( this.$input[ 0 ].readOnly === true, 'Input is readonly' )
     ok( this.$input.pickatime( '$node' )._type == 'time', 'Original input type is saved' )
-    ok( this.$input.pickatime( 'get', 'select' )[ 0 ].TIME == this.$input.pickatime( 'get', 'now' ).TIME, 'Default selected time is correct' )
+    ok( this.$input.pickatime( 'get', 'select' ).TIME == this.$input.pickatime( 'get', 'now' ).TIME, 'Default selected time is correct' )
 })
 
 test( 'Holder is present', function() {
@@ -88,7 +88,7 @@ module( 'Time picker with a data value', {
 })
 
 test( 'Input element data values', function() {
-    ok( this.$input.pickatime( 'get', 'select' )[ 0 ].TIME == 840, 'Selects correct time' )
+    ok( this.$input.pickatime( 'get', 'select' ).TIME == 840, 'Selects correct time' )
     ok( this.$input.pickatime( 'get', 'highlight' ).TIME == 840, 'Highlights correct time' )
     ok( this.$input.pickatime( 'get', 'view' ).TIME == 840, 'Viewsets correct time' )
     ok( this.$input.next().next()[ 0 ].type == 'hidden', 'There is a hidden input' )
