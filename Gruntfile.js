@@ -65,7 +65,7 @@ module.exports = function( grunt ) {
 
 
     // Register the default tasks.
-    grunt.registerTask( 'default', [ 'concat', 'jshint', 'qunit' ] )
+    grunt.registerTask( 'default', [ 'concat' ] )
     grunt.registerTask( 'travis', [ 'jshint', 'qunit' ] )
 
 

@@ -11,9 +11,13 @@
 /**
  * Todo:
  * – Restart picker after stopping.
+ * – Fix highlight changes to first of month on nav.
+ * – Fix get/set methods.
+ * – Fix for "now" disabled.
  * – If time passed, list should update?
  * – Fix time "clear" button.
  * – WAI-ARIA support
+ * – Lots more...
  */
 
 
@@ -153,6 +157,9 @@
             },
             onSet: function( $holder ) {
                 triggerFunction( this.settings.onSet, this, [ $holder ] )
+            },
+            onStop: function( $holder ) {
+                triggerFunction( this.settings.onStop, this, [ $holder ] )
             }
         })
     } //ClockPicker
@@ -166,7 +173,7 @@
         var
             clock = this,
             settings = clock.settings,
-            pickerSelected = picker.get( 'select' )[ 0 ],
+            pickerSelected = picker.get( 'select' ),
             pickerHighlighted = picker.get( 'highlight' ),
             pickerViewset = picker.get( 'view' ),
             pickerDisabledCollection = picker.get( 'disable' )
@@ -347,7 +354,7 @@
             maxLimit = clock.max().TIME
 
         // Keep looping as long as the time is disabled.
-        while ( clock.disable( clock.settings.disable, timeObject ) ) {
+        while ( clock.disable( timeObject ) ) {
 
             // Increase/decrease the time by the key movement and keep looping.
             timeObject = clock.object( timeObject.TIME += ( keyMovement || clock.i ) * clock.i )
@@ -495,7 +502,7 @@
     function CalendarPicker( settings ) {
 
         var
-            picker = this,
+            calendar = this,
 
             // Return the length of the first word in a collection.
             getWordLengthFromCollection = function( string, collection, dateObject ) {
@@ -512,36 +519,26 @@
                 return word.length
             }
 
-        return {
-            div: '/',
+        $.extend( calendar, {
             settings: settings,
-            holder: picker.holder,
-            object: picker.object,
-            validate: picker.validate,
-            parse: picker.parse,
-            disable: picker.disable,
-            shift: picker.shift,
-            now: picker.object,
-            min: picker.min,
-            max: picker.max,
+            i: 1,
+            div: '/',
             keyMove: {
                 40: 7, // Down
                 38: -7, // Up
                 39: 1, // Right
                 37: -1, // Left
-                go: function( picker, dateChange ) {
+                go: function( dateObject, dateChange ) {
 
                     var
-                        calendar = this,
-
-                        highlighted = picker.get( 'highlight' ),
+                        picker = this,
 
                         // Create a validated target object with the relative date change.
-                        targetDateObject = calendar.validate( [ highlighted.YEAR, highlighted.MONTH, highlighted.DATE + dateChange ], dateChange )
+                        targetDateObject = calendar.validate( [ dateObject.YEAR, dateObject.MONTH, dateObject.DATE + dateChange ], dateChange )
 
                     // If there's a month change, update the viewset.
-                    if ( targetDateObject.MONTH != calendar.VIEWSET.MONTH ) {
-                        calendar.VIEWSET = targetDateObject
+                    if ( targetDateObject.MONTH != picker.get( 'view' ).MONTH ) {
+                        picker.set( 'view', targetDateObject )
                     }
 
                     // Return the targetted date object to "go" to.
@@ -587,7 +584,7 @@
                 },
                 mmm: function( string, dateObject ) {
 
-                    var collection = this.settings.monthsShort
+                    var collection = settings.monthsShort
 
                     // If there's a string, get length of the relevant month from the short
                     // months collection. Otherwise return the selected month from that collection.
@@ -595,7 +592,7 @@
                 },
                 mmmm: function( string, dateObject ) {
 
-                    var collection = this.settings.monthsFull
+                    var collection = settings.monthsFull
 
                     // If there's a string, get length of the relevant month from the full
                     // months collection. Otherwise return the selected month from that collection.
@@ -618,74 +615,74 @@
                 toArray: function( formatString ) { return formatString.split( /(d{1,4}|m{1,4}|y{4}|yy|!.)/g ) },
 
                 // Format an object into a string using the formatting options.
-                toString: function ( format, itemObject ) {
-                    var calendar = this,
-                        formattings = calendar.formats
-                    return formattings.toArray( format ).map( function( label ) {
-                        return triggerFunction( formattings[ label ], calendar, [ 0, itemObject ] ) || label.replace( /^!/, '' )
+                toString: function ( formatString, itemObject ) {
+                    return calendar.formats.toArray( formatString ).map( function( label ) {
+                        return triggerFunction( calendar.formats[ label ], calendar, [ 0, itemObject ] ) || label.replace( /^!/, '' )
                     }).join( '' )
                 }
             }, //formats
-            onStart: function( picker, $holder ) {
+            onStart: function( $holder ) {
                 // console.log( 'what is ', this )
-                triggerFunction( this.settings.onStart, this, [ $holder ] )
+                triggerFunction( settings.onStart, this, [ $holder ] )
             },
-            onRender: function( picker, $holder ) {
+            onRender: function( $holder ) {
 
-                var calendar = this,
-                    settings = calendar.settings
+                var picker = this
 
                 $holder.find( '.' + settings.klass.selectMonth ).on( 'change', function() {
-                    console.log( 'set how n what?' )
-                    picker.set( [ calendar.VIEWSET.YEAR, this.value, calendar.SELECT[ 0 ].DATE ], 1 )
+                    picker.set( 'view', [ calendar.props.get( 'view' ).YEAR, this.value, calendar.props.get( 'select' ).DATE ] )
                     $holder.find( '.' + settings.klass.selectMonth ).focus()
                 })
 
                 $holder.find( '.' + settings.klass.selectYear ).on( 'change', function() {
-                    console.log( 'set how n what?' )
-                    picker.set( [ this.value, calendar.VIEWSET.MONTH, calendar.SELECT[ 0 ].DATE ], 1 )
+                    picker.set( 'view', [ this.value, calendar.props.get( 'view' ).MONTH, calendar.props.get( 'select' ).DATE ] )
                     $holder.find( '.' + settings.klass.selectYear ).focus()
                 })
 
-                triggerFunction( settings.onRender, calendar, [ $holder ] )
+                triggerFunction( settings.onRender, picker, [ $holder ] )
             },
             onOpen: function( $holder ) {
                 $holder.find( 'button, select' ).attr( 'tabindex', 0 )
-                triggerFunction( this.settings.onOpen, this, [ $holder ] )
+                triggerFunction( settings.onOpen, this, [ $holder ] )
             },
             onClose: function( $holder ) {
                 $holder.find( 'button, select' ).attr( 'tabindex', -1 )
-                triggerFunction( this.settings.onClose, this, [ $holder ] )
+                triggerFunction( settings.onClose, this, [ $holder ] )
             },
             onSet: function( $holder ) {
-                triggerFunction( this.settings.onSet, this, [ $holder ] )
+                triggerFunction( settings.onSet, this, [ $holder ] )
             },
             onStop: function( $holder ) {
-                triggerFunction( this.settings.onStop, this, [ $holder ] )
+                triggerFunction( settings.onStop, this, [ $holder ] )
             }
-        }
+        })
+
     } //CalendarPicker
 
 
     /**
      * Create a calendar holder node.
      */
-    CalendarPicker.prototype.holder = function( picker ) {
+    CalendarPicker.prototype.holder = function( picker, properties ) {
 
         var
-            calendar = this,
+            calendar = this
+
+        calendar.props = properties
+
+        var
             settings = calendar.settings,
-            maxLimitObject = calendar.max(),
-            minLimitObject = calendar.min(),
-            now = picker.get( 'now' ),
-            selected = picker.get( 'select' ),
-            highlighted = picker.get( 'highlight' ),
-            viewset = picker.get( 'view' ),
-            disabled = picker.get( 'disable' ),
+            minLimitObject = properties.get( 'min' ),
+            maxLimitObject = properties.get( 'max' ),
+            now = properties.get( 'now' ),
+            selected = properties.get( 'select' ),
+            highlighted = properties.get( 'highlight' ),
+            viewset = properties.get( 'view' ),
+            disabled = properties.get( 'disable' ),
 
             // Get the tab index state picker opened/closed.
             getTabindexState = function() {
-                return 'tabindex=' + ( calendar.OPEN ? 0 : -1 )
+                return 'tabindex=' + ( calendar.props.get( 'open' ) ? 0 : -1 )
             },
 
             // Create the nav for next/prev month.
@@ -833,10 +830,6 @@
             })( ( settings.showWeekdaysShort ? settings.weekdaysShort : settings.weekdaysFull ).slice( 0 ) ) //tableHead
 
 
-        // Update the viewset to the first day of the month so we can get an offset for the days.
-        viewset = picker.setView([ viewset.YEAR, viewset.MONTH, 1 ]).get( 'view' )
-
-
         // Create and return the entire calendar.
         return createNode(
             STRING_DIV,
@@ -869,7 +862,7 @@
                                 item: function( timeDate ) {
 
                                     // Convert the time date from a relative date to a date object
-                                    timeDate = calendar.object([ viewset.YEAR, viewset.MONTH, timeDate + ( settings.firstDay ? 1 : 0 ) ])
+                                    timeDate = calendar.create([ viewset.YEAR, viewset.MONTH, timeDate + ( settings.firstDay ? 1 : 0 ) ])
 
                                     return [
                                         createNode(
@@ -896,7 +889,7 @@
                                                 }
 
                                                 // Add the `disabled` class if something's disabled and the object matches.
-                                                if ( disabled && calendar.disable( picker, timeDate ) || timeDate.TIME < minLimitObject.TIME || timeDate.TIME > maxLimitObject.TIME ) {
+                                                if ( disabled && calendar.disable( disabled, timeDate ) || timeDate.TIME < minLimitObject.TIME || timeDate.TIME > maxLimitObject.TIME ) {
                                                     klasses.push( settings.klass.disabled )
                                                 }
 
@@ -923,12 +916,17 @@
 
 
     /**
-     * Create a date item object.
+     * Create picker component objects.
      */
-    CalendarPicker.prototype.object = function( datePassed, unlimited ) {
+    CalendarPicker.prototype.create = function( datePassed, defaultValue ) {
 
-        // If the time passed is an array, create the time by splitting the items.
-        if ( Array.isArray( datePassed ) ) {
+        // If the date passed already has a time, just return it.
+        if ( datePassed && !isNaN( datePassed.TIME ) ) {
+            return datePassed
+        }
+
+        // If the date passed is an array, create the time by splitting the items.
+        else if ( Array.isArray( datePassed ) ) {
             datePassed = new Date( datePassed[ 0 ], datePassed[ 1 ], datePassed[ 2 ] )
         }
 
@@ -937,23 +935,23 @@
             datePassed = new Date( datePassed )
         }
 
-        // Otherwise if it's not unlimited, set the time to today and
+        // Otherwise if there no default value, set the time to today and
         // set the time to midnight (for comparison purposes).
-        else if ( !unlimited ) {
+        else if ( !defaultValue ) {
             datePassed = new Date()
             datePassed.setHours( 0, 0, 0, 0 )
         }
 
-        // Return the date object.
+        // Return the object.
         return {
-            YEAR: unlimited || datePassed.getFullYear(),
-            MONTH: unlimited || datePassed.getMonth(),
-            DATE: unlimited || datePassed.getDate(),
-            DAY: unlimited || datePassed.getDay(),
-            TIME: unlimited || datePassed.getTime(),
-            OBJ: unlimited || datePassed
+            YEAR: defaultValue || datePassed.getFullYear(),
+            MONTH: defaultValue || datePassed.getMonth(),
+            DATE: defaultValue || datePassed.getDate(),
+            DAY: defaultValue || datePassed.getDay(),
+            TIME: defaultValue || datePassed.getTime(),
+            OBJ: defaultValue || datePassed
         }
-    } //CalendarPicker.prototype.object = function
+    } //CalendarPicker.prototype.create
 
 
     /**
@@ -962,12 +960,11 @@
     CalendarPicker.prototype.validate = function( datePassed, keyMovement ) {
 
         var calendar = this,
-            minLimitObject = calendar.min(),
-            maxLimitObject = calendar.max(),
+            minLimitObject = calendar.props.get( 'min' ),
+            maxLimitObject = calendar.props.get( 'max' ),
 
             // Make sure we have a date object to work with.
-            datePassedObject = datePassed && !isNaN( datePassed.TIME ) ? datePassed : calendar.object( datePassed )
-
+            datePassedObject = datePassed && !isNaN( datePassed.TIME ) ? datePassed : calendar.create( datePassed )
 
         // If we passed the lower bound, set the key movement upwards,
         // flip our "reached min" flag, and set the date to the lower bound.
@@ -987,12 +984,12 @@
 
         // If we've hit the upper and lower bounds, set the date to now and move on.
         if ( calendar.doneMin && calendar.doneMax ) {
-            datePassedObject = calendar.NOW
+            datePassedObject = calendar.props.get( 'now' )
         }
 
         // Otherwise if there are dates to disable and this is one of them,
         // shift using the interval until we reach an enabled date.
-        else if ( calendar.DISABLE && calendar.disable( datePassedObject ) ) {
+        else if ( calendar.props.disable.length && calendar.disable( datePassedObject ) ) {
             datePassedObject = calendar.shift( datePassedObject, datePassedObject.TIME > maxLimitObject.TIME ? -1 : keyMovement || 1 )
         }
 
@@ -1007,12 +1004,12 @@
     /**
      * Check if a date is disabled or not.
      */
-    CalendarPicker.prototype.disable = function( picker, dateObject ) {
+    CalendarPicker.prototype.disable = function( collection, dateObject ) {
 
         var calendar = this,
 
             // Filter through the disabled dates to check if this is one.
-            isDisabledDate = picker.get( 'disable' ).filter( function( dateToDisable ) {
+            isDisabledDate = collection.filter( function( dateToDisable ) {
 
                 // If the date is a number, match the weekday with 0index and `firstDay` check.
                 if ( !isNaN( dateToDisable ) ) {
@@ -1055,65 +1052,73 @@
     } //CalendarPicker.prototype.shift
 
 
+    // /**
+    //  * Create the lower bounding date object.
+    //  */
+    // CalendarPicker.prototype.min = function() {
+
+    //     var
+    //         calendar = this,
+    //         limit = calendar.SETTINGS.min,
+    //         nowObject = calendar.object()
+
+    //     // If the limit is set to true, just return today.
+    //     if ( limit === true ) {
+    //         return nowObject
+    //     }
+
+    //     // If there is a limit and its a number, create a
+    //     // time object relative to today by adding the limit.
+    //     if ( limit && !isNaN( limit ) ) {
+    //         return calendar.object([ nowObject.YEAR, nowObject.MONTH, nowObject.DATE + limit ])
+    //     }
+
+    //     // If the limit is an array, construct the time object.
+    //     if ( Array.isArray( limit ) ) {
+    //         return calendar.object( limit )
+    //     }
+
+    //     // Otherwise create an infinite time.
+    //     return calendar.object( 0, -Infinity )
+    // }
+
+
+    // /**
+    //  * Create the upper bounding date object.
+    //  */
+    // CalendarPicker.prototype.max = function() {
+
+    //     var
+    //         calendar = this,
+    //         limit = calendar.SETTINGS.max,
+    //         nowObject = calendar.object()
+
+    //     // If the limit is set to true, just return today.
+    //     if ( limit === true ) {
+    //         return nowObject
+    //     }
+
+    //     // If there is a limit and its a number, create a
+    //     // time object relative to today by adding the limit.
+    //     if ( limit && !isNaN( limit ) ) {
+    //         return calendar.object([ nowObject.YEAR, nowObject.MONTH, nowObject.DATE + limit ])
+    //     }
+
+    //     // If the limit is an array, construct the time object.
+    //     if ( Array.isArray( limit ) ) {
+    //         return calendar.object( limit )
+    //     }
+
+    //     // Otherwise create an infinite time.
+    //     return calendar.object( 0, Infinity )
+    // }
+
+
     /**
-     * Create the lower bounding date object.
+     * Create a view object.
      */
-    CalendarPicker.prototype.min = function() {
-
-        var
-            calendar = this,
-            limit = calendar.settings.min,
-            nowObject = calendar.object()
-
-        // If the limit is set to true, just return today.
-        if ( limit === true ) {
-            return nowObject
-        }
-
-        // If there is a limit and its a number, create a
-        // time object relative to today by adding the limit.
-        if ( limit && !isNaN( limit ) ) {
-            return calendar.object([ nowObject.YEAR, nowObject.MONTH, nowObject.DATE + limit ])
-        }
-
-        // If the limit is an array, construct the time object.
-        if ( Array.isArray( limit ) ) {
-            return calendar.object( limit )
-        }
-
-        // Otherwise create an infinite time.
-        return calendar.object( 0, -Infinity )
-    }
-
-
-    /**
-     * Create the upper bounding date object.
-     */
-    CalendarPicker.prototype.max = function() {
-
-        var
-            calendar = this,
-            limit = calendar.settings.max,
-            nowObject = calendar.object()
-
-        // If the limit is set to true, just return today.
-        if ( limit === true ) {
-            return nowObject
-        }
-
-        // If there is a limit and its a number, create a
-        // time object relative to today by adding the limit.
-        if ( limit && !isNaN( limit ) ) {
-            return calendar.object([ nowObject.YEAR, nowObject.MONTH, nowObject.DATE + limit ])
-        }
-
-        // If the limit is an array, construct the time object.
-        if ( Array.isArray( limit ) ) {
-            return calendar.object( limit )
-        }
-
-        // Otherwise create an infinite time.
-        return calendar.object( 0, Infinity )
+    CalendarPicker.prototype.view = function( datePassed ) {
+        return this.create([ datePassed.YEAR, datePassed.MONTH, 1 ])
     }
 
 
@@ -1150,8 +1155,8 @@
             string = string.substr( formatLength )
         })
 
-        return calendar.object([ parsingObject.yyyy || parsingObject.yy, parsingObject.mm || parsingObject.m, parsingObject.dd || parsingObject.d ])
-    }
+        return calendar.create([ parsingObject.yyyy || parsingObject.yy, parsingObject.mm || parsingObject.m, parsingObject.dd || parsingObject.d ])
+    } //CalendarPicker.prototype.parse
 
 
 
@@ -1170,6 +1175,10 @@
     var Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
 
         var
+            // Cache.
+            CACHE_OBJECT,
+
+
             // Shorthand for the classes.
             CLASSES = SETTINGS.klass,
 
@@ -1189,7 +1198,9 @@
 
 
             // Pseudo picker constructor
-            PickerInstance = function() {},
+            PickerInstance = function() {
+                return this.start()
+            },
 
 
             // The picker prototype
@@ -1199,32 +1210,113 @@
 
                 $node: $ELEMENT,
 
-                settings: SETTINGS,
-
 
                 /**
                  * Initialize everything
                  */
                 start: function() {
 
+                    var elementDataValue = $ELEMENT.data( 'value' )
+
+                    CACHE_OBJECT = createCacheObject().
+
+                        // Create the "min" and "max" objects.
+                        set( 'min', COMPONENT.create( SETTINGS.min, -Infinity ) ).
+                        set( 'max', COMPONENT.create( SETTINGS.max, Infinity ) ).
+
+                        // Create the "now" time object.
+                        set( 'now', COMPONENT.create() ).
+
+                        // Create a selection based on the `value` or `data-value` of the element.
+                        set( 'select', COMPONENT.create( COMPONENT.parse( elementDataValue ? SETTINGS.formatSubmit : SETTINGS.format, elementDataValue || ELEMENT.value ) ) ).
+
+                        // Create a highlight based on the "selected" object.
+                        set( 'highlight', function( cacheObject ) { return cacheObject.select }).
+
+                        // Create a view set based on the "highlighted" object.
+                        set( 'view', function( cacheObject ) { return COMPONENT.view( cacheObject.highlight ) })
+
+
+                    // Create the picker box with a new wrapped picker and bind the events.
+                    CACHE_OBJECT.$box = $( createNode( STRING_DIV, createWrappedPicker(), CLASSES.holder ) ).on({
+
+                        // When something within the holder is focused, make it appear so.
+                        focusin: function( event ) {
+
+                            // Remove the holder "focused" state from the holder.
+                            CACHE_OBJECT.$box.removeClass( CLASSES.focused )
+
+                            // Prevent the event from propagating to the doc.
+                            event.stopPropagation()
+                        },
+
+                        // Prevent any mousedowns within the holder from bubbling to the doc.
+                        mousedown: function( event ) {
+                            if ( CACHE_OBJECT.$box.find( event.target ).length ) {
+                                event.stopPropagation()
+                            }
+                        },
+
+                        // When something within the holder is clicked, handle the various event.
+                        click: function( event ) {
+
+                            var $target = $( event.target ),
+                                targetData = $target.data()
+
+                            // Prevent the default action.
+                            event.preventDefault()
+
+                            // Check if the click is within the holder.
+                            if ( CACHE_OBJECT.$box.find( $target[ 0 ] ).length ) {
+
+                                // Stop it from propagating to the doc.
+                                event.stopPropagation()
+
+                                // Maintain the focus on the `input` element.
+                                ELEMENT.focus()
+
+                                // Set and close the picker if something is getting picked.
+                                if ( targetData.pick && !$target.hasClass( CLASSES.disabled ) ) {
+                                    P.set( 'select', targetData.pick.split( COMPONENT.div ) ).close()
+                                }
+
+                                // If something is superficially changed, navigate the picker.
+                                else if ( targetData.nav && !$target.hasClass( CLASSES.navDisabled ) ) {
+                                    P.set( 'view', [ CACHE_OBJECT.get( 'view' ).YEAR, CACHE_OBJECT.get( 'view' ).MONTH + targetData.nav, 1 ] )
+                                }
+
+                                // If a "clear" button is pressed, empty the values and close it.
+                                else if ( targetData.clear ) {
+                                    P.clear().close()
+                                }
+                            }
+                        }
+                    }) //CACHE_OBJECT.$box
+
+
+                    // If there's a format for the hidden input element, create the element
+                    // using the name of the original input plus suffix. Otherwise set it to null.
+                    CACHE_OBJECT._hidden = SETTINGS.formatSubmit ? $( '<input type=hidden name=' + ELEMENT.name + ( SETTINGS.hiddenSuffix || '_submit' ) + ( ELEMENT.value || elementDataValue ? ' value=' + triggerFunction( COMPONENT.formats.toString, COMPONENT, [ SETTINGS.formatSubmit, PICKER.select ] ) : '' ) + '>' )[ 0 ] : undefined
+
+
                     // Bind the events on the `input` element and then
                     // insert the holder and hidden element after the element.
-                    $ELEMENT.on( 'focus.P' + PICKER.ID + ' click.P' + PICKER.ID, function() {
+                    $ELEMENT.on( 'focus.P' + CACHE_OBJECT.id + ' click.P' + CACHE_OBJECT.id, function() {
 
                         // Open the calendar.
                         P.open()
 
                         // Add the "focused" state onto the holder.
-                        $HOLDER.addClass( CLASSES.focused )
+                        CACHE_OBJECT.$box.addClass( CLASSES.focused )
 
-                    }).on( 'change.P' + PICKER.ID, function() {
+                    }).on( 'change.P' + CACHE_OBJECT.id, function() {
 
                         // If there's a hidden input, update the value with formatting or clear it
-                        if ( ELEMENT_HIDDEN ) {
-                            ELEMENT_HIDDEN.value = ELEMENT.value ? triggerFunction( COMPONENT.formats.toString, COMPONENT, [ SETTINGS.formatSubmit, PICKER.select[ 0 ] ] ) : ''
+                        if ( CACHE_OBJECT._hidden ) {
+                            CACHE_OBJECT._hidden.value = ELEMENT.value ? triggerFunction( COMPONENT.formats.toString, COMPONENT, [ SETTINGS.formatSubmit, COMPONENT.select ] ) : ''
                         }
 
-                    }).on( 'keydown.P' + PICKER.ID, function() {
+                    }).on( 'keydown.P' + CACHE_OBJECT.id, function() {
 
                         var
                             // Grab the keycode
@@ -1234,7 +1326,7 @@
                             isKeycodeDelete = keycode == 8 || keycode == 46
 
                         // Check if delete was pressed or the calendar is closed and there is a key movement
-                        if ( isKeycodeDelete || !PICKER.OPEN && COMPONENT.keyMove[ keycode ] ) {
+                        if ( isKeycodeDelete || !CACHE_OBJECT.get( 'open' ) && COMPONENT.keyMove[ keycode ] ) {
 
                             // Prevent it from moving the page.
                             event.preventDefault()
@@ -1253,13 +1345,13 @@
                             }
                         }
 
-                    }).after([ $HOLDER, ELEMENT_HIDDEN ])
+                    }).after([ CACHE_OBJECT.$box, CACHE_OBJECT._hidden ])
 
                     // Trigger the "start" event within scope of the picker.
-                    triggerFunction( COMPONENT.onStart, P, [ $HOLDER ] )
+                    triggerFunction( COMPONENT.onStart, P, [ CACHE_OBJECT.$box ] )
 
                     // Trigger the "render" event within scope of the picker.
-                    triggerFunction( COMPONENT.onRender, P, [ $HOLDER ] )
+                    triggerFunction( COMPONENT.onRender, P, [ CACHE_OBJECT.$box ] )
 
                     // If the element has autofocus, open the calendar
                     if ( ELEMENT.autofocus ) {
@@ -1276,10 +1368,10 @@
                 render: function() {
 
                     // Insert a new picker in the holder.
-                    $HOLDER.html( createWrappedPicker() )
+                    CACHE_OBJECT.$box.html( createWrappedPicker() )
 
                     // Trigger the "render" event within scope of the picker.
-                    triggerFunction( COMPONENT.onRender, P, [ $HOLDER ] )
+                    triggerFunction( COMPONENT.onRender, P, [ CACHE_OBJECT.$box ] )
 
                     return P
                 }, //render
@@ -1294,19 +1386,22 @@
                     P.close()
 
                     // Unbind the events on the `input` element.
-                    $ELEMENT.off( '.P' + PICKER.ID )
+                    $ELEMENT.off( '.P' + CACHE_OBJECT.id )
 
                     // Restore the element state
                     ELEMENT.type = $ELEMENT._type
                     ELEMENT.readOnly = false
 
                     // Remove the hidden field.
-                    if ( ELEMENT_HIDDEN ) {
-                        ELEMENT_HIDDEN.parentNode.removeChild( ELEMENT_HIDDEN )
+                    if ( CACHE_OBJECT._hidden ) {
+                        CACHE_OBJECT._hidden.parentNode.removeChild( CACHE_OBJECT._hidden )
                     }
 
                     // Remove the holder.
-                    $HOLDER.remove()
+                    CACHE_OBJECT.$box.remove()
+
+                    // Reset the cache object.
+                    CACHE_OBJECT = undefined
 
                     // Trigger the "stop" event within scope of the picker.
                     triggerFunction( COMPONENT.onStop, COMPONENT )
@@ -1321,26 +1416,26 @@
                 open: function() {
 
                     // If it's already open, do nothing
-                    if ( PICKER.OPEN ) return P
+                    if ( CACHE_OBJECT.get( 'open' ) ) return P
 
                     // Set it as open
-                    PICKER.OPEN = 1
+                    CACHE_OBJECT.set( 'open', 1 )
 
                     // Make sure the element has focus then add the "active" class.
                     $ELEMENT.focus().addClass( CLASSES.inputActive )
 
                     // Add the "opened" class to the picker holder.
-                    $HOLDER.addClass( CLASSES.opened )
+                    CACHE_OBJECT.$box.addClass( CLASSES.opened )
 
                     // Bind the document events.
-                    $document.on( 'click.P' + PICKER.ID + ' focusin.P' + PICKER.ID, function( event ) {
+                    $document.on( 'click.P' + CACHE_OBJECT.id + ' focusin.P' + CACHE_OBJECT.id, function( event ) {
 
                         // If the target of the event is not the element, close the picker picker.
                         // * Don't worry about clicks or focusins on the holder
                         //   because those are stopped from bubbling up.
                         if ( event.target != ELEMENT ) P.close()
 
-                    }).on( 'mousedown.P' + PICKER.ID, function( event ) {
+                    }).on( 'mousedown.P' + CACHE_OBJECT.id, function( event ) {
 
                         // Maintain the focus on the `input` element.
                         ELEMENT.focus()
@@ -1348,7 +1443,7 @@
                         // Prevent the default action to keep focus on the `input` field.
                         event.preventDefault()
 
-                    }).on( 'keydown.P' + PICKER.ID, function( event ) {
+                    }).on( 'keydown.P' + CACHE_OBJECT.id, function( event ) {
 
                         var
                             // Get the keycode
@@ -1370,22 +1465,21 @@
                             // Prevent the default action to stop it from moving the page.
                             event.preventDefault()
 
-                            // If the keycode translates to a move, superficially set the time.
-                            // * Truthy second argument makes it a superficial selection.
+                            // If the keycode translates to a move, highlight the object.
                             if ( keycodeToMove ) {
-                                P.set( triggerFunction( COMPONENT.keyMove.go, COMPONENT, [ PICKER.highlight, keycodeToMove ] ), 1 )
+                                P.set( 'highlight', triggerFunction( COMPONENT.keyMove.go, P, [ CACHE_OBJECT.get( 'highlight' ), keycodeToMove ] ) )
                             }
 
-                            // Otherwise it's the enter key so select the highlighted or selected time and then close it.
+                            // Otherwise it's the enter key so select the highlighted time and then close it.
                             else {
-                                P.set( PICKER.highlight ).close()
+                                P.set( 'select', CACHE_OBJECT.get( 'highlight' ) ).close()
                             }
 
                         } //if ELEMENT
                     })
 
-                    // Trigger the on open event within scope of the picker.
-                    triggerFunction( COMPONENT.onOpen, COMPONENT, [ $HOLDER ] )
+                    // Trigger the "open" event within scope of the picker.
+                    triggerFunction( COMPONENT.onOpen, P, [ CACHE_OBJECT.$box ] )
 
                     return P
                 }, //open
@@ -1397,22 +1491,22 @@
                 close: function() {
 
                     // If it's already closed, do nothing
-                    if ( !PICKER.OPEN ) return P
+                    if ( !CACHE_OBJECT.get( 'open' ) ) return P
 
                     // Set it as closed
-                    PICKER.OPEN = 0
+                    CACHE_OBJECT.set( 'open', 0 )
 
                     // Remove the "active" class.
                     $ELEMENT.removeClass( CLASSES.inputActive )
 
                     // Remove the "opened" class from the picker holder.
-                    $HOLDER.removeClass( CLASSES.opened )
+                    CACHE_OBJECT.$box.removeClass( CLASSES.opened )
 
                     // Bind the document events.
-                    $document.off( '.P' + PICKER.ID )
+                    $document.off( '.P' + CACHE_OBJECT.id )
 
                     // Trigger the on close event within scope of the picker.
-                    triggerFunction( COMPONENT.onClose, COMPONENT, [ $HOLDER ] )
+                    triggerFunction( COMPONENT.onClose, COMPONENT, [ CACHE_OBJECT.$box ] )
 
                     return P
                 }, //close
@@ -1430,42 +1524,67 @@
                 /**
                  * Set the values
                  */
-                set: function( timePassed, isSuperficial ) {
+                set: function( type, item ) {
 
-                    // Clear the values if there is no time and it's not superficial.
-                    if ( !timePassed && !isSuperficial ) {
-                        P.clear()
+                    if ( typeof type != 'string' ) {
+                        console.log( 'not string:', typeof type )
+                        throw 'stop yo'
                     }
 
-                    // Otherwise set the validated object as selected.
-                    else {
 
-                        // Validate and create a time object.
-                        var timeObject = timePassed && !isNaN( timePassed.TIME ) ? timePassed : COMPONENT.object( timePassed )
+                    // Check if the `type` exists in the cache.
+                    if ( CACHE_OBJECT.has( type ) ) {
 
-                        // Stop if it's not a superficial selection and the time is disabled.
-                        if ( !isSuperficial && PICKER.disable.length && triggerFunction( PICKER.disable, COMPONENT, [ timeObject ] ) ) {
-                            return P
+
+                        // Create an object to set.
+                        var objectToSet = COMPONENT.create( item )
+
+
+                        if ( type == 'select' && item ) {
+
+                            // Clear the values if there is no item.
+                            if ( !item ) {
+                                return P.clear()
+                            }
+
+                            // Stop if the time is disabled.
+                            if ( CACHE_OBJECT.disable.length && COMPONENT.disable( CACHE_OBJECT.disable, objectToSet ) ) {
+                                objectToSet = COMPONENT.validate( objectToSet )
+                            }
+
+                            // Select the time object.
+                            CACHE_OBJECT.set( 'select', objectToSet )
+
+                            // Update the element value and broadcast a change.
+                            $ELEMENT.val( triggerFunction( COMPONENT.formats.toString, P, [ SETTINGS.format, objectToSet ] ) ).trigger( 'change' )
+
+                            // Highlight the time object
+                            CACHE_OBJECT.set( 'highlight', objectToSet )
+
+                            // Update the viewset.
+                            CACHE_OBJECT.set( 'view', function( cacheObject ) { return COMPONENT.view( cacheObject.highlight ) })
                         }
 
-                        // Check it's not just a superficial selection
-                        if ( !isSuperficial ) {
+                        else if ( type == 'view' ) {
 
-                            // Select the time object
-                            PICKER.select = [ timeObject ]
+                            // Highlight the time object.
+                            CACHE_OBJECT.set( 'highlight', objectToSet )
 
-                            // Update the element value
-                            $ELEMENT.val( triggerFunction( COMPONENT.formats.toString, COMPONENT, [ SETTINGS.format, timeObject ] ) ).trigger( 'change' )
+                            // Update the viewset.
+                            CACHE_OBJECT.set( 'view', function( cacheObject ) { return COMPONENT.view( objectToSet ) })
                         }
 
-                        // Highlight the time object
-                        PICKER.view = PICKER.highlight = timeObject
+                        else {
+                            CACHE_OBJECT.set( type, objectToSet )
+                        }
 
-                        // Then render a new picker
+
+                        // Render a new picker.
                         P.render()
 
-                        // Trigger the on set event within scope of the picker.
-                        triggerFunction( PICKER.onSet, COMPONENT, [ $HOLDER ] )
+
+                        // Trigger the "set" event within scope of the picker.
+                        triggerFunction( COMPONENT.onSet, P, [ CACHE_OBJECT.$box ] )
                     }
 
                     return P
@@ -1475,8 +1594,8 @@
                 /**
                  * Get the values
                  */
-                get: function( whatToGet ) {
-                    return PICKER[ whatToGet ]
+                get: function( type ) {
+                    return CACHE_OBJECT.get( type ) || CACHE_OBJECT[ type ]
                 },
 
 
@@ -1489,10 +1608,10 @@
                     PICKER.disable = PICKER.OFF ? removeFromCollection( PICKER.disable, timePassed ) : addToCollection( PICKER.disable, timePassed )
 
                     // Revalidate the selected item.
-                    PICKER.select = [ triggerFunction( PICKER.validate, COMPONENT, PICKER.select ) ]
+                    PICKER.select = triggerFunction( PICKER.validate, P, PICKER.select )
 
                     // Update the highlight and viewset based on the "selected" item.
-                    PICKER.view = PICKER.highlight = PICKER.select[ 0 ]
+                    PICKER.view = PICKER.highlight = PICKER.select
 
                     // Then render a new picker.
                     return P.render()
@@ -1508,126 +1627,47 @@
                     PICKER.disable = PICKER.OFF ? addToCollection( PICKER.disable, timePassed ) : removeFromCollection( PICKER.disable, timePassed )
 
                     // Revalidate the selected item.
-                    PICKER.select = [ triggerFunction( PICKER.validate, COMPONENT, PICKER.select ) ]
+                    PICKER.select = triggerFunction( PICKER.validate, P, PICKER.select )
 
                     // Update the highlight and viewset based on the "selected" item.
-                    PICKER.view = PICKER.highlight = PICKER.select[ 0 ]
+                    PICKER.view = PICKER.highlight = PICKER.select
 
                     // Then render a new picker.
                     return P.render()
                 } //enableItem
 
-            }, //PickerInstance.prototype
+            } //PickerInstance.prototype
 
 
-            // Create a new picker component out of this instance and settings.
-            PICKER = (function( elementDataValue ) {
 
-                var
-                    // The disabled items collection.
-                    disabledCollection = SETTINGS.disable || [],
+        function createCacheObject() {
 
-                    // If there are items to disable and the first item is a literal `true`,
-                    // we need to disabled all the items. Remove the flag from the collection
-                    // and flip the condition of which items to disable.
-                    pickerIsOff = ( Array.isArray( disabledCollection ) && disabledCollection[ 0 ] === true ) ? disabledCollection.shift() : undefined,
+            var collectionDisabled = SETTINGS.disable || [],
+                hiddenCacheObject = {}
 
-                    // The `min` and `max` bounding limits.
-                    minLimitObject = triggerFunction( COMPONENT.min, COMPONENT ),
-                    maxLimitObject = triggerFunction( COMPONENT.max, COMPONENT ),
+            return {
 
-                    // The `now` time object.
-                    nowObject = triggerFunction( COMPONENT.now, COMPONENT ),
+                // The unique ID.
+                id: Math.abs( ~~( Math.random() * 1e9 ) ),
 
-                    // The initial selection is based on the `value` or `data-value` of the element.
-                    selectedCollection = [
-                        triggerFunction(
-                            COMPONENT.validate, COMPONENT, [
-                                triggerFunction(
-                                    COMPONENT.parse, COMPONENT, [ elementDataValue ? SETTINGS.formatSubmit : SETTINGS.format, elementDataValue || ELEMENT.value ]
-                                )
-                            ]
-                        )
-                    ],
+                // Flip and adjust the disabled collection, if that.
+                flip: ( Array.isArray( collectionDisabled ) && collectionDisabled[ 0 ] === true ) ? collectionDisabled.shift() : undefined,
 
-                    // The default highlight and viewset are based on the "selected" or "default" item.
-                    highlightedObject = selectedCollection[ 0 ] || triggerFunction( COMPONENT.validate, COMPONENT ),
-                    viewsetObject = highlightedObject
+                // Copy the collection of disabled items.
+                disable: collectionDisabled,
 
-                return {
-                    id: Math.abs( ~~( Math.random() * 1e9 ) ),
-                    disable: disabledCollection,
-                    off: pickerIsOff,
-                    min: minLimitObject,
-                    max: maxLimitObject,
-                    now: nowObject,
-                    select: selectedCollection,
-                    highlight: highlightedObject,
-                    view: viewsetObject
-                }
-            })( $ELEMENT.data( 'value' ) ),
-
-
-            // If there's a format for the hidden input element, create the element
-            // using the name of the original input plus suffix. Otherwise set it to null.
-            ELEMENT_HIDDEN = SETTINGS.formatSubmit ? $( '<input type=hidden name=' + ELEMENT.name + ( SETTINGS.hiddenSuffix || '_submit' ) + ( ELEMENT.value || $ELEMENT.data( 'value' ) ? ' value=' + triggerFunction( COMPONENT.formats.toString, COMPONENT, [ SETTINGS.formatSubmit, PICKER.select[ 0 ] ] ) : '' ) + '>' )[ 0 ] : undefined,
-
-
-            // Create the picker holder with a new wrapped picker and bind the events.
-            $HOLDER = $( createNode( STRING_DIV, createWrappedPicker(), CLASSES.holder ) ).on({
-
-                // When something within the holder is focused, make it appear so.
-                focusin: function( event ) {
-
-                    // Remove the holder "focused" state from the holder.
-                    $HOLDER.removeClass( CLASSES.focused )
-
-                    // Prevent the event from propagating to the doc.
-                    event.stopPropagation()
+                set: function( thing, value ) {
+                    hiddenCacheObject[ thing ] = triggerFunction( value, this, [ hiddenCacheObject ] )
+                    return this
                 },
-
-                // Prevent any mousedowns within the holder from bubbling to the doc.
-                mousedown: function( event ) {
-                    if ( $HOLDER.find( event.target ).length ) {
-                        event.stopPropagation()
-                    }
+                get: function( thing ) {
+                    return hiddenCacheObject[ thing ]
                 },
-
-                // When something within the holder is clicked, handle the various event.
-                click: function( event ) {
-
-                    var $target = $( event.target ),
-                        targetData = $target.data()
-
-                    // Prevent the default action.
-                    event.preventDefault()
-
-                    // Check if the click is within the holder.
-                    if ( $HOLDER.find( $target[ 0 ] ).length ) {
-
-                        // Stop it from propagating to the doc.
-                        event.stopPropagation()
-
-                        // Maintain the focus on the `input` element.
-                        ELEMENT.focus()
-
-                        // Set and close the picker if something is getting picked.
-                        if ( targetData.pick && !$target.hasClass( CLASSES.disabled ) ) {
-                            P.set( targetData.pick.split( COMPONENT.div ) ).close()
-                        }
-
-                        // If something is superficially changed, navigate the picker.
-                        else if ( targetData.nav && !$target.hasClass( CLASSES.navDisabled ) ) {
-                            P.set( [ PICKER.highlight.YEAR, PICKER.highlight.MONTH + targetData.nav, PICKER.highlight.DATE ], 1 )
-                        }
-
-                        // If a "clear" button is pressed, empty the values and close it.
-                        else if ( targetData.clear ) {
-                            P.clear().close()
-                        }
-                    }
+                has: function( thing ) {
+                    return !!hiddenCacheObject[ thing ]
                 }
-            }) //$HOLDER
+            }
+        } //createCacheObject
 
 
         /**
@@ -1645,7 +1685,7 @@
                     createNode( STRING_DIV,
 
                         // Create the components using the settings and picker
-                        triggerFunction( COMPONENT.holder, COMPONENT, [ P ] ),
+                        triggerFunction( COMPONENT.holder, COMPONENT, [ P, CACHE_OBJECT ] ),
 
                         // The picker item class
                         CLASSES.item
@@ -1690,8 +1730,8 @@
         } //removeFromCollection
 
 
-        // Return a new initialized picker.
-        return P.start()
+        // Return a new picker instance.
+        return new PickerInstance()
     } //Picker
 
 
