@@ -20,15 +20,19 @@ module.exports = function( grunt ) {
         pkg: grunt.file.readJSON( 'package.json' ),
 
 
-        // Concatenate the files and add banners.
+        // A banner to use on all script files.
+        banner: '/*!\n' +
+                ' * <%= pkg.title %> v<%= pkg.version %>, <%= grunt.template.today("yyyy-mm-dd") %>\n' +
+                ' * By <%= pkg.author.name %> (<%= pkg.author.url %>)\n' +
+                ' * Hosted on <%= pkg.homepage %>\n' +
+                ' * Licensed under MIT ("expat" flavour) license.\n' +
+                ' */\n\n',
+
+
+        // Concatenate the files and add the banner.
         concat: {
             options: {
-                banner: '/*!\n' +
-                        ' * <%= pkg.title %> v<%= pkg.version %>, <%= grunt.template.today("yyyy-mm-dd") %>\n' +
-                        ' * By <%= pkg.author.name %> (<%= pkg.author.url %>)\n' +
-                        ' * Hosted on <%= pkg.homepage %>\n' +
-                        ' * Licensed under MIT ("expat" flavour) license.\n' +
-                        ' */\n\n'
+                banner: '<%= banner %>'
             },
             scripts: {
                 src: '_source/*.js',

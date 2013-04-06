@@ -66,28 +66,45 @@
             // format: '<b>h</b>:i <!i>a</!i>',
             // format: 'h:i a',
             // formatSubmit: 'HH:i',
-            interval: 180,
+            interval: 120,
             disable: [
                 // true,
-                15, 16, 17, 18, 19, 20, 22, 23, 24, 25, 26,
+                4,5,6,7,8,15, 16, 17, 21, 23, 24, 25, 26,
                 // [ 20, 0 ],
                 // [ 23, 30 ],
                 // [ 5, 30 ]
             ],
-            // onStart: function( $holder ) {
-            //     console.log( this )
-            //     console.log( $holder )
-            // }
+            // formatSubmit: 'HH:i lol',
+            // onRender: function() {
+            //     console.log( 'rendered' )
+            // },
+            // onStart: function() {
+            //     console.log( 'started' )
+            // },
+            // onOpen: function() {
+            //     console.log( 'opened' )
+            // },
+            // onClose: function() {
+            //     console.log( 'closed' )
+            // },
+            // onSet: function() {
+            //     console.log( 'selected' )
+            // },
+            // onStop: function() {
+            //     console.log( 'stopped' )
+            // },
             // min: true,
             // min: [ 23, 30 ],
             // max: 5,
             // max: [ 4, 0 ]
-        })//.data( 'pickatime' ).open()
+        })
+
+        console.log( $input.pickatime( 'get', 'now' ) )
 
         var $button = $( '.button' ).on( 'click', function( event ) {
             event.preventDefault()
             event.stopPropagation()
-            $input.open()
+            $input.pickatime( 'open' )
         })
 
     </script>

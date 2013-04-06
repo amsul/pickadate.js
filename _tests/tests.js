@@ -27,7 +27,6 @@ module( 'Time picker stage setup', {
 test( 'Input element attributes', function() {
     ok( this.$input[ 0 ].type == 'text', 'Input type updated' )
     ok( this.$input[ 0 ].readOnly === true, 'Input is readonly' )
-    ok( this.$input.pickatime( '$node' )._type == 'time', 'Original input type is saved' )
     ok( this.$input.pickatime( 'get', 'select' ).TIME == this.$input.pickatime( 'get', 'now' ).TIME, 'Default selected time is correct' )
 })
 
@@ -41,6 +40,7 @@ test( 'Picker stage', function() {
     var nowDateObject = new Date(),
         nowTimeMinutes = nowDateObject.getHours() * 60 + nowDateObject.getMinutes(),
         interval = $.fn.pickatime.defaults.interval
+        console.log( interval + nowTimeMinutes - ( nowTimeMinutes % interval ) )
     ok( this.$input.pickatime( 'get', 'now' ).TIME === interval + nowTimeMinutes - ( nowTimeMinutes % interval ), 'Now time is correct at ' + this.$input.pickatime( 'get', 'now' ).HOUR + ':' + this.$input.pickatime( 'get', 'now' ).MINS )
     ok( !this.$input.pickatime( 'get', 'disable' ).length, 'No disabled times' )
     ok( !this.$input.pickatime( 'get', 'off' ), 'The times are not all off' )
@@ -64,7 +64,7 @@ module( 'Time picker with a value', {
 })
 
 test( 'Input element values', function() {
-    ok( this.$input.pickatime( 'get', 'select' )[ 0 ].TIME == 840, 'Element value sets correct time' )
+    ok( this.$input.pickatime( 'get', 'select' ).TIME == 840, 'Element value sets correct time' )
     ok( this.$input.pickatime( 'get', 'highlight' ).TIME == 840, 'Element value sets correct highlight' )
     ok( this.$input.pickatime( 'get', 'view' ).TIME == 840, 'Element value sets correct view' )
     ok( !this.$input.next().next().length, 'There is no hidden input' )

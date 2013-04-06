@@ -10,7 +10,8 @@ Common events:
 - `onRender`
 - `onOpen`
 - `onClose`
-- `onSelect`
+- `onSet`
+- `onStop`
 
 
 
@@ -34,8 +35,18 @@ Time picker options:
 
 ### Limits
 
-- `min`
-- `max`
+- `min`: {Array|Boolean|Integer}
+- `max`: {Array|Boolean|Integer}
+
+
+### Disable times
+
+- `disable`
+
+
+### Disable picker completely
+
+- `disablePicker`
 
 
 
@@ -83,8 +94,8 @@ Date picker options:
 
 ### Limits
 
-- `min`
-- `max`
+- `min`: {Array|Boolean|Integer}
+- `max`: {Array|Boolean|Integer}
 
 
 ### Disable dates
