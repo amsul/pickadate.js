@@ -148,12 +148,11 @@ if ( ![].indexOf ) {
 
 /**
  * Todo:
- * – Restart picker after stopping.
- * – Move interval for times passed. (Test 3.1)
  * – Max/min disabled get selected instead of shifted.
+ * – Do get/set with formatting.
+ * – Fix time "clear" button.
  * – Out of range programmatically set?
  * – If time passed, list should update?
- * – Fix time "clear" button.
  * – WAI-ARIA support
  * – Lots more...
  */
@@ -224,7 +223,7 @@ if ( ![].indexOf ) {
             set( 'now', { past: true } ).
 
             // Setting `select` also sets the `highlight` and `view`.
-            set( 'select', defaultValueObject.value, { past: true, format: defaultValueObject.format } )
+            set( 'select', defaultValueObject.value || clock.item.now.TIME, { format: defaultValueObject.format } )
 
 
         /**
@@ -365,7 +364,7 @@ if ( ![].indexOf ) {
 
         // Add an interval to the minutes, if that. Then subtract the remainder
         // of minutes divided by the interval to get it within "reach".
-        return minutes /*+ ( options && options.past ? this.i : 0 )*/ - ( minutes % this.i )
+        return minutes + ( options && options.past ? this.i : 0 ) - ( minutes % this.i )
     } //TimePicker.prototype.normalize
 
 
@@ -998,8 +997,7 @@ if ( ![].indexOf ) {
                  * Clear the values
                  */
                 clear: function() {
-                    $ELEMENT.val( '' ).trigger( 'change' )
-                    return P
+                    return P.set({ clear: true })
                 }, //clear
 
 
@@ -1008,53 +1006,30 @@ if ( ![].indexOf ) {
                  */
                 set: function( object ) {
 
-                    // Default to setting the selection.
-                    // type = type || 'select'
-
                     if ( !isObject( object ) ) {
                         console.log( 'not sure what to do here', object, type )
-                        // object = {
-                        //     // select: object
-                        // }
                         return P
                     }
 
                     // Go through each item type within the object to set.
                     for ( var itemType in object ) {
 
-                        // Check if this type of item exists and then set it.
+                        // If this type of item exists, then set it the object by type.
                         if ( P.component.item[ itemType ] ) {
-
-                            // Set the item object by type.
                             P.component.set( itemType, object[ itemType ] )
-
-                            // Update the element value and broadcast a change, if that.
-                            if ( itemType == 'select' ) {
-                                $ELEMENT.val( triggerFunction( P.component.formats.toString, P.component, [ SETTINGS.format, P.component.get( itemType ) ] ) ).trigger( 'change' )
-                            }
-
-                            // Render a new picker.
-                            P.render()
-
-                            // Trigger the "set" event within scope of the picker.
-                            triggerFunction( P.component.onSet, P, [ P.$box ] )
                         }
+
+                        // Update the element value and broadcast a change, if that.
+                        if ( itemType == 'select' || object.clear ) {
+                            $ELEMENT.val( object.clear ? '' : triggerFunction( P.component.formats.toString, P.component, [ SETTINGS.format, P.component.get( itemType ) ] ) ).trigger( 'change' )
+                        }
+
+                        // Render a new picker.
+                        P.render()
+
+                        // Trigger the "set" event within scope of the picker.
+                        triggerFunction( P.component.onSet, P, [ P.$box ] )
                     }
-
-
-                    // if ( type == 'select' ) {
-
-                    //     // Clear the values if there are no value passed.
-                    //     if ( !value ) {
-                    //         return P.clear()
-                    //     }
-
-                    //     // Stop if the time is disabled. <<<< check this in the `component.queue`
-                    //     if ( CACHE_OBJECT.get( 'disable' ).length && COMPONENT.disable( CACHE_OBJECT.get( 'disable' ), objectToSet ) ) {
-                    //         objectToSet = COMPONENT.validate( objectToSet )
-                    //     }
-
-                    // }
 
                     return P
                 }, //set
@@ -1065,6 +1040,9 @@ if ( ![].indexOf ) {
                  */
                 get: function( type ) {
                     type = type || 'select'
+                    if ( type == 'value' ) {
+                        return ELEMENT.value
+                    }
                     return P.component.get( type )
                 },
 
@@ -1321,7 +1299,7 @@ if ( ![].indexOf ) {
 
             // If it's already invoked and `options` is a string, carry out the action.
             if ( thisPickerData && typeof options == 'string' ) {
-                return triggerFunction( thisPickerData[ options ], thisPickerData, [ action ] )
+                return options == 'picker' ? thisPickerData : triggerFunction( thisPickerData[ options ], thisPickerData, [ action ] )
             }
 
             // Otherwise look through each one of the matched elements

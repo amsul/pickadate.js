@@ -66,10 +66,10 @@
             // format: '<b>h</b>:i <!i>a</!i>',
             // format: 'h:i a',
             // formatSubmit: 'HH:i',
-            interval: 120,
+            // interval: 120,
             disable: [
                 // true,
-                4,5,6,7,8,15, 16, 17, 21, 23, 24, 25, 26,
+                // 4,5,6,7,8,15, 16, 17, 21, 23, 24, 25, 26,
                 // [ 20, 0 ],
                 // [ 23, 30 ],
                 // [ 5, 30 ]
@@ -99,7 +99,7 @@
             // max: [ 4, 0 ]
         })
 
-        console.log( $input.pickatime( 'get', 'now' ) )
+        console.log( $input.pickatime( 'picker' ) )
 
         var $button = $( '.button' ).on( 'click', function( event ) {
             event.preventDefault()
