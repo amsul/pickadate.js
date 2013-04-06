@@ -70,7 +70,7 @@ module.exports = function( grunt ) {
 
     // Register the default tasks.
     grunt.registerTask( 'default', [ 'concat' ] )
-    grunt.registerTask( 'travis', [ 'jshint', 'qunit' ] )
+    grunt.registerTask( 'travis', [ /*'jshint',*/ 'qunit' ] )
 
 
     // Copy the package settings into a jquery package.
