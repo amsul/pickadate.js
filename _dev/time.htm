@@ -101,7 +101,9 @@
 
         // $input.pickatime( 'set', { disable: 8 } )
 
-        // $input.pickatime( 'set', { enable: [12,0] } )
+        // $input.pickatime( 'set', { select: [8,30] } )
+
+        console.log( $input.pickatime( 'get', { select: 'HHi' } ) )
 
         var $button = $( '.button' ).on( 'click', function( event ) {
             event.preventDefault()

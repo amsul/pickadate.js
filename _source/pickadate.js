@@ -13,7 +13,6 @@
 /**
  * Todo:
  * – Max/min disabled get selected instead of shifted.
- * – Do get/set with formatting.
  * – "negative" times.
  * – Fix time "clear" button.
  * – Out of range programmatically set?
@@ -69,7 +68,7 @@
             min: 'measure normalize create',
             max: 'measure normalize create',
             now: 'now create',
-            select: 'parse normalize create',
+            select: 'parse normalize validate create',
             highlight: 'validate create',
             view: 'validate create',
             disable: 'flipItem',
@@ -959,24 +958,24 @@
                 /**
                  * Set the values
                  */
-                set: function( object ) {
+                set: function( options ) {
 
-                    if ( !isObject( object ) ) {
-                        console.log( 'not sure what to do here', object )
+                    if ( !isObject( options ) ) {
+                        console.log( 'not sure what to do here', options )
                         return P
                     }
 
-                    // Go through each item type within the object to set.
-                    for ( var itemType in object ) {
+                    // Go through each property within the options to set.
+                    for ( var property in options ) {
 
-                        // If this type of item exists, then set it the object by type.
-                        if ( P.component.item[ itemType ] ) {
-                            P.component.set( itemType, object[ itemType ], object )
+                        // If this type of item exists, then set it the options by type.
+                        if ( P.component.item[ property ] ) {
+                            P.component.set( property, options[ property ], options )
                         }
 
                         // Update the element value and broadcast a change, if that.
-                        if ( itemType == 'select' || object.clear ) {
-                            $ELEMENT.val( object.clear ? '' : triggerFunction( P.component.formats.toString, P.component, [ SETTINGS.format, P.component.get( itemType ) ] ) ).trigger( 'change' )
+                        if ( property == 'select' || options.clear ) {
+                            $ELEMENT.val( options.clear ? '' : triggerFunction( P.component.formats.toString, P.component, [ SETTINGS.format, P.component.get( property ) ] ) ).trigger( 'change' )
                         }
 
                         // Render a new picker.
@@ -993,13 +992,28 @@
                 /**
                  * Get the values
                  */
-                get: function( type ) {
-                    type = type || 'select'
-                    if ( type == 'value' ) {
+                get: function( options ) {
+
+                    if ( options == 'value' ) {
                         return ELEMENT.value
                     }
-                    return P.component.get( type )
-                }
+
+                    if ( !isObject( options ) ) {
+                        console.log( 'not sure what to do here', options )
+                        return P
+                    }
+
+                    // Go through each property within the options to set.
+                    for ( var property in options ) {
+
+                        // If this type of item exists, then get it the options by type.
+                        if ( P.component.item[ property ] ) {
+                            return triggerFunction( P.component.formats.toString, P.component, [ options[ property ], P.component.get( property ) ] )
+                        }
+                    }
+
+                    return P
+                } //get
 
             } //PickerInstance.prototype
 
