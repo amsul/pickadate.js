@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v3.0.0alpha, 2013-04-06
+ * pickadate.js v3.0.0alpha, 2013-04-07
  * By Amsul (http://amsul.ca)
  * Hosted on http://amsul.github.com/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
@@ -142,7 +142,8 @@ if ( ![].indexOf ) {
    browser: true,
    asi: true,
    unused: true,
-   eqnull: true
+   eqnull: true,
+   boss: true
  */
 
 
@@ -150,6 +151,7 @@ if ( ![].indexOf ) {
  * Todo:
  * – Max/min disabled get selected instead of shifted.
  * – Do get/set with formatting.
+ * – "negative" times.
  * – Fix time "clear" button.
  * – Out of range programmatically set?
  * – If time passed, list should update?
@@ -206,13 +208,16 @@ if ( ![].indexOf ) {
             now: 'now create',
             select: 'parse normalize create',
             highlight: 'validate create',
-            view: 'validate create'
+            view: 'validate create',
+            disable: 'flipItem',
+            enable: 'flipItem'
         }
 
         // The component's item object.
         clock.item = {}
 
         clock.item.disable = ( settings.disable || [] ).slice( 0 )
+        clock.item.enable = 1
         clock.item.flip = (function( collectionDisabled ) {
             return collectionDisabled[ 0 ] === true ? collectionDisabled.shift() : undefined
         })( clock.item.disable )
@@ -220,7 +225,7 @@ if ( ![].indexOf ) {
         clock.
             set( 'min', settings.min, { orig: 0 } ).
             set( 'max', settings.max, { orig: MINUTES_IN_DAY - 1 } ).
-            set( 'now', { past: true } ).
+            set( 'now', 0, { past: 1 } ).
 
             // Setting `select` also sets the `highlight` and `view`.
             set( 'select', defaultValueObject.value || clock.item.now.TIME, { format: defaultValueObject.format } )
@@ -287,6 +292,22 @@ if ( ![].indexOf ) {
             // Split to get a queue of methods.
             methodsQueue = ( clock.queue[ type ] || '' ).split( ' ' )
 
+
+        if ( methodsQueue[ 0 ] === '' ) {
+            console.log( 'nothing queued up...', type, timeUnit, methodsQueue )
+            return clock
+        }
+
+        if ( !options ) {
+            console.warn( 'no options..but going on', type )
+        }
+
+        // Make sure we have options to pass
+        options = options || {}
+
+        // Attach the type to the options
+        options.type = type
+
         // Go through each method, invoke the function, update the time unit,
         // and set the final resultant as this item type.
         clock.item[ type ] = methodsQueue.map( function( method ) {
@@ -323,6 +344,11 @@ if ( ![].indexOf ) {
             return minutes
         }
 
+        // If it's an array, prepare it into minutes.
+        if ( Array.isArray( minutes ) ) {
+            minutes = this.prepare( minutes )
+        }
+
         // If no valid minutes are passed, set it to "now" with the options.
         if ( isNaN( minutes ) ) {
             minutes = this.now( options )
@@ -346,7 +372,7 @@ if ( ![].indexOf ) {
     /**
      * Get the time minutes for right now.
      */
-    TimePicker.prototype.now = function( options ) {
+    TimePicker.prototype.now = function( ignore, options ) {
         var date = new Date()
         return this.normalize( date.getHours() * MINUTES_IN_HOUR + date.getMinutes(), options )
     }
@@ -357,10 +383,8 @@ if ( ![].indexOf ) {
      */
     TimePicker.prototype.normalize = function( minutes, options ) {
 
-        // If it's an array, convert it into minutes by expecting: [ {{hour}}, {{minutes}} ].
-        if ( isArray( minutes ) ) {
-            minutes = +minutes[ 0 ] * MINUTES_IN_HOUR + (+minutes[ 1 ])
-        }
+        // Prepare an array or object into minutes.
+        minutes = this.prepare( minutes )
 
         // Add an interval to the minutes, if that. Then subtract the remainder
         // of minutes divided by the interval to get it within "reach".
@@ -369,11 +393,27 @@ if ( ![].indexOf ) {
 
 
     /**
+     * Prepare an object or an array into minutes.
+     */
+    TimePicker.prototype.prepare = function( minutes ) {
+
+        // If it's an array, convert it into minutes by expecting: [ {{hour}}, {{minutes}} ].
+        if ( isArray( minutes ) ) {
+            minutes = +minutes[ 0 ] * MINUTES_IN_HOUR + (+minutes[ 1 ])
+        }
+
+        return minutes
+    } //TimePicker.prototype.prepare
+
+
+    /**
      * Measure the range of minutes.
      */
     TimePicker.prototype.measure = function( timeUnit, options ) {
 
-        var clock = this
+        var
+            minutes = options.orig,
+            clock = this
 
         // Make sure we have options to work with
         if ( !options ) {
@@ -383,16 +423,20 @@ if ( ![].indexOf ) {
         // If it's a literal true, return the time right now.
         // For `max`, time hasn't passed. But for `min` it has.
         if ( timeUnit === true ) {
-            return clock.now( options )
+            minutes = clock.now( timeUnit, options )
+        }
+
+        else if ( Array.isArray( timeUnit ) ) {
+            minutes = clock.prepare( timeUnit )
         }
 
         // If it's a number, return the time right now shifted relative by intervals.
-        if ( !isNaN( timeUnit ) ) {
-            return timeUnit * clock.i + clock.now( options )
+        else if ( !isNaN( timeUnit ) ) {
+            minutes = timeUnit * clock.i + clock.now( timeUnit, options )
         }
 
-        // Otherwise there's no valid time unit, so return the options or 0.
-        return options.orig || 0
+        // Return the minutes or default to 0.
+        return minutes || 0
     } ///TimePicker.prototype.measure
 
 
@@ -400,13 +444,10 @@ if ( ![].indexOf ) {
      * Validate an object as enabled.
      */
     TimePicker.prototype.validate = function( timeUnit, options ) {
-
         var clock = this
-
         if ( clock.settings.disable && clock.disabled( timeUnit ) ) {
             timeUnit = clock.shift( timeUnit, options )
         }
-
         return clock.scope( timeUnit.TIME || timeUnit, options )
     } //TimePicker.prototype.validate
 
@@ -465,7 +506,7 @@ if ( ![].indexOf ) {
     /**
      * Scope minutes into range of min and max.
      */
-    TimePicker.prototype.scope = function( minutes, options ) {
+    TimePicker.prototype.scope = function( minutes/*, options*/ ) {
         var minTime = this.item.min.TIME,
             maxTime = this.item.max.TIME
         return minutes > maxTime ? maxTime : minutes < minTime ? minTime : minutes
@@ -631,6 +672,57 @@ if ( ![].indexOf ) {
     } //TimePicker.prototype.nodes
 
 
+    /**
+     * Flip an item as enabled or disabled.
+     */
+    TimePicker.prototype.flipItem = function( timeUnit, options ) {
+        var clock = this,
+            isFlipped = clock.item.flip
+        if ( !isFlipped && options.enable || isFlipped && options.disable ) {
+            clock.removeDisabled( timeUnit, options )
+        }
+        else if ( !isFlipped && options.disable || isFlipped && options.enable ) {
+            clock.addDisabled( timeUnit, options )
+        }
+        return clock.item.disable
+    } //TimePicker.prototype.flipItem
+
+
+    /**
+     * Add an item to the disabled collection.
+     */
+    TimePicker.prototype.addDisabled = function( timeUnit/*, options*/ ) {
+        var clock = this
+        if ( !clock.filterDisabled( timeUnit ).length ) {
+            clock.item.disable.push( timeUnit )
+        }
+        return clock.item.disable
+    } //TimePicker.prototype.addDisabled
+
+
+    /**
+     * Remove an item from the disabled collection.
+     */
+    TimePicker.prototype.removeDisabled = function( timeUnit/*, options*/ ) {
+        var clock = this
+        clock.item.disable = clock.filterDisabled( timeUnit, 1 )
+        return clock.item.disable
+    } //TimePicker.prototype.removeDisabled
+
+
+    /**
+     * Filter through the disabled collection to find a time unit.
+     */
+    TimePicker.prototype.filterDisabled = function( timeUnit, isRemoving ) {
+        var timeIsArray = Array.isArray( timeUnit )
+        return this.item.disable.filter( function( disabledTimeUnit ) {
+            var isMatch = !timeIsArray && timeUnit === disabledTimeUnit ||
+                timeIsArray && Array.isArray( disabledTimeUnit ) && timeUnit.toString() === disabledTimeUnit.toString()
+            return isRemoving ? !isMatch : isMatch
+        })
+    } //TimePicker.prototype.filterDisabled
+
+
 
 
 
@@ -778,7 +870,7 @@ if ( ![].indexOf ) {
 
                     // Bind the events on the `input` element and then
                     // insert the holder and hidden element after the element.
-                    $ELEMENT.on( 'focus.P' + STATE.ID + ' click.P' + STATE.ID, function( event ) {
+                    $ELEMENT.on( 'focus.P' + STATE.ID + ' click.P' + STATE.ID, function() {
 
                         // Open the calendar.
                         P.open()
@@ -1007,7 +1099,7 @@ if ( ![].indexOf ) {
                 set: function( object ) {
 
                     if ( !isObject( object ) ) {
-                        console.log( 'not sure what to do here', object, type )
+                        console.log( 'not sure what to do here', object )
                         return P
                     }
 
@@ -1016,7 +1108,7 @@ if ( ![].indexOf ) {
 
                         // If this type of item exists, then set it the object by type.
                         if ( P.component.item[ itemType ] ) {
-                            P.component.set( itemType, object[ itemType ] )
+                            P.component.set( itemType, object[ itemType ], object )
                         }
 
                         // Update the element value and broadcast a change, if that.
@@ -1044,45 +1136,7 @@ if ( ![].indexOf ) {
                         return ELEMENT.value
                     }
                     return P.component.get( type )
-                },
-
-
-                /**
-                 * Disable a picker item
-                 */
-                disableItem: function( timePassed ) {
-
-                    // Add or remove from collection based on the flipped status.
-                    PICKER.disable = CACHE_OBJECT.get( 'flip' ) ? removeFromCollection( PICKER.disable, timePassed ) : addToCollection( PICKER.disable, timePassed )
-
-                    // Revalidate the selected item.
-                    PICKER.select = triggerFunction( PICKER.validate, P, PICKER.select )
-
-                    // Update the highlight and viewset based on the "selected" item.
-                    PICKER.view = PICKER.highlight = PICKER.select
-
-                    // Then render a new picker.
-                    return P.render()
-                }, //disableItem
-
-
-                /**
-                 * Enable a picker item
-                 */
-                enableItem: function( timePassed ) {
-
-                    // Add or remove from collection based on the flipped status.
-                    PICKER.disable = CACHE_OBJECT.get( 'flip' ) ? addToCollection( PICKER.disable, timePassed ) : removeFromCollection( PICKER.disable, timePassed )
-
-                    // Revalidate the selected item.
-                    PICKER.select = triggerFunction( PICKER.validate, P, PICKER.select )
-
-                    // Update the highlight and viewset based on the "selected" item.
-                    PICKER.view = PICKER.highlight = PICKER.select
-
-                    // Then render a new picker.
-                    return P.render()
-                } //enableItem
+                }
 
             } //PickerInstance.prototype
 
@@ -1116,35 +1170,6 @@ if ( ![].indexOf ) {
                 CLASSES.frame
             ) //endreturn
         } //createWrappedPicker
-
-
-        /**
-         * Add an item to a collection.
-         */
-        function addToCollection( disabledItems, timePassed ) {
-
-            // Add the item passed to the disabled items collection if it's not already there.
-            if ( timePassed && disabledItems.indexOf( timePassed ) < 0 ) {
-                disabledItems.push( timePassed )
-            }
-
-            return disabledItems
-        } //addToCollection
-
-
-        /**
-         * Remove an item from a collection.
-         */
-        function removeFromCollection( disabledItems, timePassed ) {
-
-            // Remove the disabled item from the collection by splicing up to the
-            // item index and then concat with everything after that item.
-            if ( timePassed && disabledItems.indexOf( timePassed ) > -1 ) {
-                disabledItems = disabledItems.splice( 0, disabledItems.indexOf( timePassed ) ).concat( disabledItems.splice( disabledItems.indexOf( timePassed ) + 1 ) )
-            }
-
-            return disabledItems
-        } //removeFromCollection
 
 
         // Return a new picker instance.
