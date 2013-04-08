@@ -150,7 +150,6 @@ if ( ![].indexOf ) {
 /**
  * Todo:
  * – Add `DatePicker` stuff.
- * – Fix time "clear" button.
  * – Out of range programmatically set?
  * – If time passed, list should update?
  * – WAI-ARIA support
@@ -261,11 +260,11 @@ if ( ![].indexOf ) {
             triggerFunction( settings.onStart, this, [ $holder ] )
         }
         clock.onOpen = function( $holder ) {
-            // $holder.find( 'button, select' ).attr( 'tabindex', 0 )
+            $holder.find( 'button' ).attr( 'tabindex', 0 )
             triggerFunction( settings.onOpen, this, [ $holder ] )
         }
         clock.onClose = function( $holder ) {
-            // $holder.find( 'button, select' ).attr( 'tabindex', -1 )
+            $holder.find( 'button' ).attr( 'tabindex', -1 )
             triggerFunction( settings.onClose, this, [ $holder ] )
         }
         clock.onSet = function( $holder ) {
@@ -652,55 +651,6 @@ if ( ![].indexOf ) {
 
 
     /**
-     * Create a string for the nodes in the picker.
-     */
-    TimePicker.prototype.nodes = function() {
-
-        var
-            clock = this,
-            settings = clock.settings,
-            selectedObject = clock.item.select,
-            highlightedObject = clock.item.highlight,
-            viewsetObject = clock.item.view,
-            disabledCollection = clock.item.disable
-
-        return createNode( 'ul', createGroupOfNodes({
-            min: clock.item.min.PICK,
-            max: clock.item.max.PICK,
-            i: clock.i,
-            node: 'li',
-            item: function( loopedTime ) {
-                loopedTime = clock.create( loopedTime )
-                return [
-                    triggerFunction( clock.formats.toString, clock, [ settings.format, loopedTime ] ),
-                    (function( klasses, timeMinutes ) {
-
-                        if ( selectedObject && selectedObject.PICK == timeMinutes ) {
-                            klasses.push( settings.klass.selected )
-                        }
-
-                        if ( highlightedObject && highlightedObject.PICK == timeMinutes ) {
-                            klasses.push( settings.klass.highlighted )
-                        }
-
-                        if ( viewsetObject && viewsetObject.PICK == timeMinutes ) {
-                            klasses.push( settings.klass.viewset )
-                        }
-
-                        if ( disabledCollection && clock.disabled( loopedTime ) ) {
-                            klasses.push( settings.klass.disabled )
-                        }
-
-                        return klasses.join( ' ' )
-                    })( [ settings.klass.listItem ], loopedTime.PICK ),
-                    'data-pick=' + loopedTime.PICK
-                ]
-            }
-        }) + createNode( 'li', settings.clear, settings.klass.clear, 'data-clear=1' ), settings.klass.list )
-    } //TimePicker.prototype.nodes
-
-
-    /**
      * Flip an item as enabled or disabled.
      */
     TimePicker.prototype.flipItem = function( timeUnit, options ) {
@@ -749,6 +699,55 @@ if ( ![].indexOf ) {
             return isRemoving ? !isMatch : isMatch
         })
     } //TimePicker.prototype.filterDisabled
+
+
+    /**
+     * Create a string for the nodes in the picker.
+     */
+    TimePicker.prototype.nodes = function() {
+
+        var
+            clock = this,
+            settings = clock.settings,
+            selectedObject = clock.item.select,
+            highlightedObject = clock.item.highlight,
+            viewsetObject = clock.item.view,
+            disabledCollection = clock.item.disable
+
+        return createNode( 'ul', createGroupOfNodes({
+            min: clock.item.min.PICK,
+            max: clock.item.max.PICK,
+            i: clock.i,
+            node: 'li',
+            item: function( loopedTime ) {
+                loopedTime = clock.create( loopedTime )
+                return [
+                    triggerFunction( clock.formats.toString, clock, [ settings.format, loopedTime ] ),
+                    (function( klasses, timeMinutes ) {
+
+                        if ( selectedObject && selectedObject.PICK == timeMinutes ) {
+                            klasses.push( settings.klass.selected )
+                        }
+
+                        if ( highlightedObject && highlightedObject.PICK == timeMinutes ) {
+                            klasses.push( settings.klass.highlighted )
+                        }
+
+                        if ( viewsetObject && viewsetObject.PICK == timeMinutes ) {
+                            klasses.push( settings.klass.viewset )
+                        }
+
+                        if ( disabledCollection && clock.disabled( loopedTime ) ) {
+                            klasses.push( settings.klass.disabled )
+                        }
+
+                        return klasses.join( ' ' )
+                    })( [ settings.klass.listItem ], loopedTime.PICK ),
+                    'data-pick=' + loopedTime.PICK
+                ]
+            }
+        }) + createNode( 'li', createNode( 'button', settings.clear, settings.klass.clear, 'data-clear=1' ) ), settings.klass.list )
+    } //TimePicker.prototype.nodes
 
 
 

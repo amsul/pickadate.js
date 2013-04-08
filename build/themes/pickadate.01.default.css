@@ -15,6 +15,7 @@
  * #aaa    -> Light grey for "today" tag if disabled
  *
  * #f5f5f5 -> Dimmed grey bg for disabled days
+ * #f2f2f2 -> Slightly darker dim grey for clock bg
  * #ddd    -> Less dimmed grey for text in disabled & outfocus days
  *
  * #777    -> Grey for calendar border
@@ -22,7 +23,7 @@
  *
  * #999    -> Medium grey used for year & weekday labels
  *
- * #e20    -> Red used for "clear" icon
+ * #e20    -> Red used for "clear"
  *
  * #000    -> Black
  * #fff    -> White
@@ -383,16 +384,17 @@
     outline: none;
 }
 .pickadate__list-item--clear {
+    display: block;
+    width: 80%;
     text-align: center;
     text-transform: uppercase;
+    font-weight: 500;
     font-size: .67em;
     color: #666;
-    border-top: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
-    background: #eee;
-    margin-top: 1em;
+    background: transparent;
+    border: 1px solid transparent;
+    margin: 1em auto 0;
     padding: 1em 1.25em;
-    font-weight: 500;
 }
 
 .pickadate__button--today:before,
@@ -433,6 +435,7 @@
  * The hover effect on any buttons
  */
 .pickadate__list-item:hover,
+.pickadate__list-item--clear:hover,
 .pickadate__holder--focused .pickadate__list-item--highlighted {
     border-color: #0089ec;
     z-index: 10;
@@ -455,10 +458,17 @@
     color: #000;
     background: #b1dcfb;
 }
-.pickadate__list-item--clear:hover {
-    background: #ddd;
-    border-color: #ccc;
+.pickadate__list-item--clear:hover,
+.pickadate__list-item--clear:focus {
+    background: #e20;
+    border-color: #e20;
     cursor: pointer;
+    color: #fff;
+    outline: none;
+}
+.pickadate__list-item--clear:hover:before,
+.pickadate__list-item--clear:focus:before {
+    color: #fff;
 }
 
 
