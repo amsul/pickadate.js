@@ -32,8 +32,8 @@ module( 'Events on the time picker', {
                 thisModule.closed = true
             },
             onSet: function() {
-                thisModule.selectedArray = this.get( 'select' ).TIME == 600
-                thisModule.selectedNumber = this.get( 'select' ).TIME == 120
+                thisModule.selectedArray = this.get( 'select' ).PICK == 600
+                thisModule.selectedNumber = this.get( 'select' ).PICK == 120
                 thisModule.clearedValue = this.get( 'value' ) === ''
             },
             onStop: function() {
@@ -88,7 +88,7 @@ module( 'Set up the picker stage', {
 test( 'Checking input attributes...', function() {
     ok( this.$input[ 0 ].type == 'text', 'Input type updated' )
     ok( this.$input[ 0 ].readOnly === true, 'Input is readonly' )
-    ok( this.$input.pickatime( 'get', 'select' ).TIME == this.$input.pickatime( 'get', 'now' ).TIME, 'Default selected time is correct' )
+    ok( this.$input.pickatime( 'get', 'select' ).PICK == this.$input.pickatime( 'get', 'now' ).PICK, 'Default selected time is correct' )
 })
 
 test( 'Checking picker holder...', function() {
@@ -101,11 +101,11 @@ test( 'Checking picker objects...', function() {
     var nowDateObject = new Date(),
         nowTimeMinutes = nowDateObject.getHours() * 60 + nowDateObject.getMinutes(),
         interval = $.fn.pickatime.defaults.interval
-    ok( this.$input.pickatime( 'get', 'now' ).TIME === interval + nowTimeMinutes - ( nowTimeMinutes % interval ), 'Now time is correct at ' + this.$input.pickatime( 'get', 'now' ).HOUR + ':' + this.$input.pickatime( 'get', 'now' ).MINS )
+    ok( this.$input.pickatime( 'get', 'now' ).PICK === interval + nowTimeMinutes - ( nowTimeMinutes % interval ), 'Now time is correct at ' + this.$input.pickatime( 'get', 'now' ).HOUR + ':' + this.$input.pickatime( 'get', 'now' ).MINS )
     ok( !this.$input.pickatime( 'get', 'disable' ).length, 'No disabled times' )
     ok( !this.$input.pickatime( 'get', 'off' ), 'The times are not all off' )
-    ok( this.$input.pickatime( 'get', 'min' ).TIME === 0, 'Min time is midnight' )
-    ok( this.$input.pickatime( 'get', 'max' ).TIME == 1410, 'Max time is 23:30' )
+    ok( this.$input.pickatime( 'get', 'min' ).PICK === 0, 'Min time is midnight' )
+    ok( this.$input.pickatime( 'get', 'max' ).PICK == 1410, 'Max time is 23:30' )
 })
 
 
@@ -124,9 +124,9 @@ module( 'Time picker with a value', {
 })
 
 test( 'Checking input `value` to set time...', function() {
-    ok( this.$input.pickatime( 'get', 'select' ).TIME == 840, 'Element value sets correct time' )
-    ok( this.$input.pickatime( 'get', 'highlight' ).TIME == 840, 'Element value sets correct highlight' )
-    ok( this.$input.pickatime( 'get', 'view' ).TIME == 840, 'Element value sets correct view' )
+    ok( this.$input.pickatime( 'get', 'select' ).PICK == 840, 'Element value sets correct time' )
+    ok( this.$input.pickatime( 'get', 'highlight' ).PICK == 840, 'Element value sets correct highlight' )
+    ok( this.$input.pickatime( 'get', 'view' ).PICK == 840, 'Element value sets correct view' )
     ok( !this.$input.next().next().length, 'There is no hidden input' )
 })
 
@@ -148,11 +148,62 @@ module( 'Time picker with a data value', {
 })
 
 test( 'Checking input `data-value` to set time...', function() {
-    ok( this.$input.pickatime( 'get', 'select' ).TIME == 840, 'Selects correct time' )
-    ok( this.$input.pickatime( 'get', 'highlight' ).TIME == 840, 'Highlights correct time' )
-    ok( this.$input.pickatime( 'get', 'view' ).TIME == 840, 'Viewsets correct time' )
+    ok( this.$input.pickatime( 'get', 'select' ).PICK == 840, 'Selects correct time' )
+    ok( this.$input.pickatime( 'get', 'highlight' ).PICK == 840, 'Highlights correct time' )
+    ok( this.$input.pickatime( 'get', 'view' ).PICK == 840, 'Viewsets correct time' )
     ok( this.$input.next().next()[ 0 ].type == 'hidden', 'There is a hidden input' )
     ok( this.$input.next().next()[ 0 ].value == '14:00', 'The hidden input has correct value' )
+})
+
+
+
+
+module( 'Get and set picker properties', {
+    setup: function() {
+        this.$input = $( '<input type=time>' )
+        $DOM.append( this.$input )
+        this.$input.pickatime()
+    },
+    teardown: function() {
+        delete this.$input
+        $DOM.empty()
+    }
+})
+
+test( 'Setting properties with arrays...', function() {
+
+    this.$input.pickatime( 'set', { select: [9,0] } )
+    ok( this.$input.pickatime( 'get', 'select' ).PICK === 540, 'Selects time correctly' )
+
+    this.$input.pickatime( 'set', { highlight: [14,0] } )
+    ok( this.$input.pickatime( 'get', 'highlight' ).PICK === 840, 'Highlights time correctly' )
+
+    this.$input.pickatime( 'set', { view: [16,0] } )
+    ok( this.$input.pickatime( 'get', 'view' ).PICK === 960, 'Adjusts view correctly' )
+
+    this.$input.pickatime( 'set', { min: [2,0] } )
+    ok( this.$input.pickatime( 'get', 'min' ).PICK === 120, 'Sets min limit correctly' )
+
+    this.$input.pickatime( 'set', { max: [20,0] } )
+    ok( this.$input.pickatime( 'get', 'max' ).PICK === 1200, 'Sets max limit correctly' )
+})
+
+test( 'Settings properties with integers...', function() {
+
+    this.$input.pickatime( 'set', { min: -3 } )
+    ok( this.$input.pickatime( 'get', 'min' ).PICK === this.$input.pickatime( 'get', 'now' ).PICK - this.$input.pickatime( 'picker' ).component.i * 3, 'Sets min limit correctly' )
+
+    this.$input.pickatime( 'set', { max: 3 } )
+    ok( this.$input.pickatime( 'get', 'max' ).PICK === this.$input.pickatime( 'get', 'now' ).PICK + this.$input.pickatime( 'picker' ).component.i * 3, 'Sets max limit correctly' )
+})
+
+test( 'Settings properties with booleans...', function() {
+
+    this.$input.pickatime( 'set', { min: true } )
+    ok( this.$input.pickatime( 'get', 'min' ).PICK === this.$input.pickatime( 'get', 'now' ).PICK, 'Sets min limit correctly' )
+
+    this.$input.pickatime( 'set', { max: true } )
+    ok( this.$input.pickatime( 'get', 'max' ).PICK === this.$input.pickatime( 'get', 'now' ).PICK, 'Sets max limit correctly' )
 })
 
 

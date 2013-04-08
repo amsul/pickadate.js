@@ -12,8 +12,7 @@
 
 /**
  * Todo:
- * – Max/min disabled get selected instead of shifted.
- * – "negative" times.
+ * – Add `DatePicker` stuff.
  * – Fix time "clear" button.
  * – Out of range programmatically set?
  * – If time passed, list should update?
@@ -65,8 +64,8 @@
 
         // The queue of methods that will be used to build item objects.
         clock.queue = {
-            min: 'measure normalize create',
-            max: 'measure normalize create',
+            min: 'measure create',
+            max: 'measure create',
             now: 'now create',
             select: 'parse normalize validate create',
             highlight: 'validate create',
@@ -79,18 +78,17 @@
         clock.item = {}
 
         clock.item.disable = ( settings.disable || [] ).slice( 0 )
-        clock.item.enable = 1
-        clock.item.flip = (function( collectionDisabled ) {
-            return collectionDisabled[ 0 ] === true ? collectionDisabled.shift() : undefined
+        clock.item.enable = -(function( collectionDisabled ) {
+            return collectionDisabled[ 0 ] === true ? collectionDisabled.shift() : -1
         })( clock.item.disable )
 
         clock.
             set( 'min', settings.min, { orig: 0 } ).
-            set( 'max', settings.max, { orig: MINUTES_IN_DAY - 1 } ).
+            set( 'max', settings.max, { orig: [ HOURS_IN_DAY - 1, MINUTES_IN_HOUR - 1 ] } ).
             set( 'now', 0, { past: 1 } ).
 
             // Setting `select` also sets the `highlight` and `view`.
-            set( 'select', defaultValueObject.value || clock.item.now.TIME, { format: defaultValueObject.format } )
+            set( 'select', defaultValueObject.value || clock.item.now.PICK, { format: defaultValueObject.format } )
 
 
         /**
@@ -102,7 +100,7 @@
             39: 1, // Right
             37: -1, // Left
             go: function( timeChange ) {
-                clock.set( 'highlight', clock.create( clock.item.highlight.TIME + timeChange * clock.i ), { interval: timeChange * clock.i } )
+                clock.set( 'highlight', clock.create( clock.item.highlight.PICK + timeChange * clock.i ), { interval: timeChange * clock.i } )
                 this.render()
             }
         }
@@ -113,12 +111,12 @@
          */
         clock.onRender = function( $holder ) {
             var picker = this,
-                $highlighted = $holder.find( '.' + settings.klass.highlighted )
-            if ( $highlighted.length ) {
-                $holder[ 0 ].scrollTop = $highlighted.position().top - ~~( $holder[ 0 ].clientHeight / 4 )
+                $viewset = $holder.find( '.' + settings.klass.viewset )
+            if ( $viewset.length ) {
+                $holder[ 0 ].scrollTop = $viewset.position().top - ~~( $holder[ 0 ].clientHeight / 4 )
             }
             else {
-                console.warn( 'Nothing to highlight', clock.item.highlight )
+                console.warn( 'Nothing to viewset with', clock.item.view )
             }
             triggerFunction( settings.onRender, picker, [ $holder ] )
         }
@@ -202,7 +200,7 @@
     TimePicker.prototype.create = function( minutes, options ) {
 
         // If it's already an object, just return it.
-        if ( minutes && !isNaN( minutes.TIME ) ) {
+        if ( minutes && !isNaN( minutes.PICK ) ) {
             return minutes
         }
 
@@ -220,13 +218,16 @@
         return {
 
             // Divide to get hours from minutes.
-            HOUR: ~~( minutes / MINUTES_IN_HOUR ),
+            HOUR: ~~( HOURS_IN_DAY + minutes / MINUTES_IN_HOUR ) % HOURS_IN_DAY,
 
             // The remainder is the minutes.
-            MINS: minutes % MINUTES_IN_HOUR,
+            MINS: ( MINUTES_IN_HOUR + minutes % MINUTES_IN_HOUR ) % MINUTES_IN_HOUR,
 
-            // Reference to total minutes.
-            TIME: minutes
+            // The time in total minutes.
+            TIME: ( MINUTES_IN_DAY + minutes ) % MINUTES_IN_DAY,
+
+            // Reference to the "relative" minutes to pick.
+            PICK: minutes
         }
     } //TimePicker.prototype.create
 
@@ -237,7 +238,7 @@
     TimePicker.prototype.now = function( ignore, options ) {
         var date = new Date()
         return this.normalize( date.getHours() * MINUTES_IN_HOUR + date.getMinutes(), options )
-    }
+    } //TimePicker.prototype.now
 
 
     /**
@@ -260,7 +261,7 @@
     TimePicker.prototype.prepare = function( minutes ) {
 
         // If it's an array, convert it into minutes by expecting: [ {{hour}}, {{minutes}} ].
-        if ( isArray( minutes ) ) {
+        if ( Array.isArray( minutes ) ) {
             minutes = +minutes[ 0 ] * MINUTES_IN_HOUR + (+minutes[ 1 ])
         }
 
@@ -274,7 +275,7 @@
     TimePicker.prototype.measure = function( timeUnit, options ) {
 
         var
-            minutes = options.orig,
+            minutes = timeUnit || options.orig,
             clock = this
 
         // Make sure we have options to work with
@@ -285,15 +286,29 @@
         // If it's a literal true, return the time right now.
         // For `max`, time hasn't passed. But for `min` it has.
         if ( timeUnit === true ) {
+
+            // If it's relative a relative measure, set the time as past.
+            // *** Find a better way to do this later.
+            if ( options.type == 'max' || options.type == 'min' ) {
+                options.past = 1
+            }
+
             minutes = clock.now( timeUnit, options )
         }
 
-        else if ( Array.isArray( timeUnit ) ) {
-            minutes = clock.prepare( timeUnit )
+        else if ( Array.isArray( timeUnit || minutes ) ) {
+            minutes = clock.normalize( clock.prepare( timeUnit || minutes ), options )
         }
 
         // If it's a number, return the time right now shifted relative by intervals.
         else if ( !isNaN( timeUnit ) ) {
+
+            // If it's relative a relative measure, set the time as past.
+            // *** Find a better way to do this later.
+            if ( options.type == 'max' || options.type == 'min' ) {
+                options.past = 1
+            }
+
             minutes = timeUnit * clock.i + clock.now( timeUnit, options )
         }
 
@@ -306,11 +321,25 @@
      * Validate an object as enabled.
      */
     TimePicker.prototype.validate = function( timeUnit, options ) {
+
         var clock = this
+
+        // If this time unit is disabled, shift until we reach an enabled time.
         if ( clock.settings.disable && clock.disabled( timeUnit ) ) {
             timeUnit = clock.shift( timeUnit, options )
         }
-        return clock.scope( timeUnit.TIME || timeUnit, options )
+
+        // Scope the time unit in to range and create an object
+        timeUnit = clock.create( clock.scope( timeUnit.PICK || timeUnit, options ) )
+
+        // Improve this later. But for now, do a second check for if the scoped object
+        // is disabled. If it is, then shift in the opposite direction.
+        if ( clock.settings.disable && clock.disabled( timeUnit ) ) {
+            options.interval = options.interval * -1
+            timeUnit = clock.shift( timeUnit, options )
+        }
+
+        return timeUnit.PICK || timeUnit
     } //TimePicker.prototype.validate
 
 
@@ -332,12 +361,12 @@
 
                 // If it's an array, create the object and match the times.
                 if ( Array.isArray( timeToDisable ) ) {
-                    return object.TIME == clock.create( timeToDisable ).TIME
+                    return object.PICK == clock.create( timeToDisable ).PICK
                 }
             }).length
 
-        // If the clock is flipped, flip the condition.
-        return clock.item.flip ? !isDisabledTime : isDisabledTime
+        // If the clock is "enabled" flag is flipped, flip the condition.
+        return clock.item.enable === -1 ? !isDisabledTime : isDisabledTime
     } //TimePicker.prototype.disabled
 
 
@@ -352,25 +381,25 @@
         while ( clock.disabled( object ) ) {
 
             // Increase/decrease the time by the key movement and keep looping.
-            object = clock.create( object.TIME += options.interval || clock.i, options )
+            object = clock.create( object.PICK += options.interval || clock.i, options )
 
             // If we've looped beyond the limits, break out of the loop.
-            if ( object.TIME < clock.item.min.TIME || object.TIME > clock.item.max.TIME ) {
+            if ( object.PICK < clock.item.min.PICK || object.PICK > clock.item.max.PICK ) {
                 break
             }
         }
 
-        // Do a final validation check to make sure it's within bounds.
-        return clock.scope( object, options )
+        // Return the final object.
+        return object
     } //TimePicker.prototype.shift
 
 
     /**
      * Scope minutes into range of min and max.
      */
-    TimePicker.prototype.scope = function( minutes/*, options*/ ) {
-        var minTime = this.item.min.TIME,
-            maxTime = this.item.max.TIME
+    TimePicker.prototype.scope = function( minutes, options ) {
+        var minTime = this.item.min.PICK,
+            maxTime = this.item.max.PICK
         return minutes > maxTime ? maxTime : minutes < minTime ? minTime : minutes
     } //TimePicker.prototype.scope
 
@@ -380,7 +409,7 @@
      */
     TimePicker.prototype.parse = function( string, options ) {
 
-        if ( typeof string == 'number' && !isNaN( string ) || isArray( string ) ) {
+        if ( typeof string == 'number' && !isNaN( string ) || Array.isArray( string ) ) {
             return string
         }
 
@@ -463,13 +492,13 @@
 
             // If there's a string, then the length is always 4.
             // Otherwise check if it's more than "noon" and return either am/pm.
-            return string ? 4 : MINUTES_IN_DAY / 2 > timeObject.TIME % MINUTES_IN_DAY ? 'a.m.' : 'p.m.'
+            return string ? 4 : MINUTES_IN_DAY / 2 > timeObject.PICK % MINUTES_IN_DAY ? 'a.m.' : 'p.m.'
         },
         A: function( string, timeObject ) {
 
             // If there's a string, then the length is always 2.
             // Otherwise check if it's more than "noon" and return either am/pm.
-            return string ? 2 : MINUTES_IN_DAY / 2 > timeObject.TIME % MINUTES_IN_DAY ? 'AM' : 'PM'
+            return string ? 2 : MINUTES_IN_DAY / 2 > timeObject.PICK % MINUTES_IN_DAY ? 'AM' : 'PM'
         },
 
         // Create an array by splitting the formatting string passed.
@@ -499,8 +528,8 @@
             disabledCollection = clock.item.disable
 
         return createNode( 'ul', createGroupOfNodes({
-            min: clock.item.min.TIME,
-            max: clock.item.max.TIME,
+            min: clock.item.min.PICK,
+            max: clock.item.max.PICK,
             i: clock.i,
             node: 'li',
             item: function( loopedTime ) {
@@ -509,15 +538,15 @@
                     triggerFunction( clock.formats.toString, clock, [ settings.format, loopedTime ] ),
                     (function( klasses, timeMinutes ) {
 
-                        if ( selectedObject && selectedObject.TIME == timeMinutes ) {
+                        if ( selectedObject && selectedObject.PICK == timeMinutes ) {
                             klasses.push( settings.klass.selected )
                         }
 
-                        if ( highlightedObject && highlightedObject.TIME == timeMinutes ) {
+                        if ( highlightedObject && highlightedObject.PICK == timeMinutes ) {
                             klasses.push( settings.klass.highlighted )
                         }
 
-                        if ( viewsetObject && viewsetObject.TIME == timeMinutes ) {
+                        if ( viewsetObject && viewsetObject.PICK == timeMinutes ) {
                             klasses.push( settings.klass.viewset )
                         }
 
@@ -526,8 +555,8 @@
                         }
 
                         return klasses.join( ' ' )
-                    })( [ settings.klass.listItem ], loopedTime.TIME ),
-                    'data-pick=' + loopedTime.TIME
+                    })( [ settings.klass.listItem ], loopedTime.PICK ),
+                    'data-pick=' + loopedTime.PICK
                 ]
             }
         }) + createNode( 'li', settings.clear, settings.klass.clear, 'data-clear=1' ), settings.klass.list )
@@ -539,7 +568,7 @@
      */
     TimePicker.prototype.flipItem = function( timeUnit, options ) {
         var clock = this,
-            isFlipped = clock.item.flip
+            isFlipped = clock.item.enable === -1
         if ( !isFlipped && options.enable || isFlipped && options.disable ) {
             clock.removeDisabled( timeUnit, options )
         }
@@ -907,7 +936,7 @@
 
                             // Otherwise it's the enter key so select the highlighted time and then close it.
                             else {
-                                P.set({ select: P.component.item.highlight.TIME }).close()
+                                P.set({ select: P.component.item.highlight.PICK }).close()
                             }
 
                         } //if ELEMENT
@@ -951,7 +980,7 @@
                  * Clear the values
                  */
                 clear: function() {
-                    return P.set({ clear: true })
+                    return P.set({ clear: 1 })
                 }, //clear
 
 
@@ -994,8 +1023,9 @@
                  */
                 get: function( options ) {
 
-                    if ( options == 'value' ) {
-                        return ELEMENT.value
+                    // If it's a string, either get the value or the component item object itself.
+                    if ( typeof options == 'string' ) {
+                        return options == 'value' ? ELEMENT.value : P.component.item[ options ]
                     }
 
                     if ( !isObject( options ) ) {
@@ -1119,7 +1149,7 @@
         if ( !item ) return ''
 
         // If the item is an array, do a join
-        item = isArray( item ) ? item.join( '' ) : item
+        item = Array.isArray( item ) ? item.join( '' ) : item
 
         // Check for the class
         klass = klass ? ' class="' + klass + '"' : ''
@@ -1164,14 +1194,6 @@
      */
     function isObject( object ) {
         return {}.toString.call( object ).indexOf( 'Object' ) > -1
-    }
-
-
-    /**
-     * Tell if something is an array.
-     */
-    function isArray( array ) {
-        return Array.isArray( array )
     }
 
 

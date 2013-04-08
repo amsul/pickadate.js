@@ -66,14 +66,15 @@
             // format: '<b>h</b>:i <!i>a</!i>',
             // format: 'h:i a',
             // formatSubmit: 'HH:i',
-            interval: 15,
-            // disable: [
-            //     // true,
-            //     // 4,5,6,7,8,15, 16, 17, 21, 23, 24, 25, 26,
-            //     [ 12, 0 ],
-            //     [ 23, 30 ],
-            //     [ 5, 30 ]
-            // ],
+            interval: 120,
+            min: -6,
+            // min: [ 7, 30 ],
+            max: 2,
+            // max: [ 9, 0 ],
+            disable: [
+                // true,
+                // 7, 9, [8,45]
+            ],
             // formatSubmit: 'HH:i lol',
             // onRender: function() {
             //     console.log( 'rendered' )
@@ -92,18 +93,10 @@
             // },
             // onStop: function() {
             //     console.log( 'stopped' )
-            // },
-            // min: -4,
-            min: [ 7, 30 ],
-            // max: 5,
-            max: [ 9, 0 ]
+            // }
         })
 
-        // $input.pickatime( 'set', { disable: 8 } )
-
-        // $input.pickatime( 'set', { select: [8,30] } )
-
-        console.log( $input.pickatime( 'get', { select: 'HHi' } ) )
+        // console.log( $input.pickatime( 'get', 'now' ) )
 
         var $button = $( '.button' ).on( 'click', function( event ) {
             event.preventDefault()
