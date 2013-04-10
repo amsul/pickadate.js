@@ -609,3 +609,36 @@
         margin-bottom: 4em;
     }
 }
+
+
+/**
+ * For wide enough screens, transform into an inline picker.
+ * /
+
+@media (min-width: 640px) {
+
+    .pickadate__holder {
+        position: relative;
+        overflow: visible;
+        background: none;
+        height: 0;
+    }
+
+    .pickadate__frame {
+        position: relative;
+        margin: 1em 0;
+    }
+
+    .pickadate__clock {
+        border-color: #ccc;
+        box-shadow: 0 4px 18px 2px rgba(0,0,0,.12);
+        max-height: 20em;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .pickadate__list-item {
+        padding: .5em .75em;
+    }
+}

@@ -40,7 +40,7 @@
         <form>
             <fieldset>
                 <h3><label for="input_01">Pick a date. Go ahead...</label></h3>
-                <input id="input_01" class="datepicker" name="date" type="date" valuee="14 January, 2012" data-valuee="2012/05/22" autofocus>
+                <input id="input_01" class="datepicker" name="date" type="date" valuee="14 January, 2012" data-valuee="2012/05/22" autofocusss>
                 <br><br><br><br><br>
                 <input class="button" type="submit" value="open">
             </fieldset>
@@ -85,13 +85,13 @@
             // firstDay: 1,
             // format: 'he!y!y!y!y yyyy,mm,dd',
             // formatSubmit: 'yyyy/mm/dd',
-            selectMonths: true,
-            selectYears: 20,
+            // selectMonths: true,
+            // selectYears: 20,
             disable: [
                 // true,
-                1,
-                5,
-                7,
+                // 1,
+                // 5,
+                // 7,
                 // [2013, 1, 21],
                 // [2013, 1, 22],
                 // [2013, 1, 23],
@@ -146,11 +146,11 @@
             // max: 5,
         })
 
-        var $button = $( '.button' ).on( 'click', function( event ) {
-            event.preventDefault()
-            event.stopPropagation()
-            $input.open()
-        })
+        // var $button = $( '.button' ).on( 'click', function( event ) {
+        //     event.preventDefault()
+        //     event.stopPropagation()
+        //     $input.open()
+        // })
 
     </script>
 
