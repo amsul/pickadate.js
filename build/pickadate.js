@@ -1106,7 +1106,7 @@ if ( ![].indexOf ) {
      */
     DatePicker.prototype.parse = function( string, options ) {
 
-        if ( typeof string == 'number' && !isNaN( string ) || Array.isArray( string ) ) {
+        if ( !isNaN( string ) || Array.isArray( string ) ) {
             return string
         }
 
