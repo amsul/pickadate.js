@@ -18,6 +18,10 @@ Common events:
 Time picker options:
 --------------------
 
+### Check if picker is open
+
+- `isOpen`
+
 ### Clear
 
 - `clear`: 'Clear'
@@ -49,9 +53,12 @@ Time picker options:
 - `disablePicker`
 
 
-
 Date picker options:
 --------------------
+
+### Check if picker is open
+
+- `isOpen`
 
 ### Today and clear buttons
 

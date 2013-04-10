@@ -85,6 +85,30 @@ module( 'Set up the picker stage', {
     }
 })
 
+test( 'Checking holder states...', function () {
+
+    ok( this.$input.pickatime( 'isOpen' ) === false, 'Closed by default' )
+
+    this.$input.pickatime( 'open' )
+    ok( this.$input.pickatime( 'isOpen' ) === true, 'Opened with trigger' )
+
+    this.$input.pickatime( 'close' )
+    ok( this.$input.pickatime( 'isOpen' ) === false, 'Closed by trigger' )
+
+    this.$input.focus()
+    ok( this.$input.pickatime( 'isOpen' ) === true, 'Opened with focus' )
+
+    this.$input.blur()
+    $( 'body' ).focus()
+    ok( this.$input.pickatime( 'isOpen' ) === false, 'Closed by losing focus' )
+
+    this.$input.click()
+    ok( this.$input.pickatime( 'isOpen' ) === true, 'Opened with click' )
+
+    $( 'body' ).click()
+    ok( this.$input.pickatime( 'isOpen' ) === false, 'Closed by clicking outside' )
+})
+
 test( 'Checking input attributes...', function() {
     ok( this.$input[ 0 ].type == 'text', 'Input type updated' )
     ok( this.$input[ 0 ].readOnly === true, 'Input is readonly' )

@@ -12,7 +12,8 @@
 
 /**
  * Todo:
- * – `DatePicker` keyboard nav.
+ * – Datepicker tests.
+ * – Datepicker options & methods.
  * – Lots more...
  */
 
@@ -564,7 +565,7 @@
     /**
      * Create a string for the nodes in the picker.
      */
-    TimePicker.prototype.nodes = function() {
+    TimePicker.prototype.nodes = function( isOpen ) {
 
         var
             clock = this,
@@ -606,7 +607,7 @@
                     'data-pick=' + loopedTime.PICK
                 ]
             }
-        }) + createNode( 'li', createNode( 'button', settings.clear, settings.klass.clear, 'data-clear=1 disabled' ) ), settings.klass.list )
+        }) + createNode( 'li', createNode( 'button', settings.clear, settings.klass.clear, 'data-clear=1' + ( isOpen ? '' : ' disabled' ) ) ), settings.klass.list )
     } //TimePicker.prototype.nodes
 
 
@@ -659,14 +660,13 @@
          * The keycode to movement mapping.
          */
         calendar.key = {
-            40: 1, // Down
-            38: -1, // Up
+            40: 7, // Down
+            38: -7, // Up
             39: 1, // Right
             37: -1, // Left
             go: function( timeChange ) {
-                console.log( 'now what?' )
-                // calendar.set( 'highlight', calendar.create( calendar.item.highlight.PICK + timeChange * calendar.i ), { interval: timeChange * calendar.i } )
-                // this.render()
+                calendar.set( 'highlight', calendar.create([ calendar.item.highlight.YEAR, calendar.item.highlight.MONTH, calendar.item.highlight.DATE + timeChange ]), { interval: timeChange } )
+                this.render()
             }
         }
 
@@ -1101,7 +1101,7 @@
     /**
      * Create a string for the nodes in the picker.
      */
-    DatePicker.prototype.nodes = function() {
+    DatePicker.prototype.nodes = function( isOpen ) {
 
         var
             calendar = this,
@@ -1337,7 +1337,8 @@
 
         createNode(
             STRING_DIV,
-            createNode( 'button', settings.today, settings.klass.buttonToday, 'data-pick=' + nowObject.PICK + ' disabled' ) + createNode( 'button', settings.clear, settings.klass.buttonClear, 'data-clear=1 disabled' ),
+            createNode( 'button', settings.today, settings.klass.buttonToday, 'data-pick=' + nowObject.PICK + ( isOpen ? '' : ' disabled' ) ) +
+            createNode( 'button', settings.clear, settings.klass.buttonClear, 'data-clear=1' + ( isOpen ? '' : ' disabled' ) ),
             settings.klass.footer
         ) //endreturn
     } //DatePicker.prototype.nodes
@@ -1743,22 +1744,27 @@
                         return options == 'value' ? ELEMENT.value : P.component.item[ options ]
                     }
 
-                    if ( !isObject( options ) ) {
-                        console.log( 'not sure what to do here', options )
-                        return P
-                    }
+                    // Confirm that the options are passed as an object.
+                    if ( isObject( options ) ) {
 
-                    // Go through each property within the options to set.
-                    for ( var property in options ) {
+                        // Go through each property within the options to get.
+                        for ( var property in options ) {
 
-                        // If this type of item exists, then get it the options by type.
-                        if ( P.component.item[ property ] ) {
-                            return triggerFunction( P.component.formats.toString, P.component, [ options[ property ], P.component.get( property ) ] )
+                            // If this type of item exists, then get it based on the options.
+                            if ( P.component.item[ property ] ) {
+                                return triggerFunction( P.component.formats.toString, P.component, [ options[ property ], P.component.get( property ) ] )
+                            }
                         }
                     }
+                }, //get
 
-                    return P
-                } //get
+
+                /**
+                 * Get the open state
+                 */
+                isOpen: function() {
+                    return !!STATE.OPEN
+                }
 
             } //PickerInstance.prototype
 
@@ -1778,7 +1784,7 @@
                     createNode( STRING_DIV,
 
                         // Create the components nodes.
-                        P.component.nodes(),
+                        P.component.nodes( STATE.OPEN ),
 
                         // The picker item class
                         CLASSES.item
@@ -2082,45 +2088,6 @@
 
 
 
-// /*jshint
-//    debug: true,
-//    devel: true,
-//    browser: true,
-//    asi: true,
-//    unused: true,
-//    eqnull: true
-//  */
-
-
-
-// ;(function( $, document, undefined ) {
-
-//     'use strict';
-
-
-
-//     /* ==========================================================================
-//        Globals, constants, and strings
-//        ========================================================================== */
-
-//     var
-//         HOURS_IN_DAY = 24,
-//         HOURS_TO_NOON = 12,
-//         MINUTES_IN_HOUR = 60,
-//         MINUTES_IN_DAY = HOURS_IN_DAY * MINUTES_IN_HOUR,
-//         DAYS_IN_WEEK = 7,
-//         WEEKS_IN_CALENDAR = 6,
-
-//         STRING_DIV = 'div',
-//         STRING_PREFIX_PICKER = 'pickadate__',
-
-//         $document = $( document )
-
-
-
-
-
-
 //     /* ==========================================================================
 //        Build date picker components
 //        ========================================================================== */
@@ -2146,33 +2113,6 @@
 //             }
 
 //         $.extend( calendar, {
-//             settings: settings,
-//             i: 1,
-//             first: -Infinity,
-//             last: Infinity,
-//             div: '/',
-//             keyMove: {
-//                 40: 7, // Down
-//                 38: -7, // Up
-//                 39: 1, // Right
-//                 37: -1, // Left
-//                 go: function( dateObject, dateChange ) {
-
-//                     var
-//                         picker = this,
-
-//                         // Create a validated target object with the relative date change.
-//                         targetDateObject = calendar.validate( [ dateObject.YEAR, dateObject.MONTH, dateObject.DATE + dateChange ], dateChange )
-
-//                     // If there's a month change, update the viewset.
-//                     if ( targetDateObject.MONTH != picker.get( 'view' ).MONTH ) {
-//                         picker.set( 'view', targetDateObject )
-//                     }
-
-//                     // Return the targetted date object to "go" to.
-//                     return targetDateObject
-//                 }
-//             },
 //             onStart: function( $holder ) {
 //                 // console.log( 'what is ', this )
 //                 triggerFunction( settings.onStart, this, [ $holder ] )
@@ -2364,14 +2304,6 @@
 //     //     // Otherwise create an infinite time.
 //     //     return calendar.object( 0, Infinity )
 //     // }
-
-
-//     /**
-//      * Create a view object.
-//      */
-//     CalendarPicker.prototype.view = function( datePassed ) {
-//         return this.create([ datePassed.YEAR, datePassed.MONTH, 1 ])
-//     }
 
 
 //     /**
