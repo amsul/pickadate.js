@@ -171,7 +171,7 @@ test( 'Checking input `value` to set time...', function() {
     ok( this.$input.pickatime( 'get', 'select' ).PICK === 840, 'Element value sets correct time' )
     ok( this.$input.pickatime( 'get', 'highlight' ).PICK === 840, 'Element value sets correct highlight' )
     ok( this.$input.pickatime( 'get', 'view' ).PICK === 840, 'Element value sets correct view' )
-    ok( !this.$input.next().next().length, 'There is no hidden input' )
+    ok( !this.$input.siblings( '[type=hidden]' ).length, 'There is no hidden input' )
 })
 
 
@@ -195,14 +195,14 @@ test( 'Checking input `data-value` to set time...', function() {
     ok( this.$input.pickatime( 'get', 'select' ).PICK === 840, 'Selects correct time' )
     ok( this.$input.pickatime( 'get', 'highlight' ).PICK === 840, 'Highlights correct time' )
     ok( this.$input.pickatime( 'get', 'view' ).PICK === 840, 'Viewsets correct time' )
-    ok( this.$input.next().next()[ 0 ].type === 'hidden', 'There is a hidden input' )
-    ok( this.$input.next().next()[ 0 ].value === '14:00', 'The hidden input has correct value' )
+    ok( this.$input.siblings( '[type=hidden]' )[ 0 ].type === 'hidden', 'There is a hidden input' )
+    ok( this.$input.siblings( '[type=hidden]' )[ 0 ].value === '14:00', 'The hidden input has correct value' )
 })
 
 
 
 
-module( 'Get and set picker properties', {
+module( 'Get and set time picker properties', {
     setup: function() {
         this.$input = $( '<input type=time>' )
         $DOM.append( this.$input )
@@ -415,8 +415,76 @@ module( 'Date picker with a value', {
 })
 
 test( 'Checking input `value` to set date...', function() {
-    // ok( this.$input.pickadate( 'get', 'select' ).PICK === 840, 'Element value sets correct date' )
-    // ok( this.$input.pickadate( 'get', 'highlight' ).PICK === 840, 'Element value sets correct highlight' )
-    // ok( this.$input.pickadate( 'get', 'view' ).PICK === 840, 'Element value sets correct view' )
-    ok( !this.$input.next().next().length, 'There is no hidden input' )
+    ok( this.$input.pickadate( 'get', 'select' ).PICK === 587534400000, 'Element value sets correct date' )
+    ok( this.$input.pickadate( 'get', 'highlight' ).PICK === 587534400000, 'Element value sets correct highlight' )
+    ok( this.$input.pickadate( 'get', 'view' ).PICK === 586411200000, 'Element value sets correct view' )
+    ok( !this.$input.siblings( '[type=hidden]' ).length, 'There is no hidden input' )
+})
+
+
+
+
+module( 'Date picker with a data value', {
+    setup: function() {
+        this.$input = $( '<input type=date data-value="1988/08/14">' )
+        $DOM.append( this.$input )
+        this.$input.pickadate({
+            formatSubmit: 'yyyy/mm/dd'
+        })
+    },
+    teardown: function() {
+        delete this.$input
+        $DOM.empty()
+    }
+})
+
+test( 'Checking input `data-value` to set date...', function() {
+    ok( this.$input.pickadate( 'get', 'select' ).PICK === 587534400000, 'Selects correct date' )
+    ok( this.$input.pickadate( 'get', 'highlight' ).PICK === 587534400000, 'Highlights correct date' )
+    ok( this.$input.pickadate( 'get', 'view' ).PICK === 586411200000, 'Viewsets correct date' )
+    ok( this.$input.siblings( '[type=hidden]' )[ 0 ].type === 'hidden', 'There is a hidden input' )
+    ok( this.$input.siblings( '[type=hidden]' )[ 0 ].value === '1988/08/14', 'The hidden input has correct value' )
+})
+
+
+
+
+module( 'Get and set date picker properties', {
+    setup: function() {
+        this.$input = $( '<input type=date>' )
+        $DOM.append( this.$input )
+        this.$input.pickadate()
+    },
+    teardown: function() {
+        delete this.$input
+        $DOM.empty()
+    }
+})
+
+test( 'Setting properties with arrays...', function() {
+
+    this.$input.pickadate( 'set', { select: [1988,7,14] } )
+    ok( this.$input.pickadate( 'get', 'select' ).PICK === 587534400000, 'Selects date correctly' )
+
+    this.$input.pickadate( 'set', { highlight: [1988,7,16] } )
+    ok( this.$input.pickadate( 'get', 'highlight' ).PICK === 587707200000, 'Highlights date correctly' )
+
+    this.$input.pickadate( 'set', { view: [1988,7,18] } )
+    ok( this.$input.pickadate( 'get', 'view' ).PICK === 586411200000, 'Adjusts view correctly' )
+
+    this.$input.pickadate( 'set', { min: [1988,7,12] } )
+    ok( this.$input.pickadate( 'get', 'min' ).PICK === 587361600000, 'Sets min limit correctly' )
+
+    this.$input.pickadate( 'set', { max: [1988,7,20] } )
+    ok( this.$input.pickadate( 'get', 'max' ).PICK === 588052800000, 'Sets max limit correctly' )
+})
+
+test( 'Settings properties with integers...', function() {
+
+    this.$input.pickatime( 'set', { min: -3 } )
+    console.log( this.$input.pickatime( 'get', 'min' ) )
+    // ok( this.$input.pickatime( 'get', 'min' ).PICK === this.$input.pickatime( 'get', 'now' ).PICK - this.$input.pickatime( 'picker' ).component.i * 3, 'Sets min limit correctly' )
+
+    // this.$input.pickatime( 'set', { max: 3 } )
+    // ok( this.$input.pickatime( 'get', 'max' ).PICK === this.$input.pickatime( 'get', 'now' ).PICK + this.$input.pickatime( 'picker' ).component.i * 3, 'Sets max limit correctly' )
 })

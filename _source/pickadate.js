@@ -622,6 +622,10 @@
 
     function DatePicker( picker, settings, defaultValueObject ) {
 
+        if ( !defaultValueObject.format ) {
+            throw "Need a format"
+        }
+
         var calendar = this
 
         calendar.settings = settings
@@ -653,7 +657,7 @@
             set( 'now', 0, { past: 1 } ).
 
             // Setting `select` also sets the `highlight` and `view`.
-            set( 'select', defaultValueObject.value || calendar.item.now.PICK, { format: defaultValueObject.format } )
+            set( 'select', defaultValueObject.value || calendar.item.now.PICK, { format: defaultValueObject.format, data: defaultValueObject.data } )
 
 
         /**
@@ -839,8 +843,8 @@
     DatePicker.prototype.measure = function( timeUnit, options ) {
 
         var
-            minutes = timeUnit || options.orig,
-            clock = this
+            date = timeUnit || options.orig,
+            calendar = this
 
         // Make sure we have options to work with
         if ( !options ) {
@@ -857,11 +861,11 @@
                 options.past = 1
             }
 
-            minutes = clock.now( timeUnit, options )
+            date = calendar.now( timeUnit, options )
         }
 
-        else if ( Array.isArray( timeUnit || minutes ) ) {
-            minutes = clock.normalize( clock.prepare( timeUnit || minutes ), options )
+        else if ( Array.isArray( timeUnit || date ) ) {
+            date = calendar.normalize( calendar.prepare( timeUnit || date ), options )
         }
 
         // If it's a number, return the time right now shifted relative by intervals.
@@ -873,11 +877,11 @@
                 options.past = 1
             }
 
-            minutes = timeUnit * clock.i + clock.now( timeUnit, options )
+            date = timeUnit * calendar.i + calendar.now( timeUnit, options )
         }
 
-        // Return the minutes or default to 0.
-        return minutes || 0
+        // Return the date or default to 0.
+        return date || 0
     } ///DatePicker.prototype.measure
 
 
@@ -889,8 +893,8 @@
         var calendar = this
 
         // If we're validating a view, set it to the first of the month.
-        if ( options.type == 'view' && !isNaN( timeUnit.PICK ) ) {
-            timeUnit = calendar.create([ timeUnit.YEAR, timeUnit.MONTH + ( options.nav || 0 ), 1 ])
+        if ( options.type == 'view' ) {
+            timeUnit = calendar.viewset( !isNaN( timeUnit.PICK ) ? timeUnit : calendar.create( timeUnit ), options )
         }
 
         // If the viewset changes, update the highlight.
@@ -918,12 +922,12 @@
     } //DatePicker.prototype.validate
 
 
-    // /**
-    //  * Create a viewset object based on navigation.
-    //  */
-    // DatePicker.prototype.viewset = function( timeUnit, options ) {
-    //     return this.create([ timeUnit.YEAR, timeUnit.MONTH + options.nav, 1 ])
-    // } //DatePicker.prototype.viewset
+    /**
+     * Create a viewset object based on navigation.
+     */
+    DatePicker.prototype.viewset = function( timeUnit, options ) {
+        return this.create([ timeUnit.YEAR, timeUnit.MONTH + ( options.nav || 0 ), 1 ])
+    } //DatePicker.prototype.viewset
 
 
     /**
@@ -1004,98 +1008,109 @@
             string = string.substr( formatLength )
         })
 
-        console.log( parsingObject )
-
-        // return +parsingObject.i + MINUTES_IN_HOUR * (
-
-        //     +( parsingObject.H || parsingObject.HH ) ||
-
-        //     ( +( parsingObject.h || parsingObject.hh ) + ( /^p/i.test( parsingObject.A || parsingObject.a ) ? 12 : 0 ) )
-        // )
+        return calendar.create([ parsingObject.yyyy || parsingObject.yy, +( parsingObject.mm || parsingObject.m ) - ( options.data ?  1 : 0 ), parsingObject.dd || parsingObject.d ])
     } //DatePicker.prototype.parse
 
 
     /**
      * Various formats to display the object in.
      */
-    DatePicker.prototype.formats = {
+    DatePicker.prototype.formats = (function() {
 
-        d: function( string, dateObject ) {
+        // Return the length of the first word in a collection.
+        var getWordLengthFromCollection = function( string, collection, dateObject ) {
 
-            // If there's string, then get the digits length.
-            // Otherwise return the selected date.
-            return string ? getDigitsLength( string ) : dateObject.DATE
-        },
-        dd: function( string, dateObject ) {
+            // Grab the first word from the string.
+            var word = string.match( /\w+/ )[ 0 ]
 
-            // If there's a string, then the length is always 2.
-            // Otherwise return the selected date with a leading zero.
-            return string ? 2 : leadZero( dateObject.DATE )
-        },
-        ddd: function( string, dateObject ) {
+            // If there's no month index, add it to the date object
+            if ( !dateObject.mm && !dateObject.m ) {
+                dateObject.m = collection.indexOf( word )
+            }
 
-            // If there's a string, then get the length of the first word.
-            // Otherwise return the short selected weekday.
-            return string ? getFirstWordLength( string ) : this.settings.weekdaysShort[ dateObject.DAY ]
-        },
-        dddd: function( string, dateObject ) {
-
-            // If there's a string, then get the length of the first word.
-            // Otherwise return the full selected weekday.
-            return string ? getFirstWordLength( string ) : this.settings.weekdaysFull[ dateObject.DAY ]
-        },
-        m: function( string, dateObject ) {
-
-            // If there's a string, then get the length of the digits
-            // Otherwise return the selected month with 0index compensation.
-            return string ? getDigitsLength( string ) : dateObject.MONTH + 1
-        },
-        mm: function( string, dateObject ) {
-
-            // If there's a string, then the length is always 2.
-            // Otherwise return the selected month with 0index and leading zero.
-            return string ? 2 : leadZero( dateObject.MONTH + 1 )
-        },
-        mmm: function( string, dateObject ) {
-
-            var collection = this.settings.monthsShort
-
-            // If there's a string, get length of the relevant month from the short
-            // months collection. Otherwise return the selected month from that collection.
-            return string ? getWordLengthFromCollection( string, collection, dateObject ) : collection[ dateObject.MONTH ]
-        },
-        mmmm: function( string, dateObject ) {
-
-            var collection = this.settings.monthsFull
-
-            // If there's a string, get length of the relevant month from the full
-            // months collection. Otherwise return the selected month from that collection.
-            return string ? getWordLengthFromCollection( string, collection, dateObject ) : collection[ dateObject.MONTH ]
-        },
-        yy: function( string, dateObject ) {
-
-            // If there's a string, then the length is always 2.
-            // Otherwise return the selected year by slicing out the first 2 digits.
-            return string ? 2 : ( '' + dateObject.YEAR ).slice( 2 )
-        },
-        yyyy: function( string, dateObject ) {
-
-            // If there's a string, then the length is always 4.
-            // Otherwise return the selected year.
-            return string ? 4 : dateObject.YEAR
-        },
-
-        // Create an array by splitting the formatting string passed.
-        toArray: function( formatString ) { return formatString.split( /(d{1,4}|m{1,4}|y{4}|yy|!.)/g ) },
-
-        // Format an object into a string using the formatting options.
-        toString: function ( formatString, itemObject ) {
-            var calendar = this
-            return calendar.formats.toArray( formatString ).map( function( label ) {
-                return triggerFunction( calendar.formats[ label ], calendar, [ 0, itemObject ] ) || label.replace( /^!/, '' )
-            }).join( '' )
+            // Return the length of the word.
+            return word.length
         }
-    } //DatePicker.prototype.formats
+
+        return {
+
+            d: function( string, dateObject ) {
+
+                // If there's string, then get the digits length.
+                // Otherwise return the selected date.
+                return string ? getDigitsLength( string ) : dateObject.DATE
+            },
+            dd: function( string, dateObject ) {
+
+                // If there's a string, then the length is always 2.
+                // Otherwise return the selected date with a leading zero.
+                return string ? 2 : leadZero( dateObject.DATE )
+            },
+            ddd: function( string, dateObject ) {
+
+                // If there's a string, then get the length of the first word.
+                // Otherwise return the short selected weekday.
+                return string ? getFirstWordLength( string ) : this.settings.weekdaysShort[ dateObject.DAY ]
+            },
+            dddd: function( string, dateObject ) {
+
+                // If there's a string, then get the length of the first word.
+                // Otherwise return the full selected weekday.
+                return string ? getFirstWordLength( string ) : this.settings.weekdaysFull[ dateObject.DAY ]
+            },
+            m: function( string, dateObject ) {
+
+                // If there's a string, then get the length of the digits
+                // Otherwise return the selected month with 0index compensation.
+                return string ? getDigitsLength( string ) : dateObject.MONTH + 1
+            },
+            mm: function( string, dateObject ) {
+
+                // If there's a string, then the length is always 2.
+                // Otherwise return the selected month with 0index and leading zero.
+                return string ? 2 : leadZero( dateObject.MONTH + 1 )
+            },
+            mmm: function( string, dateObject ) {
+
+                var collection = this.settings.monthsShort
+
+                // If there's a string, get length of the relevant month from the short
+                // months collection. Otherwise return the selected month from that collection.
+                return string ? getWordLengthFromCollection( string, collection, dateObject ) : collection[ dateObject.MONTH ]
+            },
+            mmmm: function( string, dateObject ) {
+
+                var collection = this.settings.monthsFull
+
+                // If there's a string, get length of the relevant month from the full
+                // months collection. Otherwise return the selected month from that collection.
+                return string ? getWordLengthFromCollection( string, collection, dateObject ) : collection[ dateObject.MONTH ]
+            },
+            yy: function( string, dateObject ) {
+
+                // If there's a string, then the length is always 2.
+                // Otherwise return the selected year by slicing out the first 2 digits.
+                return string ? 2 : ( '' + dateObject.YEAR ).slice( 2 )
+            },
+            yyyy: function( string, dateObject ) {
+
+                // If there's a string, then the length is always 4.
+                // Otherwise return the selected year.
+                return string ? 4 : dateObject.YEAR
+            },
+
+            // Create an array by splitting the formatting string passed.
+            toArray: function( formatString ) { return formatString.split( /(d{1,4}|m{1,4}|y{4}|yy|!.)/g ) },
+
+            // Format an object into a string using the formatting options.
+            toString: function ( formatString, itemObject ) {
+                var calendar = this
+                return calendar.formats.toArray( formatString ).map( function( label ) {
+                    return triggerFunction( calendar.formats[ label ], calendar, [ 0, itemObject ] ) || label.replace( /^!/, '' )
+                }).join( '' )
+            }
+        }
+    })() //DatePicker.prototype.formats
 
 
     /**
@@ -1409,7 +1424,8 @@
                     // Create a new picker component with the settings and default value/format combo.
                     P.component = new COMPONENT( P, SETTINGS, {
                         value: elementDataValue || ELEMENT.value,
-                        format: elementDataValue ? SETTINGS.formatSubmit : SETTINGS.format
+                        format: elementDataValue ? SETTINGS.formatSubmit : SETTINGS.format,
+                        data: !!elementDataValue
                     })
 
 
@@ -2097,20 +2113,7 @@
 //         var
 //             calendar = this,
 
-//             // Return the length of the first word in a collection.
-//             getWordLengthFromCollection = function( string, collection, dateObject ) {
 
-//                 // Grab the first word from the string.
-//                 var word = string.match( /\w+/ )[ 0 ]
-
-//                 // If there's no month index, add it to the date object
-//                 if ( !dateObject.mm && !dateObject.m ) {
-//                     dateObject.m = collection.indexOf( word )
-//                 }
-
-//                 // Return the length of the word.
-//                 return word.length
-//             }
 
 //         $.extend( calendar, {
 //             onStart: function( $holder ) {
@@ -2304,43 +2307,6 @@
 //     //     // Otherwise create an infinite time.
 //     //     return calendar.object( 0, Infinity )
 //     // }
-
-
-//     /**
-//      * Create a time object from a format.
-//      */
-//     CalendarPicker.prototype.parse = function( format, string ) {
-
-//         if ( !format ) throw "Need a format"
-
-//         var
-//             calendar = this,
-//             parsingObject = {},
-//             formattings = calendar.formats
-
-//         // Convert the format into an array and then map through it.
-//         formattings.toArray( format ).map( function( label ) {
-
-//             var
-//                 // Grab the formatting label.
-//                 formattingLabel = formattings[ label ],
-
-//                 // The format length is from the formatting label function or the
-//                 // label length without the escaping exclamation (!) mark.
-//                 formatLength = formattingLabel ? triggerFunction( formattingLabel, calendar, [ string, parsingObject ] ) : label.replace( /^!/, '' ).length
-
-//             // If there's a format label, split the string up to the format length.
-//             // Then add it to the parsing object with appropriate label.
-//             if ( formattingLabel ) {
-//                 parsingObject[ label ] = string.substr( 0, formatLength )
-//             }
-
-//             // Update the time string as the substring from format length to end.
-//             string = string.substr( formatLength )
-//         })
-
-//         return calendar.create([ parsingObject.yyyy || parsingObject.yy, parsingObject.mm || parsingObject.m, parsingObject.dd || parsingObject.d ])
-//     } //CalendarPicker.prototype.parse
 
 
 
