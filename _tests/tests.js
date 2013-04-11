@@ -155,7 +155,7 @@ test( 'Checking picker objects...', function() {
 
 
 
-module( 'Time picker with a value', {
+module( 'Time picker with a `value`', {
     setup: function() {
         this.$input = $( '<input type=time value="2:00 p.m.">' )
         $DOM.append( this.$input )
@@ -177,7 +177,7 @@ test( 'Checking input `value` to set time...', function() {
 
 
 
-module( 'Time picker with a data value', {
+module( 'Time picker with a `data-value`', {
     setup: function() {
         this.$input = $( '<input type=time data-value="14:00">' )
         $DOM.append( this.$input )
@@ -234,11 +234,19 @@ test( 'Setting properties with arrays...', function() {
 
 test( 'Settings properties with integers...', function() {
 
+    var nowObject = this.$input.pickatime( 'get', 'now' )
+
+    this.$input.pickatime( 'set', { min: 3 } )
+    ok( this.$input.pickatime( 'get', 'min' ).PICK === nowObject.PICK + this.$input.pickatime( 'picker' ).component.i * 3, 'Sets positive min limit correctly' )
+
     this.$input.pickatime( 'set', { min: -3 } )
-    ok( this.$input.pickatime( 'get', 'min' ).PICK === this.$input.pickatime( 'get', 'now' ).PICK - this.$input.pickatime( 'picker' ).component.i * 3, 'Sets min limit correctly' )
+    ok( this.$input.pickatime( 'get', 'min' ).PICK === nowObject.PICK - this.$input.pickatime( 'picker' ).component.i * 3, 'Sets negative min limit correctly' )
 
     this.$input.pickatime( 'set', { max: 3 } )
-    ok( this.$input.pickatime( 'get', 'max' ).PICK === this.$input.pickatime( 'get', 'now' ).PICK + this.$input.pickatime( 'picker' ).component.i * 3, 'Sets max limit correctly' )
+    ok( this.$input.pickatime( 'get', 'max' ).PICK === nowObject.PICK + this.$input.pickatime( 'picker' ).component.i * 3, 'Sets positive max limit correctly' )
+
+    this.$input.pickatime( 'set', { max: -3 } )
+    ok( this.$input.pickatime( 'get', 'max' ).PICK === nowObject.PICK - this.$input.pickatime( 'picker' ).component.i * 3, 'Sets negative max limit correctly' )
 })
 
 test( 'Settings properties with booleans...', function() {
@@ -249,6 +257,11 @@ test( 'Settings properties with booleans...', function() {
     this.$input.pickatime( 'set', { max: true } )
     ok( this.$input.pickatime( 'get', 'max' ).PICK === this.$input.pickatime( 'get', 'now' ).PICK, 'Sets max limit correctly' )
 })
+
+
+
+
+
 
 
 
@@ -402,7 +415,7 @@ test( 'Checking picker objects...', function() {
 
 
 
-module( 'Date picker with a value', {
+module( 'Date picker with a `value`', {
     setup: function() {
         this.$input = $( '<input type=date value="14 August, 1988">' )
         $DOM.append( this.$input )
@@ -424,7 +437,7 @@ test( 'Checking input `value` to set date...', function() {
 
 
 
-module( 'Date picker with a data value', {
+module( 'Date picker with a `data-value`', {
     setup: function() {
         this.$input = $( '<input type=date data-value="1988/08/14">' )
         $DOM.append( this.$input )
@@ -481,10 +494,21 @@ test( 'Setting properties with arrays...', function() {
 
 test( 'Settings properties with integers...', function() {
 
-    this.$input.pickatime( 'set', { min: -3 } )
-    console.log( this.$input.pickatime( 'get', 'min' ) )
-    // ok( this.$input.pickatime( 'get', 'min' ).PICK === this.$input.pickatime( 'get', 'now' ).PICK - this.$input.pickatime( 'picker' ).component.i * 3, 'Sets min limit correctly' )
+    var nowObject = this.$input.pickadate( 'get', 'now' )
 
-    // this.$input.pickatime( 'set', { max: 3 } )
-    // ok( this.$input.pickatime( 'get', 'max' ).PICK === this.$input.pickatime( 'get', 'now' ).PICK + this.$input.pickatime( 'picker' ).component.i * 3, 'Sets max limit correctly' )
+    this.$input.pickadate( 'set', { min: 3 } )
+    var minObject = this.$input.pickadate( 'get', 'min' )
+    ok( minObject.YEAR === nowObject.YEAR && minObject.MONTH === nowObject.MONTH && minObject.DATE === nowObject.DATE + 3, 'Sets positive min limit correctly' )
+
+    this.$input.pickadate( 'set', { min: -3 } )
+    minObject = this.$input.pickadate( 'get', 'min' )
+    ok( minObject.YEAR === nowObject.YEAR && minObject.MONTH === nowObject.MONTH && minObject.DATE === nowObject.DATE - 3, 'Sets negative min limit correctly' )
+
+    this.$input.pickadate( 'set', { max: 3 } )
+    var maxObject = this.$input.pickadate( 'get', 'max' )
+    ok( maxObject.YEAR === nowObject.YEAR && maxObject.MONTH === nowObject.MONTH && maxObject.DATE === nowObject.DATE + 3, 'Sets positive max limit correctly' )
+
+    this.$input.pickadate( 'set', { max: -3 } )
+    maxObject = this.$input.pickadate( 'get', 'max' )
+    ok( maxObject.YEAR === nowObject.YEAR && maxObject.MONTH === nowObject.MONTH && maxObject.DATE === nowObject.DATE - 3, 'Sets negative max limit correctly' )
 })

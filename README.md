@@ -1,4 +1,4 @@
-# pickadate.js [![pickadate.js build status](https://travis-ci.org/amsul/pickadate.js.png)](https://travis-ci.org/amsul/pickadate.js)
+# pickadate.js [![pickadate.js build status](https://travis-ci.org/amsul/pickadate.js.png?branch=time-picker)](https://travis-ci.org/amsul/pickadate.js)
 
 A mobile-friendly, responsive, and lightweight jQuery datetime input picker.
 

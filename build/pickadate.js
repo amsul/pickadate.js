@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v3.0.0alpha, 2013-04-10
+ * pickadate.js v3.0.0alpha, 2013-04-11
  * By Amsul (http://amsul.ca)
  * Hosted on http://amsul.github.com/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
@@ -189,9 +189,10 @@ if ( ![].indexOf ) {
        ========================================================================== */
 
 
-    function TimePicker( picker, settings, defaultValueObject ) {
+    function TimePicker( picker, settings ) {
 
-        var clock = this
+        var clock = this,
+            elementDataValue = picker.$node.data( 'value' )
 
         clock.settings = settings
         clock.i = settings.interval || 30
@@ -201,7 +202,7 @@ if ( ![].indexOf ) {
             min: 'measure create',
             max: 'measure create',
             now: 'now create',
-            select: 'parse normalize validate create',
+            select: 'parse validate create',
             highlight: 'validate create',
             view: 'validate create',
             disable: 'flipItem',
@@ -217,12 +218,12 @@ if ( ![].indexOf ) {
         })( clock.item.disable )
 
         clock.
-            set( 'min', settings.min, { orig: 0 } ).
-            set( 'max', settings.max, { orig: [ HOURS_IN_DAY - 1, MINUTES_IN_HOUR - 1 ] } ).
-            set( 'now', 0, { past: 1 } ).
+            set( 'min', settings.min || [ 0, 0 ] ).
+            set( 'max', settings.max || [ HOURS_IN_DAY - 1, MINUTES_IN_HOUR - 1 ] ).
+            set( 'now' ).
 
             // Setting `select` also sets the `highlight` and `view`.
-            set( 'select', defaultValueObject.value || clock.item.now.PICK, { format: defaultValueObject.format } )
+            set( 'select', elementDataValue || picker.$node[ 0 ].value || clock.item.now, { format: elementDataValue ? settings.formatSubmit : settings.format } )
 
 
         /**
@@ -278,42 +279,22 @@ if ( ![].indexOf ) {
     /**
      * Set a timepicker item object.
      */
-    TimePicker.prototype.set = function( type, timeUnit, options ) {
+    TimePicker.prototype.set = function( type, value, options ) {
 
-        var
-            clock = this,
+        var clock = this
 
-            // Split to get a queue of methods.
-            methodsQueue = ( clock.queue[ type ] || '' ).split( ' ' )
-
-
-        if ( methodsQueue[ 0 ] === '' ) {
-            console.log( 'nothing queued up...', type, timeUnit, methodsQueue )
-            return clock
-        }
-
-        if ( !options ) {
-            console.warn( 'no options..but going on', type )
-        }
-
-        // Make sure we have options to pass
-        options = options || {}
-
-        // Attach the type to the options
-        options.type = type
-
-        // Go through each method, invoke the function, update the time unit,
-        // and set the final resultant as this item type.
-        clock.item[ type ] = methodsQueue.map( function( method ) {
-            return timeUnit = clock[ method ]( timeUnit, options )
+        // Go through the queue of methods, and invoke the function. Update this
+        // as the time unit, and set the final resultant as this item type.
+        clock.item[ type ] = clock.queue[ type ].split( ' ' ).map( function( method ) {
+            return value = clock[ method ]( type, value, options )
         }).pop()
 
-        // Improve this later
+        // Check if we need to cascade through more updates.
         if ( type == 'select' ) {
-            clock.set( 'highlight', timeUnit, options )
+            clock.set( 'highlight', clock.item.select, options )
         }
         else if ( type == 'highlight' ) {
-            clock.set( 'view', timeUnit, options )
+            clock.set( 'view', clock.item.highlight, options )
         }
 
         return clock
@@ -329,39 +310,46 @@ if ( ![].indexOf ) {
 
 
     /**
-     * Create a picker time object based on the minutes.
+     * Create a picker time object.
      */
-    TimePicker.prototype.create = function( minutes, options ) {
+    TimePicker.prototype.create = function( type, value, options ) {
 
-        // If it's already an object, just return it.
-        if ( minutes && !isNaN( minutes.PICK ) ) {
-            return minutes
+        var clock = this
+
+        // If there's no value, use the type as the value.
+        value = value || type
+
+        // If it's already an object, just use that.
+        if ( isObject( value ) && isInteger( value.PICK ) ) {
+            return value
         }
 
-        // If it's an array, prepare it into minutes.
-        if ( Array.isArray( minutes ) ) {
-            minutes = this.prepare( minutes )
+        // If it's an array, convert it into minutes.
+        if ( Array.isArray( value ) ) {
+            value = clock.convert( value )
         }
 
-        // If no valid minutes are passed, set it to "now" with the options.
-        if ( isNaN( minutes ) ) {
-            minutes = this.now( options )
+        // If no valid value is passed, set it to "now".
+        if ( isNaN( value ) ) {
+            value = clock.now( type, value, options )
         }
+
+        value = clock.normalize( type, value, options )
 
         // Return the compiled object.
         return {
 
             // Divide to get hours from minutes.
-            HOUR: ~~( HOURS_IN_DAY + minutes / MINUTES_IN_HOUR ) % HOURS_IN_DAY,
+            HOUR: ~~( HOURS_IN_DAY + value / MINUTES_IN_HOUR ) % HOURS_IN_DAY,
 
             // The remainder is the minutes.
-            MINS: ( MINUTES_IN_HOUR + minutes % MINUTES_IN_HOUR ) % MINUTES_IN_HOUR,
+            MINS: ( MINUTES_IN_HOUR + value % MINUTES_IN_HOUR ) % MINUTES_IN_HOUR,
 
             // The time in total minutes.
-            TIME: ( MINUTES_IN_DAY + minutes ) % MINUTES_IN_DAY,
+            TIME: ( MINUTES_IN_DAY + value ) % MINUTES_IN_DAY,
 
-            // Reference to the "relative" minutes to pick.
-            PICK: minutes
+            // Reference to the "relative" value to pick.
+            PICK: value
         }
     } //TimePicker.prototype.create
 
@@ -369,111 +357,83 @@ if ( ![].indexOf ) {
     /**
      * Get the time minutes for right now.
      */
-    TimePicker.prototype.now = function( ignore, options ) {
+    TimePicker.prototype.now = function( type, value, options ) {
         var date = new Date()
-        return this.normalize( date.getHours() * MINUTES_IN_HOUR + date.getMinutes(), options )
+        // Add an interval because the time has passed.
+        return this.i + date.getHours() * MINUTES_IN_HOUR + date.getMinutes()
     } //TimePicker.prototype.now
 
 
     /**
      * Normalize minutes or an object to be "reachable" based on the interval.
      */
-    TimePicker.prototype.normalize = function( minutes, options ) {
-
-        // Prepare an array or object into minutes.
-        minutes = this.prepare( minutes )
-
-        // Add an interval to the minutes, if that. Then subtract the remainder
-        // of minutes divided by the interval to get it within "reach".
-        return minutes + ( options && options.past ? this.i : 0 ) - ( minutes % this.i )
+    TimePicker.prototype.normalize = function( type, value, options ) {
+        return value - ( value % this.i )
     } //TimePicker.prototype.normalize
 
 
     /**
-     * Prepare an object or an array into minutes.
+     * Convert a value into minutes.
      */
-    TimePicker.prototype.prepare = function( minutes ) {
+    TimePicker.prototype.convert = function( value ) {
 
         // If it's an array, convert it into minutes by expecting: [ {{hour}}, {{minutes}} ].
-        if ( Array.isArray( minutes ) ) {
-            minutes = +minutes[ 0 ] * MINUTES_IN_HOUR + (+minutes[ 1 ])
+        if ( Array.isArray( value ) ) {
+            value = +value[ 0 ] * MINUTES_IN_HOUR + (+value[ 1 ])
         }
 
-        return minutes
-    } //TimePicker.prototype.prepare
+        return value
+    } //TimePicker.prototype.convert
 
 
     /**
      * Measure the range of minutes.
      */
-    TimePicker.prototype.measure = function( timeUnit, options ) {
+    TimePicker.prototype.measure = function( type, value, options ) {
 
-        var
-            minutes = timeUnit || options.orig,
-            clock = this
+        var clock = this
 
-        // Make sure we have options to work with
-        if ( !options ) {
-            console.warn( 'we might need some options', timeUnit, options )
+        // If it's an integer, we need to make it relative to now.
+        if ( isInteger( value ) ) {
+            value = value * clock.i + clock.now( type, value, options )
         }
 
         // If it's a literal true, return the time right now.
-        // For `max`, time hasn't passed. But for `min` it has.
-        if ( timeUnit === true ) {
-
-            // If it's relative a relative measure, set the time as past.
-            // *** Find a better way to do this later.
-            if ( options.type == 'max' || options.type == 'min' ) {
-                options.past = 1
-            }
-
-            minutes = clock.now( timeUnit, options )
+        else if ( value === true ) {
+            value = clock.now( type, value, options )
         }
 
-        else if ( Array.isArray( timeUnit || minutes ) ) {
-            minutes = clock.normalize( clock.prepare( timeUnit || minutes ), options )
-        }
-
-        // If it's a number, return the time right now shifted relative by intervals.
-        else if ( !isNaN( timeUnit ) ) {
-
-            // If it's relative a relative measure, set the time as past.
-            // *** Find a better way to do this later.
-            if ( options.type == 'max' || options.type == 'min' ) {
-                options.past = 1
-            }
-
-            minutes = timeUnit * clock.i + clock.now( timeUnit, options )
-        }
-
-        // Return the minutes or default to 0.
-        return minutes || 0
+        return value
     } ///TimePicker.prototype.measure
 
 
     /**
      * Validate an object as enabled.
      */
-    TimePicker.prototype.validate = function( timeUnit, options ) {
+    TimePicker.prototype.validate = function( type, value, object ) {
 
         var clock = this
 
-        // If this time unit is disabled, shift until we reach an enabled time.
-        if ( clock.settings.disable && clock.disabled( timeUnit ) ) {
-            timeUnit = clock.shift( timeUnit, options )
-        }
+        return value
 
-        // Scope the time unit in to range and create an object
-        timeUnit = clock.create( clock.scope( timeUnit.PICK || timeUnit, options ) )
+        console.log( type, value, object )
 
-        // Improve this later. But for now, do a second check for if the scoped object
-        // is disabled. If it is, then shift in the opposite direction.
-        if ( clock.settings.disable && clock.disabled( timeUnit ) ) {
-            options.interval = options.interval * -1
-            timeUnit = clock.shift( timeUnit, options )
-        }
+        // // If this time unit is disabled, shift until we reach an enabled time.
+        // if ( clock.settings.disable && clock.disabled( timeUnit ) ) {
+        //     timeUnit = clock.shift( timeUnit, options )
+        // }
 
-        return timeUnit.PICK || timeUnit
+        // // Scope the time unit in to range and create an object
+        // timeUnit = clock.create( clock.scope( timeUnit.PICK || timeUnit, options ) )
+
+        // // Improve this later. But for now, do a second check for if the scoped object
+        // // is disabled. If it is, then shift in the opposite direction.
+        // if ( clock.settings.disable && clock.disabled( timeUnit ) ) {
+        //     options.interval = options.interval * -1
+        //     timeUnit = clock.shift( timeUnit, options )
+        // }
+
+        // return timeUnit.PICK || timeUnit
     } //TimePicker.prototype.validate
 
 
@@ -539,43 +499,42 @@ if ( ![].indexOf ) {
 
 
     /**
-     * Parse a string into an object.
+     * Parse a string into a usable type.
      */
-    TimePicker.prototype.parse = function( string, options ) {
-
-        if ( typeof string == 'number' && !isNaN( string ) || Array.isArray( string ) ) {
-            return string
-        }
-
-        if ( !options ) {
-            console.warn( 'Need a formats option', string )
-            return string
-        }
+    TimePicker.prototype.parse = function( type, value, options ) {
 
         var
             clock = this,
-            parsingObject = {},
-            formattings = clock.formats
+            parsingObject = {}
+
+        if ( !value || isInteger( value ) || Array.isArray( value ) || isDate( value ) || isObject( value ) && isInteger( value.PICK ) ) {
+            return value
+        }
+
+        // We need a `.format` to parse the value.
+        if ( !( options && options.format ) ) {
+            throw "Need a formatting option to parse this.."
+        }
 
         // Convert the format into an array and then map through it.
-        formattings.toArray( options.format ).map( function( label ) {
+        clock.formats.toArray( options.format ).map( function( label ) {
 
             var
                 // Grab the formatting label.
-                formattingLabel = formattings[ label ],
+                formattingLabel = clock.formats[ label ],
 
                 // The format length is from the formatting label function or the
                 // label length without the escaping exclamation (!) mark.
-                formatLength = formattingLabel ? triggerFunction( formattingLabel, clock, [ string, parsingObject ] ) : label.replace( /^!/, '' ).length
+                formatLength = formattingLabel ? triggerFunction( formattingLabel, clock, [ value, parsingObject ] ) : label.replace( /^!/, '' ).length
 
-            // If there's a format label, split the string up to the format length.
+            // If there's a format label, split the value up to the format length.
             // Then add it to the parsing object with appropriate label.
             if ( formattingLabel ) {
-                parsingObject[ label ] = string.substr( 0, formatLength )
+                parsingObject[ label ] = value.substr( 0, formatLength )
             }
 
-            // Update the time string as the substring from format length to end.
-            string = string.substr( formatLength )
+            // Update the time value as the substring from format length to end.
+            value = value.substr( formatLength )
         })
 
         return +parsingObject.i + MINUTES_IN_HOUR * (
@@ -757,25 +716,21 @@ if ( ![].indexOf ) {
        ========================================================================== */
 
 
-    function DatePicker( picker, settings, defaultValueObject ) {
+    function DatePicker( picker, settings ) {
 
-        if ( !defaultValueObject.format ) {
-            throw "Need a format"
-        }
-
-        var calendar = this
+        var calendar = this,
+            elementDataValue = picker.$node.data( 'value' )
 
         calendar.settings = settings
-        calendar.i = 1
 
         // The queue of methods that will be used to build item objects.
         calendar.queue = {
             min: 'measure create',
             max: 'measure create',
             now: 'now create',
-            select: 'parse validate create',//'parse normalize validate create',
+            select: 'parse validate create',
             highlight: 'validate create',
-            view: 'validate create',
+            view: 'viewset create',
             disable: 'flipItem',
             enable: 'flipItem'
         }
@@ -789,12 +744,12 @@ if ( ![].indexOf ) {
         })( calendar.item.disable )
 
         calendar.
-            set( 'min', settings.min, { orig: -Infinity } ).
-            set( 'max', settings.max, { orig: Infinity } ).
-            set( 'now', 0, { past: 1 } ).
+            set( 'min', settings.min || -Infinity ).
+            set( 'max', settings.max || Infinity ).
+            set( 'now' ).
 
             // Setting `select` also sets the `highlight` and `view`.
-            set( 'select', defaultValueObject.value || calendar.item.now.PICK, { format: defaultValueObject.format, data: defaultValueObject.data } )
+            set( 'select', elementDataValue || picker.$node[ 0 ].value, { format: elementDataValue ? settings.formatSubmit : settings.format, data: !!elementDataValue } )
 
 
         /**
@@ -806,7 +761,7 @@ if ( ![].indexOf ) {
             39: 1, // Right
             37: -1, // Left
             go: function( timeChange ) {
-                calendar.set( 'highlight', calendar.create([ calendar.item.highlight.YEAR, calendar.item.highlight.MONTH, calendar.item.highlight.DATE + timeChange ]), { interval: timeChange } )
+                calendar.set( 'highlight', [ calendar.item.highlight.YEAR, calendar.item.highlight.MONTH, calendar.item.highlight.DATE + timeChange ], { interval: timeChange } )
                 this.render()
             }
         }
@@ -842,48 +797,25 @@ if ( ![].indexOf ) {
     /**
      * Set a datepicker item object.
      */
-    DatePicker.prototype.set = function( type, timeUnit, options ) {
+    DatePicker.prototype.set = function( type, value, options ) {
 
-        var
-            clock = this,
+        var calendar = this
 
-            // Split to get a queue of methods.
-            methodsQueue = ( clock.queue[ type ] || '' ).split( ' ' )
-
-
-        if ( methodsQueue[ 0 ] === '' ) {
-            console.log( 'nothing queued up...', type, timeUnit, methodsQueue )
-            return clock
-        }
-
-        if ( !options ) {
-            console.warn( 'no options..but going on', type )
-        }
-
-        // Make sure we have options to pass
-        options = options || {}
-
-        // Attach the type to the options
-        options.type = type
-
-        // Go through each method, invoke the function, update the time unit,
-        // and set the final resultant as this item type.
-        clock.item[ type ] = methodsQueue.map( function( method ) {
-            return timeUnit = clock[ method ]( timeUnit, options )
+        // Go through the queue of methods, and invoke the function. Update this
+        // as the time unit, and set the final resultant as this item type.
+        calendar.item[ type ] = calendar.queue[ type ].split( ' ' ).map( function( method ) {
+            return value = calendar[ method ]( type, value, options )
         }).pop()
 
-        // Improve this later
+        // Check if we need to cascade through more updates.
         if ( type == 'select' ) {
-            clock.set( 'highlight', timeUnit, options )
+            calendar.set( 'highlight', calendar.item.select, options )
         }
-        else if ( type == 'highlight' && !options.nav ) {
-            clock.set( 'view', timeUnit, options )
-        }
-        else if ( type == 'view' && options.nav ) {
-            clock.set( 'highlight', timeUnit, options )
+        else if ( type == 'highlight' ) {
+            calendar.set( 'view', calendar.item.highlight, options )
         }
 
-        return clock
+        return calendar
     } //DatePicker.prototype.set
 
 
@@ -896,41 +828,49 @@ if ( ![].indexOf ) {
 
 
     /**
-     * Create a picker date object based on the time unit.
+     * Create a picker date object.
      */
-    DatePicker.prototype.create = function( date, options ) {
+    DatePicker.prototype.create = function( type, value, options ) {
 
-        // Check if we just need an infinite object
-        var infiniteObject = date == -Infinity || date == Infinity ? date : undefined
+        var
+            isInfiniteValue,
+            calendar = this
 
-        // If it's already an object, just return it.
-        if ( date && !isNaN( date.PICK ) ) {
-            return date
+        // If there's no value, use the type as the value.
+        value = value || type
+
+        // If it's already an object, just use that.
+        if ( isObject( value ) && isInteger( value.PICK ) ) {
+            return value
         }
 
-        // If it's an array, prepare it into date.
-        if ( Array.isArray( date ) ) {
-            date = this.prepare( date )
+        if ( Array.isArray( value ) ) {
+            value = new Date( value[ 0 ], value[ 1 ], value[ 2 ] )
         }
-
-        // If the time passed is a number, create the time with the number.
-        else if ( !isNaN( date ) ) {
-            date = new Date( date )
+        else if ( isInteger( value ) ) {
+            value = calendar.normalize( type, new Date( value ), options )
         }
-
-        // If no valid date are passed, set it to "now" with the options.
+        else if ( isDate( value ) ) {
+            value = calendar.normalize( type, new Date( value ), options )
+        }
+        else if ( value == -Infinity || value == Infinity ) {
+            isInfiniteValue = value
+        }
+        else if ( value === true ) {
+            value = calendar.now( type, value, options )
+        }
         else {
-            date = this.now( date, options )
+            value = calendar.now( type, value, options )
         }
 
-        // // Return the compiled object.
+        // Return the compiled object.
         return {
-            YEAR: infiniteObject || date.getFullYear(),
-            MONTH: infiniteObject || date.getMonth(),
-            DATE: infiniteObject || date.getDate(),
-            DAY: infiniteObject || date.getDay(),
-            TIME: infiniteObject || date,
-            PICK: infiniteObject || date.getTime()
+            YEAR: isInfiniteValue || value.getFullYear(),
+            MONTH: isInfiniteValue || value.getMonth(),
+            DATE: isInfiniteValue || value.getDate(),
+            DAY: isInfiniteValue || value.getDay(),
+            TIME: isInfiniteValue || value,
+            PICK: isInfiniteValue || value.getTime()
         }
     } //DatePicker.prototype.create
 
@@ -938,132 +878,132 @@ if ( ![].indexOf ) {
     /**
      * Get the date today.
      */
-    DatePicker.prototype.now = function( ignore, options ) {
-        return this.normalize( new Date(), options )
+    DatePicker.prototype.now = function( type, value, options ) {
+        value = new Date()
+        if ( options && options.rel ) {
+            value.setDate( value.getDate() + options.rel )
+        }
+        return this.normalize( type, value, options )
     } //DatePicker.prototype.now
 
 
     /**
-     * Normalize a date object to be "reachable".
+     * Normalize a date by setting the hours to midnight.
      */
-    DatePicker.prototype.normalize = function( date, options ) {
-
-        // Prepare an array or object into date.
-        date = this.prepare( date )
-
-        // Set the hours to midnight for comparison.
-        date.setHours( 0, 0, 0, 0 )
-
-        // Add an interval to the date, if that. Then subtract the remainder
-        // of date divided by the interval to get it within "reach".
-        return date// + ( options && options.past ? this.i : 0 ) - ( date % this.i )
+    DatePicker.prototype.normalize = function( type, value, options ) {
+        value.setHours( 0, 0, 0, 0 )
+        return value
     } //DatePicker.prototype.normalize
-
-
-    /**
-     * Prepare an object or an array into a date.
-     */
-    DatePicker.prototype.prepare = function( date ) {
-
-        // If it's an array, convert it into date by expecting: [ {{year}}, {{month}}, {{date}} ].
-        if ( Array.isArray( date ) ) {
-            date = new Date( date[ 0 ], date[ 1 ], date[ 2 ] )
-        }
-
-        return date
-    } //DatePicker.prototype.prepare
 
 
     /**
      * Measure the range of dates.
      */
-    DatePicker.prototype.measure = function( timeUnit, options ) {
+    DatePicker.prototype.measure = function( type, value, options ) {
 
-        var
-            date = timeUnit || options.orig,
-            calendar = this
+        var calendar = this
 
-        // Make sure we have options to work with
-        if ( !options ) {
-            console.warn( 'we might need some options', timeUnit, options )
+        if ( isInteger( value ) ) {
+            options.rel = value
+            value = calendar.now( type, value, options )
         }
 
-        // If it's a literal true, return the time right now.
-        // For `max`, time hasn't passed. But for `min` it has.
-        if ( timeUnit === true ) {
+        return value
 
-            // If it's relative a relative measure, set the time as past.
-            // *** Find a better way to do this later.
-            if ( options.type == 'max' || options.type == 'min' ) {
-                options.past = 1
-            }
 
-            date = calendar.now( timeUnit, options )
-        }
 
-        else if ( Array.isArray( timeUnit || date ) ) {
-            date = calendar.normalize( calendar.prepare( timeUnit || date ), options )
-        }
+        // var
+        //     date = timeUnit || options.orig,
+        //     calendar = this
 
-        // If it's a number, return the time right now shifted relative by intervals.
-        else if ( !isNaN( timeUnit ) ) {
+        // // Make sure we have options to work with
+        // if ( !options ) {
+        //     console.warn( 'we might need some options', timeUnit, options )
+        // }
 
-            // If it's relative a relative measure, set the time as past.
-            // *** Find a better way to do this later.
-            if ( options.type == 'max' || options.type == 'min' ) {
-                options.past = 1
-            }
+        // // If it's a literal true, return the time right now.
+        // // For `max`, time hasn't passed. But for `min` it has.
+        // if ( timeUnit === true ) {
 
-            date = timeUnit * calendar.i + calendar.now( timeUnit, options )
-        }
+        //     // If it's relative a relative measure, set the time as past.
+        //     // *** Find a better way to do this later.
+        //     if ( options.type == 'max' || options.type == 'min' ) {
+        //         options.past = 1
+        //     }
 
-        // Return the date or default to 0.
-        return date || 0
+        //     date = calendar.now( timeUnit, options )
+        // }
+
+        // else if ( Array.isArray( timeUnit || date ) ) {
+        //     date = calendar.normalize( calendar.prepare( timeUnit || date ), options )
+        // }
+
+        // // If it's a number, return the time right now shifted relative by intervals.
+        // else if ( !isNaN( timeUnit ) ) {
+
+        //     // If it's relative a relative measure, set the time as past.
+        //     // *** Find a better way to do this later.
+        //     if ( options.type == 'max' || options.type == 'min' ) {
+        //         options.past = 1
+        //     }
+
+        //     date = timeUnit * calendar.i + calendar.now( timeUnit, options )
+        // }
+
+        // // Return the date or default to 0.
+        // return date || 0
     } ///DatePicker.prototype.measure
 
 
     /**
-     * Validate an object as enabled.
+     * Validate a date as enabled.
      */
-    DatePicker.prototype.validate = function( timeUnit, options ) {
+    DatePicker.prototype.validate = function( type, value, options ) {
 
         var calendar = this
 
-        // If we're validating a view, set it to the first of the month.
-        if ( options.type == 'view' ) {
-            timeUnit = calendar.viewset( !isNaN( timeUnit.PICK ) ? timeUnit : calendar.create( timeUnit ), options )
+        // If there's a navigation involved, move to relative month.
+        if ( options && options.nav ) {
+            value = [ value.YEAR, value.MONTH + options.nav, value.DATE ]
         }
 
-        // If the viewset changes, update the highlight.
-        else if ( options.type == 'highlight' && options.nav ) {
-            timeUnit = calendar.create([ calendar.item.view.YEAR, calendar.item.view.MONTH, calendar.item.highlight.DATE ])
-        }
+        return value
+
+        // // If we're validating a view, set it to the first of the month.
+        // if ( options.type == 'view' ) {
+        //     timeUnit = calendar.viewset( !isNaN( timeUnit.PICK ) ? timeUnit : calendar.create( timeUnit ), options )
+        // }
+
+        // // If the viewset changes, update the highlight.
+        // else if ( options.type == 'highlight' && options.nav ) {
+        //     timeUnit = calendar.create([ calendar.item.view.YEAR, calendar.item.view.MONTH, calendar.item.highlight.DATE ])
+        // }
 
 
-        // If this time unit is disabled, shift until we reach an enabled time.
-        if ( calendar.settings.disable && calendar.disabled( timeUnit ) ) {
-            timeUnit = calendar.shift( timeUnit, options )
-        }
+        // // If this time unit is disabled, shift until we reach an enabled time.
+        // if ( calendar.settings.disable && calendar.disabled( timeUnit ) ) {
+        //     timeUnit = calendar.shift( timeUnit, options )
+        // }
 
-        // Scope the time unit in to range and create an object
-        timeUnit = calendar.create( calendar.scope( timeUnit.PICK || timeUnit, options ) )
+        // // Scope the time unit into range and create an object
+        // timeUnit = calendar.create( calendar.scope( timeUnit.PICK || timeUnit, options ) )
 
-        // Improve this later. But for now, do a second check for if the scoped object
-        // is disabled. If it is, then shift in the opposite direction.
-        if ( calendar.settings.disable && calendar.disabled( timeUnit ) ) {
-            options.interval = options.interval * -1
-            timeUnit = calendar.shift( timeUnit, options )
-        }
+        // // Improve this later. But for now, do a second check for if the scoped object
+        // // is disabled. If it is, then shift in the opposite direction.
+        // if ( calendar.settings.disable && calendar.disabled( timeUnit ) ) {
+        //     options.interval = options.interval * -1
+        //     timeUnit = calendar.shift( timeUnit, options )
+        // }
 
-        return timeUnit.PICK || timeUnit
+        // return timeUnit.PICK || timeUnit
     } //DatePicker.prototype.validate
 
 
     /**
      * Create a viewset object based on navigation.
      */
-    DatePicker.prototype.viewset = function( timeUnit, options ) {
-        return this.create([ timeUnit.YEAR, timeUnit.MONTH + ( options.nav || 0 ), 1 ])
+    DatePicker.prototype.viewset = function( type, value, options ) {
+        return Array.isArray( value ) ? [ value[ 0 ], value[ 1 ], 1 ] : [ value.YEAR, value.MONTH, 1 ]
     } //DatePicker.prototype.viewset
 
 
@@ -1106,46 +1046,45 @@ if ( ![].indexOf ) {
 
 
     /**
-     * Parse a string into an object.
+     * Parse a string into a usable type.
      */
-    DatePicker.prototype.parse = function( string, options ) {
-
-        if ( !isNaN( string ) || Array.isArray( string ) ) {
-            return string
-        }
-
-        if ( !options ) {
-            console.warn( 'Need a formats option', string )
-            return string
-        }
+    DatePicker.prototype.parse = function( type, value, options ) {
 
         var
             calendar = this,
-            parsingObject = {},
-            formattings = calendar.formats
+            parsingObject = {}
+
+        if ( !value || isInteger( value ) || Array.isArray( value ) || isDate( value ) || isObject( value ) && isInteger( value.PICK ) ) {
+            return value
+        }
+
+        // We need a `.format` to parse the value.
+        if ( !( options && options.format ) ) {
+            throw "Need a formatting option to parse this.."
+        }
 
         // Convert the format into an array and then map through it.
-        formattings.toArray( options.format ).map( function( label ) {
+        calendar.formats.toArray( options.format ).map( function( label ) {
 
             var
                 // Grab the formatting label.
-                formattingLabel = formattings[ label ],
+                formattingLabel = calendar.formats[ label ],
 
                 // The format length is from the formatting label function or the
                 // label length without the escaping exclamation (!) mark.
-                formatLength = formattingLabel ? triggerFunction( formattingLabel, calendar, [ string, parsingObject ] ) : label.replace( /^!/, '' ).length
+                formatLength = formattingLabel ? triggerFunction( formattingLabel, calendar, [ value, parsingObject ] ) : label.replace( /^!/, '' ).length
 
-            // If there's a format label, split the string up to the format length.
+            // If there's a format label, split the value up to the format length.
             // Then add it to the parsing object with appropriate label.
             if ( formattingLabel ) {
-                parsingObject[ label ] = string.substr( 0, formatLength )
+                parsingObject[ label ] = value.substr( 0, formatLength )
             }
 
-            // Update the time string as the substring from format length to end.
-            string = string.substr( formatLength )
+            // Update the value as the substring from format length to end.
+            value = value.substr( formatLength )
         })
 
-        return calendar.create([ parsingObject.yyyy || parsingObject.yy, +( parsingObject.mm || parsingObject.m ) - ( options.data ?  1 : 0 ), parsingObject.dd || parsingObject.d ])
+        return [ parsingObject.yyyy || parsingObject.yy, +( parsingObject.mm || parsingObject.m ) - ( options.data ?  1 : 0 ), parsingObject.dd || parsingObject.d ]
     } //DatePicker.prototype.parse
 
 
@@ -1546,24 +1485,17 @@ if ( ![].indexOf ) {
                  */
                 start: function() {
 
-                    var
-                        elementDataValue = $ELEMENT.data( 'value' )
-
 
                     // Confirm focus state, save original type, convert into text input
                     // to remove UA stylings, and set as readonly to prevent keyboard popup.
-                    ELEMENT.autofocus = ( ELEMENT == document.activeElement )
+                    ELEMENT.autofocus = ( ELEMENT == document.activeElement ) || ELEMENT.autofocus
                     STATE.TYPE = ELEMENT.type
                     ELEMENT.type = 'text'
                     ELEMENT.readOnly = true
 
 
                     // Create a new picker component with the settings and default value/format combo.
-                    P.component = new COMPONENT( P, SETTINGS, {
-                        value: elementDataValue || ELEMENT.value,
-                        format: elementDataValue ? SETTINGS.formatSubmit : SETTINGS.format,
-                        data: !!elementDataValue
-                    })
+                    P.component = new COMPONENT( P, SETTINGS )
 
 
                     // Create the picker box with a new wrapped picker and bind the events.
@@ -1606,12 +1538,12 @@ if ( ![].indexOf ) {
 
                                 // Set and close the picker if something is getting picked.
                                 if ( !isNaN( targetData.pick ) && !$target.hasClass( CLASSES.disabled ) ) {
-                                    P.set({ select: targetData.pick }).close()
+                                    P.set( 'select', targetData.pick ).close()
                                 }
 
                                 // If something is superficially changed, navigate the picker.
                                 else if ( targetData.nav && !$target.hasClass( CLASSES.navDisabled ) ) {
-                                    P.set({ view: P.component.item.view, nav: targetData.nav })
+                                    P.set( 'highlight', P.component.item.highlight, { nav: targetData.nav } )
                                 }
 
                                 // If a "clear" button is pressed, empty the values and close it.
@@ -1625,7 +1557,7 @@ if ( ![].indexOf ) {
 
                     // If there's a format for the hidden input element, create the element
                     // using the name of the original input plus suffix. Otherwise set it to null.
-                    P._hidden = SETTINGS.formatSubmit ? $( '<input type=hidden name=' + ELEMENT.name + ( SETTINGS.hiddenSuffix || '_submit' ) + ( ELEMENT.value || elementDataValue ? ' value="' + triggerFunction( P.component.formats.toString, P.component, [ SETTINGS.formatSubmit, P.component.item.select ] ) : '' ) + '">' )[ 0 ] : undefined
+                    P._hidden = SETTINGS.formatSubmit ? $( '<input type=hidden name=' + ELEMENT.name + ( SETTINGS.hiddenSuffix || '_submit' ) + ( ELEMENT.value || $ELEMENT.data( 'value' ) ? ' value="' + triggerFunction( P.component.formats.toString, P.component, [ SETTINGS.formatSubmit, P.component.item.select ] ) : '' ) + '">' )[ 0 ] : undefined
 
 
                     // Bind the events on the `input` element and then
@@ -1805,7 +1737,7 @@ if ( ![].indexOf ) {
 
                             // Otherwise it's the enter key so select the highlighted time and then close it.
                             else {
-                                P.set({ select: P.component.item.highlight.PICK }).close()
+                                P.set( 'select', P.component.item.highlight ).close()
                             }
 
                         } //if ELEMENT
@@ -1849,39 +1781,45 @@ if ( ![].indexOf ) {
                  * Clear the values
                  */
                 clear: function() {
-                    return P.set({ clear: 1 })
+                    return P.set( 'clear' )
                 }, //clear
 
 
                 /**
                  * Set the values
                  */
-                set: function( options ) {
+                set: function( type, value, options ) {
 
-                    if ( !isObject( options ) ) {
-                        console.log( 'not sure what to do here', options )
-                        return P
+                    var
+                        typeIsObject = isObject( type ),
+                        object = typeIsObject ? type : {}
+
+                    // If the type isn't an object, make it one.
+                    if ( !typeIsObject ) {
+                        object[ type ] = value
                     }
 
-                    // Go through each property within the options to set.
-                    for ( var property in options ) {
+                    // Go through the types of items to set.
+                    for ( type in object ) {
 
-                        // If this type of item exists, then set it the options by type.
-                        if ( P.component.item[ property ] ) {
-                            P.component.set( property, options[ property ], options )
+                        // If the item exists, set it.
+                        if ( P.component.item[ type ] ) {
+                            P.component.set( type, object[ type ], options || {} )
                         }
 
                         // Update the element value and broadcast a change, if that.
-                        if ( property == 'select' || options.clear ) {
-                            $ELEMENT.val( options.clear ? '' : triggerFunction( P.component.formats.toString, P.component, [ SETTINGS.format, P.component.get( property ) ] ) ).trigger( 'change' )
+                        if ( type == 'select' || type == 'clear' ) {
+                            $ELEMENT.val( type == 'clear' ? '' :
+                                triggerFunction( P.component.formats.toString, P.component, [ SETTINGS.format, P.component.get( type ) ] )
+                            ).trigger( 'change' )
                         }
-
-                        // Render a new picker.
-                        P.render()
-
-                        // Trigger the "set" event within scope of the picker.
-                        triggerFunction( P.component.onSet, P, [ P.$box ] )
                     }
+
+                    // Render a new picker.
+                    P.render()
+
+                    // Trigger the "set" event within scope of the picker.
+                    triggerFunction( P.component.onSet, P, [ P.$box ] )
 
                     return P
                 }, //set
@@ -2045,13 +1983,10 @@ if ( ![].indexOf ) {
 
 
     /**
-     * Check if a value is a function and trigger it, if that
+     * Trigger a function otherwise return the value.
      */
     function triggerFunction( callback, scope, args ) {
-        if ( typeof callback == 'function' ) {
-            return callback.apply( scope, args || [] )
-        }
-        return callback
+        return typeof callback == 'function' ? callback.apply( scope, args || [] ) : callback
     }
 
 
@@ -2066,8 +2001,24 @@ if ( ![].indexOf ) {
     /**
      * Tell if something is an object.
      */
-    function isObject( object ) {
-        return {}.toString.call( object ).indexOf( 'Object' ) > -1
+    function isObject( value ) {
+        return {}.toString.call( value ).indexOf( 'Object' ) > -1
+    }
+
+
+    /**
+     * Tell if something is a date object.
+     */
+    function isDate( value ) {
+        return {}.toString.call( value ).indexOf( 'Date' ) > -1
+    }
+
+
+    /**
+     * Tell if something is an integer.
+     */
+    function isInteger( value ) {
+        return {}.toString.call( value ).indexOf( 'Number' ) > -1 && value % 1 === 0
     }
 
 
