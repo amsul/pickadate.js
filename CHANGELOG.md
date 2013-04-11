@@ -1,5 +1,8 @@
 ## Changelog
 
+### 2.1.8
+- Added Catalan translations
+
 ### 2.1.7
 - [Added `isOpen` method](http://amsul.ca/pickadate.js/docs.htm#api_isOpen)
 
