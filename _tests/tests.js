@@ -241,20 +241,21 @@ test( 'Setting properties with arrays...', function() {
 
 test( 'Settings properties with integers...', function() {
 
-    var nowObject = this.$input.pickatime( 'get', 'now' )
+    var nowObject = this.$input.pickatime( 'get', 'now' ),
+        interval = this.$input.pickatime( 'picker' ).component.i
 
     this.$input.pickatime( 'set', { min: -3 } )
-    console.log( this.$input.pickatime( 'get', 'min' ).PICK, nowObject.PICK )
-    ok( this.$input.pickatime( 'get', 'min' ).PICK === nowObject.PICK - this.$input.pickatime( 'picker' ).component.i * 3, 'Sets negative min limit correctly' )
+    ok( this.$input.pickatime( 'get', 'min' ).PICK === nowObject.PICK - interval * 3, 'Sets negative min limit correctly' )
 
-    // this.$input.pickatime( 'set', { max: 3 } )
-    // ok( this.$input.pickatime( 'get', 'max' ).PICK === nowObject.PICK + this.$input.pickatime( 'picker' ).component.i * 3, 'Sets positive max limit correctly' )
+    this.$input.pickatime( 'set', { max: 3 } )
+    ok( this.$input.pickatime( 'get', 'max' ).PICK === nowObject.PICK + interval * 3, 'Sets positive max limit correctly' )
 
-    // this.$input.pickatime( 'set', { min: 3 } )
-    // ok( this.$input.pickatime( 'get', 'min' ).PICK === nowObject.PICK + this.$input.pickatime( 'picker' ).component.i * 3, 'Sets positive min limit correctly' )
+    this.$input.pickatime( 'set', { min: 3 } )
+    ok( this.$input.pickatime( 'get', 'min' ).PICK === nowObject.PICK + interval * 3, 'Sets positive min limit correctly' )
 
-    // this.$input.pickatime( 'set', { max: -3 } )
-    // ok( this.$input.pickatime( 'get', 'max' ).PICK === nowObject.PICK - this.$input.pickatime( 'picker' ).component.i * 3, 'Sets negative max limit correctly' )
+    this.$input.pickatime( 'set', { max: -3 } )
+    // We add 1440 here because the min is greater than the max. So we essentially get the next day's max time.
+    ok( this.$input.pickatime( 'get', 'max' ).PICK === nowObject.PICK - interval * 3 + 1440, 'Sets negative max limit correctly' )
 })
 
 test( 'Settings properties with booleans...', function() {
