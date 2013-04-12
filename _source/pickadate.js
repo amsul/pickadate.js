@@ -57,9 +57,9 @@
             min: 'measure create',
             max: 'measure create',
             now: 'now create',
-            select: 'parse validate create',
-            highlight: 'validate create',
-            view: 'validate create',
+            select: 'parse validate create scope',
+            highlight: 'validate create scope',
+            view: 'validate create scope',
             disable: 'flipItem',
             enable: 'flipItem'
         }
@@ -77,7 +77,6 @@
             set( 'max', settings.max || [ HOURS_IN_DAY - 1, MINUTES_IN_HOUR - 1 ] ).
             set( 'now' ).
             set(
-                // Setting `select` also sets the `highlight` and `view`.
                 'select',
 
                 // If there's a `value` or `data-value`, use that with formatting.
@@ -86,7 +85,10 @@
 
                 // Use the relevant format.
                 { format: elementDataValue ? settings.formatSubmit : settings.format }
-            )
+            ).
+
+            // Setting the `highlight` also sets the `view`.
+            set( 'highlight', clock.item.select )
 
 
         /**
@@ -153,11 +155,13 @@
         }).pop()
 
         // Check if we need to cascade through more updates.
-        if ( type == 'select' ) {
-            clock.set( 'highlight', clock.item.select, options )
-        }
-        else if ( type == 'highlight' ) {
+        if ( type == 'highlight' ) {
             clock.set( 'view', clock.item.highlight, options )
+        }
+        else if ( ( type == 'min' || type == 'max' ) && clock.item.select && clock.item.highlight ) {
+            clock.
+                set( 'select', clock.item.select, options ).
+                set( 'highlight', clock.item.highlight, options )
         }
 
         return clock
@@ -220,7 +224,7 @@
     /**
      * Get the time relative to now.
      */
-    TimePicker.prototype.now = function( type, value, options ) {
+    TimePicker.prototype.now = function( type, value/*, options*/ ) {
         var date = new Date()
         // Add an interval because the time has passed.
         return ( ( isInteger( value ) ? value + 1 : 1 ) * this.i ) + date.getHours() * MINUTES_IN_HOUR + date.getMinutes()
@@ -230,7 +234,7 @@
     /**
      * Normalize minutes or an object to be "reachable" based on the interval.
      */
-    TimePicker.prototype.normalize = function( type, value, options ) {
+    TimePicker.prototype.normalize = function( type, value/*, options*/ ) {
         return value - ( value % this.i )
     } //TimePicker.prototype.normalize
 
@@ -357,12 +361,12 @@
 
 
     /**
-     * Scope minutes into range of min and max.
+     * Scope an object to be within range of min and max.
      */
-    TimePicker.prototype.scope = function( minutes, options ) {
-        var minTime = this.item.min.PICK,
-            maxTime = this.item.max.PICK
-        return minutes > maxTime ? maxTime : minutes < minTime ? minTime : minutes
+    TimePicker.prototype.scope = function( type, timeObject/*, options*/ ) {
+        var minObject = this.item.min,
+            maxObject = this.item.max
+        return timeObject.PICK > maxObject.PICK ? maxObject : timeObject.PICK < minObject.PICK ? minObject : timeObject
     } //TimePicker.prototype.scope
 
 
