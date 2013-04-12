@@ -10,14 +10,6 @@
  */
 
 
-/**
- * Todo:
- * – Datepicker tests.
- * – Datepicker options & methods.
- * – Lots more...
- */
-
-
 
 ;(function( $, document, undefined ) {
 
@@ -84,9 +76,17 @@
             set( 'min', settings.min || [ 0, 0 ] ).
             set( 'max', settings.max || [ HOURS_IN_DAY - 1, MINUTES_IN_HOUR - 1 ] ).
             set( 'now' ).
+            set(
+                // Setting `select` also sets the `highlight` and `view`.
+                'select',
 
-            // Setting `select` also sets the `highlight` and `view`.
-            set( 'select', elementDataValue || picker.$node[ 0 ].value || clock.item.now, { format: elementDataValue ? settings.formatSubmit : settings.format } )
+                // If there's a `value` or `data-value`, use that with formatting.
+                // Otherwise default to the minimum selectable time.
+                elementDataValue || picker.$node[ 0 ].value || clock.item.min,
+
+                // Use the relevant format.
+                { format: elementDataValue ? settings.formatSubmit : settings.format }
+            )
 
 
         /**
@@ -218,12 +218,12 @@
 
 
     /**
-     * Get the time minutes for right now.
+     * Get the time relative to now.
      */
     TimePicker.prototype.now = function( type, value, options ) {
         var date = new Date()
         // Add an interval because the time has passed.
-        return this.i + date.getHours() * MINUTES_IN_HOUR + date.getMinutes()
+        return ( ( isInteger( value ) ? value + 1 : 1 ) * this.i ) + date.getHours() * MINUTES_IN_HOUR + date.getMinutes()
     } //TimePicker.prototype.now
 
 
@@ -258,12 +258,17 @@
 
         // If it's an integer, we need to make it relative to now.
         if ( isInteger( value ) ) {
-            value = value * clock.i + clock.now( type, value, options )
+            value = clock.now( type, value, options )
         }
 
         // If it's a literal true, return the time right now.
         else if ( value === true ) {
             value = clock.now( type, value, options )
+        }
+
+        // If we're setting the max, make sure it's greater than the min.
+        if ( type == 'max' && value < clock.item.min.TIME ) {
+            value += MINUTES_IN_DAY
         }
 
         return value
@@ -448,13 +453,13 @@
 
             // If there's a string, then the length is always 4.
             // Otherwise check if it's more than "noon" and return either am/pm.
-            return string ? 4 : MINUTES_IN_DAY / 2 > timeObject.PICK % MINUTES_IN_DAY ? 'a.m.' : 'p.m.'
+            return string ? 4 : MINUTES_IN_DAY / 2 > timeObject.TIME % MINUTES_IN_DAY ? 'a.m.' : 'p.m.'
         },
         A: function( string, timeObject ) {
 
             // If there's a string, then the length is always 2.
             // Otherwise check if it's more than "noon" and return either am/pm.
-            return string ? 2 : MINUTES_IN_DAY / 2 > timeObject.PICK % MINUTES_IN_DAY ? 'AM' : 'PM'
+            return string ? 2 : MINUTES_IN_DAY / 2 > timeObject.TIME % MINUTES_IN_DAY ? 'AM' : 'PM'
         },
 
         // Create an array by splitting the formatting string passed.
