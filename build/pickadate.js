@@ -218,7 +218,7 @@ if ( ![].indexOf ) {
 
                 // If there's a `value` or `data-value`, use that with formatting.
                 // Otherwise default to the minimum selectable time.
-                elementDataValue || picker.$node[ 0 ].value || clock.item.min,
+                elementDataValue || picker.$node[ 0 ].value || clock.item.min.PICK,
 
                 // Use the relevant format.
                 { format: elementDataValue ? settings.formatSubmit : settings.format }
@@ -237,7 +237,7 @@ if ( ![].indexOf ) {
             39: 1, // Right
             37: -1, // Left
             go: function( timeChange ) {
-                clock.set( 'highlight', clock.create( clock.item.highlight.PICK + timeChange * clock.i ), { interval: timeChange * clock.i } )
+                clock.set( 'highlight', clock.item.highlight.PICK + timeChange * clock.i, { interval: timeChange * clock.i } )
                 this.render()
             }
         }
@@ -321,7 +321,7 @@ if ( ![].indexOf ) {
         var clock = this
 
         // If there's no value, use the type as the value.
-        value = value || type
+        value = value === undefined ? type : value
 
         // If it's already an object, just use that.
         if ( isObject( value ) && isInteger( value.PICK ) ) {
@@ -334,10 +334,16 @@ if ( ![].indexOf ) {
         }
 
         // If no valid value is passed, set it to "now".
-        if ( isNaN( value ) ) {
+        if ( !isInteger( value ) ) {
             value = clock.now( type, value, options )
         }
 
+        // If we're setting the max, make sure it's greater than the min.
+        if ( type == 'max' && value < clock.item.min.PICK ) {
+            value += MINUTES_IN_DAY
+        }
+
+        // Normalize it into a "reachable" interval.
         value = clock.normalize( type, value, options )
 
         // Return the compiled object.
@@ -407,11 +413,6 @@ if ( ![].indexOf ) {
             value = clock.now( type, value, options )
         }
 
-        // If we're setting the max, make sure it's greater than the min.
-        if ( type == 'max' && value < clock.item.min.TIME ) {
-            value += MINUTES_IN_DAY
-        }
-
         return value
     } ///TimePicker.prototype.measure
 
@@ -419,52 +420,50 @@ if ( ![].indexOf ) {
     /**
      * Validate an object as enabled.
      */
-    TimePicker.prototype.validate = function( type, value, object ) {
+    TimePicker.prototype.validate = function( type, value, options ) {
 
         var clock = this
 
+        // Check if there are times to disable and this is one of them.
+        if ( clock.settings.disable && clock.disabled( value ) ) {
+
+            // Shift with the interval until we reach an enabled time.
+            value = clock.shift( value, options.interval )
+
+            // If we land on a disabled min/max, shift in opposite direction.
+            if ( clock.disabled( value ) ) {
+                options.interval = options.interval * -1
+                value = clock.shift( value, options.interval )
+            }
+        }
+
+        // Return the final value.
         return value
-
-        console.log( type, value, object )
-
-        // // If this time unit is disabled, shift until we reach an enabled time.
-        // if ( clock.settings.disable && clock.disabled( timeUnit ) ) {
-        //     timeUnit = clock.shift( timeUnit, options )
-        // }
-
-        // // Scope the time unit in to range and create an object
-        // timeUnit = clock.create( clock.scope( timeUnit.PICK || timeUnit, options ) )
-
-        // // Improve this later. But for now, do a second check for if the scoped object
-        // // is disabled. If it is, then shift in the opposite direction.
-        // if ( clock.settings.disable && clock.disabled( timeUnit ) ) {
-        //     options.interval = options.interval * -1
-        //     timeUnit = clock.shift( timeUnit, options )
-        // }
-
-        // return timeUnit.PICK || timeUnit
     } //TimePicker.prototype.validate
 
 
     /**
      * Check if an object is disabled.
      */
-    TimePicker.prototype.disabled = function( object ) {
+    TimePicker.prototype.disabled = function( value ) {
 
         var
             clock = this,
+
+            // Make sure we have an object to work with.
+            timeObject = !isObject( value ) ? clock.create( value ) : value,
 
             // Filter through the disabled times to check if this is one.
             isDisabledTime = clock.item.disable.filter( function( timeToDisable ) {
 
                 // If the time is a number, match the hours.
-                if ( !isNaN( timeToDisable ) ) {
-                    return object.HOUR == timeToDisable
+                if ( isInteger( timeToDisable ) ) {
+                    return timeObject.HOUR == timeToDisable
                 }
 
                 // If it's an array, create the object and match the times.
                 if ( Array.isArray( timeToDisable ) ) {
-                    return object.PICK == clock.create( timeToDisable ).PICK
+                    return timeObject.PICK == clock.create( timeToDisable ).PICK
                 }
             }).length
 
@@ -476,24 +475,28 @@ if ( ![].indexOf ) {
     /**
      * Shift an object by an interval until we reach an enabled object.
      */
-    TimePicker.prototype.shift = function( object, options ) {
+    TimePicker.prototype.shift = function( value, interval ) {
 
-        var clock = this
+        var
+            clock = this,
+
+            // Make sure we have an object to work with.
+            timeObject = !isObject( value ) ? clock.create( value ) : value
 
         // Keep looping as long as the time is disabled.
-        while ( clock.disabled( object ) ) {
+        while ( clock.disabled( timeObject ) ) {
 
-            // Increase/decrease the time by the key movement and keep looping.
-            object = clock.create( object.PICK += options.interval || clock.i, options )
+            // Increase/decrease the time by the interval and keep looping.
+            timeObject = clock.create( timeObject.PICK += interval || clock.i )
 
             // If we've looped beyond the limits, break out of the loop.
-            if ( object.PICK < clock.item.min.PICK || object.PICK > clock.item.max.PICK ) {
+            if ( timeObject.PICK <= clock.item.min.PICK || timeObject.PICK >= clock.item.max.PICK ) {
                 break
             }
         }
 
         // Return the final object.
-        return object
+        return timeObject
     } //TimePicker.prototype.shift
 
 
@@ -899,7 +902,7 @@ if ( ![].indexOf ) {
     /**
      * Normalize a date by setting the hours to midnight.
      */
-    DatePicker.prototype.normalize = function( type, value, options ) {
+    DatePicker.prototype.normalize = function( type, value/*, options*/ ) {
         value.setHours( 0, 0, 0, 0 )
         return value
     } //DatePicker.prototype.normalize
@@ -1011,7 +1014,7 @@ if ( ![].indexOf ) {
     /**
      * Create a viewset object based on navigation.
      */
-    DatePicker.prototype.viewset = function( type, value, options ) {
+    DatePicker.prototype.viewset = function( type, value/*, options*/ ) {
         return Array.isArray( value ) ? [ value[ 0 ], value[ 1 ], 1 ] : [ value.YEAR, value.MONTH, 1 ]
     } //DatePicker.prototype.viewset
 
@@ -1019,23 +1022,22 @@ if ( ![].indexOf ) {
     /**
      * Check if an object is disabled.
      */
-    DatePicker.prototype.disabled = function( object ) {
+    DatePicker.prototype.disabled = function( collection, object ) {
 
         var
             calendar = this,
 
             // Filter through the disabled dates to check if this is one.
-            isDisabledTime = calendar.item.disable.filter( function( timeToDisable ) {
+            isDisabledTime = calendar.item.disable.filter( function( dateToDisable ) {
 
-                // If the time is a number, match the hours.
-                if ( !isNaN( timeToDisable ) ) {
-                    console.log( 'no hours', object.HOUR )
-                    return object.HOUR == timeToDisable
+                // If the date is a number, match the weekday with 0index and `firstDay` check.
+                if ( isInteger( dateToDisable ) ) {
+                    return object.DAY == ( calendar.settings.firstDay ? dateToDisable : dateToDisable - 1 ) % 7
                 }
 
-                // If it's an array, create the object and match the dates.
-                if ( Array.isArray( timeToDisable ) ) {
-                    return object.PICK == calendar.create( timeToDisable ).PICK
+                // If it's an array, create the object and match the exact date.
+                if ( Array.isArray( dateToDisable ) ) {
+                    return object.PICK == calendar.create( dateToDisable ).PICK
                 }
             }).length
 
@@ -1047,7 +1049,7 @@ if ( ![].indexOf ) {
     /**
      * Scope a date into range of min and max.
      */
-    DatePicker.prototype.scope = function( date, options ) {
+    DatePicker.prototype.scope = function( date/*, options*/ ) {
         var minTime = this.item.min.PICK,
             maxTime = this.item.max.PICK
         return date > maxTime ? maxTime : date < minTime ? minTime : date
@@ -1546,7 +1548,7 @@ if ( ![].indexOf ) {
                                 ELEMENT.focus()
 
                                 // Set and close the picker if something is getting picked.
-                                if ( !isNaN( targetData.pick ) && !$target.hasClass( CLASSES.disabled ) ) {
+                                if ( isInteger( targetData.pick ) && !$target.hasClass( CLASSES.disabled ) ) {
                                     P.set( 'select', targetData.pick ).close()
                                 }
 
@@ -2286,32 +2288,6 @@ if ( ![].indexOf ) {
 
 
 //     /**
-//      * Check if a date is disabled or not.
-//      */
-//     CalendarPicker.prototype.disable = function( collection, dateObject ) {
-
-//         var calendar = this,
-
-//             // Filter through the disabled dates to check if this is one.
-//             isDisabledDate = collection.filter( function( dateToDisable ) {
-
-//                 // If the date is a number, match the weekday with 0index and `firstDay` check.
-//                 if ( !isNaN( dateToDisable ) ) {
-//                     return dateObject.DAY == ( calendar.settings.firstDay ? dateToDisable : dateToDisable - 1 ) % 7
-//                 }
-
-//                 // If it's an array, create the object and match the times.
-//                 if ( Array.isArray( dateToDisable ) ) {
-//                     return dateObject.TIME == calendar.create( dateToDisable ).TIME
-//                 }
-//             }).length
-
-//         // If the calendar is flipped, flip the condition.
-//         return calendar.props.get( 'flip' ) ? !isDisabledDate : isDisabledDate
-//     } // CalendarPicker.prototype.disable
-
-
-//     /**
 //      * Shift a date by a certain interval until we reach an enabled one.
 //      */
 //     CalendarPicker.prototype.shift = function( dateObject, keyMovement ) {
@@ -2334,14 +2310,6 @@ if ( ![].indexOf ) {
 //         // Do a final validation check to make sure it's within bounds.
 //         return calendar.validate( dateObject, keyMovement )
 //     } //CalendarPicker.prototype.shift
-
-
-//     /**
-//      * Move to another month
-//      */
-//     CalendarPicker.prototype.move = function( datePassed, monthChange ) {
-//         return this.create([ datePassed.YEAR, datePassed.MONTH + monthChange, datePassed.DATE ])
-//     } //CalendarPicker.prototype.move
 
 
 //     // /**
