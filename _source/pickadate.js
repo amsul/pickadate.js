@@ -5,7 +5,6 @@
    browser: true,
    asi: true,
    unused: true,
-   eqnull: true,
    boss: true
  */
 
@@ -150,7 +149,8 @@
 
         // Go through the queue of methods, and invoke the function. Update this
         // as the time unit, and set the final resultant as this item type.
-        clock.item[ type ] = clock.queue[ type ].split( ' ' ).map( function( method ) {
+        // * In the case of `enable`, keep the queue but set `disable` instead.
+        clock.item[ ( type == 'enable' ? 'disable' : type ) ] = clock.queue[ type ].split( ' ' ).map( function( method ) {
             return value = clock[ method ]( type, value, options )
         }).pop()
 
@@ -158,7 +158,7 @@
         if ( type == 'highlight' ) {
             clock.set( 'view', clock.item.highlight, options )
         }
-        else if ( ( type == 'min' || type == 'max' ) && clock.item.select && clock.item.highlight ) {
+        else if ( ( type == 'min' || type == 'max' || type == 'disable' || type == 'enable' ) && clock.item.select && clock.item.highlight ) {
             clock.
                 set( 'select', clock.item.select, options ).
                 set( 'highlight', clock.item.highlight, options )
@@ -485,47 +485,55 @@
     /**
      * Flip an item as enabled or disabled.
      */
-    TimePicker.prototype.flipItem = function( timeUnit, options ) {
+    TimePicker.prototype.flipItem = function( type, value/*, options*/ ) {
+
         var clock = this,
+            collection = clock.item.disable,
             isFlipped = clock.item.enable === -1
-        if ( !isFlipped && options.enable || isFlipped && options.disable ) {
-            clock.removeDisabled( timeUnit, options )
+
+        if ( !isFlipped && type == 'enable' || isFlipped && type == 'disable' ) {
+            collection = clock.removeDisabled( collection, value )
         }
-        else if ( !isFlipped && options.disable || isFlipped && options.enable ) {
-            clock.addDisabled( timeUnit, options )
+        else if ( !isFlipped && type == 'disable' || isFlipped && type == 'enable' ) {
+            collection = clock.addDisabled( collection, value )
         }
-        return clock.item.disable
+
+        return collection
     } //TimePicker.prototype.flipItem
 
 
     /**
      * Add an item to the disabled collection.
      */
-    TimePicker.prototype.addDisabled = function( timeUnit/*, options*/ ) {
+    TimePicker.prototype.addDisabled = function( collection, item ) {
         var clock = this
-        if ( !clock.filterDisabled( timeUnit ).length ) {
-            clock.item.disable.push( timeUnit )
-        }
-        return clock.item.disable
+        item.map( function( timeUnit ) {
+            if ( !clock.filterDisabled( collection, timeUnit ).length ) {
+                collection.push( timeUnit )
+            }
+        })
+        return collection
     } //TimePicker.prototype.addDisabled
 
 
     /**
      * Remove an item from the disabled collection.
      */
-    TimePicker.prototype.removeDisabled = function( timeUnit/*, options*/ ) {
+    TimePicker.prototype.removeDisabled = function( collection, item ) {
         var clock = this
-        clock.item.disable = clock.filterDisabled( timeUnit, 1 )
-        return clock.item.disable
+        item.map( function( timeUnit ) {
+            collection = clock.filterDisabled( collection, timeUnit, 1 )
+        })
+        return collection
     } //TimePicker.prototype.removeDisabled
 
 
     /**
      * Filter through the disabled collection to find a time unit.
      */
-    TimePicker.prototype.filterDisabled = function( timeUnit, isRemoving ) {
+    TimePicker.prototype.filterDisabled = function( collection, timeUnit, isRemoving ) {
         var timeIsArray = Array.isArray( timeUnit )
-        return this.item.disable.filter( function( disabledTimeUnit ) {
+        return collection.filter( function( disabledTimeUnit ) {
             var isMatch = !timeIsArray && timeUnit === disabledTimeUnit ||
                 timeIsArray && Array.isArray( disabledTimeUnit ) && timeUnit.toString() === disabledTimeUnit.toString()
             return isRemoving ? !isMatch : isMatch
