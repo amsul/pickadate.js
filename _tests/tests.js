@@ -10,8 +10,10 @@
 
 /**
  * To do:
- * – disabled times & dates
+ * – disabled dates
+ * – "flip" disabled
  * – selection out of view/disabled
+ * – changing disable/enable updates highlight, select, and view
  */
 
 
@@ -63,40 +65,36 @@ module( 'Events on the time picker', {
 
 test( 'Checking the basic events...', function() {
 
-    var thisModule = this
+    ok( this.started, 'Started up fine' )
+    ok( this.updatedType, 'Updated the element type' )
 
-    ok( thisModule.started, 'Started up fine' )
-    ok( thisModule.updatedType, 'Updated the element type' )
+    ok( this.rendered, 'Rendered correctly' )
 
-    ok( thisModule.rendered, 'Rendered correctly' )
+    this.$input.pickatime( 'open' )
+    ok( this.opened, 'Opened just fine with a trigger' )
 
-    thisModule.$input.pickatime( 'open' )
-    ok( thisModule.opened, 'Opened just fine with a trigger' )
+    this.$input.pickatime( 'close' )
+    ok( this.closed, 'Closed just fine with a trigger' )
 
-    thisModule.$input.pickatime( 'close' )
-    ok( thisModule.closed, 'Closed just fine with a trigger' )
+    this.$input.pickatime( 'stop' )
+    ok( this.stopped, 'Stopped just fine' )
+    ok( this.restoredType, 'Restored the element type' )
 
-    thisModule.$input.pickatime( 'stop' )
-    ok( thisModule.stopped, 'Stopped just fine' )
-    ok( thisModule.restoredType, 'Restored the element type' )
-
-    thisModule.$input.pickatime( 'start' )
-    ok( thisModule.restarted, 'Restarted just fine' )
-    ok( thisModule.updatedType, 'Updated the element type' )
+    this.$input.pickatime( 'start' )
+    ok( this.restarted, 'Restarted just fine' )
+    ok( this.updatedType, 'Updated the element type' )
 })
 
 test( 'Checking the `set` events...', function() {
 
-    var thisModule = this
+    this.$input.pickatime( 'set', { select: [10,0] } )
+    ok( this.selectedArray, 'Selected from an array' )
 
-    thisModule.$input.pickatime( 'set', { select: [10,0] } )
-    ok( thisModule.selectedArray, 'Selected from an array' )
+    this.$input.pickatime( 'set', { select: 120 } )
+    ok( this.selectedNumber, 'Selected from a number' )
 
-    thisModule.$input.pickatime( 'set', { select: 120 } )
-    ok( thisModule.selectedNumber, 'Selected from a number' )
-
-    thisModule.$input.pickatime( 'clear' )
-    ok( thisModule.clearedValue, 'Cleared the input value' )
+    this.$input.pickatime( 'clear' )
+    ok( this.clearedValue, 'Cleared the input value' )
 })
 
 
@@ -155,6 +153,7 @@ test( 'Checking picker objects...', function() {
         interval = $.fn.pickatime.defaults.interval
     ok( this.$input.pickatime( 'get', 'now' ).PICK === interval + nowTimeMinutes - ( nowTimeMinutes % interval ), 'Now time is correct at ' + this.$input.pickatime( 'get', 'now' ).HOUR + ':' + this.$input.pickatime( 'get', 'now' ).MINS )
     ok( !this.$input.pickatime( 'get', 'disable' ).length, 'No disabled times' )
+    ok( this.$input.pickatime( 'get', 'min' ).PICK === 0, 'Selected time is midnight' )
     ok( this.$input.pickatime( 'get', 'min' ).PICK === 0, 'Min time is midnight' )
     ok( this.$input.pickatime( 'get', 'max' ).PICK === 1410, 'Max time is 23:30' )
 })
@@ -209,6 +208,34 @@ test( 'Checking input `data-value` to set time...', function() {
 
 
 
+module( 'Time picker with disabled times', {
+    setup: function() {
+        this.$input = $( '<input type=time>' )
+        $DOM.append( this.$input )
+        this.$input.pickatime({
+            disable: [ 0, 1, 10, 23, [4,30], [23,30] ]
+        })
+    },
+    teardown: function() {
+        delete this.$input
+        $DOM.empty()
+    }
+})
+
+test( 'Confirming disabled times with integers & arrays...', function() {
+
+    var $holder = this.$input.next( '.' + $.fn.pickatime.defaults.klass.holder.split( ' ' )[ 0 ] )
+
+    $holder.find( '.' + $.fn.pickatime.defaults.klass.listItem ).each( function( index, item ) {
+        if ( index >= 0 && index < 4 || index >= 20 && index < 22 || index >= 46 && index < 48 || index === 9 || index === 48 ) {
+            ok( $( item ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is disabled: ' + item.innerHTML )
+        }
+    })
+})
+
+
+
+
 module( 'Get and set time picker properties', {
     setup: function() {
         this.$input = $( '<input type=time>' )
@@ -221,50 +248,148 @@ module( 'Get and set time picker properties', {
     }
 })
 
-test( 'Setting properties with arrays...', function() {
-
-    this.$input.pickatime( 'set', { select: [9,0] } )
-    ok( this.$input.pickatime( 'get', 'select' ).PICK === 540, 'Selects time correctly' )
-
-    this.$input.pickatime( 'set', { highlight: [14,0] } )
-    ok( this.$input.pickatime( 'get', 'highlight' ).PICK === 840, 'Highlights time correctly' )
-
-    this.$input.pickatime( 'set', { view: [16,0] } )
-    ok( this.$input.pickatime( 'get', 'view' ).PICK === 960, 'Adjusts view correctly' )
+test( 'Setting `min` & `max` with arrays...', function() {
 
     this.$input.pickatime( 'set', { min: [2,0] } )
     ok( this.$input.pickatime( 'get', 'min' ).PICK === 120, 'Sets min limit correctly' )
+    ok( this.$input.pickatime( 'get', 'select' ).PICK === 120, 'Select updates accordingly' )
+    ok( this.$input.pickatime( 'get', 'highlight' ).PICK === 120, 'Highlight updates accordingly' )
+    ok( this.$input.pickatime( 'get', 'view' ).PICK === 120, 'View updates accordingly' )
 
     this.$input.pickatime( 'set', { max: [20,0] } )
     ok( this.$input.pickatime( 'get', 'max' ).PICK === 1200, 'Sets max limit correctly' )
+    ok( this.$input.pickatime( 'get', 'select' ).PICK === 120, 'Select unaffected' )
+    ok( this.$input.pickatime( 'get', 'highlight' ).PICK === 120, 'Highlight unaffected' )
+    ok( this.$input.pickatime( 'get', 'view' ).PICK === 120, 'View unaffected' )
 })
 
-test( 'Settings properties with integers...', function() {
+test( 'Setting `min` & `max` with integers...', function() {
 
     var nowObject = this.$input.pickatime( 'get', 'now' ),
         interval = this.$input.pickatime( 'picker' ).component.i
 
     this.$input.pickatime( 'set', { min: -3 } )
     ok( this.$input.pickatime( 'get', 'min' ).PICK === nowObject.PICK - interval * 3, 'Sets negative min limit correctly' )
+    ok( this.$input.pickatime( 'get', 'select' ).PICK === nowObject.PICK - interval * 3, 'Select updates accordingly' )
+    ok( this.$input.pickatime( 'get', 'highlight' ).PICK === nowObject.PICK - interval * 3, 'Highlight updates accordingly' )
+    ok( this.$input.pickatime( 'get', 'view' ).PICK === nowObject.PICK - interval * 3, 'View updates accordingly' )
 
     this.$input.pickatime( 'set', { max: 3 } )
     ok( this.$input.pickatime( 'get', 'max' ).PICK === nowObject.PICK + interval * 3, 'Sets positive max limit correctly' )
+    ok( this.$input.pickatime( 'get', 'select' ).PICK === nowObject.PICK - interval * 3, 'Select unaffected' )
+    ok( this.$input.pickatime( 'get', 'highlight' ).PICK === nowObject.PICK - interval * 3, 'Highlight unaffected' )
+    ok( this.$input.pickatime( 'get', 'view' ).PICK === nowObject.PICK - interval * 3, 'View unaffected' )
 
     this.$input.pickatime( 'set', { min: 3 } )
     ok( this.$input.pickatime( 'get', 'min' ).PICK === nowObject.PICK + interval * 3, 'Sets positive min limit correctly' )
+    ok( this.$input.pickatime( 'get', 'select' ).PICK === nowObject.PICK + interval * 3, 'Select updates accordingly' )
+    ok( this.$input.pickatime( 'get', 'highlight' ).PICK === nowObject.PICK + interval * 3, 'Highlight updates accordingly' )
+    ok( this.$input.pickatime( 'get', 'view' ).PICK === nowObject.PICK + interval * 3, 'View updates accordingly' )
 
     this.$input.pickatime( 'set', { max: -3 } )
-    // We add 1440 here because the min is greater than the max. So we essentially get the next day's max time.
-    ok( this.$input.pickatime( 'get', 'max' ).PICK === nowObject.PICK - interval * 3 + 1440, 'Sets negative max limit correctly' )
+    // If the max is less than the min, we need the next day's max time so add 1440.
+    ok( this.$input.pickatime( 'get', 'max' ).PICK === nowObject.PICK - interval * 3 + ( this.$input.pickatime( 'get', 'min' ).PICK > this.$input.pickatime( 'get', 'max' ).PICK ? 0 : 1440 ), 'Sets negative max limit correctly' )
+    ok( this.$input.pickatime( 'get', 'select' ).PICK === nowObject.PICK + interval * 3, 'Select unaffected' )
+    ok( this.$input.pickatime( 'get', 'highlight' ).PICK === nowObject.PICK + interval * 3, 'Highlight unaffected' )
+    ok( this.$input.pickatime( 'get', 'view' ).PICK === nowObject.PICK + interval * 3, 'View unaffected' )
 })
 
-test( 'Settings properties with booleans...', function() {
+test( 'Setting `min` & `max` with booleans...', function() {
+
+    var nowObject = this.$input.pickatime( 'get', 'now' )
 
     this.$input.pickatime( 'set', { min: true } )
-    ok( this.$input.pickatime( 'get', 'min' ).PICK === this.$input.pickatime( 'get', 'now' ).PICK, 'Sets min limit correctly' )
+    ok( this.$input.pickatime( 'get', 'min' ).PICK === nowObject.PICK, 'Sets min limit correctly' )
+    ok( this.$input.pickatime( 'get', 'select' ).PICK === nowObject.PICK, 'Select updates accordingly' )
+    ok( this.$input.pickatime( 'get', 'highlight' ).PICK === nowObject.PICK, 'Highlight updates accordingly' )
+    ok( this.$input.pickatime( 'get', 'view' ).PICK === nowObject.PICK, 'View updates accordingly' )
 
     this.$input.pickatime( 'set', { max: true } )
-    ok( this.$input.pickatime( 'get', 'max' ).PICK === this.$input.pickatime( 'get', 'now' ).PICK, 'Sets max limit correctly' )
+    ok( this.$input.pickatime( 'get', 'max' ).PICK === nowObject.PICK, 'Sets max limit correctly' )
+    ok( this.$input.pickatime( 'get', 'select' ).PICK === nowObject.PICK, 'Select unaffected' )
+    ok( this.$input.pickatime( 'get', 'highlight' ).PICK === nowObject.PICK, 'Highlight unaffected' )
+    ok( this.$input.pickatime( 'get', 'view' ).PICK === nowObject.PICK, 'View unaffected' )
+})
+
+test( 'Setting `disable` with integers...', function() {
+
+    this.$input.pickatime( 'set', { disable: [0,1,4] } )
+
+    ok( this.$input.pickatime( 'get', 'disable' ).toString() === [0,1,4].toString(), 'Disabled times added to collection' )
+
+    var $holder = this.$input.next( '.' + $.fn.pickatime.defaults.klass.holder.split( ' ' )[ 0 ] )
+
+    $holder.find( '.' + $.fn.pickatime.defaults.klass.listItem ).each( function( index, item ) {
+        if ( index >= 0 && index < 4 || index >= 8 && index < 10 ) {
+            ok( $( item ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is disabled: ' + item.innerHTML )
+        }
+        else {
+            ok( !$( item ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is enabled: ' + item.innerHTML )
+        }
+    })
+
+    this.$input.pickatime( 'set', { enable: [1] } )
+    ok( this.$input.pickatime( 'get', 'disable' ).toString() === [0,4].toString(), 'Disabled time removed from collection' )
+
+    $holder.find( '.' + $.fn.pickatime.defaults.klass.listItem ).each( function( index, item ) {
+        if ( index >= 0 && index < 2 || index >= 8 && index < 10 ) {
+            ok( $( item ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is disabled: ' + item.innerHTML )
+        }
+        else {
+            ok( !$( item ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is enabled: ' + item.innerHTML )
+        }
+    })
+})
+
+test( 'Setting `disable` with arrays...', function() {
+
+    this.$input.pickatime( 'set', { disable: [ [1,0],[4,30],[18,0],[23,30] ] } )
+
+    ok( this.$input.pickatime( 'get', 'disable' ).toString() === [ [1,0],[4,30],[18,0],[23,30] ].toString(), 'Disabled times added to collection' )
+
+    var $holder = this.$input.next( '.' + $.fn.pickatime.defaults.klass.holder.split( ' ' )[ 0 ] )
+
+    $holder.find( '.' + $.fn.pickatime.defaults.klass.listItem ).each( function( index, item ) {
+        if ( index === 2 || index === 9 || index === 36 || index === 47 ) {
+            ok( $( item ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is disabled: ' + item.innerHTML )
+        }
+        else {
+            ok( !$( item ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is enabled: ' + item.innerHTML )
+        }
+    })
+
+    this.$input.pickatime( 'set', { enable: [ [4,30] ] } )
+    ok( this.$input.pickatime( 'get', 'disable' ).toString() === [ [1,0],[18,0],[23,30] ].toString(), 'Disabled time removed from collection' )
+
+    $holder.find( '.' + $.fn.pickatime.defaults.klass.listItem ).each( function( index, item ) {
+        if ( index === 2 || index === 36 || index === 47 ) {
+            ok( $( item ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is disabled: ' + item.innerHTML )
+        }
+        else {
+            ok( !$( item ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is enabled: ' + item.innerHTML )
+        }
+    })
+})
+
+test( 'Setting `select` with arrays...', function() {
+    this.$input.pickatime( 'set', { select: [9,0] } )
+    ok( this.$input.pickatime( 'get', 'select' ).PICK === 540, 'Selects time correctly' )
+    ok( this.$input.pickatime( 'get', 'highlight' ).PICK === 0, 'Highlight unaffected' )
+    ok( this.$input.pickatime( 'get', 'view' ).PICK === 0, 'View unaffected' )
+})
+
+test( 'Setting `highlight` with arrays...', function() {
+    this.$input.pickatime( 'set', { highlight: [14,0] } )
+    ok( this.$input.pickatime( 'get', 'highlight' ).PICK === 840, 'Highlights time correctly' )
+    ok( this.$input.pickatime( 'get', 'view' ).PICK === 840, 'View updates accordingly' )
+    ok( this.$input.pickatime( 'get', 'select' ).PICK === 0, 'Select unaffected' )
+})
+
+test( 'Setting `view` with arrays...', function() {
+    this.$input.pickatime( 'set', { view: [16,0] } )
+    ok( this.$input.pickatime( 'get', 'view' ).PICK === 960, 'Viewsets correctly' )
+    ok( this.$input.pickatime( 'get', 'highlight' ).PICK === 0, 'Highlight unaffected' )
+    ok( this.$input.pickatime( 'get', 'select' ).PICK === 0, 'Select unaffected' )
 })
 
 
@@ -501,7 +626,7 @@ test( 'Setting properties with arrays...', function() {
     ok( this.$input.pickadate( 'get', 'max' ).PICK === 588052800000, 'Sets max limit correctly' )
 })
 
-test( 'Settings properties with integers...', function() {
+test( 'Setting properties with integers...', function() {
 
     var nowObject = this.$input.pickadate( 'get', 'now' )
 
@@ -520,4 +645,13 @@ test( 'Settings properties with integers...', function() {
     this.$input.pickadate( 'set', { max: -3 } )
     maxObject = this.$input.pickadate( 'get', 'max' )
     ok( maxObject.YEAR === nowObject.YEAR && maxObject.MONTH === nowObject.MONTH && maxObject.DATE === nowObject.DATE - 3, 'Sets negative max limit correctly' )
+})
+
+test( 'Setting properties with booleans...', function() {
+
+    this.$input.pickadate( 'set', { min: true } )
+    ok( this.$input.pickadate( 'get', 'min' ).PICK === this.$input.pickadate( 'get', 'now' ).PICK, 'Sets min limit correctly' )
+
+    this.$input.pickadate( 'set', { max: true } )
+    ok( this.$input.pickadate( 'get', 'max' ).PICK === this.$input.pickadate( 'get', 'now' ).PICK, 'Sets max limit correctly' )
 })
