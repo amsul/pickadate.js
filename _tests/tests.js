@@ -552,246 +552,246 @@ test( 'Setting `view` with arrays...', function() {
    ========================================================================== */
 
 
-module( 'Events on the date picker', {
-    setup: function() {
-        var thisModule = this
-        thisModule.$input = $( '<input type=date>' )
-        $DOM.append( thisModule.$input )
-        thisModule.$input.pickadate({
-            onStart: function() {
-                thisModule.started = true
-                thisModule.restarted = thisModule.stopped && thisModule.started
-                thisModule.updatedType = thisModule.$input[ 0 ].type === 'text'
-            },
-            onRender: function() {
-                thisModule.rendered = true
-            },
-            onOpen: function() {
-                thisModule.opened = true
-            },
-            onClose: function() {
-                thisModule.closed = true
-            },
-            onSet: function() {
-                thisModule.selectedArray = this.get( 'select' ).PICK === 1365912000000
-                thisModule.selectedNumber = this.get( 'select' ).PICK === 1366084800000
-                thisModule.selectedDateObject = this.get( 'select' ).PICK === 1366257600000
-                thisModule.clearedValue = this.get( 'value' ) === ''
-            },
-            onStop: function() {
-                thisModule.stopped = true
-                thisModule.restoredType = thisModule.$input[ 0 ].type === 'date'
-            }
-        })
-    },
-    teardown: function() {
-        delete this.$input
-        $DOM.empty()
-    }
-})
+// module( 'Events on the date picker', {
+//     setup: function() {
+//         var thisModule = this
+//         thisModule.$input = $( '<input type=date>' )
+//         $DOM.append( thisModule.$input )
+//         thisModule.$input.pickadate({
+//             onStart: function() {
+//                 thisModule.started = true
+//                 thisModule.restarted = thisModule.stopped && thisModule.started
+//                 thisModule.updatedType = thisModule.$input[ 0 ].type === 'text'
+//             },
+//             onRender: function() {
+//                 thisModule.rendered = true
+//             },
+//             onOpen: function() {
+//                 thisModule.opened = true
+//             },
+//             onClose: function() {
+//                 thisModule.closed = true
+//             },
+//             onSet: function() {
+//                 thisModule.selectedArray = this.get( 'select' ).PICK === 1365912000000
+//                 thisModule.selectedNumber = this.get( 'select' ).PICK === 1366084800000
+//                 thisModule.selectedDateObject = this.get( 'select' ).PICK === 1366257600000
+//                 thisModule.clearedValue = this.get( 'value' ) === ''
+//             },
+//             onStop: function() {
+//                 thisModule.stopped = true
+//                 thisModule.restoredType = thisModule.$input[ 0 ].type === 'date'
+//             }
+//         })
+//     },
+//     teardown: function() {
+//         delete this.$input
+//         $DOM.empty()
+//     }
+// })
 
-test( 'Checking the basic events...', function() {
+// test( 'Checking the basic events...', function() {
 
-    ok( this.started, 'Started up fine' )
-    ok( this.updatedType, 'Updated the element type' )
+//     ok( this.started, 'Started up fine' )
+//     ok( this.updatedType, 'Updated the element type' )
 
-    ok( this.rendered, 'Rendered correctly' )
+//     ok( this.rendered, 'Rendered correctly' )
 
-    this.$input.pickadate( 'open' )
-    ok( this.opened, 'Opened just fine with a trigger' )
+//     this.$input.pickadate( 'open' )
+//     ok( this.opened, 'Opened just fine with a trigger' )
 
-    this.$input.pickadate( 'close' )
-    ok( this.closed, 'Closed just fine with a trigger' )
+//     this.$input.pickadate( 'close' )
+//     ok( this.closed, 'Closed just fine with a trigger' )
 
-    this.$input.pickadate( 'stop' )
-    ok( this.stopped, 'Stopped just fine' )
-    ok( this.restoredType, 'Restored the element type' )
+//     this.$input.pickadate( 'stop' )
+//     ok( this.stopped, 'Stopped just fine' )
+//     ok( this.restoredType, 'Restored the element type' )
 
-    this.$input.pickadate( 'start' )
-    ok( this.restarted, 'Restarted just fine' )
-    ok( this.updatedType, 'Updated the element type' )
-})
+//     this.$input.pickadate( 'start' )
+//     ok( this.restarted, 'Restarted just fine' )
+//     ok( this.updatedType, 'Updated the element type' )
+// })
 
-test( 'Checking the `set` events...', function() {
+// test( 'Checking the `set` events...', function() {
 
-    this.$input.pickadate( 'set', { select: [2013,3,14] } )
-    ok( this.selectedArray, 'Selected from an array' )
+//     this.$input.pickadate( 'set', { select: [2013,3,14] } )
+//     ok( this.selectedArray, 'Selected from an array' )
 
-    this.$input.pickadate( 'set', { select: 1366084800000 } )
-    ok( this.selectedNumber, 'Selected from a number' )
+//     this.$input.pickadate( 'set', { select: 1366084800000 } )
+//     ok( this.selectedNumber, 'Selected from a number' )
 
-    this.$input.pickadate( 'set', { select: new Date(2013,3,18) } )
-    ok( this.selectedDateObject, 'Selected from a JS date object' )
+//     this.$input.pickadate( 'set', { select: new Date(2013,3,18) } )
+//     ok( this.selectedDateObject, 'Selected from a JS date object' )
 
-    this.$input.pickadate( 'clear' )
-    ok( this.clearedValue, 'Cleared the input value' )
-})
-
-
-
-module( 'Set up the date picker stage', {
-    setup: function() {
-        this.$input = $( '<input type=date>' )
-        $DOM.append( this.$input )
-        this.$input.pickadate()
-    },
-    teardown: function() {
-        delete this.$input
-        $DOM.empty()
-    }
-})
-
-test( 'Checking holder states...', function () {
-
-    ok( this.$input.pickadate( 'isOpen' ) === false, 'Closed by default' )
-
-    this.$input.pickadate( 'open' )
-    ok( this.$input.pickadate( 'isOpen' ) === true, 'Opened with trigger' )
-
-    this.$input.pickadate( 'close' )
-    ok( this.$input.pickadate( 'isOpen' ) === false, 'Closed by trigger' )
-
-    this.$input.focus()
-    ok( this.$input.pickadate( 'isOpen' ) === true, 'Opened with focus' )
-
-    this.$input.blur()
-    $( 'body' ).focus()
-    ok( this.$input.pickadate( 'isOpen' ) === false, 'Closed by losing focus' )
-
-    this.$input.click()
-    ok( this.$input.pickadate( 'isOpen' ) === true, 'Opened with click' )
-
-    $( 'body' ).click()
-    ok( this.$input.pickadate( 'isOpen' ) === false, 'Closed by clicking outside' )
-})
-
-test( 'Checking input attributes...', function() {
-    ok( this.$input[ 0 ].type === 'text', 'Input type updated' )
-    ok( this.$input[ 0 ].readOnly === true, 'Input is readonly' )
-    ok( this.$input.pickadate( 'get', 'select' ).PICK === this.$input.pickadate( 'get', 'now' ).PICK, 'Default selected time is correct' )
-})
-
-test( 'Checking picker holder...', function() {
-    var $holder = this.$input.next( '.' + $.fn.pickadate.defaults.klass.holder.split( ' ' )[ 0 ] )
-    ok( $holder.length, 'There is a picker holder right after the input element' )
-    ok( $holder.find( '.' + $.fn.pickadate.defaults.klass.table + ' [data-pick]' ).length === 42, 'There are 42 dates on the calendar' )
-})
-
-test( 'Checking picker objects...', function() {
-    var nowDateObject = new Date()
-    nowDateObject.setHours( 0, 0, 0, 0 )
-    ok( this.$input.pickadate( 'get', 'now' ).PICK === nowDateObject.getTime(), 'Now date is correct at ' + this.$input.pickadate( 'get', 'now' ).YEAR + '/' + ( this.$input.pickadate( 'get', 'now' ).MONTH + 1 ) + '/' + this.$input.pickadate( 'get', 'now' ).DATE )
-    ok( !this.$input.pickadate( 'get', 'disable' ).length, 'No disabled dates' )
-    ok( this.$input.pickadate( 'get', 'min' ).PICK === -Infinity, 'Min date is negative Infinity' )
-    ok( this.$input.pickadate( 'get', 'max' ).PICK === Infinity, 'Max date is positive Infinity' )
-})
+//     this.$input.pickadate( 'clear' )
+//     ok( this.clearedValue, 'Cleared the input value' )
+// })
 
 
 
+// module( 'Set up the date picker stage', {
+//     setup: function() {
+//         this.$input = $( '<input type=date>' )
+//         $DOM.append( this.$input )
+//         this.$input.pickadate()
+//     },
+//     teardown: function() {
+//         delete this.$input
+//         $DOM.empty()
+//     }
+// })
 
-module( 'Date picker with a `value`', {
-    setup: function() {
-        this.$input = $( '<input type=date value="14 August, 1988">' )
-        $DOM.append( this.$input )
-        this.$input.pickadate()
-    },
-    teardown: function() {
-        delete this.$input
-        $DOM.empty()
-    }
-})
+// test( 'Checking holder states...', function () {
 
-test( 'Checking input `value` to set date...', function() {
-    ok( this.$input.pickadate( 'get', 'select' ).PICK === 587534400000, 'Element value sets correct date' )
-    ok( this.$input.pickadate( 'get', 'highlight' ).PICK === 587534400000, 'Element value sets correct highlight' )
-    ok( this.$input.pickadate( 'get', 'view' ).PICK === 586411200000, 'Element value sets correct view' )
-    ok( !this.$input.siblings( '[type=hidden]' ).length, 'There is no hidden input' )
-})
+//     ok( this.$input.pickadate( 'isOpen' ) === false, 'Closed by default' )
+
+//     this.$input.pickadate( 'open' )
+//     ok( this.$input.pickadate( 'isOpen' ) === true, 'Opened with trigger' )
+
+//     this.$input.pickadate( 'close' )
+//     ok( this.$input.pickadate( 'isOpen' ) === false, 'Closed by trigger' )
+
+//     this.$input.focus()
+//     ok( this.$input.pickadate( 'isOpen' ) === true, 'Opened with focus' )
+
+//     this.$input.blur()
+//     $( 'body' ).focus()
+//     ok( this.$input.pickadate( 'isOpen' ) === false, 'Closed by losing focus' )
+
+//     this.$input.click()
+//     ok( this.$input.pickadate( 'isOpen' ) === true, 'Opened with click' )
+
+//     $( 'body' ).click()
+//     ok( this.$input.pickadate( 'isOpen' ) === false, 'Closed by clicking outside' )
+// })
+
+// test( 'Checking input attributes...', function() {
+//     ok( this.$input[ 0 ].type === 'text', 'Input type updated' )
+//     ok( this.$input[ 0 ].readOnly === true, 'Input is readonly' )
+//     ok( this.$input.pickadate( 'get', 'select' ).PICK === this.$input.pickadate( 'get', 'now' ).PICK, 'Default selected time is correct' )
+// })
+
+// test( 'Checking picker holder...', function() {
+//     var $holder = this.$input.next( '.' + $.fn.pickadate.defaults.klass.holder.split( ' ' )[ 0 ] )
+//     ok( $holder.length, 'There is a picker holder right after the input element' )
+//     ok( $holder.find( '.' + $.fn.pickadate.defaults.klass.table + ' [data-pick]' ).length === 42, 'There are 42 dates on the calendar' )
+// })
+
+// test( 'Checking picker objects...', function() {
+//     var nowDateObject = new Date()
+//     nowDateObject.setHours( 0, 0, 0, 0 )
+//     ok( this.$input.pickadate( 'get', 'now' ).PICK === nowDateObject.getTime(), 'Now date is correct at ' + this.$input.pickadate( 'get', 'now' ).YEAR + '/' + ( this.$input.pickadate( 'get', 'now' ).MONTH + 1 ) + '/' + this.$input.pickadate( 'get', 'now' ).DATE )
+//     ok( !this.$input.pickadate( 'get', 'disable' ).length, 'No disabled dates' )
+//     ok( this.$input.pickadate( 'get', 'min' ).PICK === -Infinity, 'Min date is negative Infinity' )
+//     ok( this.$input.pickadate( 'get', 'max' ).PICK === Infinity, 'Max date is positive Infinity' )
+// })
 
 
 
 
-module( 'Date picker with a `data-value`', {
-    setup: function() {
-        this.$input = $( '<input type=date data-value="1988/08/14">' )
-        $DOM.append( this.$input )
-        this.$input.pickadate({
-            formatSubmit: 'yyyy/mm/dd'
-        })
-    },
-    teardown: function() {
-        delete this.$input
-        $DOM.empty()
-    }
-})
+// module( 'Date picker with a `value`', {
+//     setup: function() {
+//         this.$input = $( '<input type=date value="14 August, 1988">' )
+//         $DOM.append( this.$input )
+//         this.$input.pickadate()
+//     },
+//     teardown: function() {
+//         delete this.$input
+//         $DOM.empty()
+//     }
+// })
 
-test( 'Checking input `data-value` to set date...', function() {
-    ok( this.$input.pickadate( 'get', 'select' ).PICK === 587534400000, 'Selects correct date' )
-    ok( this.$input.pickadate( 'get', 'highlight' ).PICK === 587534400000, 'Highlights correct date' )
-    ok( this.$input.pickadate( 'get', 'view' ).PICK === 586411200000, 'Viewsets correct date' )
-    ok( this.$input.siblings( '[type=hidden]' )[ 0 ].type === 'hidden', 'There is a hidden input' )
-    ok( this.$input.siblings( '[type=hidden]' )[ 0 ].value === '1988/08/14', 'The hidden input has correct value' )
-})
+// test( 'Checking input `value` to set date...', function() {
+//     ok( this.$input.pickadate( 'get', 'select' ).PICK === 587534400000, 'Element value sets correct date' )
+//     ok( this.$input.pickadate( 'get', 'highlight' ).PICK === 587534400000, 'Element value sets correct highlight' )
+//     ok( this.$input.pickadate( 'get', 'view' ).PICK === 586411200000, 'Element value sets correct view' )
+//     ok( !this.$input.siblings( '[type=hidden]' ).length, 'There is no hidden input' )
+// })
 
 
 
 
-module( 'Get and set date picker properties', {
-    setup: function() {
-        this.$input = $( '<input type=date>' )
-        $DOM.append( this.$input )
-        this.$input.pickadate()
-    },
-    teardown: function() {
-        delete this.$input
-        $DOM.empty()
-    }
-})
+// module( 'Date picker with a `data-value`', {
+//     setup: function() {
+//         this.$input = $( '<input type=date data-value="1988/08/14">' )
+//         $DOM.append( this.$input )
+//         this.$input.pickadate({
+//             formatSubmit: 'yyyy/mm/dd'
+//         })
+//     },
+//     teardown: function() {
+//         delete this.$input
+//         $DOM.empty()
+//     }
+// })
 
-test( 'Setting properties with arrays...', function() {
+// test( 'Checking input `data-value` to set date...', function() {
+//     ok( this.$input.pickadate( 'get', 'select' ).PICK === 587534400000, 'Selects correct date' )
+//     ok( this.$input.pickadate( 'get', 'highlight' ).PICK === 587534400000, 'Highlights correct date' )
+//     ok( this.$input.pickadate( 'get', 'view' ).PICK === 586411200000, 'Viewsets correct date' )
+//     ok( this.$input.siblings( '[type=hidden]' )[ 0 ].type === 'hidden', 'There is a hidden input' )
+//     ok( this.$input.siblings( '[type=hidden]' )[ 0 ].value === '1988/08/14', 'The hidden input has correct value' )
+// })
 
-    this.$input.pickadate( 'set', { select: [1988,7,14] } )
-    ok( this.$input.pickadate( 'get', 'select' ).PICK === 587534400000, 'Selects date correctly' )
 
-    this.$input.pickadate( 'set', { highlight: [1988,7,16] } )
-    ok( this.$input.pickadate( 'get', 'highlight' ).PICK === 587707200000, 'Highlights date correctly' )
 
-    this.$input.pickadate( 'set', { view: [1988,7,18] } )
-    ok( this.$input.pickadate( 'get', 'view' ).PICK === 586411200000, 'Adjusts view correctly' )
 
-    this.$input.pickadate( 'set', { min: [1988,7,12] } )
-    ok( this.$input.pickadate( 'get', 'min' ).PICK === 587361600000, 'Sets min limit correctly' )
+// module( 'Get and set date picker properties', {
+//     setup: function() {
+//         this.$input = $( '<input type=date>' )
+//         $DOM.append( this.$input )
+//         this.$input.pickadate()
+//     },
+//     teardown: function() {
+//         delete this.$input
+//         $DOM.empty()
+//     }
+// })
 
-    this.$input.pickadate( 'set', { max: [1988,7,20] } )
-    ok( this.$input.pickadate( 'get', 'max' ).PICK === 588052800000, 'Sets max limit correctly' )
-})
+// test( 'Setting properties with arrays...', function() {
 
-test( 'Setting properties with integers...', function() {
+//     this.$input.pickadate( 'set', { select: [1988,7,14] } )
+//     ok( this.$input.pickadate( 'get', 'select' ).PICK === 587534400000, 'Selects date correctly' )
 
-    var nowObject = this.$input.pickadate( 'get', 'now' )
+//     this.$input.pickadate( 'set', { highlight: [1988,7,16] } )
+//     ok( this.$input.pickadate( 'get', 'highlight' ).PICK === 587707200000, 'Highlights date correctly' )
 
-    this.$input.pickadate( 'set', { min: 3 } )
-    var minObject = this.$input.pickadate( 'get', 'min' )
-    ok( minObject.YEAR === nowObject.YEAR && minObject.MONTH === nowObject.MONTH && minObject.DATE === nowObject.DATE + 3, 'Sets positive min limit correctly' )
+//     this.$input.pickadate( 'set', { view: [1988,7,18] } )
+//     ok( this.$input.pickadate( 'get', 'view' ).PICK === 586411200000, 'Adjusts view correctly' )
 
-    this.$input.pickadate( 'set', { min: -3 } )
-    minObject = this.$input.pickadate( 'get', 'min' )
-    ok( minObject.YEAR === nowObject.YEAR && minObject.MONTH === nowObject.MONTH && minObject.DATE === nowObject.DATE - 3, 'Sets negative min limit correctly' )
+//     this.$input.pickadate( 'set', { min: [1988,7,12] } )
+//     ok( this.$input.pickadate( 'get', 'min' ).PICK === 587361600000, 'Sets min limit correctly' )
 
-    this.$input.pickadate( 'set', { max: 3 } )
-    var maxObject = this.$input.pickadate( 'get', 'max' )
-    ok( maxObject.YEAR === nowObject.YEAR && maxObject.MONTH === nowObject.MONTH && maxObject.DATE === nowObject.DATE + 3, 'Sets positive max limit correctly' )
+//     this.$input.pickadate( 'set', { max: [1988,7,20] } )
+//     ok( this.$input.pickadate( 'get', 'max' ).PICK === 588052800000, 'Sets max limit correctly' )
+// })
 
-    this.$input.pickadate( 'set', { max: -3 } )
-    maxObject = this.$input.pickadate( 'get', 'max' )
-    ok( maxObject.YEAR === nowObject.YEAR && maxObject.MONTH === nowObject.MONTH && maxObject.DATE === nowObject.DATE - 3, 'Sets negative max limit correctly' )
-})
+// test( 'Setting properties with integers...', function() {
 
-test( 'Setting properties with booleans...', function() {
+//     var nowObject = this.$input.pickadate( 'get', 'now' )
 
-    this.$input.pickadate( 'set', { min: true } )
-    ok( this.$input.pickadate( 'get', 'min' ).PICK === this.$input.pickadate( 'get', 'now' ).PICK, 'Sets min limit correctly' )
+//     this.$input.pickadate( 'set', { min: 3 } )
+//     var minObject = this.$input.pickadate( 'get', 'min' )
+//     ok( minObject.YEAR === nowObject.YEAR && minObject.MONTH === nowObject.MONTH && minObject.DATE === nowObject.DATE + 3, 'Sets positive min limit correctly' )
 
-    this.$input.pickadate( 'set', { max: true } )
-    ok( this.$input.pickadate( 'get', 'max' ).PICK === this.$input.pickadate( 'get', 'now' ).PICK, 'Sets max limit correctly' )
-})
+//     this.$input.pickadate( 'set', { min: -3 } )
+//     minObject = this.$input.pickadate( 'get', 'min' )
+//     ok( minObject.YEAR === nowObject.YEAR && minObject.MONTH === nowObject.MONTH && minObject.DATE === nowObject.DATE - 3, 'Sets negative min limit correctly' )
+
+//     this.$input.pickadate( 'set', { max: 3 } )
+//     var maxObject = this.$input.pickadate( 'get', 'max' )
+//     ok( maxObject.YEAR === nowObject.YEAR && maxObject.MONTH === nowObject.MONTH && maxObject.DATE === nowObject.DATE + 3, 'Sets positive max limit correctly' )
+
+//     this.$input.pickadate( 'set', { max: -3 } )
+//     maxObject = this.$input.pickadate( 'get', 'max' )
+//     ok( maxObject.YEAR === nowObject.YEAR && maxObject.MONTH === nowObject.MONTH && maxObject.DATE === nowObject.DATE - 3, 'Sets negative max limit correctly' )
+// })
+
+// test( 'Setting properties with booleans...', function() {
+
+//     this.$input.pickadate( 'set', { min: true } )
+//     ok( this.$input.pickadate( 'get', 'min' ).PICK === this.$input.pickadate( 'get', 'now' ).PICK, 'Sets min limit correctly' )
+
+//     this.$input.pickadate( 'set', { max: true } )
+//     ok( this.$input.pickadate( 'get', 'max' ).PICK === this.$input.pickadate( 'get', 'now' ).PICK, 'Sets max limit correctly' )
+// })
