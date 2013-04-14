@@ -10,10 +10,7 @@
 
 /**
  * To do:
- * – disabled dates
  * – "flip" disabled
- * – selection out of view/disabled
- * – changing disable/enable updates highlight, select, and view
  */
 
 
@@ -26,7 +23,69 @@ var $DOM = $( '#qunit-fixture' )
    ========================================================================== */
 
 
-module( 'Events on the time picker', {
+module( 'Set up the time picker stage', {
+    setup: function() {
+        this.$input = $( '<input type=time>' )
+        $DOM.append( this.$input )
+        this.$input.pickatime()
+    },
+    teardown: function() {
+        delete this.$input
+        $DOM.empty()
+    }
+})
+
+test( 'Checking holder states...', function () {
+
+    ok( this.$input.pickatime( 'isOpen' ) === false, 'Closed by default' )
+
+    this.$input.pickatime( 'open' )
+    ok( this.$input.pickatime( 'isOpen' ) === true, 'Opened with trigger' )
+
+    this.$input.pickatime( 'close' )
+    ok( this.$input.pickatime( 'isOpen' ) === false, 'Closed by trigger' )
+
+    this.$input.focus()
+    ok( this.$input.pickatime( 'isOpen' ) === true, 'Opened with focus' )
+
+    this.$input.blur()
+    $( 'body' ).focus()
+    ok( this.$input.pickatime( 'isOpen' ) === false, 'Closed by losing focus' )
+
+    this.$input.click()
+    ok( this.$input.pickatime( 'isOpen' ) === true, 'Opened with click' )
+
+    $( 'body' ).click()
+    ok( this.$input.pickatime( 'isOpen' ) === false, 'Closed by clicking outside' )
+})
+
+test( 'Checking input attributes...', function() {
+    ok( this.$input[ 0 ].type === 'text', 'Input type updated' )
+    ok( this.$input[ 0 ].readOnly === true, 'Input is readonly' )
+    ok( this.$input.pickatime( 'get', 'select' ).PICK === this.$input.pickatime( 'get', 'min' ).PICK, 'Default selected time is correct' )
+})
+
+test( 'Checking picker holder...', function() {
+    var $holder = this.$input.next( '.' + $.fn.pickatime.defaults.klass.holder.split( ' ' )[ 0 ] )
+    ok( $holder.length, 'There is a picker holder right after the input element' )
+    ok( $holder.find( '[data-pick]' ).length === 48, 'There are 48 selectable times at 30 minute intervals' )
+})
+
+test( 'Checking picker objects...', function() {
+    var nowDateObject = new Date(),
+        nowTimeMinutes = nowDateObject.getHours() * 60 + nowDateObject.getMinutes(),
+        interval = $.fn.pickatime.defaults.interval
+    ok( this.$input.pickatime( 'get', 'now' ).PICK === interval + nowTimeMinutes - ( nowTimeMinutes % interval ), 'Now time is correct at ' + this.$input.pickatime( 'get', 'now' ).HOUR + ':' + this.$input.pickatime( 'get', 'now' ).MINS )
+    ok( !this.$input.pickatime( 'get', 'disable' ).length, 'No disabled times' )
+    ok( this.$input.pickatime( 'get', 'min' ).PICK === 0, 'Selected time is midnight' )
+    ok( this.$input.pickatime( 'get', 'min' ).PICK === 0, 'Min time is midnight' )
+    ok( this.$input.pickatime( 'get', 'max' ).PICK === 1410, 'Max time is 23:30' )
+})
+
+
+
+
+module( 'General events on the time picker', {
     setup: function() {
         var thisModule = this
         thisModule.$input = $( '<input type=time>' )
@@ -99,7 +158,8 @@ test( 'Checking the `set` events...', function() {
 
 
 
-module( 'Set up the time picker stage', {
+
+module( 'Mouse events on the time picker', {
     setup: function() {
         this.$input = $( '<input type=time>' )
         $DOM.append( this.$input )
@@ -111,51 +171,117 @@ module( 'Set up the time picker stage', {
     }
 })
 
-test( 'Checking holder states...', function () {
+test( 'Checking click to open and close...', function() {
 
-    ok( this.$input.pickatime( 'isOpen' ) === false, 'Closed by default' )
-
-    this.$input.pickatime( 'open' )
-    ok( this.$input.pickatime( 'isOpen' ) === true, 'Opened with trigger' )
-
-    this.$input.pickatime( 'close' )
-    ok( this.$input.pickatime( 'isOpen' ) === false, 'Closed by trigger' )
-
-    this.$input.focus()
-    ok( this.$input.pickatime( 'isOpen' ) === true, 'Opened with focus' )
-
-    this.$input.blur()
-    $( 'body' ).focus()
-    ok( this.$input.pickatime( 'isOpen' ) === false, 'Closed by losing focus' )
+    ok( !this.$input.pickatime( 'isOpen' ), 'Closed to start with' )
 
     this.$input.click()
-    ok( this.$input.pickatime( 'isOpen' ) === true, 'Opened with click' )
-
-    $( 'body' ).click()
-    ok( this.$input.pickatime( 'isOpen' ) === false, 'Closed by clicking outside' )
+    ok( this.$input.pickatime( 'isOpen' ), 'Opened after click' )
 })
 
-test( 'Checking input attributes...', function() {
-    ok( this.$input[ 0 ].type === 'text', 'Input type updated' )
-    ok( this.$input[ 0 ].readOnly === true, 'Input is readonly' )
-    ok( this.$input.pickatime( 'get', 'select' ).PICK === this.$input.pickatime( 'get', 'min' ).PICK, 'Default selected time is correct' )
+test( 'Checking click to select...', function() {
+
+    var $holder = this.$input.next( '.' + $.fn.pickatime.defaults.klass.holder.split( ' ' )[ 0 ] ),
+        interval = this.$input.pickatime( 'picker' ).component.i
+
+    for ( var i = 0; i < 48; i += 1 ) {
+        $holder.find( '.' + $.fn.pickatime.defaults.klass.listItem )[ i ].click()
+        ok( this.$input.pickatime( 'get', 'select' ).PICK === i * interval, 'Selected ' + this.$input.pickatime( 'get', { select: 'h:i A' } ) )
+        ok( this.$input.pickatime( 'get', 'value' ) === this.$input.pickatime( 'get', { select: 'h:i A' } ), 'Input value updated to ' + this.$input.pickatime( 'get', 'value' ) )
+    }
 })
 
-test( 'Checking picker holder...', function() {
+test( 'Checking click to clear...', function() {
+
     var $holder = this.$input.next( '.' + $.fn.pickatime.defaults.klass.holder.split( ' ' )[ 0 ] )
-    ok( $holder.length, 'There is a picker holder right after the input element' )
-    ok( $holder.find( '[data-pick]' ).length === 48, 'There are 48 selectable times at 30 minute intervals' )
+
+    this.$input.pickatime( 'set', { select: [4,30] } )
+    ok( this.$input.pickatime( 'get', 'value' ) === '4:30 AM', 'Input has a value' )
+
+    $holder.find( '.' + $.fn.pickatime.defaults.klass.buttonClear ).click()
+    ok( this.$input.pickatime( 'get', 'value' ) === '', 'Input value has cleared' )
 })
 
-test( 'Checking picker objects...', function() {
-    var nowDateObject = new Date(),
-        nowTimeMinutes = nowDateObject.getHours() * 60 + nowDateObject.getMinutes(),
-        interval = $.fn.pickatime.defaults.interval
-    ok( this.$input.pickatime( 'get', 'now' ).PICK === interval + nowTimeMinutes - ( nowTimeMinutes % interval ), 'Now time is correct at ' + this.$input.pickatime( 'get', 'now' ).HOUR + ':' + this.$input.pickatime( 'get', 'now' ).MINS )
-    ok( !this.$input.pickatime( 'get', 'disable' ).length, 'No disabled times' )
-    ok( this.$input.pickatime( 'get', 'min' ).PICK === 0, 'Selected time is midnight' )
-    ok( this.$input.pickatime( 'get', 'min' ).PICK === 0, 'Min time is midnight' )
-    ok( this.$input.pickatime( 'get', 'max' ).PICK === 1410, 'Max time is 23:30' )
+
+
+
+module( 'Keyboard events on the time picker', {
+    setup: function() {
+        this.$input = $( '<input type=time>' )
+        $DOM.append( this.$input )
+        this.$input.pickatime()
+    },
+    teardown: function() {
+        delete this.$input
+        $DOM.empty()
+    }
+})
+
+test( 'Checking keydown to open and close...', function() {
+
+    ok( !this.$input.pickatime( 'isOpen' ), 'Closed to start with' )
+
+    this.$input.trigger({ type: 'keydown', keyCode: 40 })
+    ok( this.$input.pickatime( 'isOpen' ), 'Opened after pressing "down"' )
+
+    this.$input.trigger({ type: 'keydown', keyCode: 27 })
+    ok( !this.$input.pickatime( 'isOpen' ), 'Closed after pressing "escape"' )
+
+    this.$input.trigger({ type: 'keydown', keyCode: 38 })
+    ok( this.$input.pickatime( 'isOpen' ), 'Opened after pressing "up"' )
+
+    this.$input.trigger({ type: 'keydown', keyCode: 8 })
+    ok( !this.$input.pickatime( 'isOpen' ), 'Closed after pressing "backspace"' )
+
+    this.$input.trigger({ type: 'keydown', keyCode: 37 })
+    ok( this.$input.pickatime( 'isOpen' ), 'Opened after pressing "left"' )
+
+    this.$input.trigger({ type: 'keydown', keyCode: 46 })
+    ok( !this.$input.pickatime( 'isOpen' ), 'Closed after pressing "alt. backspace"' )
+
+    this.$input.trigger({ type: 'keydown', keyCode: 39 })
+    ok( this.$input.pickatime( 'isOpen' ), 'Opened after pressing "right"' )
+})
+
+test( 'Checking keydown to highlight, viewset, and select...', function() {
+
+    this.$input.focus()
+    ok( this.$input.pickatime( 'isOpen' ), 'Opened with focus' )
+    ok( this.$input.pickatime( 'get', 'highlight' ).PICK === 0, 'Focused in: ' + this.$input.pickatime( 'get', { highlight: 'h:i A' } ) )
+
+    this.$input.trigger({ type: 'keydown', keyCode: 13 })
+    ok( this.$input.pickatime( 'get', 'value' ) === this.$input.pickatime( 'get', { highlight: 'h:i A' } ), 'Selected value with "enter": ' + this.$input.pickatime( 'get', 'value' ) )
+
+    for ( var i = 1; i < 48; i += 1 ) {
+
+        this.$input.focus()
+        this.$input.trigger({ type: 'keydown', keyCode: 40 })
+        ok( this.$input.pickatime( 'get', 'highlight' ).PICK === 30 * i, 'Keyed "down" to: ' + this.$input.pickatime( 'get', { highlight: 'h:i A' } ) )
+        ok( this.$input.pickatime( 'get', 'view' ).PICK === this.$input.pickatime( 'get', 'highlight' ).PICK, 'Updated "view" to: ' + this.$input.pickatime( 'get', { highlight: 'h:i A' } ) )
+
+        this.$input.trigger({ type: 'keydown', keyCode: 13 })
+        ok( this.$input.pickatime( 'get', 'value' ) === this.$input.pickatime( 'get', { highlight: 'h:i A' } ), 'Selected value with "enter": ' + this.$input.pickatime( 'get', 'value' ) )
+    }
+
+    this.$input.focus()
+    this.$input.trigger({ type: 'keydown', keyCode: 40 })
+    ok( this.$input.pickatime( 'get', 'highlight' ).PICK === 1410, 'Reached "down" limit: ' + this.$input.pickatime( 'get', { highlight: 'h:i A' } ) )
+
+    this.$input.trigger({ type: 'keydown', keyCode: 13 })
+    ok( this.$input.pickatime( 'get', 'value' ) === this.$input.pickatime( 'get', { highlight: 'h:i A' } ), 'Selected value with "enter": ' + this.$input.pickatime( 'get', 'value' ) )
+
+    for ( var i = 2; i < 49; i += 1 ) {
+
+        this.$input.focus()
+        this.$input.trigger({ type: 'keydown', keyCode: 38 })
+        ok( this.$input.pickatime( 'get', 'highlight' ).PICK === 1440 - 30 * i, 'Keyed "up" to: ' + this.$input.pickatime( 'get', { highlight: 'h:i A' } ) )
+
+        this.$input.trigger({ type: 'keydown', keyCode: 13 })
+        ok( this.$input.pickatime( 'get', 'value' ) === this.$input.pickatime( 'get', { highlight: 'h:i A' } ), 'Selected value with "enter": ' + this.$input.pickatime( 'get', 'value' ) )
+    }
+
+    this.$input.trigger({ type: 'keydown', keyCode: 38 })
+    ok( this.$input.pickatime( 'get', 'highlight' ).PICK === 0, 'Reached "up" limit: ' + this.$input.pickatime( 'get', { highlight: 'h:i A' } ) )
 })
 
 
@@ -208,7 +334,7 @@ test( 'Checking input `data-value` to set time...', function() {
 
 
 
-module( 'Time picker with disabled times', {
+module( 'Time picker with `disable` collection', {
     setup: function() {
         this.$input = $( '<input type=time>' )
         $DOM.append( this.$input )
@@ -224,11 +350,18 @@ module( 'Time picker with disabled times', {
 
 test( 'Confirming disabled times with integers & arrays...', function() {
 
-    var $holder = this.$input.next( '.' + $.fn.pickatime.defaults.klass.holder.split( ' ' )[ 0 ] )
+    var $input = this.$input,
+        $holder = $input.next( '.' + $.fn.pickatime.defaults.klass.holder.split( ' ' )[ 0 ] ),
+        interval = $input.pickatime( 'picker' ).component.i
 
     $holder.find( '.' + $.fn.pickatime.defaults.klass.listItem ).each( function( index, item ) {
         if ( index >= 0 && index < 4 || index >= 20 && index < 22 || index >= 46 && index < 48 || index === 9 || index === 48 ) {
             ok( $( item ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is disabled: ' + item.innerHTML )
+        }
+        else if ( index === 4 ) {
+            ok( index * interval === $input.pickatime( 'get', 'select' ).PICK, 'Time selected shifted to 2:00 AM' )
+            ok( index * interval === $input.pickatime( 'get', 'highlight' ).PICK, 'Time highlighted shifted to 2:00 AM' )
+            ok( index * interval === $input.pickatime( 'get', 'view' ).PICK, 'View shifted to 2:00 AM' )
         }
     })
 })
@@ -313,11 +446,15 @@ test( 'Setting `min` & `max` with booleans...', function() {
 
 test( 'Setting `disable` with integers...', function() {
 
-    this.$input.pickatime( 'set', { disable: [0,1,4] } )
+    var $input = this.$input,
+        $holder = $input.next( '.' + $.fn.pickatime.defaults.klass.holder.split( ' ' )[ 0 ] )
 
-    ok( this.$input.pickatime( 'get', 'disable' ).toString() === [0,1,4].toString(), 'Disabled times added to collection' )
+    $input.pickatime( 'set', { disable: [0,1,4] } )
 
-    var $holder = this.$input.next( '.' + $.fn.pickatime.defaults.klass.holder.split( ' ' )[ 0 ] )
+    ok( $input.pickatime( 'get', 'disable' ).toString() === [0,1,4].toString(), 'Disabled times added to collection' )
+    ok( 120 === $input.pickatime( 'get', 'select' ).PICK, 'Select updated: 2:00 AM' )
+    ok( 120 === $input.pickatime( 'get', 'highlight' ).PICK, 'Highlight updated: 2:00 AM' )
+    ok( 120 === $input.pickatime( 'get', 'view' ).PICK, 'View updated: 2:00 AM' )
 
     $holder.find( '.' + $.fn.pickatime.defaults.klass.listItem ).each( function( index, item ) {
         if ( index >= 0 && index < 4 || index >= 8 && index < 10 ) {
@@ -328,8 +465,11 @@ test( 'Setting `disable` with integers...', function() {
         }
     })
 
-    this.$input.pickatime( 'set', { enable: [1] } )
-    ok( this.$input.pickatime( 'get', 'disable' ).toString() === [0,4].toString(), 'Disabled time removed from collection' )
+    $input.pickatime( 'set', { enable: [1] } )
+    ok( $input.pickatime( 'get', 'disable' ).toString() === [0,4].toString(), 'Disabled time removed from collection' )
+    ok( 120 === $input.pickatime( 'get', 'select' ).PICK, 'Select unaffected: 2:00 AM' )
+    ok( 120 === $input.pickatime( 'get', 'highlight' ).PICK, 'Highlight unaffected: 2:00 AM' )
+    ok( 120 === $input.pickatime( 'get', 'view' ).PICK, 'View unaffected: 2:00 AM' )
 
     $holder.find( '.' + $.fn.pickatime.defaults.klass.listItem ).each( function( index, item ) {
         if ( index >= 0 && index < 2 || index >= 8 && index < 10 ) {
@@ -403,6 +543,9 @@ test( 'Setting `view` with arrays...', function() {
 
 
 
+
+
+
 /* ==========================================================================
    Date picker tests
    ========================================================================== */
@@ -448,43 +591,39 @@ module( 'Events on the date picker', {
 
 test( 'Checking the basic events...', function() {
 
-    var thisModule = this
+    ok( this.started, 'Started up fine' )
+    ok( this.updatedType, 'Updated the element type' )
 
-    ok( thisModule.started, 'Started up fine' )
-    ok( thisModule.updatedType, 'Updated the element type' )
+    ok( this.rendered, 'Rendered correctly' )
 
-    ok( thisModule.rendered, 'Rendered correctly' )
+    this.$input.pickadate( 'open' )
+    ok( this.opened, 'Opened just fine with a trigger' )
 
-    thisModule.$input.pickadate( 'open' )
-    ok( thisModule.opened, 'Opened just fine with a trigger' )
+    this.$input.pickadate( 'close' )
+    ok( this.closed, 'Closed just fine with a trigger' )
 
-    thisModule.$input.pickadate( 'close' )
-    ok( thisModule.closed, 'Closed just fine with a trigger' )
+    this.$input.pickadate( 'stop' )
+    ok( this.stopped, 'Stopped just fine' )
+    ok( this.restoredType, 'Restored the element type' )
 
-    thisModule.$input.pickadate( 'stop' )
-    ok( thisModule.stopped, 'Stopped just fine' )
-    ok( thisModule.restoredType, 'Restored the element type' )
-
-    thisModule.$input.pickadate( 'start' )
-    ok( thisModule.restarted, 'Restarted just fine' )
-    ok( thisModule.updatedType, 'Updated the element type' )
+    this.$input.pickadate( 'start' )
+    ok( this.restarted, 'Restarted just fine' )
+    ok( this.updatedType, 'Updated the element type' )
 })
 
 test( 'Checking the `set` events...', function() {
 
-    var thisModule = this
+    this.$input.pickadate( 'set', { select: [2013,3,14] } )
+    ok( this.selectedArray, 'Selected from an array' )
 
-    thisModule.$input.pickadate( 'set', { select: [2013,3,14] } )
-    ok( thisModule.selectedArray, 'Selected from an array' )
+    this.$input.pickadate( 'set', { select: 1366084800000 } )
+    ok( this.selectedNumber, 'Selected from a number' )
 
-    thisModule.$input.pickadate( 'set', { select: 1366084800000 } )
-    ok( thisModule.selectedNumber, 'Selected from a number' )
+    this.$input.pickadate( 'set', { select: new Date(2013,3,18) } )
+    ok( this.selectedDateObject, 'Selected from a JS date object' )
 
-    thisModule.$input.pickadate( 'set', { select: new Date(2013,3,18) } )
-    ok( thisModule.selectedDateObject, 'Selected from a JS date object' )
-
-    thisModule.$input.pickadate( 'clear' )
-    ok( thisModule.clearedValue, 'Cleared the input value' )
+    this.$input.pickadate( 'clear' )
+    ok( this.clearedValue, 'Cleared the input value' )
 })
 
 
