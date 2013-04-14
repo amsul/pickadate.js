@@ -10,6 +10,7 @@
 
 /**
  * To do:
+ * – intervals
  * – "flip" disabled
  */
 
@@ -185,7 +186,7 @@ test( 'Checking click to select...', function() {
         interval = this.$input.pickatime( 'picker' ).component.i
 
     for ( var i = 0; i < 48; i += 1 ) {
-        $holder.find( '.' + $.fn.pickatime.defaults.klass.listItem )[ i ].click()
+        $holder.find( '.' + $.fn.pickatime.defaults.klass.listItem ).eq( i ).click()
         ok( this.$input.pickatime( 'get', 'select' ).PICK === i * interval, 'Selected ' + this.$input.pickatime( 'get', { select: 'h:i A' } ) )
         ok( this.$input.pickatime( 'get', 'value' ) === this.$input.pickatime( 'get', { select: 'h:i A' } ), 'Input value updated to ' + this.$input.pickatime( 'get', 'value' ) )
     }
