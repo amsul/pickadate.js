@@ -287,8 +287,8 @@
 
         var clock = this
 
-        // Check if there are times to disable and this is one of them.
-        if ( clock.settings.disable && clock.disabled( value ) ) {
+        // Check if the value is disabled.
+        if ( clock.disabled( value ) ) {
 
             // Shift with the interval until we reach an enabled time.
             value = clock.shift( value, options.interval )
@@ -586,7 +586,7 @@
                     'data-pick=' + loopedTime.PICK
                 ]
             }
-        }) + createNode( 'li', createNode( 'button', settings.clear, settings.klass.clear, 'data-clear=1' + ( isOpen ? '' : ' disabled' ) ) ), settings.klass.list )
+        }) + createNode( 'li', createNode( 'button', settings.clear, settings.klass.buttonClear, 'data-clear=1' + ( isOpen ? '' : ' disabled' ) ) ), settings.klass.list )
     } //TimePicker.prototype.nodes
 
 
@@ -1418,12 +1418,12 @@
                                 // Maintain the focus on the `input` element.
                                 ELEMENT.focus()
 
-                                // Set and close the picker if something is getting picked.
+                                // If something is getting picked, update the `select` and `highlight` and then close.
                                 if ( isInteger( targetData.pick ) && !$target.hasClass( CLASSES.disabled ) ) {
-                                    P.set( 'select', targetData.pick ).close()
+                                    P.set( 'select', targetData.pick ).set( 'highlight', targetData.pick ).close()
                                 }
 
-                                // If something is superficially changed, navigate the picker.
+                                // If something is superficially changed, update the `highlight` based on the `nav`.
                                 else if ( targetData.nav && !$target.hasClass( CLASSES.navDisabled ) ) {
                                     P.set( 'highlight', P.component.item.highlight, { nav: targetData.nav } )
                                 }
@@ -2049,7 +2049,8 @@
             highlighted: STRING_PREFIX_PICKER + 'list-item--highlighted',
             viewset: STRING_PREFIX_PICKER + 'list-item--viewset',
             now: STRING_PREFIX_PICKER + 'list-item--now',
-            clear: STRING_PREFIX_PICKER + 'list-item--clear'
+
+            buttonClear: STRING_PREFIX_PICKER + 'button--clear'
         }
     } //$.fn.pickatime.defaults
 

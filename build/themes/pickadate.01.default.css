@@ -383,7 +383,7 @@
     border-color: #0089ec;
     outline: none;
 }
-.pickadate__list-item--clear {
+.pickadate__holder--time .pickadate__button--clear {
     display: block;
     width: 80%;
     text-align: center;
@@ -392,14 +392,14 @@
     font-size: .67em;
     color: #666;
     background: transparent;
-    border: 1px solid transparent;
+    border-color: transparent;
     margin: 1em auto 0;
     padding: 1em 1.25em;
 }
 
 .pickadate__button--today:before,
 .pickadate__button--clear:before,
-.pickadate__list-item--clear:before {
+.pickadate__holder--time .pickadate__button--clear:before {
     position: relative;
     display: inline-block;
     height: 0;
@@ -413,7 +413,7 @@
     border-left: .66em solid transparent;
 }
 .pickadate__button--clear:before,
-.pickadate__list-item--clear:before {
+.pickadate__holder--time .pickadate__button--clear:before {
     content: "\D7";
     margin-right: .35em;
     top: -.1em;
@@ -421,7 +421,7 @@
     vertical-align: top;
     font-size: 1.1em;
 }
-.pickadate__list-item--clear:before {
+.pickadate__holder--time .pickadate__button--clear:before {
     top: -.25em;
     color: #666;
     font-size: 1.25em;
@@ -435,7 +435,7 @@
  * The hover effect on any buttons
  */
 .pickadate__list-item:hover,
-.pickadate__list-item--clear:hover,
+.pickadate__holder--time .pickadate__button--clear:hover,
 .pickadate__holder--focused .pickadate__list-item--highlighted {
     border-color: #0089ec;
     z-index: 10;
@@ -458,16 +458,16 @@
     color: #000;
     background: #b1dcfb;
 }
-.pickadate__list-item--clear:hover,
-.pickadate__list-item--clear:focus {
+.pickadate__holder--time .pickadate__button--clear:hover,
+.pickadate__holder--time .pickadate__button--clear:focus {
     background: #e20;
     border-color: #e20;
     cursor: pointer;
     color: #fff;
     outline: none;
 }
-.pickadate__list-item--clear:hover:before,
-.pickadate__list-item--clear:focus:before {
+.pickadate__holder--time .pickadate__button--clear:hover:before,
+.pickadate__holder--time .pickadate__button--clear:focus:before {
     color: #fff;
 }
 
