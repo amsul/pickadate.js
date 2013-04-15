@@ -10,7 +10,6 @@
 
 /**
  * To do:
- * – time intervals
  * – click outfocus date changes month
  * – keydown into next/prev month
  */
@@ -76,7 +75,8 @@ test( 'Checking picker holder...', function() {
 test( 'Checking picker objects...', function() {
     var nowDateObject = new Date(),
         nowTimeMinutes = nowDateObject.getHours() * 60 + nowDateObject.getMinutes(),
-        interval = $.fn.pickatime.defaults.interval
+        interval = this.$input.pickatime( 'get', 'interval' )
+    ok( interval === 30, 'Default interval is 30' )
     ok( this.$input.pickatime( 'get', 'now' ).PICK === interval + nowTimeMinutes - ( nowTimeMinutes % interval ), 'Now time is correct at ' + this.$input.pickatime( 'get', 'now' ).HOUR + ':' + this.$input.pickatime( 'get', 'now' ).MINS )
     ok( !this.$input.pickatime( 'get', 'disable' ).length, 'No disabled times' )
     ok( this.$input.pickatime( 'get', 'min' ).PICK === 0, 'Selected time is midnight' )
@@ -184,7 +184,7 @@ test( 'Checking click to open and close...', function() {
 test( 'Checking click to select...', function() {
 
     var $holder = this.$input.next( '.' + $.fn.pickatime.defaults.klass.holder.split( ' ' )[ 0 ] ),
-        interval = this.$input.pickatime( 'picker' ).component.i
+        interval = this.$input.pickatime( 'get', 'interval' )
 
     for ( var i = 0; i < 48; i += 1 ) {
         $holder.find( '.' + $.fn.pickatime.defaults.klass.listItem ).eq( i ).click()
@@ -354,7 +354,7 @@ test( 'Confirming disabled times with integers & arrays...', function() {
 
     var $input = this.$input,
         $holder = $input.next( '.' + $.fn.pickatime.defaults.klass.holder.split( ' ' )[ 0 ] ),
-        interval = $input.pickatime( 'picker' ).component.i
+        interval = $input.pickatime( 'get', 'interval' )
 
     $holder.find( '.' + $.fn.pickatime.defaults.klass.listItem ).each( function( index, item ) {
         if ( index >= 0 && index < 4 || index >= 20 && index < 22 || index === 9 || index === 45 ) {
@@ -372,7 +372,7 @@ test( 'Flipping disabled times as enabled...', function() {
 
     var $input = this.$input,
         $holder = $input.next( '.' + $.fn.pickatime.defaults.klass.holder.split( ' ' )[ 0 ] ),
-        interval = $input.pickatime( 'picker' ).component.i
+        interval = $input.pickatime( 'get', 'interval' )
 
     this.$input.pickatime( 'disableAll' )
 
@@ -404,7 +404,7 @@ test( 'Flipping disabled times as enabled...', function() {
 
 
 
-module( 'Time picker get and set properties', {
+module( 'Time picker `get` and `set` properties', {
     setup: function() {
         this.$input = $( '<input type=time>' )
         $DOM.append( this.$input )
@@ -434,7 +434,7 @@ test( 'Setting `min` & `max` with arrays...', function() {
 test( 'Setting `min` & `max` with integers...', function() {
 
     var nowObject = this.$input.pickatime( 'get', 'now' ),
-        interval = this.$input.pickatime( 'picker' ).component.i
+        interval = this.$input.pickatime( 'get', 'interval' )
 
     this.$input.pickatime( 'set', { min: -3 } )
     ok( this.$input.pickatime( 'get', 'min' ).PICK === nowObject.PICK - interval * 3, 'Sets negative min limit correctly' )
@@ -565,6 +565,17 @@ test( 'Setting `view` with arrays...', function() {
     ok( this.$input.pickatime( 'get', 'view' ).PICK === 960, 'Viewsets correctly' )
     ok( this.$input.pickatime( 'get', 'highlight' ).PICK === 0, 'Highlight unaffected' )
     ok( this.$input.pickatime( 'get', 'select' ).PICK === 0, 'Select unaffected' )
+})
+
+test( 'Setting `interval` with integers...', function() {
+
+    this.$input.pickatime( 'set', { interval: 120 } )
+    ok( this.$input.pickatime( 'get', 'interval' ) === 120, 'Interval updated' )
+    ok( this.$input.pickatime( 'get', 'min' ).PICK % 120 === 0, 'Min updated accordingly' )
+    ok( this.$input.pickatime( 'get', 'max' ).PICK % 120 === 0, 'Max updated accordingly' )
+
+    this.$input.pickatime( 'set', { interval: 'asdf' } )
+    ok( this.$input.pickatime( 'get', 'interval' ) === 120, 'Interval unaffected by non-integer' )
 })
 
 
