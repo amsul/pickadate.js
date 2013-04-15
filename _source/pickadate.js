@@ -60,7 +60,8 @@
             highlight: 'create validate',
             view: 'create validate',
             disable: 'flipItem',
-            enable: 'flipItem'
+            enable: 'flipItem',
+            flip: 'flipAll'
         }
 
         // The component's item object.
@@ -147,24 +148,18 @@
 
         var clock = this
 
-        if ( type == 'flip' ) {
-            clock.item.enable = value
-        }
-        else {
-
-            // Go through the queue of methods, and invoke the function. Update this
-            // as the time unit, and set the final resultant as this item type.
-            // * In the case of `enable`, keep the queue but set `disable` instead.
-            clock.item[ ( type == 'enable' ? 'disable' : type ) ] = clock.queue[ type ].split( ' ' ).map( function( method ) {
-                return value = clock[ method ]( type, value, options )
-            }).pop()
-        }
+        // Go through the queue of methods, and invoke the function. Update this
+        // as the time unit, and set the final resultant as this item type.
+        // * In the case of `enable`, keep the queue but set `disable` instead.
+        clock.item[ ( type == 'enable' ? 'disable' : type == 'flip' ? 'enable' : type ) ] = clock.queue[ type ].split( ' ' ).map( function( method ) {
+            return value = clock[ method ]( type, value, options )
+        }).pop()
 
         // Check if we need to cascade through more updates.
         if ( type == 'highlight' ) {
             clock.set( 'view', clock.item.highlight, options )
         }
-        else if ( ( type =='flip' || type == 'min' || type == 'max' || type == 'disable' || type == 'enable' ) && clock.item.select && clock.item.highlight ) {
+        else if ( ( type == 'flip' || type == 'min' || type == 'max' || type == 'disable' || type == 'enable' ) && clock.item.select && clock.item.highlight ) {
             clock.
                 set( 'select', clock.item.select, options ).
                 set( 'highlight', clock.item.highlight, options )
@@ -514,6 +509,14 @@
 
         return collection
     } //TimePicker.prototype.flipItem
+
+
+    /**
+     * Flip all items as disabled or enabled.
+     */
+    TimePicker.prototype.flipAll = function( type, value/*, options*/ ) {
+        return value === false ? 1 : -1
+    }
 
 
     /**
@@ -1766,7 +1769,7 @@
                  * Flip the switch to disable items
                  */
                 disableAll: function( value ) {
-                    P.component.set( 'flip', value === false ? 1 : -1 )
+                    P.component.set( 'flip', value )
                     return P.render()
                 } //disableAll
 
