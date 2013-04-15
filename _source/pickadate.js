@@ -49,16 +49,16 @@
             elementDataValue = picker.$node.data( 'value' )
 
         clock.settings = settings
-        clock.i = settings.interval || 30
 
         // The queue of methods that will be used to build item objects.
         clock.queue = {
+            interval: 'i',
             min: 'measure create',
             max: 'measure create',
             now: 'now create',
-            select: 'parse validate create scope',
-            highlight: 'validate create scope',
-            view: 'validate create scope',
+            select: 'parse create validate',
+            highlight: 'create validate',
+            view: 'create validate',
             disable: 'flipItem',
             enable: 'flipItem'
         }
@@ -66,6 +66,7 @@
         // The component's item object.
         clock.item = {}
 
+        clock.item.interval = settings.interval || 30
         clock.item.disable = ( settings.disable || [] ).slice( 0 )
         clock.item.enable = -(function( collectionDisabled ) {
             return collectionDisabled[ 0 ] === true ? collectionDisabled.shift() : -1
@@ -80,7 +81,7 @@
 
                 // If there's a `value` or `data-value`, use that with formatting.
                 // Otherwise default to the minimum selectable time.
-                elementDataValue || picker.$node[ 0 ].value || clock.item.min.PICK,
+                elementDataValue || picker.$node[ 0 ].value || clock.item.min,
 
                 // Use the relevant format.
                 { format: elementDataValue ? settings.formatSubmit : settings.format }
@@ -88,7 +89,6 @@
 
             // Setting the `highlight` also sets the `view`.
             set( 'highlight', clock.item.select )
-
 
         /**
          * The keycode to movement mapping.
@@ -99,7 +99,7 @@
             39: 1, // Right
             37: -1, // Left
             go: function( timeChange ) {
-                clock.set( 'highlight', clock.item.highlight.PICK + timeChange * clock.i, { interval: timeChange * clock.i } )
+                clock.set( 'highlight', clock.item.highlight.PICK + timeChange * clock.item.interval, { interval: timeChange * clock.item.interval } )
                 this.render()
             }
         }
@@ -169,6 +169,11 @@
                 set( 'select', clock.item.select, options ).
                 set( 'highlight', clock.item.highlight, options )
         }
+        else if ( type == 'interval' ) {
+            clock.
+                set( 'min', clock.item.min, options ).
+                set( 'max', clock.item.max, options )
+        }
 
         return clock
     } //TimePicker.prototype.set
@@ -192,18 +197,18 @@
         // If there's no value, use the type as the value.
         value = value === undefined ? type : value
 
-        // If it's already an object, just use that.
+        // If it's an object, use the "pick" value.
         if ( isObject( value ) && isInteger( value.PICK ) ) {
-            return value
+            value = value.PICK
         }
 
         // If it's an array, convert it into minutes.
-        if ( Array.isArray( value ) ) {
+        else if ( Array.isArray( value ) ) {
             value = clock.convert( value )
         }
 
         // If no valid value is passed, set it to "now".
-        if ( !isInteger( value ) ) {
+        else if ( !isInteger( value ) ) {
             value = clock.now( type, value, options )
         }
 
@@ -239,7 +244,7 @@
     TimePicker.prototype.now = function( type, value/*, options*/ ) {
         var date = new Date()
         // Add an interval because the time has passed.
-        return ( ( isInteger( value ) ? value + 1 : 1 ) * this.i ) + date.getHours() * MINUTES_IN_HOUR + date.getMinutes()
+        return ( ( isInteger( value ) ? value + 1 : 1 ) * this.item.interval ) + date.getHours() * MINUTES_IN_HOUR + date.getMinutes()
     } //TimePicker.prototype.now
 
 
@@ -247,7 +252,7 @@
      * Normalize minutes or an object to be "reachable" based on the interval.
      */
     TimePicker.prototype.normalize = function( type, value/*, options*/ ) {
-        return value - ( value % this.i )
+        return value - ( value % this.item.interval )
     } //TimePicker.prototype.normalize
 
 
@@ -282,6 +287,11 @@
             value = clock.now( type, value, options )
         }
 
+        // If it's an object already, just normalize it.
+        else if ( isObject( value ) && isInteger( value.PICK ) ) {
+            value = clock.normalize( type, value.PICK, options )
+        }
+
         return value
     } ///TimePicker.prototype.measure
 
@@ -289,38 +299,39 @@
     /**
      * Validate an object as enabled.
      */
-    TimePicker.prototype.validate = function( type, value, options ) {
+    TimePicker.prototype.validate = function( type, timeObject, options ) {
 
         var clock = this,
-            interval = options ? options.interval : clock.i
+            interval = options ? options.interval : clock.item.interval
 
-        // Check if the value is disabled.
-        if ( clock.disabled( value ) ) {
+        // Check if the object is disabled.
+        if ( clock.disabled( timeObject ) ) {
 
             // Shift with the interval until we reach an enabled time.
-            value = clock.shift( value, interval )
-
-            // If we land on a disabled min/max, shift in opposite direction.
-            if ( clock.disabled( value ) ) {
-                value = clock.shift( value, interval *= -1 )
-            }
+            timeObject = clock.shift( timeObject, interval )
         }
 
-        // Return the final value.
-        return value
+        // Scope the object into range.
+        timeObject = clock.scope( timeObject )
+
+        // Do a second check to see if we landed on a disabled min/max.
+        // In that case, shift using the opposite interval as before.
+        if ( clock.disabled( timeObject ) ) {
+            timeObject = clock.shift( timeObject, interval * -1 )
+        }
+
+        // Return the final object.
+        return timeObject
     } //TimePicker.prototype.validate
 
 
     /**
      * Check if an object is disabled.
      */
-    TimePicker.prototype.disabled = function( value ) {
+    TimePicker.prototype.disabled = function( timeObject ) {
 
         var
             clock = this,
-
-            // Make sure we have an object to work with.
-            timeObject = !isObject( value ) ? clock.create( value ) : value,
 
             // Filter through the disabled times to check if this is one.
             isDisabledTime = clock.item.disable.filter( function( timeToDisable ) {
@@ -344,19 +355,16 @@
     /**
      * Shift an object by an interval until we reach an enabled object.
      */
-    TimePicker.prototype.shift = function( value, interval ) {
+    TimePicker.prototype.shift = function( timeObject, interval ) {
 
         var
-            clock = this,
-
-            // Make sure we have an object to work with.
-            timeObject = !isObject( value ) ? clock.create( value ) : value
+            clock = this
 
         // Keep looping as long as the time is disabled.
         while ( clock.disabled( timeObject ) ) {
 
             // Increase/decrease the time by the interval and keep looping.
-            timeObject = clock.create( timeObject.PICK += interval || clock.i )
+            timeObject = clock.create( timeObject.PICK += interval || clock.item.interval )
 
             // If we've looped beyond the limits, break out of the loop.
             if ( timeObject.PICK <= clock.item.min.PICK || timeObject.PICK >= clock.item.max.PICK ) {
@@ -372,10 +380,10 @@
     /**
      * Scope an object to be within range of min and max.
      */
-    TimePicker.prototype.scope = function( type, timeObject/*, options*/ ) {
+    TimePicker.prototype.scope = function( timeObject ) {
         var minObject = this.item.min,
             maxObject = this.item.max
-        return timeObject.PICK > maxObject.PICK ? maxObject : timeObject.PICK < minObject.PICK ? minObject : timeObject
+        return this.create( timeObject.PICK > maxObject.PICK ? maxObject : timeObject.PICK < minObject.PICK ? minObject : timeObject )
     } //TimePicker.prototype.scope
 
 
@@ -548,6 +556,14 @@
 
 
     /**
+     * The division to use for the range intervals.
+     */
+    TimePicker.prototype.i = function( type, value/*, options*/ ) {
+        return isInteger( value ) && value > 0 ? value : this.item.interval
+    }
+
+
+    /**
      * Create a string for the nodes in the picker.
      */
     TimePicker.prototype.nodes = function( isOpen ) {
@@ -563,7 +579,7 @@
         return createNode( 'ul', createGroupOfNodes({
             min: clock.item.min.PICK,
             max: clock.item.max.PICK,
-            i: clock.i,
+            i: clock.item.interval,
             node: 'li',
             item: function( loopedTime ) {
                 loopedTime = clock.create( loopedTime )
