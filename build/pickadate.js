@@ -284,18 +284,24 @@ if ( ![].indexOf ) {
 
         var clock = this
 
-        // Go through the queue of methods, and invoke the function. Update this
-        // as the time unit, and set the final resultant as this item type.
-        // * In the case of `enable`, keep the queue but set `disable` instead.
-        clock.item[ ( type == 'enable' ? 'disable' : type ) ] = clock.queue[ type ].split( ' ' ).map( function( method ) {
-            return value = clock[ method ]( type, value, options )
-        }).pop()
+        if ( type == 'flip' ) {
+            clock.item.enable = value
+        }
+        else {
+
+            // Go through the queue of methods, and invoke the function. Update this
+            // as the time unit, and set the final resultant as this item type.
+            // * In the case of `enable`, keep the queue but set `disable` instead.
+            clock.item[ ( type == 'enable' ? 'disable' : type ) ] = clock.queue[ type ].split( ' ' ).map( function( method ) {
+                return value = clock[ method ]( type, value, options )
+            }).pop()
+        }
 
         // Check if we need to cascade through more updates.
         if ( type == 'highlight' ) {
             clock.set( 'view', clock.item.highlight, options )
         }
-        else if ( ( type == 'min' || type == 'max' || type == 'disable' || type == 'enable' ) && clock.item.select && clock.item.highlight ) {
+        else if ( ( type =='flip' || type == 'min' || type == 'max' || type == 'disable' || type == 'enable' ) && clock.item.select && clock.item.highlight ) {
             clock.
                 set( 'select', clock.item.select, options ).
                 set( 'highlight', clock.item.highlight, options )
@@ -422,18 +428,18 @@ if ( ![].indexOf ) {
      */
     TimePicker.prototype.validate = function( type, value, options ) {
 
-        var clock = this
+        var clock = this,
+            interval = options ? options.interval : clock.i
 
         // Check if the value is disabled.
         if ( clock.disabled( value ) ) {
 
             // Shift with the interval until we reach an enabled time.
-            value = clock.shift( value, options.interval )
+            value = clock.shift( value, interval )
 
             // If we land on a disabled min/max, shift in opposite direction.
             if ( clock.disabled( value ) ) {
-                options.interval = options.interval * -1
-                value = clock.shift( value, options.interval )
+                value = clock.shift( value, interval *= -1 )
             }
         }
 
@@ -1874,7 +1880,16 @@ if ( ![].indexOf ) {
                  */
                 isOpen: function() {
                     return !!STATE.OPEN
-                }
+                },
+
+
+                /**
+                 * Flip the switch to disable items
+                 */
+                disableAll: function( value ) {
+                    P.component.set( 'flip', value === false ? 1 : -1 )
+                    return P.render()
+                } //disableAll
 
             } //PickerInstance.prototype
 
