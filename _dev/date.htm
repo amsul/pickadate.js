@@ -89,7 +89,8 @@
             // selectYears: 20,
             disable: [
                 // true,
-                1,
+                // 1,
+                // 2,
                 // 5,
                 // 7,
                 // [2013, 1, 21],
@@ -145,6 +146,10 @@
             // min: -4,
             // max: 5,
         })
+
+        $input.pickadate( 'set', { disable: [1,2,4,7] } )
+        // $input.pickadate( 'set', { min: [2013,3,4] } )
+        // $input.pickadate( 'set', { min: false === -Infinity } )
 
         // var $button = $( '.button' ).on( 'click', function( event ) {
         //     event.preventDefault()

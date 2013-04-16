@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v3.0.0alpha, 2013-04-15
+ * pickadate.js v3.0.0alpha, 2013-04-16
  * By Amsul (http://amsul.ca)
  * Hosted on http://amsul.github.com/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
@@ -296,15 +296,18 @@ if ( ![].indexOf ) {
         if ( type == 'highlight' ) {
             clock.set( 'view', clock.item.highlight, options )
         }
-        else if ( ( type == 'flip' || type == 'min' || type == 'max' || type == 'disable' || type == 'enable' ) && clock.item.select && clock.item.highlight ) {
-            clock.
-                set( 'select', clock.item.select, options ).
-                set( 'highlight', clock.item.highlight, options )
-        }
         else if ( type == 'interval' ) {
             clock.
                 set( 'min', clock.item.min, options ).
                 set( 'max', clock.item.max, options )
+        }
+        else if ( ( type == 'flip' || type == 'min' || type == 'max' || type == 'disable' || type == 'enable' ) && clock.item.select && clock.item.highlight ) {
+            if ( type == 'min' ) {
+                clock.set( 'max', clock.item.max, options )
+            }
+            clock.
+                set( 'select', clock.item.select, options ).
+                set( 'highlight', clock.item.highlight, options )
         }
 
         return clock
@@ -350,7 +353,7 @@ if ( ![].indexOf ) {
         }
 
         // Normalize it into a "reachable" interval.
-        value = clock.normalize( type, value, options )
+        value = clock.normalize( value, options )
 
         // Return the compiled object.
         return {
@@ -383,8 +386,9 @@ if ( ![].indexOf ) {
     /**
      * Normalize minutes or an object to be "reachable" based on the interval.
      */
-    TimePicker.prototype.normalize = function( type, value/*, options*/ ) {
-        return value - ( value % this.item.interval )
+    TimePicker.prototype.normalize = function( value/*, options*/ ) {
+        // If it's a negative value, add one interval to keep it as "passed".
+        return value - ( ( value < 0 ? this.item.interval : 0 ) + value % this.item.interval )
     } //TimePicker.prototype.normalize
 
 
@@ -407,7 +411,7 @@ if ( ![].indexOf ) {
 
         // If it's an object already, just normalize it.
         else if ( isObject( value ) && isInteger( value.PICK ) ) {
-            value = clock.normalize( type, value.PICK, options )
+            value = clock.normalize( value.PICK, options )
         }
 
         return value
@@ -420,7 +424,7 @@ if ( ![].indexOf ) {
     TimePicker.prototype.validate = function( type, timeObject, options ) {
 
         var clock = this,
-            interval = options ? options.interval : clock.item.interval
+            interval = options && options.interval ? options.interval : clock.item.interval
 
         // Check if the object is disabled.
         if ( clock.disabled( timeObject ) ) {
@@ -499,9 +503,9 @@ if ( ![].indexOf ) {
      * Scope an object to be within range of min and max.
      */
     TimePicker.prototype.scope = function( timeObject ) {
-        var minObject = this.item.min,
-            maxObject = this.item.max
-        return this.create( timeObject.PICK > maxObject.PICK ? maxObject : timeObject.PICK < minObject.PICK ? minObject : timeObject )
+        var minLimit = this.item.min.PICK,
+            maxLimit = this.item.max.PICK
+        return this.create( timeObject.PICK > maxLimit ? maxLimit : timeObject.PICK < minLimit ? minLimit : timeObject )
     } //TimePicker.prototype.scope
 
 
@@ -759,11 +763,12 @@ if ( ![].indexOf ) {
             min: 'measure create',
             max: 'measure create',
             now: 'now create',
-            select: 'parse validate create',
-            highlight: 'validate create',
-            view: 'viewset create',
+            select: 'parse create validate',
+            highlight: 'navigate create validate',
+            view: 'create viewset',
             disable: 'flipItem',
-            enable: 'flipItem'
+            enable: 'flipItem',
+            flip: 'flipAll'
         }
 
         // The component's item object.
@@ -811,6 +816,19 @@ if ( ![].indexOf ) {
          * The time picker events.
          */
         calendar.onRender = function( $holder ) {
+
+            var picker = this
+
+            // $holder.find( '.' + settings.klass.selectMonth ).on( 'change', function() {
+            //     picker.set( 'view', [ calendar.props.get( 'view' ).YEAR, this.value, calendar.props.get( 'highlight' ).DATE ] )
+            //     $holder.find( '.' + settings.klass.selectMonth ).focus()
+            // })
+
+            // $holder.find( '.' + settings.klass.selectYear ).on( 'change', function() {
+            //     picker.set( 'view', [ this.value, calendar.props.get( 'view' ).MONTH, calendar.props.get( 'highlight' ).DATE ] )
+            //     $holder.find( '.' + settings.klass.selectYear ).focus()
+            // })
+
             triggerFunction( settings.onRender, picker, [ $holder ] )
         }
         calendar.onStart = function( $holder ) {
@@ -852,6 +870,11 @@ if ( ![].indexOf ) {
         // Check if we need to cascade through more updates.
         if ( type == 'highlight' ) {
             calendar.set( 'view', calendar.item.highlight, options )
+        }
+        else if ( ( type == 'flip' || type == 'min' || type == 'max' || type == 'disable' || type == 'enable' ) && calendar.item.select && calendar.item.highlight ) {
+            calendar.
+                set( 'select', calendar.item.select, options ).
+                set( 'highlight', calendar.item.highlight, options )
         }
 
         return calendar
@@ -895,7 +918,7 @@ if ( ![].indexOf ) {
 
         // If it's a number or date object, make a normalized date.
         else if ( isInteger( value ) || isDate( value ) ) {
-            value = calendar.normalize( type, new Date( value ), options )
+            value = calendar.normalize( new Date( value ), options )
         }
 
         // If it's a literal true or any other case, set it to now.
@@ -923,17 +946,28 @@ if ( ![].indexOf ) {
         if ( options && options.rel ) {
             value.setDate( value.getDate() + options.rel )
         }
-        return this.normalize( type, value, options )
+        return this.normalize( value, options )
     } //DatePicker.prototype.now
+
+
+    /**
+     * Navigate to next/prev month.
+     */
+    DatePicker.prototype.navigate = function( type, dateObject, options ) {
+        if ( isObject( dateObject ) ) {
+            dateObject = [ dateObject.YEAR, dateObject.MONTH + ( options && options.nav ? options.nav : 0 ), dateObject.DATE ]
+        }
+        return dateObject
+    }
 
 
     /**
      * Normalize a date by setting the hours to midnight.
      */
-    DatePicker.prototype.normalize = function( type, value/*, options*/ ) {
+    DatePicker.prototype.normalize = function( value/*, options*/ ) {
         value.setHours( 0, 0, 0, 0 )
         return value
-    } //DatePicker.prototype.normalize
+    }
 
 
     /**
@@ -996,61 +1030,45 @@ if ( ![].indexOf ) {
 
 
     /**
-     * Validate a date as enabled.
+     * Create a viewset object based on navigation.
      */
-    DatePicker.prototype.validate = function( type, value, options ) {
-
-        var calendar = this
-
-        // If there's a navigation involved, move to relative month.
-        if ( options && options.nav ) {
-            value = [ value.YEAR, value.MONTH + options.nav, value.DATE ]
-        }
-
-        return value
-
-        // // If we're validating a view, set it to the first of the month.
-        // if ( options.type == 'view' ) {
-        //     timeUnit = calendar.viewset( !isNaN( timeUnit.PICK ) ? timeUnit : calendar.create( timeUnit ), options )
-        // }
-
-        // // If the viewset changes, update the highlight.
-        // else if ( options.type == 'highlight' && options.nav ) {
-        //     timeUnit = calendar.create([ calendar.item.view.YEAR, calendar.item.view.MONTH, calendar.item.highlight.DATE ])
-        // }
-
-
-        // // If this time unit is disabled, shift until we reach an enabled time.
-        // if ( calendar.settings.disable && calendar.disabled( timeUnit ) ) {
-        //     timeUnit = calendar.shift( timeUnit, options )
-        // }
-
-        // // Scope the time unit into range and create an object
-        // timeUnit = calendar.create( calendar.scope( timeUnit.PICK || timeUnit, options ) )
-
-        // // Improve this later. But for now, do a second check for if the scoped object
-        // // is disabled. If it is, then shift in the opposite direction.
-        // if ( calendar.settings.disable && calendar.disabled( timeUnit ) ) {
-        //     options.interval = options.interval * -1
-        //     timeUnit = calendar.shift( timeUnit, options )
-        // }
-
-        // return timeUnit.PICK || timeUnit
-    } //DatePicker.prototype.validate
+    DatePicker.prototype.viewset = function( type, dateObject/*, options*/ ) {
+        return this.create([ dateObject.YEAR, dateObject.MONTH, 1 ])
+    }
 
 
     /**
-     * Create a viewset object based on navigation.
+     * Validate a date as enabled.
      */
-    DatePicker.prototype.viewset = function( type, value/*, options*/ ) {
-        return Array.isArray( value ) ? [ value[ 0 ], value[ 1 ], 1 ] : [ value.YEAR, value.MONTH, 1 ]
-    } //DatePicker.prototype.viewset
+    DatePicker.prototype.validate = function( type, dateObject, options ) {
+
+        var calendar = this,
+            interval = options && options.interval ? options.interval : 1
+
+        // Check if the object is disabled.
+        if ( calendar.disabled( dateObject ) ) {
+
+            // Shift with the interval until we reach an enabled time.
+            dateObject = calendar.shift( dateObject, interval )
+        }
+
+        // Scope the object into range.
+        dateObject = calendar.scope( dateObject )
+
+        // Do a second check to see if we landed on a disabled min/max.
+        // In that case, shift using the opposite interval direction as before.
+        if ( calendar.disabled( dateObject ) ) {
+            dateObject = calendar.shift( dateObject, dateObject.PICK <= calendar.item.min.PICK ? 1 : dateObject.PICK >= calendar.item.max.PICK ? -1 : interval )
+        }
+
+        return dateObject
+    } //DatePicker.prototype.validate
 
 
     /**
      * Check if an object is disabled.
      */
-    DatePicker.prototype.disabled = function( collection, object ) {
+    DatePicker.prototype.disabled = function( dateObject ) {
 
         var
             calendar = this,
@@ -1060,12 +1078,12 @@ if ( ![].indexOf ) {
 
                 // If the date is a number, match the weekday with 0index and `firstDay` check.
                 if ( isInteger( dateToDisable ) ) {
-                    return object.DAY == ( calendar.settings.firstDay ? dateToDisable : dateToDisable - 1 ) % 7
+                    return dateObject.DAY == ( calendar.settings.firstDay ? dateToDisable : dateToDisable - 1 ) % 7
                 }
 
                 // If it's an array, create the object and match the exact date.
                 if ( Array.isArray( dateToDisable ) ) {
-                    return object.PICK == calendar.create( dateToDisable ).PICK
+                    return dateObject.PICK == calendar.create( dateToDisable ).PICK
                 }
             }).length
 
@@ -1075,12 +1093,37 @@ if ( ![].indexOf ) {
 
 
     /**
-     * Scope a date into range of min and max.
+     * Shift an object by an interval until we reach an enabled object.
      */
-    DatePicker.prototype.scope = function( date/*, options*/ ) {
+    DatePicker.prototype.shift = function( dateObject, interval ) {
+
+        var calendar = this,
+            originalDateObject = dateObject
+
+        // Keep looping as long as the time is disabled.
+        while ( calendar.disabled( dateObject ) ) {
+
+            // Increase/decrease the date by the key movement and keep looping.
+            dateObject = calendar.create([ dateObject.YEAR, dateObject.MONTH, dateObject.DATE + ( interval || 1 ) ])
+
+            // If we've looped through to the next month, break out of the loop.
+            if ( dateObject.MONTH != originalDateObject.MONTH ) {
+                break
+            }
+        }
+
+        // Return the final object.
+        return dateObject
+    } //DatePicker.prototype.shift
+
+
+    /**
+     * Scope an object into range of min and max.
+     */
+    DatePicker.prototype.scope = function( dateObject ) {
         var minTime = this.item.min.PICK,
             maxTime = this.item.max.PICK
-        return date > maxTime ? maxTime : date < minTime ? minTime : date
+        return this.create( dateObject.PICK > maxTime ? maxTime : dateObject.PICK < minTime ? minTime : dateObject )
     } //DatePicker.prototype.scope
 
 
@@ -1514,7 +1557,7 @@ if ( ![].indexOf ) {
                                                 }
 
                                                 // Add the `disabled` class if something's disabled and the object matches.
-                                                if ( disabledCollection && calendar.disabled( disabledCollection, timeDate ) || timeDate.PICK < minLimitObject.PICK || timeDate.PICK > maxLimitObject.PICK ) {
+                                                if ( disabledCollection && calendar.disabled( timeDate ) || timeDate.PICK < minLimitObject.PICK || timeDate.PICK > maxLimitObject.PICK ) {
                                                     klasses.push( settings.klass.disabled )
                                                 }
 
@@ -2312,38 +2355,6 @@ if ( ![].indexOf ) {
 //        Build date picker components
 //        ========================================================================== */
 
-//     function CalendarPicker( settings ) {
-
-//         var
-//             calendar = this,
-
-
-
-//         $.extend( calendar, {
-//             onStart: function( $holder ) {
-//                 // console.log( 'what is ', this )
-//                 triggerFunction( settings.onStart, this, [ $holder ] )
-//             },
-//             onRender: function( $holder ) {
-
-//                 var picker = this
-
-//                 $holder.find( '.' + settings.klass.selectMonth ).on( 'change', function() {
-//                     picker.set( 'view', [ calendar.props.get( 'view' ).YEAR, this.value, calendar.props.get( 'highlight' ).DATE ] )
-//                     $holder.find( '.' + settings.klass.selectMonth ).focus()
-//                 })
-
-//                 $holder.find( '.' + settings.klass.selectYear ).on( 'change', function() {
-//                     picker.set( 'view', [ this.value, calendar.props.get( 'view' ).MONTH, calendar.props.get( 'highlight' ).DATE ] )
-//                     $holder.find( '.' + settings.klass.selectYear ).focus()
-//                 })
-
-//                 triggerFunction( settings.onRender, picker, [ $holder ] )
-//             }
-//         })
-
-//     } //CalendarPicker
-
 
 //     /**
 //      * Create a date object by validating it can be "reached".
@@ -2390,31 +2401,6 @@ if ( ![].indexOf ) {
 
 //         return datePassedObject
 //     } //CalendarPicker.prototype.validate
-
-
-//     /**
-//      * Shift a date by a certain interval until we reach an enabled one.
-//      */
-//     CalendarPicker.prototype.shift = function( dateObject, keyMovement ) {
-
-//         var calendar = this,
-//             originalDateObject = dateObject
-
-//         // Keep looping as long as the date is disabled.
-//         while ( calendar.disable( dateObject ) ) {
-
-//             // Increase/decrease the date by the key movement and keep looping.
-//             dateObject = calendar.create([ dateObject.YEAR, dateObject.MONTH, dateObject.DATE + ( keyMovement || 1 ) ])
-
-//             // If we've looped through to the next month, break out of the loop.
-//             if ( dateObject.MONTH != originalDateObject.MONTH ) {
-//                 break
-//             }
-//         }
-
-//         // Do a final validation check to make sure it's within bounds.
-//         return calendar.validate( dateObject, keyMovement )
-//     } //CalendarPicker.prototype.shift
 
 
 //     // /**
