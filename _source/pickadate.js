@@ -77,8 +77,7 @@
             set( 'min', settings.min || [ 0, 0 ] ).
             set( 'max', settings.max || [ HOURS_IN_DAY - 1, MINUTES_IN_HOUR - 1 ] ).
             set( 'now' ).
-            set(
-                'select',
+            set( 'select',
 
                 // If there's a `value` or `data-value`, use that with formatting.
                 // Otherwise default to the minimum selectable time.
@@ -151,6 +150,7 @@
         // Go through the queue of methods, and invoke the function. Update this
         // as the time unit, and set the final resultant as this item type.
         // * In the case of `enable`, keep the queue but set `disable` instead.
+        //   And in the case of `flip`, keep the queue but set `enable` instead.
         clock.item[ ( type == 'enable' ? 'disable' : type == 'flip' ? 'enable' : type ) ] = clock.queue[ type ].split( ' ' ).map( function( method ) {
             return value = clock[ method ]( type, value, options )
         }).pop()
@@ -178,7 +178,7 @@
      * Get a timepicker item object.
      */
     TimePicker.prototype.get = function( type ) {
-        return this.item[ type ] || this[ type ]
+        return this.item[ type ]
     } //TimePicker.prototype.get
 
 
@@ -199,7 +199,7 @@
 
         // If it's an array, convert it into minutes.
         else if ( Array.isArray( value ) ) {
-            value = clock.convert( value )
+            value = +value[ 0 ] * MINUTES_IN_HOUR + (+value[ 1 ])
         }
 
         // If no valid value is passed, set it to "now".
@@ -249,20 +249,6 @@
     TimePicker.prototype.normalize = function( type, value/*, options*/ ) {
         return value - ( value % this.item.interval )
     } //TimePicker.prototype.normalize
-
-
-    /**
-     * Convert a value into minutes.
-     */
-    TimePicker.prototype.convert = function( value ) {
-
-        // If it's an array, convert it into minutes by expecting: [ {{hour}}, {{minutes}} ].
-        if ( Array.isArray( value ) ) {
-            value = +value[ 0 ] * MINUTES_IN_HOUR + (+value[ 1 ])
-        }
-
-        return value
-    } //TimePicker.prototype.convert
 
 
     /**
@@ -655,9 +641,18 @@
             set( 'min', settings.min || -Infinity ).
             set( 'max', settings.max || Infinity ).
             set( 'now' ).
+            set( 'select',
 
-            // Setting `select` also sets the `highlight` and `view`.
-            set( 'select', elementDataValue || picker.$node[ 0 ].value, { format: elementDataValue ? settings.formatSubmit : settings.format, data: !!elementDataValue } )
+                // If there's a `value` or `data-value`, use that with formatting.
+                // Otherwise default to the minimum selectable time.
+                elementDataValue || picker.$node[ 0 ].value || calendar.item.now,
+
+                // Use the relevant format and data property.
+                { format: elementDataValue ? settings.formatSubmit : settings.format, data: !!elementDataValue }
+            ).
+
+            // Setting the `highlight` also sets the `view`.
+            set( 'highlight', calendar.item.select )
 
 
         /**
@@ -711,15 +706,14 @@
 
         // Go through the queue of methods, and invoke the function. Update this
         // as the time unit, and set the final resultant as this item type.
-        calendar.item[ type ] = calendar.queue[ type ].split( ' ' ).map( function( method ) {
+        // * In the case of `enable`, keep the queue but set `disable` instead.
+        //   And in the case of `flip`, keep the queue but set `enable` instead.
+        calendar.item[ ( type == 'enable' ? 'disable' : type == 'flip' ? 'enable' : type ) ] = calendar.queue[ type ].split( ' ' ).map( function( method ) {
             return value = calendar[ method ]( type, value, options )
         }).pop()
 
         // Check if we need to cascade through more updates.
-        if ( type == 'select' ) {
-            calendar.set( 'highlight', calendar.item.select, options )
-        }
-        else if ( type == 'highlight' ) {
+        if ( type == 'highlight' ) {
             calendar.set( 'view', calendar.item.highlight, options )
         }
 
@@ -731,7 +725,7 @@
      * Get a datepicker item object.
      */
     DatePicker.prototype.get = function( type ) {
-        return this.item[ type ] || this[ type ]
+        return this.item[ type ]
     } //DatePicker.prototype.get
 
 
@@ -740,34 +734,35 @@
      */
     DatePicker.prototype.create = function( type, value, options ) {
 
-        var
-            isInfiniteValue,
+        var isInfiniteValue,
             calendar = this
 
         // If there's no value, use the type as the value.
-        value = value || type
+        value = value === undefined ? type : value
 
-        // If it's already an object, just use that.
-        if ( isObject( value ) && isInteger( value.PICK ) ) {
-            return value
-        }
 
-        if ( Array.isArray( value ) ) {
-            value = new Date( value[ 0 ], value[ 1 ], value[ 2 ] )
-        }
-        else if ( isInteger( value ) ) {
-            value = calendar.normalize( type, new Date( value ), options )
-        }
-        else if ( isDate( value ) ) {
-            value = calendar.normalize( type, new Date( value ), options )
-        }
-        else if ( value == -Infinity || value == Infinity ) {
+        // If it's infinity, update the value.
+        if ( value == -Infinity || value == Infinity ) {
             isInfiniteValue = value
         }
-        else if ( value === true ) {
-            value = calendar.now( type, value, options )
+
+        // If it's an object, use the "time" value.
+        else if ( isObject( value ) && isInteger( value.PICK ) ) {
+            value = value.TIME
         }
-        else {
+
+        // If it's an array, convert it into a date.
+        else if ( Array.isArray( value ) ) {
+            value = new Date( value[ 0 ], value[ 1 ], value[ 2 ] )
+        }
+
+        // If it's a number or date object, make a normalized date.
+        else if ( isInteger( value ) || isDate( value ) ) {
+            value = calendar.normalize( type, new Date( value ), options )
+        }
+
+        // If it's a literal true or any other case, set it to now.
+        else /*if ( value === true )*/ {
             value = calendar.now( type, value, options )
         }
 
@@ -1094,6 +1089,73 @@
             }
         }
     })() //DatePicker.prototype.formats
+
+
+    /**
+     * Flip an item as enabled or disabled.
+     */
+    DatePicker.prototype.flipItem = function( type, value/*, options*/ ) {
+
+        var calendar = this,
+            collection = calendar.item.disable,
+            isFlipped = calendar.item.enable === -1
+
+        if ( !isFlipped && type == 'enable' || isFlipped && type == 'disable' ) {
+            collection = calendar.removeDisabled( collection, value )
+        }
+        else if ( !isFlipped && type == 'disable' || isFlipped && type == 'enable' ) {
+            collection = calendar.addDisabled( collection, value )
+        }
+
+        return collection
+    } //DatePicker.prototype.flipItem
+
+
+    /**
+     * Flip all items as disabled or enabled.
+     */
+    DatePicker.prototype.flipAll = function( type, value/*, options*/ ) {
+        return value === false ? 1 : -1
+    }
+
+
+    /**
+     * Add an item to the disabled collection.
+     */
+    DatePicker.prototype.addDisabled = function( collection, item ) {
+        var calendar = this
+        item.map( function( timeUnit ) {
+            if ( !calendar.filterDisabled( collection, timeUnit ).length ) {
+                collection.push( timeUnit )
+            }
+        })
+        return collection
+    } //DatePicker.prototype.addDisabled
+
+
+    /**
+     * Remove an item from the disabled collection.
+     */
+    DatePicker.prototype.removeDisabled = function( collection, item ) {
+        var calendar = this
+        item.map( function( timeUnit ) {
+            collection = calendar.filterDisabled( collection, timeUnit, 1 )
+        })
+        return collection
+    } //DatePicker.prototype.removeDisabled
+
+
+    /**
+     * Filter through the disabled collection to find a time unit.
+     */
+    DatePicker.prototype.filterDisabled = function( collection, timeUnit, isRemoving ) {
+        var timeIsArray = Array.isArray( timeUnit )
+        return collection.filter( function( disabledTimeUnit ) {
+            var isMatch = !timeIsArray && timeUnit === disabledTimeUnit ||
+                timeIsArray && Array.isArray( disabledTimeUnit ) && timeUnit.toString() === disabledTimeUnit.toString()
+            return isRemoving ? !isMatch : isMatch
+        })
+    } //DatePicker.prototype.filterDisabled
 
 
     /**
