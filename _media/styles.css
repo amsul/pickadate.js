@@ -14,9 +14,11 @@
  * TYPOGRAPHY.................
  * FORM-ELEMENTS..............
  * BUTTONS....................
- * LISTS-MENUS................
+ * MENUS......................
+ * GROUPS.....................Group sets of content
  * TABLES.....................
  * CODE.......................
+ * TARGETS....................Page focus targets
  * RAINBOW....................Syntax highlighting
  * HELPERS....................
  */
@@ -460,7 +462,7 @@ table {
 body {
     font-family: 'Helvetica Neue', sans-serif;
     font-weight: 200;
-    font-size: 20px;
+    font-size: 16px;
     line-height: 1.6;
 }
 
@@ -473,11 +475,10 @@ body {
     padding: 0 20px;
 }
 .section--header {
-    background: url(bg.png) #fafbfb;
+    background: url(bg.png) #fafbfb 50% 0;
+    border-bottom: 2px solid #e9ebeb;
 }
 .section--splash {
-    min-height: 520px;
-    border-bottom: 2px solid #e9ebeb;
 }
 .section--footer {
     margin-bottom: 8em;
@@ -511,12 +512,14 @@ body {
     overflow: hidden;
 }
 .logocon__p,
-.logocon--dimmed:hover .logocon__p {
+.menu__link--dimmed:hover .logocon__p,
+.menu__link--dimmed:focus .logocon__p {
     font-weight: bold;
     color: #000;
 }
 .logocon__u,
-.logocon--dimmed:hover .logocon__u {
+.menu__link--dimmed:hover .logocon__u,
+.menu__link--dimmed:focus .logocon__u {
     position: absolute;
     background: #0089ec;
     height: .1em;
@@ -524,16 +527,16 @@ body {
     left: .25em;
     right: .025em;
 }
-.logocon--dimmed .logocon__p,
-.logocon--dimmed .logocon__u {
+.menu__link--dimmed .logocon__p,
+.menu__link--dimmed .logocon__u {
     -webkit-transition: all linear .15s;
        -moz-transition: all linear .15s;
             transition: all linear .15s;
 }
-.logocon--dimmed .logocon__p {
+.menu__link--dimmed .logocon__p {
     color: #bbb;
 }
-.logocon--dimmed .logocon__u {
+.menu__link--dimmed .logocon__u {
     background: #bbb;
 }
 
@@ -582,7 +585,8 @@ a:focus {
 p > a {
     text-decoration: none;
 }
-p > a:hover {
+p > a:hover,
+p > a:focus {
     text-decoration: underline;
 }
 
@@ -607,15 +611,41 @@ h1, h2,
 }
 h1,
 .heading--one {
-    font-size: 2.4em
+    font-size: 2em
 }
 h2,
 .heading--two {
-    font-size: 1.8em;
+    font-size: 1.5em;
 }
 h3,
 .heading--three {
     font-size: 1.2em;
+}
+
+@media (min-width: 300px) {
+
+    /**
+     * Adjust the heading sizes
+     */
+    h1,
+    .heading--one {
+        font-size: 2.125em
+    }
+} /* min-width: 300px */
+
+@media (min-width: 540px) {
+
+    /**
+     * Adjust the heading sizes
+     */
+    h1,
+    .heading--one {
+        font-size: 2.4em
+    }
+    h2,
+    .heading--two {
+        font-size: 1.8em;
+    }
 }
 
 .heading--thin {
@@ -623,7 +653,10 @@ h3,
 }
 
 .heading--splash {
-    margin-top: 1.25em;
+    margin-top: .25em;
+    margin-left: auto;
+    margin-right: auto;
+    width: 88%;
 }
 
 
@@ -633,29 +666,41 @@ h3,
  * Divider headings
  */
 .heading--divide {
-    position: relative;
-    margin-top: 1.6em;
+    margin-top: 1.5em;
+    border-top: 1px solid #ddd;
+    padding-top: 1.5em;
 }
-.heading--divide:after {
-    content: " ";
-    border-bottom: 1px solid #ddd;
-    height: 0;
-    position: absolute;
-    bottom: .5em;
-    z-index: -1;
-    right: 0;
-    left: 0;
-    display: block;
+.heading--divide-first {
+    padding-top: 0;
+    border-top: 0;
 }
-.heading--divide .heading__text {
-    background: #fff;
-    padding-left: .5em;
-    padding-right: .5em;
-    display: inline-block;
-}
-.heading--divide .heading__text--larger {
-    font-size: 1.4em;
-}
+
+@media (min-width: 540px) {
+
+    .heading--divide {
+        position: relative;
+        margin-top: 1.6em;
+        padding-top: 0;
+        border-top: 0;
+    }
+    .heading--divide:after {
+        content: " ";
+        border-bottom: 1px solid #ddd;
+        height: 0;
+        position: absolute;
+        bottom: .5em;
+        z-index: -1;
+        right: 0;
+        left: 0;
+        display: block;
+    }
+    .heading--divide .heading__text {
+        background: #fff;
+        padding-left: .5em;
+        padding-right: .5em;
+        display: inline-block;
+    }
+} /* min-width: 540px */
 
 
 /**
@@ -670,7 +715,8 @@ h3,
     font-size: .75em;
     vertical-align: 3px;
 }
-.heading__anchor:hover {
+.heading__anchor:hover,
+.heading__anchor:focus {
     color: #0089ec;
 }
 
@@ -691,7 +737,8 @@ fieldset {
     padding: 0;
 }
 
-label:hover {
+label:hover,
+label:focus {
     color: #0089ec;
 }
 
@@ -799,15 +846,12 @@ input[type=search] {
     text-decoration: none;
     padding: .67em 1.25em;
 }
-.button--secondary {
-    background: #74c346;
-    border-color: #74c346;
-    color: #fff;
-    font-weight: 400;
-}
 
-.button:hover {
+.button:hover,
+.button:focus {
     text-decoration: none;
+    background: #5c2;
+    border-color: #5c2;
 }
 
 
@@ -815,46 +859,160 @@ input[type=search] {
 
 
 /* ==========================================================================
-   $LISTS-MENUS
+   $MENUS
    ========================================================================== */
 
 .menu {
 
 }
-.menu--header {
-    font-weight: 500;
-    font-size: .8em;
-}
-.menu--header .menu__list--loner {
-    margin-top: 30px;
-}
 
-.menu__list,
-.list {
+.menu__list {
     margin: 0;
     list-style: none;
     padding: 0;
 }
 
-.menu__list--inline > .menu__item,
-.list--inline > .list__item {
-    display: inline-block;
-    margin-right: 1.5em;
-}
-.menu__list--inline > .menu__item:last-child,
-.list--inline > .list__item:last-child {
-    margin-right: 0;
-}
 
+/**
+ * Menu links
+ */
 .menu__link {
     text-decoration: none;
 }
 .menu__link--dimmed {
     color: #aaa;
 }
-.menu__link--dimmed:hover {
+.menu__link--dimmed:hover,
+.menu__link--dimmed:focus {
     color: #000;
 }
+
+
+/**
+ * Header menu
+ */
+.menu--header {
+    font-size: 1.25em;
+}
+.menu--header .menu__link {
+    display: block;
+    height: 3em;
+    line-height: 3em;
+}
+
+.menu__item--logo {
+    float: left;
+}
+.menu__item--toggle {
+    float: right;
+}
+.menu__item--clear {
+    padding-bottom: 1em;
+}
+
+/* Make the links touch friendly */
+.menu__item--logo .menu__link,
+.menu__item--toggle .menu__link {
+    margin-right: -20px;
+    padding-right: 20px;
+    margin-left: -20px;
+    padding-left: 20px;
+}
+
+/* Add a border to the block links */
+.menu__item--responsive .menu__link {
+    border-top: 1px solid #eee;
+}
+
+/* Add some spacing after the last item */
+.menu__item:last-child .menu__link {
+    margin-bottom: 2em;
+}
+
+
+
+@media (min-width: 740px) {
+
+    /**
+     * Adjust the base font-size
+     */
+    body {
+        font-size: 20px;
+    }
+
+
+    /**
+     * Adjust the header menu
+     */
+    .menu--header {
+        font-size: .8em;
+        font-weight: 500;
+    }
+
+    /**
+     * Hide the toggler
+     */
+    .menu__item--toggle,
+    .menu__item--clear {
+        display: none;
+    }
+
+    /**
+     * Make the list inline
+     */
+    .menu__item--logo,
+    .menu__item--responsive {
+        display: inline-block;
+        margin-right: 1.5em;
+        border-top: 0;
+    }
+    .menu__item--logo {
+        float: none;
+    }
+    .menu__item--responsive:last-child {
+        margin-right: 0;
+    }
+    .menu__item--responsive .menu__link {
+        border-top: 0;
+    }
+
+    /**
+     * Move the secondary links to the right
+     */
+    .menu__item--trail {
+        float: right;
+        position: relative;
+        top: 13px; /* Align it with the logo and other list items */
+    }
+    .menu__item--trail .menu__link {
+        margin-bottom: 0;
+    }
+
+
+    /**
+     * Add some spacing above the splash heading
+     */
+    .heading--splash {
+        margin-top: 1.25em;
+    }
+} /* min-width: 740px */
+
+
+
+
+/* ==========================================================================
+   $GROUPS
+   ========================================================================== */
+
+.groupset {
+    margin: 1em 0 2em;
+}
+.groupset__item {
+    display: inline-block;
+    vertical-align: top;
+}
+
+
 
 
 
@@ -904,11 +1062,11 @@ input[type=search] {
 pre,
 code {
     font-family: Monaco, Consolas, 'Liberation Mono', monospace;
-    padding: 3px 5px;
     border: 1px solid #e9ebeb;
     background-color: #f5f8f8;
     font-size: .9em;
     letter-spacing: -1px;
+    word-break: break-word;
 
     -webkit-border-radius: 3px;
        -moz-border-radius: 3px;
@@ -929,6 +1087,65 @@ pre > code {
     padding: 0 4.2em 0 0;
 }
 
+
+
+
+/* ==========================================================================
+   $TARGETS
+   ========================================================================== */
+
+
+@media (max-width: 740px) {
+
+    .page-target__toggle {
+        display: inline-block;
+        vertical-align: top;
+        position: relative;
+        top: 20px;
+
+        width: 28px;
+        height: 4px;
+        border-bottom: 12px double;
+        border-top: 12px double;
+    }
+    .page-target:target .page-target__toggle {
+        width: 4px;
+        height: 28px;
+        border-bottom: 0;
+        border-top: 0;
+        border-right: 12px double;
+        border-left: 12px double;
+    }
+
+    .page-target__display--flip,
+    .page-target:target .page-target__display {
+        display: none !important;
+    }
+    .page-target:target .page-target__display--flip {
+        display: inherit !important;
+    }
+    .page-target__reveal {
+        max-height: 0;
+        overflow: hidden;
+
+        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+        filter: alpha(opacity=0);
+        -moz-opacity: 0;
+             opacity: 0;
+
+        -webkit-transition: all linear .15s;
+           -moz-transition: all linear .15s;
+                transition: all linear .15s;
+    }
+    .page-target:target .page-target__reveal {
+        max-height: 5em;
+
+        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+        filter: alpha(opacity=100);
+        -moz-opacity: 1;
+             opacity: 1;
+    }
+} /* max-width: 740px */
 
 
 
@@ -992,15 +1209,7 @@ a.dimmed {
     color: #e20;
 }
 
-.float--left {
-    float: left;
-}
-
-.float--right {
-    float: right;
-}
-
-.justify--center {
+.justify-center {
     text-align: center;
 }
 
@@ -1038,6 +1247,7 @@ a.dimmed {
     speak: none;
     line-height: .8;
     vertical-align: -6px;
+    font-size: 1.4em;
 }
 
 .ampersand {

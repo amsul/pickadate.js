@@ -2,7 +2,7 @@
   "name": "pickadate",
   "version": "3.0.0alpha",
   "title": "pickadate.js",
-  "description": "A fully responsive and lightweight jQuery dateinput picker.",
+  "description": "The mobile-friendly, responsive, and lightweight jQuery date & time input picker.",
   "author": {
     "name": "Amsul",
     "email": "reach@amsul.ca",
@@ -21,15 +21,14 @@
     "input",
     "responsive"
   ],
-  "homepage": "http://amsul.github.com/pickadate.js",
-  "docs": "http://amsul.github.com/pickadate.js/docs.htm",
-  "demo": "http://amsul.github.com/pickadate.js/themes.htm",
+  "homepage": "http://amsul.github.io/pickadate.js",
+  "docs": "http://amsul.github.io/pickadate.js/docs.htm",
+  "demo": "http://amsul.github.io/pickadate.js/themes.htm",
   "bugs": "https://github.com/amsul/pickadate.js/issues",
   "repository": {
     "type": "git",
     "url": "https://github.com/amsul/pickadate.js.git"
   },
-  "main": "build/pickadate",
   "dependencies": {
     "jquery": ">=1.7"
   },
