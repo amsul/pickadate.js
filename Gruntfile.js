@@ -20,6 +20,32 @@ module.exports = function( grunt ) {
         pkg: grunt.file.readJSON( 'package.json' ),
 
 
+        // Copy and process files.
+        copy: {
+
+            // Generate the site templates.
+            site: {
+                options: {
+                    processContent: function( content ) {
+                        return grunt.template.process( content, { delimiters: 'curly' } )
+                    }
+                },
+                files: [
+                    {
+                        'index.htm': '_site/index.htm'
+                    }
+                ]
+            },
+
+
+            // Copy the package settings into a jquery package.
+            pkg: {
+                src: 'package.json',
+                dest: 'pickadate.jquery.json'
+            }
+        },
+
+
         // A banner to use on all script files.
         banner: '/*!\n' +
                 ' * <%= pkg.title %> v<%= pkg.version %>, <%= grunt.template.today("yyyy-mm-dd") %>\n' +
@@ -36,7 +62,7 @@ module.exports = function( grunt ) {
             },
             scripts: {
                 src: '_source/*.js',
-                dest: 'build/pickadate.js'
+                dest: 'lib/pickadate.js'
             }
         },
 
@@ -55,8 +81,14 @@ module.exports = function( grunt ) {
 
         // Watch the project files.
         watch: {
-            files: [ '_source/*.js' ],
-            tasks: [ 'default' ]
+            site: {
+                files: [ '_site/*.htm' ],
+                tasks: [ 'site' ]
+            },
+            scripts: {
+                files: [ '_source/*.js' ],
+                tasks: [ 'default' ]
+            }
         }
     }) //grunt.initConfig
 
@@ -66,15 +98,15 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks( 'grunt-contrib-watch' )
     grunt.loadNpmTasks( 'grunt-contrib-jshint' )
     grunt.loadNpmTasks( 'grunt-contrib-qunit' )
+    grunt.loadNpmTasks( 'grunt-contrib-copy' )
 
+    // Add the "curly" delimiters.
+    grunt.template.addDelimiters( 'curly', '{%', '%}' )
 
     // Register the default tasks.
     grunt.registerTask( 'default', [ 'concat' ] )
+    grunt.registerTask( 'site', [ 'copy:site' ] )
     grunt.registerTask( 'travis', [ /*'jshint',*/ 'qunit' ] )
-
-
-    // Copy the package settings into a jquery package.
-    grunt.file.copy( 'package.json', 'pickadate.jquery.json' )
 
 } //module.exports
 

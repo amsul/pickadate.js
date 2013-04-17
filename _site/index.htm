@@ -1,0 +1,121 @@
+<!doctype html>
+
+<meta charset="utf-8">
+
+<meta name="author" content="Amsul - http://amsul.ca">
+
+<meta name="viewport" content="width=device-width">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+<title>{%= pkg.title %}</title>
+
+<link rel="stylesheet" href="_media/styles.css">
+<link rel="stylesheet" href="lib/themes/pickadate.01.default.css">
+
+<!--[if lt IE 9]>
+    <script>document.createElement('section')</script>
+<![endif]-->
+
+
+<body>
+
+
+    <header class="section section--header section--splash">
+
+        <div class="section__block section__block--scoped">
+            <nav class="menu menu--header">
+                <ul class="float--left menu__list menu__list--inline">
+                    <li class="menu__item"><a class="logocon logocon--dimmed" href="index.htm"><span class="logocon__p">p</span><span class="logocon__u"></span></a></li>
+                    <li class="menu__item"><a class="menu__link menu__link--dimmed" href="date.htm">Date picker</a></li>
+                    <li class="menu__item"><a class="menu__link menu__link--dimmed" href="time.htm">Time picker</a></li>
+                    <li class="menu__item"><a class="menu__link menu__link--dimmed" href="v2.htm">v2 Docs</a></li>
+                </ul>
+                <ul class="float--right menu__list menu__list--inline menu__list--loner">
+                    <li class="menu__item"><a class="menu__link menu__link--dimmed" href="https://github.com/amsul/pickadate.js">View on Github</a></li>
+                </ul>
+                <div class="clear"></div>
+            </nav>
+        </div> <!-- .section__block -->
+
+        <div class="section__block justify--center">
+
+            <h1 class="heading heading--splash"><img src="_media/logo.png" alt="pickadate.js" width="478" height="90"></h1>
+            <h2 class="heading heading--thin">The mobile-friendly, responsive, and&nbsp;lightweight<br>jQuery date <span class="ampersand">&amp;</span> time input picker.</h2>
+            <h3 class="heading heading--thin"><a class="button" href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download {%= pkg.title %} v{%= pkg.version %}</a></h3>
+
+            <ul class="list list--inline">
+                <li class="list__item"><iframe src="http://ghbtns.com/github-btn.html?user=amsul&repo=pickadate.js&size=large&type=watch&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="145" height="30"></iframe></li>
+                <li class="list__item"><iframe src="http://ghbtns.com/github-btn.html?user=amsul&repo=pickadate.js&size=large&type=fork&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="135" height="30"></iframe></li>
+            </ul>
+
+        </div> <!-- .section__block -->
+
+    </header> <!-- .section -->
+
+
+    <section class="section">
+
+        <div class="section__block section__block--scoped justify--center">
+            <h2 class="heading heading--one heading--divide"><span class="heading__text">the date picker<a class="heading__anchor" name="date-picker" href="#date-picker">&sect;</a></span></h2>
+            <h3 class="heading heading--thin">Initiate it <code data-language="javascript">$('.datepicker').pickadate()</code> then pick a date:</h3>
+            <fieldset class="fieldset fieldset--demo"><input class="fieldset__input picker--date" type="text" placeholder="Try me&hellip;"></fieldset>
+            <p>And customize it as you please&hellip;<br><a href>Dropdown selectors</a>, <a href>date formats</a>, and <a href><i>lots more</i></a>.</p>
+        </div> <!-- .section__block -->
+
+        <div class="section__block section__block--scoped justify--center">
+            <h2 class="heading heading--one heading--divide"><span class="heading__text">the time picker<a class="heading__anchor" name="time-picker" href="#time-picker">&sect;</a></span></h2>
+            <h3 class="heading heading--thin">Initiate it <code data-language="javascript">$('.timepicker').pickatime()</code> then pick a time:</h3>
+            <fieldset class="fieldset fieldset--demo"><input class="fieldset__input picker--time" type="text" placeholder="Try me&hellip;"></fieldset>
+            <p>And customize it as you please&hellip;<br><a href>Time intervals</a>, <a href>time formats</a>, and <a href><i>lots more</i></a>.</p>
+        </div> <!-- .section__block -->
+
+        <div class="section__block section__block--scoped justify--center">
+            <h2 class="heading heading--one heading--divide"><span class="heading__text">features<a class="heading__anchor" name="features" href="#features">&sect;</a></span></h2>
+            <p>Works with jQuery 1.7+, BEM style class naming, Sass based styling</p>
+        </div> <!-- .section__block -->
+
+        <div class="section__block section__block--scoped justify--center">
+            <h2 class="heading heading--one heading--divide"><span class="heading__text">browser support<a class="heading__anchor" name="browser-support" href="#browser-support">&sect;</a></span></h2>
+            <h3 class="heading heading--thin">Supports all modern browsers &ndash; and IE7+.</h3>
+            <div class="notification">
+                <p>Make sure to also include the <code>*.legacy.js</code> file along for the oldie browsers.</p>
+            </div>
+            <p>Specifically, v3.0 has been tested with <a href>Chrome</a> <small class="dimmed">(MWA)</small>, <a href>Firefox</a> <small class="dimmed">(MWA)</small>,<br><a href>Opera</a> <small class="dimmed">(MWA)</small>, <a href>Safari</a> <small class="dimmed">(Mi)</small>, <a href>Blackberry</a> 6.0+ and <a href>Android</a> 3.2+ browsers.</p>
+            <small class="dimmed">
+                <p>M = Mac, W = Windows, A = Android, i = iOS</p>
+            </small>
+        </div> <!-- .section__block -->
+
+    </section> <!-- .section -->
+
+
+    <footer class="section section--footer">
+
+        <div class="section__block section__block--scoped justify--center">
+            <h2 class="heading heading--one heading--divide"><span class="heading__text heading__text--larger peace">&#x270C;</span></h2>
+            <p class="heading heading--three heading--thin">Made by <a href="http://twitter.com/amsul_">Amsul</a>.</p>
+            <p>Code licensed under <a href="http://amsul.ca/MIT">MIT</a>.</p>
+        </div> <!-- .section__block -->
+
+    </footer> <!-- .section -->
+
+
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="lib/pickadate.js"></script>
+    <script src="_media/scripts.js"></script>
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-36321179-2']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+
+</body>

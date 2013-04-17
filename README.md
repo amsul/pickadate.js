@@ -121,4 +121,4 @@ Date picker options:
 
 ---
 
-&copy; 2013 [Amsul](http://twitter.com/amsul_) - Licensed under [MIT](http://amsul.ca/MIT).
+© 2013 [Amsul](http://twitter.com/amsul_) - Licensed under [MIT](http://amsul.ca/MIT).

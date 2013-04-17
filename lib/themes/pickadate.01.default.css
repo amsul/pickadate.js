@@ -50,6 +50,8 @@
     /* The base font-size */
     font-size: 16px;
 
+    text-align: left;
+
     line-height: 1.2;
     color: #000;
 
@@ -302,8 +304,8 @@
  * The days on the calendar
  */
 .pickadate__day {
-    padding: .3125em 0 .25em;
-    font-weight: 100;
+    padding: .3125em 0;
+    font-weight: 200;
     border: 1px solid #fff;
     margin-bottom: 1px;
 }
