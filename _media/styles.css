@@ -1,47 +1,40 @@
-/*!
- * Author:         Amsul - http://amsul.ca
- * Last Updated:   16 April, 2013
- */
-
-
 /* ==========================================================================
    $CONTENTS
    ========================================================================== */
-
 /**
+ * MIXINS.....................
  * NORMALIZE..................Normalize v2.1.1
- * BASE.......................Base doc stylings
+ * BASE.......................Base stylings
  * TYPOGRAPHY.................
  * FORM-ELEMENTS..............
  * BUTTONS....................
  * MENUS......................
  * GROUPS.....................Group sets of content
  * TABLES.....................
- * CODE.......................
+ * CODE-BLOCKS................
+ * SECTIONS...................Blocks of content
  * TARGETS....................Page focus targets
  * RAINBOW....................Syntax highlighting
  * HELPERS....................
  */
-
-
-
-
-
-
+/* ==========================================================================
+   $MIXINS
+   ========================================================================== */
+/* 300px */
+/* 540px */
+/* 740px */
+/* 1152px */
+/* 1280px */
 /* ==========================================================================
    $NORMALIZE
    ========================================================================== */
-
-/*! normalize.css v2.1.1 | MIT License | git.io/normalize */
-
+/* normalize.css v2.1.1 | MIT License | git.io/normalize */
 /* ==========================================================================
    HTML5 display definitions
    ========================================================================== */
-
 /**
  * Correct `block` display not defined in IE 8/9.
  */
-
 article,
 aside,
 details,
@@ -54,41 +47,37 @@ main,
 nav,
 section,
 summary {
-    display: block;
+  display: block;
 }
 
 /**
  * Correct `inline-block` display not defined in IE 8/9.
  */
-
 audio,
 canvas,
 video {
-    display: inline-block;
+  display: inline-block;
 }
 
 /**
  * Prevent modern browsers from displaying `audio` without controls.
  * Remove excess height in iOS 5 devices.
  */
-
 audio:not([controls]) {
-    display: none;
-    height: 0;
+  display: none;
+  height: 0;
 }
 
 /**
  * Address styling not present in IE 8/9.
  */
-
 [hidden] {
-    display: none;
+  display: none;
 }
 
 /* ==========================================================================
    Base
    ========================================================================== */
-
 /**
  * 1. Prevent system color scheme's background color being used in Firefox, IE,
  *    and Opera.
@@ -98,212 +87,194 @@ audio:not([controls]) {
  * 4. Prevent iOS text size adjust after orientation change, without disabling
  *    user zoom.
  */
-
 html {
-    background: #fff; /* 1 */
-    color: #000; /* 2 */
-    font-family: sans-serif; /* 3 */
-    -ms-text-size-adjust: 100%; /* 4 */
-    -webkit-text-size-adjust: 100%; /* 4 */
+  background: #fff;
+  /* 1 */
+  color: #000;
+  /* 2 */
+  font-family: sans-serif;
+  /* 3 */
+  -ms-text-size-adjust: 100%;
+  /* 4 */
+  -webkit-text-size-adjust: 100%;
+  /* 4 */
 }
 
 /**
  * Remove default margin.
  */
-
 body {
-    margin: 0;
+  margin: 0;
 }
 
 /* ==========================================================================
    Links
    ========================================================================== */
-
 /**
  * Address `outline` inconsistency between Chrome and other browsers.
  */
-
 a:focus {
-    outline: thin dotted;
+  outline: thin dotted;
 }
 
 /**
  * Improve readability when focused and also mouse hovered in all browsers.
  */
-
 a:active,
 a:hover {
-    outline: 0;
+  outline: 0;
 }
 
 /* ==========================================================================
    Typography
    ========================================================================== */
-
 /**
  * Address variable `h1` font-size and margin within `section` and `article`
  * contexts in Firefox 4+, Safari 5, and Chrome.
  */
-
 h1 {
-    font-size: 2em;
-    margin: 0.67em 0;
+  font-size: 2em;
+  margin: 0.67em 0;
 }
 
 /**
  * Address styling not present in IE 8/9, Safari 5, and Chrome.
  */
-
 abbr[title] {
-    border-bottom: 1px dotted;
+  border-bottom: 1px dotted;
 }
 
 /**
  * Address style set to `bolder` in Firefox 4+, Safari 5, and Chrome.
  */
-
 b,
 strong {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 /**
  * Address styling not present in Safari 5 and Chrome.
  */
-
 dfn {
-    font-style: italic;
+  font-style: italic;
 }
 
 /**
  * Address differences between Firefox and other browsers.
  */
-
 hr {
-    -moz-box-sizing: content-box;
-    box-sizing: content-box;
-    height: 0;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  height: 0;
 }
 
 /**
  * Address styling not present in IE 8/9.
  */
-
 mark {
-    background: #ff0;
-    color: #000;
+  background: #ff0;
+  color: #000;
 }
 
 /**
  * Correct font family set oddly in Safari 5 and Chrome.
  */
-
 code,
 kbd,
 pre,
 samp {
-    font-family: monospace, serif;
-    font-size: 1em;
+  font-family: monospace, serif;
+  font-size: 1em;
 }
 
 /**
  * Improve readability of pre-formatted text in all browsers.
  */
-
 pre {
-    white-space: pre-wrap;
+  white-space: pre-wrap;
 }
 
 /**
  * Set consistent quote types.
  */
-
 q {
-    quotes: "\201C" "\201D" "\2018" "\2019";
+  quotes: "\201C" "\201D" "\2018" "\2019";
 }
 
 /**
  * Address inconsistent and variable font size in all browsers.
  */
-
 small {
-    font-size: 80%;
+  font-size: 80%;
 }
 
 /**
  * Prevent `sub` and `sup` affecting `line-height` in all browsers.
  */
-
 sub,
 sup {
-    font-size: 75%;
-    line-height: 0;
-    position: relative;
-    vertical-align: baseline;
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
 }
 
 sup {
-    top: -0.5em;
+  top: -0.5em;
 }
 
 sub {
-    bottom: -0.25em;
+  bottom: -0.25em;
 }
 
 /* ==========================================================================
    Embedded content
    ========================================================================== */
-
 /**
  * Remove border when inside `a` element in IE 8/9.
  */
-
 img {
-    border: 0;
+  border: 0;
 }
 
 /**
  * Correct overflow displayed oddly in IE 9.
  */
-
 svg:not(:root) {
-    overflow: hidden;
+  overflow: hidden;
 }
 
 /* ==========================================================================
    Figures
    ========================================================================== */
-
 /**
  * Address margin not present in IE 8/9 and Safari 5.
  */
-
 figure {
-    margin: 0;
+  margin: 0;
 }
 
 /* ==========================================================================
    Forms
    ========================================================================== */
-
 /**
  * Define consistent border, margin, and padding.
  */
-
 fieldset {
-    border: 1px solid #c0c0c0;
-    margin: 0 2px;
-    padding: 0.35em 0.625em 0.75em;
+  border: 1px solid silver;
+  margin: 0 2px;
+  padding: 0.35em 0.625em 0.75em;
 }
 
 /**
  * 1. Correct `color` not being inherited in IE 8/9.
  * 2. Remove padding so people aren't caught out if they zero out fieldsets.
  */
-
 legend {
-    border: 0; /* 1 */
-    padding: 0; /* 2 */
+  border: 0;
+  /* 1 */
+  padding: 0;
+  /* 2 */
 }
 
 /**
@@ -311,24 +282,25 @@ legend {
  * 2. Correct font size not being inherited in all browsers.
  * 3. Address margins set differently in Firefox 4+, Safari 5, and Chrome.
  */
-
 button,
 input,
 select,
 textarea {
-    font-family: inherit; /* 1 */
-    font-size: 100%; /* 2 */
-    margin: 0; /* 3 */
+  font-family: inherit;
+  /* 1 */
+  font-size: 100%;
+  /* 2 */
+  margin: 0;
+  /* 3 */
 }
 
 /**
  * Address Firefox 4+ setting `line-height` on `input` using `!important` in
  * the UA stylesheet.
  */
-
 button,
 input {
-    line-height: normal;
+  line-height: normal;
 }
 
 /**
@@ -337,10 +309,9 @@ input {
  * Correct `button` style inheritance in Chrome, Safari 5+, and IE 8+.
  * Correct `select` style inheritance in Firefox 4+ and Opera.
  */
-
 button,
 select {
-    text-transform: none;
+  text-transform: none;
 }
 
 /**
@@ -350,33 +321,34 @@ select {
  * 3. Improve usability and consistency of cursor style between image-type
  *    `input` and others.
  */
-
 button,
-html input[type="button"], /* 1 */
+html input[type="button"],
 input[type="reset"],
 input[type="submit"] {
-    -webkit-appearance: button; /* 2 */
-    cursor: pointer; /* 3 */
+  -webkit-appearance: button;
+  /* 2 */
+  cursor: pointer;
+  /* 3 */
 }
 
 /**
  * Re-set default cursor for disabled elements.
  */
-
 button[disabled],
 html input[disabled] {
-    cursor: default;
+  cursor: default;
 }
 
 /**
  * 1. Address box sizing set to `content-box` in IE 8/9.
  * 2. Remove excess padding in IE 8/9.
  */
-
 input[type="checkbox"],
 input[type="radio"] {
-    box-sizing: border-box; /* 1 */
-    padding: 0; /* 2 */
+  box-sizing: border-box;
+  /* 1 */
+  padding: 0;
+  /* 2 */
 }
 
 /**
@@ -384,369 +356,306 @@ input[type="radio"] {
  * 2. Address `box-sizing` set to `border-box` in Safari 5 and Chrome
  *    (include `-moz` to future-proof).
  */
-
 input[type="search"] {
-    -webkit-appearance: textfield; /* 1 */
-    -moz-box-sizing: content-box;
-    -webkit-box-sizing: content-box; /* 2 */
-    box-sizing: content-box;
+  -webkit-appearance: textfield;
+  /* 1 */
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  /* 2 */
+  box-sizing: content-box;
 }
 
 /**
  * Remove inner padding and search cancel button in Safari 5 and Chrome
  * on OS X.
  */
-
 input[type="search"]::-webkit-search-cancel-button,
 input[type="search"]::-webkit-search-decoration {
-    -webkit-appearance: none;
+  -webkit-appearance: none;
 }
 
 /**
  * Remove inner padding and border in Firefox 4+.
  */
-
 button::-moz-focus-inner,
 input::-moz-focus-inner {
-    border: 0;
-    padding: 0;
+  border: 0;
+  padding: 0;
 }
 
 /**
  * 1. Remove default vertical scrollbar in IE 8/9.
  * 2. Improve readability and alignment in all browsers.
  */
-
 textarea {
-    overflow: auto; /* 1 */
-    vertical-align: top; /* 2 */
+  overflow: auto;
+  /* 1 */
+  vertical-align: top;
+  /* 2 */
 }
 
 /* ==========================================================================
    Tables
    ========================================================================== */
-
 /**
  * Remove most spacing between table cells.
  */
-
 table {
-    border-collapse: collapse;
-    border-spacing: 0;
+  border-collapse: collapse;
+  border-spacing: 0;
 }
-
-
-
-
-
-
-
-
 
 /* ==========================================================================
    ==========================================================================
    ==========================================================================
    ========================================================================== */
-
-
-
-
-
-
-
-
-/* ========================================================================
+/* ==========================================================================
    $BASE
-   ======================================================================== */
-
-body {
-    font-family: 'Helvetica Neue', sans-serif;
-    font-weight: 200;
-    font-size: 16px;
-    line-height: 1.6;
+   ========================================================================== */
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #cccccc;
+  margin: 1em 0;
+  padding: 0;
 }
 
-
+img {
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
 
 /**
- * Sections of content
+ * Links
  */
-.section {
-    padding: 0 20px;
-}
-.section--header {
-    background: url(bg.png) #fafbfb 50% 0;
-    border-bottom: 2px solid #e9ebeb;
-}
-.section--splash {
-}
-.section--footer {
-    margin-bottom: 8em;
+a {
+  text-decoration: underline;
+  cursor: pointer;
+  color: #0089ec;
+  -webkit-transition: all linear 0.15s;
+  -moz-transition: all linear 0.15s;
+  transition: all linear 0.15s;
 }
 
-
-/**
- * Section block holder
- */
-.section__block {
-}
-.section__block--scoped {
-    max-width: 760px;
-    margin: 0 auto;
+a:focus {
+  outline: 2px dotted;
 }
 
+p > a {
+  text-decoration: none;
+}
 
-
+p > a:hover,
+p > a:focus {
+  text-decoration: underline;
+}
 
 /**
  * Logo stuff
  */
 .logocon {
-    position: relative;
-    display: inline-block;
-    text-decoration: none;
-    font-size: 56px;
-    height: 1.05em;
-    width: .6em;
-    line-height: 1em;
-    overflow: hidden;
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+  font-size: 56px;
+  height: 1.05em;
+  width: .6em;
+  line-height: 1em;
+  overflow: hidden;
 }
+
 .logocon__p,
 .menu__link--dimmed:hover .logocon__p,
 .menu__link--dimmed:focus .logocon__p {
-    font-weight: bold;
-    color: #000;
+  font-weight: bold;
+  color: #000;
 }
+
 .logocon__u,
 .menu__link--dimmed:hover .logocon__u,
 .menu__link--dimmed:focus .logocon__u {
-    position: absolute;
-    background: #0089ec;
-    height: .1em;
-    bottom: 0;
-    left: .25em;
-    right: .025em;
+  position: absolute;
+  background: #0089ec;
+  height: .1em;
+  bottom: 0;
+  left: .25em;
+  right: .025em;
 }
+
 .menu__link--dimmed .logocon__p,
 .menu__link--dimmed .logocon__u {
-    -webkit-transition: all linear .15s;
-       -moz-transition: all linear .15s;
-            transition: all linear .15s;
+  -webkit-transition: all linear 0.15s;
+  -moz-transition: all linear 0.15s;
+  transition: all linear 0.15s;
 }
+
 .menu__link--dimmed .logocon__p {
-    color: #bbb;
+  color: #bbb;
 }
+
 .menu__link--dimmed .logocon__u {
-    background: #bbb;
+  background: #bbb;
 }
-
-
-
-.notification {
-    background: #ffd;
-    border: 1px solid #eec;
-    padding: 0 20px;
-    color: #442;
-}
-
-
-hr {
-    display: block;
-    height: 1px;
-    border: 0;
-    border-top: 1px solid #ccc;
-    margin: 1em 0;
-    padding: 0;
-}
-
-img {
-    max-width: 100%;
-    height: auto;
-    vertical-align: middle;
-}
-
-
-/**
- * Links
- */
-
-a {
-    text-decoration: underline;
-    cursor: pointer;
-    color: #0089ec;
-
-    -webkit-transition: all linear .15s;
-       -moz-transition: all linear .15s;
-            transition: all linear .15s;
-}
-a:focus {
-    outline: 2px dotted;
-}
-p > a {
-    text-decoration: none;
-}
-p > a:hover,
-p > a:focus {
-    text-decoration: underline;
-}
-
-
-
-
 
 /* ==========================================================================
    $TYPOGRAPHY
    ========================================================================== */
+body {
+  font-family: "Helvetica Neue", sans-serif;
+  font-weight: 200;
+  font-size: 16px;
+  line-height: 1.6;
+}
+@media (min-width: 46.25em) {
+  body {
+    font-size: 20px;
+  }
+}
 
 h1, h2, h3, h4, h5, h6,
 .heading {
-    line-height: 1.25;
-    font-weight: 400;
+  line-height: 1.25;
+  font-weight: 400;
 }
 
 h1, h2,
 .heading--one,
 .heading--two {
-    letter-spacing: -1px;
+  letter-spacing: -1px;
 }
+
 h1,
 .heading--one {
-    font-size: 2em
+  font-size: 2em;
 }
+@media (min-width: 18.75em) {
+  h1,
+  .heading--one {
+    font-size: 2.125em;
+  }
+}
+@media (min-width: 33.75em) {
+  h1,
+  .heading--one {
+    font-size: 2.4em;
+  }
+}
+
 h2,
 .heading--two {
-    font-size: 1.5em;
+  font-size: 1.5em;
 }
+@media (min-width: 33.75em) {
+  h2,
+  .heading--two {
+    font-size: 1.8em;
+  }
+}
+
 h3,
 .heading--three {
-    font-size: 1.2em;
-}
-
-@media (min-width: 300px) {
-
-    /**
-     * Adjust the heading sizes
-     */
-    h1,
-    .heading--one {
-        font-size: 2.125em
-    }
-} /* min-width: 300px */
-
-@media (min-width: 540px) {
-
-    /**
-     * Adjust the heading sizes
-     */
-    h1,
-    .heading--one {
-        font-size: 2.4em
-    }
-    h2,
-    .heading--two {
-        font-size: 1.8em;
-    }
+  font-size: 1.2em;
 }
 
 .heading--thin {
-    font-weight: 200;
+  font-weight: 200;
 }
 
 .heading--splash {
-    margin-top: .25em;
-    margin-left: auto;
-    margin-right: auto;
-    width: 88%;
+  margin-top: .25em;
+  margin-left: auto;
+  margin-right: auto;
+  width: 88%;
 }
-
-
-
+@media (min-width: 46.25em) {
+  .heading--splash {
+    margin-top: 1.25em;
+  }
+}
 
 /**
  * Divider headings
  */
 .heading--divide {
-    margin-top: 1.5em;
-    border-top: 1px solid #ddd;
-    padding-top: 1.5em;
+  margin-top: 1.5em;
+  border-top: 1px solid #dddddd;
+  padding-top: 1.5em;
 }
-.heading--divide-first {
+@media (min-width: 33.75em) {
+  .heading--divide {
+    position: relative;
+    margin-top: 1.6em;
     padding-top: 0;
     border-top: 0;
+  }
 }
 
-@media (min-width: 540px) {
+.heading--divide-first {
+  padding-top: 0;
+  border-top: 0;
+}
 
-    .heading--divide {
-        position: relative;
-        margin-top: 1.6em;
-        padding-top: 0;
-        border-top: 0;
-    }
-    .heading--divide:after {
-        content: " ";
-        border-bottom: 1px solid #ddd;
-        height: 0;
-        position: absolute;
-        bottom: .5em;
-        z-index: -1;
-        right: 0;
-        left: 0;
-        display: block;
-    }
-    .heading--divide .heading__text {
-        background: #fff;
-        padding-left: .5em;
-        padding-right: .5em;
-        display: inline-block;
-    }
-} /* min-width: 540px */
+@media (min-width: 33.75em) {
+  .heading--divide:after {
+    content: " ";
+    border-bottom: 1px solid #dddddd;
+    height: 0;
+    position: absolute;
+    bottom: .5em;
+    z-index: -1;
+    right: 0;
+    left: 0;
+    display: block;
+  }
+}
 
+@media (min-width: 33.75em) {
+  .heading--divide .heading__text {
+    background: #fff;
+    padding-left: .5em;
+    padding-right: .5em;
+    display: inline-block;
+  }
+}
 
 /**
  * Anchor for a heading
  */
 .heading__anchor {
-    color: #bbb;
-    font-weight: 100;
-    text-decoration: none;
-    margin-left: .5em;
-    font-style: italic;
-    font-size: .75em;
-    vertical-align: 3px;
+  color: #bbb;
+  font-weight: 100;
+  text-decoration: none;
+  margin-left: .5em;
+  font-style: italic;
+  font-size: .75em;
+  vertical-align: 3px;
 }
+
 .heading__anchor:hover,
 .heading__anchor:focus {
-    color: #0089ec;
+  color: #0089ec;
 }
-
-
-
-
-
-
 
 /* ==========================================================================
    $FORM-ELEMENTS
    ========================================================================== */
-
 fieldset {
-    position: relative;
-    border: 0;
-    margin: 1em 0 1.5em;
-    padding: 0;
+  position: relative;
+  border: 0;
+  margin: 1em 0 1.5em;
+  padding: 0;
 }
 
 label:hover,
 label:focus {
-    color: #0089ec;
+  color: #0089ec;
 }
-
 
 /**
  * Inputs and textareas
  */
-
 input[type=text],
 input[type=password],
 input[type=email],
@@ -754,22 +663,20 @@ input[type=date],
 input[type=number],
 input[type=search],
 textarea {
-    border: 3px solid #ccc;
-    padding: .6em 1em;
-    font-weight: 100;
-    width: 100%;
-
-    -webkit-box-shadow: none;
-       -moz-box-shadow: none;
-            box-shadow: none;
-
-    -webkit-box-sizing: border-box;
-       -moz-box-sizing: border-box;
-            box-sizing: border-box;
+  border: 3px solid #cccccc;
+  padding: 0.6em 1em;
+  font-weight: 100;
+  width: 100%;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 textarea {
-    min-height: 2em;
+  min-height: 2em;
 }
 
 input[type=text]:focus,
@@ -779,250 +686,213 @@ input[type=date]:focus,
 input[type=number]:focus,
 input[type=search]:focus,
 textarea:focus {
-    outline: none;
-    border-color: #0089ec;
+  outline: none;
+  border-color: #0089ec;
 }
-
 
 /**
  * Radios and checkboxes
  */
-
 input[type=checkbox],
 input[type=radio] {
-    margin-right: 5px;
-    vertical-align: 1px;
+  margin-right: 5px;
+  vertical-align: 1px;
 }
-
 
 /**
  * Select drop-downs and search
  */
-
 select {
-    border: 1px solid #999;
-    background: #fff;
-    padding: 3px 5px;
-    height: 29px;
-    white-space: nowrap;
+  border: 1px solid #999999;
+  background: #fff;
+  padding: 3px 5px;
+  height: 29px;
+  white-space: nowrap;
 }
 
 input[type=search] {
-    padding-left: 0;
-    padding-right: 0;
-
-    -webkit-border-radius: 14px;
-       -moz-border-radius: 14px;
-            border-radius: 14px;
+  padding-left: 0;
+  padding-right: 0;
+  -webkit-border-radius: 14px;
+  -moz-border-radius: 14px;
+  border-radius: 14px;
 }
-
-
-
 
 /**
  * Groups of fields
  */
 .fieldset--demo .fieldset__input {
-    font-size: 1.2em;
-    text-align: center;
-    width: 70%;
-    margin: 0 auto;
+  font-size: 1.2em;
+  text-align: center;
+  margin: 0 auto;
+  width: 80%;
 }
-
-
-
-
-
+@media (min-width: 33.75em) {
+  .fieldset--demo .fieldset__input {
+    width: 70%;
+  }
+}
 
 /* ==========================================================================
    $BUTTONS
    ========================================================================== */
-
 .button {
-    display: inline-block;
-    border: 2px solid #0089ec;
-    background: #0089ec;
-    color: #fff;
-    text-decoration: none;
-    padding: .67em 1.25em;
+  display: inline-block;
+  border: 2px solid #0089ec;
+  background: #0089ec;
+  color: #fff;
+  text-decoration: none;
+  padding: 0.67em 1.25em;
 }
 
 .button:hover,
 .button:focus {
-    text-decoration: none;
-    background: #5c2;
-    border-color: #5c2;
+  text-decoration: none;
+  background: #5c2;
+  border-color: #5c2;
 }
-
-
-
-
 
 /* ==========================================================================
    $MENUS
    ========================================================================== */
-
-.menu {
-
-}
-
 .menu__list {
-    margin: 0;
-    list-style: none;
-    padding: 0;
+  margin: 0;
+  list-style: none;
+  padding: 0;
 }
-
 
 /**
  * Menu links
  */
 .menu__link {
-    text-decoration: none;
-}
-.menu__link--dimmed {
-    color: #aaa;
-}
-.menu__link--dimmed:hover,
-.menu__link--dimmed:focus {
-    color: #000;
+  text-decoration: none;
 }
 
+/* Dimmed links */
+.menu__link--dimmed {
+  color: #aaa;
+}
+
+.menu__link--dimmed:hover,
+.menu__link--dimmed:focus {
+  color: #000;
+}
+
+/* Touch friendly links */
+.menu__item--touch .menu__link {
+  margin-right: -20px;
+  padding-right: 20px;
+  margin-left: -20px;
+  padding-left: 20px;
+}
+
+/**
+ * Menu items
+ */
+.menu__item--logo {
+  float: left;
+}
+@media (min-width: 46.25em) {
+  .menu__item--logo {
+    float: none;
+    display: inline-block;
+    margin-right: 1.5em;
+  }
+}
+
+.menu__item--toggle {
+  float: right;
+}
+@media (min-width: 46.25em) {
+  .menu__item--toggle {
+    display: none;
+  }
+}
+
+.menu__item--clear {
+  padding-bottom: 1em;
+}
+@media (min-width: 46.25em) {
+  .menu__item--clear {
+    display: none;
+  }
+}
+
+@media (min-width: 46.25em) {
+  .menu__item--responsive {
+    display: inline-block;
+    margin-right: 1.5em;
+  }
+  .menu__item--responsive:last-child {
+    margin-right: 0;
+  }
+}
+
+/* Trailing items sit separately */
+@media (min-width: 46.25em) {
+  .menu__item--trail {
+    float: right;
+    position: relative;
+    top: 13px;
+    /* Align it with the logo and other list items */
+  }
+}
 
 /**
  * Header menu
  */
 .menu--header {
-    font-size: 1.25em;
+  font-size: 1.25em;
 }
+@media (min-width: 46.25em) {
+  .menu--header {
+    font-size: .8em;
+    font-weight: 500;
+  }
+}
+
 .menu--header .menu__link {
-    display: block;
-    height: 3em;
-    line-height: 3em;
-}
-
-.menu__item--logo {
-    float: left;
-}
-.menu__item--toggle {
-    float: right;
-}
-.menu__item--clear {
-    padding-bottom: 1em;
-}
-
-/* Make the links touch friendly */
-.menu__item--logo .menu__link,
-.menu__item--toggle .menu__link {
-    margin-right: -20px;
-    padding-right: 20px;
-    margin-left: -20px;
-    padding-left: 20px;
+  display: block;
+  height: 3em;
+  line-height: 3em;
 }
 
 /* Add a border to the block links */
 .menu__item--responsive .menu__link {
-    border-top: 1px solid #eee;
+  border-top: 1px solid #eeeeee;
+  text-align: center;
+}
+@media (min-width: 46.25em) {
+  .menu__item--responsive .menu__link {
+    border-top: 0;
+  }
 }
 
-/* Add some spacing after the last item */
+/* Add some spacing after the last block item */
 .menu__item:last-child .menu__link {
-    margin-bottom: 2em;
+  margin-bottom: 2em;
 }
-
-
-
-@media (min-width: 740px) {
-
-    /**
-     * Adjust the base font-size
-     */
-    body {
-        font-size: 20px;
-    }
-
-
-    /**
-     * Adjust the header menu
-     */
-    .menu--header {
-        font-size: .8em;
-        font-weight: 500;
-    }
-
-    /**
-     * Hide the toggler
-     */
-    .menu__item--toggle,
-    .menu__item--clear {
-        display: none;
-    }
-
-    /**
-     * Make the list inline
-     */
-    .menu__item--logo,
-    .menu__item--responsive {
-        display: inline-block;
-        margin-right: 1.5em;
-        border-top: 0;
-    }
-    .menu__item--logo {
-        float: none;
-    }
-    .menu__item--responsive:last-child {
-        margin-right: 0;
-    }
-    .menu__item--responsive .menu__link {
-        border-top: 0;
-    }
-
-    /**
-     * Move the secondary links to the right
-     */
-    .menu__item--trail {
-        float: right;
-        position: relative;
-        top: 13px; /* Align it with the logo and other list items */
-    }
-    .menu__item--trail .menu__link {
-        margin-bottom: 0;
-    }
-
-
-    /**
-     * Add some spacing above the splash heading
-     */
-    .heading--splash {
-        margin-top: 1.25em;
-    }
-} /* min-width: 740px */
-
-
-
+@media (min-width: 46.25em) {
+  .menu__item:last-child .menu__link {
+    margin-bottom: 0;
+  }
+}
 
 /* ==========================================================================
    $GROUPS
    ========================================================================== */
-
 .groupset {
-    margin: 1em 0 2em;
+  margin: 1em 0 2em;
 }
+
 .groupset__item {
-    display: inline-block;
-    vertical-align: top;
+  display: inline-block;
+  vertical-align: top;
 }
-
-
-
-
-
-
-
 
 /* ==========================================================================
    $TABLES
    ========================================================================== */
-
 /*.table {
     line-height: 1.5;
     background: #fff;
@@ -1050,219 +920,204 @@ input[type=search] {
     background: #f5f5f5;
     border-top: 0;
 }*/
-
-
-
-
-
 /* ==========================================================================
-   $CODE
+   $CODE-BLOCKS
    ========================================================================== */
-
 pre,
 code {
-    font-family: Monaco, Consolas, 'Liberation Mono', monospace;
-    border: 1px solid #e9ebeb;
-    background-color: #f5f8f8;
-    font-size: .9em;
-    letter-spacing: -1px;
-    word-break: break-word;
-
-    -webkit-border-radius: 3px;
-       -moz-border-radius: 3px;
-            border-radius: 3px;
+  font-family: Monaco, Consolas, "Liberation Mono", monospace;
+  border: 1px solid #e9ebeb;
+  background-color: #f5f8f8;
+  font-size: .9em;
+  letter-spacing: -1px;
+  word-break: break-word;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
 }
 
 pre {
-    overflow-x: auto;
-    padding: 1em;
-    font-size: 1em;
+  overflow-x: auto;
+  padding: 1em;
+  font-size: 1em;
 }
 
 pre > code {
-    display: table;
-    line-height: 1.5;
-    border: 0;
-    background: none;
-    padding: 0 4.2em 0 0;
+  display: table;
+  line-height: 1.5;
+  border: 0;
+  background: none;
+  padding: 0 4.2em 0 0;
 }
 
+/* ========================================================================
+   $SECTIONS
+   ======================================================================== */
+/**
+ * Sections of content
+ */
+.section {
+  padding: 0 20px;
+}
 
+.section--header {
+  background: url(bg.png) #fafbfb 50% 0;
+  border-bottom: 2px solid #e9ebeb;
+}
 
+.section--footer {
+  margin-bottom: 8em;
+}
+
+/**
+ * Section block holder
+ */
+/* Block scoped with a max-width */
+.section__block--scoped {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+/* Notification blocks */
+.section__block--notification {
+  background: #ffd;
+  border: 1px solid #eeeecc;
+  padding: 0 20px;
+  color: #442;
+}
 
 /* ==========================================================================
    $TARGETS
    ========================================================================== */
+@media (max-width: 46.25em) {
+  .page-target__toggle {
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    top: 20px;
+    width: 28px;
+    height: 4px;
+    border-bottom: 12px double;
+    border-top: 12px double;
+  }
 
+  .page-target:target .page-target__toggle {
+    width: 4px;
+    height: 28px;
+    border-bottom: 0;
+    border-top: 0;
+    border-right: 12px double;
+    border-left: 12px double;
+  }
 
-@media (max-width: 740px) {
+  .page-target__display--flip,
+  .page-target:target .page-target__display {
+    display: none !important;
+  }
 
-    .page-target__toggle {
-        display: inline-block;
-        vertical-align: top;
-        position: relative;
-        top: 20px;
+  .page-target:target .page-target__display--flip {
+    display: inherit !important;
+  }
 
-        width: 28px;
-        height: 4px;
-        border-bottom: 12px double;
-        border-top: 12px double;
-    }
-    .page-target:target .page-target__toggle {
-        width: 4px;
-        height: 28px;
-        border-bottom: 0;
-        border-top: 0;
-        border-right: 12px double;
-        border-left: 12px double;
-    }
+  .page-target__reveal {
+    max-height: 0;
+    overflow: hidden;
+    -webkit-transition: all linear 0.15s;
+    -moz-transition: all linear 0.15s;
+    transition: all linear 0.15s;
+  }
 
-    .page-target__display--flip,
-    .page-target:target .page-target__display {
-        display: none !important;
-    }
-    .page-target:target .page-target__display--flip {
-        display: inherit !important;
-    }
-    .page-target__reveal {
-        max-height: 0;
-        overflow: hidden;
-
-        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
-        filter: alpha(opacity=0);
-        -moz-opacity: 0;
-             opacity: 0;
-
-        -webkit-transition: all linear .15s;
-           -moz-transition: all linear .15s;
-                transition: all linear .15s;
-    }
-    .page-target:target .page-target__reveal {
-        max-height: 5em;
-
-        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
-        filter: alpha(opacity=100);
-        -moz-opacity: 1;
-             opacity: 1;
-    }
-} /* max-width: 740px */
-
-
-
-
-
-
+  .page-target:target .page-target__reveal {
+    max-height: 5em;
+  }
+}
+/* max-width: 740px */
 /* ==========================================================================
    $RAINBOW
    ========================================================================== */
-
 .string {
-    color: #68c244;
+  color: #68c244;
 }
 
 .selector,
 .function,
 .method {
-    color: #0069bc;
+  color: #0069bc;
 }
 
 .comment,
 .comment a {
-    /*color: #8e69c9;*/
-    color: #0089ec;
-    font-style: italic;
+  /*color: #8e69c9;*/
+  color: #0089ec;
+  font-style: italic;
 }
 
 .constant {
-    color: #d40;
+  color: #d40;
 }
 
 .tag-name,
 .attribute {
-    color: #c50;
+  color: #c50;
 }
 
 .keyword {
-    color: #b90690;
+  color: #b90690;
 }
 
 .rainbow,
 .operator {
-    color: #585856;
+  color: #585856;
 }
-
-
-
-
-
 
 /* ==========================================================================
    $HELPERS
    ========================================================================== */
-
 .dimmed,
 a.dimmed {
-    color: #bbb;
+  color: #bbb;
 }
 
 .warning {
-    color: #e20;
+  color: #e20;
 }
 
 .justify-center {
-    text-align: center;
+  text-align: center;
 }
-
-
 
 /**
  * Clear fix from HTML5 Boilerplate
  */
-
 .clear:before,
 .clear:after {
-    content: " ";
-    display: table;
+  content: " ";
+  display: table;
 }
 
 .clear:after {
-    clear: both;
+  clear: both;
 }
-
-
 
 /**
  * Special fonts
  */
 @font-face {
-    font-family: Peace;
-    src: url(data:application/x-font-woff;charset=utf-8;base64,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) format('woff'),
-         url(data:application/x-font-ttf;charset=utf-8;base64,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) format('truetype');
-    font-weight: normal;
-    font-style: normal;
+  font-family: Peace;
+  src: url(data:application/x-font-woff;charset=utf-8;base64,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) format("woff"), url(data:application/x-font-ttf;charset=utf-8;base64,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) format("truetype");
+  font-weight: normal;
+  font-style: normal;
 }
 
 .peace {
-    font-family: Peace, 'Zapf Dingbats', dingbats;
-    speak: none;
-    line-height: .8;
-    vertical-align: -6px;
-    font-size: 1.4em;
+  font-family: Peace, "Zapf Dingbats", dingbats;
+  speak: none;
+  line-height: .8;
+  vertical-align: -6px;
+  font-size: 1.4em;
 }
 
 .ampersand {
-    font-family: Baskerville, 'Goudy Old Style', Palatino, 'Book Antiqua', serif;
-    font-style: italic;
+  font-family: Baskerville, "Goudy Old Style", Palatino, "Book Antiqua", serif;
+  font-style: italic;
 }
-
-
-
-
-
-
-
-
-
-
-
-

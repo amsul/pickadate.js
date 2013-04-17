@@ -23,46 +23,56 @@ module.exports = function( grunt ) {
         // Copy and process files.
         copy: {
 
-            // Generate the site templates.
-            site: {
-                options: {
-                    processContent: function( content ) {
-                        return grunt.template.process( content, { delimiters: 'curly' } )
-                    }
-                },
-                files: [
-                    {
-                        'index.htm': '_site/index.htm'
-                    }
-                ]
+            // Use curly braces to process these files.
+            options: {
+                processContent: function( content ) {
+                    return grunt.template.process( content, { delimiters: 'curly' } )
+                }
             },
 
+            // Generate the site templates.
+            site: {
+                files: {
+                    'index.htm': '_site/index.htm'
+                }
+            },
 
             // Copy the package settings into a jquery package.
             pkg: {
-                src: 'package.json',
-                dest: 'pickadate.jquery.json'
+                files: {
+                    'pickadate.jquery.json': 'package.json'
+                }
             }
         },
 
 
-        // A banner to use on all script files.
-        banner: '/*!\n' +
-                ' * <%= pkg.title %> v<%= pkg.version %>, <%= grunt.template.today("yyyy-mm-dd") %>\n' +
-                ' * By <%= pkg.author.name %> (<%= pkg.author.url %>)\n' +
-                ' * Hosted on <%= pkg.homepage %>\n' +
-                ' * Licensed under MIT ("expat" flavour) license.\n' +
-                ' */\n\n',
+        // Convert any Sass files into CSS.
+        sass: {
+            options: {
+                style: 'expanded'
+            },
+            site: {
+                files: {
+                    '_media/styles.css': '_site/styles/main.scss'
+                }
+            }
+        },
 
 
         // Concatenate the files and add the banner.
         concat: {
             options: {
-                banner: '<%= banner %>'
+                banner: '/*!\n' +
+                        ' * <%= pkg.title %> v<%= pkg.version %>, <%= grunt.template.today("yyyy-mm-dd") %>\n' +
+                        ' * By <%= pkg.author.name %> (<%= pkg.author.url %>)\n' +
+                        ' * Hosted on <%= pkg.homepage %>\n' +
+                        ' * Licensed under MIT ("expat" flavour) license.\n' +
+                        ' */\n\n'
             },
             scripts: {
-                src: '_source/*.js',
-                dest: 'lib/pickadate.js'
+                files: {
+                    'lib/pickadate.js': '_source/*.js'
+                }
             }
         },
 
@@ -82,7 +92,7 @@ module.exports = function( grunt ) {
         // Watch the project files.
         watch: {
             site: {
-                files: [ '_site/*.htm' ],
+                files: [ '_site/*.htm', '_site/**/*.scss' ],
                 tasks: [ 'site' ]
             },
             scripts: {
@@ -93,19 +103,20 @@ module.exports = function( grunt ) {
     }) //grunt.initConfig
 
 
+    // Add the "curly" delimiters.
+    grunt.template.addDelimiters( 'curly', '{%', '%}' )
+
     // Load the NPM tasks.
     grunt.loadNpmTasks( 'grunt-contrib-concat' )
     grunt.loadNpmTasks( 'grunt-contrib-watch' )
     grunt.loadNpmTasks( 'grunt-contrib-jshint' )
     grunt.loadNpmTasks( 'grunt-contrib-qunit' )
     grunt.loadNpmTasks( 'grunt-contrib-copy' )
-
-    // Add the "curly" delimiters.
-    grunt.template.addDelimiters( 'curly', '{%', '%}' )
+    grunt.loadNpmTasks( 'grunt-contrib-sass' )
 
     // Register the default tasks.
-    grunt.registerTask( 'default', [ 'concat' ] )
-    grunt.registerTask( 'site', [ 'copy:site' ] )
+    grunt.registerTask( 'default', [ 'concat:scripts' ] )
+    grunt.registerTask( 'site', [ 'copy:site', 'sass:site' ] )
     grunt.registerTask( 'travis', [ /*'jshint',*/ 'qunit' ] )
 
 } //module.exports
