@@ -39,9 +39,9 @@ module.exports = function( grunt ) {
 
             // Copy the translations over.
             lib: {
-                files: {
-                    'lib/translations/': '_source/lib/translations/'
-                }
+                files: [
+                    { expand: true, cwd: '_source/lib/', src: [ 'translations/*.js' ], dest: 'lib/' }
+                ]
             },
 
             // Copy the package settings into a jquery package.
@@ -108,7 +108,7 @@ module.exports = function( grunt ) {
 
         // Unit test the files.
         qunit: {
-            all: [ '_dev/qunit/qunit.htm' ]
+            lib: [ '_dev/qunit/qunit.htm' ]
         },
 
 
@@ -139,7 +139,7 @@ module.exports = function( grunt ) {
 
     // Register the tasks.
     grunt.registerTask( 'default', [ 'concat', 'copy', 'sass', 'jshint', 'qunit' ] )
-    grunt.registerTask( 'build', [ 'concat:lib', 'copy:lib', 'sass:lib' ] )
+    grunt.registerTask( 'build', [ 'concat:lib', 'copy:lib', 'sass:lib', 'qunit:lib' ] )
     grunt.registerTask( 'site', [ 'concat:site', 'copy:site', 'sass:site' ] )
     grunt.registerTask( 'travis', [ 'jshint', 'qunit' ] )
 
