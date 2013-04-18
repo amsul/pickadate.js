@@ -23,17 +23,24 @@ module.exports = function( grunt ) {
         // Copy and process files.
         copy: {
 
-            // Use curly braces to process these files.
-            options: {
-                processContent: function( content ) {
-                    return grunt.template.process( content, { delimiters: 'curly' } )
-                }
+            // Generate the site templates and copy the site images over.
+            site: {
+                options: {
+                    processContentExclude: [ '**/*.{png,ico}' ],
+                    processContent: function( content ) {
+                        return grunt.template.process( content, { delimiters: 'curly' } )
+                    }
+                },
+                files: [
+                    { expand: true, cwd: '_source/site/', src: [ 'images/*.{png,ico}' ], dest: 'site/' },
+                    { 'index.htm': '_source/index.htm' }
+                ]
             },
 
-            // Generate the site templates.
-            site: {
+            // Copy the translations over.
+            lib: {
                 files: {
-                    'index.htm': '_site/index.htm'
+                    'lib/translations/': '_source/lib/translations/'
                 }
             },
 
@@ -46,14 +53,22 @@ module.exports = function( grunt ) {
         },
 
 
-        // Convert any Sass files into CSS.
+        // Convert Sass files into CSS.
         sass: {
-            options: {
-                style: 'expanded'
-            },
             site: {
+                options: {
+                    style: 'expanded'
+                },
                 files: {
-                    '_media/styles.css': '_site/styles/main.scss'
+                    'site/styles/main.css': '_source/site/styles/main.scss'
+                }
+            },
+            lib: {
+                options: {
+                    style: 'compressed'
+                },
+                files: {
+                    'lib/themes/default.css': '_source/lib/themes/*.scss'
                 }
             }
         },
@@ -61,42 +76,50 @@ module.exports = function( grunt ) {
 
         // Concatenate the files and add the banner.
         concat: {
-            options: {
-                banner: '/*!\n' +
-                        ' * <%= pkg.title %> v<%= pkg.version %>, <%= grunt.template.today("yyyy-mm-dd") %>\n' +
-                        ' * By <%= pkg.author.name %> (<%= pkg.author.url %>)\n' +
-                        ' * Hosted on <%= pkg.homepage %>\n' +
-                        ' * Licensed under MIT ("expat" flavour) license.\n' +
-                        ' */\n\n'
-            },
-            scripts: {
+            site: {
                 files: {
-                    'lib/pickadate.js': '_source/*.js'
+                    'site/scripts/main.js': '_source/site/scripts/*.js'
+                }
+            },
+            lib: {
+                options: {
+                    banner: '/*!\n' +
+                            ' * <%= pkg.title %> v<%= pkg.version %>, <%= grunt.template.today("yyyy-mm-dd") %>\n' +
+                            ' * By <%= pkg.author.name %> (<%= pkg.author.url %>)\n' +
+                            ' * Hosted on <%= pkg.homepage %>\n' +
+                            ' * Licensed under MIT ("expat" flavour) license.\n' +
+                            ' */\n\n'
+                },
+                files: {
+                    'lib/pickadate.js': '_source/lib/*.js'
                 }
             }
         },
 
 
-        // Lint the build files.
+        // Lint the files.
         jshint: {
-            files: [ '_source/pickadate.js' ]
+            options: {
+                asi: true
+            },
+            files: [ 'Gruntfile.js', '_source/lib/pickadate.js', '_source/lib/translations/*.js', '_dev/qunit/tests.js' ]
         },
 
 
-        // Unit test the build files.
+        // Unit test the files.
         qunit: {
-            all: [ '_tests/qunit.htm' ]
+            all: [ '_dev/qunit/qunit.htm' ]
         },
 
 
         // Watch the project files.
         watch: {
             site: {
-                files: [ '_site/*.htm', '_site/**/*.scss' ],
+                files: [ '_source/site/**/*.htm', '_source/site/**/*.scss', '_source/site/**/*.js' ],
                 tasks: [ 'site' ]
             },
-            scripts: {
-                files: [ '_source/*.js' ],
+            lib: {
+                files: [ '_source/lib/**/*.js' ],
                 tasks: [ 'default' ]
             }
         }
@@ -114,10 +137,11 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks( 'grunt-contrib-copy' )
     grunt.loadNpmTasks( 'grunt-contrib-sass' )
 
-    // Register the default tasks.
-    grunt.registerTask( 'default', [ 'concat:scripts' ] )
-    grunt.registerTask( 'site', [ 'copy:site', 'sass:site' ] )
-    grunt.registerTask( 'travis', [ /*'jshint',*/ 'qunit' ] )
+    // Register the tasks.
+    grunt.registerTask( 'default', [ 'concat', 'copy', 'sass', 'jshint', 'qunit' ] )
+    grunt.registerTask( 'build', [ 'concat:lib', 'copy:lib', 'sass:lib' ] )
+    grunt.registerTask( 'site', [ 'concat:site', 'copy:site', 'sass:site' ] )
+    grunt.registerTask( 'travis', [ 'jshint', 'qunit' ] )
 
 } //module.exports
 

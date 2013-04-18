@@ -6,29 +6,35 @@
  */
 
 /**
- * Colors used:
- *
- * #0089ec -> Base blue
- * #b1dcfb -> Hover blue bg
- *
- * #0059bc -> Dark blue for "today" tag
- * #aaa    -> Light grey for "today" tag if disabled
- *
- * #f5f5f5 -> Dimmed grey bg for disabled days
- * #f2f2f2 -> Slightly darker dim grey for clock bg
- * #ddd    -> Less dimmed grey for text in disabled & outfocus days
- *
- * #777    -> Grey for calendar border
- * #888    -> Slightly lighter grey for calendar top border
- *
- * #999    -> Medium grey used for year & weekday labels
- *
- * #e20    -> Red used for "clear"
- *
- * #000    -> Black
- * #fff    -> White
- *
+ * Colors
  */
+
+/* Base */
+$blue: #0089ec;
+$blue-hover: #b1dcfb;
+$black: #000;
+$white: #fff;
+
+/* "Clear" indicator */
+$red: #e20;
+
+/* Borders */
+$light-border: #ddd;
+$grey-border: #777;
+
+/* Month & year labels */
+$grey-label: #999;
+
+/* "Today" tag indicators */
+$blue-tag: #0059bc;
+$disabled-tag: #aaa;
+
+/* Disabled things.. such as days, month nav, etc */
+$disabled-things-bg: #f5f5f5;
+$disabled-things-text: #ddd;
+
+/* Clock */
+$clock-bg: #f2f2f2;
 
 
 /**
@@ -37,7 +43,7 @@
 
 /* And add the "active" state to the input */
 /*input*/.pickadate__input--active {
-    border-color: #0089ec !important;
+    border-color: $blue !important;
 }
 
 
@@ -53,7 +59,7 @@
     text-align: left;
 
     line-height: 1.2;
-    color: #000;
+    color: $black;
 
     position: fixed;
     z-index: 10000;
@@ -163,12 +169,12 @@
 .pickadate__clock {
     display: table-cell;
     vertical-align: middle;
-    background: #fff;
+    background: $white;
     padding: 0 1em;
 }
 .pickadate__clock {
     padding: 0;
-    background: #f2f2f2;
+    background: $clock-bg;
 }
 
 
@@ -182,9 +188,9 @@
 }
 .pickadate__list-item {
     padding: .75em 1.25em;
-    background: #fff;
-    border-bottom: 1px solid #ddd;
-    border-top: 1px solid #ddd;
+    background: $white;
+    border-bottom: 1px solid $light-border;
+    border-top: 1px solid $light-border;
     margin-bottom: -1px;
     position: relative;
 }
@@ -242,7 +248,7 @@
     content: " ";
     border-top: .5em solid transparent;
     border-bottom: .5em solid transparent;
-    border-right: .75em solid #000;
+    border-right: .75em solid $black;
     width: 0;
     height: 0;
     display: block;
@@ -250,7 +256,7 @@
 }
 .pickadate__nav--next:before {
     border-right: 0;
-    border-left: .75em solid #000;
+    border-left: .75em solid $black;
 }
 
 .pickadate__month,
@@ -259,7 +265,7 @@
     display: inline-block;
 }
 .pickadate__year {
-    color: #999;
+    color: $grey-label;
     font-size: .8em;
     font-style: italic;
     margin-left: .5em;
@@ -282,7 +288,7 @@
 }
 .pickadate__select--month:focus,
 .pickadate__select--year:focus {
-    border-color: #0089ec;
+    border-color: $blue;
 }
 
 
@@ -295,7 +301,7 @@
     width: 14.285714286%; /* 100/7 */
     font-size: .75em;
     padding-bottom: .25em;
-    color: #999;
+    color: $grey-label;
     font-weight: 500;
 }
 
@@ -306,7 +312,7 @@
 .pickadate__day {
     padding: .3125em 0;
     font-weight: 200;
-    border: 1px solid #fff;
+    border: 1px solid $white;
     margin-bottom: 1px;
 }
 
@@ -314,7 +320,7 @@
  * The various states of a day
  */
 .pickadate__day--today {
-    color: #0089ec;
+    color: $blue;
     position: relative;
 }
 .pickadate__day--today:before {
@@ -324,14 +330,14 @@
     right: 2px;
     width: 0;
     height: 0;
-    border-top: .5em solid #0059bc;
+    border-top: .5em solid $blue-tag;
     border-left: .5em solid transparent;
 }
 .pickadate__day--selected,
 .pickadate__day--selected:hover,
 .pickadate__list-item--selected,
 .pickadate__list-item--selected:hover {
-    border-color: #0089ec;
+    border-color: $blue;
 }
 .pickadate__list-item--selected,
 .pickadate__list-item--selected:hover {
@@ -339,13 +345,13 @@
 }
 .pickadate__day--highlighted,
 .pickadate__list-item--highlighted {
-    background: #b1dcfb;
+    background: $blue-hover;
 }
 .pickadate__day--disabled:before {
-    border-top-color: #aaa;
+    border-top-color: $disabled-tag;
 }
 .pickadate__day--outfocus {
-    color: #ddd;
+    color: $disabled-things-text;
 
     -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=66)";
     filter: alpha(opacity=66);
@@ -366,8 +372,8 @@
 
 .pickadate__button--today,
 .pickadate__button--clear {
-    border: 1px solid #fff;
-    background: #fff;
+    border: 1px solid $white;
+    background: $white;
     font-size: .8em;
     padding: .66em 0;
     font-weight: bold;
@@ -377,12 +383,12 @@
 }
 .pickadate__button--today:hover,
 .pickadate__button--clear:hover {
-    border-bottom-color: #b1dcfb;
+    border-bottom-color: $blue-hover;
 }
 .pickadate__button--today:focus,
 .pickadate__button--clear:focus {
-    background: #b1dcfb;
-    border-color: #0089ec;
+    background: $blue-hover;
+    border-color: $blue;
     outline: none;
 }
 .pickadate__holder--time .pickadate__button--clear {
@@ -411,7 +417,7 @@
     margin-right: .45em;
     top: -.05em;
     width: 0;
-    border-top: .66em solid #0059bc;
+    border-top: .66em solid $blue-tag;
     border-left: .66em solid transparent;
 }
 .pickadate__button--clear:before,
@@ -419,7 +425,7 @@
     content: "\D7";
     margin-right: .35em;
     top: -.1em;
-    color: #e20;
+    color: $red;
     vertical-align: top;
     font-size: 1.1em;
 }
@@ -439,15 +445,15 @@
 .pickadate__list-item:hover,
 .pickadate__holder--time .pickadate__button--clear:hover,
 .pickadate__holder--focused .pickadate__list-item--highlighted {
-    border-color: #0089ec;
+    border-color: $blue;
     z-index: 10;
 }
 .pickadate__day--highlighted:hover,
 .pickadate__list-item--highlighted:hover,
 .pickadate__holder--focused .pickadate__day--highlighted,
 .pickadate__holder--focused .pickadate__list-item--highlighted {
-    background: #0089ec;
-    color: #fff;
+    background: $blue;
+    color: $white;
 }
 .pickadate__day--infocus:hover,
 .pickadate__day--outfocus:hover,
@@ -457,20 +463,20 @@
 .pickadate__button--clear:hover,
 .pickadate__list-item:hover {
     cursor: pointer;
-    color: #000;
-    background: #b1dcfb;
+    color: $black;
+    background: $blue-hover;
 }
 .pickadate__holder--time .pickadate__button--clear:hover,
 .pickadate__holder--time .pickadate__button--clear:focus {
-    background: #e20;
-    border-color: #e20;
+    background: $red;
+    border-color: $red;
     cursor: pointer;
-    color: #fff;
+    color: $white;
     outline: none;
 }
 .pickadate__holder--time .pickadate__button--clear:hover:before,
 .pickadate__holder--time .pickadate__button--clear:focus:before {
-    color: #fff;
+    color: $white;
 }
 
 
@@ -484,15 +490,15 @@
 .pickadate__list-item--disabled,
 .pickadate__list-item--disabled:hover,
 .pickadate__holder--focused .pickadate__list-item--disabled {
-    background: #f5f5f5;
-    border-color: #f5f5f5;
-    color: #ddd;
+    background: $disabled-things-bg;
+    border-color: $disabled-things-bg;
+    color: $disabled-things-text;
     cursor: default;
 }
 .pickadate__list-item--disabled,
 .pickadate__list-item--disabled:hover,
 .pickadate__holder--focused .pickadate__list-item--disabled {
-    border-color: #ddd;
+    border-color: $light-border;
     z-index: auto;
 }
 
@@ -500,13 +506,13 @@
 .pickadate__nav--disabled:hover,
 .pickadate__nav--disabled:before,
 .pickadate__nav--disabled:before:hover {
-    border-right-color: #f5f5f5;
+    border-right-color: $disabled-things-bg;
     background: none;
     cursor: default;
 }
 .pickadate__nav--next.pickadate__nav--disabled:before,
 .pickadate__nav--next.pickadate__nav--disabled:before:hover {
-    border-left-color: #f5f5f5;
+    border-left-color: $disabled-things-bg;
 }
 
 
@@ -560,8 +566,8 @@
         font-size: 1.33em;
 
         /* Add the borders except the bottom one */
-        border: 1px solid #777;
-        border-top-color: #888;
+        border: 1px solid $grey-border;
+        border-top-color: lighten( $grey-border, 7% );
         border-bottom-width: 0;
 
         /* Make 'em rounded at the top corners */
@@ -643,4 +649,4 @@
     .pickadate__list-item {
         padding: .5em .75em;
     }
-}
+}*/

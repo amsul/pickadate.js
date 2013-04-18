@@ -947,7 +947,7 @@ pre > code {
 }
 
 .section--header {
-  background: url(bg.png) #fafbfb 50% 0;
+  background: url(../images/bg.png) #fafbfb 50% 0;
   border-bottom: 2px solid #e9ebeb;
 }
 
