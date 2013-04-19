@@ -666,6 +666,8 @@ module( 'Date picker general events', {
             },
             onSet: function() {
                 thisModule.selectedArray = this.get( 'select' ).PICK === 1365912000000
+                console.log( 'from array:', thisModule.selectedArray )
+                console.log( this.get( 'select' ).TIME.toString() )
                 thisModule.selectedNumber = this.get( 'select' ).PICK === 1366084800000
                 thisModule.selectedDateObject = this.get( 'select' ).PICK === 1366257600000
                 thisModule.clearedValue = this.get( 'value' ) === ''

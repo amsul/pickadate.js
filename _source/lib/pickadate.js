@@ -1898,8 +1898,8 @@
                         // Create the components nodes.
                         P.component.nodes( STATE.OPEN ),
 
-                        // The picker item class
-                        CLASSES.item
+                        // The picker box class
+                        CLASSES.box
                     ),
 
                     // Picker wrap class
@@ -2118,7 +2118,7 @@
             frame: STRING_PREFIX_PICKER + 'frame',
             wrap: STRING_PREFIX_PICKER + 'wrap',
 
-            item: STRING_PREFIX_PICKER + 'calendar',
+            box: STRING_PREFIX_PICKER + 'box',
 
             table: STRING_PREFIX_PICKER + 'table',
 
@@ -2178,7 +2178,7 @@
             frame: STRING_PREFIX_PICKER + 'frame',
             wrap: STRING_PREFIX_PICKER + 'wrap',
 
-            item: STRING_PREFIX_PICKER + 'clock',
+            box: STRING_PREFIX_PICKER + 'box',
 
             list: STRING_PREFIX_PICKER + 'list',
             listItem: STRING_PREFIX_PICKER + 'list-item',

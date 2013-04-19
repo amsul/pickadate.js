@@ -55,20 +55,17 @@ module.exports = function( grunt ) {
 
         // Convert Sass files into CSS.
         sass: {
+            options: {
+                style: 'expanded'
+            },
             site: {
-                options: {
-                    style: 'expanded'
-                },
                 files: {
-                    'site/styles/main.css': '_source/site/styles/main.scss'
+                    'site/styles/main.css': '_source/site/styles/base.scss'
                 }
             },
             lib: {
-                options: {
-                    style: 'compressed'
-                },
                 files: {
-                    'lib/themes/default.css': '_source/lib/themes/*.scss'
+                    'lib/themes/default.css': '_source/lib/themes/default.scss'
                 }
             }
         },
@@ -119,7 +116,7 @@ module.exports = function( grunt ) {
                 tasks: [ 'site' ]
             },
             lib: {
-                files: [ '_source/lib/**/*.js' ],
+                files: [ '_source/lib/**/*.js', '_source/lib/**/*.scss' ],
                 tasks: [ 'default' ]
             }
         }
@@ -138,7 +135,7 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks( 'grunt-contrib-sass' )
 
     // Register the tasks.
-    grunt.registerTask( 'default', [ 'concat', 'copy', 'sass', 'jshint', 'qunit' ] )
+    grunt.registerTask( 'default', [ 'concat', 'copy', 'sass', 'jshint'/*, 'qunit'*/ ] )
     grunt.registerTask( 'build', [ 'concat:lib', 'copy:lib', 'sass:lib', 'qunit:lib' ] )
     grunt.registerTask( 'site', [ 'concat:site', 'copy:site', 'sass:site' ] )
     grunt.registerTask( 'travis', [ 'jshint', 'qunit' ] )

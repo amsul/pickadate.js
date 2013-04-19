@@ -1,200 +1,214 @@
 
-
 /**
  * Default mobile-first, responsive styling for pickadate.js
  * Demo: http://amsul.github.com/pickadate.js/themes.htm#default
  */
 
-/**
- * Colors
- */
 
-/* Base */
-$blue: #0089ec;
-$blue-hover: #b1dcfb;
-$black: #000;
-$white: #fff;
+/* ==========================================================================
+   $IMPORTS
+   ========================================================================== */
 
-/* "Clear" indicator */
-$red: #e20;
+@import "variables";
 
-/* Borders */
-$light-border: #ddd;
-$grey-border: #777;
 
-/* Month & year labels */
-$grey-label: #999;
 
-/* "Today" tag indicators */
-$blue-tag: #0059bc;
-$disabled-tag: #aaa;
 
-/* Disabled things.. such as days, month nav, etc */
-$disabled-things-bg: #f5f5f5;
-$disabled-things-text: #ddd;
 
-/* Clock */
-$clock-bg: #f2f2f2;
-
+/* ==========================================================================
+   $PICKER-BASE
+   ========================================================================== */
 
 /**
- * When the calendar is open
+ * When the picker is opened, add an "active" state to the input
  */
-
-/* And add the "active" state to the input */
 /*input*/.pickadate__input--active {
-    border-color: $blue !important;
-}
 
+    // Using `!important` here because `input[type=text]`
+    // has higher priority than just a class selector
+    border-color: $input-active-border !important;
+}
 
 
 /**
- * The holder that fills the entire screen
- */
-.pickadate__holder {
-
-    /* The base font-size */
-    font-size: 16px;
-
-    text-align: left;
-
-    line-height: 1.2;
-    color: $black;
-
-    position: fixed;
-    z-index: 10000;
-
-    /* Allow the holder to be scrolled in case the screen is too small */
-    overflow-y: scroll;
-    -webkit-overflow-scrolling: touch;
-
-    width: 100%;
-    height: 100%;
-
-    /* Fade out the background, then immediately hide the holder */
-    -webkit-transition: background .15s ease-out, top 0s .2s;
-       -moz-transition: background .15s ease-out, top 0s .2s;
-            transition: background .15s ease-out, top 0s .2s;
-}
-
-/**
- * The frame that bounds the calendar
- */
-.pickadate__frame {
-    min-width: 256px;
-    max-width: 666px;
-    width: 100%;
-    margin: 0 auto;
-
-    position: absolute;
-
-    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
-    filter: alpha(opacity=0);
-    -moz-opacity: 0;
-         opacity: 0;
-
-    /* Animate the frame in and out of view */
-    -webkit-transition: all .15s ease-out;
-       -moz-transition: all .15s ease-out;
-            transition: all .15s ease-out;
-}
-
-/* A smaller `max-width` for the time picker */
-.pickadate__holder--time .pickadate__frame {
-    max-width: 320px;
-}
-
-/**
- * Make the calendar holder and frame fullscreen
+ * Make the holder and frame fullscreen
  */
 .pickadate__holder,
 .pickadate__frame {
-    top: 100%;
     bottom: 0;
     left: 0;
     right: 0;
+
+    /* Nudge everything off-screen to begin with */
+    top: 100%;
 }
 
 
 /**
- * When the calendar opens
+ * The holder that overlays the entire screen
  */
+.pickadate__holder {
+
+    /* The base font stylings */
+    font-size: $base-font-size;
+    text-align: left;
+    line-height: $base-line-height;
+    color: $black;
+
+    /* Fill the screen */
+    position: fixed;
+    z-index: $overlay-z-index;
+    width: 100%;
+    height: 100%;
+
+    /* Allow the holder to be scrolled in case the content doesn't fit */
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+
+    /* Fade out the background, then after a .5 sec delay, shift the holder out of view */
+    @include prefix( transition, (background $speed-animate-in ease-out, top 0s ($speed-animate-in + .5s) ) );
+}
+
+/* When the picker opens, fade in an overlay */
 .pickadate__holder--opened {
+
+    /* Move it to the top edge */
+    top: 0;
 
     /* Show a translucent black background (order is important for IE) */
     background: transparent;
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#1E000000,endColorstr=#1E000000)"; /* IE8 */
-        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#1E000000,endColorstr=#1E000000); /* IE6 & 7 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#1E000000,endColorstr=#1E000000)"; // IE8
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#1E000000,endColorstr=#1E000000); // IE6 & 7
           zoom: 1;
-    background: rgba(0,0,0,.32); /* Normal browsers */
+    background: rgba(0,0,0,.32); // Normal browsers
 
     /* Animate in the background */
-    -webkit-transition: background .15s ease-out;
-       -moz-transition: background .15s ease-out;
-            transition: background .15s ease-out;
+    @include prefix( transition, background $speed-animate-in ease-out );
 }
-
-/* Bring the holder and frame into view */
-.pickadate__holder--opened,
-.pickadate__holder--opened .pickadate__frame {
-    top: 0;
-}
-.pickadate__holder--opened .pickadate__frame {
-
-    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
-    filter: alpha(opacity=100);
-    -moz-opacity: 1;
-         opacity: 1;
-}
-
-
-
 
 
 
 
 /**
- * The calendar wrapper
+ * The frame that bounds the picker
+ */
+.pickadate__frame {
+    position: absolute;
+    margin: 0 auto;
+
+    min-width: $picker-min-width;
+    max-width: $picker-max-width;
+
+    /* Hide it to begin with */
+    @include opacity( 0 );
+
+    /* Animate the frame in and out of view */
+    @include prefix( transition, all $speed-animate-in ease-out );
+
+    /* For `small` screens, prevent from filling height to the top */
+    @include min-screen( small ) {
+        overflow: visible;
+        top: auto;
+        bottom: -100%;
+    }
+
+    /* For `medium` screens, move away from the bottom edge */
+    @include min-screen( medium ) {
+        margin-bottom: 5%;
+    }
+
+
+    /**
+     * When the picker opens...
+     */
+    .pickadate__holder--opened & {
+
+        /* Align it to the top */
+        top: 0;
+
+        /* Ånd then reveal it */
+        @include opacity( 1 );
+
+        /* For `small` screens, align to the bottom instead. */
+        @include min-screen( small ) {
+            top: auto;
+            bottom: 0;
+        }
+    }
+}
+
+
+/**
+ * The picker wrapper
  */
 .pickadate__wrap {
     display: table;
     width: 100%;
     height: 100%;
+
+    /* For `small` screens, remove the "middle-aligned" styling */
+    @include min-screen( small ) {
+        display: block;
+    }
 }
 
+
+
 /**
- * The calendar and clock
+ * The picker box
  */
-.pickadate__calendar,
-.pickadate__clock {
+.pickadate__box {
     display: table-cell;
     vertical-align: middle;
     background: $white;
     padding: 0 1em;
-}
-.pickadate__clock {
-    padding: 0;
-    background: $clock-bg;
+
+    /* For `tiny` screens, increase the font size a bit */
+    @include min-screen( tiny ) {
+        font-size: 1.25em;
+    }
+
+    /* For `small` screens... */
+    @include min-screen( small ) {
+
+        /* Remove the "middle-aligned" styling */
+        display: block;
+
+        /* Increase the font size a bit more */
+        font-size: 1.33em;
+
+        /* Add the borders except the bottom one */
+        border: 1px solid $grey-border;
+        border-top-color: lighten( $grey-border, 7% );
+        border-bottom-width: 0;
+
+        /* Make 'em rounded at the top corners */
+        @include prefix( border-radius, $picker-border-radius $picker-border-radius 0 0 );
+
+        /* And finally, add a nice shadow */
+        @include prefix( box-shadow, $picker-box-shadow );
+    }
+
+    /* For `medium` screens, increase the font size and round all corners */
+    @include min-screen( medium ) {
+        font-size: 1.5em;
+        border-bottom-width: 1px;
+        @include prefix( border-radius, $picker-border-radius );
+    }
 }
 
 
-/**
- * The clock list of times
- */
-.pickadate__list {
-    padding: .75em 0 4.2em;
-    margin: 0;
-    list-style: none;
-}
-.pickadate__list-item {
-    padding: .75em 1.25em;
-    background: $white;
-    border-bottom: 1px solid $light-border;
-    border-top: 1px solid $light-border;
-    margin-bottom: -1px;
-    position: relative;
-}
 
+
+
+
+
+
+@if $date-picker == true {
+
+/* ==========================================================================
+   $DATE-PICKER
+   ========================================================================== */
 
 /**
  * The calendar table of dates
@@ -208,6 +222,11 @@ $clock-bg: #f2f2f2;
     width: 100%;
     margin-top: .75em;
     margin-bottom: .5em;
+
+    /* Increase the spacing a tad */
+    @include min-screen( small ) {
+        margin-bottom: .75em;
+    }
 }
 
 /* Remove browser stylings on a table cell */
@@ -215,7 +234,6 @@ $clock-bg: #f2f2f2;
     margin: 0;
     padding: 0;
 }
-
 
 
 /**
@@ -227,6 +245,10 @@ $clock-bg: #f2f2f2;
     margin-top: .75em;
 }
 
+
+/**
+ * The month navigation buttons
+ */
 .pickadate__nav--prev,
 .pickadate__nav--next {
     position: absolute;
@@ -259,6 +281,10 @@ $clock-bg: #f2f2f2;
     border-left: .75em solid $black;
 }
 
+
+/**
+ * The month & year labels
+ */
 .pickadate__month,
 .pickadate__year {
     font-weight: 500;
@@ -271,12 +297,16 @@ $clock-bg: #f2f2f2;
     margin-left: .5em;
 }
 
+
+/**
+ * The month & year selectors
+ */
 .pickadate__select--month,
 .pickadate__select--year {
     font-size: .8em;
-    border: 1px solid #ccc;
+    border: 1px solid $select-border;
     height: 2.5em;
-    padding: .66em .25em; /* For firefox */
+    padding: .66em .25em; // For firefox
     margin-top: -.5em;
 }
 .pickadate__select--month {
@@ -292,17 +322,20 @@ $clock-bg: #f2f2f2;
 }
 
 
-
-
 /**
  * The weekday labels
  */
 .pickadate__weekday {
-    width: 14.285714286%; /* 100/7 */
+    width: 14.285714286%; // 100/7
     font-size: .75em;
     padding-bottom: .25em;
     color: $grey-label;
     font-weight: 500;
+
+    /* Increase the spacing a tad */
+    @include min-screen( small ) {
+        padding-bottom: .5em;
+    }
 }
 
 
@@ -316,49 +349,81 @@ $clock-bg: #f2f2f2;
     margin-bottom: 1px;
 }
 
-/**
- * The various states of a day
- */
+/* Today */
 .pickadate__day--today {
     color: $blue;
     position: relative;
+
+    &:before {
+        content: " ";
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        width: 0;
+        height: 0;
+        border-top: .5em solid $blue-tag;
+        border-left: .5em solid transparent;
+    }
 }
-.pickadate__day--today:before {
-    content: " ";
-    position: absolute;
-    top: 2px;
-    right: 2px;
-    width: 0;
-    height: 0;
-    border-top: .5em solid $blue-tag;
-    border-left: .5em solid transparent;
-}
+
+/* Selected day */
 .pickadate__day--selected,
-.pickadate__day--selected:hover,
-.pickadate__list-item--selected,
-.pickadate__list-item--selected:hover {
-    border-color: $blue;
+.pickadate__day--selected:hover {
+    @include picker-item-selected;
 }
-.pickadate__list-item--selected,
-.pickadate__list-item--selected:hover {
-    z-index: 10;
-}
-.pickadate__day--highlighted,
-.pickadate__list-item--highlighted {
+
+/* Highlighted day */
+.pickadate__day--highlighted {
     background: $blue-hover;
 }
+
+/* Disabled day */
 .pickadate__day--disabled:before {
     border-top-color: $disabled-tag;
 }
+
+/* Out of focus days */
 .pickadate__day--outfocus {
     color: $disabled-things-text;
-
-    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=66)";
-    filter: alpha(opacity=66);
-    -moz-opacity: .66;
-         opacity: .66;
+    @include opacity( .66 );
 }
 
+
+/* Hovered date picker items */
+.pickadate__day--infocus:hover,
+.pickadate__day--outfocus:hover,
+.pickadate__nav--prev:hover,
+.pickadate__nav--next:hover {
+    @include picker-item-hovered;
+}
+
+/* Highlighted and hovered/focused dates */
+.pickadate__day--highlighted:hover,
+.pickadate__holder--focused .pickadate__day--highlighted {
+    @include picker-item-highlighted;
+}
+
+/* Disabled dates */
+.pickadate__day--disabled,
+.pickadate__day--disabled:hover {
+    @include picker-item-disabled;
+}
+
+
+/* Disabled month nav */
+.pickadate__nav--disabled,
+.pickadate__nav--disabled:hover,
+.pickadate__nav--disabled:before,
+.pickadate__nav--disabled:before:hover {
+    cursor: default;
+    background: none;
+    border-right-color: $disabled-things-bg;
+
+    &.pickadate__nav--next:before,
+    &.pickadate__nav--next:before:hover {
+        border-left-color: $disabled-things-bg;
+    }
+}
 
 
 
@@ -380,37 +445,22 @@ $clock-bg: #f2f2f2;
     width: 50%;
     display: inline-block;
     vertical-align: bottom;
-}
-.pickadate__button--today:hover,
-.pickadate__button--clear:hover {
-    border-bottom-color: $blue-hover;
-}
-.pickadate__button--today:focus,
-.pickadate__button--clear:focus {
-    background: $blue-hover;
-    border-color: $blue;
-    outline: none;
-}
-.pickadate__holder--time .pickadate__button--clear {
-    display: block;
-    width: 80%;
-    text-align: center;
-    text-transform: uppercase;
-    font-weight: 500;
-    font-size: .67em;
-    color: #666;
-    background: transparent;
-    border-color: transparent;
-    margin: 1em auto 0;
-    padding: 1em 1.25em;
-}
 
-.pickadate__button--today:before,
-.pickadate__button--clear:before,
-.pickadate__holder--time .pickadate__button--clear:before {
-    position: relative;
-    display: inline-block;
-    height: 0;
+    &:before {
+        position: relative;
+        display: inline-block;
+        height: 0;
+    }
+
+    &:hover {
+        @include picker-item-hovered;
+        border-bottom-color: $blue-hover;
+    }
+    &:focus {
+        background: $blue-hover;
+        border-color: $blue;
+        outline: none;
+    }
 }
 .pickadate__button--today:before {
     content: " ";
@@ -420,203 +470,167 @@ $clock-bg: #f2f2f2;
     border-top: .66em solid $blue-tag;
     border-left: .66em solid transparent;
 }
-.pickadate__button--clear:before,
-.pickadate__holder--time .pickadate__button--clear:before {
-    content: "\D7";
+.pickadate__button--clear:before {
+    content: "\D7"; // ×
     margin-right: .35em;
     top: -.1em;
     color: $red;
     vertical-align: top;
     font-size: 1.1em;
 }
-.pickadate__holder--time .pickadate__button--clear:before {
-    top: -.25em;
-    color: #666;
-    font-size: 1.25em;
-    font-weight: bold;
-}
 
+
+} //endif `$time-picker`
+
+
+
+
+
+
+
+@if $time-picker == true {
+
+/* ==========================================================================
+   $TIME-PICKER
+   ========================================================================== */
+
+/**
+ * The frame the bounds the time picker
+ */
+.pickadate__holder--time .pickadate__frame {
+
+    /* Adjust the min & max widths */
+    min-width: $picker-time-min-width;
+    max-width: $picker-time-max-width;
+
+    /* For `small` screens, set a `max-height` to act as top spacing */
+    @include min-screen( small ) {
+        max-height: 80%;
+    }
+}
 
 
 
 /**
- * The hover effect on any buttons
+ * The time picker box
  */
+.pickadate__holder--time .pickadate__box {
+
+    /* Remove the side paddings */
+    padding: 0;
+
+    /* Add a slight background color */
+    background: $clock-bg;
+
+    /* For `medium` screens, move it away from the bottom edge of the screen */
+    @include min-screen( medium ) {
+        margin-bottom: 4em;
+    }
+}
+
+
+
+/**
+ * The clock list of times
+ */
+.pickadate__list {
+    padding: .75em 0 4.2em;
+    margin: 0;
+    list-style: none;
+}
+
+
+/**
+ * The times on the clock
+ */
+.pickadate__list-item {
+    padding: .75em 1.25em;
+    background: $white;
+    border-bottom: 1px solid $light-border;
+    border-top: 1px solid $light-border;
+    margin-bottom: -1px;
+    position: relative;
+}
+
+/* Hovered time */
 .pickadate__list-item:hover,
-.pickadate__holder--time .pickadate__button--clear:hover,
-.pickadate__holder--focused .pickadate__list-item--highlighted {
-    border-color: $blue;
-    z-index: 10;
+.pickadate__holder--time .pickadate__button--clear:hover {
+    @include picker-item-hovered;
+    @include picker-item-selected;
 }
-.pickadate__day--highlighted:hover,
-.pickadate__list-item--highlighted:hover,
-.pickadate__holder--focused .pickadate__day--highlighted,
-.pickadate__holder--focused .pickadate__list-item--highlighted {
-    background: $blue;
-    color: $white;
+
+/* Selected time */
+.pickadate__list-item--selected,
+.pickadate__list-item--selected:hover {
+    @include picker-item-selected;
 }
-.pickadate__day--infocus:hover,
-.pickadate__day--outfocus:hover,
-.pickadate__nav--prev:hover,
-.pickadate__nav--next:hover,
-.pickadate__button--today:hover,
-.pickadate__button--clear:hover,
-.pickadate__list-item:hover {
-    cursor: pointer;
-    color: $black;
+
+/* Highlighted time */
+.pickadate__list-item--highlighted {
     background: $blue-hover;
 }
-.pickadate__holder--time .pickadate__button--clear:hover,
-.pickadate__holder--time .pickadate__button--clear:focus {
-    background: $red;
-    border-color: $red;
-    cursor: pointer;
-    color: $white;
-    outline: none;
-}
-.pickadate__holder--time .pickadate__button--clear:hover:before,
-.pickadate__holder--time .pickadate__button--clear:focus:before {
-    color: $white;
+
+/* Highlighted and hovered/focused time */
+.pickadate__list-item--highlighted:hover,
+.pickadate__holder--focused .pickadate__list-item--highlighted {
+    @include picker-item-highlighted;
 }
 
-
-
-/**
- * The disabled buttons
- */
-.pickadate__day--disabled,
-.pickadate__day--disabled:hover,
-.pickadate__holder--focused .pickadate__day--disabled,
+/* Disabled time */
 .pickadate__list-item--disabled,
-.pickadate__list-item--disabled:hover,
-.pickadate__holder--focused .pickadate__list-item--disabled {
-    background: $disabled-things-bg;
-    border-color: $disabled-things-bg;
-    color: $disabled-things-text;
-    cursor: default;
-}
-.pickadate__list-item--disabled,
-.pickadate__list-item--disabled:hover,
-.pickadate__holder--focused .pickadate__list-item--disabled {
+.pickadate__list-item--disabled:hover {
+    @include picker-item-disabled;
     border-color: $light-border;
     z-index: auto;
 }
 
-.pickadate__nav--disabled,
-.pickadate__nav--disabled:hover,
-.pickadate__nav--disabled:before,
-.pickadate__nav--disabled:before:hover {
-    border-right-color: $disabled-things-bg;
-    background: none;
-    cursor: default;
-}
-.pickadate__nav--next.pickadate__nav--disabled:before,
-.pickadate__nav--next.pickadate__nav--disabled:before:hover {
-    border-left-color: $disabled-things-bg;
-}
-
 
 
 
 /**
- * Adjust the calendar for not so tiny screens
- * by just increasing the font size a bit
+ * The clear button
  */
-@media (min-height: 342px) {
-    .pickadate__calendar,
-    .pickadate__clock {
+.pickadate__holder--time .pickadate__button--clear {
+    display: block;
+    width: 80%;
+    margin: 1em auto 0;
+    padding: 1em 1.25em;
+
+    background: transparent;
+    border-color: transparent;
+
+    font-weight: 500;
+    font-size: .67em;
+    text-align: center;
+    text-transform: uppercase;
+    color: #666;
+
+    &:before {
+        top: -.25em;
+        color: #666;
         font-size: 1.25em;
+        font-weight: bold;
+    }
+
+    &:hover,
+    &:focus {
+        background: $red;
+        border-color: $red;
+        cursor: pointer;
+        color: $white;
+        outline: none;
+
+        &:before {
+            color: $white;
+        }
     }
 }
 
 
-/**
- * For bigger viewports, adjust the calendar
- * to not cover the entire screen
- */
-@media (min-height: 424px) {
-
-    /* Align the frame to the bottom, rather than top */
-    .pickadate__frame {
-        overflow: visible;
-        top: auto;
-        bottom: -100%;
-    }
-    .pickadate__holder--opened .pickadate__frame {
-        top: auto;
-        bottom: 0;
-    }
-
-    /* Set a `max-height` for the time picker to act as top margin */
-    .pickadate__holder--time .pickadate__frame {
-        max-height: 80%;
-    }
+} //endif `$time-picker`
 
 
-    /* Remove the calendar middle-aligned styling */
-    .pickadate__wrap,
-    .pickadate__calendar,
-    .pickadate__clock {
-        display: block;
-    }
-    .pickadate__calendar,
-    .pickadate__clock {
 
-        /* Increase the font size a bit more */
-        font-size: 1.33em;
-
-        /* Add the borders except the bottom one */
-        border: 1px solid $grey-border;
-        border-top-color: lighten( $grey-border, 7% );
-        border-bottom-width: 0;
-
-        /* Make 'em rounded at the top corners */
-        -webkit-border-radius: 6px 6px 0 0;
-           -moz-border-radius: 6px 6px 0 0;
-                border-radius: 6px 6px 0 0;
-
-        /* And finally, add a nice shadow */
-        -webkit-box-shadow: 0 12px 36px 16px rgba(0,0,0,.24);
-           -moz-box-shadow: 0 12px 36px 16px rgba(0,0,0,.24);
-                box-shadow: 0 12px 36px 16px rgba(0,0,0,.24);
-    }
-
-
-    /* Increase the spacing a tad */
-    .pickadate__table {
-        margin-bottom: .75em;
-    }
-    .pickadate__weekday {
-        padding-bottom: .5em;
-    }
-}
-
-
-/**
- * For bigger monitors still, move it away
- * from the bottom edge of the screen
- * and round the top and bottom corners.
- */
-@media (min-height: 542px) {
-
-    .pickadate__frame {
-        margin-bottom: 5%;
-    }
-
-    .pickadate__calendar,
-    .pickadate__clock {
-        font-size: 1.5em;
-        border-bottom-width: 1px;
-
-        -webkit-border-radius: 6px;
-           -moz-border-radius: 6px;
-                border-radius: 6px;
-    }
-
-    .pickadate__clock {
-        margin-bottom: 4em;
-    }
-}
 
 
 /**
@@ -637,7 +651,7 @@ $clock-bg: #f2f2f2;
         margin: 1em 0;
     }
 
-    .pickadate__clock {
+    .pickadate__box {
         border-color: #ccc;
         box-shadow: 0 4px 18px 2px rgba(0,0,0,.12);
         max-height: 20em;
