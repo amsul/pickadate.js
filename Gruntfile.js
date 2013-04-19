@@ -13,7 +13,23 @@
 
 module.exports = function( grunt ) {
 
-    // Initial grunt configurations
+    // Add the "curly" delimiters.
+    grunt.template.addDelimiters( 'curly', '{%', '%}' )
+
+
+    // Load the NPM tasks.
+    grunt.loadNpmTasks( 'grunt-contrib-concat' )
+    grunt.loadNpmTasks( 'grunt-contrib-watch' )
+    grunt.loadNpmTasks( 'grunt-contrib-jshint' )
+    grunt.loadNpmTasks( 'grunt-contrib-qunit' )
+    grunt.loadNpmTasks( 'grunt-contrib-copy' )
+    grunt.loadNpmTasks( 'grunt-contrib-sass' )
+    grunt.loadNpmTasks( 'grunt-contrib-clean' )
+    grunt.loadNpmTasks( 'grunt-contrib-cssmin' )
+    grunt.loadNpmTasks( 'grunt-contrib-uglify' )
+
+
+    // Create the initial grunt configurations.
     grunt.initConfig({
 
 
@@ -35,9 +51,25 @@ module.exports = function( grunt ) {
         },
 
 
-        // Clean the destination directories.
+        // Clean the destination files and directories.
         clean: {
+            site: [ '<%= dirs.site.dest %>', 'index.htm', 'date.htm', 'time.htm' ],
             lib: [ '<%= dirs.lib.dest %>' ]
+        },
+
+
+        // Generate static HTML templates.
+        htmlify: {
+            site: {
+                options: {
+                    base: grunt.file.read( '_source/base.htm' )
+                },
+                files: [
+                    { 'index.htm': '_source/index.htm' },
+                    { 'date.htm': '_source/date.htm' },
+                    { 'time.htm': '_source/time.htm' }
+                ]
+            }
         },
 
 
@@ -56,21 +88,15 @@ module.exports = function( grunt ) {
         },
 
 
-        // Copy and process files.
+        // Copy over files to destination directions.
         copy: {
 
-            // Generate the site templates and copy the site images over.
+            // Copy the site images over.
             site: {
-                options: {
-                    processContentExclude: [ '**/*.{png,ico}' ],
-                    processContent: function( content ) {
-                        return grunt.template.process( content, { delimiters: 'curly' } )
-                    }
-                },
-                files: [
-                    { expand: true, cwd: '<%= dirs.site.src %>/', src: [ 'images/*.{png,ico}' ], dest: '<%= dirs.site.dest %>/' },
-                    { 'index.htm': '_source/index.htm' }
-                ]
+                expand: true,
+                cwd: '<%= dirs.site.src %>/',
+                src: [ 'images/*.{png,ico}' ],
+                dest: '<%= dirs.site.dest %>/'
             },
 
             // Copy the lib files over that don't need concatenation.
@@ -138,7 +164,8 @@ module.exports = function( grunt ) {
         // Lint the files.
         jshint: {
             gruntfile: 'Gruntfile.js',
-            lib: [ '<%= dirs.lib.dest %>/**/*.js', '!<%= dirs.lib.dest %>/**/*.min.js', '<%= dirs.tests %>/tests.js' ]
+            site: [ '<%= dirs.site.src %>/scripts/base.js' ],
+            lib: [ '<%= dirs.lib.dest %>/**/*.js', '!<%= dirs.lib.dest %>/legacy.js', '!<%= dirs.lib.dest %>/**/*.min.js', '<%= dirs.tests %>/tests.js' ]
         },
 
 
@@ -156,7 +183,7 @@ module.exports = function( grunt ) {
             },
             legacy: {
                 files: {
-                    '<%= dirs.lib.dest %>/<%= pkg.name %>-legacy.js': [ '<%= dirs.lib.src %>/legacy.js' ]
+                    '<%= dirs.lib.dest %>/legacy.js': [ '<%= dirs.lib.src %>/legacy.js' ]
                 }
             }
         },
@@ -184,7 +211,7 @@ module.exports = function( grunt ) {
         watch: {
             gruntfile: {
                 files: [ 'Gruntfile.js' ],
-                tasks: [ 'jshint:gruntfile' ]
+                tasks: [ 'jshint:gruntfile', 'default' ]
             },
             site: {
                 files: [ '<%= dirs.site.src %>/../*.htm', '<%= dirs.site.src %>/styles/*.scss', '<%= dirs.site.src %>/scripts/*.js' ],
@@ -198,25 +225,43 @@ module.exports = function( grunt ) {
     }) //grunt.initConfig
 
 
-    // Add the "curly" delimiters.
-    grunt.template.addDelimiters( 'curly', '{%', '%}' )
-
-    // Load the NPM tasks.
-    grunt.loadNpmTasks( 'grunt-contrib-concat' )
-    grunt.loadNpmTasks( 'grunt-contrib-watch' )
-    grunt.loadNpmTasks( 'grunt-contrib-jshint' )
-    grunt.loadNpmTasks( 'grunt-contrib-qunit' )
-    grunt.loadNpmTasks( 'grunt-contrib-copy' )
-    grunt.loadNpmTasks( 'grunt-contrib-sass' )
-    grunt.loadNpmTasks( 'grunt-contrib-clean' )
-    grunt.loadNpmTasks( 'grunt-contrib-cssmin' )
-    grunt.loadNpmTasks( 'grunt-contrib-uglify' )
-
     // Register the tasks.
     grunt.registerTask( 'default', [ 'clean', 'concat', 'copy', 'sass', 'jshint', 'uglify', 'cssmin' ] )
     grunt.registerTask( 'build', [ 'clean:lib', 'concat:lib', 'copy:lib', 'sass:lib', 'jshint:lib', 'qunit:lib', 'uglify:lib', 'cssmin:lib' ] )
-    grunt.registerTask( 'site', [ 'concat:site', 'copy:site', 'sass:site' ] )
-    grunt.registerTask( 'travis', [ 'concat', 'copy', 'sass', 'jshint', 'qunit', 'uglify', 'cssmin' ] )
+    grunt.registerTask( 'site', [ 'clean:site', 'htmlify:site', 'concat:site', 'copy:site', 'sass:site', 'jshint:site' ] )
+    grunt.registerTask( 'travis', [ 'concat', 'copy', 'sass', 'jshint', 'qunit' ] )
+
+
+
+    // Register the tasks to build out the static HTML files.
+    grunt.registerMultiTask( 'htmlify', 'Build static HTML files', function() {
+
+        var task = this,
+            options = this.data.options,
+            files = this.data.files
+
+        files.map( function( file ) {
+
+            for ( var dest in file ) {
+
+                // Process the source file.
+                var sourceContent = grunt.template.process( grunt.file.read( file[ dest ] ), { delimiters: 'curly' } )
+
+                // Process the base file using the source content.
+                var destinationContent = grunt.template.process( options.base, {
+                    delimiters: 'curly',
+                    data: {
+                        content: sourceContent,
+                        pkg: grunt.config.data.pkg,
+                        page: dest.replace( '.htm', '' )
+                    }
+                })
+
+                // Create the actual file.
+                grunt.file.write( dest, destinationContent )
+            }
+        })
+    })
 
 } //module.exports
 
