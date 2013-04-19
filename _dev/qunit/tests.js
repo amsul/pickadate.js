@@ -888,10 +888,17 @@ module( 'Date picker with a `value`', {
 })
 
 test( 'Checking input `value` to set date...', function() {
-    ok( this.$input.pickadate( 'get', 'select' ).PICK === 587534400000, 'Element value sets correct date' )
-    ok( this.$input.pickadate( 'get', 'highlight' ).PICK === 587534400000, 'Element value sets correct highlight' )
-    ok( this.$input.pickadate( 'get', 'view' ).PICK === 586411200000, 'Element value sets correct view' )
+
     ok( !this.$input.siblings( '[type=hidden]' ).length, 'There is no hidden input' )
+
+    var selectedObject = this.$input.pickadate( 'get', 'select' )
+    ok( [selectedObject.YEAR,selectedObject.MONTH,selectedObject.DATE].toString() === [1988,7,14].toString(), 'Sets correct date' )
+
+    var highlightedObject = this.$input.pickadate( 'get', 'highlight' )
+    ok( [highlightedObject.YEAR,highlightedObject.MONTH,highlightedObject.DATE].toString() === [1988,7,14].toString(), 'Highlights correct date' )
+
+    var viewsetObject = this.$input.pickadate( 'get', 'view' )
+    ok( [viewsetObject.YEAR,viewsetObject.MONTH,viewsetObject.DATE].toString() === [1988,7,1].toString(), 'Viewsets correct date' )
 })
 
 
@@ -912,11 +919,19 @@ module( 'Date picker with a `data-value`', {
 })
 
 test( 'Checking input `data-value` to set date...', function() {
-    ok( this.$input.pickadate( 'get', 'select' ).PICK === 587534400000, 'Selects correct date' )
-    ok( this.$input.pickadate( 'get', 'highlight' ).PICK === 587534400000, 'Highlights correct date' )
-    ok( this.$input.pickadate( 'get', 'view' ).PICK === 586411200000, 'Viewsets correct date' )
-    ok( this.$input.siblings( '[type=hidden]' )[ 0 ].type === 'hidden', 'There is a hidden input' )
-    ok( this.$input.siblings( '[type=hidden]' )[ 0 ].value === '1988/08/14', 'The hidden input has correct value' )
+
+    var hiddenElement = this.$input.siblings( '[type=hidden]' )[ 0 ]
+    ok( hiddenElement.type === 'hidden', 'There is a hidden input' )
+    ok( hiddenElement.value === '1988/08/14', 'The hidden input has correct value' )
+
+    var selectedObject = this.$input.pickadate( 'get', 'select' )
+    ok( [selectedObject.YEAR,selectedObject.MONTH,selectedObject.DATE].toString() === [1988,7,14].toString(), 'Selects correct date' )
+
+    var highlightedObject = this.$input.pickadate( 'get', 'highlight' )
+    ok( [highlightedObject.YEAR,highlightedObject.MONTH,highlightedObject.DATE].toString() === [1988,7,14].toString(), 'Highlights correct date' )
+
+    var viewsetObject = this.$input.pickadate( 'get', 'view' )
+    ok( [viewsetObject.YEAR,viewsetObject.MONTH,viewsetObject.DATE].toString() === [1988,7,1].toString(), 'Viewsets correct date' )
 })
 
 
@@ -937,19 +952,24 @@ module( 'Date picker `get` and `set` properties', {
 test( 'Setting `min` & `max` with arrays...', function() {
 
     this.$input.pickadate( 'set', { select: [1988,7,14] } )
-    ok( this.$input.pickadate( 'get', 'select' ).PICK === 587534400000, 'Selects date correctly' )
+    var selectedObject = this.$input.pickadate( 'get', 'select' )
+    ok( [selectedObject.YEAR,selectedObject.MONTH,selectedObject.DATE].toString() === [1988,7,14].toString(), 'Selects date correctly' )
 
     this.$input.pickadate( 'set', { highlight: [1988,7,16] } )
-    ok( this.$input.pickadate( 'get', 'highlight' ).PICK === 587707200000, 'Highlights date correctly' )
+    var highlightedObject = this.$input.pickadate( 'get', 'highlight' )
+    ok( [highlightedObject.YEAR,highlightedObject.MONTH,highlightedObject.DATE].toString() === [1988,7,16].toString(), 'Highlights date correctly' )
 
     this.$input.pickadate( 'set', { view: [1988,7,18] } )
-    ok( this.$input.pickadate( 'get', 'view' ).PICK === 586411200000, 'Adjusts view correctly' )
+    var viewsetObject = this.$input.pickadate( 'get', 'view' )
+    ok( [viewsetObject.YEAR,viewsetObject.MONTH,viewsetObject.DATE].toString() === [1988,7,1].toString(), 'Adjusts view correctly' )
 
     this.$input.pickadate( 'set', { min: [1988,7,12] } )
-    ok( this.$input.pickadate( 'get', 'min' ).PICK === 587361600000, 'Sets min limit correctly' )
+    var minObject = this.$input.pickadate( 'get', 'min' )
+    ok( [minObject.YEAR,minObject.MONTH,minObject.DATE].toString() === [1988,7,12].toString(), 'Sets min limit correctly' )
 
     this.$input.pickadate( 'set', { max: [1988,7,20] } )
-    ok( this.$input.pickadate( 'get', 'max' ).PICK === 588052800000, 'Sets max limit correctly' )
+    var maxObject = this.$input.pickadate( 'get', 'max' )
+    ok( [maxObject.YEAR,maxObject.MONTH,maxObject.DATE].toString() === [1988,7,20].toString(), 'Sets max limit correctly' )
 })
 
 test( 'Setting `min` & `max` with integers...', function() {
@@ -1029,13 +1049,12 @@ test( 'Setting `disable` with arrays...', function() {
         nowYear = now.getFullYear(),
         nowMonth = now.getMonth(),
         disableCollection = [ [nowYear,nowMonth,1],[nowYear,nowMonth,17],[nowYear,nowMonth,25] ],
-        firstDay = this.$input.pickadate( 'get', 'view' ).DAY
+        firstDay = this.$input.pickadate( 'get', 'view' ).DAY,
+        $holder = this.$input.next( '.' + $.fn.pickadate.defaults.klass.holder.split( ' ' )[ 0 ] )
+
 
     this.$input.pickadate( 'set', { disable: disableCollection } )
-
     ok( this.$input.pickadate( 'get', 'disable' ).toString() === disableCollection.toString(), 'Disabled dates added to collection' )
-
-    var $holder = this.$input.next( '.' + $.fn.pickadate.defaults.klass.holder.split( ' ' )[ 0 ] )
 
     $holder.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
         var index = indexCell - 1 + firstDay
@@ -1047,17 +1066,19 @@ test( 'Setting `disable` with arrays...', function() {
         }
     })
 
-    // this.$input.pickadate( 'set', { enable: [ [4,30] ] } )
-    // ok( this.$input.pickadate( 'get', 'disable' ).toString() === [ [1,0],[18,0],[23,30] ].toString(), 'Disabled date removed from collection' )
 
-    // $holder.find( '.' + $.fn.pickadate.defaults.klass.listItem ).each( function( index, item ) {
-    //     if ( index === 2 || index === 36 || index === 47 ) {
-    //         ok( $( item ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is disabled: ' + item.innerHTML )
-    //     }
-    //     else {
-    //         ok( !$( item ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is enabled: ' + item.innerHTML )
-    //     }
-    // })
+    this.$input.pickadate( 'set', { enable: [ [nowYear,nowMonth,17] ] } )
+    ok( this.$input.pickadate( 'get', 'disable' ).toString() === [ [nowYear,nowMonth,1],[nowYear,nowMonth,25] ].toString(), 'Disabled date removed from collection' )
+
+    $holder.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
+        var index = indexCell - 1 + firstDay
+        if ( index === 1 || index === 25 ) {
+            ok( $( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is disabled: ' + tableCell.innerHTML )
+        }
+        else {
+            ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is enabled: ' + tableCell.innerHTML )
+        }
+    })
 })
 
 test( 'Setting `select` with arrays...', function() {
