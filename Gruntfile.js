@@ -233,7 +233,7 @@ module.exports = function( grunt ) {
 
 
 
-    // Register the tasks to build out the static HTML files.
+    // Register the task to build out the static HTML files.
     grunt.registerMultiTask( 'htmlify', 'Build static HTML files', function() {
 
         var task = this,

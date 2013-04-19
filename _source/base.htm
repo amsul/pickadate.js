@@ -42,7 +42,7 @@
             </nav>
         </div> <!-- .section__block -->
 
-        {%= page == 'index' ? grunt.file.read( '_source/hero.htm' ) : '' %}
+        {%= page == 'index' ? grunt.file.read( '<%= dirs.site.src %>/../hero.htm' ) : '' %}
 
     </header> <!-- .section -->
 
