@@ -665,11 +665,17 @@ module( 'Date picker general events', {
                 thisModule.closed = true
             },
             onSet: function() {
-                thisModule.selectedArray = this.get( 'select' ).PICK === 1365912000000
-                console.log( 'from array:', thisModule.selectedArray )
-                console.log( this.get( 'select' ).TIME.toString() )
-                thisModule.selectedNumber = this.get( 'select' ).PICK === 1366084800000
-                thisModule.selectedDateObject = this.get( 'select' ).PICK === 1366257600000
+
+                var today = new Date(),
+                    dateObject = this.get( 'select' )
+
+                today.setHours(0,0,0,0)
+                thisModule.selectedNumber = dateObject.PICK === today.getTime()
+
+                thisModule.selectedArray = [dateObject.YEAR,dateObject.MONTH,dateObject.DATE].toString() === [1988,7,14].toString()
+
+                thisModule.selectedDateObject = [dateObject.YEAR,dateObject.MONTH,dateObject.DATE].toString() === [2013,7,14].toString()
+
                 thisModule.clearedValue = this.get( 'value' ) === ''
             },
             onStop: function() {
@@ -708,13 +714,13 @@ test( 'Checking the basic events...', function() {
 
 test( 'Checking the `set` events...', function() {
 
-    this.$input.pickadate( 'set', { select: [2013,3,14] } )
-    ok( this.selectedArray, 'Selected from an array' )
-
-    this.$input.pickadate( 'set', { select: 1366084800000 } )
+    this.$input.pickadate( 'set', { select: new Date().getTime() } )
     ok( this.selectedNumber, 'Selected from a number' )
 
-    this.$input.pickadate( 'set', { select: new Date(2013,3,18) } )
+    this.$input.pickadate( 'set', { select: [1988,7,14] } )
+    ok( this.selectedArray, 'Selected from an array' )
+
+    this.$input.pickadate( 'set', { select: new Date(2013,7,14) } )
     ok( this.selectedDateObject, 'Selected from a JS date object' )
 
     this.$input.pickadate( 'clear' )
