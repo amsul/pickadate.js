@@ -1,5 +1,6 @@
+
 /*!
- * This Gruntfile is used to build the scripts.
+ * This Gruntfile is used to build the project files.
  */
 
 /*jshint
@@ -20,6 +21,41 @@ module.exports = function( grunt ) {
         pkg: grunt.file.readJSON( 'package.json' ),
 
 
+        // Set up the directories.
+        dirs: {
+            site: {
+                src: '_source/site',
+                dest: 'site'
+            },
+            lib: {
+                src: '_source/lib',
+                dest: 'lib'
+            },
+            tests: '_tests/qunit'
+        },
+
+
+        // Clean the destination directories.
+        clean: {
+            lib: [ '<%= dirs.lib.dest %>' ]
+        },
+
+
+        // The banner to prepend.
+        banner: {
+            js: '/*!\n' +
+                ' * <%= pkg.title %> v<%= pkg.version %>, <%= grunt.template.today("yyyy-mm-dd") %>\n' +
+                ' * By <%= pkg.author.name %> (<%= pkg.author.url %>)\n' +
+                ' * Hosted on <%= pkg.homepage %>\n' +
+                ' * Licensed under <%= pkg.licenses[0].type %>\n' +
+                ' */\n',
+            css: '/*!\n' +
+                 ' * <%= pkg.title %> v<%= pkg.version %>, <%= grunt.template.today("yyyy-mm-dd") %>\n' +
+                 ' * <%= pkg.homepage %> : <%= grunt.task.current.filesSrc %>\n' +
+                 ' */'
+        },
+
+
         // Copy and process files.
         copy: {
 
@@ -32,23 +68,22 @@ module.exports = function( grunt ) {
                     }
                 },
                 files: [
-                    { expand: true, cwd: '_source/site/', src: [ 'images/*.{png,ico}' ], dest: 'site/' },
+                    { expand: true, cwd: '<%= dirs.site.src %>/', src: [ 'images/*.{png,ico}' ], dest: '<%= dirs.site.dest %>/' },
                     { 'index.htm': '_source/index.htm' }
                 ]
             },
 
-            // Copy the translations over.
+            // Copy the lib files over that don't need concatenation.
             lib: {
-                files: [
-                    { expand: true, cwd: '_source/lib/', src: [ 'translations/*.js' ], dest: 'lib/' }
-                ]
+                expand: true,
+                cwd: '<%= dirs.lib.src %>',
+                src: [ 'translations/*.js' ],
+                dest: '<%= dirs.lib.dest %>/'
             },
 
             // Copy the package settings into a jquery package.
             pkg: {
-                files: {
-                    'pickadate.jquery.json': 'package.json'
-                }
+                files: { '<%= pkg.name %>.jquery.json': 'package.json' }
             }
         },
 
@@ -60,12 +95,12 @@ module.exports = function( grunt ) {
             },
             site: {
                 files: {
-                    'site/styles/main.css': '_source/site/styles/base.scss'
+                    '<%= dirs.site.dest %>/styles/main.css': '<%= dirs.site.src %>/styles/base.scss'
                 }
             },
             lib: {
                 files: {
-                    'lib/themes/default.css': '_source/lib/themes/default.scss'
+                    '<%= dirs.lib.dest %>/themes/default.css': '<%= dirs.lib.src %>/themes/default.scss'
                 }
             }
         },
@@ -74,21 +109,27 @@ module.exports = function( grunt ) {
         // Concatenate the files and add the banner.
         concat: {
             site: {
-                files: {
-                    'site/scripts/main.js': '_source/site/scripts/*.js'
-                }
+                files: { '<%= dirs.site.dest %>/scripts/main.js': '<%= dirs.site.src %>/scripts/*.js' }
             },
             lib: {
                 options: {
-                    banner: '/*!\n' +
-                            ' * <%= pkg.title %> v<%= pkg.version %>, <%= grunt.template.today("yyyy-mm-dd") %>\n' +
-                            ' * By <%= pkg.author.name %> (<%= pkg.author.url %>)\n' +
-                            ' * Hosted on <%= pkg.homepage %>\n' +
-                            ' * Licensed under MIT ("expat" flavour) license.\n' +
-                            ' */\n\n'
+                    banner: '<%= banner.js %>\n' + '(function( $, document, undefined ) {"use strict";',
+                    footer: '})( jQuery, document );'
                 },
                 files: {
-                    'lib/pickadate.js': '_source/lib/*.js'
+                    '<%= dirs.lib.dest %>/<%= pkg.name %>.datetime.js': [
+                        '<%= dirs.lib.src %>/datepicker.js',
+                        '<%= dirs.lib.src %>/timepicker.js',
+                        '<%= dirs.lib.src %>/basepicker.js'
+                    ],
+                    '<%= dirs.lib.dest %>/<%= pkg.name %>.date.js': [
+                        '<%= dirs.lib.src %>/datepicker.js',
+                        '<%= dirs.lib.src %>/basepicker.js'
+                    ],
+                    '<%= dirs.lib.dest %>/<%= pkg.name %>.time.js': [
+                        '<%= dirs.lib.src %>/timepicker.js',
+                        '<%= dirs.lib.src %>/basepicker.js'
+                    ]
                 }
             }
         },
@@ -96,28 +137,62 @@ module.exports = function( grunt ) {
 
         // Lint the files.
         jshint: {
+            gruntfile: 'Gruntfile.js',
+            lib: [ '<%= dirs.lib.dest %>/**/*.js', '!<%= dirs.lib.dest %>/**/*.min.js', '<%= dirs.tests %>/tests.js' ]
+        },
+
+
+        // Minify everything!
+        uglify: {
             options: {
-                asi: true
+                preserveComments: 'some'
             },
-            files: [ 'Gruntfile.js', '_source/lib/pickadate.js', '_source/lib/translations/*.js', '_dev/qunit/tests.js' ]
+            lib: {
+                files: {
+                    '<%= dirs.lib.dest %>/<%= pkg.name %>.datetime.min.js': [ '<%= dirs.lib.dest %>/<%= pkg.name %>.datetime.js' ],
+                    '<%= dirs.lib.dest %>/<%= pkg.name %>.date.min.js': [ '<%= dirs.lib.dest %>/<%= pkg.name %>.date.js' ],
+                    '<%= dirs.lib.dest %>/<%= pkg.name %>.time.min.js': [ '<%= dirs.lib.dest %>/<%= pkg.name %>.time.js' ]
+                }
+            },
+            legacy: {
+                files: {
+                    '<%= dirs.lib.dest %>/<%= pkg.name %>-legacy.js': [ '<%= dirs.lib.src %>/legacy.js' ]
+                }
+            }
+        },
+        cssmin: {
+            lib: {
+                options: {
+                    banner: '<%= banner.css %>'
+                },
+                expand: true,
+                cwd: '<%= dirs.lib.dest %>',
+                src: [ 'themes/*.css', '!themes/*.min.css' ],
+                dest: '<%= dirs.lib.dest %>/',
+                ext: '.min.css'
+            }
         },
 
 
         // Unit test the files.
         qunit: {
-            lib: [ '_dev/qunit/qunit.htm' ]
+            lib: [ '<%= dirs.tests %>/qunit.htm' ]
         },
 
 
         // Watch the project files.
         watch: {
+            gruntfile: {
+                files: [ 'Gruntfile.js' ],
+                tasks: [ 'jshint:gruntfile' ]
+            },
             site: {
-                files: [ '_source/site/**/*.htm', '_source/site/**/*.scss', '_source/site/**/*.js' ],
+                files: [ '<%= dirs.site.src %>/../*.htm', '<%= dirs.site.src %>/styles/*.scss', '<%= dirs.site.src %>/scripts/*.js' ],
                 tasks: [ 'site' ]
             },
             lib: {
-                files: [ '_source/lib/**/*.js', '_source/lib/**/*.scss' ],
-                tasks: [ 'default' ]
+                files: [ '<%= dirs.lib.src %>/**/*.js', '<%= dirs.lib.src %>/themes/*.scss' ],
+                tasks: [ 'build' ]
             }
         }
     }) //grunt.initConfig
@@ -133,12 +208,15 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks( 'grunt-contrib-qunit' )
     grunt.loadNpmTasks( 'grunt-contrib-copy' )
     grunt.loadNpmTasks( 'grunt-contrib-sass' )
+    grunt.loadNpmTasks( 'grunt-contrib-clean' )
+    grunt.loadNpmTasks( 'grunt-contrib-cssmin' )
+    grunt.loadNpmTasks( 'grunt-contrib-uglify' )
 
     // Register the tasks.
-    grunt.registerTask( 'default', [ 'concat', 'copy', 'sass', 'jshint'/*, 'qunit'*/ ] )
-    grunt.registerTask( 'build', [ 'concat:lib', 'copy:lib', 'sass:lib', 'qunit:lib' ] )
+    grunt.registerTask( 'default', [ 'clean', 'concat', 'copy', 'sass', 'jshint', 'uglify', 'cssmin' ] )
+    grunt.registerTask( 'build', [ 'clean:lib', 'concat:lib', 'copy:lib', 'sass:lib', 'jshint:lib', 'qunit:lib', 'uglify:lib', 'cssmin:lib' ] )
     grunt.registerTask( 'site', [ 'concat:site', 'copy:site', 'sass:site' ] )
-    grunt.registerTask( 'travis', [ 'jshint', 'qunit' ] )
+    grunt.registerTask( 'travis', [ 'concat', 'copy', 'sass', 'jshint', 'qunit', 'uglify', 'cssmin' ] )
 
 } //module.exports
 

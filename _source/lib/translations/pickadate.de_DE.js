@@ -10,4 +10,4 @@ $.extend( $.fn.pickadate.defaults, {
     firstDay: 1,
     format: 'dddd, dd. mmmm yyyy',
     formatSubmit: 'yyyy/mm/dd'
-})
+});
