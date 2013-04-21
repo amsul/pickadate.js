@@ -92,32 +92,19 @@ function TimePicker( picker, settings ) {
      * The time picker events.
      */
     clock.onRender = function( $holder ) {
-        var picker = this,
-            $viewset = $holder.find( '.' + settings.klass.viewset )
+        var $viewset = $holder.find( '.' + settings.klass.viewset )
         if ( $viewset.length ) {
             $holder[ 0 ].scrollTop = $viewset.position().top - ~~( $holder[ 0 ].clientHeight / 4 )
         }
         else {
             console.warn( 'Nothing to viewset with', clock.item.view )
         }
-        triggerFunction( settings.onRender, picker, [ $holder ] )
-    }
-    clock.onStart = function( $holder ) {
-        triggerFunction( settings.onStart, this, [ $holder ] )
     }
     clock.onOpen = function( $holder ) {
         $holder.find( 'button' ).attr( 'disable', false )
-        triggerFunction( settings.onOpen, this, [ $holder ] )
     }
     clock.onClose = function( $holder ) {
         $holder.find( 'button' ).attr( 'disable', true )
-        triggerFunction( settings.onClose, this, [ $holder ] )
-    }
-    clock.onSet = function( $holder ) {
-        triggerFunction( settings.onSet, this, [ $holder ] )
-    }
-    clock.onStop = function( $holder ) {
-        triggerFunction( settings.onStop, this, [ $holder ] )
     }
 
 } //TimePicker

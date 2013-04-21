@@ -89,37 +89,21 @@ function DatePicker( picker, settings ) {
      * The time picker events.
      */
     calendar.onRender = function( $holder ) {
-
         var picker = this
-
-        // $holder.find( '.' + settings.klass.selectMonth ).on( 'change', function() {
-        //     picker.set( 'view', [ calendar.props.get( 'view' ).YEAR, this.value, calendar.props.get( 'highlight' ).DATE ] )
-        //     $holder.find( '.' + settings.klass.selectMonth ).focus()
-        // })
-
-        // $holder.find( '.' + settings.klass.selectYear ).on( 'change', function() {
-        //     picker.set( 'view', [ this.value, calendar.props.get( 'view' ).MONTH, calendar.props.get( 'highlight' ).DATE ] )
-        //     $holder.find( '.' + settings.klass.selectYear ).focus()
-        // })
-
-        triggerFunction( settings.onRender, picker, [ $holder ] )
-    }
-    calendar.onStart = function( $holder ) {
-        triggerFunction( settings.onStart, this, [ $holder ] )
+        $holder.find( '.' + settings.klass.selectMonth ).on( 'change', function() {
+            picker.set( 'highlight', [ calendar.get( 'view' ).YEAR, this.value, calendar.get( 'highlight' ).DATE ] )
+            $holder.find( '.' + settings.klass.selectMonth ).focus()
+        })
+        $holder.find( '.' + settings.klass.selectYear ).on( 'change', function() {
+            picker.set( 'highlight', [ this.value, calendar.get( 'view' ).MONTH, calendar.get( 'highlight' ).DATE ] )
+            $holder.find( '.' + settings.klass.selectYear ).focus()
+        })
     }
     calendar.onOpen = function( $holder ) {
         $holder.find( 'button, select' ).attr( 'disabled', false )
-        triggerFunction( settings.onOpen, this, [ $holder ] )
     }
     calendar.onClose = function( $holder ) {
         $holder.find( 'button, select' ).attr( 'disabled', true )
-        triggerFunction( settings.onClose, this, [ $holder ] )
-    }
-    calendar.onSet = function( $holder ) {
-        triggerFunction( settings.onSet, this, [ $holder ] )
-    }
-    calendar.onStop = function( $holder ) {
-        triggerFunction( settings.onStop, this, [ $holder ] )
     }
 
 } //DatePicker
@@ -653,7 +637,7 @@ DatePicker.prototype.nodes = function( isOpen ) {
                     }
                 })
             ) //endreturn
-        })( ( settings.showWeekdaysShort ? settings.weekdaysShort : settings.weekdaysFull ).slice( 0 ) ), //tableHead
+        })( ( settings.showWeekdaysFull ? settings.weekdaysFull : settings.weekdaysShort ).slice( 0 ) ), //tableHead
 
 
         // Create the nav for next/prev month.
@@ -777,7 +761,7 @@ DatePicker.prototype.nodes = function( isOpen ) {
     return createNode(
         'div',
         createMonthNav() + createMonthNav( 1 ) +
-        createMonthLabel( settings.showMonthsFull ? settings.monthsFull : settings.monthsShort ) +
+        createMonthLabel( settings.showMonthsShort ? settings.monthsShort : settings.monthsFull ) +
         createYearLabel(),
         settings.klass.header
     ) + createNode(

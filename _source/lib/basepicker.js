@@ -82,9 +82,9 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                         event.stopPropagation()
                     },
 
-                    // Prevent any mousedowns within the holder from bubbling to the doc.
+                    // If the event is not on the box itself, stop it from bubbling to the doc.
                     mousedown: function( event ) {
-                        if ( P.$box.find( event.target ).length ) {
+                        if ( event.target != P.$box[ 0 ] ) {
                             event.stopPropagation()
                         }
                     },
@@ -93,23 +93,26 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                     click: function( event ) {
 
                         var $target = $( event.target ),
-                            targetData = $target.data()
+                            targetData = $target.data(),
+                            activeElement = document.activeElement
 
                         // Prevent the default action.
                         event.preventDefault()
 
-                        // Check if the click is within the holder.
-                        if ( P.$box.find( $target[ 0 ] ).length ) {
+                        // If the event is not on the box itself, handle clicks within.
+                        if ( event.target != P.$box[ 0 ] ) {
 
                             // Stop it from propagating to the doc.
                             event.stopPropagation()
 
-                            // Maintain the focus on the `input` element.
-                            ELEMENT.focus()
+                            // Maintain focus on the `input` element if no picker item is focused.
+                            if ( activeElement != ELEMENT && !P.$box.find( activeElement ).length ) {
+                                ELEMENT.focus()
+                            }
 
                             // If something is getting picked, update the `select` and `highlight` and then close.
                             if ( isInteger( targetData.pick ) && !$target.hasClass( CLASSES.disabled ) ) {
-                                P.set( 'select', targetData.pick ).set( 'highlight', targetData.pick ).close()
+                                P.set({ select: targetData.pick, highlight: targetData.pick }).close()
                             }
 
                             // If something is superficially changed, update the `highlight` based on the `nav`.
@@ -183,8 +186,14 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                 // Trigger the "start" event within scope of the picker.
                 triggerFunction( P.component.onStart, P, [ P.$box ] )
 
+                // Trigger the settings "start" event within scope of the picker.
+                triggerFunction( SETTINGS.onStart, P, [ P.$box ] )
+
                 // Trigger the "render" event within scope of the picker.
                 triggerFunction( P.component.onRender, P, [ P.$box ] )
+
+                // Trigger the settings "render" event within scope of the picker.
+                triggerFunction( SETTINGS.onRender, P, [ P.$box ] )
 
                 // If the element has autofocus, open the calendar
                 if ( ELEMENT.autofocus ) {
@@ -205,6 +214,9 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
 
                 // Trigger the "render" event within scope of the picker.
                 triggerFunction( P.component.onRender, P, [ P.$box ] )
+
+                // Trigger the settings "render" event within scope of the picker.
+                triggerFunction( SETTINGS.onRender, P, [ P.$box ] )
 
                 return P
             }, //render
@@ -242,6 +254,9 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                 // Trigger the "stop" event within scope of the picker.
                 triggerFunction( stopEvent, P )
 
+                // Trigger the settings "stop" event within scope of the picker.
+                triggerFunction( SETTINGS.onStop, P, [ P.$box ] )
+
                 return P
             }, //stop
 
@@ -269,9 +284,11 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                     // If the target of the event is not the element, close the picker picker.
                     // * Don't worry about clicks or focusins on the holder
                     //   because those are stopped from bubbling up.
-                    if ( event.target != ELEMENT ) P.close()
+                    //   Also, for Firefox, a click on an `option` element bubbles up directly
+                    //   to the doc. So make sure the target wasn't the doc also.
+                    if ( event.target != ELEMENT && event.target != document ) P.close()
 
-                }).on( 'mousedown.P' + STATE.ID, function( event ) {
+                })/*.on( 'mousedown.P' + STATE.ID, function( event ) {
 
                     // Maintain the focus on the `input` element.
                     ELEMENT.focus()
@@ -279,7 +296,7 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                     // Prevent the default action to keep focus on the `input` field.
                     event.preventDefault()
 
-                }).on( 'keydown.P' + STATE.ID, function( event ) {
+                })*/.on( 'keydown.P' + STATE.ID, function( event ) {
 
                     var
                         // Get the keycode
@@ -317,6 +334,9 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                 // Trigger the "open" event within scope of the picker.
                 triggerFunction( P.component.onOpen, P, [ P.$box ] )
 
+                // Trigger the settings "open" event within scope of the picker.
+                triggerFunction( SETTINGS.onOpen, P, [ P.$box ] )
+
                 return P
             }, //open
 
@@ -343,6 +363,9 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
 
                 // Trigger the on close event within scope of the picker.
                 triggerFunction( P.component.onClose, P, [ P.$box ] )
+
+                // Trigger the settings "close" event within scope of the picker.
+                triggerFunction( SETTINGS.onClose, P, [ P.$box ] )
 
                 return P
             }, //close
@@ -389,8 +412,11 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                 // Render a new picker.
                 P.render()
 
-                // Trigger the "set" event within scope of the picker.
+                // Trigger the component "set" event within scope of the picker.
                 triggerFunction( P.component.onSet, P, [ P.$box ] )
+
+                // Trigger the settings "set" event within scope of the picker.
+                triggerFunction( SETTINGS.onSet, P, [ P.$box ] )
 
                 return P
             }, //set
@@ -644,7 +670,7 @@ function isInteger( value ) {
 
 
 /**
- * Default options for the date picker
+ * Default options for the date picker.
  */
 $.fn.pickadate.defaults = {
 
@@ -657,10 +683,6 @@ $.fn.pickadate.defaults = {
     monthsShort: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
     weekdaysFull: [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ],
     weekdaysShort: [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ],
-
-    // Display strings
-    showMonthsFull: 1,
-    showWeekdaysShort: 1,
 
     // The format to show on the `input` element
     format: 'd mmmm, yyyy',
