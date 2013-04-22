@@ -362,9 +362,16 @@ DatePicker.prototype.shift = function( dateObject, interval ) {
         // Increase/decrease the date by the key movement and keep looping.
         dateObject = calendar.create([ dateObject.YEAR, dateObject.MONTH, dateObject.DATE + ( interval || 1 ) ])
 
-        // If we've looped through to the next month, break out of the loop.
-        if ( dateObject.MONTH != originalDateObject.MONTH ) {
+        // If we've looped beyond the limits, break out of the loop.
+        if ( dateObject.PICK <= calendar.item.min.PICK || dateObject.PICK >= calendar.item.max.PICK ) {
             break
+        }
+
+        // If we've looped through to 2 month either way, reset the date object
+        // to the original date and shift by 1 in the same direction as before.
+        if ( Math.abs( dateObject.MONTH - originalDateObject.MONTH ) > 1 ) {
+            dateObject = originalDateObject
+            interval = interval < 0 ? -1 : 1
         }
     }
 

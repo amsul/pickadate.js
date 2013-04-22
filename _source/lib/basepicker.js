@@ -416,7 +416,7 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                 triggerFunction( P.component.onSet, P, [ P.$box ] )
 
                 // Trigger the settings "set" event within scope of the picker.
-                triggerFunction( SETTINGS.onSet, P, [ P.$box ] )
+                triggerFunction( SETTINGS.onSet, P, [ P.$box, object ] )
 
                 return P
             }, //set
@@ -426,6 +426,9 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
              * Get the values
              */
             get: function( options ) {
+
+                // Make sure there's something to get.
+                options = options || 'value'
 
                 // If it's a string, either get the value or the component item object itself.
                 if ( typeof options == 'string' ) {
