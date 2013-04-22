@@ -69,22 +69,22 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                 P.component = new COMPONENT( P, SETTINGS )
 
 
-                // Create the picker box with a new wrapped picker and bind the events.
-                P.$box = $( createNode( 'div', createWrappedPicker(), CLASSES.holder ) ).on({
+                // Create the picker holder with a new wrapped picker and bind the events.
+                P.$holder = $( createNode( 'div', createWrappedPicker(), CLASSES.holder ) ).on({
 
                     // When something within the holder is focused, make it appear so.
                     focusin: function( event ) {
 
                         // Remove the holder "focused" state from the holder.
-                        P.$box.removeClass( CLASSES.focused )
+                        P.$holder.removeClass( CLASSES.focused )
 
                         // Prevent the event from propagating to the doc.
                         event.stopPropagation()
                     },
 
-                    // If the event is not on the box itself, stop it from bubbling to the doc.
+                    // If the event is not on the holder itself, stop it from bubbling to the doc.
                     mousedown: function( event ) {
-                        if ( event.target != P.$box[ 0 ] ) {
+                        if ( event.target != P.$holder[ 0 ] ) {
                             event.stopPropagation()
                         }
                     },
@@ -99,14 +99,14 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                         // Prevent the default action.
                         event.preventDefault()
 
-                        // If the event is not on the box itself, handle clicks within.
-                        if ( event.target != P.$box[ 0 ] ) {
+                        // If the event is not on the holder itself, handle clicks within.
+                        if ( event.target != P.$holder[ 0 ] ) {
 
                             // Stop it from propagating to the doc.
                             event.stopPropagation()
 
                             // Maintain focus on the `input` element if no picker item is focused.
-                            if ( activeElement != ELEMENT && !P.$box.find( activeElement ).length ) {
+                            if ( activeElement != ELEMENT && !P.$holder.find( activeElement ).length ) {
                                 ELEMENT.focus()
                             }
 
@@ -126,7 +126,7 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                             }
                         }
                     }
-                }) //P.$box
+                }) //P.$holder
 
 
                 // If there's a format for the hidden input element, create the element
@@ -142,7 +142,7 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                     P.open()
 
                     // Add the "focused" state onto the holder.
-                    P.$box.addClass( CLASSES.focused )
+                    P.$holder.addClass( CLASSES.focused )
 
                 }).on( 'change.P' + STATE.ID, function() {
 
@@ -180,20 +180,20 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                         }
                     }
 
-                }).after([ P.$box, P._hidden ])
+                }).after([ P.$holder, P._hidden ])
 
 
                 // Trigger the "start" event within scope of the picker.
-                triggerFunction( P.component.onStart, P, [ P.$box ] )
+                triggerFunction( P.component.onStart, P, [ P.$holder ] )
 
                 // Trigger the settings "start" event within scope of the picker.
-                triggerFunction( SETTINGS.onStart, P, [ P.$box ] )
+                triggerFunction( SETTINGS.onStart, P, [ P.$holder ] )
 
                 // Trigger the "render" event within scope of the picker.
-                triggerFunction( P.component.onRender, P, [ P.$box ] )
+                triggerFunction( P.component.onRender, P, [ P.$holder ] )
 
                 // Trigger the settings "render" event within scope of the picker.
-                triggerFunction( SETTINGS.onRender, P, [ P.$box ] )
+                triggerFunction( SETTINGS.onRender, P, [ P.$holder ] )
 
                 // If the element has autofocus, open the calendar
                 if ( ELEMENT.autofocus ) {
@@ -210,13 +210,13 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
             render: function() {
 
                 // Insert a new picker in the holder.
-                P.$box.html( createWrappedPicker() )
+                P.$holder.html( createWrappedPicker() )
 
                 // Trigger the "render" event within scope of the picker.
-                triggerFunction( P.component.onRender, P, [ P.$box ] )
+                triggerFunction( P.component.onRender, P, [ P.$holder ] )
 
                 // Trigger the settings "render" event within scope of the picker.
-                triggerFunction( SETTINGS.onRender, P, [ P.$box ] )
+                triggerFunction( SETTINGS.onRender, P, [ P.$holder ] )
 
                 return P
             }, //render
@@ -246,7 +246,7 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                 }
 
                 // Remove the holder.
-                P.$box.remove()
+                P.$holder.remove()
 
                 // Reset the component object.
                 P.component = undefined
@@ -255,7 +255,7 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                 triggerFunction( stopEvent, P )
 
                 // Trigger the settings "stop" event within scope of the picker.
-                triggerFunction( SETTINGS.onStop, P, [ P.$box ] )
+                triggerFunction( SETTINGS.onStop, P, [ P.$holder ] )
 
                 return P
             }, //stop
@@ -276,7 +276,7 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                 $ELEMENT.focus().addClass( CLASSES.inputActive )
 
                 // Add the "opened" class to the picker holder.
-                P.$box.addClass( CLASSES.opened )
+                P.$holder.addClass( CLASSES.opened )
 
                 // Bind the document events.
                 $DOCUMENT.on( 'click.P' + STATE.ID + ' focusin.P' + STATE.ID, function( event ) {
@@ -332,10 +332,10 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                 })
 
                 // Trigger the "open" event within scope of the picker.
-                triggerFunction( P.component.onOpen, P, [ P.$box ] )
+                triggerFunction( P.component.onOpen, P, [ P.$holder ] )
 
                 // Trigger the settings "open" event within scope of the picker.
-                triggerFunction( SETTINGS.onOpen, P, [ P.$box ] )
+                triggerFunction( SETTINGS.onOpen, P, [ P.$holder ] )
 
                 return P
             }, //open
@@ -356,16 +356,16 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                 $ELEMENT.removeClass( CLASSES.inputActive )
 
                 // Remove the "opened" class from the picker holder.
-                P.$box.removeClass( CLASSES.opened )
+                P.$holder.removeClass( CLASSES.opened )
 
                 // Bind the document events.
                 $DOCUMENT.off( '.P' + STATE.ID )
 
                 // Trigger the on close event within scope of the picker.
-                triggerFunction( P.component.onClose, P, [ P.$box ] )
+                triggerFunction( P.component.onClose, P, [ P.$holder ] )
 
                 // Trigger the settings "close" event within scope of the picker.
-                triggerFunction( SETTINGS.onClose, P, [ P.$box ] )
+                triggerFunction( SETTINGS.onClose, P, [ P.$holder ] )
 
                 return P
             }, //close
@@ -413,10 +413,10 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                 P.render()
 
                 // Trigger the component "set" event within scope of the picker.
-                triggerFunction( P.component.onSet, P, [ P.$box ] )
+                triggerFunction( P.component.onSet, P, [ P.$holder ] )
 
                 // Trigger the settings "set" event within scope of the picker.
-                triggerFunction( SETTINGS.onSet, P, [ P.$box, object ] )
+                triggerFunction( SETTINGS.onSet, P, [ P.$holder, object ] )
 
                 return P
             }, //set
