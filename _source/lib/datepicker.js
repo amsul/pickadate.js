@@ -230,13 +230,12 @@ DatePicker.prototype.normalize = function( value/*, options*/ ) {
 /**
  * Measure the range of dates.
  */
-DatePicker.prototype.measure = function( type, value, options ) {
+DatePicker.prototype.measure = function( type, value/*, options*/ ) {
 
     var calendar = this
 
     if ( isInteger( value ) ) {
-        options.rel = value
-        value = calendar.now( type, value, options )
+        value = calendar.now( type, value, { rel: value } )
     }
 
     return value
