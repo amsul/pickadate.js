@@ -34,7 +34,6 @@
   },
   "jam": {
     "dependencies": {
-      "main": "lib/pickadate.js",
       "jquery": ">=1.7"
     }
   },

@@ -91,8 +91,9 @@ function TimePicker( picker, settings ) {
     /**
      * The time picker events.
      */
-    clock.onRender = function( $holder ) {
-        var $viewset = $holder.find( '.' + settings.klass.viewset )
+    clock.onRender = function() {
+        var $holder = this.$holder,
+            $viewset = $holder.find( '.' + settings.klass.viewset )
         if ( $viewset.length ) {
             $holder[ 0 ].scrollTop = $viewset.position().top - ~~( $holder[ 0 ].clientHeight / 4 )
         }
@@ -100,11 +101,11 @@ function TimePicker( picker, settings ) {
             console.warn( 'Nothing to viewset with', clock.item.view )
         }
     }
-    clock.onOpen = function( $holder ) {
-        $holder.find( 'button' ).attr( 'disable', false )
+    clock.onOpen = function() {
+        this.$holder.find( 'button' ).attr( 'disable', false )
     }
-    clock.onClose = function( $holder ) {
-        $holder.find( 'button' ).attr( 'disable', true )
+    clock.onClose = function() {
+        this.$holder.find( 'button' ).attr( 'disable', true )
     }
 
 } //TimePicker
@@ -573,4 +574,54 @@ TimePicker.prototype.nodes = function( isOpen ) {
         }
     }) + createNode( 'li', createNode( 'button', settings.clear, settings.klass.buttonClear, 'data-clear=1' + ( isOpen ? '' : ' disabled' ) ) ), settings.klass.list )
 } //TimePicker.prototype.nodes
+
+
+
+
+
+
+
+/* ==========================================================================
+   Extend jQuery with the component time picker and defaults
+   ========================================================================== */
+
+jQueryExtend( TimePicker, 'pickatime', {
+
+    // Clear
+    clear: 'Clear',
+
+    // The format to show on the `input` element
+    format: 'h:i A',
+
+    // The interval between each time
+    interval: 30,
+
+    // Classes
+    klass: {
+
+        inputActive: STRING_PREFIX_PICKER + 'input--active',
+
+        holder: STRING_PREFIX_PICKER + 'holder ' + STRING_PREFIX_PICKER + 'holder--time',
+        opened: STRING_PREFIX_PICKER + 'holder--opened',
+        focused: STRING_PREFIX_PICKER + 'holder--focused',
+
+        frame: STRING_PREFIX_PICKER + 'frame',
+        wrap: STRING_PREFIX_PICKER + 'wrap',
+
+        box: STRING_PREFIX_PICKER + 'box',
+
+        list: STRING_PREFIX_PICKER + 'list',
+        listItem: STRING_PREFIX_PICKER + 'list-item',
+
+        disabled: STRING_PREFIX_PICKER + 'list-item--disabled',
+        selected: STRING_PREFIX_PICKER + 'list-item--selected',
+        highlighted: STRING_PREFIX_PICKER + 'list-item--highlighted',
+        viewset: STRING_PREFIX_PICKER + 'list-item--viewset',
+        now: STRING_PREFIX_PICKER + 'list-item--now',
+
+        buttonClear: STRING_PREFIX_PICKER + 'button--clear'
+    }
+});
+
+
 

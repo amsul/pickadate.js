@@ -88,24 +88,23 @@ function DatePicker( picker, settings ) {
     /**
      * The time picker events.
      */
-    calendar.onRender = function( $holder ) {
+    calendar.onRender = function() {
         var picker = this
-        $holder.find( '.' + settings.klass.selectMonth ).on( 'change', function() {
+        picker.$holder.find( '.' + settings.klass.selectMonth ).on( 'change', function() {
             picker.set( 'highlight', [ calendar.get( 'view' ).YEAR, this.value, calendar.get( 'highlight' ).DATE ] )
-            $holder.find( '.' + settings.klass.selectMonth ).focus()
+            picker.$holder.find( '.' + settings.klass.selectMonth ).focus()
         })
-        $holder.find( '.' + settings.klass.selectYear ).on( 'change', function() {
+        picker.$holder.find( '.' + settings.klass.selectYear ).on( 'change', function() {
             picker.set( 'highlight', [ this.value, calendar.get( 'view' ).MONTH, calendar.get( 'highlight' ).DATE ] )
-            $holder.find( '.' + settings.klass.selectYear ).focus()
+            picker.$holder.find( '.' + settings.klass.selectYear ).focus()
         })
     }
-    calendar.onOpen = function( $holder ) {
-        $holder.find( 'button, select' ).attr( 'disabled', false )
+    calendar.onOpen = function() {
+        this.$holder.find( 'button, select' ).attr( 'disabled', false )
     }
-    calendar.onClose = function( $holder ) {
-        $holder.find( 'button, select' ).attr( 'disabled', true )
+    calendar.onClose = function() {
+        this.$holder.find( 'button, select' ).attr( 'disabled', true )
     }
-
 } //DatePicker
 
 
@@ -852,13 +851,6 @@ DatePicker.prototype.nodes = function( isOpen ) {
 
 
 
-
-
-
-
-
-
-
 //     /* ==========================================================================
 //        Build date picker components
 //        ========================================================================== */
@@ -911,66 +903,74 @@ DatePicker.prototype.nodes = function( isOpen ) {
 //     } //CalendarPicker.prototype.validate
 
 
-//     // /**
-//     //  * Create the lower bounding date object.
-//     //  */
-//     // CalendarPicker.prototype.min = function() {
-
-//     //     var
-//     //         calendar = this,
-//     //         limit = calendar.SETTINGS.min,
-//     //         nowObject = calendar.object()
-
-//     //     // If the limit is set to true, just return today.
-//     //     if ( limit === true ) {
-//     //         return nowObject
-//     //     }
-
-//     //     // If there is a limit and its a number, create a
-//     //     // time object relative to today by adding the limit.
-//     //     if ( limit && !isNaN( limit ) ) {
-//     //         return calendar.object([ nowObject.YEAR, nowObject.MONTH, nowObject.DATE + limit ])
-//     //     }
-
-//     //     // If the limit is an array, construct the time object.
-//     //     if ( Array.isArray( limit ) ) {
-//     //         return calendar.object( limit )
-//     //     }
-
-//     //     // Otherwise create an infinite time.
-//     //     return calendar.object( 0, -Infinity )
-//     // }
 
 
-//     // /**
-//     //  * Create the upper bounding date object.
-//     //  */
-//     // CalendarPicker.prototype.max = function() {
 
-//     //     var
-//     //         calendar = this,
-//     //         limit = calendar.SETTINGS.max,
-//     //         nowObject = calendar.object()
 
-//     //     // If the limit is set to true, just return today.
-//     //     if ( limit === true ) {
-//     //         return nowObject
-//     //     }
 
-//     //     // If there is a limit and its a number, create a
-//     //     // time object relative to today by adding the limit.
-//     //     if ( limit && !isNaN( limit ) ) {
-//     //         return calendar.object([ nowObject.YEAR, nowObject.MONTH, nowObject.DATE + limit ])
-//     //     }
+/* ==========================================================================
+   Extend jQuery with the component date picker and defaults
+   ========================================================================== */
 
-//     //     // If the limit is an array, construct the time object.
-//     //     if ( Array.isArray( limit ) ) {
-//     //         return calendar.object( limit )
-//     //     }
+jQueryExtend( DatePicker, 'pickadate', {
 
-//     //     // Otherwise create an infinite time.
-//     //     return calendar.object( 0, Infinity )
-//     // }
+    // Months and weekdays
+    monthsFull: [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ],
+    monthsShort: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
+    weekdaysFull: [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ],
+    weekdaysShort: [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ],
+
+    // Today and clear
+    today: 'Today',
+    clear: 'Clear',
+
+    // The format to show on the `input` element
+    format: 'd mmmm, yyyy',
+
+    // Classes
+    klass: {
+
+        inputActive: STRING_PREFIX_PICKER + 'input--active',
+
+        holder: STRING_PREFIX_PICKER + 'holder',
+        opened: STRING_PREFIX_PICKER + 'holder--opened',
+        focused: STRING_PREFIX_PICKER + 'holder--focused',
+
+        frame: STRING_PREFIX_PICKER + 'frame',
+        wrap: STRING_PREFIX_PICKER + 'wrap',
+
+        box: STRING_PREFIX_PICKER + 'box',
+
+        table: STRING_PREFIX_PICKER + 'table',
+
+        header: STRING_PREFIX_PICKER + 'header',
+
+        navPrev: STRING_PREFIX_PICKER + 'nav--prev',
+        navNext: STRING_PREFIX_PICKER + 'nav--next',
+        navDisabled: STRING_PREFIX_PICKER + 'nav--disabled',
+
+        month: STRING_PREFIX_PICKER + 'month',
+        year: STRING_PREFIX_PICKER + 'year',
+
+        selectMonth: STRING_PREFIX_PICKER + 'select--month',
+        selectYear: STRING_PREFIX_PICKER + 'select--year',
+
+        weekdays: STRING_PREFIX_PICKER + 'weekday',
+
+        day: STRING_PREFIX_PICKER + 'day',
+        disabled: STRING_PREFIX_PICKER + 'day--disabled',
+        selected: STRING_PREFIX_PICKER + 'day--selected',
+        highlighted: STRING_PREFIX_PICKER + 'day--highlighted',
+        now: STRING_PREFIX_PICKER + 'day--today',
+        infocus: STRING_PREFIX_PICKER + 'day--infocus',
+        outfocus: STRING_PREFIX_PICKER + 'day--outfocus',
+
+        footer: STRING_PREFIX_PICKER + 'footer',
+
+        buttonClear: STRING_PREFIX_PICKER + 'button--clear',
+        buttonToday: STRING_PREFIX_PICKER + 'button--today'
+    }
+}); //jQueryExtend
 
 
 

@@ -184,16 +184,16 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
 
 
                 // Trigger the "start" event within scope of the picker.
-                triggerFunction( P.component.onStart, P, [ P.$holder ] )
+                triggerFunction( P.component.onStart, P )
 
                 // Trigger the settings "start" event within scope of the picker.
-                triggerFunction( SETTINGS.onStart, P, [ P.$holder ] )
+                triggerFunction( SETTINGS.onStart, P )
 
                 // Trigger the "render" event within scope of the picker.
-                triggerFunction( P.component.onRender, P, [ P.$holder ] )
+                triggerFunction( P.component.onRender, P )
 
                 // Trigger the settings "render" event within scope of the picker.
-                triggerFunction( SETTINGS.onRender, P, [ P.$holder ] )
+                triggerFunction( SETTINGS.onRender, P )
 
                 // If the element has autofocus, open the calendar
                 if ( ELEMENT.autofocus ) {
@@ -213,10 +213,10 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                 P.$holder.html( createWrappedPicker() )
 
                 // Trigger the "render" event within scope of the picker.
-                triggerFunction( P.component.onRender, P, [ P.$holder ] )
+                triggerFunction( P.component.onRender, P )
 
                 // Trigger the settings "render" event within scope of the picker.
-                triggerFunction( SETTINGS.onRender, P, [ P.$holder ] )
+                triggerFunction( SETTINGS.onRender, P )
 
                 return P
             }, //render
@@ -255,7 +255,7 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                 triggerFunction( stopEvent, P )
 
                 // Trigger the settings "stop" event within scope of the picker.
-                triggerFunction( SETTINGS.onStop, P, [ P.$holder ] )
+                triggerFunction( SETTINGS.onStop, P )
 
                 return P
             }, //stop
@@ -332,10 +332,10 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                 })
 
                 // Trigger the "open" event within scope of the picker.
-                triggerFunction( P.component.onOpen, P, [ P.$holder ] )
+                triggerFunction( P.component.onOpen, P )
 
                 // Trigger the settings "open" event within scope of the picker.
-                triggerFunction( SETTINGS.onOpen, P, [ P.$holder ] )
+                triggerFunction( SETTINGS.onOpen, P )
 
                 return P
             }, //open
@@ -362,10 +362,10 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                 $DOCUMENT.off( '.P' + STATE.ID )
 
                 // Trigger the on close event within scope of the picker.
-                triggerFunction( P.component.onClose, P, [ P.$holder ] )
+                triggerFunction( P.component.onClose, P )
 
                 // Trigger the settings "close" event within scope of the picker.
-                triggerFunction( SETTINGS.onClose, P, [ P.$holder ] )
+                triggerFunction( SETTINGS.onClose, P )
 
                 return P
             }, //close
@@ -413,10 +413,10 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                 P.render()
 
                 // Trigger the component "set" event within scope of the picker.
-                triggerFunction( P.component.onSet, P, [ P.$holder ] )
+                triggerFunction( P.component.onSet, P )
 
                 // Trigger the settings "set" event within scope of the picker.
-                triggerFunction( SETTINGS.onSet, P, [ P.$holder, object ] )
+                triggerFunction( SETTINGS.onSet, P, [ object ] )
 
                 return P
             }, //set
@@ -632,28 +632,21 @@ function isInteger( value ) {
 
 
 
-
-
-
-
-
-
-/* ==========================================================================
-   Extend jQuery
-   ========================================================================== */
-
 /**
- * Map through the each picker type and extend jQuery
+ * Extend jQuery with a picker type and defaults
  */
-[ 'pickadate', 'pickatime' ].map( function( picker, index ) {
 
-    $.fn[ picker ] = function( options, action ) {
+function jQueryExtend( Component, name, defaults ) {
+
+    // Extend jQuery
+    $.fn[ name ] = function( options, action ) {
 
         var
             // Merge the options and defaults with a deep copy.
-            settings = $.extend( true, {}, $.fn[ picker ].defaults, options ),
+            settings = $.extend( true, {}, $.fn[ name ].defaults, options ),
 
-            thisPickerData = this.data( picker )
+            // Grab the picker data if that.
+            thisPickerData = this.data( name )
 
         // If it's already invoked and `options` is a string, carry out the action.
         if ( thisPickerData && typeof options == 'string' ) {
@@ -664,119 +657,14 @@ function isInteger( value ) {
         // and if it doesn't have any picker data, create and link one.
         return this.each( function() {
             var $this = $( this )
-            if ( !$this.data( picker ) ) {
-                $this.data( picker, new Picker( $this, settings, index ? TimePicker : DatePicker ) )
+            if ( !$this.data( name ) ) {
+                $this.data( name, new Picker( $this, settings, Component ) )
             }
         })
     }
-})
 
-
-/**
- * Default options for the date picker.
- */
-$.fn.pickadate.defaults = {
-
-    // Today and clear
-    today: 'Today',
-    clear: 'Clear',
-
-    // Months and weekdays
-    monthsFull: [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ],
-    monthsShort: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
-    weekdaysFull: [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ],
-    weekdaysShort: [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ],
-
-    // The format to show on the `input` element
-    format: 'd mmmm, yyyy',
-
-    // Classes
-    klass: {
-
-        inputActive: STRING_PREFIX_PICKER + 'input--active',
-
-        holder: STRING_PREFIX_PICKER + 'holder',
-        opened: STRING_PREFIX_PICKER + 'holder--opened',
-        focused: STRING_PREFIX_PICKER + 'holder--focused',
-
-        frame: STRING_PREFIX_PICKER + 'frame',
-        wrap: STRING_PREFIX_PICKER + 'wrap',
-
-        box: STRING_PREFIX_PICKER + 'box',
-
-        table: STRING_PREFIX_PICKER + 'table',
-
-        header: STRING_PREFIX_PICKER + 'header',
-
-        navPrev: STRING_PREFIX_PICKER + 'nav--prev',
-        navNext: STRING_PREFIX_PICKER + 'nav--next',
-        navDisabled: STRING_PREFIX_PICKER + 'nav--disabled',
-
-        month: STRING_PREFIX_PICKER + 'month',
-        year: STRING_PREFIX_PICKER + 'year',
-
-        selectMonth: STRING_PREFIX_PICKER + 'select--month',
-        selectYear: STRING_PREFIX_PICKER + 'select--year',
-
-        weekdays: STRING_PREFIX_PICKER + 'weekday',
-
-        day: STRING_PREFIX_PICKER + 'day',
-        disabled: STRING_PREFIX_PICKER + 'day--disabled',
-        selected: STRING_PREFIX_PICKER + 'day--selected',
-        highlighted: STRING_PREFIX_PICKER + 'day--highlighted',
-        now: STRING_PREFIX_PICKER + 'day--today',
-        infocus: STRING_PREFIX_PICKER + 'day--infocus',
-        outfocus: STRING_PREFIX_PICKER + 'day--outfocus',
-
-        footer: STRING_PREFIX_PICKER + 'footer',
-
-        buttonClear: STRING_PREFIX_PICKER + 'button--clear',
-        buttonToday: STRING_PREFIX_PICKER + 'button--today'
-    }
-} //$.fn.pickadate.defaults
-
-
-/**
- * Default options for the time picker
- */
-$.fn.pickatime.defaults = {
-
-    // Clear
-    clear: 'Clear',
-
-    // The format to show on the `input` element
-    format: 'h:i A',
-
-    // The interval between each time
-    interval: 30,
-
-    // Classes
-    klass: {
-
-        inputActive: STRING_PREFIX_PICKER + 'input--active',
-
-        holder: STRING_PREFIX_PICKER + 'holder ' + STRING_PREFIX_PICKER + 'holder--time',
-        opened: STRING_PREFIX_PICKER + 'holder--opened',
-        focused: STRING_PREFIX_PICKER + 'holder--focused',
-
-        frame: STRING_PREFIX_PICKER + 'frame',
-        wrap: STRING_PREFIX_PICKER + 'wrap',
-
-        box: STRING_PREFIX_PICKER + 'box',
-
-        list: STRING_PREFIX_PICKER + 'list',
-        listItem: STRING_PREFIX_PICKER + 'list-item',
-
-        disabled: STRING_PREFIX_PICKER + 'list-item--disabled',
-        selected: STRING_PREFIX_PICKER + 'list-item--selected',
-        highlighted: STRING_PREFIX_PICKER + 'list-item--highlighted',
-        viewset: STRING_PREFIX_PICKER + 'list-item--viewset',
-        now: STRING_PREFIX_PICKER + 'list-item--now',
-
-        buttonClear: STRING_PREFIX_PICKER + 'button--clear'
-    }
-} //$.fn.pickatime.defaults
-
-
+    // Set the defaults
+    $.fn[ name ].defaults = defaults
+} //jQueryExtend
 
 

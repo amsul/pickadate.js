@@ -3,7 +3,7 @@
 <meta charset="utf-8">
 
 <meta name="author" content="Amsul - http://amsul.ca">
-<meta name="viewport" content="width=device-width,maximum-scale=1">
+<meta name="viewport" content="width=device-width">
 <meta http-equiv="cache-control" content="no-cache">
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
@@ -11,7 +11,7 @@
 <title>Pickadate.js</title>
 
 <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="../build/themes/pickadate.01.default.css">
+<link rel="stylesheet" href="../../lib/themes/default.css">
 
 <!--[if lt IE 9]>
     <script>document.createElement('section')</script>
@@ -57,8 +57,8 @@
     </section>
 
 
-    <script src="jquery.js"></script>
-    <script src="../build/pickadate.js"></script>
+    <script src="../jquery.1.9.1.js"></script>
+    <script src="../../lib/pickadate.time.js"></script>
 
     <script type="text/javascript">
 
@@ -67,10 +67,6 @@
             // format: 'h:i a',
             // formatSubmit: 'HH:i',
             // interval: 120,
-            // min: 4,
-            // min: [ 7, 30 ],
-            // max: -2,
-            // max: [ 9, 0 ],
             disable: [
                 // true,
                 // 0,
@@ -79,25 +75,10 @@
                 // [3,30],
                 // [8,45]
             ],
-            // formatSubmit: 'HH:i lol',
-            // onRender: function() {
-            //     console.log( 'rendered' )
-            // },
-            // onStart: function() {
-            //     console.log( 'started' )
-            // },
-            // onOpen: function() {
-            //     console.log( 'opened' )
-            // },
-            // onClose: function() {
-            //     console.log( 'closed' )
-            // },
-            // onSet: function() {
-            //     console.log( 'selected' )
-            // },
-            // onStop: function() {
-            //     console.log( 'stopped' )
-            // }
+            // min: 4,
+            // min: [ 7, 30 ],
+            // max: -2,
+            // max: [ 9, 0 ]
         })
 
         // $input.pickatime( 'set', { disable: [0,1,4] } )

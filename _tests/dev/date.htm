@@ -1,0 +1,93 @@
+<!doctype html>
+
+<meta charset="utf-8">
+
+<meta name="author" content="Amsul - http://amsul.ca">
+<meta name="viewport" content="width=device-width">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+<title>Pickadate.js</title>
+
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="../../lib/themes/default.css">
+
+<!--[if lt IE 9]>
+    <script>document.createElement('section')</script>
+    <style type="text/css">
+        .holder {
+            position: relative;
+            z-index: 10000;
+        }
+        .datepicker {
+            display: block;
+        }
+    </style>
+<![endif]-->
+
+
+<body>
+
+    <section class="holder holder-top holder-clean">
+
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+        <fieldset>
+            <input type="text">
+        </fieldset>
+
+        <form>
+            <fieldset>
+                <h3><label for="input_01">Pick a date. Go ahead...</label></h3>
+                <input id="input_01" class="datepicker" name="date" type="date" valuee="22 January, 2012" data-valuee="2012/01/22" autofocus>
+                <br><br><br><br><br>
+                <input class="button" type="submit" value="open">
+            </fieldset>
+        </form>
+
+        <fieldset>
+            <input type="text" class="datepickerr">
+        </fieldset>
+
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+    </section>
+
+
+    <script src="../jquery.1.9.1.js"></script>
+    <script src="../../lib/pickadate.date.js"></script>
+
+    <script type="text/javascript">
+
+        var $input = $( '.datepicker' ).pickadate({
+            // firstDay: 1,
+            // format: 'he!y!y!y!y yyyy,mm,dd',
+            // formatSubmit: 'yyyy/mm/dd',
+            // selectMonths: true,
+            // selectYears: 20,
+            disable: [
+            ],
+            // min: [2013, 1, 10],
+            // max: [2014, 3, 25],
+            // min: -4,
+            // max: 5,
+        })
+
+        // $input.pickadate( 'set', { disable: [1,2,4,7] } )
+
+        // var $button = $( '.button' ).on( 'click', function( event ) {
+        //     event.preventDefault()
+        //     event.stopPropagation()
+        //     $input.open()
+        // })
+
+    </script>
+
+
+</body>
+
+
+

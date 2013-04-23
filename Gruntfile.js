@@ -47,13 +47,13 @@ module.exports = function( grunt ) {
                 src: '_source/lib',
                 dest: 'lib'
             },
-            tests: '_tests/qunit'
+            tests: '_tests/'
         },
 
 
         // Clean the destination files and directories.
         clean: {
-            site: [ '<%= dirs.site.dest %>', 'index.htm', 'date.htm', 'time.htm' ],
+            site: [ '<%= dirs.site.dest %>', 'index.htm', 'date.htm', 'time.htm', 'api.htm' ],
             lib: [ '<%= dirs.lib.dest %>' ],
             pkg: [ '<%= pkg.name %>.jquery.json', 'README.md', 'LICENSE.md', 'CHANGELOG.md' ]
         },
@@ -156,17 +156,17 @@ module.exports = function( grunt ) {
                 },
                 files: {
                     '<%= dirs.lib.dest %>/<%= pkg.name %>.datetime.js': [
+                        '<%= dirs.lib.src %>/basepicker.js',
                         '<%= dirs.lib.src %>/datepicker.js',
-                        '<%= dirs.lib.src %>/timepicker.js',
-                        '<%= dirs.lib.src %>/basepicker.js'
+                        '<%= dirs.lib.src %>/timepicker.js'
                     ],
                     '<%= dirs.lib.dest %>/<%= pkg.name %>.date.js': [
-                        '<%= dirs.lib.src %>/datepicker.js',
-                        '<%= dirs.lib.src %>/basepicker.js'
+                        '<%= dirs.lib.src %>/basepicker.js',
+                        '<%= dirs.lib.src %>/datepicker.js'
                     ],
                     '<%= dirs.lib.dest %>/<%= pkg.name %>.time.js': [
-                        '<%= dirs.lib.src %>/timepicker.js',
-                        '<%= dirs.lib.src %>/basepicker.js'
+                        '<%= dirs.lib.src %>/basepicker.js',
+                        '<%= dirs.lib.src %>/timepicker.js'
                     ]
                 }
             }
@@ -215,7 +215,7 @@ module.exports = function( grunt ) {
 
         // Unit test the files.
         qunit: {
-            lib: [ '<%= dirs.tests %>/qunit.htm' ]
+            lib: [ '<%= dirs.tests %>/units/all.htm' ]
         },
 
 
@@ -224,6 +224,13 @@ module.exports = function( grunt ) {
             gruntfile: {
                 files: [ 'Gruntfile.js' ],
                 tasks: [ 'jshint:gruntfile', 'default' ]
+            },
+            quick: {
+                files: [
+                    '<%= dirs.site.src %>/../*.htm', '<%= dirs.site.src %>/styles/*.scss', '<%= dirs.site.src %>/scripts/*.js',
+                    '<%= dirs.lib.src %>/**/*.js', '<%= dirs.lib.src %>/themes/*.scss'
+                ],
+                tasks: [ 'quick' ]
             },
             site: {
                 files: [ '<%= dirs.site.src %>/../*.htm', '<%= dirs.site.src %>/styles/*.scss', '<%= dirs.site.src %>/scripts/*.js' ],
@@ -239,6 +246,7 @@ module.exports = function( grunt ) {
 
     // Register the tasks.
     grunt.registerTask( 'default', [ 'clean', 'htmlify', 'concat', 'copy', 'sass', 'jshint', 'uglify', 'cssmin' ] )
+    grunt.registerTask( 'quick', [ 'htmlify', 'concat', 'copy', 'sass' ] )
     grunt.registerTask( 'build', [ 'clean:lib', 'concat:lib', 'copy:lib', 'sass:lib', 'jshint:lib', 'qunit:lib', 'uglify:lib', 'cssmin:lib' ] )
     grunt.registerTask( 'site', [ 'clean:site', 'htmlify:site', 'concat:site', 'copy:site', 'sass:site', 'jshint:site' ] )
     grunt.registerTask( 'travis', [ 'concat', 'copy', 'sass', 'jshint', 'qunit' ] )
