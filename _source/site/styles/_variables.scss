@@ -4,14 +4,26 @@
    ========================================================================== */
 
 /**
+ * Font families
+ */
+$code-family: Monaco, Consolas, "Liberation Mono", monospace;
+
+/**
  * Colors
  */
 $blue: #0089ec;
-$green: #5c2;
+
 $red: #e20;
-$brown: #442;
+
 $black: #000;
 $white: #fff;
+
+$green: #5c2;
+$green-darker: #342;
+$green-faded: #ecffdd;
+$green-faded-darker: darken( desaturate( $green-faded, 50% ), 12.5% ); /* #cbe7b6 */
+
+$dark-brown: #442;
 
 $grey: #ccc;
 $grey-lighter: lighten( $grey, 5% ); /* #d9d9d9 */
@@ -20,6 +32,8 @@ $grey-darker: darken( $grey, 5% ); /* #bfbfbf */
 $grey-darkest: darken( $grey-darker, 8% ); /* #ababab */
 
 $medium-grey: #999;
+
+$dark-grey: #333;
 
 $yellow-faded: #ffd;
 $yellow-faded-darker: darken( desaturate( $yellow-faded, 45% ), 8% ); /* #eeeec5 */
@@ -56,6 +70,32 @@ $smooth-fast: all linear .15s;
 @mixin list-item-inline {
     display: inline-block;
     margin-right: 1.5em;
+}
+
+
+/**
+ * Demo tags
+ */
+@mixin demo-tag( $tag-text ) {
+    padding-top: 30px;
+    position: relative;
+
+    &:before {
+        content: $tag-text;
+        position: absolute;
+        top: 0;
+        left: 0;
+        font-family: $code-family;
+        font-weight: 500;
+        font-size: 10px;
+        line-height: 1;
+        background: $white;
+        padding: 5px 6px 4px 6px;
+        color: #989a99;
+        border-right: 1px solid $grey-lightest;
+        border-bottom: 1px solid $grey-lightest;
+        @include prefix( border-radius, 0 0 4px 0 );
+    }
 }
 
 

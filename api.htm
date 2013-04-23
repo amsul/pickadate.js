@@ -1,0 +1,294 @@
+<!doctype html>
+
+<meta charset="utf-8">
+
+<meta name="author" content="Amsul - http://amsul.ca">
+
+<meta name="viewport" content="width=device-width">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+<title>pickadate.js</title>
+
+<link rel="shortcut icon" href="site/images/favicon.ico">
+<link rel="stylesheet" href="site/styles/main.css">
+<link rel="stylesheet" href="lib/themes/default.css">
+
+<!--[if lt IE 9]>
+    <script>document.createElement('section')</script>
+<![endif]-->
+
+
+<body>
+
+
+    <header class="section section--header section--splash">
+
+        <div class="section__block section__block--scoped">
+            <nav class="menu menu--header page-target" id="menu">
+                <ul class="menu__list menu__list--header">
+                    <li class="menu__item menu__item--touch menu__item--logo"><a class="menu__link menu__link--dimmed" href="index.htm"><span class="logocon"><span class="logocon__p">p</span><span class="logocon__u"></span></span></a></li>
+                    <li class="menu__item menu__item--touch menu__item--toggle">
+                        <a class="menu__link menu__link--dimmed page-target__display" href="#menu"><span class="page-target__toggle"></span></a>
+                        <a class="menu__link menu__link--dimmed page-target__display--flip" href="#"><span class="page-target__toggle"></span></a>
+                    </li>
+                    <li class="menu__item menu__item--clear"></li>
+                    <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="date.htm">Date picker</a></li>
+                    <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="time.htm">Time picker</a></li>
+                    <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed menu__link--active" href="api.htm">API</a></li>
+                    <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="v2.htm">v2 Docs</a></li>
+                    <li class="menu__item menu__item--responsive page-target__reveal menu__item--trail"><a class="menu__link menu__link--dimmed" href="https://github.com/amsul/pickadate.js">View on Github</a></li>
+                </ul>
+            </nav>
+        </div> <!-- .section__block -->
+
+        
+
+    </header> <!-- .section -->
+
+
+    
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h1 class="heading heading--divide-center heading--divide-first"><span class="heading__text">the picker api<a class="heading__anchor" name="picker" href="#picker">&sect;</a></span></h1>
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<!--
+        <p>The date picker api can be played with in several ways:</p>
+
+        <pre><code data-language="javascript">var $input = $('.datepicker').pickadate()
+var picker = $input.pickadate('picker')</code></pre>
+
+        <p>Or:</p>
+
+        <pre><code data-language="javascript">var $input = $('.datepicker').pickadate()
+var picker = $input.data('pickadate')</code></pre>
+
+        <p>Or:</p>
+
+        <pre><code data-language="javascript">$('.datepicker').pickadate({
+    // Within scope of the <a href="#events">picker events</a>, `this` is the picker.
+    onStart: function() {
+        var picker = this
+    }
+})</code></pre>
+
+        <p>Or:</p>
+
+        <pre><code data-language="javascript">var $input = $('.datepicker').pickadate()
+$input.pickadate( /* <a href="#api-methods">an api method</a> */ )</code></pre>
+
+    </div> <!-- .section__block - ->
+
+</section> <!-- .section - ->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">api methods<a class="heading__anchor" name="api-methods" href="#api-methods">&sect;</a></span></h2>
+        <p>There are a few methods available on the date picker. All of which (except of course <code class="function">get</code>) are <a href="#api-chainable">chainable</a>:</p>
+
+        <ol>
+            <li><code><a href="#api-open-close">open</a></code></li>
+            <li><code><a href="#api-open-close">close</a></code></li>
+            <!--<li><code><a href="#api-isOpen">isOpen</a></code></li>- ->
+            <li><code><a href="#api-start-stop">start</a></code></li>
+            <li><code><a href="#api-start-stop">stop</a></code></li>
+            <li><code><a href="#api-render">render</a></code></li>
+            <li><code><a href="#api-clear">clear</a></code></li>
+            <li><code><a href="#api-get">get</a></code></li>
+            <li><code><a href="#api-set">set</a></code></li>
+            <!--<li><code><a href="#api-disableAll">disableAll</a></code></li>- ->
+        </ol>
+
+        <p>And then there are also a few shorthands available to the following objects:</p>
+
+        <ol>
+            <li><code><a href="#api-$node">$node</a></code></li>
+            <li><code><a href="#api-$holder">$holder</a></code></li>
+            <li><code><a href="#api-_hidden">_hidden</a></code></li>
+            <li><code><a href="#api-component">component</a></code></li>
+        </ol>
+
+    </div> <!-- .section__block - ->
+
+</section> <!-- .section - ->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">open and close<a class="heading__anchor" name="api-open-close" href="#api-open-close">&sect;</a></span></h2>
+        <p>Open and close the picker holder.</p>
+
+        <pre class="pre--demo"><code data-language="javascript">picker.open()
+picker.close()
+
+// If a “click” is involved, prevent the event bubbling.
+event.stopPropagation()</code></pre>
+
+        <fieldset class="fieldset fieldset--demo js__fieldset"><button id=button__api-open-close class="fieldset__button button button--small">Open</button><input id=demo__api-open-close class=fieldset__input type=text placeholder="Try me&hellip;"></fieldset>
+
+    </div> <!-- .section__block - ->
+
+</section> <!-- .section - ->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+<!--
+        <h2 class="text-center heading heading--one heading--divide"><span class="heading__text">is open<a class="heading__anchor" name="api-isOpen" href="#api-isOpen">&sect;</a></span></h2>
+        <h3 class="text-center heading heading--thin">Check if the picker is opened:</h3>
+
+        <pre class="pre--demo"><code data-language="javascript">picker.isOpen()</code></pre>
+
+        <fieldset class="fieldset fieldset--demo js__fieldset"><p><button id=button__api-isOpen class="button button--small">Is open?</button></p><input id=demo__api-isOpen class=fieldset__input type=text placeholder="Try me&hellip;"></fieldset>
+- ->
+    </div> <!-- .section__block - ->
+
+</section> <!-- .section - ->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">start and stop<a class="heading__anchor" name="api-start-stop" href="#api-start-stop">&sect;</a></span></h2>
+        <p>Destroy and rebuild the picker.</p>
+
+        <pre class="pre--demo"><code data-language="javascript">picker.start()
+picker.stop()</code></pre>
+
+        <fieldset class="fieldset fieldset--demo js__fieldset"><button id=button__api-start-stop class="fieldset__button button button--small">Stop</button><input id=demo__api-start-stop class=fieldset__input type=date placeholder="Try me&hellip;"></fieldset>
+
+    </div> <!-- .section__block - ->
+
+</section> <!-- .section - ->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">render<a class="heading__anchor" name="api-render" href="#api-render">&sect;</a></span></h2>
+        <p>Render a new picker after adding something to the holder.</p>
+
+        <pre class="pre--demo"><code data-language="javascript">picker.render()</code></pre>
+
+        <fieldset class="fieldset fieldset--demo js__fieldset"><button id=button__api-render class="fieldset__button button button--small">Add stuff</button><input id=demo__api-render class=fieldset__input type=text placeholder="Try me&hellip;"></fieldset>
+
+    </div> <!-- .section__block - ->
+
+</section> <!-- .section - ->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">clear<a class="heading__anchor" name="api-clear" href="#api-clear">&sect;</a></span></h2>
+        <p>Clear the value in the picker’s <code class="tag-name">input</code> element.</p>
+
+        <pre class="pre--demo"><code data-language="javascript">picker.clear()</code></pre>
+
+        <fieldset class="fieldset fieldset--demo js__fieldset"><button id=button__api-clear class="fieldset__button button button--small">Clear</button><input id=demo__api-clear class=fieldset__input type=text value="23 April, 2013" placeholder="Try me&hellip;"></fieldset>
+
+    </div> <!-- .section__block - ->
+
+</section> <!-- .section - ->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">get<a class="heading__anchor" name="api-get" href="#api-get">&sect;</a></span></h2>
+        <p>Get various properties of the picker using the following syntax:</p>
+
+        <pre><code data-language="javascript">picker.get(property)</code></pre>
+
+        <p><code>property</code> is optional and defaults to <code class="string">'value'</code>. The <code>property</code> can be one of the following:</p>
+
+        <ol>
+            <li><code class="string">'value'</code></li>
+            <li><code class="string">'select'</code></li>
+            <li><code class="string">'highlight'</code></li>
+            <li><code class="string">'view'</code></li>
+            <li><code class="string">'min'</code></li>
+            <li><code class="string">'max'</code></li>
+            <li><code class="string">'open'</code></li>
+            <li><code class="string">'id'</code></li>
+            <li><code class="string">'disable'</code></li>
+            <li><code class="string">'enable'</code></li>
+        </ol>
+
+        <!--which returns the string value of the <code class="tag-name">input</code> element- ->
+
+        <pre class="pre--demo"><code data-language="javascript">picker.get()</code></pre>
+
+        <fieldset class="fieldset fieldset--demo js__fieldset"><button id=button__api-get--a class="fieldset__button button button--small">Log the value</button><input id=demo__api-get--a class=fieldset__input type=text value="23 April, 2013" placeholder="Try me&hellip;"></fieldset>
+
+    </div> <!-- .section__block - ->
+
+    <div class="section__block section__block--scoped">
+
+        <h3 class="text-center heading heading--thin">There are several more properties:</h3>
+
+        <pre class="pre--demo"><code data-language="javascript">// The date "selected".
+picker.get('select')
+
+// The date "highlighted".
+picker.get('highlight')
+
+// The date setting the "view".
+picker.get('view')</code></pre>
+
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="groupset groupset--flat"><button id=button__api-get--b class="button button--small groupset__item groupset__item--spaced">Log the selected date</button><button id=button__api-get--c class="button button--small groupset__item groupset__item--spaced">Log the highlighted date</button><button id=button__api-get--d class="button button--small groupset__item groupset__item--spaced">Log the viewset date</button></div><input id=demo__api-get--b class=fieldset__input type=text value="23 April, 2013" placeholder="Try me&hellip;"></fieldset>
+
+    </div> <!-- .section__block - ->
+
+</section> <!-- .section -->
+
+
+
+
+
+    <footer class="section section--footer">
+
+        <div class="section__block section__block--scoped text-center">
+            <h2 class="heading heading--one heading--divide-center"><span class="heading__text peace">&#x270C;</span></h2>
+            <p class="heading heading--three heading--thin">Made by <a href="http://twitter.com/amsul_">Amsul</a>.</p>
+            <p>Code licensed under <a href="http://amsul.ca/MIT">MIT</a>.</p>
+        </div> <!-- .section__block -->
+
+    </footer> <!-- .section -->
+
+
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="lib/pickadate.datetime.js"></script>
+    <script src="site/scripts/main.js"></script>
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-36321179-2']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+
+</body>

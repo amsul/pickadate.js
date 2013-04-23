@@ -9,12 +9,12 @@
  * IMPORTS....................
  * BASE.......................Base stylings
  * TYPOGRAPHY.................
+ * CODE-BLOCKS................
  * FORM-ELEMENTS..............
  * BUTTONS....................
  * MENUS......................
  * GROUPS.....................Group sets of content
  * TABLES.....................
- * CODE-BLOCKS................
  * SECTIONS...................Blocks of content
  * TARGETS....................Page focus targets
  * RAINBOW....................Syntax highlighting
@@ -142,13 +142,13 @@ h3,
 }
 
 .heading--splash {
-    margin-top: .25em;
+    width: 88%;
     margin-left: auto;
     margin-right: auto;
-    width: 88%;
+    margin-top: .5em;
 
     @include screen( medium ) {
-        margin-top: 1.25em;
+        margin-top: 1em;
     }
 }
 
@@ -158,8 +158,10 @@ h3,
 /**
  * Divider headings
  */
-.heading--divide {
-    margin-top: 1.5em;
+.heading--divide,
+.heading--divide-center,
+.heading--divide-first {
+    margin-top: 2.5em;
     border-top: 1px solid $grey-lighter;
     padding-top: 1.5em;
 
@@ -170,12 +172,18 @@ h3,
         border-top: 0;
     }
 }
+.heading--divide-center {
+    text-align: center;
+}
 .heading--divide-first {
     padding-top: 0;
     border-top: 0;
+    margin-top: 1em;
 }
 
-.heading--divide:after {
+.heading--divide:after,
+.heading--divide-center:after,
+.heading--divide-first:after {
     @include screen( small ) {
         content: " ";
         border-bottom: 1px solid $grey-lighter;
@@ -189,13 +197,17 @@ h3,
     }
 }
 
-.heading--divide .heading__text {
+.heading--divide .heading__text,
+.heading--divide-center .heading__text,
+.heading--divide-first .heading__text {
     @include screen( small ) {
         background: $white;
-        padding-left: .5em;
-        padding-right: .5em;
         display: inline-block;
+        padding-right: .5em;
     }
+}
+.heading--divide-center .heading__text {
+    padding-left: .5em;
 }
 
 
@@ -215,6 +227,44 @@ h3,
 .heading__anchor:hover,
 .heading__anchor:focus {
     color: $blue;
+}
+
+
+
+
+
+
+
+/* ==========================================================================
+   $CODE-BLOCKS
+   ========================================================================== */
+
+pre,
+code {
+    font-family: $code-family;
+    border: 1px solid #e9ebeb;
+    background: #f5f8f8;
+    color: $dark-grey;
+    font-size: .9em;
+    padding: 0 .125em;
+    word-break: break-word;
+    @include prefix( border-radius, 3px );
+}
+
+pre {
+    white-space: pre;
+    overflow-x: auto;
+    padding: 1em;
+    text-align: left;
+    @include prefix( border-radius, 4px );
+}
+
+pre > code {
+    display: table;
+    line-height: 1.5;
+    border: 0;
+    background: none;
+    padding: 0 4.2em 0 0;
 }
 
 
@@ -253,7 +303,7 @@ input[type=search],
 textarea {
     border: 3px solid $grey;
     padding: .6em 1em;
-    font-weight: 100;
+    font-weight: 200;
     width: 100%;
     -webkit-appearance: none;
 
@@ -313,12 +363,33 @@ input[type=search] {
 /**
  * Groups of fields
  */
-.fieldset--demo .fieldset__input {
+.pre--demo {
+    margin-bottom: 0;
+    @include prefix( border-radius, 4px 4px 0 0 );
+    @include demo-tag( "Code" );
+}
+.fieldset--demo {
+    margin-top: 0;
+    padding: 1em;
+    background: #f8faf9;
+    border: 1px solid $grey-lightest;
+    border-top: 0;
+    @include prefix( border-radius, 0 0 4px 4px );
+    @include demo-tag( "Demo" );
+}
+
+.fieldset--demo .fieldset__button {
+    margin-bottom: 1em;
+    margin-right: 1em;
+}
+
+.fieldset--splash .fieldset__input {
     font-size: 1.2em;
     text-align: center;
+}
+.fieldset--splash .fieldset__input {
     margin: 0 auto;
     width: 80%;
-
     @include screen( small ) {
         width: 70%;
     }
@@ -347,6 +418,11 @@ input[type=search] {
     text-decoration: none;
     background: $green;
     border-color: $green;
+}
+
+.button--small {
+    padding: 0.5em 1em;
+    font-size: .8em;
 }
 
 
@@ -402,25 +478,20 @@ input[type=search] {
 
 .menu__item--logo {
     float: left;
-
     @include screen( medium ) {
         float: none;
-
         @include list-item-inline;
     }
 }
 
 .menu__item--toggle {
     float: right;
-
     @include screen( medium ) {
         display: none;
     }
 }
 
 .menu__item--clear {
-    padding-bottom: 1em;
-
     @include clearfix;
     @include screen( medium ) {
         display: none;
@@ -432,7 +503,6 @@ input[type=search] {
     @include screen( medium ) {
         vertical-align: top;
         @include list-item-inline;
-
         &:last-child {
             margin-right: 0;
         }
@@ -500,11 +570,21 @@ input[type=search] {
    ========================================================================== */
 
 .groupset {
-    margin: 1em 0 2em;
+    margin: 1em 0;
+}
+.groupset--flat {
+    margin: 0;
 }
 .groupset__item {
     display: inline-block;
     vertical-align: top;
+}
+.groupset__item--spaced {
+    margin-right: 1em;
+    margin-bottom: 1em;
+}
+.groupset__item--spaced:last-child {
+    margin-right: 0;
 }
 
 
@@ -518,65 +598,49 @@ input[type=search] {
    $TABLES
    ========================================================================== */
 
-/*.table {
-    line-height: 1.5;
-    background: $white;
-    border: 1px solid #ccc;
+.table {
+    width: 100%;
+    margin: 1em 0;
+    text-align: left;
+    font-size: .8em;
+    line-height: 1.4;
+    border-collapse: separate;
+}
 
-    -webkit-border-radius: 5px;
-       -moz-border-radius: 5px;
-            border-radius: 5px;
+.table th {
+    background: #f5f7f7;
+    font-weight: 500;
 }
 
 .table th,
 .table td {
+    border-color: #e8ebeb;
+    border-style: solid;
+    border-width: 1px 0 0 1px;
+    padding: .5em 1em;
     vertical-align: top;
-    padding: 10px;
-    border-top: 1px solid #e2e2e2;
-    border-right: 1px solid #e2e2e2;
 }
-
 .table th:last-child,
 .table td:last-child {
-    border-right: 0;
+    border-right-width: 1px;
+}
+.table thead:last-child tr:last-child th,
+.table tbody:last-child tr:last-child td {
+    border-bottom-width: 1px;
 }
 
-.table th {
-    background: #f5f5f5;
-    border-top: 0;
-}*/
-
-
-
-
-
-/* ==========================================================================
-   $CODE-BLOCKS
-   ========================================================================== */
-
-pre,
-code {
-    font-family: Monaco, Consolas, "Liberation Mono", monospace;
-    border: 1px solid #e9ebeb;
-    background-color: #f5f8f8;
-    font-size: .9em;
-    word-break: break-word;
-
-    @include prefix( border-radius, 3px );
+.table thead:first-child tr:first-child th:first-child {
+    @include prefix( border-radius, 4px 0 0 0 );
+}
+.table thead:first-child tr:first-child th:last-child {
+    @include prefix( border-radius, 0 4px 0 0 );
 }
 
-pre {
-    overflow-x: auto;
-    padding: 1em;
-    font-size: 1em;
+.table tbody:last-child tr:last-child td:first-child {
+    @include prefix( border-radius, 0 0 0 4px );
 }
-
-pre > code {
-    display: table;
-    line-height: 1.5;
-    border: 0;
-    background: none;
-    padding: 0 4.2em 0 0;
+.table tbody:last-child tr:last-child td:last-child {
+    @include prefix( border-radius, 0 0 4px 0 );
 }
 
 
@@ -598,8 +662,6 @@ pre > code {
     background: url(../images/bg.png) #fafbfb 50% 0;
     border-bottom: 2px solid #e9ebeb;
 }
-.section--splash {
-}
 .section--footer {
     margin-bottom: 8em;
 }
@@ -618,11 +680,19 @@ pre > code {
 }
 
 /* Notification blocks */
-.section__block--notification {
+.section__block--notification,
+.section__block--notification-green {
     background: $yellow-faded;
     border: 1px solid $yellow-faded-darker;
     padding: 0 $gutter;
-    color: $brown;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    color: $dark-brown;
+}
+.section__block--notification-green {
+    background: $green-faded;
+    border-color: $green-faded-darker;
+    color: $green-darker;
 }
 
 
@@ -695,12 +765,20 @@ pre > code {
 
 .comment,
 .comment a {
-    /*color: #8e69c9;*/
     color: $blue;
     font-style: italic;
 }
+.comment a {
+    padding: 2px 0;
+    @include prefix( border-radius, 3px );
+}
+.comment a:hover {
+    background: $blue;
+    color: $white;
+}
 
-.constant {
+.constant,
+.null {
     color: #d40;
 }
 

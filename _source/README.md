@@ -1,6 +1,6 @@
-# pickadate [![pickadate build status](https://travis-ci.org/amsul/pickadate.js.png?branch=time-picker)](https://travis-ci.org/amsul/pickadate.js)
+# {%= pkg.name %} [![{%= pkg.name %} build status](https://travis-ci.org/amsul/pickadate.js.png?branch=time-picker)](https://travis-ci.org/amsul/pickadate.js)
 
-The mobile-friendly, responsive, and lightweight jQuery date & time input picker.
+{%= pkg.description %}
 
 Common events:
 --------------

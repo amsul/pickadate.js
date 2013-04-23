@@ -36,6 +36,7 @@
                     <li class="menu__item menu__item--clear"></li>
                     <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed{%= page == 'date' ? ' menu__link--active' : '' %}" href="date.htm">Date picker</a></li>
                     <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed{%= page == 'time' ? ' menu__link--active' : '' %}" href="time.htm">Time picker</a></li>
+                    <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed{%= page == 'api' ? ' menu__link--active' : '' %}" href="api.htm">API</a></li>
                     <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed{%= page == 'v2' ? ' menu__link--active' : '' %}" href="v2.htm">v2 Docs</a></li>
                     <li class="menu__item menu__item--responsive page-target__reveal menu__item--trail"><a class="menu__link menu__link--dimmed" href="https://github.com/amsul/pickadate.js">View on Github</a></li>
                 </ul>
@@ -53,7 +54,7 @@
     <footer class="section section--footer">
 
         <div class="section__block section__block--scoped text-center">
-            <h2 class="heading heading--one heading--divide"><span class="heading__text peace">&#x270C;</span></h2>
+            <h2 class="heading heading--one heading--divide-center"><span class="heading__text peace">&#x270C;</span></h2>
             <p class="heading heading--three heading--thin">Made by <a href="http://twitter.com/amsul_">Amsul</a>.</p>
             <p>Code licensed under <a href="{%= pkg.licenses[0].url %}">{%= pkg.licenses[0].type %}</a>.</p>
         </div> <!-- .section__block -->

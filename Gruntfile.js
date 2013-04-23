@@ -54,7 +54,8 @@ module.exports = function( grunt ) {
         // Clean the destination files and directories.
         clean: {
             site: [ '<%= dirs.site.dest %>', 'index.htm', 'date.htm', 'time.htm' ],
-            lib: [ '<%= dirs.lib.dest %>' ]
+            lib: [ '<%= dirs.lib.dest %>' ],
+            pkg: [ '<%= pkg.name %>.jquery.json', 'README.md', 'LICENSE.md', 'CHANGELOG.md' ]
         },
 
 
@@ -67,7 +68,8 @@ module.exports = function( grunt ) {
                 files: [
                     { 'index.htm': '_source/index.htm' },
                     { 'date.htm': '_source/date.htm' },
-                    { 'time.htm': '_source/time.htm' }
+                    { 'time.htm': '_source/time.htm' },
+                    { 'api.htm': '_source/api.htm' }
                 ]
             }
         },
@@ -109,7 +111,17 @@ module.exports = function( grunt ) {
 
             // Copy the package settings into a jquery package.
             pkg: {
-                files: { '<%= pkg.name %>.jquery.json': 'package.json' }
+                options: {
+                    processContent: function( content ) {
+                        return grunt.template.process( content, { delimiters: 'curly' } )
+                    }
+                },
+                files: [
+                    { '<%= pkg.name %>.jquery.json': 'package.json' },
+                    { 'README.md': '<%= dirs.lib.src %>/../README.md' },
+                    { 'LICENSE.md': '<%= dirs.lib.src %>/../LICENSE.md' },
+                    { 'CHANGELOG.md': '<%= dirs.lib.src %>/../CHANGELOG.md' }
+                ]
             }
         },
 
@@ -226,7 +238,7 @@ module.exports = function( grunt ) {
 
 
     // Register the tasks.
-    grunt.registerTask( 'default', [ 'clean', 'concat', 'copy', 'sass', 'jshint', 'uglify', 'cssmin' ] )
+    grunt.registerTask( 'default', [ 'clean', 'htmlify', 'concat', 'copy', 'sass', 'jshint', 'uglify', 'cssmin' ] )
     grunt.registerTask( 'build', [ 'clean:lib', 'concat:lib', 'copy:lib', 'sass:lib', 'jshint:lib', 'qunit:lib', 'uglify:lib', 'cssmin:lib' ] )
     grunt.registerTask( 'site', [ 'clean:site', 'htmlify:site', 'concat:site', 'copy:site', 'sass:site', 'jshint:site' ] )
     grunt.registerTask( 'travis', [ 'concat', 'copy', 'sass', 'jshint', 'qunit' ] )
