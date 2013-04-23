@@ -1,11 +1,358 @@
 
 
+{% timeDemoField = function( props ) {
+    props = props || {}
+    return '<fieldset class="fieldset fieldset--demo js__fieldset">' +
+        ( props.pre || '' ) +
+        '<input id="' + ( props.id || '' ) + '" class="fieldset__input ' + ( props.klass || '' ) + '" type=text placeholder="Try me&hellip;">' +
+    '</fieldset>'
+} %}
+
+
 <section class="section">
+
 
     <div class="section__block section__block--scoped">
 
         <h1 class="heading heading--divide-center heading--divide-first"><span class="heading__text">the time picker<a class="heading__anchor" name="picker" href="#picker">&sect;</a></span></h1>
 
+        <h3 class="heading heading--thin">The basic setup requires targetting an <code class="tag-name">input</code> element and invoking the picker:</h3>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.timepicker').pickatime()</code></pre>
+        {%= timeDemoField({ klass: 'js__timepicker' }) %}
+
+    </div> <!-- .section__block -->
+
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">the options<a class="heading__anchor" name="options" href="#options">&sect;</a></span></h2>
+        <p>With the basic invocation above, these are the default settings:</p>
+
+        <pre><code data-language="javascript">// <a href="#translations">Translations</a> and <a href="#buttons">clear button</a>
+clear: 'Clear',
+
+// <a href="#formats">Formats</a>
+format: 'h:i A',
+formatSubmit: undefined,
+hiddenSuffix: '_submit',
+
+// <a href="#intervals">Time intervals</a>
+interval: 30,
+
+// <a href="#limits">Time limits</a>
+min: undefined,
+max: undefined,
+
+// <a href="#disable-times">Disable times</a>
+disable: undefined,
+
+// <a href="#events">Events</a>
+onStart: undefined,
+onRender: undefined,
+onOpen: undefined,
+onClose: undefined,
+onSet: undefined,
+onStop: undefined,
+
+// <a href="#classes">Classes</a>
+klass: {
+
+    // "Activated" input
+    inputActive: 'pickadate__input--active',
+
+    // Picker holder states
+    holder: 'pickadate__holder pickadate__holder--time',
+    opened: 'pickadate__holder--opened',
+    focused: 'pickadate__holder--focused',
+
+    // Picker frame, wrapper, and box
+    frame: 'pickadate__frame',
+    wrap: 'pickadate__wrap',
+    box: 'pickadate__box',
+
+    // List of times
+    list: 'pickadate__list',
+    listItem: 'pickadate__list-item',
+
+    // Time states
+    disabled: 'pickadate__list-item--disabled',
+    selected: 'pickadate__list-item--selected',
+    highlighted: 'pickadate__list-item--highlighted',
+    viewset: 'pickadate__list-item--viewset', // <<< is this needed?
+    now: 'pickadate__list-item--now',
+
+    // Clear button
+    buttonClear: 'pickadate__button--clear',
+}</code></pre>
+
+    </div> <!-- .section__block -->
+
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">translations<a class="heading__anchor" name="translations" href="#translations">&sect;</a></span></h2>
+        <p>Coming soon...</p>
+        <!--
+        <p>The picker can be extended to add support for internationalization. There are translations available for <a href="{%= pkg.repository.url.replace(/.git$/,'') %}/tree/gh-pages/translations">{%= grunt.file.expand( '_source/lib/translations/*.js' ).length %} languages</a> which you can include in one of two ways:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">// Extend the default picker options for <u>all instances</u>.
+$.extend($.fn.pickatime.defaults, {
+    clear: 'effacer'
+})
+
+// Or, pass the months and weekdays as an array for <u>each invocation</u>.
+$('.timepicker').pickatime({
+    clear: 'effacer'
+})</code></pre>
+
+        {%= timeDemoField({ id: 'time_demo__translations' }) %}
+        -->
     </div> <!-- .section__block -->
 
 </section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">clear button<a class="heading__anchor" name="buttons" href="#buttons">&sect;</a></span></h2>
+        <p>Change the text or hide the button completely by passing a false-y value:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.timepicker').pickatime({
+    clear: ''
+})</code></pre>
+
+        {%= timeDemoField({ id: 'time_demo__buttons' }) %}
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">formats<a class="heading__anchor" name="formats" href="#formats">&sect;</a></span></h2>
+        <p>Display a human-friendly format and use an alternate one to submit.</p>
+        <p>This is done by creating a new hidden <code class="tag-name">input</code> element with the same <code class="attribute">name</code> attribute as the original and a suffix:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.timepicker').pickatime({
+    // Escape any “<a href="#formatting-rules">rule</a>” characters with an exclamation mark (!).
+    format: 'T!ime: h:i a',
+    formatDisplay: '', // <<<< add this
+    formatSubmit: 'HH:i',
+    hiddenSuffix: '--submit'
+})</code></pre>
+
+        {%= timeDemoField({ id: 'time_demo__formats' }) %}
+
+    </div> <!-- .section__block -->
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">formatting rules<a class="heading__anchor" name="formatting-rules" href="#formatting-rules">&sect;</a></span></h2>
+        <p>The following rules can be used to format any time:</p>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Rule</th>
+                    <th>Description</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>h</code></td>
+                    <td>Hour in 12-hour format</td>
+                    <td>1 &ndash; 12</td>
+                </tr>
+                <tr>
+                    <td><code>hh</code></td>
+                    <td>Hour in 12-hour format with a leading zero</td>
+                    <td>01 &ndash; 12</td>
+                </tr>
+                <tr>
+                    <td><code>H</code></td>
+                    <td>Hour in 24-hour format</td>
+                    <td>0 &ndash; 23</td>
+                </tr>
+                <tr>
+                    <td><code>HH</code></td>
+                    <td>Hour in 24-hour format with a leading zero</td>
+                    <td>00 &ndash; 23</td>
+                </tr>
+            </tbody>
+            <tbody>
+                <tr>
+                    <td><code>i</code></td>
+                    <td>Minutes</td>
+                    <td>00 &ndash; 59</td>
+                </tr>
+            </tbody>
+            <tbody>
+                <tr>
+                    <td><code>a</code></td>
+                    <td>Day time period</td>
+                    <td>a.m. / p.m.</td>
+                </tr>
+                <tr>
+                    <td><code>A</code></td>
+                    <td>Day time period in uppercase</td>
+                    <td>AM / PM</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">intervals<a class="heading__anchor" name="intervals" href="#intervals">&sect;</a></span></h2>
+        <p>Choose the minutes interval between each time in the list:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
+    interval: 150
+})</code></pre>
+
+        {%= dateDemoField({ id: 'time_demo__interval' }) %}
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">time limits<a class="heading__anchor" name="limits" href="#limits">&sect;</a></span></h2>
+        <p>Set the minimum and maximum selectable times on the picker.</p>
+
+        <p><b>1)</b> Using arrays formatted as <code>[HOUR,MINUTE]</code>:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.timepicker').pickatime({
+    min: [7,30],
+    max: [14,0]
+})</code></pre>
+
+        {%= timeDemoField({ id: 'time_demo__limits--a' }) %}
+
+        <p><b>2)</b> As times relative to now using integers or a boolean:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.timepicker').pickatime({
+    // An integer (positive/negative) sets it as intervals relative from now.
+    min: -5,
+    // `true` sets it to now. `false` removes any limits.
+    max: true
+})</code></pre>
+
+        {%= timeDemoField({ id: 'time_demo__limits--b' }) %}
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">disable times<a class="heading__anchor" name="disable-times" href="#disable-times">&sect;</a></span></h2>
+        <p>Disable a specific or arbitrary set of times selectable on the picker.</p>
+
+        <p><b>1)</b> Using arrays formatted as <code>[HOUR,MINUTE]</code>:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.timepicker').pickatime({
+    disable: [
+        [0,30],
+        [2,0],
+        [8,30],
+        [9,0]
+    ]
+})</code></pre>
+
+        {%= timeDemoField({ id: 'time_demo__disable-times--a' }) %}
+
+        <p><b>2)</b> Using integers representing hours (from 0 to 23):</p>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.timepicker').pickatime({
+    disable: [
+        3, 5, 7
+    ]
+})</code></pre>
+
+        {%= timeDemoField({ id: 'time_demo__disable-times--b' }) %}
+
+        <p><b>3)</b> <i><u>Disabling all</u></i> except a specific or arbitrary set of times by setting <code class="constant">true</code> as the first item in the collection:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.timepicker').pickatime({
+    disable: [
+        true,
+        3, 5, 7,
+        [0,30],
+        [2,0],
+        [8,30],
+        [9,0]
+    ]
+})</code></pre>
+
+        {%= timeDemoField({ id: 'time_demo__disable-times--c' }) %}
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">events<a class="heading__anchor" name="events" href="#events">&sect;</a></span></h2>
+        <p>Fire off events as the user interacts with the picker:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.timepicker').pickatime({
+    onStart: function() {
+        console.log( 'Hello there :)' )
+    },
+    onRender: function() {
+        console.log( 'Whoa.. rendered anew' )
+    },
+    onOpen: function() {
+        console.log( 'Opened up' )
+    },
+    onClose: function() {
+        console.log( 'Closed now' )
+    },
+    onStop: function() {
+        console.log( 'See ya.' )
+    },
+    onSet: function( event ) {
+        console.log( 'Just set stuff:', event )
+    }
+})</code></pre>
+
+        {%= timeDemoField({ id: 'time_demo__events' }).replace( 'Try me', 'Open your console and try me' ) %}
+
+        <p>Within scope of all six of these events, <code class="keyword">this</code> refers to <a href="api.htm">the picker</a>.</p>
+
+        <p>The <code class="function">onSet</code> method is unique - in that it has an <code>event</code> argument that provides a bit of context as to which properties are being “set” through the <a href="api.htm">picker api</a>.</p>
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+

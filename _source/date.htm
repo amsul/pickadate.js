@@ -1,10 +1,10 @@
 
 
-{% dateDemoField = function( id, pre, post ) {
+{% dateDemoField = function( props ) {
+    props = props || {}
     return '<fieldset class="fieldset fieldset--demo js__fieldset">' +
-        ( pre ? pre : '' ) +
-        '<input id=' + id + ' class=fieldset__input type=text placeholder="Try me&hellip;">' +
-        ( post ? post : '' ) +
+        ( props.pre || '' ) +
+        '<input id="' + ( props.id || '' ) + '" class="fieldset__input ' + ( props.klass || '' ) + '" type=text placeholder="Try me&hellip;">' +
     '</fieldset>'
 } %}
 
@@ -19,7 +19,7 @@
         <h3 class="heading heading--thin">The basic setup requires targetting an <code class="tag-name">input</code> element and invoking the picker:</h3>
 
         <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate()</code></pre>
-        <fieldset class="fieldset fieldset--demo"><input class="fieldset__input js__datepicker" type="text" placeholder="Try me&hellip;"></fieldset>
+        {%= dateDemoField({ klass: 'js__datepicker' }) %}
 
     </div> <!-- .section__block -->
 
@@ -30,10 +30,10 @@
         <p>With the basic invocation above, these are the default settings:</p>
 
         <pre><code data-language="javascript">// <a href="#strings">Strings</a> and <a href="#translations">translations</a>
-monthsFull: [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ],
-monthsShort: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
-weekdaysFull: [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ],
-weekdaysShort: [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ],
+monthsFull: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+weekdaysFull: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+weekdaysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
 showMonthsShort: undefined,
 showWeekdaysFull: undefined,
 
@@ -134,14 +134,14 @@ klass: {
     <div class="section__block section__block--scoped">
 
         <h2 class="heading heading--divide"><span class="heading__text">strings<a class="heading__anchor" name="strings" href="#strings">&sect;</a></span></h2>
-        <p>Change the month and weekday labels as you want:</p>
+        <p>Change the month and weekday labels as you find suitable:</p>
 
         <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
-    weekdaysShort: [ 'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa' ],
+    weekdaysShort: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
     showMonthsShort: true
 })</code></pre>
 
-        {%= dateDemoField( 'demo__weekdaysShort' ) %}
+        {%= dateDemoField({ id: 'date_demo__weekdaysShort' }) %}
 
     </div> <!-- .section__block -->
 
@@ -157,23 +157,21 @@ klass: {
 
         <pre class="pre--demo"><code data-language="javascript">// Extend the default picker options for <u>all instances</u>.
 $.extend($.fn.pickadate.defaults, {
-    monthsFull: [ 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre' ],
-    monthsShort: [ 'Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec' ],
-    weekdaysShort: [ 'Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam' ],
+    monthsFull: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+    weekdaysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
     today: 'aujourd\'hui',
     clear: 'effacer'
 })
 
 // Or, pass the months and weekdays as an array for <u>each invocation</u>.
 $('.datepicker').pickadate({
-    monthsFull: [ 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre' ],
-    monthsShort: [ 'Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec' ],
-    weekdaysShort: [ 'Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam' ],
+    monthsFull: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+    weekdaysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
     today: 'aujourd\'hui',
     clear: 'effacer'
 })</code></pre>
 
-        {%= dateDemoField( 'demo__translations' ) %}
+        {%= dateDemoField({ id: 'date_demo__translations' }) %}
 
     </div> <!-- .section__block -->
 
@@ -192,7 +190,7 @@ $('.datepicker').pickadate({
     clear: 'Clear selection'
 })</code></pre>
 
-        {%= dateDemoField( 'demo__buttons' ) %}
+        {%= dateDemoField({ id: 'date_demo__buttons' }) %}
 
     </div> <!-- .section__block -->
 
@@ -205,7 +203,7 @@ $('.datepicker').pickadate({
 
         <h2 class="heading heading--divide"><span class="heading__text">formats<a class="heading__anchor" name="formats" href="#formats">&sect;</a></span></h2>
         <p>Display a human-friendly format and use an alternate one to submit.</p>
-        <p>This is done by creating a new hidden <code class="tag-name">input</code> field with the same <code class="attribute">name</code> attribute as the original and a suffix:</p>
+        <p>This is done by creating a new hidden <code class="tag-name">input</code> element with the same <code class="attribute">name</code> attribute as the original and a suffix:</p>
 
         <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
     // Escape any “<a href="#formatting-rules">rule</a>” characters with an exclamation mark (!).
@@ -214,14 +212,14 @@ $('.datepicker').pickadate({
     hiddenSuffix: '--submit'
 })</code></pre>
 
-        {%= dateDemoField( 'demo__formats' ) %}
+        {%= dateDemoField({ id: 'date_demo__formats' }) %}
 
     </div> <!-- .section__block -->
 
     <div class="section__block section__block--scoped">
 
         <h2 class="heading heading--divide"><span class="heading__text">formatting rules<a class="heading__anchor" name="formatting-rules" href="#formatting-rules">&sect;</a></span></h2>
-        <p>The following rules can be used to format any dates:</p>
+        <p>The following rules can be used to format any date:</p>
 
         <table class="table">
             <thead>
@@ -310,7 +308,7 @@ $('.datepicker').pickadate({
     selectMonths: true
 })</code></pre>
 
-        {%= dateDemoField( 'demo__selectors--a' ) %}
+        {%= dateDemoField({ id: 'date_demo__selectors--a' }) %}
 
         <p>Specify the number of years selectable using an even integer - half before and half after the year in focus:</p>
 
@@ -319,7 +317,7 @@ $('.datepicker').pickadate({
     selectYears: 4
 })</code></pre>
 
-        {%= dateDemoField( 'demo__selectors--b' ) %}
+        {%= dateDemoField({ id: 'date_demo__selectors--b' }) %}
 
     </div> <!-- .section__block -->
 
@@ -331,13 +329,13 @@ $('.datepicker').pickadate({
     <div class="section__block section__block--scoped">
 
         <h2 class="heading heading--divide"><span class="heading__text">first weekday<a class="heading__anchor" name="first-weekday" href="#first-weekday">&sect;</a></span></h2>
-        <p>The first day of the week can be set to Sunday or Monday. Anything truth-y sets it as Monday and anything false-y as Sunday:</p>
+        <p>The first day of the week can be set to either Sunday or Monday. Anything truth-y sets it as Monday and anything false-y as Sunday:</p>
 
         <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
     firstDay: 1
 })</code></pre>
 
-        {%= dateDemoField( 'demo__firstDay' ) %}
+        {%= dateDemoField({ id: 'date_demo__firstDay' }) %}
 
     </div> <!-- .section__block -->
 
@@ -358,7 +356,7 @@ $('.datepicker').pickadate({
     max: new Date(2013,7,14)
 })</code></pre>
 
-        {%= dateDemoField( 'demo__limits--a' ) %}
+        {%= dateDemoField({ id: 'date_demo__limits--a' }) %}
 
         <p><b>2)</b> Using arrays formatted as <code>[YEAR,MONTH,DATE]</code>:</p>
 
@@ -367,7 +365,7 @@ $('.datepicker').pickadate({
     max: [2013,7,14]
 })</code></pre>
 
-        {%= dateDemoField( 'demo__limits--b' ) %}
+        {%= dateDemoField({ id: 'date_demo__limits--b' }) %}
 
         <p><b>3)</b> As dates relative to today using integers or a boolean:</p>
 
@@ -378,7 +376,7 @@ $('.datepicker').pickadate({
     max: true
 })</code></pre>
 
-        {%= dateDemoField( 'demo__limits--c' ) %}
+        {%= dateDemoField({ id: 'date_demo__limits--c' }) %}
 
     </div> <!-- .section__block -->
 
@@ -403,7 +401,7 @@ $('.datepicker').pickadate({
     ]
 })</code></pre>
 
-        {%= dateDemoField( 'demo__disable-dates--a' ) %}
+        {%= dateDemoField({ id: 'date_demo__disable-dates--a' }) %}
 
         <p><b>2)</b> Using integers representing days of the week (from 1 to 7):</p>
 
@@ -413,7 +411,7 @@ $('.datepicker').pickadate({
     ]
 })</code></pre>
 
-        {%= dateDemoField( 'demo__disable-dates--b' ) %}
+        {%= dateDemoField({ id: 'date_demo__disable-dates--b' }) %}
 
         <p><b>3)</b> <i><u>Disabling all</u></i> except a specific or arbitrary set of dates by setting <code class="constant">true</code> as the first item in the collection:</p>
 
@@ -428,7 +426,7 @@ $('.datepicker').pickadate({
     ]
 })</code></pre>
 
-        {%= dateDemoField( 'demo__disable-dates--c' ) %}
+        {%= dateDemoField({ id: 'date_demo__disable-dates--c' }) %}
 
     </div> <!-- .section__block -->
 
@@ -463,10 +461,11 @@ $('.datepicker').pickadate({
     }
 })</code></pre>
 
-        {%= dateDemoField( 'demo__events' ).replace( 'Try me', 'Open your console and try me' ) %}
+        {%= dateDemoField({ id: 'date_demo__events' }).replace( 'Try me', 'Open your console and try me' ) %}
 
-        <p>The <code class="function">onSet</code> method has an <code>event</code> argument that provides a bit of context as to what is being “set” through the <a href="api.htm">api</a>.</p>
-        <p>And within scope of all six of these events, <code class="keyword">this</code> refers to <a href="api.htm">the picker</a>.</p>
+        <p>Within scope of all six of these events, <code class="keyword">this</code> refers to <a href="api.htm">the picker</a>.</p>
+
+        <p>The <code class="function">onSet</code> method is unique - in that it has an <code>event</code> argument that provides a bit of context as to which properties are being “set” through the <a href="api.htm">picker api</a>.</p>
 
     </div> <!-- .section__block -->
 
