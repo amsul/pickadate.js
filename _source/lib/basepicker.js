@@ -5,7 +5,8 @@
    browser: true,
    asi: true,
    unused: true,
-   boss: true
+   boss: true,
+   eqnull: true
  */
 
 
@@ -25,7 +26,7 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
     var
         // The state of the picker.
         STATE = {
-            ID: Math.abs( ~~( Math.random() * 1e9 ) )
+            id: Math.abs( ~~( Math.random() * 1e9 ) )
         },
 
 
@@ -56,11 +57,15 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
              */
             start: function() {
 
+                // Update the picker state.
+                STATE.start = true
+                STATE.open = false
+                STATE.type = ELEMENT.type
+
 
                 // Confirm focus state, save original type, convert into text input
                 // to remove UA stylings, and set as readonly to prevent keyboard popup.
                 ELEMENT.autofocus = ( ELEMENT == document.activeElement ) || ELEMENT.autofocus
-                STATE.TYPE = ELEMENT.type
                 ELEMENT.type = 'text'
                 ELEMENT.readOnly = true
 
@@ -136,7 +141,7 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
 
                 // Bind the events on the `input` element and then
                 // insert the holder and hidden element after the element.
-                $ELEMENT.on( 'focus.P' + STATE.ID + ' click.P' + STATE.ID, function() {
+                $ELEMENT.on( 'focus.P' + STATE.id + ' click.P' + STATE.id, function() {
 
                     // Open the calendar.
                     P.open()
@@ -144,14 +149,14 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                     // Add the "focused" state onto the holder.
                     P.$holder.addClass( CLASSES.focused )
 
-                }).on( 'change.P' + STATE.ID, function() {
+                }).on( 'change.P' + STATE.id, function() {
 
                     // If there's a hidden input, update the value with formatting or clear it
                     if ( P._hidden ) {
                         P._hidden.value = ELEMENT.value ? triggerFunction( P.component.formats.toString, P.component, [ SETTINGS.formatSubmit, P.component.item.select ] ) : ''
                     }
 
-                }).on( 'keydown.P' + STATE.ID, function( event ) {
+                }).on( 'keydown.P' + STATE.id, function( event ) {
 
                     var
                         // Grab the keycode
@@ -161,7 +166,7 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                         isKeycodeDelete = keycode == 8 || keycode == 46
 
                     // Check if delete was pressed or the calendar is closed and there is a key movement
-                    if ( isKeycodeDelete || !STATE.OPEN && P.component.key[ keycode ] ) {
+                    if ( isKeycodeDelete || !STATE.open && P.component.key[ keycode ] ) {
 
                         // Prevent it from moving the page.
                         event.preventDefault()
@@ -227,6 +232,9 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
              */
             stop: function() {
 
+                // Update the picker state.
+                STATE.start = false
+
                 // Cache the stop event for a bit.
                 var stopEvent = P.component.onStop
 
@@ -234,10 +242,10 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                 P.close()
 
                 // Unbind the events on the `input` element.
-                $ELEMENT.off( '.P' + STATE.ID )
+                $ELEMENT.off( '.P' + STATE.id )
 
                 // Restore the element state
-                ELEMENT.type = STATE.TYPE
+                ELEMENT.type = STATE.type
                 ELEMENT.readOnly = false
 
                 // Remove the hidden field.
@@ -267,10 +275,10 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
             open: function() {
 
                 // If it's already open, do nothing.
-                if ( STATE.OPEN ) return P
+                if ( STATE.open ) return P
 
                 // Set it as open.
-                STATE.OPEN = 1
+                STATE.open = true
 
                 // Make sure the element has focus then add the "active" class.
                 $ELEMENT.focus().addClass( CLASSES.inputActive )
@@ -279,7 +287,7 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                 P.$holder.addClass( CLASSES.opened )
 
                 // Bind the document events.
-                $DOCUMENT.on( 'click.P' + STATE.ID + ' focusin.P' + STATE.ID, function( event ) {
+                $DOCUMENT.on( 'click.P' + STATE.id + ' focusin.P' + STATE.id, function( event ) {
 
                     // If the target of the event is not the element, close the picker picker.
                     // * Don't worry about clicks or focusins on the holder
@@ -288,7 +296,7 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                     //   to the doc. So make sure the target wasn't the doc also.
                     if ( event.target != ELEMENT && event.target != document ) P.close()
 
-                })/*.on( 'mousedown.P' + STATE.ID, function( event ) {
+                })/*.on( 'mousedown.P' + STATE.id, function( event ) {
 
                     // Maintain the focus on the `input` element.
                     ELEMENT.focus()
@@ -296,7 +304,7 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                     // Prevent the default action to keep focus on the `input` field.
                     event.preventDefault()
 
-                })*/.on( 'keydown.P' + STATE.ID, function( event ) {
+                })*/.on( 'keydown.P' + STATE.id, function( event ) {
 
                     var
                         // Get the keycode
@@ -347,10 +355,10 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
             close: function() {
 
                 // If it's already closed, do nothing.
-                if ( !STATE.OPEN ) return P
+                if ( !STATE.open ) return P
 
                 // Set it as closed.
-                STATE.OPEN = 0
+                STATE.open = false
 
                 // Remove the "active" class.
                 $ELEMENT.removeClass( CLASSES.inputActive )
@@ -359,7 +367,7 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                 P.$holder.removeClass( CLASSES.opened )
 
                 // Bind the document events.
-                $DOCUMENT.off( '.P' + STATE.ID )
+                $DOCUMENT.off( '.P' + STATE.id )
 
                 // Trigger the on close event within scope of the picker.
                 triggerFunction( P.component.onClose, P )
@@ -380,82 +388,78 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
 
 
             /**
-             * Set the values
+             * Set something
              */
-            set: function( type, value, options ) {
+            set: function( thing, value, options ) {
 
                 var
-                    typeIsObject = isObject( type ),
-                    object = typeIsObject ? type : {}
+                    thingIsObject = isObject( thing ),
+                    object = thingIsObject ? thing : {}
 
-                // If the type isn't an object, make it one.
-                if ( !typeIsObject ) {
-                    object[ type ] = value
-                }
+                if ( thing ) {
 
-                // Go through the types of items to set.
-                for ( type in object ) {
-
-                    // If the item exists, set it.
-                    if ( P.component.item[ type ] ) {
-                        P.component.set( type, object[ type ], options || {} )
+                    // If the thing isn't an object, make it one.
+                    if ( !thingIsObject ) {
+                        object[ thing ] = value
                     }
 
-                    // Update the element value and broadcast a change, if that.
-                    if ( type == 'select' || type == 'clear' ) {
-                        $ELEMENT.val( type == 'clear' ? '' :
-                            triggerFunction( P.component.formats.toString, P.component, [ SETTINGS.format, P.component.get( type ) ] )
-                        ).trigger( 'change' )
-                    }
-                }
+                    // Go through the things of items to set.
+                    for ( thing in object ) {
 
-                // Render a new picker.
-                P.render()
+                        // If the item exists, set it first.
+                        if ( P.component.item[ thing ] ) {
+                            P.component.set( thing, object[ thing ], options || {} )
+                        }
+
+                        // Then update the element value and broadcast a change, if that.
+                        if ( thing == 'select' || thing == 'clear' ) {
+                            $ELEMENT.val( thing == 'clear' ? '' :
+                                triggerFunction( P.component.formats.toString, P.component, [ SETTINGS.format, P.component.get( thing ) ] )
+                            ).trigger( 'change' )
+                        }
+                    }
+
+                    // Render a new picker.
+                    P.render()
+                }
 
                 // Trigger the component "set" event within scope of the picker.
                 triggerFunction( P.component.onSet, P )
 
                 // Trigger the settings "set" event within scope of the picker.
-                triggerFunction( SETTINGS.onSet, P, [ object ] )
+                triggerFunction( SETTINGS.onSet, P, [ thing, value ] )
 
                 return P
             }, //set
 
 
             /**
-             * Get the values
+             * Get something
              */
-            get: function( options ) {
+            get: function( thing, format ) {
 
-                // Make sure there's something to get.
-                options = options || 'value'
-
-                // If it's a string, either get the value or the component item object itself.
-                if ( typeof options == 'string' ) {
-                    return options == 'value' ? ELEMENT.value : P.component.item[ options ]
+                if ( STATE[ thing ] != null ) {
+                    return STATE[ thing ]
                 }
 
-                // Confirm that the options are passed as an object.
-                if ( isObject( options ) ) {
+                // Make sure there's something to get.
+                thing = thing || 'value'
 
-                    // Go through each property within the options to get.
-                    for ( var property in options ) {
+                if ( typeof thing == 'string' ) {
 
-                        // If this type of item exists, then get it based on the options.
-                        if ( P.component.item[ property ] ) {
-                            return triggerFunction( P.component.formats.toString, P.component, [ options[ property ], P.component.get( property ) ] )
+                    if ( thing == 'value' ) {
+                        return ELEMENT.value
+                    }
+
+                    if ( P.component.item[ thing ] ) {
+
+                        if ( typeof format == 'string' ) {
+                            return triggerFunction( P.component.formats.toString, P.component, [ format, P.component.get( thing ) ] )
                         }
+                        return P.component.get( thing )
                     }
                 }
             }, //get
-
-
-            /**
-             * Get the open state
-             */
-            isOpen: function() {
-                return !!STATE.OPEN
-            },
 
 
             /**
@@ -465,7 +469,6 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                 P.component.set( 'flip', value )
                 return P.render()
             } //disableAll
-
         } //PickerInstance.prototype
 
 
@@ -484,7 +487,7 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                 createNode( 'div',
 
                     // Create the components nodes.
-                    P.component.nodes( STATE.OPEN ),
+                    P.component.nodes( STATE.open ),
 
                     // The picker box class
                     CLASSES.box

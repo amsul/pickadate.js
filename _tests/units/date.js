@@ -4,11 +4,14 @@
     devel: true,
     browser: true,
     asi: true,
-    unused: true
+    unused: true,
+    eqnull: true,
+    eqeqeq: true
  */
 
 
-var $DOM = $( '#qunit-fixture' )
+var $DOM = $( '#qunit-fixture' ),
+    $INPUT = $( '<input type=password>' )
 
 
 
@@ -17,484 +20,375 @@ var $DOM = $( '#qunit-fixture' )
    ========================================================================== */
 
 
-module( 'Date picker stage setup', {
+module( 'Date picker setup', {
     setup: function() {
-        this.$input = $( '<input type=date>' )
-        $DOM.append( this.$input )
-        this.$input.pickadate()
+        var $input = $INPUT.clone().pickadate()
+        $DOM.append( $input )
+        this.picker = $input.pickadate( 'picker' )
     },
     teardown: function() {
-        delete this.$input
+        this.picker.stop()
         $DOM.empty()
     }
 })
 
-test( 'Checking holder states...', function () {
-
-    ok( this.$input.pickadate( 'isOpen' ) === false, 'Closed by default' )
-
-    this.$input.pickadate( 'open' )
-    ok( this.$input.pickadate( 'isOpen' ) === true, 'Opened with trigger' )
-
-    this.$input.pickadate( 'close' )
-    ok( this.$input.pickadate( 'isOpen' ) === false, 'Closed by trigger' )
-
-    this.$input.focus()
-    ok( this.$input.pickadate( 'isOpen' ) === true, 'Opened with focus' )
-
-    this.$input.blur()
-    $( 'body' ).focus()
-    ok( this.$input.pickadate( 'isOpen' ) === false, 'Closed by losing focus' )
-
-    this.$input.click()
-    ok( this.$input.pickadate( 'isOpen' ) === true, 'Opened with click' )
-
-    $( 'body' ).click()
-    ok( this.$input.pickadate( 'isOpen' ) === false, 'Closed by clicking outside' )
+test( 'Calendar stage', function() {
+    ok( this.picker.$holder.find( '.' + $.fn.pickadate.defaults.klass.table + ' [data-pick]' ).length === 42, '42 selectables dates' )
 })
 
-test( 'Checking input attributes...', function() {
-    ok( this.$input[ 0 ].type === 'text', 'Input type updated' )
-    ok( this.$input[ 0 ].readOnly === true, 'Input is readonly' )
-    ok( this.$input.pickadate( 'get', 'select' ).PICK === this.$input.pickadate( 'get', 'now' ).PICK, 'Default selected date is correct' )
-})
+test( 'Properties', function() {
 
-test( 'Checking picker holder...', function() {
-    var $holder = this.$input.pickadate( 'picker' ).$holder
-    ok( $holder.length, 'There is a picker holder right after the input element' )
-    ok( $holder.find( '.' + $.fn.pickadate.defaults.klass.table + ' [data-pick]' ).length === 42, 'There are 42 dates on the calendar' )
-})
+    var picker = this.picker,
+        today = new Date()
 
-test( 'Checking picker objects...', function() {
-    var nowDateObject = new Date()
-    nowDateObject.setHours( 0, 0, 0, 0 )
-    ok( this.$input.pickadate( 'get', 'now' ).PICK === nowDateObject.getTime(), 'Now date is correct at ' + this.$input.pickadate( 'get', 'now' ).YEAR + '/' + ( this.$input.pickadate( 'get', 'now' ).MONTH + 1 ) + '/' + this.$input.pickadate( 'get', 'now' ).DATE )
-    ok( !this.$input.pickadate( 'get', 'disable' ).length, 'No disabled dates' )
-    ok( this.$input.pickadate( 'get', 'min' ).PICK === -Infinity, 'Min date is negative Infinity' )
-    ok( this.$input.pickadate( 'get', 'max' ).PICK === Infinity, 'Max date is positive Infinity' )
+    today.setHours( 0, 0, 0, 0 )
+
+    strictEqual( picker.get( 'min' ).pick, -Infinity, 'Default “min” is -Infinity' )
+    strictEqual( picker.get( 'max' ).pick, Infinity, 'Default “max’ is +Infinity' )
+    strictEqual( picker.get( 'now' ).pick, today.getTime(), 'Default “now” is ' + picker.get( 'now', 'yyyy/mm/dd' ) )
+    deepEqual( picker.get( 'select' ), picker.get( 'now' ), 'Default “select” is “now”' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'select' ), 'Default “highlight” is “select”' )
+    strictEqual( picker.get( 'view' ).pick, today.setDate( 1 ), 'Default “view” is ' + picker.get( 'view', 'yyyy/mm/dd' ) )
 })
 
 
 
 
-module( 'Date picker general events', {
+module( 'Date picker `set`', {
     setup: function() {
-        var thisModule = this
-        thisModule.$input = $( '<input type=date>' )
-        $DOM.append( thisModule.$input )
-        thisModule.$input.pickadate({
-            onStart: function() {
-                thisModule.started = true
-                thisModule.restarted = thisModule.stopped && thisModule.started
-                thisModule.updatedType = thisModule.$input[ 0 ].type === 'text'
-            },
-            onRender: function() {
-                thisModule.rendered = true
-            },
-            onOpen: function() {
-                thisModule.opened = true
-            },
-            onClose: function() {
-                thisModule.closed = true
-            },
-            onSet: function() {
-
-                var today = new Date(),
-                    dateObject = this.get( 'select' )
-
-                today.setHours(0,0,0,0)
-                thisModule.selectedNumber = dateObject.PICK === today.getTime()
-
-                thisModule.selectedArray = [dateObject.YEAR,dateObject.MONTH,dateObject.DATE].toString() === [1988,7,14].toString()
-
-                thisModule.selectedDateObject = [dateObject.YEAR,dateObject.MONTH,dateObject.DATE].toString() === [2013,7,14].toString()
-
-                thisModule.clearedValue = this.get( 'value' ) === ''
-            },
-            onStop: function() {
-                thisModule.stopped = true
-                thisModule.restoredType = thisModule.$input[ 0 ].type === 'date'
-            }
-        })
+        var $input = $INPUT.clone().pickadate()
+        $DOM.append( $input )
+        this.picker = $input.pickadate( 'picker' )
     },
     teardown: function() {
-        delete this.$input
+        this.picker.stop()
         $DOM.empty()
     }
 })
 
-test( 'Checking the basic events...', function() {
+test( '`select`', function() {
 
-    ok( this.started, 'Started up fine' )
-    ok( this.updatedType, 'Updated the element type' )
+    var picker = this.picker,
+        today = new Date(),
+        playdate = new Date( today.getFullYear(), today.getMonth(), today.getDate() + 40 )
 
-    ok( this.rendered, 'Rendered correctly' )
+    today.setHours(0,0,0,0)
 
-    this.$input.pickadate( 'open' )
-    ok( this.opened, 'Opened just fine with a trigger' )
+    // Using numbers
+    picker.set( 'select', playdate.getTime() )
+    deepEqual( picker.get( 'select' ).obj, playdate, '`select` using a number: ' + playdate )
+    strictEqual( picker.get( 'value' ), picker.get( 'select', $.fn.pickadate.defaults.format ), '`value` matches' )
+    deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'now' ), '`highlight` unaffected' )
+    strictEqual( picker.get( 'view', 'yyyy/mm/dd' ), picker.get( 'highlight', 'yyyy/mm/01' ), '`view` unaffected' )
+    deepEqual( picker.get( 'min' ).pick, -Infinity, '`min` unaffected' )
+    deepEqual( picker.get( 'max' ).pick, Infinity, '`max` unaffected' )
 
-    this.$input.pickadate( 'close' )
-    ok( this.closed, 'Closed just fine with a trigger' )
+    // Using arrays
+    playdate.setDate( playdate.getDate() + 40 )
+    picker.set( 'select', [playdate.getFullYear(),playdate.getMonth(),playdate.getDate()] )
+    deepEqual( picker.get( 'select' ).obj, playdate, '`select` using an array: ' + playdate )
+    strictEqual( picker.get( 'value' ), picker.get( 'select', $.fn.pickadate.defaults.format ), '`value` matches' )
+    deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'now' ), '`highlight` unaffected' )
+    strictEqual( picker.get( 'view', 'yyyy/mm/dd' ), picker.get( 'highlight', 'yyyy/mm/01' ), '`view` unaffected' )
+    deepEqual( picker.get( 'min' ).pick, -Infinity, '`min` unaffected' )
+    deepEqual( picker.get( 'max' ).pick, Infinity, '`max` unaffected' )
 
-    this.$input.pickadate( 'stop' )
-    ok( this.stopped, 'Stopped just fine' )
-    ok( this.restoredType, 'Restored the element type' )
-
-    this.$input.pickadate( 'start' )
-    ok( this.restarted, 'Restarted just fine' )
-    ok( this.updatedType, 'Updated the element type' )
+    // Using JavaScript date objects
+    playdate.setDate( playdate.getDate() + 40 )
+    picker.set( 'select', playdate )
+    deepEqual( picker.get( 'select' ).obj, playdate, '`select` using a JS date object: ' + playdate )
+    strictEqual( picker.get( 'value' ), picker.get( 'select', $.fn.pickadate.defaults.format ), '`value` matches' )
+    deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'now' ), '`highlight` unaffected' )
+    strictEqual( picker.get( 'view', 'yyyy/mm/dd' ), picker.get( 'highlight', 'yyyy/mm/01' ), '`view` unaffected' )
+    deepEqual( picker.get( 'min' ).pick, -Infinity, '`min` unaffected' )
+    deepEqual( picker.get( 'max' ).pick, Infinity, '`max` unaffected' )
 })
 
-test( 'Checking the `set` events...', function() {
+test( '`highlight`', function() {
 
-    this.$input.pickadate( 'set', { select: new Date().getTime() } )
-    ok( this.selectedNumber, 'Selected from a number' )
+    var picker = this.picker,
+        today = new Date(),
+        playdate = new Date( today.getFullYear(), today.getMonth(), today.getDate() + 40 )
 
-    this.$input.pickadate( 'set', { select: [1988,7,14] } )
-    ok( this.selectedArray, 'Selected from an array' )
+    today.setHours(0,0,0,0)
 
-    this.$input.pickadate( 'set', { select: new Date(2013,7,14) } )
-    ok( this.selectedDateObject, 'Selected from a JS date object' )
+    // Using numbers
+    picker.set( 'highlight', playdate.getTime() )
+    deepEqual( picker.get( 'highlight' ).obj, playdate, '`highlight` using a number: ' + playdate )
+    strictEqual( picker.get( 'view', 'yyyy/mm/dd' ), picker.get( 'highlight', 'yyyy/mm/01' ), '`view` updated: ' + picker.get( 'view', 'yyyy/mm/dd' ) )
+    deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
+    deepEqual( picker.get( 'select' ), picker.get( 'now' ), '`select` unaffected' )
+    strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
+    deepEqual( picker.get( 'min' ).pick, -Infinity, '`min` unaffected' )
+    deepEqual( picker.get( 'max' ).pick, Infinity, '`max` unaffected' )
 
-    this.$input.pickadate( 'clear' )
-    ok( this.clearedValue, 'Cleared the input value' )
+    // Using arrays
+    playdate.setDate( playdate.getDate() + 40 )
+    picker.set( 'highlight', [playdate.getFullYear(),playdate.getMonth(),playdate.getDate()] )
+    deepEqual( picker.get( 'highlight' ).obj, playdate, '`highlight` using an array: ' + playdate )
+    strictEqual( picker.get( 'view', 'yyyy/mm/dd' ), picker.get( 'highlight', 'yyyy/mm/01' ), '`view` updated: ' + picker.get( 'view', 'yyyy/mm/dd' ) )
+    deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
+    deepEqual( picker.get( 'select' ), picker.get( 'now' ), '`select` unaffected' )
+    strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
+    deepEqual( picker.get( 'min' ).pick, -Infinity, '`min` unaffected' )
+    deepEqual( picker.get( 'max' ).pick, Infinity, '`max` unaffected' )
+
+    // Using JavaScript date objects
+    playdate.setDate( playdate.getDate() + 40 )
+    picker.set( 'highlight', playdate )
+    deepEqual( picker.get( 'highlight' ).obj, playdate, '`highlight` using a JS date object: ' + playdate )
+    strictEqual( picker.get( 'view', 'yyyy/mm/dd' ), picker.get( 'highlight', 'yyyy/mm/01' ), '`view` updated: ' + picker.get( 'view', 'yyyy/mm/dd' ) )
+    deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
+    deepEqual( picker.get( 'select' ), picker.get( 'now' ), '`select` unaffected' )
+    strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
+    deepEqual( picker.get( 'min' ).pick, -Infinity, '`min` unaffected' )
+    deepEqual( picker.get( 'max' ).pick, Infinity, '`max` unaffected' )
 })
 
+test( '`view`', function() {
+
+    var picker = this.picker,
+        today = new Date(),
+        playdate = new Date( today.getFullYear(), today.getMonth(), today.getDate() + 40 )
+
+    today.setHours(0,0,0,0)
+
+    // Using numbers
+    picker.set( 'view', playdate.getTime() )
+    playdate.setDate( 1 )
+    deepEqual( picker.get( 'view' ).obj, playdate, '`view` using a number: ' + playdate )
+    deepEqual( picker.get( 'highlight' ).obj, today, '`highlight` unaffected' )
+    deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
+    deepEqual( picker.get( 'select' ), picker.get( 'now' ), '`select` unaffected' )
+    strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
+    deepEqual( picker.get( 'min' ).pick, -Infinity, '`min` unaffected' )
+    deepEqual( picker.get( 'max' ).pick, Infinity, '`max` unaffected' )
+
+    // Using arrays
+    playdate.setDate( playdate.getDate() + 40 )
+    picker.set( 'view', [playdate.getFullYear(),playdate.getMonth(),playdate.getDate()] )
+    playdate.setDate( 1 )
+    deepEqual( picker.get( 'view' ).obj, playdate, '`view` using a number: ' + playdate )
+    deepEqual( picker.get( 'highlight' ).obj, today, '`highlight` unaffected' )
+    deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
+    deepEqual( picker.get( 'select' ), picker.get( 'now' ), '`select` unaffected' )
+    strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
+    deepEqual( picker.get( 'min' ).pick, -Infinity, '`min` unaffected' )
+    deepEqual( picker.get( 'max' ).pick, Infinity, '`max` unaffected' )
 
 
-
-module( 'Date picker mouse events', {
-    setup: function() {
-        this.$input = $( '<input type=date>' )
-        $DOM.append( this.$input )
-        this.$input.pickadate()
-    },
-    teardown: function() {
-        delete this.$input
-        $DOM.empty()
-    }
+    // Using JavaScript date objects
+    playdate.setDate( playdate.getDate() + 40 )
+    picker.set( 'view', playdate )
+    playdate.setDate( 1 )
+    deepEqual( picker.get( 'view' ).obj, playdate, '`view` using a JS date object: ' + playdate )
+    deepEqual( picker.get( 'highlight' ).obj, today, '`highlight` unaffected' )
+    deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
+    deepEqual( picker.get( 'select' ), picker.get( 'now' ), '`select` unaffected' )
+    strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
+    deepEqual( picker.get( 'min' ).pick, -Infinity, '`min` unaffected' )
+    deepEqual( picker.get( 'max' ).pick, Infinity, '`max` unaffected' )
 })
 
-test( 'Checking click to open and close...', function() {
+test( '`min`', function() {
 
-    ok( !this.$input.pickadate( 'isOpen' ), 'Closed to start with' )
+    var picker = this.picker,
+        today = new Date(),
+        playdate = new Date( today.getFullYear(), today.getMonth(), today.getDate() - 40 )
 
-    this.$input.click()
-    ok( this.$input.pickadate( 'isOpen' ), 'Opened after click' )
+    today.setHours(0,0,0,0)
+
+    // Using negative numbers
+    picker.set( 'min', -40 )
+    deepEqual( picker.get( 'min' ).obj, playdate, '`min` using a negative number: ' + playdate )
+    deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
+    deepEqual( picker.get( 'select' ), picker.get( 'now' ), '`select` unaffected' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'select' ), '`highlight` unaffected' )
+
+    playdate.setMonth( today.getMonth() )
+    playdate.setDate( 1 )
+    deepEqual( picker.get( 'view' ).obj, playdate, '`view` unaffected' )
+    strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
+    deepEqual( picker.get( 'max' ).pick, Infinity, '`max` unaffected' )
+
+    // Using positive numbers
+    picker.set( 'min', 40 )
+    playdate.setDate( today.getDate() + 40 )
+    deepEqual( picker.get( 'min' ).obj, playdate, '`min` using a positive number: ' + playdate )
+    deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
+    deepEqual( picker.get( 'select' ), picker.get( 'min' ), '`select` updated' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'select' ), '`highlight` updated' )
+
+    playdate.setDate( 1 )
+    deepEqual( picker.get( 'view' ).obj, playdate, '`view` updated' )
+    strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
+    deepEqual( picker.get( 'max' ).pick, Infinity, '`max` unaffected' )
+
+    // Using arrays
+    playdate.setDate( playdate.getDate() + 40 )
+    picker.set( 'min', [playdate.getFullYear(),playdate.getMonth(),playdate.getDate()] )
+    deepEqual( picker.get( 'min' ).obj, playdate, '`min` using an array: ' + playdate )
+    deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
+    deepEqual( picker.get( 'select' ), picker.get( 'min' ), '`select` updated' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'select' ), '`highlight` updated' )
+    strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
+
+    playdate.setDate( 1 )
+    deepEqual( picker.get( 'view' ).obj, playdate, '`view` updated' )
+    deepEqual( picker.get( 'max' ).pick, Infinity, '`max` unaffected' )
+
+    // Using JavaScript date objects
+    playdate.setDate( playdate.getDate() + 40 )
+    picker.set( 'min', playdate )
+    deepEqual( picker.get( 'min' ).obj, playdate, '`min` using a JS date object: ' + playdate )
+    deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
+    deepEqual( picker.get( 'select' ), picker.get( 'min' ), '`select` updated' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'select' ), '`highlight` updated' )
+    strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
+
+    playdate.setDate( 1 )
+    deepEqual( picker.get( 'view' ).obj, playdate, '`view` updated' )
+    deepEqual( picker.get( 'max' ).pick, Infinity, '`max` unaffected' )
 })
 
-test( 'Checking click to select...', function() {
+test( '`min` using boolean', function() {
 
-    var $holder = this.$input.pickadate( 'picker' ).$holder,
-        viewsetObject = this.$input.pickadate( 'get', 'view' ),
-        interval = 86400000,
-        monthStart = viewsetObject.DAY,
-        monthEnd = new Date()
+    var picker = this.picker,
+        today = new Date(),
+        playdate = new Date( today.getFullYear(), today.getMonth(), 1 )
 
-    monthEnd.setMonth( monthEnd.getMonth() + 1 )
-    monthEnd.setDate( 0 )
+    today.setHours(0,0,0,0)
 
-    for ( var i = monthStart; i <= monthEnd.getDate(); i += 1 ) {
-        $holder.find( '.' + $.fn.pickadate.defaults.klass.day ).eq( i ).click()
-        ok( this.$input.pickadate( 'get', 'select' ).PICK === viewsetObject.PICK + ( i - 1 ) * interval, 'Selected ' + this.$input.pickadate( 'get', { select: 'yyyy-mm-dd' } ) )
-        ok( this.$input.pickadate( 'get', 'value' ) === this.$input.pickadate( 'get', { select: $.fn.pickadate.defaults.format } ), 'Input value updated to ' + this.$input.pickadate( 'get', 'value' ) )
-    }
+    // Using `true`
+    picker.set( 'min', true )
+    deepEqual( picker.get( 'min' ).obj, today, '`min` using `true`: ' + today )
+    deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
+    deepEqual( picker.get( 'select' ).obj, today, '`select` unaffected' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'select' ), '`highlight` unaffected' )
+    deepEqual( picker.get( 'view' ).obj, playdate, '`view` unaffected' )
+    strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
+    deepEqual( picker.get( 'max' ).pick, Infinity, '`max` unaffected' )
+
+    // Using `false`
+    picker.set( 'min', false )
+    deepEqual( picker.get( 'min' ).obj, -Infinity, '`min` using `false`: ' + -Infinity )
+    deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
+    deepEqual( picker.get( 'select' ).obj, today, '`select` unaffected' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'select' ), '`highlight` unaffected' )
+    deepEqual( picker.get( 'view' ).obj, playdate, '`view` unaffected' )
+    strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
+    deepEqual( picker.get( 'max' ).pick, Infinity, '`max` unaffected' )
 })
 
-test( 'Checking click to clear...', function() {
+test( '`max`', function() {
 
-    var $holder = this.$input.pickadate( 'picker' ).$holder
+    var picker = this.picker,
+        today = new Date(),
+        playdate = new Date( today.getFullYear(), today.getMonth(), today.getDate() + 40 )
 
-    this.$input.pickadate( 'set', { select: [2013,3,20] } )
-    ok( this.$input.pickadate( 'get', 'value' ) === '20 April, 2013', 'Input has a value' )
+    today.setHours(0,0,0,0)
 
-    $holder.find( '.' + $.fn.pickadate.defaults.klass.buttonClear ).click()
-    ok( this.$input.pickadate( 'get', 'value' ) === '', 'Input value has cleared' )
+    // Using positive numbers
+    picker.set( 'max', 40 )
+    deepEqual( picker.get( 'max' ).obj, playdate, '`max` using a positive number: ' + playdate )
+    deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
+    deepEqual( picker.get( 'select' ), picker.get( 'now' ), '`select` unaffected' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'select' ), '`highlight` unaffected' )
+
+    playdate.setMonth( today.getMonth() )
+    playdate.setDate( 1 )
+    deepEqual( picker.get( 'view' ).obj, playdate, '`view` unaffected' )
+    strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
+    deepEqual( picker.get( 'min' ).pick, -Infinity, '`min` unaffected' )
+
+    // Using negative numbers
+    picker.set( 'max', -40 )
+    playdate.setDate( today.getDate() - 40 )
+    deepEqual( picker.get( 'max' ).obj, playdate, '`max` using a negative number: ' + playdate )
+    deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
+    deepEqual( picker.get( 'select' ), picker.get( 'max' ), '`select` updated' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'select' ), '`highlight` updated' )
+
+    playdate.setDate( 1 )
+    deepEqual( picker.get( 'view' ).obj, playdate, '`view` unaffected' )
+    strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
+    deepEqual( picker.get( 'min' ).pick, -Infinity, '`min` unaffected' )
+
+    // Using arrays
+    playdate.setDate( playdate.getDate() - 40 )
+    picker.set( 'max', [playdate.getFullYear(),playdate.getMonth(),playdate.getDate()] )
+    deepEqual( picker.get( 'max' ).obj, playdate, '`max` using an array: ' + playdate )
+    deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
+    deepEqual( picker.get( 'select' ), picker.get( 'max' ), '`select` updated' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'select' ), '`highlight` updated' )
+    strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
+
+    playdate.setDate( 1 )
+    deepEqual( picker.get( 'view' ).obj, playdate, '`view` updated' )
+    deepEqual( picker.get( 'min' ).pick, -Infinity, '`min` unaffected' )
+
+    // Using JavaScript date objects
+    playdate.setDate( playdate.getDate() - 40 )
+    picker.set( 'max', playdate )
+    deepEqual( picker.get( 'max' ).obj, playdate, '`max` using a JS date object: ' + playdate )
+    deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
+    deepEqual( picker.get( 'select' ), picker.get( 'max' ), '`select` updated' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'select' ), '`highlight` updated' )
+    strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
+
+    playdate.setDate( 1 )
+    deepEqual( picker.get( 'view' ).obj, playdate, '`view` updated' )
+    deepEqual( picker.get( 'min' ).pick, -Infinity, '`min` unaffected' )
 })
 
+test( '`max` using booleans', function() {
 
+    var picker = this.picker,
+        today = new Date(),
+        playdate = new Date( today.getFullYear(), today.getMonth(), 1 )
 
+    today.setHours(0,0,0,0)
 
-module( 'Date picker keyboard events', {
-    setup: function() {
-        this.$input = $( '<input type=date>' )
-        $DOM.append( this.$input )
-        this.$input.pickadate()
-    },
-    teardown: function() {
-        delete this.$input
-        $DOM.empty()
-    }
+    // Using `true`
+    picker.set( 'max', true )
+    deepEqual( picker.get( 'max' ).obj, today, '`max` using `true`: ' + today )
+    deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
+    deepEqual( picker.get( 'select' ).obj, today, '`select` unaffected' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'select' ), '`highlight` unaffected' )
+    deepEqual( picker.get( 'view' ).obj, playdate, '`view` unaffected' )
+    strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
+    deepEqual( picker.get( 'min' ).pick, -Infinity, '`min` unaffected' )
+
+    // Using `false`
+    picker.set( 'max', false )
+    deepEqual( picker.get( 'max' ).obj, Infinity, '`max` using `false`: ' + Infinity )
+    deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
+    deepEqual( picker.get( 'select' ).obj, today, '`select` unaffected' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'select' ), '`highlight` unaffected' )
+    deepEqual( picker.get( 'view' ).obj, playdate, '`view` unaffected' )
+    strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
+    deepEqual( picker.get( 'min' ).pick, -Infinity, '`min` unaffected' )
 })
 
-test( 'Checking keydown to open and close...', function() {
+test( '`disable` and `enable` using integers', function() {
 
-    ok( !this.$input.pickadate( 'isOpen' ), 'Closed to start with' )
-
-    this.$input.trigger({ type: 'keydown', keyCode: 40 })
-    ok( this.$input.pickadate( 'isOpen' ), 'Opened after pressing "down"' )
-
-    this.$input.trigger({ type: 'keydown', keyCode: 27 })
-    ok( !this.$input.pickadate( 'isOpen' ), 'Closed after pressing "escape"' )
-
-    this.$input.trigger({ type: 'keydown', keyCode: 38 })
-    ok( this.$input.pickadate( 'isOpen' ), 'Opened after pressing "up"' )
-
-    this.$input.trigger({ type: 'keydown', keyCode: 8 })
-    ok( !this.$input.pickadate( 'isOpen' ), 'Closed after pressing "backspace"' )
-
-    this.$input.trigger({ type: 'keydown', keyCode: 37 })
-    ok( this.$input.pickadate( 'isOpen' ), 'Opened after pressing "left"' )
-
-    this.$input.trigger({ type: 'keydown', keyCode: 46 })
-    ok( !this.$input.pickadate( 'isOpen' ), 'Closed after pressing "alt. backspace"' )
-
-    this.$input.trigger({ type: 'keydown', keyCode: 39 })
-    ok( this.$input.pickadate( 'isOpen' ), 'Opened after pressing "right"' )
-})
-
-test( 'Checking keydown to highlight, viewset, and select...', function() {
-
-    var playDate = new Date()
-
-    this.$input.focus()
-    ok( this.$input.pickadate( 'get', 'highlight' ).PICK === new Date().setHours(0,0,0,0), 'Focused in: ' + this.$input.pickadate( 'get', { highlight: 'yyyy-mm-dd' } ) )
-
-    this.$input.trigger({ type: 'keydown', keyCode: 13 })
-    ok( this.$input.pickadate( 'get', 'value' ) === this.$input.pickadate( 'get', { highlight: $.fn.pickadate.defaults.format } ), 'Selected value with "enter": ' + this.$input.pickadate( 'get', 'value' ) )
-    ok( !this.$input.pickadate( 'isOpen' ), 'Closed after selecting' )
-
-
-    // Open the picker
-    this.$input.focus()
-
-    // Down
-    for ( var i = 0; i < 10; i += 1 ) {
-
-        this.$input.trigger({ type: 'keydown', keyCode: 40 })
-        playDate.setDate( playDate.getDate() + 7 )
-        ok( this.$input.pickadate( 'get', 'highlight' ).DATE === playDate.getDate(), 'Keyed "down" to: ' + this.$input.pickadate( 'get', { highlight: 'yyyy-mm-dd' } ) )
-        ok( this.$input.pickadate( 'get', 'view' ).MONTH === this.$input.pickadate( 'get', 'highlight' ).MONTH, 'Updated "view" to: ' + this.$input.pickadate( 'get', { view: 'yyyy-mm-dd' } ) )
-    }
-
-    // Up
-    for ( var j = 0; j < 10; j += 1 ) {
-
-        this.$input.trigger({ type: 'keydown', keyCode: 38 })
-        playDate.setDate( playDate.getDate() - 7 )
-        ok( this.$input.pickadate( 'get', 'highlight' ).DATE === playDate.getDate(), 'Keyed "up" to: ' + this.$input.pickadate( 'get', { highlight: 'yyyy-mm-dd' } ) )
-        ok( this.$input.pickadate( 'get', 'view' ).MONTH === this.$input.pickadate( 'get', 'highlight' ).MONTH, 'Updated "view" to: ' + this.$input.pickadate( 'get', { view: 'yyyy-mm-dd' } ) )
-    }
-
-    // Left
-    for ( var k = 0; k < 10; k += 1 ) {
-
-        this.$input.trigger({ type: 'keydown', keyCode: 37 })
-        playDate.setDate( playDate.getDate() - 1 )
-        ok( this.$input.pickadate( 'get', 'highlight' ).DATE === playDate.getDate() && this.$input.pickadate( 'get', 'highlight' ).DAY === playDate.getDay(), 'Keyed "left" to: ' + this.$input.pickadate( 'get', { highlight: 'yyyy-mm-dd' } ) )
-        ok( this.$input.pickadate( 'get', 'view' ).MONTH === this.$input.pickadate( 'get', 'highlight' ).MONTH, 'Updated "view" to: ' + this.$input.pickadate( 'get', { view: 'yyyy-mm-dd' } ) )
-    }
-
-    // Right
-    for ( var l = 0; l < 10; l += 1 ) {
-
-        this.$input.trigger({ type: 'keydown', keyCode: 39 })
-        playDate.setDate( playDate.getDate() + 1 )
-        ok( this.$input.pickadate( 'get', 'highlight' ).DATE === playDate.getDate() && this.$input.pickadate( 'get', 'highlight' ).DAY === playDate.getDay(), 'Keyed "right" to: ' + this.$input.pickadate( 'get', { highlight: 'yyyy-mm-dd' } ) )
-        ok( this.$input.pickadate( 'get', 'view' ).MONTH === this.$input.pickadate( 'get', 'highlight' ).MONTH, 'Updated "view" to: ' + this.$input.pickadate( 'get', { view: 'yyyy-mm-dd' } ) )
-    }
-})
-
-test( 'Checking keydown to highlight, viewset, and select with disabled dates...', function() {
-
-    var inputPicker = this.$input.pickadate( 'picker' ).open()
-
-    inputPicker.set({
-        disable: [
-            1, 4, 7,
-            [2013,3,29]
-        ]
-    })
-    deepEqual( inputPicker.get( 'disable' ), [1,4,7,[2013,3,29]], 'Correct dates disabled' )
-
-    inputPicker.disableAll()
-    ok( inputPicker.get( 'enable' ) === -1, 'Enabled dates flipped' )
-
-    inputPicker.set({ highlight: [2013,3,29] })
-    ok( inputPicker.get( 'highlight' ).PICK === new Date(2013,3,29).getTime(), 'Highlighted ' + inputPicker.get({ highlight: 'yyyy-mm-dd' }) )
-
-    this.$input.trigger({ type: 'keydown', keyCode: 40 })
-    ok( inputPicker.get( 'highlight' ).PICK === new Date(2013,4,8).getTime(), 'Highlight keyed "down" to ' + inputPicker.get({ highlight: 'yyyy-mm-dd' }) )
-
-    inputPicker.set({ highlight: [2013,3,29] })
-    ok( inputPicker.get( 'highlight' ).PICK === new Date(2013,3,29).getTime(), 'Highlighted ' + inputPicker.get({ highlight: 'yyyy-mm-dd' }) )
-
-    this.$input.trigger({ type: 'keydown', keyCode: 38 })
-    ok( inputPicker.get( 'highlight' ).PICK === new Date(2013,3,21).getTime(), 'Highlight keyed "up" to ' + inputPicker.get({ highlight: 'yyyy-mm-dd' }) )
-
-    inputPicker.set({ highlight: [2013,3,29] })
-    ok( inputPicker.get( 'highlight' ).PICK === new Date(2013,3,29).getTime(), 'Highlighted ' + inputPicker.get({ highlight: 'yyyy-mm-dd' }) )
-
-    this.$input.trigger({ type: 'keydown', keyCode: 39 })
-    ok( inputPicker.get( 'highlight' ).PICK === new Date(2013,4,1).getTime(), 'Highlight keyed "right" to ' + inputPicker.get({ highlight: 'yyyy-mm-dd' }) )
-
-    inputPicker.set({ highlight: [2013,3,29] })
-    ok( inputPicker.get( 'highlight' ).PICK === new Date(2013,3,29).getTime(), 'Highlighted ' + inputPicker.get({ highlight: 'yyyy-mm-dd' }) )
-
-    this.$input.trigger({ type: 'keydown', keyCode: 37 })
-    ok( inputPicker.get( 'highlight' ).PICK === new Date(2013,3,28).getTime(), 'Highlight keyed "left" to ' + inputPicker.get({ highlight: 'yyyy-mm-dd' }) )
-
-    this.$input.trigger({ type: 'keydown', keyCode: 37 })
-    ok( inputPicker.get( 'highlight' ).PICK === new Date(2013,3,27).getTime(), 'Highlight keyed "left" to ' + inputPicker.get({ highlight: 'yyyy-mm-dd' }) )
-
-    this.$input.trigger({ type: 'keydown', keyCode: 37 })
-    ok( inputPicker.get( 'highlight' ).PICK === new Date(2013,3,24).getTime(), 'Highlight keyed "left" to ' + inputPicker.get({ highlight: 'yyyy-mm-dd' }) )
-})
-
-
-
-
-module( 'Date picker with a `value`', {
-    setup: function() {
-        this.$input = $( '<input type=date value="14 August, 1988">' )
-        $DOM.append( this.$input )
-        this.$input.pickadate()
-    },
-    teardown: function() {
-        delete this.$input
-        $DOM.empty()
-    }
-})
-
-test( 'Checking input `value` to set date...', function() {
-
-    ok( !this.$input.siblings( '[type=hidden]' ).length, 'There is no hidden input' )
-
-    var selectedObject = this.$input.pickadate( 'get', 'select' )
-    ok( [selectedObject.YEAR,selectedObject.MONTH,selectedObject.DATE].toString() === [1988,7,14].toString(), 'Sets correct date' )
-
-    var highlightedObject = this.$input.pickadate( 'get', 'highlight' )
-    ok( [highlightedObject.YEAR,highlightedObject.MONTH,highlightedObject.DATE].toString() === [1988,7,14].toString(), 'Highlights correct date' )
-
-    var viewsetObject = this.$input.pickadate( 'get', 'view' )
-    ok( [viewsetObject.YEAR,viewsetObject.MONTH,viewsetObject.DATE].toString() === [1988,7,1].toString(), 'Viewsets correct date' )
-})
-
-
-
-
-module( 'Date picker with a `data-value`', {
-    setup: function() {
-        this.$input = $( '<input type=date data-value="1988/08/14">' )
-        $DOM.append( this.$input )
-        this.$input.pickadate({
-            formatSubmit: 'yyyy/mm/dd'
-        })
-    },
-    teardown: function() {
-        delete this.$input
-        $DOM.empty()
-    }
-})
-
-test( 'Checking input `data-value` to set date...', function() {
-
-    var hiddenElement = this.$input.siblings( '[type=hidden]' )[ 0 ]
-    ok( hiddenElement.type === 'hidden', 'There is a hidden input' )
-    ok( hiddenElement.value === '1988/08/14', 'The hidden input has correct value' )
-
-    var selectedObject = this.$input.pickadate( 'get', 'select' )
-    ok( [selectedObject.YEAR,selectedObject.MONTH,selectedObject.DATE].toString() === [1988,7,14].toString(), 'Selects correct date' )
-
-    var highlightedObject = this.$input.pickadate( 'get', 'highlight' )
-    ok( [highlightedObject.YEAR,highlightedObject.MONTH,highlightedObject.DATE].toString() === [1988,7,14].toString(), 'Highlights correct date' )
-
-    var viewsetObject = this.$input.pickadate( 'get', 'view' )
-    ok( [viewsetObject.YEAR,viewsetObject.MONTH,viewsetObject.DATE].toString() === [1988,7,1].toString(), 'Viewsets correct date' )
-})
-
-
-
-
-module( 'Date picker `get` and `set` properties', {
-    setup: function() {
-        this.$input = $( '<input type=date>' )
-        $DOM.append( this.$input )
-        this.$input.pickadate()
-    },
-    teardown: function() {
-        delete this.$input
-        $DOM.empty()
-    }
-})
-
-test( 'Setting `min` & `max` with arrays...', function() {
-
-    this.$input.pickadate( 'set', { select: [1988,7,14] } )
-    var selectedObject = this.$input.pickadate( 'get', 'select' )
-    ok( [selectedObject.YEAR,selectedObject.MONTH,selectedObject.DATE].toString() === [1988,7,14].toString(), 'Selects date correctly' )
-
-    this.$input.pickadate( 'set', { highlight: [1988,7,16] } )
-    var highlightedObject = this.$input.pickadate( 'get', 'highlight' )
-    ok( [highlightedObject.YEAR,highlightedObject.MONTH,highlightedObject.DATE].toString() === [1988,7,16].toString(), 'Highlights date correctly' )
-
-    this.$input.pickadate( 'set', { view: [1988,7,18] } )
-    var viewsetObject = this.$input.pickadate( 'get', 'view' )
-    ok( [viewsetObject.YEAR,viewsetObject.MONTH,viewsetObject.DATE].toString() === [1988,7,1].toString(), 'Adjusts view correctly' )
-
-    this.$input.pickadate( 'set', { min: [1988,7,12] } )
-    var minObject = this.$input.pickadate( 'get', 'min' )
-    ok( [minObject.YEAR,minObject.MONTH,minObject.DATE].toString() === [1988,7,12].toString(), 'Sets min limit correctly' )
-
-    this.$input.pickadate( 'set', { max: [1988,7,20] } )
-    var maxObject = this.$input.pickadate( 'get', 'max' )
-    ok( [maxObject.YEAR,maxObject.MONTH,maxObject.DATE].toString() === [1988,7,20].toString(), 'Sets max limit correctly' )
-})
-
-test( 'Setting `min` & `max` with integers...', function() {
-
-    var nowObject = this.$input.pickadate( 'get', 'now' )
-
-    this.$input.pickadate( 'set', { min: 3 } )
-    var minObject = this.$input.pickadate( 'get', 'min' )
-    ok( minObject.YEAR === nowObject.YEAR && minObject.MONTH === nowObject.MONTH && minObject.DATE === nowObject.DATE + 3, 'Sets positive min limit correctly' )
-
-    this.$input.pickadate( 'set', { min: -3 } )
-    minObject = this.$input.pickadate( 'get', 'min' )
-    ok( minObject.YEAR === nowObject.YEAR && minObject.MONTH === nowObject.MONTH && minObject.DATE === nowObject.DATE - 3, 'Sets negative min limit correctly' )
-
-    this.$input.pickadate( 'set', { max: 3 } )
-    var maxObject = this.$input.pickadate( 'get', 'max' )
-    ok( maxObject.YEAR === nowObject.YEAR && maxObject.MONTH === nowObject.MONTH && maxObject.DATE === nowObject.DATE + 3, 'Sets positive max limit correctly' )
-
-    this.$input.pickadate( 'set', { max: -3 } )
-    maxObject = this.$input.pickadate( 'get', 'max' )
-    ok( maxObject.YEAR === nowObject.YEAR && maxObject.MONTH === nowObject.MONTH && maxObject.DATE === nowObject.DATE - 3, 'Sets negative max limit correctly' )
-})
-
-test( 'Setting `min` & `max` with booleans...', function() {
-
-    this.$input.pickadate( 'set', { min: true } )
-    ok( this.$input.pickadate( 'get', 'min' ).PICK === this.$input.pickadate( 'get', 'now' ).PICK, 'Sets min limit correctly' )
-
-    this.$input.pickadate( 'set', { max: true } )
-    ok( this.$input.pickadate( 'get', 'max' ).PICK === this.$input.pickadate( 'get', 'now' ).PICK, 'Sets max limit correctly' )
-})
-
-test( 'Setting `disable` with integers...', function() {
-
-    var //today = new Date(),
+    var today = new Date(),
         disableCollection = [1,4,7],
-        $input = this.$input,
-        $holder = $input.pickadate( 'picker' ).$holder
+        picker = this.picker,
+        $holder = picker.$holder
 
-    if ( disableCollection.indexOf( $input.pickadate( 'get', 'select' ).DAY + 1 ) > -1 ) {
-        console.log( 'check if will move', $input.pickadate( 'get', 'select' ) )
+    today.setHours(0,0,0,0)
+
+    picker.set( 'disable', disableCollection )
+
+    if ( disableCollection.indexOf( today.getDay() + 1 ) > -1 ) {
+        notDeepEqual( picker.get( 'select' ), picker.get( 'now' ), 'Shifted disabled `select`: ' + picker.get( 'select' ).obj )
     }
 
-    $input.pickadate( 'set', { disable: disableCollection } )
-
-    ok( $input.pickadate( 'get', 'disable' ).toString() === disableCollection.toString(), 'Disabled dates added to collection' )
+    deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled dates added to collection' )
 
     $holder.find( 'tr' ).each( function( indexRow, tableRow ) {
         $( tableRow ).find( '[data-pick]' ).each( function( indexCell, tableCell ) {
@@ -507,8 +401,8 @@ test( 'Setting `disable` with integers...', function() {
         })
     })
 
-    $input.pickadate( 'set', { enable: [1] } )
-    ok( $input.pickadate( 'get', 'disable' ).toString() === [4,7].toString(), 'Disabled time removed from collection' )
+    picker.set( 'enable', [1] )
+    deepEqual( picker.get( 'disable' ), [4,7], 'Disabled time removed from collection' )
 
     $holder.find( 'tr' ).each( function( indexRow, tableRow ) {
         $( tableRow ).find( '[data-pick]' ).each( function( indexCell, tableCell ) {
@@ -522,18 +416,19 @@ test( 'Setting `disable` with integers...', function() {
     })
 })
 
-test( 'Setting `disable` with arrays...', function() {
+test( '`disable` and `enable` using arrays', function() {
 
     var now = new Date()
         nowYear = now.getFullYear(),
         nowMonth = now.getMonth(),
         disableCollection = [ [nowYear,nowMonth,1],[nowYear,nowMonth,17],[nowYear,nowMonth,25] ],
-        firstDay = this.$input.pickadate( 'get', 'view' ).DAY,
-        $holder = this.$input.pickadate( 'picker' ).$holder
+        picker = this.picker,
+        firstDay = picker.get( 'view' ).day,
+        $holder = picker.$holder
 
 
-    this.$input.pickadate( 'set', { disable: disableCollection } )
-    ok( this.$input.pickadate( 'get', 'disable' ).toString() === disableCollection.toString(), 'Disabled dates added to collection' )
+    picker.set( { disable: disableCollection } )
+    deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled dates added to collection' )
 
     $holder.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
         var index = indexCell - 1 + firstDay
@@ -546,8 +441,8 @@ test( 'Setting `disable` with arrays...', function() {
     })
 
 
-    this.$input.pickadate( 'set', { enable: [ [nowYear,nowMonth,17] ] } )
-    ok( this.$input.pickadate( 'get', 'disable' ).toString() === [ [nowYear,nowMonth,1],[nowYear,nowMonth,25] ].toString(), 'Disabled date removed from collection' )
+    picker.set( { enable: [ [nowYear,nowMonth,17] ] } )
+    deepEqual( picker.get( 'disable' ), [ [nowYear,nowMonth,1],[nowYear,nowMonth,25] ], 'Disabled date removed from collection' )
 
     $holder.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
         var index = indexCell - 1 + firstDay
@@ -560,33 +455,226 @@ test( 'Setting `disable` with arrays...', function() {
     })
 })
 
-test( 'Setting `select` with arrays...', function() {
 
-    var now = new Date()
-        nowYear = now.getFullYear(),
-        nowMonth = now.getMonth()
 
-    this.$input.pickadate( 'set', { select: [nowYear,nowMonth,9] } )
-    ok( this.$input.pickadate( 'get', 'select' ).PICK === new Date(nowYear,nowMonth,9).getTime(), 'Selects date correctly' )
+
+module( 'Date picker mouse events', {
+    setup: function() {
+        var $input = $INPUT.clone().pickadate()
+        $DOM.append( $input )
+        this.picker = $input.pickadate( 'picker' )
+    },
+    teardown: function() {
+        this.picker.stop()
+        $DOM.empty()
+    }
 })
 
-test( 'Setting `highlight` with arrays...', function() {
+test( 'Select', function() {
 
-    var now = new Date()
-        nowYear = now.getFullYear(),
-        nowMonth = now.getMonth()
+    var picker = this.picker,
+        $holder = picker.$holder,
+        viewsetObject = picker.get( 'view' ),
+        interval = 86400000,
+        monthStart = viewsetObject.day,
+        monthEnd = new Date()
 
-    this.$input.pickadate( 'set', { highlight: [nowYear,nowMonth,13] } )
-    ok( this.$input.pickadate( 'get', 'highlight' ).PICK === new Date(nowYear,nowMonth,13).getTime(), 'Highlights date correctly' )
+    monthEnd.setMonth( monthEnd.getMonth() + 1 )
+    monthEnd.setDate( 0 )
+
+    for ( var i = monthStart; i <= monthEnd.getDate(); i += 1 ) {
+        $holder.find( '.' + $.fn.pickadate.defaults.klass.day ).eq( i ).click()
+        ok( picker.get( 'select' ).pick === viewsetObject.pick + ( i - 1 ) * interval, 'Selected ' + picker.get( 'select', 'yyyy/mm/dd' ) )
+        ok( picker.get( 'value' ) === picker.get( 'select', $.fn.pickadate.defaults.format ), 'Input value updated to ' + picker.get( 'value' ) )
+    }
 })
 
-test( 'Setting `view` with arrays...', function() {
+test( 'Highlight', function() {
 
-    var now = new Date()
-        nowYear = now.getFullYear(),
-        nowMonth = now.getMonth()
+    var picker = this.picker,
+        $holder = picker.$holder,
+        today = new Date(),
+        playdate = new Date()
 
-    this.$input.pickadate( 'set', { view: [nowYear,nowMonth,-10] } )
-    ok( this.$input.pickadate( 'get', 'view' ).MONTH === nowMonth - 1, 'View month updated correctly' )
-    ok( this.$input.pickadate( 'get', 'view' ).DATE === 1, 'View date updated correctly' )
+    today.setHours(0,0,0,0)
+    playdate.setHours(0,0,0,0)
+
+    $holder.find( '.' + $.fn.pickadate.defaults.klass.navPrev ).click()
+    playdate.setMonth( playdate.getMonth() - 1 )
+    deepEqual( picker.get( 'highlight' ).obj, playdate, 'Previous month: ' + playdate )
+    deepEqual( picker.get( 'select' ).obj, today, 'Select unaffected' )
+
+    playdate.setDate( 1 )
+    deepEqual( picker.get( 'view' ).obj, playdate, 'View updated' )
+
+    $holder.find( '.' + $.fn.pickadate.defaults.klass.navNext ).click()
+    $holder.find( '.' + $.fn.pickadate.defaults.klass.navNext ).click()
+    playdate.setMonth( today.getMonth() + 1 )
+    playdate.setDate( today.getDate() )
+    deepEqual( picker.get( 'highlight' ).obj, playdate, 'Next month: ' + playdate )
+    deepEqual( picker.get( 'select' ).obj, today, 'Select unaffected' )
+
+    playdate.setDate( 1 )
+    deepEqual( picker.get( 'view' ).obj, playdate, 'View updated' )
 })
+
+test( 'Today', function() {
+
+    var picker = this.picker
+
+    picker.$holder.find( '.' + $.fn.pickadate.defaults.klass.buttonToday ).click()
+    ok( picker.get( 'value' ) === picker.get( 'select', $.fn.pickadate.defaults.format ), 'Value set to today' )
+})
+
+test( 'Clear', function() {
+
+    var picker = this.picker
+
+    picker.set( 'select', new Date() )
+    ok( picker.get( 'value' ) === picker.get( 'select', $.fn.pickadate.defaults.format ), 'Value updated' )
+
+    picker.$holder.find( '.' + $.fn.pickadate.defaults.klass.buttonClear ).click()
+    ok( picker.get( 'value' ) === '', 'Value cleared' )
+})
+
+
+
+
+module( 'Date picker keyboard events', {
+    setup: function() {
+        var $input = $INPUT.clone().pickadate()
+        $DOM.append( $input )
+        this.picker = $input.pickadate( 'picker' )
+    },
+    teardown: function() {
+        this.picker.stop()
+        $DOM.empty()
+    }
+})
+
+test( 'Select', function() {
+
+    var picker = this.picker,
+        $input = picker.$node,
+        playdate = new Date()
+
+    playdate.setHours(0,0,0,0)
+
+    for ( var i = 0; i < 10; i += 1 ) {
+
+        // Open the picker.
+        picker.open()
+
+        // Update the playdate.
+        playdate.setDate( playdate.getDate() + 10 )
+
+        // Set the highlight.
+        picker.set( 'highlight', playdate )
+
+        // Keydown to select the highlighted item.
+        $input.trigger({ type: 'keydown', keyCode: 13 })
+
+        // Check if the select is the same as the highlight.
+        deepEqual( picker.get( 'select' ), picker.get( 'highlight' ), 'Select updated to: ' + picker.get( 'select' ).obj )
+    }
+})
+
+test( 'Highlight', function() {
+
+    var picker = this.picker,
+        $input = picker.$node,
+        playdate = new Date()
+
+    // Open the picker
+    picker.open()
+
+    // Down
+    for ( var i = 0; i < 10; i += 1 ) {
+
+        $input.trigger({ type: 'keydown', keyCode: 40 })
+        playdate.setDate( playdate.getDate() + 7 )
+        ok( picker.get( 'highlight' ).date === playdate.getDate(), 'Keyed "down" to: ' + picker.get( 'highlight', 'yyyy/mm/dd' ) )
+        ok( picker.get( 'view' ).month === picker.get( 'highlight' ).month, 'Updated "view" to: ' + picker.get( 'view', 'yyyy/mm/dd' ) )
+    }
+
+    // Up
+    for ( var j = 0; j < 10; j += 1 ) {
+
+        $input.trigger({ type: 'keydown', keyCode: 38 })
+        playdate.setDate( playdate.getDate() - 7 )
+        ok( picker.get( 'highlight' ).date === playdate.getDate(), 'Keyed "up" to: ' + picker.get( 'highlight', 'yyyy/mm/dd' ) )
+        ok( picker.get( 'view' ).month === picker.get( 'highlight' ).month, 'Updated "view" to: ' + picker.get( 'view', 'yyyy/mm/dd' ) )
+    }
+
+    // Left
+    for ( var k = 0; k < 10; k += 1 ) {
+
+        $input.trigger({ type: 'keydown', keyCode: 37 })
+        playdate.setDate( playdate.getDate() - 1 )
+        ok( picker.get( 'highlight' ).date === playdate.getDate() && picker.get( 'highlight' ).day === playdate.getDay(), 'Keyed "left" to: ' + picker.get( 'highlight', 'yyyy/mm/dd' ) )
+        ok( picker.get( 'view' ).month === picker.get( 'highlight' ).month, 'Updated "view" to: ' + picker.get( 'view', 'yyyy/mm/dd' ) )
+    }
+
+    // Right
+    for ( var l = 0; l < 10; l += 1 ) {
+
+        $input.trigger({ type: 'keydown', keyCode: 39 })
+        playdate.setDate( playdate.getDate() + 1 )
+        ok( picker.get( 'highlight' ).date === playdate.getDate() && picker.get( 'highlight' ).day === playdate.getDay(), 'Keyed "right" to: ' + picker.get( 'highlight', 'yyyy/mm/dd' ) )
+        ok( picker.get( 'view' ).month === picker.get( 'highlight' ).month, 'Updated "view" to: ' + picker.get( 'view', 'yyyy/mm/dd' ) )
+    }
+})
+
+
+
+
+module( 'Date picker with a `value`', {
+    setup: function() {
+        var $input = $INPUT.clone().val( '14 August, 1988' ).pickadate()
+        $DOM.append( $input )
+        this.picker = $input.pickadate( 'picker' )
+    },
+    teardown: function() {
+        this.picker.stop()
+        $DOM.empty()
+    }
+})
+
+test( '`value` to select, highlight, and view', function() {
+    var picker = this.picker
+    ok( !picker._hidden, 'No hidden input' )
+    deepEqual( picker.get( 'select' ).obj, new Date(1988,7,14), 'Selects date' )
+    deepEqual( picker.get( 'highlight' ).obj, new Date(1988,7,14), 'Highlights date' )
+    deepEqual( picker.get( 'view' ).obj, new Date(1988,7,1), 'Viewsets date' )
+})
+
+
+
+
+module( 'Date picker with a `data-value`', {
+    setup: function() {
+        var $input = $INPUT.clone().data( 'value', '1988/08/14' ).pickadate({
+            formatSubmit: 'yyyy/mm/dd'
+        })
+        $DOM.append( $input )
+        this.picker = $input.pickadate( 'picker' )
+    },
+    teardown: function() {
+        this.picker.stop()
+        $DOM.empty()
+    }
+})
+
+test( '`data-value` to select, highlight, and view', function() {
+
+    var picker = this.picker
+
+    ok( picker._hidden, 'Has hidden input' )
+    ok( picker._hidden.value === '1988/08/14', 'Hidden input value' )
+    deepEqual( picker.get( 'select' ).obj, new Date(1988,7,14), 'Selects date' )
+    deepEqual( picker.get( 'highlight' ).obj, new Date(1988,7,14), 'Highlights date' )
+    deepEqual( picker.get( 'view' ).obj, new Date(1988,7,1), 'Viewsets date' )
+})
+
+
+

@@ -4,11 +4,14 @@
     devel: true,
     browser: true,
     asi: true,
-    unused: true
+    unused: true,
+    eqnull: true,
+    eqeqeq: true
  */
 
 
-var $DOM = $( '#qunit-fixture' )
+var $DOM = $( '#qunit-fixture' ),
+    $INPUT = $( '<input type=password>' )
 
 
 
@@ -17,496 +20,285 @@ var $DOM = $( '#qunit-fixture' )
    ========================================================================== */
 
 
-module( 'Time picker stage setup', {
+module( 'Time picker setup', {
     setup: function() {
-        this.$input = $( '<input type=time>' )
-        $DOM.append( this.$input )
-        this.$input.pickatime()
+        var $input = $INPUT.clone().pickatime()
+        $DOM.append( $input )
+        this.picker = $input.pickatime( 'picker' )
     },
     teardown: function() {
-        delete this.$input
+        this.picker.stop()
         $DOM.empty()
     }
 })
 
-test( 'Checking holder states...', function () {
-
-    ok( this.$input.pickatime( 'isOpen' ) === false, 'Closed by default' )
-
-    this.$input.pickatime( 'open' )
-    ok( this.$input.pickatime( 'isOpen' ) === true, 'Opened with trigger' )
-
-    this.$input.pickatime( 'close' )
-    ok( this.$input.pickatime( 'isOpen' ) === false, 'Closed by trigger' )
-
-    this.$input.focus()
-    ok( this.$input.pickatime( 'isOpen' ) === true, 'Opened with focus' )
-
-    this.$input.blur()
-    $( 'body' ).focus()
-    ok( this.$input.pickatime( 'isOpen' ) === false, 'Closed by losing focus' )
-
-    this.$input.click()
-    ok( this.$input.pickatime( 'isOpen' ) === true, 'Opened with click' )
-
-    $( 'body' ).click()
-    ok( this.$input.pickatime( 'isOpen' ) === false, 'Closed by clicking outside' )
+test( 'Clock stage', function() {
+    ok( this.picker.$holder.find( '[data-pick]' ).length === 48, '48 selectable times' )
 })
 
-test( 'Checking input attributes...', function() {
-    ok( this.$input[ 0 ].type === 'text', 'Input type updated' )
-    ok( this.$input[ 0 ].readOnly === true, 'Input is readonly' )
-    ok( this.$input.pickatime( 'get', 'select' ).PICK === this.$input.pickatime( 'get', 'min' ).PICK, 'Default selected time is correct' )
-})
+test( 'Properties', function() {
 
-test( 'Checking picker holder...', function() {
-    var $holder = this.$input.pickatime( 'picker' ).$holder
-    ok( $holder.length, 'There is a picker holder right after the input element' )
-    ok( $holder.find( '[data-pick]' ).length === 48, 'There are 48 selectable times at 30 minute intervals' )
-})
+    var picker = this.picker,
+        today = new Date(),
+        interval = picker.get( 'interval' ),
+        nowMinutes = today.getHours() * 60 + today.getMinutes()
 
-test( 'Checking picker objects...', function() {
-    var nowDateObject = new Date(),
-        nowTimeMinutes = nowDateObject.getHours() * 60 + nowDateObject.getMinutes(),
-        interval = this.$input.pickatime( 'get', 'interval' )
-    ok( interval === 30, 'Default interval is 30' )
-    ok( this.$input.pickatime( 'get', 'now' ).PICK === interval + nowTimeMinutes - ( nowTimeMinutes % interval ), 'Now time is correct at ' + this.$input.pickatime( 'get', 'now' ).HOUR + ':' + this.$input.pickatime( 'get', 'now' ).MINS )
-    ok( !this.$input.pickatime( 'get', 'disable' ).length, 'No disabled times' )
-    ok( this.$input.pickatime( 'get', 'min' ).PICK === 0, 'Selected time is midnight' )
-    ok( this.$input.pickatime( 'get', 'min' ).PICK === 0, 'Min time is midnight' )
-    ok( this.$input.pickatime( 'get', 'max' ).PICK === 1410, 'Max time is 23:30' )
+    strictEqual( interval, 30, 'Default interval is 30' )
+
+    strictEqual( picker.get( 'min' ).pick, 0, 'Default “min” is midnight' )
+    strictEqual( picker.get( 'max' ).pick, 1410, 'Default “max” is 23:30' )
+    strictEqual( picker.get( 'now' ).pick, interval + nowMinutes - ( nowMinutes % interval ), 'Default “now” is: ' + picker.get( 'now', 'HH:i' ) )
+    deepEqual( picker.get( 'select' ), picker.get( 'min' ), 'Default “select” is “min”' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'select' ), 'Default “highlight” is “select”' )
+    deepEqual( picker.get( 'view' ), picker.get( 'highlight' ), 'Default “view” is “highlight”' )
 })
 
 
 
 
-module( 'Time picker general events', {
+module( 'Time picker `set`', {
     setup: function() {
-        var thisModule = this
-        thisModule.$input = $( '<input type=time>' )
-        $DOM.append( thisModule.$input )
-        thisModule.$input.pickatime({
-            onStart: function() {
-                thisModule.started = true
-                thisModule.restarted = thisModule.stopped && thisModule.started
-                thisModule.updatedType = thisModule.$input[ 0 ].type === 'text'
-            },
-            onRender: function() {
-                thisModule.rendered = true
-            },
-            onOpen: function() {
-                thisModule.opened = true
-            },
-            onClose: function() {
-                thisModule.closed = true
-            },
-            onSet: function() {
-                thisModule.selectedArray = this.get( 'select' ).PICK === 600
-                thisModule.selectedNumber = this.get( 'select' ).PICK === 120
-                thisModule.clearedValue = this.get( 'value' ) === ''
-            },
-            onStop: function() {
-                thisModule.stopped = true
-                thisModule.restoredType = thisModule.$input[ 0 ].type === 'time'
-            }
-        })
+        var $input = $INPUT.clone().pickatime()
+        $DOM.append( $input )
+        this.picker = $input.pickatime( 'picker' )
     },
     teardown: function() {
-        delete this.$input
+        this.picker.stop()
         $DOM.empty()
     }
 })
 
-test( 'Checking the basic events...', function() {
+test( '`select`', function() {
 
-    ok( this.started, 'Started up fine' )
-    ok( this.updatedType, 'Updated the element type' )
+    var picker = this.picker
 
-    ok( this.rendered, 'Rendered correctly' )
+    // Using numbers
+    picker.set( 'select', 180 )
+    ok( picker.get( 'select' ).pick === 180, '`select` using a number: ' + picker.get( 'select', 'HH:i' ) )
+    ok( picker.get( 'highlight' ).pick === 0, '`highlight` unaffected' )
+    ok( picker.get( 'view' ).pick === 0, '`view` unaffected' )
+    ok( picker.get( 'min' ).pick === 0, '`min` unaffected' )
+    ok( picker.get( 'max' ).pick === 1410, '`max` unaffected' )
 
-    this.$input.pickatime( 'open' )
-    ok( this.opened, 'Opened just fine with a trigger' )
-
-    this.$input.pickatime( 'close' )
-    ok( this.closed, 'Closed just fine with a trigger' )
-
-    this.$input.pickatime( 'stop' )
-    ok( this.stopped, 'Stopped just fine' )
-    ok( this.restoredType, 'Restored the element type' )
-
-    this.$input.pickatime( 'start' )
-    ok( this.restarted, 'Restarted just fine' )
-    ok( this.updatedType, 'Updated the element type' )
+    // Using arrays
+    picker.set( 'select', [9,0] )
+    ok( picker.get( 'select' ).pick === 540, '`select` using an array: ' + picker.get( 'select', 'HH:i' ) )
+    ok( picker.get( 'highlight' ).pick === 0, '`highlight` unaffected' )
+    ok( picker.get( 'view' ).pick === 0, '`view` unaffected' )
+    ok( picker.get( 'min' ).pick === 0, '`min` unaffected' )
+    ok( picker.get( 'max' ).pick === 1410, '`max` unaffected' )
 })
 
-test( 'Checking the `set` events...', function() {
+test( '`highlight`', function() {
 
-    this.$input.pickatime( 'set', { select: [10,0] } )
-    ok( this.selectedArray, 'Selected from an array' )
+    var picker = this.picker
 
-    this.$input.pickatime( 'set', { select: 120 } )
-    ok( this.selectedNumber, 'Selected from a number' )
+    // Using numbers
+    picker.set( 'highlight', 180 )
+    ok( picker.get( 'highlight' ).pick === 180, '`highlight` using a number: ' + picker.get( 'highlight', 'HH:i' ) )
+    deepEqual( picker.get( 'view' ), picker.get( 'highlight' ), '`view` updated' )
+    ok( picker.get( 'select' ).pick === 0, '`select` unaffected' )
+    ok( picker.get( 'min' ).pick === 0, '`min` unaffected' )
+    ok( picker.get( 'max' ).pick === 1410, '`max` unaffected' )
 
-    this.$input.pickatime( 'clear' )
-    ok( this.clearedValue, 'Cleared the input value' )
+    // Using arrays
+    picker.set( 'highlight', [9,0] )
+    ok( picker.get( 'highlight' ).pick === 540, '`highlight` using an array: ' + picker.get( 'highlight', 'HH:i' ) )
+    deepEqual( picker.get( 'view' ), picker.get( 'highlight' ), '`view` updated' )
+    ok( picker.get( 'select' ).pick === 0, '`select` unaffected' )
+    ok( picker.get( 'min' ).pick === 0, '`min` unaffected' )
+    ok( picker.get( 'max' ).pick === 1410, '`max` unaffected' )
 })
 
+test( '`view`', function() {
+
+    var picker = this.picker
+
+    // Using numbers
+    picker.set( 'view', 180 )
+    ok( picker.get( 'view' ).pick === 180, '`view` using a number: ' + picker.get( 'view', 'HH:i' ) )
+    ok( picker.get( 'highlight' ).pick === 0, '`highlight` unaffected' )
+    ok( picker.get( 'select' ).pick === 0, '`select` unaffected' )
+    ok( picker.get( 'min' ).pick === 0, '`min` unaffected' )
+    ok( picker.get( 'max' ).pick === 1410, '`max` unaffected' )
+
+    // Using arrays
+    picker.set( 'view', [9,0] )
+    ok( picker.get( 'view' ).pick === 540, '`view` using an array: ' + picker.get( 'view', 'HH:i' ) )
+    ok( picker.get( 'highlight' ).pick === 0, '`highlight` unaffected' )
+    ok( picker.get( 'select' ).pick === 0, '`select` unaffected' )
+    ok( picker.get( 'min' ).pick === 0, '`min` unaffected' )
+    ok( picker.get( 'max' ).pick === 1410, '`max` unaffected' )
+})
+
+test( '`min` relative', function() {
+
+    var picker = this.picker,
+        interval = 30
+
+    // Using negative numbers
+    picker.set( 'min', -3 )
+    strictEqual( picker.get( 'min' ).pick, picker.get( 'now' ).pick + ( interval * -3 ), '`min` using a negative number: ' + picker.get( 'min', 'HH:i' ) )
+
+    if ( picker.get( 'min' ).pick > 0 ) {
+        deepEqual( picker.get( 'select' ), picker.get( 'min' ), '`select` updated' )
+        deepEqual( picker.get( 'highlight' ), picker.get( 'min' ), '`highlight` updated' )
+        deepEqual( picker.get( 'view' ), picker.get( 'min' ), '`view` updated' )
+    }
+    else {
+        strictEqual( picker.get( 'select' ).pick, 0, '`select` unaffected' )
+        strictEqual( picker.get( 'highlight' ).pick, 0, '`highlight` unaffected' )
+        strictEqual( picker.get( 'view' ).pick, 0, '`view` unaffected' )
+    }
+    ok( picker.get( 'max' ).pick === 1410, '`max` unaffected' )
 
 
+    // Using positive numbers
+    picker.set( 'min', 3 )
+    strictEqual( picker.get( 'min' ).pick, picker.get( 'now' ).pick + ( interval * 3 ), '`min` using a positive number: ' + picker.get( 'min', 'HH:i' ) )
 
-module( 'Time picker mouse events', {
-    setup: function() {
-        this.$input = $( '<input type=time>' )
-        $DOM.append( this.$input )
-        this.$input.pickatime()
-    },
-    teardown: function() {
-        delete this.$input
-        $DOM.empty()
+    deepEqual( picker.get( 'select' ), picker.get( 'min' ), '`select` updated' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'min' ), '`highlight` updated' )
+    deepEqual( picker.get( 'view' ), picker.get( 'min' ), '`view` updated' )
+
+    if ( picker.get( 'min' ).pick > 1410 ) {
+        ok( picker.get( 'max' ).pick === 1410 + 1440, '`max` updated' )
+    }
+    else {
+        ok( picker.get( 'max' ).pick === 1410, '`max` unaffected' )
     }
 })
 
-test( 'Checking click to open and close...', function() {
+test( '`min` now', function() {
 
-    ok( !this.$input.pickatime( 'isOpen' ), 'Closed to start with' )
+    var picker = this.picker
 
-    this.$input.click()
-    ok( this.$input.pickatime( 'isOpen' ), 'Opened after click' )
+    // Boolean true
+    picker.set( 'min', true )
+    deepEqual( picker.get( 'min' ), picker.get( 'now' ), '`min` using `true`: ' + picker.get( 'min', 'HH:i' ) )
+    deepEqual( picker.get( 'select' ), picker.get( 'min' ), '`select` updated' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'min' ), '`highlight` updated' )
+    deepEqual( picker.get( 'view' ), picker.get( 'min' ), '`view` updated' )
+    deepEqual( picker.get( 'max' ).pick, 1410, '`max` unaffected' )
 })
 
-test( 'Checking click to select...', function() {
+test( '`min` specific', function() {
 
-    var $holder = this.$input.pickatime( 'picker' ).$holder,
-        interval = this.$input.pickatime( 'get', 'interval' )
+    var picker = this.picker
 
-    for ( var i = 0; i < 48; i += 1 ) {
-        $holder.find( '.' + $.fn.pickatime.defaults.klass.listItem ).eq( i ).click()
-        ok( this.$input.pickatime( 'get', 'select' ).PICK === i * interval, 'Selected ' + this.$input.pickatime( 'get', { select: 'h:i A' } ) )
-        ok( this.$input.pickatime( 'get', 'value' ) === this.$input.pickatime( 'get', { select: 'h:i A' } ), 'Input value updated to ' + this.$input.pickatime( 'get', 'value' ) )
+    picker.set( 'min', [2,0] )
+    strictEqual( picker.get( 'min' ).pick, 120, '`min` using an array: ' + picker.get( 'min', 'HH:i' ) )
+    deepEqual( picker.get( 'select' ), picker.get( 'min' ), '`select` updated' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'min' ), '`highlight` updated' )
+    deepEqual( picker.get( 'view' ), picker.get( 'min' ), '`view` updated' )
+    deepEqual( picker.get( 'max' ).pick, 1410, '`max` unaffected' )
+})
+
+test( '`max` relative', function() {
+
+    var picker = this.picker,
+        interval = 30
+
+    // Using positive numbers
+    picker.set( 'max', 3 )
+    strictEqual( picker.get( 'max' ).pick, picker.get( 'now' ).pick + ( interval * 3 ), '`max` using a positive number: ' + picker.get( 'max', 'HH:i' ) )
+
+    strictEqual( picker.get( 'min' ).pick, 0, '`min` unaffected' )
+    deepEqual( picker.get( 'select' ), picker.get( 'min' ), '`select` unaffected' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'min' ), '`highlight` unaffected' )
+    deepEqual( picker.get( 'view' ), picker.get( 'min' ), '`view` unaffected' )
+
+
+    // Using negative numbers
+    picker.set( 'max', -3 )
+    strictEqual( picker.get( 'max' ).pick, picker.get( 'now' ).pick + ( interval * -3 ), '`max` using a negative number: ' + picker.get( 'max', 'HH:i' ) )
+
+    if ( picker.get( 'max' ).pick < 0 ) {
+        notStrictEqual( picker.get( 'min' ).pick, 0, '`min` updated' )
+        deepEqual( picker.get( 'select' ), picker.get( 'max' ), '`select` updated' )
+        deepEqual( picker.get( 'highlight' ), picker.get( 'max' ), '`highlight` updated' )
+        deepEqual( picker.get( 'view' ), picker.get( 'max' ), '`view` updated' )
+    }
+    else {
+        strictEqual( picker.get( 'min' ).pick, 0, '`min` unaffected' )
+        deepEqual( picker.get( 'select' ), picker.get( 'min' ), '`select` unaffected' )
+        deepEqual( picker.get( 'highlight' ), picker.get( 'min' ), '`highlight` unaffected' )
+        deepEqual( picker.get( 'view' ), picker.get( 'min' ), '`view` unaffected' )
     }
 })
 
-test( 'Checking click to clear...', function() {
+test( '`max` now', function() {
 
-    var $holder = this.$input.pickatime( 'picker' ).$holder
+    var picker = this.picker
 
-    this.$input.pickatime( 'set', { select: [4,30] } )
-    ok( this.$input.pickatime( 'get', 'value' ) === '4:30 AM', 'Input has a value' )
-
-    $holder.find( '.' + $.fn.pickatime.defaults.klass.buttonClear ).click()
-    ok( this.$input.pickatime( 'get', 'value' ) === '', 'Input value has cleared' )
+    // Boolean true
+    picker.set( 'max', true )
+    deepEqual( picker.get( 'max' ), picker.get( 'now' ), '`max` using `true`: ' + picker.get( 'max', 'HH:i' ) )
+    strictEqual( picker.get( 'select' ).pick, 0, '`select` unaffected' )
+    strictEqual( picker.get( 'highlight' ).pick, 0, '`highlight` unaffected' )
+    strictEqual( picker.get( 'view' ).pick, 0, '`view` unaffected' )
+    strictEqual( picker.get( 'min' ).pick, 0, '`min` unaffected' )
 })
 
+test( '`max` specific', function() {
 
+    var picker = this.picker
 
-
-module( 'Time picker keyboard events', {
-    setup: function() {
-        this.$input = $( '<input type=time>' )
-        $DOM.append( this.$input )
-        this.$input.pickatime()
-    },
-    teardown: function() {
-        delete this.$input
-        $DOM.empty()
-    }
+    picker.set( 'max', [14,30] )
+    strictEqual( picker.get( 'max' ).pick, 870, '`max` using an array: ' + picker.get( 'max', 'HH:i' ) )
+    strictEqual( picker.get( 'select' ).pick, 0, '`select` unaffected' )
+    strictEqual( picker.get( 'highlight' ).pick, 0, '`highlight` unaffected' )
+    strictEqual( picker.get( 'view' ).pick, 0, '`view` unaffected' )
+    strictEqual( picker.get( 'min' ).pick, 0, '`min` unaffected' )
 })
 
-test( 'Checking keydown to open and close...', function() {
+test( '`disable` and `enable` using integers', function() {
 
-    ok( !this.$input.pickatime( 'isOpen' ), 'Closed to start with' )
+    var today = new Date(),
+        disableCollection = [1,4,7],
+        picker = this.picker,
+        $holder = picker.$holder
 
-    this.$input.trigger({ type: 'keydown', keyCode: 40 })
-    ok( this.$input.pickatime( 'isOpen' ), 'Opened after pressing "down"' )
+    today.setHours(0,0,0,0)
 
-    this.$input.trigger({ type: 'keydown', keyCode: 27 })
-    ok( !this.$input.pickatime( 'isOpen' ), 'Closed after pressing "escape"' )
+    picker.set( 'disable', disableCollection )
 
-    this.$input.trigger({ type: 'keydown', keyCode: 38 })
-    ok( this.$input.pickatime( 'isOpen' ), 'Opened after pressing "up"' )
+    deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled times added' )
 
-    this.$input.trigger({ type: 'keydown', keyCode: 8 })
-    ok( !this.$input.pickatime( 'isOpen' ), 'Closed after pressing "backspace"' )
-
-    this.$input.trigger({ type: 'keydown', keyCode: 37 })
-    ok( this.$input.pickatime( 'isOpen' ), 'Opened after pressing "left"' )
-
-    this.$input.trigger({ type: 'keydown', keyCode: 46 })
-    ok( !this.$input.pickatime( 'isOpen' ), 'Closed after pressing "alt. backspace"' )
-
-    this.$input.trigger({ type: 'keydown', keyCode: 39 })
-    ok( this.$input.pickatime( 'isOpen' ), 'Opened after pressing "right"' )
-})
-
-test( 'Checking keydown to highlight, viewset, and select...', function() {
-
-    this.$input.focus()
-    ok( this.$input.pickatime( 'isOpen' ), 'Opened with focus' )
-    ok( this.$input.pickatime( 'get', 'highlight' ).PICK === 0, 'Focused in: ' + this.$input.pickatime( 'get', { highlight: 'h:i A' } ) )
-
-    this.$input.trigger({ type: 'keydown', keyCode: 13 })
-    ok( this.$input.pickatime( 'get', 'value' ) === this.$input.pickatime( 'get', { highlight: 'h:i A' } ), 'Selected value with "enter": ' + this.$input.pickatime( 'get', 'value' ) )
-
-    for ( var i = 1; i < 48; i += 1 ) {
-
-        this.$input.focus()
-        this.$input.trigger({ type: 'keydown', keyCode: 40 })
-        ok( this.$input.pickatime( 'get', 'highlight' ).PICK === 30 * i, 'Keyed "down" to: ' + this.$input.pickatime( 'get', { highlight: 'h:i A' } ) )
-        ok( this.$input.pickatime( 'get', 'view' ).PICK === this.$input.pickatime( 'get', 'highlight' ).PICK, 'Updated "view" to: ' + this.$input.pickatime( 'get', { view: 'h:i A' } ) )
-
-        this.$input.trigger({ type: 'keydown', keyCode: 13 })
-        ok( this.$input.pickatime( 'get', 'value' ) === this.$input.pickatime( 'get', { highlight: 'h:i A' } ), 'Selected value with "enter": ' + this.$input.pickatime( 'get', 'value' ) )
-    }
-
-    this.$input.focus()
-    this.$input.trigger({ type: 'keydown', keyCode: 40 })
-    ok( this.$input.pickatime( 'get', 'highlight' ).PICK === 1410, 'Reached "down" limit: ' + this.$input.pickatime( 'get', { highlight: 'h:i A' } ) )
-
-    this.$input.trigger({ type: 'keydown', keyCode: 13 })
-    ok( this.$input.pickatime( 'get', 'value' ) === this.$input.pickatime( 'get', { highlight: 'h:i A' } ), 'Selected value with "enter": ' + this.$input.pickatime( 'get', 'value' ) )
-
-    for ( var j = 2; j < 49; j += 1 ) {
-
-        this.$input.focus()
-        this.$input.trigger({ type: 'keydown', keyCode: 38 })
-        ok( this.$input.pickatime( 'get', 'highlight' ).PICK === 1440 - 30 * j, 'Keyed "up" to: ' + this.$input.pickatime( 'get', { highlight: 'h:i A' } ) )
-
-        this.$input.trigger({ type: 'keydown', keyCode: 13 })
-        ok( this.$input.pickatime( 'get', 'value' ) === this.$input.pickatime( 'get', { highlight: 'h:i A' } ), 'Selected value with "enter": ' + this.$input.pickatime( 'get', 'value' ) )
-    }
-
-    this.$input.trigger({ type: 'keydown', keyCode: 38 })
-    ok( this.$input.pickatime( 'get', 'highlight' ).PICK === 0, 'Reached "up" limit: ' + this.$input.pickatime( 'get', { highlight: 'h:i A' } ) )
-})
-
-
-
-
-module( 'Time picker with a `value`', {
-    setup: function() {
-        this.$input = $( '<input type=time value="2:00 p.m.">' )
-        $DOM.append( this.$input )
-        this.$input.pickatime()
-    },
-    teardown: function() {
-        delete this.$input
-        $DOM.empty()
-    }
-})
-
-test( 'Checking input `value` to set time...', function() {
-    ok( this.$input.pickatime( 'get', 'select' ).PICK === 840, 'Element value sets correct time' )
-    ok( this.$input.pickatime( 'get', 'highlight' ).PICK === 840, 'Element value sets correct highlight' )
-    ok( this.$input.pickatime( 'get', 'view' ).PICK === 840, 'Element value sets correct view' )
-    ok( !this.$input.siblings( '[type=hidden]' ).length, 'There is no hidden input' )
-})
-
-
-
-
-module( 'Time picker with a `data-value`', {
-    setup: function() {
-        this.$input = $( '<input type=time data-value="14:00">' )
-        $DOM.append( this.$input )
-        this.$input.pickatime({
-            formatSubmit: 'HH:i'
-        })
-    },
-    teardown: function() {
-        delete this.$input
-        $DOM.empty()
-    }
-})
-
-test( 'Checking input `data-value` to set time...', function() {
-    ok( this.$input.pickatime( 'get', 'select' ).PICK === 840, 'Selects correct time' )
-    ok( this.$input.pickatime( 'get', 'highlight' ).PICK === 840, 'Highlights correct time' )
-    ok( this.$input.pickatime( 'get', 'view' ).PICK === 840, 'Viewsets correct time' )
-    ok( this.$input.siblings( '[type=hidden]' )[ 0 ].type === 'hidden', 'There is a hidden input' )
-    ok( this.$input.siblings( '[type=hidden]' )[ 0 ].value === '14:00', 'The hidden input has correct value' )
-})
-
-
-
-
-module( 'Time picker with a `disable` collection', {
-    setup: function() {
-        this.$input = $( '<input type=time>' )
-        $DOM.append( this.$input )
-        this.$input.pickatime({
-            disable: [ 0, 1, 10, [4,30], [22,30] ]
-        })
-    },
-    teardown: function() {
-        delete this.$input
-        $DOM.empty()
-    }
-})
-
-test( 'Confirming disabled times with integers & arrays...', function() {
-
-    var $input = this.$input,
-        $holder = $input.pickatime( 'picker' ).$holder,
-        interval = $input.pickatime( 'get', 'interval' )
-
-    $holder.find( '.' + $.fn.pickatime.defaults.klass.listItem ).each( function( index, item ) {
-        if ( index >= 0 && index < 4 || index >= 20 && index < 22 || index === 9 || index === 45 ) {
-            ok( $( item ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is disabled: ' + item.innerHTML )
-        }
-        if ( index === 4 ) {
-            ok( index * interval === $input.pickatime( 'get', 'select' ).PICK, 'Time selected shifted to 2:00 AM' )
-            ok( index * interval === $input.pickatime( 'get', 'highlight' ).PICK, 'Time highlighted shifted to 2:00 AM' )
-            ok( index * interval === $input.pickatime( 'get', 'view' ).PICK, 'View shifted to 2:00 AM' )
-        }
-    })
-})
-
-test( 'Flipping disabled times as enabled...', function() {
-
-    var $input = this.$input,
-        $holder = $input.pickatime( 'picker' ).$holder,
-        interval = $input.pickatime( 'get', 'interval' )
-
-    this.$input.pickatime( 'disableAll' )
-
-    $holder.find( '.' + $.fn.pickatime.defaults.klass.listItem ).each( function( index, item ) {
-        if ( index >= 0 && index < 4 || index >= 20 && index < 22 || index === 9 || index === 45 ) {
-            ok( !$( item ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is not disabled: ' + item.innerHTML )
-        }
-        if ( index === 9 ) {
-            ok( index * interval === $input.pickatime( 'get', 'select' ).PICK, 'Time selected shifted to 4:30 AM' )
-            ok( index * interval === $input.pickatime( 'get', 'highlight' ).PICK, 'Time highlighted shifted to 4:30 AM' )
-            ok( index * interval === $input.pickatime( 'get', 'view' ).PICK, 'View shifted to 4:30 AM' )
-        }
-    })
-
-    this.$input.pickatime( 'disableAll', false )
-
-    $holder.find( '.' + $.fn.pickatime.defaults.klass.listItem ).each( function( index, item ) {
-        if ( index >= 0 && index < 4 || index >= 20 && index < 22 || index === 9 || index === 45 ) {
-            ok( $( item ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is not disabled: ' + item.innerHTML )
-        }
-        if ( index === 10 ) {
-            ok( index * interval === $input.pickatime( 'get', 'select' ).PICK, 'Time selected shifted to 4:30 AM' )
-            ok( index * interval === $input.pickatime( 'get', 'highlight' ).PICK, 'Time highlighted shifted to 4:30 AM' )
-            ok( index * interval === $input.pickatime( 'get', 'view' ).PICK, 'View shifted to 4:30 AM' )
-        }
-    })
-})
-
-
-
-
-module( 'Time picker `get` and `set` properties', {
-    setup: function() {
-        this.$input = $( '<input type=time>' )
-        $DOM.append( this.$input )
-        this.$input.pickatime()
-    },
-    teardown: function() {
-        delete this.$input
-        $DOM.empty()
-    }
-})
-
-test( 'Setting `min` & `max` with arrays...', function() {
-
-    this.$input.pickatime( 'set', { min: [2,0] } )
-    ok( this.$input.pickatime( 'get', 'min' ).PICK === 120, 'Sets min limit correctly' )
-    ok( this.$input.pickatime( 'get', 'select' ).PICK === 120, 'Select updates accordingly' )
-    ok( this.$input.pickatime( 'get', 'highlight' ).PICK === 120, 'Highlight updates accordingly' )
-    ok( this.$input.pickatime( 'get', 'view' ).PICK === 120, 'View updates accordingly' )
-
-    this.$input.pickatime( 'set', { max: [20,0] } )
-    ok( this.$input.pickatime( 'get', 'max' ).PICK === 1200, 'Sets max limit correctly' )
-    ok( this.$input.pickatime( 'get', 'select' ).PICK === 120, 'Select unaffected' )
-    ok( this.$input.pickatime( 'get', 'highlight' ).PICK === 120, 'Highlight unaffected' )
-    ok( this.$input.pickatime( 'get', 'view' ).PICK === 120, 'View unaffected' )
-})
-
-test( 'Setting `min` & `max` with integers...', function() {
-
-    var nowObject = this.$input.pickatime( 'get', 'now' ),
-        interval = this.$input.pickatime( 'get', 'interval' )
-
-    this.$input.pickatime( 'set', { min: -3 } )
-    ok( this.$input.pickatime( 'get', 'min' ).PICK === nowObject.PICK - interval * 3, 'Sets negative min limit correctly' )
-
-    this.$input.pickatime( 'set', { max: 3 } )
-    ok( this.$input.pickatime( 'get', 'max' ).PICK === nowObject.PICK + interval * 3, 'Sets positive max limit correctly' )
-
-    this.$input.pickatime( 'set', { min: 3 } )
-    ok( this.$input.pickatime( 'get', 'min' ).PICK === nowObject.PICK + interval * 3, 'Sets positive min limit correctly' )
-    ok( this.$input.pickatime( 'get', 'select' ).PICK === nowObject.PICK + interval * 3, 'Select updates accordingly' )
-    ok( this.$input.pickatime( 'get', 'highlight' ).PICK === nowObject.PICK + interval * 3, 'Highlight updates accordingly' )
-    ok( this.$input.pickatime( 'get', 'view' ).PICK === nowObject.PICK + interval * 3, 'View updates accordingly' )
-
-    this.$input.pickatime( 'set', { max: -3 } )
-    // If the max is less than the min, we need the next day's max time so add 1440.
-    ok( this.$input.pickatime( 'get', 'max' ).PICK === nowObject.PICK - interval * 3 + ( this.$input.pickatime( 'get', 'min' ).PICK > this.$input.pickatime( 'get', 'max' ).PICK ? 0 : 1440 ), 'Sets negative max limit correctly' )
-})
-
-test( 'Setting `min` & `max` with booleans...', function() {
-
-    var nowObject = this.$input.pickatime( 'get', 'now' )
-
-    this.$input.pickatime( 'set', { min: true } )
-    ok( this.$input.pickatime( 'get', 'min' ).PICK === nowObject.PICK, 'Sets min limit correctly' )
-    ok( this.$input.pickatime( 'get', 'select' ).PICK === nowObject.PICK, 'Select updates accordingly' )
-    ok( this.$input.pickatime( 'get', 'highlight' ).PICK === nowObject.PICK, 'Highlight updates accordingly' )
-    ok( this.$input.pickatime( 'get', 'view' ).PICK === nowObject.PICK, 'View updates accordingly' )
-
-    this.$input.pickatime( 'set', { max: true } )
-    ok( this.$input.pickatime( 'get', 'max' ).PICK === nowObject.PICK, 'Sets max limit correctly' )
-    ok( this.$input.pickatime( 'get', 'select' ).PICK === nowObject.PICK, 'Select unaffected' )
-    ok( this.$input.pickatime( 'get', 'highlight' ).PICK === nowObject.PICK, 'Highlight unaffected' )
-    ok( this.$input.pickatime( 'get', 'view' ).PICK === nowObject.PICK, 'View unaffected' )
-})
-
-test( 'Setting `disable` with integers...', function() {
-
-    var $input = this.$input,
-        $holder = $input.pickatime( 'picker' ).$holder
-
-    $input.pickatime( 'set', { disable: [0,1,4] } )
-
-    ok( $input.pickatime( 'get', 'disable' ).toString() === [0,1,4].toString(), 'Disabled times added to collection' )
-    ok( 120 === $input.pickatime( 'get', 'select' ).PICK, 'Select updated: 2:00 AM' )
-    ok( 120 === $input.pickatime( 'get', 'highlight' ).PICK, 'Highlight updated: 2:00 AM' )
-    ok( 120 === $input.pickatime( 'get', 'view' ).PICK, 'View updated: 2:00 AM' )
-
-    $holder.find( '.' + $.fn.pickatime.defaults.klass.listItem ).each( function( index, item ) {
-        if ( index >= 0 && index < 4 || index >= 8 && index < 10 ) {
-            ok( $( item ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is disabled: ' + item.innerHTML )
+    $holder.find( '[data-pick]' ).each( function() {
+        var $this = $( this ),
+            hour = ~~( $this.data('pick')/60 )
+        if ( disableCollection.indexOf( hour ) > -1 ) {
+            ok( $this.hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Disabled time: ' + $this.html() )
         }
         else {
-            ok( !$( item ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is enabled: ' + item.innerHTML )
+            ok( !$this.hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Enabled time: ' + $this.html() )
         }
     })
 
-    $input.pickatime( 'set', { enable: [1] } )
-    ok( $input.pickatime( 'get', 'disable' ).toString() === [0,4].toString(), 'Disabled time removed from collection' )
-    ok( 120 === $input.pickatime( 'get', 'select' ).PICK, 'Select unaffected: 2:00 AM' )
-    ok( 120 === $input.pickatime( 'get', 'highlight' ).PICK, 'Highlight unaffected: 2:00 AM' )
-    ok( 120 === $input.pickatime( 'get', 'view' ).PICK, 'View unaffected: 2:00 AM' )
+    picker.set( 'enable', [1] )
+    deepEqual( picker.get( 'disable' ), [4,7], 'Disabled time removed' )
 
-    $holder.find( '.' + $.fn.pickatime.defaults.klass.listItem ).each( function( index, item ) {
-        if ( index >= 0 && index < 2 || index >= 8 && index < 10 ) {
-            ok( $( item ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is disabled: ' + item.innerHTML )
+    $holder.find( '[data-pick]' ).each( function() {
+        var $this = $( this ),
+            hour = ~~( $this.data('pick')/60 )
+        if ( [4,7].indexOf( hour ) > -1 ) {
+            ok( $this.hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Disabled time: ' + $this.html() )
         }
         else {
-            ok( !$( item ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is enabled: ' + item.innerHTML )
+            ok( !$this.hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Enabled time: ' + $this.html() )
         }
     })
 })
 
-test( 'Setting `disable` with arrays...', function() {
+test( '`disable` and `enable` using arrays', function() {
 
-    this.$input.pickatime( 'set', { disable: [ [1,0],[4,30],[18,0],[23,30] ] } )
+    var picker = this.picker,
+        $holder = picker.$holder,
+        disableCollection = [ [1,0],[4,30],[18,0],[23,30] ]
 
-    ok( this.$input.pickatime( 'get', 'disable' ).toString() === [ [1,0],[4,30],[18,0],[23,30] ].toString(), 'Disabled times added to collection' )
-
-    var $holder = this.$input.pickatime( 'picker' ).$holder
+    picker.set( 'disable', disableCollection )
+    deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled times added' )
 
     $holder.find( '.' + $.fn.pickatime.defaults.klass.listItem ).each( function( index, item ) {
         if ( index === 2 || index === 9 || index === 36 || index === 47 ) {
@@ -517,8 +309,8 @@ test( 'Setting `disable` with arrays...', function() {
         }
     })
 
-    this.$input.pickatime( 'set', { enable: [ [4,30] ] } )
-    ok( this.$input.pickatime( 'get', 'disable' ).toString() === [ [1,0],[18,0],[23,30] ].toString(), 'Disabled time removed from collection' )
+    picker.set( 'enable', [ [4,30] ] )
+    deepEqual( picker.get( 'disable' ), [ [1,0],[18,0],[23,30] ], 'Disabled time removed' )
 
     $holder.find( '.' + $.fn.pickatime.defaults.klass.listItem ).each( function( index, item ) {
         if ( index === 2 || index === 36 || index === 47 ) {
@@ -530,42 +322,183 @@ test( 'Setting `disable` with arrays...', function() {
     })
 })
 
-test( 'Setting `select` with arrays...', function() {
-    this.$input.pickatime( 'set', { select: [9,0] } )
-    ok( this.$input.pickatime( 'get', 'select' ).PICK === 540, 'Selects time correctly' )
-    ok( this.$input.pickatime( 'get', 'highlight' ).PICK === 0, 'Highlight unaffected' )
-    ok( this.$input.pickatime( 'get', 'view' ).PICK === 0, 'View unaffected' )
-})
+test( '`interval`', function() {
 
-test( 'Setting `highlight` with arrays...', function() {
-    this.$input.pickatime( 'set', { highlight: [14,0] } )
-    ok( this.$input.pickatime( 'get', 'highlight' ).PICK === 840, 'Highlights time correctly' )
-    ok( this.$input.pickatime( 'get', 'view' ).PICK === 840, 'View updates accordingly' )
-    ok( this.$input.pickatime( 'get', 'select' ).PICK === 0, 'Select unaffected' )
-})
+    var picker = this.picker,
+        $holder = picker.$holder
 
-test( 'Setting `view` with arrays...', function() {
-    this.$input.pickatime( 'set', { view: [16,0] } )
-    ok( this.$input.pickatime( 'get', 'view' ).PICK === 960, 'Viewsets correctly' )
-    ok( this.$input.pickatime( 'get', 'highlight' ).PICK === 0, 'Highlight unaffected' )
-    ok( this.$input.pickatime( 'get', 'select' ).PICK === 0, 'Select unaffected' )
-})
+    picker.set( 'interval', 120 )
+    ok( picker.get( 'interval' ) === 120, '`interval` updated' )
+    ok( picker.get( 'min' ).pick % 120 === 0, '`min` updated' )
+    ok( picker.get( 'max' ).pick % 120 === 0, '`max` updated' )
+    ok( $holder.find( '.' + $.fn.pickatime.defaults.klass.listItem ).length === 12, '12 selectable times' )
 
-test( 'Setting `interval` with integers...', function() {
-
-    var $holder = this.$input.pickatime( 'picker' ).$holder
-
-    this.$input.pickatime( 'set', { interval: 120 } )
-    ok( this.$input.pickatime( 'get', 'interval' ) === 120, 'Interval updated' )
-    ok( this.$input.pickatime( 'get', 'min' ).PICK % 120 === 0, 'Min updated accordingly' )
-    ok( this.$input.pickatime( 'get', 'max' ).PICK % 120 === 0, 'Max updated accordingly' )
-    ok( $holder.find( '.' + $.fn.pickatime.defaults.klass.listItem ).length === 12, 'There are 12 selectable times' )
-
-    this.$input.pickatime( 'set', { interval: 'asdf' } )
-    ok( this.$input.pickatime( 'get', 'interval' ) === 120, 'Interval unaffected by non-integer' )
+    picker.set( 'interval', 'lol' )
+    ok( picker.get( 'interval' ) === 120, 'Interval unaffected by non-integer' )
 })
 
 
+
+
+module( 'Time picker mouse events', {
+    setup: function() {
+        var $input = $INPUT.clone().pickatime()
+        $DOM.append( $input )
+        this.picker = $input.pickatime( 'picker' )
+    },
+    teardown: function() {
+        this.picker.stop()
+        $DOM.empty()
+    }
+})
+
+test( 'Select', function() {
+
+    var picker = this.picker,
+        $holder = picker.$holder,
+        interval = picker.get( 'interval' )
+
+    for ( var i = 0; i < 48; i += 1 ) {
+        $holder.find( '.' + $.fn.pickatime.defaults.klass.listItem ).eq( i ).click()
+        ok( picker.get( 'select' ).pick === i * interval, 'Selected ' + picker.get( 'select', 'h:i A' ) )
+        ok( picker.get( 'value' ) === picker.get( 'select', 'h:i A' ), 'Input value updated to ' + picker.get( 'value' ) )
+    }
+})
+
+test( 'Clear', function() {
+
+    var picker = this.picker
+
+    picker.set( 'select', [2,0] )
+    ok( picker.get( 'value' ) === picker.get( 'select', $.fn.pickatime.defaults.format ), 'Value updated' )
+
+    picker.$holder.find( '.' + $.fn.pickatime.defaults.klass.buttonClear ).click()
+    ok( picker.get( 'value' ) === '', 'Value cleared' )
+})
+
+
+
+
+module( 'Time picker keyboard events', {
+    setup: function() {
+        var $input = $INPUT.clone().pickatime()
+        $DOM.append( $input )
+        this.picker = $input.pickatime( 'picker' )
+    },
+    teardown: function() {
+        this.picker.stop()
+        $DOM.empty()
+    }
+})
+
+test( 'Select', function() {
+
+    var picker = this.picker,
+        $input = picker.$node
+
+    for ( var i = 0; i < 48; i += 1 ) {
+
+        // Open the picker.
+        picker.open()
+
+        // Set the highlight.
+        picker.set( 'highlight', i * 30 )
+
+        // Keydown to select the highlighted item.
+        $input.trigger({ type: 'keydown', keyCode: 13 })
+
+        // Check if the select is the same as the highlight.
+        deepEqual( picker.get( 'select' ), picker.get( 'highlight' ), 'Select updated to: ' + picker.get( 'select', 'HH:i' ) )
+    }
+})
+
+test( 'Highlight', function() {
+
+    var picker = this.picker,
+        $input = picker.$node
+
+    // Open the picker
+    picker.open()
+
+    // Down
+    for ( var i = 1; i < 48; i += 1 ) {
+        $input.trigger({ type: 'keydown', keyCode: 40 })
+        ok( picker.get( 'highlight' ).pick === 30 * i, 'Key “down” to `highlight`: ' + picker.get( 'highlight', 'h:i A' ) )
+        deepEqual( picker.get( 'view' ), picker.get( 'highlight' ), 'Updated `view`' )
+    }
+
+    // Up
+    for ( var j = 2; j < 49; j += 1 ) {
+        $input.trigger({ type: 'keydown', keyCode: 38 })
+        ok( picker.get( 'highlight' ).pick === 1440 - 30 * j, 'Key “up” to `highlight`: ' + picker.get( 'highlight', 'h:i A' ) )
+        deepEqual( picker.get( 'view' ), picker.get( 'highlight' ), 'Updated `view`' )
+    }
+
+    // Right
+    for ( var k = 1; k < 48; k += 1 ) {
+        $input.trigger({ type: 'keydown', keyCode: 39 })
+        ok( picker.get( 'highlight' ).pick === 30 * k, 'Key “right” to `highlight`: ' + picker.get( 'highlight', 'h:i A' ) )
+        deepEqual( picker.get( 'view' ), picker.get( 'highlight' ), 'Updated `view`' )
+    }
+
+    // Left
+    for ( var l = 2; l < 49; l += 1 ) {
+        $input.trigger({ type: 'keydown', keyCode: 37 })
+        ok( picker.get( 'highlight' ).pick === 1440 - 30 * l, 'Key “up” to `highlight`: ' + picker.get( 'highlight', 'h:i A' ) )
+        deepEqual( picker.get( 'view' ), picker.get( 'highlight' ), 'Updated `view`' )
+    }
+})
+
+
+
+
+module( 'Time picker with a `value`', {
+    setup: function() {
+        var $input = $INPUT.clone().val( '2:00 p.m.' ).pickatime()
+        $DOM.append( $input )
+        this.picker = $input.pickatime( 'picker' )
+    },
+    teardown: function() {
+        this.picker.stop()
+        $DOM.empty()
+    }
+})
+
+test( '`value` to select, highlight, and view', function() {
+    var picker = this.picker
+    ok( !picker._hidden, 'No hidden input' )
+    strictEqual( picker.get( 'select' ).pick, 840, 'Selects time' )
+    strictEqual( picker.get( 'highlight' ).pick, 840, 'Highlights time' )
+    strictEqual( picker.get( 'view' ).pick, 840, 'Viewsets time' )
+})
+
+
+
+
+module( 'Time picker with a `data-value`', {
+    setup: function() {
+        var $input = $INPUT.clone().data( 'value', '14:00' ).pickatime({
+            formatSubmit: 'HH:i'
+        })
+        $DOM.append( $input )
+        this.picker = $input.pickatime( 'picker' )
+    },
+    teardown: function() {
+        this.picker.stop()
+        $DOM.empty()
+    }
+})
+
+test( '`data-value` to select, highlight, and view', function() {
+
+    var picker = this.picker
+
+    ok( picker._hidden, 'Has hidden input' )
+    ok( picker._hidden.value === '14:00', 'Hidden input value' )
+    strictEqual( picker.get( 'select' ).pick, 840, 'Selects time' )
+    strictEqual( picker.get( 'highlight' ).pick, 840, 'Highlights time' )
+    strictEqual( picker.get( 'view' ).pick, 840, 'Viewsets time' )
+})
 
 
 
