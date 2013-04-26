@@ -9,7 +9,7 @@
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 
-<title>pickadate.js</title>
+<title>pickadate.js / api</title>
 
 <link rel="shortcut icon" href="site/images/favicon.ico">
 <link rel="stylesheet" href="site/styles/main.css">
@@ -37,7 +37,7 @@
                     <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="date.htm">Date picker</a></li>
                     <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="time.htm">Time picker</a></li>
                     <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed menu__link--active" href="api.htm">API</a></li>
-                    <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="v2.htm">v2 Docs</a></li>
+                    <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="v2/index.htm">v2 Docs</a></li>
                     <li class="menu__item menu__item--responsive page-target__reveal menu__item--trail"><a class="menu__link menu__link--dimmed" href="https://github.com/amsul/pickadate.js">View on Github</a></li>
                 </ul>
             </nav>
@@ -166,7 +166,13 @@ picker.close()
 // If a “click” is involved, prevent the event bubbling.
 event.stopPropagation()</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><button id=button__api-open-close class="fieldset__button button button--small">Open</button><input id="demo__api-open-close" class="fieldset__input " type=text value="" placeholder="Open your console and try me&hellip;"></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><button id=button__api-open-close class="fieldset__button button button--small">Open</button><input id="demo__api-open-close" class="fieldset__input " type=text value="" placeholder="Try me&hellip;"></fieldset>
+
+        <p>To close the picker while focusing onto the <code class="tag-name">input</code> element, pass a truth-y first argument.</p>
+
+        <pre class="pre--demo"><code data-language="javascript">picker.close(true)</code></pre>
+
+        <fieldset class="fieldset fieldset--demo js__fieldset"><input id="demo__api-close-focus" class="fieldset__input " type=text value="" placeholder="Try me&hellip;"></fieldset>
 
     </div> <!-- .section__block -->
 
@@ -183,7 +189,7 @@ event.stopPropagation()</code></pre>
         <pre class="pre--demo"><code data-language="javascript">picker.start()
 picker.stop()</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><button id=button__api-start-stop class="fieldset__button button button--small">Stop</button><input id="demo__api-start-stop" class="fieldset__input " type=date value="" placeholder="Open your console and try me&hellip;"></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><button id=button__api-start-stop class="fieldset__button button button--small">Stop</button><input id="demo__api-start-stop" class="fieldset__input " type=date value="" placeholder="Try me&hellip;"></fieldset>
 
     </div> <!-- .section__block -->
 
@@ -199,7 +205,7 @@ picker.stop()</code></pre>
 
         <pre class="pre--demo"><code data-language="javascript">picker.render()</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><button id=button__api-render class="fieldset__button button button--small">Add stuff</button><input id="demo__api-render" class="fieldset__input " type=text value="" placeholder="Open your console and try me&hellip;"></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><button id=button__api-render class="fieldset__button button button--small">Add stuff</button><input id="demo__api-render" class="fieldset__input " type=text value="" placeholder="Try me&hellip;"></fieldset>
 
     </div> <!-- .section__block -->
 
@@ -215,7 +221,9 @@ picker.stop()</code></pre>
 
         <pre class="pre--demo"><code data-language="javascript">picker.clear()</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><button id=button__api-clear class="fieldset__button button button--small">Clear</button><input id="demo__api-clear" class="fieldset__input " type=text value="25 April, 2013" placeholder="Open your console and try me&hellip;"></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><button id=button__api-clear class="fieldset__button button button--small">Clear</button><input id="demo__api-clear" class="fieldset__input " type=text value="26 April, 2013" placeholder="Try me&hellip;"></fieldset>
+
+        <p>This is a shorthand that uses the <a href="#set"><code class="function">set</code> method</a> behind the scenes.</p>
 
     </div> <!-- .section__block -->
 
@@ -242,6 +250,7 @@ picker.stop()</code></pre>
             <li><code><a href="#get-min">min</a></code> <b>*</b></li>
             <li><code><a href="#get-max">max</a></code> <b>*</b></li>
             <li><code><a href="#get-open">open</a></code></li>
+            <li><code><a href="#get-start">start</a></code></li>
             <li><code><a href="#get-id">id</a></code></li>
             <li><code><a href="#get-disable">disable</a></code></li>
             <li><code><a href="#get-enable">enable</a></code></li>
@@ -254,7 +263,7 @@ picker.stop()</code></pre>
 
         <p>Each “date” or “time” within the picker has an item object accompanying it behind the scenes.</p>
 
-        <p>Here’s a <b>date picker item object</b> for <u>25 April, 2013</u>:</p>
+        <p>Here’s a <b>date picker item object</b> for <u>26 April, 2013</u>:</p>
         <pre><code data-language="javascript">{
     // The full year.
     year: 2013,
@@ -275,16 +284,16 @@ picker.stop()</code></pre>
     pick: 1366430400000
 }</code></pre>
 
-        <p>Here’s a <b>time picker item object</b> for <u>8:53 PM</u>:</p>
+        <p>Here’s a <b>time picker item object</b> for <u>4:11 PM</u>:</p>
         <pre><code data-language="javascript">{
     // Hour of the day from 0 to 23.
-    hour: 20,
+    hour: 16,
 
     // The minutes of the hour from 0 to 59 (based on the interval).
-    mins: 60,
+    mins: 30,
 
     // The “pick” value used for comparisons.
-    pick: 1260
+    pick: 990
 }</code></pre>
 
     </div> <!-- .section__block -->
@@ -302,7 +311,7 @@ picker.stop()</code></pre>
 
         <pre class="pre--demo"><code data-language="javascript">picker.get() // Short for `picker.get('value')`.</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><button id=button__api-get--value class="fieldset__button button button--small">Log the value</button><input id="demo__api-get--value" class="fieldset__input " type=text value="25 April, 2013" placeholder="Open your console and try me&hellip;"></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><button id=button__api-get--value class="fieldset__button button button--small">Log the value</button><input id="demo__api-get--value" class="fieldset__input " type=text value="26 April, 2013" placeholder="Open your console and try me&hellip;"></fieldset>
 
     </div> <!-- .section__block -->
 
@@ -388,6 +397,16 @@ picker.stop()</code></pre>
 
     <div class="section__block section__block--scoped">
 
+        <h2 class="heading heading--divide"><span class="heading__text">get <code class="string">start</code><a class="heading__anchor" name="get-start" href="#get-start">&sect;</a></span></h2>
+
+        <p>Returns a boolean value of whether the picker has started or not.</p>
+        <pre class="pre--demo"><code data-language="javascript">picker.get('start')</code></pre>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><button id=button__api-get--start class="fieldset__button button button--small">Log the start state</button><button id=button__api-get--start-stop class="fieldset__button button button--small">Stop picker</button><input id="demo__api-get--start" class="fieldset__input " type=date value="" placeholder="Open your console and try me&hellip;"></fieldset>
+
+    </div> <!-- .section__block -->
+
+    <div class="section__block section__block--scoped">
+
         <h2 class="heading heading--divide"><span class="heading__text">get <code class="string">id</code><a class="heading__anchor" name="get-id" href="#get-id">&sect;</a></span></h2>
 
         <p>Returns a unique 9-digit integer that is the ID of the picker.</p>
@@ -422,12 +441,12 @@ picker.stop()</code></pre>
         <p>Both <code>thing</code> and <code>value</code> are required arguments. The <code>value</code>, is based on type of <code>thing</code> being set. The <code>thing</code>, is a string that can be:</p>
 
         <ul>
+            <li><code><a href="#set-clear">clear</a></code></li>
             <li><code><a href="#set-select">select</a></code> <b>*</b></li>
             <li><code><a href="#set-highlight">highlight</a></code> <b>*</b></li>
             <li><code><a href="#set-view">view</a></code></li>
             <li><code><a href="#set-min">min</a></code> <b>*</b></li>
             <li><code><a href="#set-max">max</a></code> <b>*</b></li>
-            <li><code><a href="#set-open">open</a></code></li>
             <li><code><a href="#set-disable">disable</a></code> <b>*</b></li>
             <li><code><a href="#set-enable">enable</a></code> <b>*</b></li>
             <li><code><a href="#set-interval">interval</a></code> (time picker only) <b>*</b></li>
@@ -444,6 +463,24 @@ picker.stop()</code></pre>
         <h3 class="heading heading--divide"><span class="heading__text"><b>*</b> cascading changes<a class="heading__anchor--bigger" name="cascading-changes" href="#cascading-changes">&sect;</a></span></h3>
 
         <p>When the <code>thing</code>s denoted in the list above with an asterisk (<b>*</b>) are set, they cascade into updating other things using the same value.</p>
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">set <code class="string">clear</code><a class="heading__anchor" name="set-clear" href="#set-clear">&sect;</a></span></h2>
+        <p>Clear the value in the picker’s <code class="tag-name">input</code> element.</p>
+
+        <pre class="pre--demo"><code data-language="javascript">picker.set('clear')</code></pre>
+
+        <fieldset class="fieldset fieldset--demo js__fieldset"><button id=button__api-set-clear class="fieldset__button button button--small">Clear</button><input id="demo__api-set-clear" class="fieldset__input " type=text value="26 April, 2013" placeholder="Try me&hellip;"></fieldset>
+
+        <p>This is the full form of the <a href="#clear"><code class="function">clear</code> method</a>.</p>
 
     </div> <!-- .section__block -->
 

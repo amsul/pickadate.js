@@ -4,7 +4,7 @@
     props = props || {}
     return '<fieldset class="fieldset fieldset--demo js__fieldset">' +
         ( props.pre || '' ) +
-        '<input id="' + ( props.id || '' ) + '" class="fieldset__input ' + ( props.klass || '' ) + '" type=text value="' + ( props.value || '' ) + '" placeholder="Open your console and try me&hellip;">' +
+        '<input id="' + ( props.id || '' ) + '" class="fieldset__input ' + ( props.klass || '' ) + '" type=text value="' + ( props.value || '' ) + '" placeholder="' + ( props.placeholder || 'Try me&hellip;' ) + '">' +
     '</fieldset>'
 } %}
 
@@ -122,7 +122,16 @@ picker.close()
 // If a “click” is involved, prevent the event bubbling.
 event.stopPropagation()</code></pre>
 
-        {%= dateDemoField({ id: 'demo__api-open-close', pre: '<button id=button__api-open-close class="fieldset__button button button--small">Open</button>' }) %}
+        {%= dateDemoField({
+            id: 'demo__api-open-close',
+            pre: '<button id=button__api-open-close class="fieldset__button button button--small">Open</button>'
+        }) %}
+
+        <p>To close the picker while focusing onto the <code class="tag-name">input</code> element, pass a truth-y first argument.</p>
+
+        <pre class="pre--demo"><code data-language="javascript">picker.close(true)</code></pre>
+
+        {%= dateDemoField({ id: 'demo__api-close-focus' }) %}
 
     </div> <!-- .section__block -->
 
@@ -139,7 +148,10 @@ event.stopPropagation()</code></pre>
         <pre class="pre--demo"><code data-language="javascript">picker.start()
 picker.stop()</code></pre>
 
-        {%= dateDemoField({ id: 'demo__api-start-stop', pre: '<button id=button__api-start-stop class="fieldset__button button button--small">Stop</button>' }).replace( 'type=text', 'type=date' ) %}
+        {%= dateDemoField({
+            id: 'demo__api-start-stop',
+            pre: '<button id=button__api-start-stop class="fieldset__button button button--small">Stop</button>'
+        }).replace( 'type=text', 'type=date' ) %}
 
     </div> <!-- .section__block -->
 
@@ -155,7 +167,10 @@ picker.stop()</code></pre>
 
         <pre class="pre--demo"><code data-language="javascript">picker.render()</code></pre>
 
-        {%= dateDemoField({ id: 'demo__api-render', pre: '<button id=button__api-render class="fieldset__button button button--small">Add stuff</button>' }) %}
+        {%= dateDemoField({
+            id: 'demo__api-render',
+            pre: '<button id=button__api-render class="fieldset__button button button--small">Add stuff</button>'
+        }) %}
 
     </div> <!-- .section__block -->
 
@@ -176,6 +191,8 @@ picker.stop()</code></pre>
             pre: '<button id=button__api-clear class="fieldset__button button button--small">Clear</button>',
             value: grunt.template.date('d mmmm, yyyy')
         }) %}
+
+        <p>This is a shorthand that uses the <a href="#set"><code class="function">set</code> method</a> behind the scenes.</p>
 
     </div> <!-- .section__block -->
 
@@ -202,6 +219,7 @@ picker.stop()</code></pre>
             <li><code><a href="#get-min">min</a></code> <b>*</b></li>
             <li><code><a href="#get-max">max</a></code> <b>*</b></li>
             <li><code><a href="#get-open">open</a></code></li>
+            <li><code><a href="#get-start">start</a></code></li>
             <li><code><a href="#get-id">id</a></code></li>
             <li><code><a href="#get-disable">disable</a></code></li>
             <li><code><a href="#get-enable">enable</a></code></li>
@@ -265,7 +283,8 @@ picker.stop()</code></pre>
         {%= dateDemoField({
             id: 'demo__api-get--value',
             pre: '<button id=button__api-get--value class="fieldset__button button button--small">Log the value</button>',
-            value: grunt.template.date('d mmmm, yyyy')
+            value: grunt.template.date('d mmmm, yyyy'),
+            placeholder: 'Open your console and try me&hellip;'
         }) %}
 
     </div> <!-- .section__block -->
@@ -278,14 +297,16 @@ picker.stop()</code></pre>
         <pre class="pre--demo"><code data-language="javascript">picker.get('select')</code></pre>
         {%= dateDemoField({
             id: 'demo__api-get--select',
-            pre: '<button id=button__api-get--select class="fieldset__button button button--small">Log the select</button>'
+            pre: '<button id=button__api-get--select class="fieldset__button button button--small">Log the select</button>',
+            placeholder: 'Open your console and try me&hellip;'
         }) %}
 
         <p>Returns a formatted string for the <a href="#item-objects">item object</a> that is visually selected.</p>
         <pre class="pre--demo"><code data-language="javascript">picker.get('select', 'yyyy/mm/dd')</code></pre>
         {%= dateDemoField({
             id: 'demo__api-get--select-format',
-            pre: '<button id=button__api-get--select-format class="fieldset__button button button--small">Log the select formatted</button>'
+            pre: '<button id=button__api-get--select-format class="fieldset__button button button--small">Log the select formatted</button>',
+            placeholder: 'Open your console and try me&hellip;'
         }) %}
 
     </div> <!-- .section__block -->
@@ -298,14 +319,16 @@ picker.stop()</code></pre>
         <pre class="pre--demo"><code data-language="javascript">picker.get('highlight')</code></pre>
         {%= dateDemoField({
             id: 'demo__api-get--highlight',
-            pre: '<button id=button__api-get--highlight class="fieldset__button button button--small">Log the highlight</button>'
+            pre: '<button id=button__api-get--highlight class="fieldset__button button button--small">Log the highlight</button>',
+            placeholder: 'Open your console and try me&hellip;'
         }) %}
 
         <p>Returns a formatted string for the <a href="#item-objects">item object</a> that is visually highlighted.</p>
         <pre class="pre--demo"><code data-language="javascript">picker.get('highlight', 'yyyy/mm/dd')</code></pre>
         {%= dateDemoField({
             id: 'demo__api-get--highlight-format',
-            pre: '<button id=button__api-get--highlight-format class="fieldset__button button button--small">Log the highlight formatted</button>'
+            pre: '<button id=button__api-get--highlight-format class="fieldset__button button button--small">Log the highlight formatted</button>',
+            placeholder: 'Open your console and try me&hellip;'
         }) %}
 
     </div> <!-- .section__block -->
@@ -318,14 +341,16 @@ picker.stop()</code></pre>
         <pre class="pre--demo"><code data-language="javascript">picker.get('view')</code></pre>
         {%= dateDemoField({
             id: 'demo__api-get--view',
-            pre: '<button id=button__api-get--view class="fieldset__button button button--small">Log the view</button>'
+            pre: '<button id=button__api-get--view class="fieldset__button button button--small">Log the view</button>',
+            placeholder: 'Open your console and try me&hellip;'
         }) %}
 
         <p>Returns a formatted string for the <a href="#item-objects">item object</a> that sets the current view.</p>
         <pre class="pre--demo"><code data-language="javascript">picker.get('view', 'yyyy/mm/dd')</code></pre>
         {%= dateDemoField({
             id: 'demo__api-get--view-format',
-            pre: '<button id=button__api-get--view-format class="fieldset__button button button--small">Log the view formatted</button>'
+            pre: '<button id=button__api-get--view-format class="fieldset__button button button--small">Log the view formatted</button>',
+            placeholder: 'Open your console and try me&hellip;'
         }) %}
 
     </div> <!-- .section__block -->
@@ -338,14 +363,16 @@ picker.stop()</code></pre>
         <pre class="pre--demo"><code data-language="javascript">picker.get('min')</code></pre>
         {%= dateDemoField({
             id: 'demo__api-get--min',
-            pre: '<button id=button__api-get--min class="fieldset__button button button--small">Log the min</button>'
+            pre: '<button id=button__api-get--min class="fieldset__button button button--small">Log the min</button>',
+            placeholder: 'Open your console and try me&hellip;'
         }) %}
 
         <p>Returns a formatted string for the <a href="#item-objects">item object</a> that limits the picker’s lower range.</p>
         <pre class="pre--demo"><code data-language="javascript">picker.get('min', 'yyyy/mm/dd')</code></pre>
         {%= dateDemoField({
             id: 'demo__api-get--min-format',
-            pre: '<button id=button__api-get--min-format class="fieldset__button button button--small">Log the min formatted</button>'
+            pre: '<button id=button__api-get--min-format class="fieldset__button button button--small">Log the min formatted</button>',
+            placeholder: 'Open your console and try me&hellip;'
         }) %}
 
     </div> <!-- .section__block -->
@@ -358,14 +385,16 @@ picker.stop()</code></pre>
         <pre class="pre--demo"><code data-language="javascript">picker.get('max')</code></pre>
         {%= dateDemoField({
             id: 'demo__api-get--max',
-            pre: '<button id=button__api-get--max class="fieldset__button button button--small">Log the max</button>'
+            pre: '<button id=button__api-get--max class="fieldset__button button button--small">Log the max</button>',
+            placeholder: 'Open your console and try me&hellip;'
         }) %}
 
         <p>Returns a formatted string for the <a href="#item-objects">item object</a> that limits the picker’s upper range.</p>
         <pre class="pre--demo"><code data-language="javascript">picker.get('max', 'yyyy/mm/dd')</code></pre>
         {%= dateDemoField({
             id: 'demo__api-get--max-format',
-            pre: '<button id=button__api-get--max-format class="fieldset__button button button--small">Log the max formatted</button>'
+            pre: '<button id=button__api-get--max-format class="fieldset__button button button--small">Log the max formatted</button>',
+            placeholder: 'Open your console and try me&hellip;'
         }) %}
 
     </div> <!-- .section__block -->
@@ -378,8 +407,24 @@ picker.stop()</code></pre>
         <pre class="pre--demo"><code data-language="javascript">picker.get('open')</code></pre>
         {%= dateDemoField({
             id: 'demo__api-get--open',
-            pre: '<button id=button__api-get--open class="fieldset__button button button--small">Log the open state</button>'
+            pre: '<button id=button__api-get--open class="fieldset__button button button--small">Log the open state</button>',
+            placeholder: 'Open your console and try me&hellip;'
         }) %}
+
+    </div> <!-- .section__block -->
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">get <code class="string">start</code><a class="heading__anchor" name="get-start" href="#get-start">&sect;</a></span></h2>
+
+        <p>Returns a boolean value of whether the picker has started or not.</p>
+        <pre class="pre--demo"><code data-language="javascript">picker.get('start')</code></pre>
+        {%= dateDemoField({
+            id: 'demo__api-get--start',
+            pre: '<button id=button__api-get--start class="fieldset__button button button--small">Log the start state</button>' +
+                '<button id=button__api-get--start-stop class="fieldset__button button button--small">Stop picker</button>',
+            placeholder: 'Open your console and try me&hellip;'
+        }).replace( 'type=text', 'type=date' ) %}
 
     </div> <!-- .section__block -->
 
@@ -391,7 +436,8 @@ picker.stop()</code></pre>
         <pre class="pre--demo"><code data-language="javascript">picker.get('id')</code></pre>
         {%= dateDemoField({
             id: 'demo__api-get--id',
-            pre: '<button id=button__api-get--id class="fieldset__button button button--small">Log the picker ID</button>'
+            pre: '<button id=button__api-get--id class="fieldset__button button button--small">Log the picker ID</button>',
+            placeholder: 'Open your console and try me&hellip;'
         }) %}
 
     </div> <!-- .section__block -->
@@ -404,7 +450,8 @@ picker.stop()</code></pre>
         <pre class="pre--demo"><code data-language="javascript">picker.get('disable')</code></pre>
         {%= dateDemoField({
             id: 'demo__api-get--disable',
-            pre: '<button id=button__api-get--disable class="fieldset__button button button--small">Log the disabled collection</button>'
+            pre: '<button id=button__api-get--disable class="fieldset__button button button--small">Log the disabled collection</button>',
+            placeholder: 'Open your console and try me&hellip;'
         }) %}
 
     </div> <!-- .section__block -->
@@ -425,12 +472,12 @@ picker.stop()</code></pre>
         <p>Both <code>thing</code> and <code>value</code> are required arguments. The <code>value</code>, is based on type of <code>thing</code> being set. The <code>thing</code>, is a string that can be:</p>
 
         <ul>
+            <li><code><a href="#set-clear">clear</a></code></li>
             <li><code><a href="#set-select">select</a></code> <b>*</b></li>
             <li><code><a href="#set-highlight">highlight</a></code> <b>*</b></li>
             <li><code><a href="#set-view">view</a></code></li>
             <li><code><a href="#set-min">min</a></code> <b>*</b></li>
             <li><code><a href="#set-max">max</a></code> <b>*</b></li>
-            <li><code><a href="#set-open">open</a></code></li>
             <li><code><a href="#set-disable">disable</a></code> <b>*</b></li>
             <li><code><a href="#set-enable">enable</a></code> <b>*</b></li>
             <li><code><a href="#set-interval">interval</a></code> (time picker only) <b>*</b></li>
@@ -447,6 +494,28 @@ picker.stop()</code></pre>
         <h3 class="heading heading--divide"><span class="heading__text"><b>*</b> cascading changes<a class="heading__anchor--bigger" name="cascading-changes" href="#cascading-changes">&sect;</a></span></h3>
 
         <p>When the <code>thing</code>s denoted in the list above with an asterisk (<b>*</b>) are set, they cascade into updating other things using the same value.</p>
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">set <code class="string">clear</code><a class="heading__anchor" name="set-clear" href="#set-clear">&sect;</a></span></h2>
+        <p>Clear the value in the picker’s <code class="tag-name">input</code> element.</p>
+
+        <pre class="pre--demo"><code data-language="javascript">picker.set('clear')</code></pre>
+
+        {%= dateDemoField({
+            id: 'demo__api-set-clear',
+            pre: '<button id=button__api-set-clear class="fieldset__button button button--small">Clear</button>',
+            value: grunt.template.date('d mmmm, yyyy')
+        }) %}
+
+        <p>This is the full form of the <a href="#clear"><code class="function">clear</code> method</a>.</p>
 
     </div> <!-- .section__block -->
 
@@ -476,7 +545,7 @@ picker.set('select', {%= today.getTime() - 468487654 %})</code></pre>
             pre: '<button id=button__api-set--select-date-array class="fieldset__button button button--small">Select using an array</button>' +
                 '<button id=button__api-set--select-date-js class="fieldset__button button button--small">Select using a JS Date</button>' +
                 '<button id=button__api-set--select-date-integer class="fieldset__button button button--small">Select using an integer</button>'
-        }).replace( 'Open your console and t', 'T' ) %}
+        }) %}
 
         <h3 class="heading heading--divide"><span class="heading__text">Select a time <a href="#item-objects">item object</a><a class="heading__anchor--bigger" name="set-select-time" href="#set-select-time">&sect;</a></span></h3>
 
@@ -490,7 +559,7 @@ picker.set('select', 540)</code></pre>
             id: 'demo__api-set--select-time',
             pre: '<button id=button__api-set--select-time-array class="fieldset__button button button--small">Select using an array</button>' +
                 '<button id=button__api-set--select-time-integer class="fieldset__button button button--small">Select using an integer</button>'
-        }).replace( 'Open your console and t', 'T' ) %}
+        }) %}
 
     </div> <!-- .section__block -->
 
@@ -520,7 +589,7 @@ picker.set('highlight', {%= today.getTime() - 468487654 %})</code></pre>
             pre: '<button id=button__api-set--highlight-date-array class="fieldset__button button button--small">Highlight using an array</button>' +
                 '<button id=button__api-set--highlight-date-js class="fieldset__button button button--small">Highlight using a JS Date</button>' +
                 '<button id=button__api-set--highlight-date-integer class="fieldset__button button button--small">Highlight using an integer</button>'
-        }).replace( 'Open your console and t', 'T' ) %}
+        }) %}
 
         <h3 class="heading heading--divide"><span class="heading__text">Highlight a time <a href="#item-objects">item object</a><a class="heading__anchor--bigger" name="set-highlight-time" href="#set-highlight-time">&sect;</a></span></h3>
 
@@ -534,7 +603,7 @@ picker.set('highlight', 1080)</code></pre>
             id: 'demo__api-set--highlight-time',
             pre: '<button id=button__api-set--highlight-time-array class="fieldset__button button button--small">Highlight using an array</button>' +
                 '<button id=button__api-set--highlight-time-integer class="fieldset__button button button--small">Highlight using an integer</button>'
-        }).replace( 'Open your console and t', 'T' ) %}
+        }) %}
 
     </div> <!-- .section__block -->
 
@@ -566,7 +635,7 @@ picker.set('view', 1587355200000)</code></pre>
             pre: '<button id=button__api-set--view-date-array class="fieldset__button button button--small">Viewset using an array</button>' +
                 '<button id=button__api-set--view-date-js class="fieldset__button button button--small">Viewset using a JS Date</button>' +
                 '<button id=button__api-set--view-date-integer class="fieldset__button button button--small">Viewset using an integer</button>'
-        }).replace( 'Open your console and t', 'T' ) %}
+        }) %}
 
         <h3 class="heading heading--divide"><span class="heading__text">Viewset a time <a href="#item-objects">item object</a><a class="heading__anchor--bigger" name="set-view-time" href="#set-view-time">&sect;</a></span></h3>
 
@@ -580,7 +649,7 @@ picker.set('view', 1080)</code></pre>
             id: 'demo__api-set--view-time',
             pre: '<button id=button__api-set--view-time-array class="fieldset__button button button--small">Viewset using an array</button>' +
                 '<button id=button__api-set--view-time-integer class="fieldset__button button button--small">Viewset using an integer</button>'
-        }).replace( 'Open your console and t', 'T' ) %}
+        }) %}
 
     </div> <!-- .section__block -->
 
@@ -618,7 +687,7 @@ picker.set('min', false)</code></pre>
                 '<button id=button__api-set--min-date-integer class="fieldset__button button button--small">Scope using an integer</button>' +
                 '<button id=button__api-set--min-date-true class="fieldset__button button button--small">Scope using `true`</button>' +
                 '<button id=button__api-set--min-date-false class="fieldset__button button button--small">Scope using `false`</button>'
-        }).replace( 'Open your console and t', 'T' ) %}
+        }) %}
 
         <h3 class="heading heading--divide"><span class="heading__text">Scope the time <a href="#item-objects">item objects</a><a class="heading__anchor--bigger" name="set-min-time" href="#set-min-time">&sect;</a></span></h3>
 
@@ -640,7 +709,7 @@ picker.set('min', false)</code></pre>
                 '<button id=button__api-set--min-time-integer class="fieldset__button button button--small">Scope using an integer</button>' +
                 '<button id=button__api-set--min-time-true class="fieldset__button button button--small">Scope using `true`</button>' +
                 '<button id=button__api-set--min-time-false class="fieldset__button button button--small">Scope using `false`</button>'
-        }).replace( 'Open your console and t', 'T' ) %}
+        }) %}
 
     </div> <!-- .section__block -->
 
@@ -678,7 +747,7 @@ picker.set('max', false)</code></pre>
                 '<button id=button__api-set--max-date-integer class="fieldset__button button button--small">Scope using an integer</button>' +
                 '<button id=button__api-set--max-date-true class="fieldset__button button button--small">Scope using `true`</button>' +
                 '<button id=button__api-set--max-date-false class="fieldset__button button button--small">Scope using `false`</button>'
-        }).replace( 'Open your console and t', 'T' ) %}
+        }) %}
 
         <h3 class="heading heading--divide"><span class="heading__text">Scope the time <a href="#item-objects">item objects</a><a class="heading__anchor--bigger" name="set-max-time" href="#set-max-time">&sect;</a></span></h3>
 
@@ -700,7 +769,7 @@ picker.set('max', false)</code></pre>
                 '<button id=button__api-set--max-time-integer class="fieldset__button button button--small">Scope using an integer</button>' +
                 '<button id=button__api-set--max-time-true class="fieldset__button button button--small">Scope using `true`</button>' +
                 '<button id=button__api-set--max-time-false class="fieldset__button button button--small">Scope using `false`</button>'
-        }).replace( 'Open your console and t', 'T' ) %}
+        }) %}
 
     </div> <!-- .section__block -->
 

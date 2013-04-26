@@ -67,7 +67,7 @@ $( '#date_demo__formats' ).pickadate({
             closest( '.js__fieldset' ).
             after( '<div class="section__block section__block--notification-green">' +
                 '<p>Value to submit: <code>' +
-                    this.get({ select: 'yyyy/mm/dd' }) +
+                    this.get( 'select', 'yyyy/mm/dd' ) +
                 '</code></p></div>'
             )
     }
@@ -219,7 +219,8 @@ $( '#time_demo__buttons' ).pickatime({
  * Formats
  */
 $( '#time_demo__formats' ).pickatime({
-    format: 'T!ime: HHi',
+    format: 'T!ime selected: h:i a',
+    formatLabel: '<b>h</b>:i <!i>a</!i>',
     formatSubmit: 'HH:i',
     hiddenSuffix: '--submit',
     onSet: function() {
@@ -227,7 +228,7 @@ $( '#time_demo__formats' ).pickatime({
             closest( '.js__fieldset' ).
             after( '<div class="section__block section__block--notification-green">' +
                 '<p>Value to submit: <code>' +
-                    this.get({ select: 'yyyy/mm/dd' }) +
+                    this.get( 'select', 'HH:i' ) +
                 '</code></p></div>'
             )
     }
@@ -361,6 +362,11 @@ $button_open_close.on( 'click', function( event ) {
         picker_open_close.open()
     }
     event.stopPropagation()
+})
+$( '#demo__api-close-focus' ).pickadate({
+    onClose: function() {
+        this.close(true)
+    }
 })
 
 
@@ -536,6 +542,30 @@ $( '#button__api-get--open' ).on( 'click', function( event ) {
     event.stopPropagation()
 })
 
+//start
+var $input_get__start = $( '#demo__api-get--start' ).pickadate({
+        onOpen: function() {
+            console.log( 'Open state:', picker_get__start.get( 'start' ) )
+        }
+    }),
+    picker_get__start = $input_get__start.pickadate( 'picker' )
+$( '#button__api-get--start' ).on( 'click', function( event ) {
+    console.log( 'Start state:', picker_get__start.get( 'start' ) )
+    event.stopPropagation()
+})
+$( '#button__api-get--start-stop' ).on( 'click', function( event ) {
+    var $this = $( this )
+    if ( $this.text() == 'Stop picker' ) {
+        picker_get__start.stop()
+        $this.text( 'Start picker' )
+    }
+    else {
+        picker_get__start.start()
+        $this.text( 'Stop picker' )
+    }
+    event.stopPropagation()
+})
+
 //id
 var $input_get__id = $( '#demo__api-get--id' ).pickadate(),
     picker_get__id = $input_get__id.pickadate( 'picker' )
@@ -564,6 +594,14 @@ $( '#button__api-get--disable' ).on( 'click', function( event ) {
 /**
  * API demo: set
  */
+
+//select: clear
+var $input_set_clear = $( '#demo__api-set-clear' ).pickadate(),
+    picker_set_clear = $input_set_clear.pickadate( 'picker' )
+$( '#button__api-set-clear' ).on( 'click', function( event ) {
+    picker_set_clear.clear()
+    event.stopPropagation()
+})
 
 //select: date
 var $input_set__select_date = $( '#demo__api-set--select-date' ).pickadate(),

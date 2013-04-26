@@ -34,6 +34,7 @@ clear: 'Clear',
 
 // <a href="#formats">Formats</a>
 format: 'h:i A',
+formatLabel: undefined,
 formatSubmit: undefined,
 hiddenSuffix: '_submit',
 
@@ -141,13 +142,13 @@ $('.timepicker').pickatime({
     <div class="section__block section__block--scoped">
 
         <h2 class="heading heading--divide"><span class="heading__text">formats<a class="heading__anchor" name="formats" href="#formats">&sect;</a></span></h2>
-        <p>Display a human-friendly format and use an alternate one to submit.</p>
+        <p>Display a human-friendly label and input format and use an alternate one to submit.</p>
         <p>This is done by creating a new hidden <code class="tag-name">input</code> element with the same <code class="attribute">name</code> attribute as the original and a suffix:</p>
 
         <pre class="pre--demo"><code data-language="javascript">$('.timepicker').pickatime({
     // Escape any “<a href="#formatting-rules">rule</a>” characters with an exclamation mark (!).
-    format: 'T!ime: h:i a',
-    formatDisplay: '', // <<<< add this
+    format: 'T!ime selected: h:i a',
+    formatLabel: '&lt;b>h&lt;/b>:i &lt;!i>a&lt;/!i>',
     formatSubmit: 'HH:i',
     hiddenSuffix: '--submit'
 })</code></pre>

@@ -1,0 +1,3 @@
+[submodule "v2"]
+	path = v2
+	url = git://github.com/amsul/pickadate.js.git
