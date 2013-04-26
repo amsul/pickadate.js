@@ -476,12 +476,15 @@ a:focus {
   outline: 2px dotted;
 }
 
-p > a {
+p > a,
+.heading__text > a {
   text-decoration: none;
 }
 
 p > a:hover,
-p > a:focus {
+p > a:focus,
+.heading__text > a:hover,
+.heading__text > a:focus {
   text-decoration: underline;
 }
 
@@ -576,7 +579,6 @@ h3,
   .heading--divide-center,
   .heading--divide-first {
     position: relative;
-    margin-top: 1.6em;
     padding-top: 0;
     border-top: 0;
   }
@@ -625,7 +627,7 @@ h3,
 /**
  * Anchor for a heading
  */
-.heading__anchor {
+.heading__anchor, .heading__anchor--bigger {
   color: #bfbfbf;
   font-weight: 100;
   text-decoration: none;
@@ -635,9 +637,16 @@ h3,
   vertical-align: 3px;
 }
 
-.heading__anchor:hover,
-.heading__anchor:focus {
+.heading__text .heading__anchor:hover, .heading__text .heading__anchor--bigger:hover,
+.heading__text .heading__anchor:focus,
+.heading__text .heading__anchor--bigger:focus {
   color: #0089ec;
+  text-decoration: none;
+}
+
+.heading__anchor--bigger {
+  font-size: 1em;
+  vertical-align: 1px;
 }
 
 /* ==========================================================================
@@ -1232,6 +1241,10 @@ a.text-dimmed {
 
 .text-warning {
   color: #ee2200;
+}
+
+.text-tiny {
+  font-size: 60%;
 }
 
 /**

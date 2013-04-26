@@ -8,6 +8,13 @@
  */
 
 
+/* ==========================================================================
+   Globals
+   ========================================================================== */
+
+var TODAY = new Date(2013,3,20)
+
+
 
 /* ==========================================================================
    Date picker demos
@@ -337,7 +344,7 @@ $( '#time_demo__events' ).pickatime({
  * API demo: open-close
  */
 var $button_open_close = $( '#button__api-open-close' ),
-    $input_open_close = $( '#date_demo__api-open-close' ).pickadate({
+    $input_open_close = $( '#demo__api-open-close' ).pickadate({
         onOpen: function() {
             $button_open_close.text( 'Close' )
         },
@@ -347,7 +354,7 @@ var $button_open_close = $( '#button__api-open-close' ),
     }),
     picker_open_close = $input_open_close.pickadate( 'picker' )
 $button_open_close.on( 'click', function( event ) {
-    if ( picker_open_close.isOpen() ) {
+    if ( picker_open_close.get( 'open' ) ) {
         picker_open_close.close()
     }
     else {
@@ -362,7 +369,7 @@ $button_open_close.on( 'click', function( event ) {
  * API demo: isOpen
  */
 var $button_isOpen = $( '#button__api-isOpen' ),
-    $input_isOpen = $( '#date_demo__api-isOpen' ).pickadate({
+    $input_isOpen = $( '#demo__api-isOpen' ).pickadate({
         onOpen: function() {
             alert( 'The picker is open: ' + this.isOpen() )
         }
@@ -379,7 +386,7 @@ $button_isOpen.on( 'click', function( event ) {
  * API demo: start-stop
  */
 var $button_start_stop = $( '#button__api-start-stop' ),
-    $input_start_stop = $( '#date_demo__api-start-stop' ).pickadate({
+    $input_start_stop = $( '#demo__api-start-stop' ).pickadate({
         onStart: function() {
             $button_start_stop.text( 'Stop' )
         },
@@ -398,14 +405,14 @@ $button_start_stop.on( 'click', function( event ) {
 /**
  * API demo: render
  */
-var manglePicker = function( picker ) {
+var addStuff = function( picker ) {
         var today = new Date(),
             todayString = today.getDate() + '/' + (today.getMonth()+1) + '/' + today.getFullYear()
         picker.$holder.find( '.pickadate__box' ).
-            prepend('<p class="text-center">Hello there! Today is <code>' + todayString + '</code></p>')
+            prepend('<p class="text-center" style="padding:.25em;border:2px solid red">Hello there! Today is <code>' + todayString + '</code></p>')
     },
     $button_render = $( '#button__api-render' ),
-    $input_render = $( '#date_demo__api-render' ).pickadate(),
+    $input_render = $( '#demo__api-render' ).pickadate(),
     picker_render = $input_render.pickadate( 'picker' )
 $button_render.on( 'click', function( event ) {
     if ( $button_render.text() == 'Render' ) {
@@ -413,7 +420,7 @@ $button_render.on( 'click', function( event ) {
         $button_render.text( 'Add stuff' )
     }
     else {
-        manglePicker( picker_render )
+        addStuff( picker_render )
         $button_render.text( 'Render' )
     }
     event.stopPropagation()
@@ -425,7 +432,7 @@ $button_render.on( 'click', function( event ) {
  * API demo: clear
  */
 var $button_clear = $( '#button__api-clear' ),
-    $input_clear = $( '#date_demo__api-clear' ).pickadate(),
+    $input_clear = $( '#demo__api-clear' ).pickadate(),
     picker_clear = $input_clear.pickadate( 'picker' )
 $button_clear.on( 'click', function( event ) {
     picker_clear.clear()
@@ -439,27 +446,296 @@ $button_clear.on( 'click', function( event ) {
  */
 
 //value
-var $button_get__a = $( '#button__api-get--a' ),
-    $input_get__a = $( '#date_demo__api-get--a' ).pickadate(),
-    picker_get__a = $input_get__a.pickadate( 'picker' )
-$button_get__a.on( 'click', function( event ) {
-    console.log( picker_get__a.get() )
+var $button_get__value = $( '#button__api-get--value' ),
+    $input_get__value = $( '#demo__api-get--value' ).pickadate(),
+    picker_get__value = $input_get__value.pickadate( 'picker' )
+$button_get__value.on( 'click', function( event ) {
+    console.log( picker_get__value.get() )
     event.stopPropagation()
 })
 
 //select
-var $input_get__b = $( '#date_demo__api-get--b' ).pickadate(),
-    picker_get__b = $input_get__b.pickadate( 'picker' )
-$( '#button__api-get--b' ).on( 'click', function( event ) {
-    console.log( picker_get__b.get( 'select' ) )
+var $input_get__select = $( '#demo__api-get--select' ).pickadate(),
+    picker_get__select = $input_get__select.pickadate( 'picker' )
+$( '#button__api-get--select' ).on( 'click', function( event ) {
+    console.log( picker_get__select.get( 'select' ) )
     event.stopPropagation()
 })
-$( '#button__api-get--c' ).on( 'click', function( event ) {
-    console.log( picker_get__b.get( 'highlight' ) )
+var $input_get__select_format = $( '#demo__api-get--select-format' ).pickadate(),
+    picker_get__select_format = $input_get__select_format.pickadate( 'picker' )
+$( '#button__api-get--select-format' ).on( 'click', function( event ) {
+    console.log( picker_get__select_format.get( 'select', 'yyyy/mm/dd' ) )
     event.stopPropagation()
 })
-$( '#button__api-get--d' ).on( 'click', function( event ) {
-    console.log( picker_get__b.get( 'view' ) )
+
+//highlight
+var $input_get__highlight = $( '#demo__api-get--highlight' ).pickadate(),
+    picker_get__highlight = $input_get__highlight.pickadate( 'picker' )
+$( '#button__api-get--highlight' ).on( 'click', function( event ) {
+    console.log( picker_get__highlight.get( 'highlight' ) )
+    event.stopPropagation()
+})
+var $input_get__highlight_format = $( '#demo__api-get--highlight-format' ).pickadate(),
+    picker_get__highlight_format = $input_get__highlight_format.pickadate( 'picker' )
+$( '#button__api-get--highlight-format' ).on( 'click', function( event ) {
+    console.log( picker_get__highlight_format.get( 'highlight', 'yyyy/mm/dd' ) )
+    event.stopPropagation()
+})
+
+//view
+var $input_get__view = $( '#demo__api-get--view' ).pickadate(),
+    picker_get__view = $input_get__view.pickadate( 'picker' )
+$( '#button__api-get--view' ).on( 'click', function( event ) {
+    console.log( picker_get__view.get( 'view' ) )
+    event.stopPropagation()
+})
+var $input_get__view_format = $( '#demo__api-get--view-format' ).pickadate(),
+    picker_get__view_format = $input_get__view_format.pickadate( 'picker' )
+$( '#button__api-get--view-format' ).on( 'click', function( event ) {
+    console.log( picker_get__view_format.get( 'view', 'yyyy/mm/dd' ) )
+    event.stopPropagation()
+})
+
+//min
+var $input_get__min = $( '#demo__api-get--min' ).pickadate(),
+    picker_get__min = $input_get__min.pickadate( 'picker' )
+$( '#button__api-get--min' ).on( 'click', function( event ) {
+    console.log( picker_get__min.get( 'min' ) )
+    event.stopPropagation()
+})
+var $input_get__min_format = $( '#demo__api-get--min-format' ).pickadate(),
+    picker_get__min_format = $input_get__min_format.pickadate( 'picker' )
+$( '#button__api-get--min-format' ).on( 'click', function( event ) {
+    console.log( picker_get__min_format.get( 'min', 'yyyy/mm/dd' ) )
+    event.stopPropagation()
+})
+
+//max
+var $input_get__max = $( '#demo__api-get--max' ).pickadate(),
+    picker_get__max = $input_get__max.pickadate( 'picker' )
+$( '#button__api-get--max' ).on( 'click', function( event ) {
+    console.log( picker_get__max.get( 'max' ) )
+    event.stopPropagation()
+})
+var $input_get__max_format = $( '#demo__api-get--max-format' ).pickadate(),
+    picker_get__max_format = $input_get__max_format.pickadate( 'picker' )
+$( '#button__api-get--max-format' ).on( 'click', function( event ) {
+    console.log( picker_get__max_format.get( 'max', 'yyyy/mm/dd' ) )
+    event.stopPropagation()
+})
+
+//open
+var $input_get__open = $( '#demo__api-get--open' ).pickadate({
+        onOpen: function() {
+            console.log( 'Open state:', picker_get__open.get( 'open' ) )
+        }
+    }),
+    picker_get__open = $input_get__open.pickadate( 'picker' )
+$( '#button__api-get--open' ).on( 'click', function( event ) {
+    console.log( 'Open state:', picker_get__open.get( 'open' ) )
+    event.stopPropagation()
+})
+
+//id
+var $input_get__id = $( '#demo__api-get--id' ).pickadate(),
+    picker_get__id = $input_get__id.pickadate( 'picker' )
+$( '#button__api-get--id' ).on( 'click', function( event ) {
+    console.log( picker_get__id.get( 'id' ) )
+    event.stopPropagation()
+})
+
+//disable
+var $input_get__disable = $( '#demo__api-get--disable' ).pickadate({
+        disable: [
+            1,4,7,
+            [TODAY.getFullYear(),TODAY.getMonth(),8],
+            [TODAY.getFullYear(),TODAY.getMonth(),19],
+            [TODAY.getFullYear(),TODAY.getMonth(),27]
+        ]
+    }),
+    picker_get__disable = $input_get__disable.pickadate( 'picker' )
+$( '#button__api-get--disable' ).on( 'click', function( event ) {
+    console.log( picker_get__disable.get( 'disable' ) )
+    event.stopPropagation()
+})
+
+
+
+/**
+ * API demo: set
+ */
+
+//select: date
+var $input_set__select_date = $( '#demo__api-set--select-date' ).pickadate(),
+    picker_set__select_date = $input_set__select_date.pickadate( 'picker' )
+$( '#button__api-set--select-date-array' ).on( 'click', function( event ) {
+    picker_set__select_date.set( 'select', [TODAY.getFullYear(),TODAY.getMonth(),TODAY.getDate()] )
+    event.stopPropagation()
+})
+$( '#button__api-set--select-date-js' ).on( 'click', function( event ) {
+    var dateToSet = new Date( TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate() + 10 )
+    picker_set__select_date.set( 'select', dateToSet )
+    event.stopPropagation()
+})
+$( '#button__api-set--select-date-integer' ).on( 'click', function( event ) {
+    picker_set__select_date.set( 'select', TODAY.getTime() + 468487654 )
+    event.stopPropagation()
+})
+
+//select: time
+var $input_set__select_time = $( '#demo__api-set--select-time' ).pickatime(),
+    picker_set__select_time = $input_set__select_time.pickatime( 'picker' )
+$( '#button__api-set--select-time-array' ).on( 'click', function( event ) {
+    picker_set__select_time.set( 'select', [3,0] )
+    event.stopPropagation()
+})
+$( '#button__api-set--select-time-integer' ).on( 'click', function( event ) {
+    picker_set__select_time.set( 'select', 540 )
+    event.stopPropagation()
+})
+
+//highlight: date
+var $input_set__highlight_date = $( '#demo__api-set--highlight-date' ).pickadate(),
+    picker_set__highlight_date = $input_set__highlight_date.pickadate( 'picker' )
+$( '#button__api-set--highlight-date-array' ).on( 'click', function( event ) {
+    picker_set__highlight_date.set( 'highlight', [TODAY.getFullYear(),TODAY.getMonth(),TODAY.getDate()] )
+    event.stopPropagation()
+})
+$( '#button__api-set--highlight-date-js' ).on( 'click', function( event ) {
+    var dateToSet = new Date( TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate() + 10 )
+    picker_set__highlight_date.set( 'highlight', dateToSet )
+    event.stopPropagation()
+})
+$( '#button__api-set--highlight-date-integer' ).on( 'click', function( event ) {
+    picker_set__highlight_date.set( 'highlight', TODAY.getTime() - 468487654 )
+    event.stopPropagation()
+})
+
+//highlight: time
+var $input_set__highlight_time = $( '#demo__api-set--highlight-time' ).pickatime(),
+    picker_set__highlight_time = $input_set__highlight_time.pickatime( 'picker' )
+$( '#button__api-set--highlight-time-array' ).on( 'click', function( event ) {
+    picker_set__highlight_time.set( 'highlight', [15,30] )
+    event.stopPropagation()
+})
+$( '#button__api-set--highlight-time-integer' ).on( 'click', function( event ) {
+    picker_set__highlight_time.set( 'highlight', 1080 )
+    event.stopPropagation()
+})
+
+//view: date
+var $input_set__view_date = $( '#demo__api-set--view-date' ).pickadate(),
+    picker_set__view_date = $input_set__view_date.pickadate( 'picker' )
+$( '#button__api-set--view-date-array' ).on( 'click', function( event ) {
+    picker_set__view_date.set( 'view', [2000,3,20] )
+    event.stopPropagation()
+})
+$( '#button__api-set--view-date-js' ).on( 'click', function( event ) {
+    picker_set__view_date.set( 'view', new Date(1988,7,14) )
+    event.stopPropagation()
+})
+$( '#button__api-set--view-date-integer' ).on( 'click', function( event ) {
+    picker_set__view_date.set( 'view', 1587355200000 )
+    event.stopPropagation()
+})
+
+//view: time
+var $input_set__view_time = $( '#demo__api-set--view-time' ).pickatime(),
+    picker_set__view_time = $input_set__view_time.pickatime( 'picker' )
+$( '#button__api-set--view-time-array' ).on( 'click', function( event ) {
+    picker_set__view_time.set( 'view', [15,30] )
+    event.stopPropagation()
+})
+$( '#button__api-set--view-time-integer' ).on( 'click', function( event ) {
+    picker_set__view_time.set( 'view', 1080 )
+    event.stopPropagation()
+})
+
+//min: date
+var $input_set__min_date = $( '#demo__api-set--min-date' ).pickadate(),
+    picker_set__min_date = $input_set__min_date.pickadate( 'picker' )
+$( '#button__api-set--min-date-array' ).on( 'click', function( event ) {
+    picker_set__min_date.set( 'min', [2013,3,20] )
+    event.stopPropagation()
+})
+$( '#button__api-set--min-date-js' ).on( 'click', function( event ) {
+    picker_set__min_date.set( 'min', new Date(2013,7,14) )
+    event.stopPropagation()
+})
+$( '#button__api-set--min-date-integer' ).on( 'click', function( event ) {
+    picker_set__min_date.set( 'min', -4 )
+    event.stopPropagation()
+})
+$( '#button__api-set--min-date-true' ).on( 'click', function( event ) {
+    picker_set__min_date.set( 'min', true )
+    event.stopPropagation()
+})
+$( '#button__api-set--min-date-false' ).on( 'click', function( event ) {
+    picker_set__min_date.set( 'min', false )
+    event.stopPropagation()
+})
+
+//min: time
+var $input_set__min_time = $( '#demo__api-set--min-time' ).pickatime(),
+    picker_set__min_time = $input_set__min_time.pickatime( 'picker' )
+$( '#button__api-set--min-time-array' ).on( 'click', function( event ) {
+    picker_set__min_time.set( 'min', [15,30] )
+    event.stopPropagation()
+})
+$( '#button__api-set--min-time-integer' ).on( 'click', function( event ) {
+    picker_set__min_time.set( 'min', -4 )
+    event.stopPropagation()
+})
+$( '#button__api-set--min-time-true' ).on( 'click', function( event ) {
+    picker_set__min_time.set( 'min', true )
+    event.stopPropagation()
+})
+$( '#button__api-set--min-time-false' ).on( 'click', function( event ) {
+    picker_set__min_time.set( 'min', false )
+    event.stopPropagation()
+})
+
+//max: date
+var $input_set__max_date = $( '#demo__api-set--max-date' ).pickadate(),
+    picker_set__max_date = $input_set__max_date.pickadate( 'picker' )
+$( '#button__api-set--max-date-array' ).on( 'click', function( event ) {
+    picker_set__max_date.set( 'max', [2013,3,20] )
+    event.stopPropagation()
+})
+$( '#button__api-set--max-date-js' ).on( 'click', function( event ) {
+    picker_set__max_date.set( 'max', new Date(2013,7,14) )
+    event.stopPropagation()
+})
+$( '#button__api-set--max-date-integer' ).on( 'click', function( event ) {
+    picker_set__max_date.set( 'max', 4 )
+    event.stopPropagation()
+})
+$( '#button__api-set--max-date-true' ).on( 'click', function( event ) {
+    picker_set__max_date.set( 'max', true )
+    event.stopPropagation()
+})
+$( '#button__api-set--max-date-false' ).on( 'click', function( event ) {
+    picker_set__max_date.set( 'max', false )
+    event.stopPropagation()
+})
+
+//max: time
+var $input_set__max_time = $( '#demo__api-set--max-time' ).pickatime(),
+    picker_set__max_time = $input_set__max_time.pickatime( 'picker' )
+$( '#button__api-set--max-time-array' ).on( 'click', function( event ) {
+    picker_set__max_time.set( 'max', [15,30] )
+    event.stopPropagation()
+})
+$( '#button__api-set--max-time-integer' ).on( 'click', function( event ) {
+    picker_set__max_time.set( 'max', 4 )
+    event.stopPropagation()
+})
+$( '#button__api-set--max-time-true' ).on( 'click', function( event ) {
+    picker_set__max_time.set( 'max', true )
+    event.stopPropagation()
+})
+$( '#button__api-set--max-time-false' ).on( 'click', function( event ) {
+    picker_set__max_time.set( 'max', false )
     event.stopPropagation()
 })
 

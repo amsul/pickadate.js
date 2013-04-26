@@ -70,11 +70,14 @@ a {
 a:focus {
     outline: 2px dotted;
 }
-p > a {
+p > a,
+.heading__text > a {
     text-decoration: none;
 }
 p > a:hover,
-p > a:focus {
+p > a:focus,
+.heading__text > a:hover,
+.heading__text > a:focus {
     text-decoration: underline;
 }
 
@@ -167,7 +170,6 @@ h3,
 
     @include screen( small ) {
         position: relative;
-        margin-top: 1.6em;
         padding-top: 0;
         border-top: 0;
     }
@@ -224,9 +226,15 @@ h3,
     font-size: .75em;
     vertical-align: 3px;
 }
-.heading__anchor:hover,
-.heading__anchor:focus {
+.heading__text .heading__anchor:hover,
+.heading__text .heading__anchor:focus {
     color: $blue;
+    text-decoration: none;
+}
+.heading__anchor--bigger {
+    @extend .heading__anchor;
+    font-size: 1em;
+    vertical-align: 1px;
 }
 
 
@@ -816,6 +824,10 @@ a.text-dimmed {
 
 .text-warning {
     color: $red;
+}
+
+.text-tiny {
+    font-size: 60%;
 }
 
 
