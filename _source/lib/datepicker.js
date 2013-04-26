@@ -40,8 +40,7 @@ function DatePicker( picker, settings ) {
         highlight: 'navigate create validate',
         view: 'create viewset',
         disable: 'flipItem',
-        enable: 'flipItem',
-        flip: 'flipAll'
+        enable: 'flipItem'
     }
 
     // The component's item object.
@@ -339,12 +338,12 @@ DatePicker.prototype.disabled = function( dateObject ) {
 
             // If the date is a number, match the weekday with 0index and `firstDay` check.
             if ( isInteger( dateToDisable ) ) {
-                return dateObject.day == ( calendar.settings.firstDay ? dateToDisable : dateToDisable - 1 ) % 7
+                return dateObject.day === ( calendar.settings.firstDay ? dateToDisable : dateToDisable - 1 ) % 7
             }
 
             // If it's an array, create the object and match the exact date.
             if ( Array.isArray( dateToDisable ) ) {
-                return dateObject.pick == calendar.create( dateToDisable ).pick
+                return dateObject.pick === calendar.create( dateToDisable ).pick
             }
         }).length
 
@@ -361,22 +360,33 @@ DatePicker.prototype.shift = function( dateObject, interval ) {
     var calendar = this,
         originalDateObject = dateObject
 
+    interval = interval || 1
+
     // Keep looping as long as the time is disabled.
     while ( calendar.disabled( dateObject ) ) {
 
         // Increase/decrease the date by the key movement and keep looping.
-        dateObject = calendar.create([ dateObject.year, dateObject.month, dateObject.date + ( interval || 1 ) ])
+        dateObject = calendar.create([ dateObject.year, dateObject.month, dateObject.date + interval ])
 
-        // If we've looped beyond the limits, break out of the loop.
-        if ( dateObject.pick <= calendar.item.min.pick || dateObject.pick >= calendar.item.max.pick ) {
-            break
+        // Check if we've looped through over 2 months in either direction.
+        if ( Math.abs( dateObject.month - originalDateObject.month ) > 2 ) {
+
+            // Reset the date object to the original date.
+            dateObject = originalDateObject
+
+            // If the calendar is flipped, go in the opposite direction.
+            if ( calendar.item.enable === -1 ) {
+                interval = interval < 0 ? 1 : -1
+            }
+            // Otherwise go in the same direction.
+            else {
+                interval = interval < 0 ? -1 : 1
+            }
         }
 
-        // If we've looped through to 2 month either way, reset the date object
-        // to the original date and shift by 1 in the same direction as before.
-        if ( Math.abs( dateObject.month - originalDateObject.month ) > 1 ) {
-            dateObject = originalDateObject
-            interval = interval < 0 ? -1 : 1
+        // If we've gone beyond the limits, break out of the loop.
+        if ( dateObject.pick <= calendar.item.min.pick || dateObject.pick >= calendar.item.max.pick ) {
+            break
         }
     }
 
@@ -548,7 +558,13 @@ DatePicker.prototype.flipItem = function( type, value/*, options*/ ) {
         collection = calendar.item.disable,
         isFlipped = calendar.item.enable === -1
 
-    if ( !isFlipped && type == 'enable' || isFlipped && type == 'disable' ) {
+    // Flip the enabled and disabled dates.
+    if ( value == 'flip' ) {
+        calendar.item.enable = isFlipped ? 1 : -1
+    }
+
+    // Check if we have to add/remove from collection.
+    else if ( !isFlipped && type == 'enable' || isFlipped && type == 'disable' ) {
         collection = calendar.removeDisabled( collection, value )
     }
     else if ( !isFlipped && type == 'disable' || isFlipped && type == 'enable' ) {
@@ -557,14 +573,6 @@ DatePicker.prototype.flipItem = function( type, value/*, options*/ ) {
 
     return collection
 } //DatePicker.prototype.flipItem
-
-
-/**
- * Flip all items as disabled or enabled.
- */
-DatePicker.prototype.flipAll = function( type, value/*, options*/ ) {
-    return value === false ? 1 : -1
-}
 
 
 /**

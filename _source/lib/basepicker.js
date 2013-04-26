@@ -459,16 +459,7 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                         return P.component.get( thing )
                     }
                 }
-            }, //get
-
-
-            /**
-             * Flip the switch to disable items
-             */
-            disableAll: function( value ) {
-                P.component.set( 'flip', value )
-                return P.render()
-            } //disableAll
+            } //get
         } //PickerInstance.prototype
 
 

@@ -43,8 +43,7 @@ function TimePicker( picker, settings ) {
         highlight: 'create validate',
         view: 'create validate',
         disable: 'flipItem',
-        enable: 'flipItem',
-        flip: 'flipAll'
+        enable: 'flipItem'
     }
 
     // The component's item object.
@@ -461,7 +460,13 @@ TimePicker.prototype.flipItem = function( type, value/*, options*/ ) {
         collection = clock.item.disable,
         isFlipped = clock.item.enable === -1
 
-    if ( !isFlipped && type == 'enable' || isFlipped && type == 'disable' ) {
+    // Flip the enabled and disabled times.
+    if ( value == 'flip' ) {
+        clock.item.enable = isFlipped ? 1 : -1
+    }
+
+    // Check if we have to add/remove from collection.
+    else if ( !isFlipped && type == 'enable' || isFlipped && type == 'disable' ) {
         collection = clock.removeDisabled( collection, value )
     }
     else if ( !isFlipped && type == 'disable' || isFlipped && type == 'enable' ) {
@@ -470,14 +475,6 @@ TimePicker.prototype.flipItem = function( type, value/*, options*/ ) {
 
     return collection
 } //TimePicker.prototype.flipItem
-
-
-/**
- * Flip all items as disabled or enabled.
- */
-TimePicker.prototype.flipAll = function( type, value/*, options*/ ) {
-    return value === false ? 1 : -1
-}
 
 
 /**

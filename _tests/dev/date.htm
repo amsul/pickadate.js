@@ -69,6 +69,9 @@
             // selectMonths: true,
             // selectYears: 20,
             disable: [
+                // 1,2,4,7,
+                // [2013,3,19]
+                [2013,3,1],[2013,3,17],[2013,3,25]
             ],
             // min: [2013, 1, 10],
             // max: [2014, 3, 25],
@@ -76,7 +79,7 @@
             // max: 5,
         })
 
-        // $input.pickadate( 'set', { disable: [1,2,4,7] } )
+        $input.pickadate( 'set', { disable: 'flip' } )
 
         // var $button = $( '.button' ).on( 'click', function( event ) {
         //     event.preventDefault()

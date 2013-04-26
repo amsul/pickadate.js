@@ -414,6 +414,34 @@ test( '`disable` and `enable` using integers', function() {
             }
         })
     })
+
+    picker.set( 'enable', 'flip' )
+    deepEqual( picker.get( 'disable' ), [4,7], 'Disabled collection `enable` flipped' )
+
+    $holder.find( 'tr' ).each( function( indexRow, tableRow ) {
+        $( tableRow ).find( '[data-pick]' ).each( function( indexCell, tableCell ) {
+            if ( [4,7].indexOf( indexCell + 1 ) < 0 ) {
+                ok( $( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Disabled as day of week: ' + ( indexCell + 1 ) + '. Date: ' + tableCell.innerHTML )
+            }
+            else {
+                ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Enabled as day of week: ' + ( indexCell + 1 ) + '. Date: ' + tableCell.innerHTML )
+            }
+        })
+    })
+
+    picker.set( 'disable', 'flip' )
+    deepEqual( picker.get( 'disable' ), [4,7], 'Disabled collection `disable` flipped' )
+
+    $holder.find( 'tr' ).each( function( indexRow, tableRow ) {
+        $( tableRow ).find( '[data-pick]' ).each( function( indexCell, tableCell ) {
+            if ( [4,7].indexOf( indexCell + 1 ) > -1 ) {
+                ok( $( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Disabled as day of week: ' + ( indexCell + 1 ) + '. Date: ' + tableCell.innerHTML )
+            }
+            else {
+                ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Enabled as day of week: ' + ( indexCell + 1 ) + '. Date: ' + tableCell.innerHTML )
+            }
+        })
+    })
 })
 
 test( '`disable` and `enable` using arrays', function() {
@@ -427,7 +455,7 @@ test( '`disable` and `enable` using arrays', function() {
         $holder = picker.$holder
 
 
-    picker.set( { disable: disableCollection } )
+    picker.set( 'disable', disableCollection )
     deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled dates added to collection' )
 
     $holder.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
@@ -441,8 +469,36 @@ test( '`disable` and `enable` using arrays', function() {
     })
 
 
-    picker.set( { enable: [ [nowYear,nowMonth,17] ] } )
+    picker.set( 'enable', [ [nowYear,nowMonth,17] ] )
     deepEqual( picker.get( 'disable' ), [ [nowYear,nowMonth,1],[nowYear,nowMonth,25] ], 'Disabled date removed from collection' )
+
+    $holder.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
+        var index = indexCell - 1 + firstDay
+        if ( index === 1 || index === 25 ) {
+            ok( $( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is disabled: ' + tableCell.innerHTML )
+        }
+        else {
+            ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is enabled: ' + tableCell.innerHTML )
+        }
+    })
+
+
+    picker.set( 'enable', 'flip' )
+    deepEqual( picker.get( 'disable' ), [ [nowYear,nowMonth,1],[nowYear,nowMonth,25] ], 'Disabled collection `enable` flipped' )
+
+    $holder.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
+        var index = indexCell - 1 + firstDay
+        if ( index !== 1 && index !== 25 ) {
+            ok( $( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is disabled: ' + tableCell.innerHTML )
+        }
+        else {
+            ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is enabled: ' + tableCell.innerHTML )
+        }
+    })
+
+
+    picker.set( 'disable', 'flip' )
+    deepEqual( picker.get( 'disable' ), [ [nowYear,nowMonth,1],[nowYear,nowMonth,25] ], 'Disabled collection `disable` flipped' )
 
     $holder.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
         var index = indexCell - 1 + firstDay

@@ -68,6 +68,21 @@ module( 'Time picker `set`', {
     }
 })
 
+test( '`interval`', function() {
+
+    var picker = this.picker,
+        $holder = picker.$holder
+
+    picker.set( 'interval', 120 )
+    ok( picker.get( 'interval' ) === 120, '`interval` updated' )
+    ok( picker.get( 'min' ).pick % 120 === 0, '`min` updated' )
+    ok( picker.get( 'max' ).pick % 120 === 0, '`max` updated' )
+    ok( $holder.find( '.' + $.fn.pickatime.defaults.klass.listItem ).length === 12, '12 selectable times' )
+
+    picker.set( 'interval', 'lol' )
+    ok( picker.get( 'interval' ) === 120, 'Interval unaffected by non-integer' )
+})
+
 test( '`select`', function() {
 
     var picker = this.picker
@@ -254,12 +269,9 @@ test( '`max` specific', function() {
 
 test( '`disable` and `enable` using integers', function() {
 
-    var today = new Date(),
-        disableCollection = [1,4,7],
+    var disableCollection = [1,4,7],
         picker = this.picker,
         $holder = picker.$holder
-
-    today.setHours(0,0,0,0)
 
     picker.set( 'disable', disableCollection )
 
@@ -278,6 +290,34 @@ test( '`disable` and `enable` using integers', function() {
 
     picker.set( 'enable', [1] )
     deepEqual( picker.get( 'disable' ), [4,7], 'Disabled time removed' )
+
+    $holder.find( '[data-pick]' ).each( function() {
+        var $this = $( this ),
+            hour = ~~( $this.data('pick')/60 )
+        if ( [4,7].indexOf( hour ) > -1 ) {
+            ok( $this.hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Disabled time: ' + $this.html() )
+        }
+        else {
+            ok( !$this.hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Enabled time: ' + $this.html() )
+        }
+    })
+
+    picker.set( 'enable', 'flip' )
+    deepEqual( picker.get( 'disable' ), [4,7], 'Disabled collection `enable` flipped' )
+
+    $holder.find( '[data-pick]' ).each( function() {
+        var $this = $( this ),
+            hour = ~~( $this.data('pick')/60 )
+        if ( [4,7].indexOf( hour ) < 0 ) {
+            ok( $this.hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Disabled time: ' + $this.html() )
+        }
+        else {
+            ok( !$this.hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Enabled time: ' + $this.html() )
+        }
+    })
+
+    picker.set( 'disable', 'flip' )
+    deepEqual( picker.get( 'disable' ), [4,7], 'Disabled collection `disable` flipped' )
 
     $holder.find( '[data-pick]' ).each( function() {
         var $this = $( this ),
@@ -320,21 +360,30 @@ test( '`disable` and `enable` using arrays', function() {
             ok( !$( item ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is enabled: ' + item.innerHTML )
         }
     })
-})
 
-test( '`interval`', function() {
+    picker.set( 'enable', 'flip' )
+    deepEqual( picker.get( 'disable' ), [ [1,0],[18,0],[23,30] ], 'Disabled collection `enable` flipped' )
 
-    var picker = this.picker,
-        $holder = picker.$holder
+    $holder.find( '[data-pick]' ).each( function( index, item ) {
+        if ( index !== 2 && index !== 36 && index !== 47 ) {
+            ok( $( item ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is disabled: ' + item.innerHTML )
+        }
+        else {
+            ok( !$( item ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is enabled: ' + item.innerHTML )
+        }
+    })
 
-    picker.set( 'interval', 120 )
-    ok( picker.get( 'interval' ) === 120, '`interval` updated' )
-    ok( picker.get( 'min' ).pick % 120 === 0, '`min` updated' )
-    ok( picker.get( 'max' ).pick % 120 === 0, '`max` updated' )
-    ok( $holder.find( '.' + $.fn.pickatime.defaults.klass.listItem ).length === 12, '12 selectable times' )
+    picker.set( 'disable', 'flip' )
+    deepEqual( picker.get( 'disable' ), [ [1,0],[18,0],[23,30] ], 'Disabled collection `disable` flipped' )
 
-    picker.set( 'interval', 'lol' )
-    ok( picker.get( 'interval' ) === 120, 'Interval unaffected by non-integer' )
+    $holder.find( '[data-pick]' ).each( function( index, item ) {
+        if ( index === 2 || index === 36 || index === 47 ) {
+            ok( $( item ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is disabled: ' + item.innerHTML )
+        }
+        else {
+            ok( !$( item ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is enabled: ' + item.innerHTML )
+        }
+    })
 })
 
 
