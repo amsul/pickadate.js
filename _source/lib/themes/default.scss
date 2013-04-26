@@ -65,8 +65,8 @@
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
 
-    /* Fade out the background, then after a .5 sec delay, shift the holder out of view */
-    @include prefix( transition, (background $speed-animate-in ease-out, top 0s ($speed-animate-in + .5s) ) );
+    /* Fade out the background, then immediately shift the holder out of view */
+    @include prefix( transition, (background $speed-animate-in ease-out, top 0s $speed-animate-in ) );
 }
 
 /* When the picker opens, fade in an overlay */

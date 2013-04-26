@@ -52,8 +52,8 @@ function DatePicker( picker, settings ) {
     })( calendar.item.disable )
 
     calendar.
-        set( 'min', settings.min || -Infinity ).
-        set( 'max', settings.max || Infinity ).
+        set( 'min', settings.min ).
+        set( 'max', settings.max ).
         set( 'now' ).
         set( 'select',
 
@@ -232,8 +232,8 @@ DatePicker.prototype.measure = function( type, value/*, options*/ ) {
 
     var calendar = this
 
-    // If it's a literal `false`, remove the limits.
-    if ( value === false ) {
+    // If it's anything false-y, remove the limits.
+    if ( !value ) {
         value = type == 'min' ? -Infinity : Infinity
     }
 
@@ -243,49 +243,6 @@ DatePicker.prototype.measure = function( type, value/*, options*/ ) {
     }
 
     return value
-
-
-
-    // var
-    //     date = timeUnit || options.orig,
-    //     calendar = this
-
-    // // Make sure we have options to work with
-    // if ( !options ) {
-    //     console.warn( 'we might need some options', timeUnit, options )
-    // }
-
-    // // If it's a literal true, return the time right now.
-    // // For `max`, time hasn't passed. But for `min` it has.
-    // if ( timeUnit === true ) {
-
-    //     // If it's relative a relative measure, set the time as past.
-    //     // *** Find a better way to do this later.
-    //     if ( options.type == 'max' || options.type == 'min' ) {
-    //         options.past = 1
-    //     }
-
-    //     date = calendar.now( timeUnit, options )
-    // }
-
-    // else if ( Array.isArray( timeUnit || date ) ) {
-    //     date = calendar.normalize( calendar.prepare( timeUnit || date ), options )
-    // }
-
-    // // If it's a number, return the time right now shifted relative by intervals.
-    // else if ( !isNaN( timeUnit ) ) {
-
-    //     // If it's relative a relative measure, set the time as past.
-    //     // *** Find a better way to do this later.
-    //     if ( options.type == 'max' || options.type == 'min' ) {
-    //         options.past = 1
-    //     }
-
-    //     date = timeUnit * calendar.i + calendar.now( timeUnit, options )
-    // }
-
-    // // Return the date or default to 0.
-    // return date || 0
 } ///DatePicker.prototype.measure
 
 
@@ -420,6 +377,7 @@ DatePicker.prototype.parse = function( type, value, options ) {
 
     // We need a `.format` to parse the value.
     if ( !( options && options.format ) ) {
+        // should probably default to the default format.
         throw "Need a formatting option to parse this.."
     }
 
@@ -858,63 +816,6 @@ DatePicker.prototype.nodes = function( isOpen ) {
         settings.klass.footer
     ) //endreturn
 } //DatePicker.prototype.nodes
-
-
-
-
-
-
-
-//     /* ==========================================================================
-//        Build date picker components
-//        ========================================================================== */
-
-
-//     /**
-//      * Create a date object by validating it can be "reached".
-//      */
-//     CalendarPicker.prototype.validate = function( datePassed, keyMovement ) {
-
-//         var calendar = this,
-//             minLimitObject = calendar.props.get( 'min' ),
-//             maxLimitObject = calendar.props.get( 'max' ),
-
-//             // Make sure we have a date object to work with.
-//             datePassedObject = datePassed && !isNaN( datePassed.obj ) ? datePassed : calendar.create( datePassed )
-
-//         // If we passed the lower bound, set the key movement upwards,
-//         // flip our "reached min" flag, and set the date to the lower bound.
-//         if ( datePassedObject.obj < minLimitObject.obj ) {
-//             keyMovement = 1
-//             calendar.doneMin = 1
-//             datePassedObject = minLimitObject
-//         }
-
-//         // Otherwise if we passed the upper bound, set the key movement downwards,
-//         // flip our "reached max" flag, and set the date to the upper bound.
-//         else if ( datePassedObject.obj > maxLimitObject.obj ) {
-//             keyMovement = -1
-//             calendar.doneMax = 1
-//             datePassedObject = maxLimitObject
-//         }
-
-//         // If we've hit the upper and lower bounds, set the date to now and move on.
-//         if ( calendar.doneMin && calendar.doneMax ) {
-//             datePassedObject = calendar.props.get( 'now' )
-//         }
-
-//         // Otherwise if there are dates to disable and this is one of them,
-//         // shift using the interval until we reach an enabled date.
-//         else if ( calendar.props.disable.length && calendar.disable( datePassedObject ) ) {
-//             datePassedObject = calendar.shift( datePassedObject, datePassedObject.obj > maxLimitObject.obj ? -1 : keyMovement || 1 )
-//         }
-
-//         // Reset the check for if we reached the min and max bounds.
-//         calendar.doneMin = undefined
-//         calendar.doneMax = undefined
-
-//         return datePassedObject
-//     } //CalendarPicker.prototype.validate
 
 
 

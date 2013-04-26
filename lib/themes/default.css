@@ -88,10 +88,10 @@
   /* Allow the holder to be scrolled in case the content doesn't fit */
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
-  /* Fade out the background, then after a .5 sec delay, shift the holder out of view */
-  -webkit-transition: background 0.15s ease-out, top 0s 0.65s;
-  -moz-transition: background 0.15s ease-out, top 0s 0.65s;
-  transition: background 0.15s ease-out, top 0s 0.65s;
+  /* Fade out the background, then immediately shift the holder out of view */
+  -webkit-transition: background 0.15s ease-out, top 0s 0.15s;
+  -moz-transition: background 0.15s ease-out, top 0s 0.15s;
+  transition: background 0.15s ease-out, top 0s 0.15s;
 }
 
 /* When the picker opens, fade in an overlay */

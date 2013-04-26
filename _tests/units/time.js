@@ -146,7 +146,7 @@ test( '`view`', function() {
     ok( picker.get( 'max' ).pick === 1410, '`max` unaffected' )
 })
 
-test( '`min` relative', function() {
+test( '`min` using integers', function() {
 
     var picker = this.picker,
         interval = 30
@@ -184,7 +184,7 @@ test( '`min` relative', function() {
     }
 })
 
-test( '`min` now', function() {
+test( '`min` using booleans', function() {
 
     var picker = this.picker
 
@@ -194,6 +194,14 @@ test( '`min` now', function() {
     deepEqual( picker.get( 'select' ), picker.get( 'min' ), '`select` updated' )
     deepEqual( picker.get( 'highlight' ), picker.get( 'min' ), '`highlight` updated' )
     deepEqual( picker.get( 'view' ), picker.get( 'min' ), '`view` updated' )
+    deepEqual( picker.get( 'max' ).pick, 1410, '`max` unaffected' )
+
+    // Boolean false
+    picker.set( 'min', false )
+    strictEqual( picker.get( 'min' ).pick, 0, '`min` using `false`: ' + picker.get( 'min', 'HH:i' ) )
+    deepEqual( picker.get( 'select' ), picker.get( 'now' ), '`select` unaffected' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'now' ), '`highlight` unaffected' )
+    deepEqual( picker.get( 'view' ), picker.get( 'now' ), '`view` unaffected' )
     deepEqual( picker.get( 'max' ).pick, 1410, '`max` unaffected' )
 })
 
@@ -209,7 +217,7 @@ test( '`min` specific', function() {
     deepEqual( picker.get( 'max' ).pick, 1410, '`max` unaffected' )
 })
 
-test( '`max` relative', function() {
+test( '`max` using integers', function() {
 
     var picker = this.picker,
         interval = 30
@@ -226,7 +234,11 @@ test( '`max` relative', function() {
 
     // Using negative numbers
     picker.set( 'max', -3 )
-    strictEqual( picker.get( 'max' ).pick, picker.get( 'now' ).pick + ( interval * -3 ), '`max` using a negative number: ' + picker.get( 'max', 'HH:i' ) )
+
+    var maxPickTime = picker.get( 'now' ).pick + ( interval * -3 )
+    // If it's less than `min` time, add a day.
+    maxPickTime += maxPickTime < 0 ? 1440 : 0
+    strictEqual( picker.get( 'max' ).pick, maxPickTime, '`max` using a negative number: ' + picker.get( 'max', 'HH:i' ) )
 
     if ( picker.get( 'max' ).pick < 0 ) {
         notStrictEqual( picker.get( 'min' ).pick, 0, '`min` updated' )
@@ -242,13 +254,21 @@ test( '`max` relative', function() {
     }
 })
 
-test( '`max` now', function() {
+test( '`max` using booleans', function() {
 
     var picker = this.picker
 
     // Boolean true
     picker.set( 'max', true )
     deepEqual( picker.get( 'max' ), picker.get( 'now' ), '`max` using `true`: ' + picker.get( 'max', 'HH:i' ) )
+    strictEqual( picker.get( 'select' ).pick, 0, '`select` unaffected' )
+    strictEqual( picker.get( 'highlight' ).pick, 0, '`highlight` unaffected' )
+    strictEqual( picker.get( 'view' ).pick, 0, '`view` unaffected' )
+    strictEqual( picker.get( 'min' ).pick, 0, '`min` unaffected' )
+
+    // Boolean false
+    picker.set( 'max', false )
+    deepEqual( picker.get( 'max' ).pick, 1410, '`max` using `false`: ' + picker.get( 'max', 'HH:i' ) )
     strictEqual( picker.get( 'select' ).pick, 0, '`select` unaffected' )
     strictEqual( picker.get( 'highlight' ).pick, 0, '`highlight` unaffected' )
     strictEqual( picker.get( 'view' ).pick, 0, '`view` unaffected' )

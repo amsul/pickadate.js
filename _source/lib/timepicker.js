@@ -56,8 +56,8 @@ function TimePicker( picker, settings ) {
     })( clock.item.disable )
 
     clock.
-        set( 'min', settings.min || [ 0, 0 ] ).
-        set( 'max', settings.max || [ HOURS_IN_DAY - 1, MINUTES_IN_HOUR - 1 ] ).
+        set( 'min', settings.min ).
+        set( 'max', settings.max ).
         set( 'now' ).
         set( 'select',
 
@@ -232,13 +232,13 @@ TimePicker.prototype.measure = function( type, value, options ) {
 
     var clock = this
 
-    // If it's an integer, we need to make it relative to now.
-    if ( isInteger( value ) ) {
-        value = clock.now( type, value, options )
+    // If it's anything false-y, set it to the default.
+    if ( !value ) {
+        value = type == 'min' ? [ 0, 0 ] : [ HOURS_IN_DAY - 1, MINUTES_IN_HOUR - 1 ]
     }
 
-    // If it's a literal true, return the time right now.
-    else if ( value === true ) {
+    // If it's a literal true, or an integer, make it relative to now.
+    else if ( value === true || isInteger( value ) ) {
         value = clock.now( type, value, options )
     }
 
@@ -545,7 +545,7 @@ TimePicker.prototype.nodes = function( isOpen ) {
         item: function( loopedTime ) {
             loopedTime = clock.create( loopedTime )
             return [
-                triggerFunction( clock.formats.toString, clock, [ settings.format, loopedTime ] ),
+                triggerFunction( clock.formats.toString, clock, [ settings.formatLabel || settings.format, loopedTime ] ),
                 (function( klasses, timeMinutes ) {
 
                     if ( selectedObject && selectedObject.pick == timeMinutes ) {

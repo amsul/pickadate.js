@@ -254,7 +254,7 @@ test( '`min`', function() {
     deepEqual( picker.get( 'max' ).pick, Infinity, '`max` unaffected' )
 })
 
-test( '`min` using boolean', function() {
+test( '`min` using booleans', function() {
 
     var picker = this.picker,
         today = new Date(),

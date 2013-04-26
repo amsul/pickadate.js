@@ -143,7 +143,7 @@ test( 'Options', function() {
     strictEqual( thisModule.retarted, picker.get( 'open' ) === true, 'Restarted: `onStart`' )
 
     picker.set()
-    strictEqual( thisModule.selected, undefined, 'Fired: `onSet`' )
+    deepEqual( thisModule.selected, {}, 'Fired: `onSet`' )
 })
 
 

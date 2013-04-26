@@ -63,8 +63,8 @@
     <script type="text/javascript">
 
         var $input = $( '.datepicker' ).pickatime({
-            // format: '<b>h</b>:i <!i>a</!i>',
             // format: 'h:i a',
+            formatLabel: '<b>h</b>:i <!i>a</!i>',
             // formatSubmit: 'HH:i',
             // interval: 120,
             disable: [
@@ -76,13 +76,13 @@
                 // [8,45]
             ],
             // min: 4,
-            // min: [ 7, 30 ],
+            min: [ 7, 30 ],
             // max: -2,
-            // max: [ 9, 0 ]
-        })
+            max: [ 9, 0 ]
+        }),
+        picker = $input.pickatime('picker')
 
-        // $input.pickatime( 'set', { disable: [0,1,4] } )
-        // $input.pickatime( 'disableAll' )
+        console.log( picker.set( 'max', false ) )
 
         // var $button = $( '.button' ).on( 'click', function( event ) {
         //     event.preventDefault()
