@@ -81,6 +81,15 @@ Before contributing any code to the project, please take a look at the [Contribu
 
 
 
+<br>
+## Building with Grunt
+
+Grunt `~0.4.0` is used to build the project files. To get started, after cloning the project over, run `npm install` to get all the required node modules.
+
+Then run `grunt everything --verbose` to check if you have all the dependencies.
+
+
+
 <br><br>
 
 ---
