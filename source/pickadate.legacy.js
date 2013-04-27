@@ -120,7 +120,7 @@
                                     }
                                 }
                             }
-                        }).after( [ $HOLDER, ELEMENT_HIDDEN ] )
+                        }).after( $HOLDER, ELEMENT_HIDDEN )
 
 
                         // If the element has autofocus, open the calendar
