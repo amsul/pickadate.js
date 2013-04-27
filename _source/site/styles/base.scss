@@ -265,6 +265,7 @@ pre {
     padding: 1em;
     text-align: left;
     @include prefix( border-radius, 4px );
+    @include demo-tag( "Code" );
 }
 
 pre > code {
@@ -374,7 +375,6 @@ input[type=search] {
 .pre--demo {
     margin-bottom: 0;
     @include prefix( border-radius, 4px 4px 0 0 );
-    @include demo-tag( "Code" );
 }
 .fieldset--demo {
     margin-top: 0;
@@ -692,7 +692,7 @@ input[type=search] {
 .section__block--notification-green {
     background: $yellow-faded;
     border: 1px solid $yellow-faded-darker;
-    padding: 0 $gutter;
+    padding: 5px 30px;
     margin-top: 1em;
     margin-bottom: 1em;
     color: $dark-brown;

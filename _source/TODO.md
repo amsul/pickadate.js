@@ -1,11 +1,16 @@
 
 a lot of the stuff below may never happen...
 
+
 docs
 ----
 
-- note on the "month 0index"
+- add “input” class on start
 - examples page
+- note on using translations with `data-value`
+- api events and objects description
+- contributing guide
+- readme with build system, et al
 
 
 tests

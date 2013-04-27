@@ -13,6 +13,10 @@
 
 module.exports = function( grunt ) {
 
+    // Read the package manifest.
+    var packageJSON = grunt.file.readJSON( 'package.json' )
+
+
     // Add the "curly" delimiters.
     grunt.template.addDelimiters( 'curly', '{%', '%}' )
 
@@ -33,8 +37,8 @@ module.exports = function( grunt ) {
     grunt.initConfig({
 
 
-        // Read the package manifest.
-        pkg: grunt.file.readJSON( 'package.json' ),
+        // Add the package data.
+        pkg: packageJSON,
 
 
         // Set up the directories.
@@ -120,7 +124,8 @@ module.exports = function( grunt ) {
                     { '<%= pkg.name %>.jquery.json': 'package.json' },
                     { 'README.md': '<%= dirs.lib.src %>/../README.md' },
                     { 'LICENSE.md': '<%= dirs.lib.src %>/../LICENSE.md' },
-                    { 'CHANGELOG.md': '<%= dirs.lib.src %>/../CHANGELOG.md' }
+                    { 'CHANGELOG.md': '<%= dirs.lib.src %>/../CHANGELOG.md' },
+                    { 'CONTRIBUTING.md': '<%= dirs.lib.src %>/../CONTRIBUTING.md' }
                 ]
             }
         },
@@ -240,16 +245,33 @@ module.exports = function( grunt ) {
                 files: [ '<%= dirs.lib.src %>/**/*.js', '<%= dirs.lib.src %>/themes/*.scss' ],
                 tasks: [ 'build' ]
             }
+        },
+
+
+        // Any extra data needed in the templates.
+        ___: {
+
+            // The sanitized github repo url.
+            gitrepo_url: packageJSON.repository.url.replace( /.git$/, '' ),
+
+            // Get the min & gzip size of a text file.
+            fileSize: function( content ) {
+                return {
+                    min: content.length || 0,
+                    gzip: content ? require( 'zlib-browserify' ).gzipSync( content ).length : 0
+                }
+            }
         }
     }) //grunt.initConfig
 
 
     // Register the tasks.
-    grunt.registerTask( 'default', [ 'clean', 'htmlify', 'concat', 'copy', 'sass', 'jshint', 'uglify', 'cssmin' ] )
-    grunt.registerTask( 'quick', [ 'htmlify', 'concat', 'copy', 'sass' ] )
+    grunt.registerTask( 'default', [ 'clean', 'htmlify', 'concat', 'copy:site', 'copy:lib', 'sass', 'jshint', 'uglify', 'cssmin', 'copy:pkg' ] )
+    grunt.registerTask( 'quick', [ 'htmlify', 'concat', 'copy:site', 'copy:lib', 'sass' ] )
     grunt.registerTask( 'build', [ 'clean:lib', 'concat:lib', 'copy:lib', 'sass:lib', 'jshint:lib', 'qunit:lib', 'uglify:lib', 'cssmin:lib' ] )
     grunt.registerTask( 'site', [ 'clean:site', 'htmlify:site', 'concat:site', 'copy:site', 'sass:site', 'jshint:site' ] )
-    grunt.registerTask( 'travis', [ 'concat', 'copy', 'sass', 'jshint', 'qunit' ] )
+    grunt.registerTask( 'travis', [ 'concat:lib', 'copy:lib', 'sass:lib', 'jshint:lib', 'qunit:lib' ] )
+    grunt.registerTask( 'everything', [ 'clean', 'htmlify', 'concat', 'copy:site', 'copy:lib', 'sass', 'jshint', 'qunit', 'uglify', 'cssmin', 'copy:pkg' ] )
 
 
 
