@@ -755,6 +755,14 @@ pre > code {
     background: #74c346;
 }
 
+.button-header {
+    font-size: 14px;
+    letter-spacing: 0;
+    margin-left: 1em;
+    vertical-align: 8px;
+    font-weight: 500;
+}
+
 
 
 
