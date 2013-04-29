@@ -22,8 +22,8 @@ var $DOM = $( '#qunit-fixture' ),
 
 module( 'Time picker setup', {
     setup: function() {
-        var $input = $INPUT.clone().pickatime()
-        $DOM.append( $input )
+        $DOM.append( $INPUT.clone() )
+        var $input = $DOM.find( 'input' ).pickatime()
         this.picker = $input.pickatime( 'picker' )
     },
     teardown: function() {
@@ -58,8 +58,8 @@ test( 'Properties', function() {
 
 module( 'Time picker `set`', {
     setup: function() {
-        var $input = $INPUT.clone().pickatime()
-        $DOM.append( $input )
+        $DOM.append( $INPUT.clone() )
+        var $input = $DOM.find( 'input' ).pickatime()
         this.picker = $input.pickatime( 'picker' )
     },
     teardown: function() {
@@ -411,8 +411,8 @@ test( '`disable` and `enable` using arrays', function() {
 
 module( 'Time picker mouse events', {
     setup: function() {
-        var $input = $INPUT.clone().pickatime()
-        $DOM.append( $input )
+        $DOM.append( $INPUT.clone() )
+        var $input = $DOM.find( 'input' ).pickatime()
         this.picker = $input.pickatime( 'picker' )
     },
     teardown: function() {
@@ -450,8 +450,8 @@ test( 'Clear', function() {
 
 module( 'Time picker keyboard events', {
     setup: function() {
-        var $input = $INPUT.clone().pickatime()
-        $DOM.append( $input )
+        $DOM.append( $INPUT.clone() )
+        var $input = $DOM.find( 'input' ).pickatime()
         this.picker = $input.pickatime( 'picker' )
     },
     teardown: function() {
@@ -523,8 +523,8 @@ test( 'Highlight', function() {
 
 module( 'Time picker with a `value`', {
     setup: function() {
-        var $input = $INPUT.clone().val( '2:00 p.m.' ).pickatime()
-        $DOM.append( $input )
+        $DOM.append( $INPUT.clone().val( '2:00 p.m.' ) )
+        var $input = $DOM.find( 'input' ).pickatime()
         this.picker = $input.pickatime( 'picker' )
     },
     teardown: function() {
@@ -546,10 +546,10 @@ test( '`value` to select, highlight, and view', function() {
 
 module( 'Time picker with a `data-value`', {
     setup: function() {
-        var $input = $INPUT.clone().data( 'value', '14:00' ).pickatime({
+        $DOM.append( $INPUT.clone().data( 'value', '14:00' ) )
+        var $input = $DOM.find( 'input' ).pickatime({
             formatSubmit: 'HH:i'
         })
-        $DOM.append( $input )
         this.picker = $input.pickatime( 'picker' )
     },
     teardown: function() {

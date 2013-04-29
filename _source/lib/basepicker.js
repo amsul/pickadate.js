@@ -14,7 +14,7 @@
    The picker base
    ========================================================================== */
 
-var STRING_PREFIX_PICKER = 'pickadate__',
+var CLASSES_PREFIX = 'picker__',
     $DOCUMENT = $( document ),
 
 
@@ -73,20 +73,17 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                 ELEMENT.readOnly = true
 
 
-                // Create a new picker component with the settings and default value/format combo.
+                // Create a new picker component with the settings.
                 P.component = new COMPONENT( P, SETTINGS )
 
 
                 // Create the picker holder with a new wrapped component and bind the events.
                 P.$holder = $( createNode( 'div', createWrappedComponent(), CLASSES.holder ) ).on({
 
-                    // When something within the holder is focused, make it appear so.
+                    // When something within the holder is focused, stop from bubbling
+                    // to the doc and remove the “focused” state from the holder.
                     focusin: function( event ) {
-
-                        // Remove the input “focused” state from the holder.
                         P.$holder.removeClass( CLASSES.focused )
-
-                        // Prevent the event from propagating to the doc.
                         event.stopPropagation()
                     },
 
@@ -136,56 +133,53 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
 
                 // If there’s a format for the hidden input element, create the element
                 // using the name of the original input plus suffix. Otherwise set it to null.
-                P._hidden = SETTINGS.formatSubmit ? $( '<input type=hidden name=' + ELEMENT.name + ( SETTINGS.hiddenSuffix || '_submit' ) + ( ELEMENT.value || $ELEMENT.data( 'value' ) ? ' value="' + triggerFunction( P.component.formats.toString, P.component, [ SETTINGS.formatSubmit, P.component.item.select ] ) : '' ) + '">' )[ 0 ] : undefined
+                // If the element has a value, use either the `data-value` or `value`.
+                P._hidden = SETTINGS.formatSubmit ? $( '<input type=hidden name=' + ELEMENT.name + ( SETTINGS.hiddenSuffix || '_submit' ) + ( $ELEMENT.data( 'value' ) ? ' value="' + triggerFunction( P.component.formats.toString, P.component, [ SETTINGS.formatSubmit, P.component.item.select ] ) : '' ) + '">' )[ 0 ] : undefined
 
 
-                // Bind the events on the `input` element and then
-                // insert the holder and hidden element after the element.
-                $ELEMENT.on( 'focus.P' + STATE.id + ' click.P' + STATE.id, function() {
+                // Add the class and bind the events on the element.
+                $ELEMENT.addClass( CLASSES.input ).
 
-                    // Open the calendar.
-                    P.open()
+                    // On focus or click, open the calendar and add the “focused” state tothe holder.
+                    on( 'focus.P' + STATE.id + ' click.P' + STATE.id, function() {
+                        P.open()
+                        P.$holder.addClass( CLASSES.focused )
+                    }).
 
-                    // Add the input “focused” state onto the holder.
-                    P.$holder.addClass( CLASSES.focused )
-
-                }).on( 'change.P' + STATE.id, function() {
-
-                    // If there's a hidden input, update the value with the correct format.
-                    if ( P._hidden ) {
-                        P._hidden.value = ELEMENT.value ? triggerFunction( P.component.formats.toString, P.component, [ SETTINGS.formatSubmit, P.component.item.select ] ) : ''
-                    }
-
-                }).on( 'keydown.P' + STATE.id, function( event ) {
-
-                    var
-                        // Grab the keycode
-                        keycode = event.keyCode,
-
-                        // Check if one of the delete keys was pressed
-                        isKeycodeDelete = keycode == 8 || keycode == 46
-
-                    // Check if `space` or `delete` was pressed or the calendar is closed with a key movement.
-                    if ( keycode == 32 || isKeycodeDelete || !STATE.open && P.component.key[ keycode ] ) {
-
-                        // Prevent it from moving the page.
-                        event.preventDefault()
-
-                        // Prevent it from bubbling to doc.
-                        event.stopPropagation()
-
-                        // If `delete` was pressed, clear the values and close the picker.
-                        if ( isKeycodeDelete ) {
-                            P.clear().close()
+                    // If the value changes, update the hidden input with the correct format.
+                    on( 'change.P' + STATE.id, function() {
+                        if ( P._hidden ) {
+                            P._hidden.value = ELEMENT.value ? triggerFunction( P.component.formats.toString, P.component, [ SETTINGS.formatSubmit, P.component.item.select ] ) : ''
                         }
+                    }).
 
-                        // Otherwise open the calendar.
-                        else {
-                            P.open()
+                    // Handle keyboard event based on the picker being opened or not.
+                    on( 'keydown.P' + STATE.id, function( event ) {
+
+                        var keycode = event.keyCode,
+
+                            // Check if one of the delete keys was pressed
+                            isKeycodeDelete = /^(8|46)$/.test( keycode )
+
+                        // Check if `space` or `delete` was pressed or the calendar is closed with a key movement.
+                        if ( keycode == 32 || isKeycodeDelete || !STATE.open && P.component.key[ keycode ] ) {
+
+                            // Prevent it from moving the page and bubbling to doc.
+                            event.preventDefault()
+                            event.stopPropagation()
+
+                            // If `delete` was pressed, clear the values and close the picker.
+                            // Otherwise open the calendar.
+                            if ( isKeycodeDelete ) { P.clear().close() }
+                            else { P.open() }
                         }
-                    }
+                    }).
 
-                }).after([ P.$holder, P._hidden ])
+                    // If there’s a `data-value`, update the value of the element.
+                    val( $ELEMENT.data( 'value' ) ? triggerFunction( P.component.formats.toString, P.component, [ SETTINGS.format, P.component.item.select ] ) : '' ).
+
+                    // Insert the holder and hidden input after the element.
+                    after( P.$holder, P._hidden )
 
 
                 // Trigger the component “start” event within scope of the picker.
@@ -238,14 +232,11 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                 // Update the picker state.
                 STATE.start = false
 
-                // Cache the stop event for a bit.
-                var stopEvent = P.component.onStop
-
                 // Then close the picker.
                 P.close()
 
-                // Unbind the events on the `input` element.
-                $ELEMENT.off( '.P' + STATE.id )
+                // Remove the input class and unbind the events.
+                $ELEMENT.removeClass( CLASSES.input ).off( '.P' + STATE.id )
 
                 // Restore the element state
                 ELEMENT.type = STATE.type
@@ -259,7 +250,8 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                 // Remove the holder.
                 P.$holder.remove()
 
-                // Reset the component object.
+                // Cache the stop event and then reset the component object.
+                var stopEvent = P.component.onStop
                 P.component = undefined
 
                 // Trigger the component “stop” event within scope of the picker.
@@ -284,7 +276,7 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                 STATE.open = true
 
                 // Make sure the element has focus then add the “active” class.
-                $ELEMENT.focus().addClass( CLASSES.inputActive )
+                $ELEMENT.focus().addClass( CLASSES.active )
 
                 // Add the “opened” class to the picker holder.
                 P.$holder.addClass( CLASSES.opened )
@@ -368,7 +360,7 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                 STATE.open = false
 
                 // Remove the “active” class.
-                $ELEMENT.removeClass( CLASSES.inputActive )
+                $ELEMENT.removeClass( CLASSES.active )
 
                 // Remove the “opened” class from the picker holder.
                 P.$holder.removeClass( CLASSES.opened )

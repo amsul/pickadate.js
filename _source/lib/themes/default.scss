@@ -22,7 +22,7 @@
 /**
  * When the picker is opened, add an "active" state to the input
  */
-/*input*/.pickadate__input--active {
+/*input*/.picker__input--active {
 
     // Using `!important` here because `input[type=text]`
     // has higher priority than just a class selector
@@ -33,8 +33,8 @@
 /**
  * Make the holder and frame fullscreen
  */
-.pickadate__holder,
-.pickadate__frame {
+.picker__holder,
+.picker__frame {
     bottom: 0;
     left: 0;
     right: 0;
@@ -47,7 +47,7 @@
 /**
  * The holder that overlays the entire screen
  */
-.pickadate__holder {
+.picker__holder {
 
     /* The base font stylings */
     font-size: $base-font-size;
@@ -70,7 +70,7 @@
 }
 
 /* When the picker opens, fade in an overlay */
-.pickadate__holder--opened {
+.picker__holder--opened {
 
     /* Move it to the top edge */
     top: 0;
@@ -92,7 +92,7 @@
 /**
  * The frame that bounds the picker
  */
-.pickadate__frame {
+.picker__frame {
     position: absolute;
     margin: 0 auto;
 
@@ -121,7 +121,7 @@
     /**
      * When the picker opens...
      */
-    .pickadate__holder--opened & {
+    .picker__holder--opened & {
 
         /* Align it to the top */
         top: 0;
@@ -141,7 +141,7 @@
 /**
  * The picker wrapper
  */
-.pickadate__wrap {
+.picker__wrap {
     display: table;
     width: 100%;
     height: 100%;
@@ -157,7 +157,7 @@
 /**
  * The picker box
  */
-.pickadate__box {
+.picker__box {
     display: table-cell;
     vertical-align: middle;
     background: $white;
@@ -213,7 +213,7 @@
 /**
  * The calendar table of dates
  */
-.pickadate__table {
+.picker__table {
     text-align: center;
     border-collapse: collapse;
     border-spacing: 0;
@@ -230,7 +230,7 @@
 }
 
 /* Remove browser stylings on a table cell */
-.pickadate__table td {
+.picker__table td {
     margin: 0;
     padding: 0;
 }
@@ -239,7 +239,7 @@
 /**
  * The header containing the month and year tags/selectors
  */
-.pickadate__header {
+.picker__header {
     text-align: center;
     position: relative;
     margin-top: .75em;
@@ -249,24 +249,24 @@
 /**
  * The month navigation buttons
  */
-.pickadate__nav--prev,
-.pickadate__nav--next {
+.picker__nav--prev,
+.picker__nav--next {
     position: absolute;
     top: -.33em;
     padding: .5em 1.33em;
     width: 1em;
     height: 1em;
 }
-.pickadate__nav--prev {
+.picker__nav--prev {
     left: -1em;
     padding-right: 1.5em;
 }
-.pickadate__nav--next {
+.picker__nav--next {
     right: -1em;
     padding-left: 1.5em;
 }
-.pickadate__nav--prev:before,
-.pickadate__nav--next:before {
+.picker__nav--prev:before,
+.picker__nav--next:before {
     content: " ";
     border-top: .5em solid transparent;
     border-bottom: .5em solid transparent;
@@ -276,7 +276,7 @@
     display: block;
     margin: 0 auto;
 }
-.pickadate__nav--next:before {
+.picker__nav--next:before {
     border-right: 0;
     border-left: .75em solid $black;
 }
@@ -285,12 +285,12 @@
 /**
  * The month & year labels
  */
-.pickadate__month,
-.pickadate__year {
+.picker__month,
+.picker__year {
     font-weight: 500;
     display: inline-block;
 }
-.pickadate__year {
+.picker__year {
     color: $grey-label;
     font-size: .8em;
     font-style: italic;
@@ -301,23 +301,23 @@
 /**
  * The month & year selectors
  */
-.pickadate__select--month,
-.pickadate__select--year {
+.picker__select--month,
+.picker__select--year {
     font-size: .8em;
     border: 1px solid $select-border;
     height: 2.5em;
     padding: .66em .25em; // For firefox
     margin-top: -.5em;
 }
-.pickadate__select--month {
+.picker__select--month {
     width: 35%;
 }
-.pickadate__select--year {
+.picker__select--year {
     width: 22.5%;
     margin-left: .5em;
 }
-.pickadate__select--month:focus,
-.pickadate__select--year:focus {
+.picker__select--month:focus,
+.picker__select--year:focus {
     border-color: $blue;
 }
 
@@ -325,7 +325,7 @@
 /**
  * The weekday labels
  */
-.pickadate__weekday {
+.picker__weekday {
     width: 14.285714286%; // 100/7
     font-size: .75em;
     padding-bottom: .25em;
@@ -342,7 +342,7 @@
 /**
  * The days on the calendar
  */
-.pickadate__day {
+.picker__day {
     padding: .3125em 0;
     font-weight: 200;
     border: 1px solid $white;
@@ -350,7 +350,7 @@
 }
 
 /* Today */
-.pickadate__day--today {
+.picker__day--today {
     color: $blue;
     position: relative;
 
@@ -367,60 +367,60 @@
 }
 
 /* Selected day */
-.pickadate__day--selected,
-.pickadate__day--selected:hover {
+.picker__day--selected,
+.picker__day--selected:hover {
     @include picker-item-selected;
 }
 
 /* Highlighted day */
-.pickadate__day--highlighted {
+.picker__day--highlighted {
     background: $blue-hover;
 }
 
 /* Disabled day */
-.pickadate__day--disabled:before {
+.picker__day--disabled:before {
     border-top-color: $disabled-tag;
 }
 
 /* Out of focus days */
-.pickadate__day--outfocus {
+.picker__day--outfocus {
     color: $disabled-things-text;
     @include opacity( .66 );
 }
 
 
 /* Hovered date picker items */
-.pickadate__day--infocus:hover,
-.pickadate__day--outfocus:hover,
-.pickadate__nav--prev:hover,
-.pickadate__nav--next:hover {
+.picker__day--infocus:hover,
+.picker__day--outfocus:hover,
+.picker__nav--prev:hover,
+.picker__nav--next:hover {
     @include picker-item-hovered;
 }
 
 /* Highlighted and hovered/focused dates */
-.pickadate__day--highlighted:hover,
-.pickadate__holder--focused .pickadate__day--highlighted {
+.picker__day--highlighted:hover,
+.picker__holder--focused .picker__day--highlighted {
     @include picker-item-highlighted;
 }
 
 /* Disabled dates */
-.pickadate__day--disabled,
-.pickadate__day--disabled:hover {
+.picker__day--disabled,
+.picker__day--disabled:hover {
     @include picker-item-disabled;
 }
 
 
 /* Disabled month nav */
-.pickadate__nav--disabled,
-.pickadate__nav--disabled:hover,
-.pickadate__nav--disabled:before,
-.pickadate__nav--disabled:before:hover {
+.picker__nav--disabled,
+.picker__nav--disabled:hover,
+.picker__nav--disabled:before,
+.picker__nav--disabled:before:hover {
     cursor: default;
     background: none;
     border-right-color: $disabled-things-bg;
 
-    &.pickadate__nav--next:before,
-    &.pickadate__nav--next:before:hover {
+    &.picker__nav--next:before,
+    &.picker__nav--next:before:hover {
         border-left-color: $disabled-things-bg;
     }
 }
@@ -431,12 +431,12 @@
 /**
  * The footer containing the "today" and "clear" buttons
  */
-.pickadate__footer {
+.picker__footer {
     text-align: center;
 }
 
-.pickadate__button--today,
-.pickadate__button--clear {
+.picker__button--today,
+.picker__button--clear {
     border: 1px solid $white;
     background: $white;
     font-size: .8em;
@@ -462,7 +462,7 @@
         outline: none;
     }
 }
-.pickadate__button--today:before {
+.picker__button--today:before {
     content: " ";
     margin-right: .45em;
     top: -.05em;
@@ -470,7 +470,7 @@
     border-top: .66em solid $blue-tag;
     border-left: .66em solid transparent;
 }
-.pickadate__button--clear:before {
+.picker__button--clear:before {
     content: "\D7"; // ×
     margin-right: .35em;
     top: -.1em;
@@ -480,7 +480,7 @@
 }
 
 
-} //endif `$time-picker`
+} //endif `$date-picker`
 
 
 
@@ -497,7 +497,7 @@
 /**
  * The frame the bounds the time picker
  */
-.pickadate__holder--time .pickadate__frame {
+.picker__holder--time .picker__frame {
 
     /* Adjust the min & max widths */
     min-width: $picker-time-min-width;
@@ -507,6 +507,11 @@
     @include min-screen( small ) {
         max-height: 80%;
     }
+
+    /* For `medium` screens, reduce the font-size a bit to get more in view */
+    @include min-screen( medium ) {
+        font-size: .75em;
+    }
 }
 
 
@@ -514,7 +519,7 @@
 /**
  * The time picker box
  */
-.pickadate__holder--time .pickadate__box {
+.picker__holder--time .picker__box {
 
     /* Remove the side paddings */
     padding: 0;
@@ -533,7 +538,7 @@
 /**
  * The clock list of times
  */
-.pickadate__list {
+.picker__list {
     padding: .75em 0 4.2em;
     margin: 0;
     list-style: none;
@@ -543,7 +548,7 @@
 /**
  * The times on the clock
  */
-.pickadate__list-item {
+.picker__list-item {
     padding: .75em 1.25em;
     background: $white;
     border-bottom: 1px solid $light-border;
@@ -553,32 +558,32 @@
 }
 
 /* Hovered time */
-.pickadate__list-item:hover,
-.pickadate__holder--time .pickadate__button--clear:hover {
+.picker__list-item:hover,
+.picker__holder--time .picker__button--clear:hover {
     @include picker-item-hovered;
     @include picker-item-selected;
 }
 
 /* Selected time */
-.pickadate__list-item--selected,
-.pickadate__list-item--selected:hover {
+.picker__list-item--selected,
+.picker__list-item--selected:hover {
     @include picker-item-selected;
 }
 
 /* Highlighted time */
-.pickadate__list-item--highlighted {
+.picker__list-item--highlighted {
     background: $blue-hover;
 }
 
 /* Highlighted and hovered/focused time */
-.pickadate__list-item--highlighted:hover,
-.pickadate__holder--focused .pickadate__list-item--highlighted {
+.picker__list-item--highlighted:hover,
+.picker__holder--focused .picker__list-item--highlighted {
     @include picker-item-highlighted;
 }
 
 /* Disabled time */
-.pickadate__list-item--disabled,
-.pickadate__list-item--disabled:hover {
+.picker__list-item--disabled,
+.picker__list-item--disabled:hover {
     @include picker-item-disabled;
     border-color: $light-border;
     z-index: auto;
@@ -590,7 +595,7 @@
 /**
  * The clear button
  */
-.pickadate__holder--time .pickadate__button--clear {
+.picker__holder--time .picker__button--clear {
     display: block;
     width: 80%;
     margin: 1em auto 0;
@@ -639,19 +644,19 @@
 
 @media (min-width: 640px) {
 
-    .pickadate__holder {
+    .picker__holder {
         position: relative;
         overflow: visible;
         background: none;
         height: 0;
     }
 
-    .pickadate__frame {
+    .picker__frame {
         position: relative;
         margin: 1em 0;
     }
 
-    .pickadate__box {
+    .picker__box {
         border-color: #ccc;
         box-shadow: 0 4px 18px 2px rgba(0,0,0,.12);
         max-height: 20em;
@@ -660,7 +665,7 @@
         -webkit-overflow-scrolling: touch;
     }
 
-    .pickadate__list-item {
+    .picker__list-item {
         padding: .5em .75em;
     }
 }*/

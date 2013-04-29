@@ -32,7 +32,7 @@ The v3 API is significantly different from v2 (all for the greater good!). So if
 <br>
 ## Library files
 
-The [`lib`]({%= ___.gitrepo_url %}/tree/gh-pages/lib) folder includes **three** `.js` files - alongside the `.min.js` counter-parts. Only include the one script that is most suitable to your use case:
+The `lib` folder includes **three** `.js` files – alongside the `.min.js` counter-parts. Only include the one script that is most suitable to your use case:
 
 File name               | Picker(s) included   | File size (min & gzip)
 ----------------------- | -------------------- | ----------------------
@@ -84,9 +84,11 @@ Before contributing any code to the project, please take a look at the [Contribu
 <br>
 ## Building with Grunt
 
-Grunt `~0.4.0` is used to build the project files. To get started, after cloning the project over, run `npm install` to get all the required node modules.
+[Grunt](http://gruntjs.com/) `~{%= grunt.version %}` is used to build the project files. To get started, clone the project and then run:
 
-Then run `grunt everything --verbose` to check if you have all the dependencies.
+- `npm install` to get the required node modules.
+- `grunt --verbose` to confirm you have all the dependencies.
+
 
 
 

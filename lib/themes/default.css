@@ -55,15 +55,15 @@
  * When the picker is opened, add an "active" state to the input
  */
 /*input*/
-.pickadate__input--active {
+.picker__input--active {
   border-color: #0089ec !important;
 }
 
 /**
  * Make the holder and frame fullscreen
  */
-.pickadate__holder,
-.pickadate__frame {
+.picker__holder,
+.picker__frame {
   bottom: 0;
   left: 0;
   right: 0;
@@ -74,7 +74,7 @@
 /**
  * The holder that overlays the entire screen
  */
-.pickadate__holder {
+.picker__holder {
   /* The base font stylings */
   font-size: 16px;
   text-align: left;
@@ -95,7 +95,7 @@
 }
 
 /* When the picker opens, fade in an overlay */
-.pickadate__holder--opened {
+.picker__holder--opened {
   /* Move it to the top edge */
   top: 0;
   /* Show a translucent black background (order is important for IE) */
@@ -113,7 +113,7 @@
 /**
  * The frame that bounds the picker
  */
-.pickadate__frame {
+.picker__frame {
   position: absolute;
   margin: 0 auto;
   min-width: 256px;
@@ -134,18 +134,18 @@
    */
 }
 @media (min-height: 26.5em) {
-  .pickadate__frame {
+  .picker__frame {
     overflow: visible;
     top: auto;
     bottom: -100%;
   }
 }
 @media (min-height: 33.875em) {
-  .pickadate__frame {
+  .picker__frame {
     margin-bottom: 5%;
   }
 }
-.pickadate__holder--opened .pickadate__frame {
+.picker__holder--opened .picker__frame {
   /* Align it to the top */
   top: 0;
   /* Ånd then reveal it */
@@ -156,7 +156,7 @@
   /* For `small` screens, align to the bottom instead. */
 }
 @media (min-height: 26.5em) {
-  .pickadate__holder--opened .pickadate__frame {
+  .picker__holder--opened .picker__frame {
     top: auto;
     bottom: 0;
   }
@@ -165,14 +165,14 @@
 /**
  * The picker wrapper
  */
-.pickadate__wrap {
+.picker__wrap {
   display: table;
   width: 100%;
   height: 100%;
   /* For `small` screens, remove the "middle-aligned" styling */
 }
 @media (min-height: 26.5em) {
-  .pickadate__wrap {
+  .picker__wrap {
     display: block;
   }
 }
@@ -180,7 +180,7 @@
 /**
  * The picker box
  */
-.pickadate__box {
+.picker__box {
   display: table-cell;
   vertical-align: middle;
   background: white;
@@ -190,12 +190,12 @@
   /* For `medium` screens, increase the font size and round all corners */
 }
 @media (min-height: 21.375em) {
-  .pickadate__box {
+  .picker__box {
     font-size: 1.25em;
   }
 }
 @media (min-height: 26.5em) {
-  .pickadate__box {
+  .picker__box {
     /* Remove the "middle-aligned" styling */
     display: block;
     /* Increase the font size a bit more */
@@ -215,7 +215,7 @@
   }
 }
 @media (min-height: 33.875em) {
-  .pickadate__box {
+  .picker__box {
     font-size: 1.5em;
     border-bottom-width: 1px;
     -webkit-border-radius: 6px;
@@ -230,7 +230,7 @@
 /**
  * The calendar table of dates
  */
-.pickadate__table {
+.picker__table {
   text-align: center;
   border-collapse: collapse;
   border-spacing: 0;
@@ -242,13 +242,13 @@
   /* Increase the spacing a tad */
 }
 @media (min-height: 26.5em) {
-  .pickadate__table {
+  .picker__table {
     margin-bottom: .75em;
   }
 }
 
 /* Remove browser stylings on a table cell */
-.pickadate__table td {
+.picker__table td {
   margin: 0;
   padding: 0;
 }
@@ -256,7 +256,7 @@
 /**
  * The header containing the month and year tags/selectors
  */
-.pickadate__header {
+.picker__header {
   text-align: center;
   position: relative;
   margin-top: .75em;
@@ -265,8 +265,8 @@
 /**
  * The month navigation buttons
  */
-.pickadate__nav--prev,
-.pickadate__nav--next {
+.picker__nav--prev,
+.picker__nav--next {
   position: absolute;
   top: -.33em;
   padding: 0.5em 1.33em;
@@ -274,18 +274,18 @@
   height: 1em;
 }
 
-.pickadate__nav--prev {
+.picker__nav--prev {
   left: -1em;
   padding-right: 1.5em;
 }
 
-.pickadate__nav--next {
+.picker__nav--next {
   right: -1em;
   padding-left: 1.5em;
 }
 
-.pickadate__nav--prev:before,
-.pickadate__nav--next:before {
+.picker__nav--prev:before,
+.picker__nav--next:before {
   content: " ";
   border-top: 0.5em solid transparent;
   border-bottom: 0.5em solid transparent;
@@ -296,7 +296,7 @@
   margin: 0 auto;
 }
 
-.pickadate__nav--next:before {
+.picker__nav--next:before {
   border-right: 0;
   border-left: 0.75em solid black;
 }
@@ -304,13 +304,13 @@
 /**
  * The month & year labels
  */
-.pickadate__month,
-.pickadate__year {
+.picker__month,
+.picker__year {
   font-weight: 500;
   display: inline-block;
 }
 
-.pickadate__year {
+.picker__year {
   color: #999999;
   font-size: .8em;
   font-style: italic;
@@ -320,8 +320,8 @@
 /**
  * The month & year selectors
  */
-.pickadate__select--month,
-.pickadate__select--year {
+.picker__select--month,
+.picker__select--year {
   font-size: .8em;
   border: 1px solid #cccccc;
   height: 2.5em;
@@ -329,24 +329,24 @@
   margin-top: -.5em;
 }
 
-.pickadate__select--month {
+.picker__select--month {
   width: 35%;
 }
 
-.pickadate__select--year {
+.picker__select--year {
   width: 22.5%;
   margin-left: .5em;
 }
 
-.pickadate__select--month:focus,
-.pickadate__select--year:focus {
+.picker__select--month:focus,
+.picker__select--year:focus {
   border-color: #0089ec;
 }
 
 /**
  * The weekday labels
  */
-.pickadate__weekday {
+.picker__weekday {
   width: 14.285714286%;
   font-size: .75em;
   padding-bottom: .25em;
@@ -355,7 +355,7 @@
   /* Increase the spacing a tad */
 }
 @media (min-height: 26.5em) {
-  .pickadate__weekday {
+  .picker__weekday {
     padding-bottom: .5em;
   }
 }
@@ -363,7 +363,7 @@
 /**
  * The days on the calendar
  */
-.pickadate__day {
+.picker__day {
   padding: 0.3125em 0;
   font-weight: 200;
   border: 1px solid white;
@@ -371,11 +371,11 @@
 }
 
 /* Today */
-.pickadate__day--today {
+.picker__day--today {
   color: #0089ec;
   position: relative;
 }
-.pickadate__day--today:before {
+.picker__day--today:before {
   content: " ";
   position: absolute;
   top: 2px;
@@ -387,24 +387,24 @@
 }
 
 /* Selected day */
-.pickadate__day--selected,
-.pickadate__day--selected:hover {
+.picker__day--selected,
+.picker__day--selected:hover {
   border-color: #0089ec;
   z-index: 10;
 }
 
 /* Highlighted day */
-.pickadate__day--highlighted {
+.picker__day--highlighted {
   background: #b1dcfb;
 }
 
 /* Disabled day */
-.pickadate__day--disabled:before {
+.picker__day--disabled:before {
   border-top-color: #aaaaaa;
 }
 
 /* Out of focus days */
-.pickadate__day--outfocus {
+.picker__day--outfocus {
   color: #dddddd;
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=66)";
   filter: alpha(opacity=66);
@@ -413,25 +413,25 @@
 }
 
 /* Hovered date picker items */
-.pickadate__day--infocus:hover,
-.pickadate__day--outfocus:hover,
-.pickadate__nav--prev:hover,
-.pickadate__nav--next:hover {
+.picker__day--infocus:hover,
+.picker__day--outfocus:hover,
+.picker__nav--prev:hover,
+.picker__nav--next:hover {
   cursor: pointer;
   color: black;
   background: #b1dcfb;
 }
 
 /* Highlighted and hovered/focused dates */
-.pickadate__day--highlighted:hover,
-.pickadate__holder--focused .pickadate__day--highlighted {
+.picker__day--highlighted:hover,
+.picker__holder--focused .picker__day--highlighted {
   background: #0089ec;
   color: white;
 }
 
 /* Disabled dates */
-.pickadate__day--disabled,
-.pickadate__day--disabled:hover {
+.picker__day--disabled,
+.picker__day--disabled:hover {
   background: whitesmoke;
   border-color: whitesmoke;
   color: #dddddd;
@@ -439,33 +439,33 @@
 }
 
 /* Disabled month nav */
-.pickadate__nav--disabled,
-.pickadate__nav--disabled:hover,
-.pickadate__nav--disabled:before,
-.pickadate__nav--disabled:before:hover {
+.picker__nav--disabled,
+.picker__nav--disabled:hover,
+.picker__nav--disabled:before,
+.picker__nav--disabled:before:hover {
   cursor: default;
   background: none;
   border-right-color: whitesmoke;
 }
-.pickadate__nav--disabled.pickadate__nav--next:before, .pickadate__nav--disabled.pickadate__nav--next:before:hover,
-.pickadate__nav--disabled:hover.pickadate__nav--next:before,
-.pickadate__nav--disabled:hover.pickadate__nav--next:before:hover,
-.pickadate__nav--disabled:before.pickadate__nav--next:before,
-.pickadate__nav--disabled:before.pickadate__nav--next:before:hover,
-.pickadate__nav--disabled:before:hover.pickadate__nav--next:before,
-.pickadate__nav--disabled:before:hover.pickadate__nav--next:before:hover {
+.picker__nav--disabled.picker__nav--next:before, .picker__nav--disabled.picker__nav--next:before:hover,
+.picker__nav--disabled:hover.picker__nav--next:before,
+.picker__nav--disabled:hover.picker__nav--next:before:hover,
+.picker__nav--disabled:before.picker__nav--next:before,
+.picker__nav--disabled:before.picker__nav--next:before:hover,
+.picker__nav--disabled:before:hover.picker__nav--next:before,
+.picker__nav--disabled:before:hover.picker__nav--next:before:hover {
   border-left-color: whitesmoke;
 }
 
 /**
  * The footer containing the "today" and "clear" buttons
  */
-.pickadate__footer {
+.picker__footer {
   text-align: center;
 }
 
-.pickadate__button--today,
-.pickadate__button--clear {
+.picker__button--today,
+.picker__button--clear {
   border: 1px solid white;
   background: white;
   font-size: .8em;
@@ -475,27 +475,27 @@
   display: inline-block;
   vertical-align: bottom;
 }
-.pickadate__button--today:before,
-.pickadate__button--clear:before {
+.picker__button--today:before,
+.picker__button--clear:before {
   position: relative;
   display: inline-block;
   height: 0;
 }
-.pickadate__button--today:hover,
-.pickadate__button--clear:hover {
+.picker__button--today:hover,
+.picker__button--clear:hover {
   cursor: pointer;
   color: black;
   background: #b1dcfb;
   border-bottom-color: #b1dcfb;
 }
-.pickadate__button--today:focus,
-.pickadate__button--clear:focus {
+.picker__button--today:focus,
+.picker__button--clear:focus {
   background: #b1dcfb;
   border-color: #0089ec;
   outline: none;
 }
 
-.pickadate__button--today:before {
+.picker__button--today:before {
   content: " ";
   margin-right: .45em;
   top: -.05em;
@@ -504,7 +504,7 @@
   border-left: 0.66em solid transparent;
 }
 
-.pickadate__button--clear:before {
+.picker__button--clear:before {
   content: "\D7";
   margin-right: .35em;
   top: -.1em;
@@ -519,22 +519,28 @@
 /**
  * The frame the bounds the time picker
  */
-.pickadate__holder--time .pickadate__frame {
+.picker__holder--time .picker__frame {
   /* Adjust the min & max widths */
   min-width: 256px;
   max-width: 320px;
   /* For `small` screens, set a `max-height` to act as top spacing */
+  /* For `medium` screens, reduce the font-size a bit to get more in view */
 }
 @media (min-height: 26.5em) {
-  .pickadate__holder--time .pickadate__frame {
+  .picker__holder--time .picker__frame {
     max-height: 80%;
+  }
+}
+@media (min-height: 33.875em) {
+  .picker__holder--time .picker__frame {
+    font-size: .75em;
   }
 }
 
 /**
  * The time picker box
  */
-.pickadate__holder--time .pickadate__box {
+.picker__holder--time .picker__box {
   /* Remove the side paddings */
   padding: 0;
   /* Add a slight background color */
@@ -542,7 +548,7 @@
   /* For `medium` screens, move it away from the bottom edge of the screen */
 }
 @media (min-height: 33.875em) {
-  .pickadate__holder--time .pickadate__box {
+  .picker__holder--time .picker__box {
     margin-bottom: 4em;
   }
 }
@@ -550,7 +556,7 @@
 /**
  * The clock list of times
  */
-.pickadate__list {
+.picker__list {
   padding: 0.75em 0 4.2em;
   margin: 0;
   list-style: none;
@@ -559,7 +565,7 @@
 /**
  * The times on the clock
  */
-.pickadate__list-item {
+.picker__list-item {
   padding: 0.75em 1.25em;
   background: white;
   border-bottom: 1px solid #dddddd;
@@ -569,8 +575,8 @@
 }
 
 /* Hovered time */
-.pickadate__list-item:hover,
-.pickadate__holder--time .pickadate__button--clear:hover {
+.picker__list-item:hover,
+.picker__holder--time .picker__button--clear:hover {
   cursor: pointer;
   color: black;
   background: #b1dcfb;
@@ -579,27 +585,27 @@
 }
 
 /* Selected time */
-.pickadate__list-item--selected,
-.pickadate__list-item--selected:hover {
+.picker__list-item--selected,
+.picker__list-item--selected:hover {
   border-color: #0089ec;
   z-index: 10;
 }
 
 /* Highlighted time */
-.pickadate__list-item--highlighted {
+.picker__list-item--highlighted {
   background: #b1dcfb;
 }
 
 /* Highlighted and hovered/focused time */
-.pickadate__list-item--highlighted:hover,
-.pickadate__holder--focused .pickadate__list-item--highlighted {
+.picker__list-item--highlighted:hover,
+.picker__holder--focused .picker__list-item--highlighted {
   background: #0089ec;
   color: white;
 }
 
 /* Disabled time */
-.pickadate__list-item--disabled,
-.pickadate__list-item--disabled:hover {
+.picker__list-item--disabled,
+.picker__list-item--disabled:hover {
   background: whitesmoke;
   border-color: whitesmoke;
   color: #dddddd;
@@ -611,7 +617,7 @@
 /**
  * The clear button
  */
-.pickadate__holder--time .pickadate__button--clear {
+.picker__holder--time .picker__button--clear {
   display: block;
   width: 80%;
   margin: 1em auto 0;
@@ -624,20 +630,20 @@
   text-transform: uppercase;
   color: #666;
 }
-.pickadate__holder--time .pickadate__button--clear:before {
+.picker__holder--time .picker__button--clear:before {
   top: -.25em;
   color: #666;
   font-size: 1.25em;
   font-weight: bold;
 }
-.pickadate__holder--time .pickadate__button--clear:hover, .pickadate__holder--time .pickadate__button--clear:focus {
+.picker__holder--time .picker__button--clear:hover, .picker__holder--time .picker__button--clear:focus {
   background: #ee2200;
   border-color: #ee2200;
   cursor: pointer;
   color: white;
   outline: none;
 }
-.pickadate__holder--time .pickadate__button--clear:hover:before, .pickadate__holder--time .pickadate__button--clear:focus:before {
+.picker__holder--time .picker__button--clear:hover:before, .picker__holder--time .picker__button--clear:focus:before {
   color: white;
 }
 
@@ -647,19 +653,19 @@
 
 @media (min-width: 640px) {
 
-    .pickadate__holder {
+    .picker__holder {
         position: relative;
         overflow: visible;
         background: none;
         height: 0;
     }
 
-    .pickadate__frame {
+    .picker__frame {
         position: relative;
         margin: 1em 0;
     }
 
-    .pickadate__box {
+    .picker__box {
         border-color: #ccc;
         box-shadow: 0 4px 18px 2px rgba(0,0,0,.12);
         max-height: 20em;
@@ -668,7 +674,7 @@
         -webkit-overflow-scrolling: touch;
     }
 
-    .pickadate__list-item {
+    .picker__list-item {
         padding: .5em .75em;
     }
 }*/

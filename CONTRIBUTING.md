@@ -10,7 +10,7 @@ Please take a moment to review this doc to make contributions easy and effective
 <a name="bugs"></a>
 ## Bug reports
 
-If you believe you‘ve found a bug within the repository code:
+If you believe you’ve found a bug within the repository code:
 
 - Search the existing issues to avoid duplicates and to check if it has already been solved.
 - Make sure you’re using the latest build.
@@ -33,9 +33,9 @@ A few other things to keep in mind:
 
 - Make sure the changes are suitable within the scope of this project.
 - Discuss any significant features before endeavoring into developing them. I‘d hate to have anyone spend effort on something only for me to not merge it into the main project.
-- Include the relevant test coverage for any JavaScript files are involved.
-- Compile the project using `grunt everything --verbose` to make sure everything passes with a green flag.
-- Use the Semantic Versioning guide as mentioned in the [Readme file](/tree/gh-pages/README.md) in the case a version bump is due.
+- Include the relevant test coverage if any JavaScript files are involved.
+- Compile the project using `grunt --verbose` to make sure everything passes with a green flag.
+- Use the Semantic Versioning guide, as mentioned in the [readme file](/tree/gh-pages/README.md), in the case a version bump is due.
 
 
 #### All pull requests should be submitted to the `dev` branch.

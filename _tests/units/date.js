@@ -22,8 +22,8 @@ var $DOM = $( '#qunit-fixture' ),
 
 module( 'Date picker setup', {
     setup: function() {
-        var $input = $INPUT.clone().pickadate()
-        $DOM.append( $input )
+        $DOM.append( $INPUT.clone() )
+        var $input = $DOM.find( 'input' ).pickadate()
         this.picker = $input.pickadate( 'picker' )
     },
     teardown: function() {
@@ -56,8 +56,8 @@ test( 'Properties', function() {
 
 module( 'Date picker `set`', {
     setup: function() {
-        var $input = $INPUT.clone().pickadate()
-        $DOM.append( $input )
+        $DOM.append( $INPUT.clone() )
+        var $input = $DOM.find( 'input' ).pickadate()
         this.picker = $input.pickadate( 'picker' )
     },
     teardown: function() {
@@ -516,8 +516,8 @@ test( '`disable` and `enable` using arrays', function() {
 
 module( 'Date picker mouse events', {
     setup: function() {
-        var $input = $INPUT.clone().pickadate()
-        $DOM.append( $input )
+        $DOM.append( $INPUT.clone() )
+        var $input = $DOM.find( 'input' ).pickadate()
         this.picker = $input.pickadate( 'picker' )
     },
     teardown: function() {
@@ -598,8 +598,8 @@ test( 'Clear', function() {
 
 module( 'Date picker keyboard events', {
     setup: function() {
-        var $input = $INPUT.clone().pickadate()
-        $DOM.append( $input )
+        $DOM.append( $INPUT.clone() )
+        var $input = $DOM.find( 'input' ).pickadate()
         this.picker = $input.pickadate( 'picker' )
     },
     teardown: function() {
@@ -686,8 +686,8 @@ test( 'Highlight', function() {
 
 module( 'Date picker with a `value`', {
     setup: function() {
-        var $input = $INPUT.clone().val( '14 August, 1988' ).pickadate()
-        $DOM.append( $input )
+        $DOM.append( $INPUT.clone().val( '14 August, 1988' ) )
+        var $input = $DOM.find( 'input' ).pickadate()
         this.picker = $input.pickadate( 'picker' )
     },
     teardown: function() {
@@ -709,10 +709,10 @@ test( '`value` to select, highlight, and view', function() {
 
 module( 'Date picker with a `data-value`', {
     setup: function() {
-        var $input = $INPUT.clone().data( 'value', '1988/08/14' ).pickadate({
+        $DOM.append( $INPUT.clone().data( 'value', '1988/08/14' ) )
+        var $input = $DOM.find( 'input' ).pickadate({
             formatSubmit: 'yyyy/mm/dd'
         })
-        $DOM.append( $input )
         this.picker = $input.pickadate( 'picker' )
     },
     teardown: function() {

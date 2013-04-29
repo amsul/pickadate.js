@@ -37,7 +37,7 @@
                     <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="date.htm">Date picker</a></li>
                     <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed menu__link--active" href="time.htm">Time picker</a></li>
                     <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="api.htm">API</a></li>
-                    <!--<li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="v2/index.htm">v2 Docs</a></li>-->
+                    <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="v2/index.htm">v2 Docs</a></li>
                     <li class="menu__item menu__item--responsive page-target__reveal menu__item--trail"><a class="menu__link menu__link--dimmed" href="https://github.com/amsul/pickadate.js">View on Github</a></li>
                 </ul>
             </nav>
@@ -103,32 +103,33 @@ onStop: undefined,
 // <a href="#classes">Classes</a>
 klass: {
 
-    // "Activated" input
-    inputActive: 'pickadate__input--active',
+    // The element states
+    input: 'picker__input',
+    active: 'picker__input--active',
 
     // Picker holder states
-    holder: 'pickadate__holder pickadate__holder--time',
-    opened: 'pickadate__holder--opened',
-    focused: 'pickadate__holder--focused',
+    holder: 'picker__holder picker__holder--time',
+    opened: 'picker__holder--opened',
+    focused: 'picker__holder--focused',
 
     // Picker frame, wrapper, and box
-    frame: 'pickadate__frame',
-    wrap: 'pickadate__wrap',
-    box: 'pickadate__box',
+    frame: 'picker__frame',
+    wrap: 'picker__wrap',
+    box: 'picker__box',
 
     // List of times
-    list: 'pickadate__list',
-    listItem: 'pickadate__list-item',
+    list: 'picker__list',
+    listItem: 'picker__list-item',
 
     // Time states
-    disabled: 'pickadate__list-item--disabled',
-    selected: 'pickadate__list-item--selected',
-    highlighted: 'pickadate__list-item--highlighted',
-    viewset: 'pickadate__list-item--viewset', // <<< is this needed?
-    now: 'pickadate__list-item--now',
+    disabled: 'picker__list-item--disabled',
+    selected: 'picker__list-item--selected',
+    highlighted: 'picker__list-item--highlighted',
+    viewset: 'picker__list-item--viewset',
+    now: 'picker__list-item--now',
 
     // Clear button
-    buttonClear: 'pickadate__button--clear',
+    buttonClear: 'picker__button--clear',
 }</code></pre>
 
     </div> <!-- .section__block -->
@@ -183,7 +184,7 @@ klass: {
     hiddenSuffix: '--submit'
 })</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><input id="time_demo__formats" class="fieldset__input " type=text placeholder="Try me&hellip;"></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><input id="time_demo__formats" class="fieldset__input " name=time_demo__formats type=text placeholder="Try me&hellip;"></fieldset>
 
     </div> <!-- .section__block -->
 
@@ -401,7 +402,7 @@ klass: {
     </footer> <!-- .section -->
 
 
-    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="http://code.jquery.com/jquery-2.0.0.min.js"></script>
     <script src="lib/pickadate.datetime.js"></script>
     <script src="site/scripts/main.js"></script>
     <script type="text/javascript">

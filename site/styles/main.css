@@ -668,9 +668,10 @@ code {
 
 pre {
   white-space: pre;
-  overflow-x: auto;
   padding: 1em;
   text-align: left;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -919,6 +920,10 @@ input[type=search] {
     margin-right: 1.5em;
   }
 }
+.menu__item--logo .menu__link {
+  display: block;
+  padding-bottom: 0.5em;
+}
 
 .menu__item--toggle {
   float: right;
@@ -927,6 +932,11 @@ input[type=search] {
   .menu__item--toggle {
     display: none;
   }
+}
+.menu__item--toggle .menu__link {
+  display: block;
+  padding-top: 1em;
+  padding-bottom: 1em;
 }
 
 .menu__item--clear:before, .menu__item--clear:after {
@@ -973,16 +983,13 @@ input[type=search] {
   }
 }
 
-.menu--header .menu__link {
-  display: block;
-  min-height: 3em;
-  line-height: 3em;
-}
-
 /* Add a border to the block links */
 .menu__item--responsive .menu__link {
   border-top: 1px solid #ededed;
   text-align: center;
+  display: block;
+  min-height: 3em;
+  line-height: 3em;
 }
 @media (min-width: 46.25em) {
   .menu__item--responsive .menu__link {
@@ -1041,6 +1048,7 @@ input[type=search] {
 .table th {
   background: #f5f7f7;
   font-weight: 500;
+  min-width: 40px;
 }
 
 .table th,
@@ -1138,8 +1146,6 @@ input[type=search] {
   .page-target__toggle {
     display: inline-block;
     vertical-align: top;
-    position: relative;
-    top: 20px;
     width: 28px;
     height: 4px;
     border-bottom: 12px double;

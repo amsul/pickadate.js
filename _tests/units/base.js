@@ -25,8 +25,8 @@ var $DOM = $( '#qunit-fixture' ),
 
 module( 'Base setup', {
     setup: function() {
-        var $input = $INPUT.clone().pickadate()
-        $DOM.append( $input )
+        $DOM.append( $INPUT.clone() )
+        var $input = $DOM.find( 'input' ).pickadate()
         this.picker = $input.pickadate( 'picker' )
     },
     teardown: function() {
@@ -87,8 +87,9 @@ test( 'Properties', function() {
 
 module( 'Base events', {
     setup: function() {
+        $DOM.append( $INPUT.clone() )
         var thisModule = this,
-            $input = $INPUT.clone().pickadate({
+            $input = $DOM.find( 'input' ).pickadate({
                 onStart: function() {
                     thisModule.started = true
                     thisModule.retarted = true
@@ -111,7 +112,7 @@ module( 'Base events', {
                     thisModule.selected = thing
                 }
             })
-        $DOM.append( $input )
+        this.picker = $input.pickadate( 'picker' )
         this.picker = $input.pickadate( 'picker' )
     },
     teardown: function() {
@@ -153,8 +154,8 @@ test( 'Options', function() {
 
 module( 'Base mouse events', {
     setup: function() {
-        var $input = $INPUT.clone().pickadate()
-        $DOM.append( $input )
+        $DOM.append( $INPUT.clone() )
+        var $input = $DOM.find( 'input' ).pickadate()
         this.picker = $input.pickadate( 'picker' )
     },
     teardown: function() {
@@ -181,8 +182,8 @@ test( 'Open and close', function() {
 
 module( 'Base keyboard events', {
     setup: function() {
-        var $input = $INPUT.clone().pickadate()
-        $DOM.append( $input )
+        $DOM.append( $INPUT.clone() )
+        var $input = $DOM.find( 'input' ).pickadate()
         this.picker = $input.pickadate( 'picker' )
     },
     teardown: function() {
@@ -199,7 +200,7 @@ test( 'Open and close', function() {
     ok( picker.get( 'open' ) === true, 'Opened with key in' )
 
     picker.$node.blur()
-    $( 'body' ).focus()
+    $DOM.focusin()
     ok( picker.get( 'open' ) === false, 'Closed with key out' )
 
     picker.$node.trigger({ type: 'keydown', keyCode: 40 })

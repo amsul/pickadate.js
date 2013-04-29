@@ -28,13 +28,13 @@ The v3 API is significantly different from v2 (all for the greater good!). So if
 <br>
 ## Library files
 
-The [`lib`](https://github.com/amsul/pickadate.js/tree/gh-pages/lib) folder includes **three** `.js` files - alongside the `.min.js` counter-parts. Only include the one script that is most suitable to your use case:
+The `lib` folder includes **three** `.js` files – alongside the `.min.js` counter-parts. Only include the one script that is most suitable to your use case:
 
 File name               | Picker(s) included   | File size (min & gzip)
 ----------------------- | -------------------- | ----------------------
-`pickadate.datetime`    | Date and time        | 3.35kb
-`pickadate.date`        | Date                 | 2.74kb
-`pickadate.time`        | Time                 | 2.18kb
+`pickadate.datetime`    | Date and time        | 3.36kb
+`pickadate.date`        | Date                 | 2.76kb
+`pickadate.time`        | Time                 | 2.19kb
 
 
 _To support old browsers as well, namely IE7 and IE8, **also include** the `legacy.js` file._
@@ -80,9 +80,11 @@ Before contributing any code to the project, please take a look at the [Contribu
 <br>
 ## Building with Grunt
 
-Grunt `~0.4.0` is used to build the project files. To get started, after cloning the project over, run `npm install` to get all the required node modules.
+[Grunt](http://gruntjs.com/) `~0.4.1` is used to build the project files. To get started, clone the project and then run:
 
-Then run `grunt everything --verbose` to check if you have all the dependencies.
+- `npm install` to get the required node modules.
+- `grunt --verbose` to confirm you have all the dependencies.
+
 
 
 

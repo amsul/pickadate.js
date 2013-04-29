@@ -10,24 +10,27 @@ With this major release, the entire API has been rethought to allow the picker t
 - [#84]({%= gitrepo_url %}/issues/84): Scrollbar not hidden to avoid page shift.
 - [#89]({%= gitrepo_url %}/issues/89): Better event handling on clicks/focuses/keydowns within the holder.
 - [#98]({%= gitrepo_url %}/issues/98): Destroy picker data from element.
-- Grunt.js build system added.
-- Extensive QUnit test suite added.
-- Themes updated to be Sass-based.
-- “Inline” and “inline-fixed” themes removed.
+- Added Grunt.js build system.
+- Added QUnit test suite.
+- Added Travis integration.
+- Updated themes to be Sass-based.
+- Removed “Inline” theme.
+- Removed jam.js bindings within `package.json`.
 
 To enable all this goodness, some **backward-incompatible changes** have been introduced. These are the main ones:
 
+<a name="zero-as-index"></a>
 - [#85]({%= gitrepo_url %}/issues/85): Months have __zero-as-index__:
 
 	Just as in JavaScript’s native Date object, the `month` used to create dates is now 	based on zero as the first index. Meaning:
-	
+
 	```
 	[2013,0,1] → January 01, 2013
 	[2013,11,1] → December 01, 2013
 	```
 
 - API revised:
-	
+
 	```
 	isOpen → get('open')
 	getDate → get('select')
@@ -49,7 +52,7 @@ To enable all this goodness, some **backward-incompatible changes** have been in
 	datesDisabled → disable
 	onSelect → onSet
 	```
-	
+
 - Options removed:
 
 	```
@@ -57,7 +60,7 @@ To enable all this goodness, some **backward-incompatible changes** have been in
 	monthNext
 	```
 	To add labels for the month navigation tabs, use CSS pseudo-elements instead.
-	
+
 - A few [HTML classes]({%= pkg.homepage %}/date.htm#classes) name and property changes.
 
 - [Formatting rules]({%= pkg.homepage %}/date.htm#formats) that appear within a word need to be escaped with an exclamation mark (!).

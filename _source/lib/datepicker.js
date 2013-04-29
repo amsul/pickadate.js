@@ -58,7 +58,7 @@ function DatePicker( picker, settings ) {
         set( 'select',
 
             // If there's a `value` or `data-value`, use that with formatting.
-            // Otherwise default to the minimum selectable time.
+            // Otherwise default to selecting “today”.
             elementDataValue || picker.$node[ 0 ].value || calendar.item.now,
 
             // Use the relevant format and data property.
@@ -845,45 +845,46 @@ jQueryExtend( DatePicker, 'pickadate', {
     // Classes
     klass: {
 
-        inputActive: STRING_PREFIX_PICKER + 'input--active',
+        input: CLASSES_PREFIX + 'input',
+        active: CLASSES_PREFIX + 'input--active',
 
-        holder: STRING_PREFIX_PICKER + 'holder',
-        opened: STRING_PREFIX_PICKER + 'holder--opened',
-        focused: STRING_PREFIX_PICKER + 'holder--focused',
+        holder: CLASSES_PREFIX + 'holder',
+        opened: CLASSES_PREFIX + 'holder--opened',
+        focused: CLASSES_PREFIX + 'holder--focused',
 
-        frame: STRING_PREFIX_PICKER + 'frame',
-        wrap: STRING_PREFIX_PICKER + 'wrap',
+        frame: CLASSES_PREFIX + 'frame',
+        wrap: CLASSES_PREFIX + 'wrap',
 
-        box: STRING_PREFIX_PICKER + 'box',
+        box: CLASSES_PREFIX + 'box',
 
-        table: STRING_PREFIX_PICKER + 'table',
+        table: CLASSES_PREFIX + 'table',
 
-        header: STRING_PREFIX_PICKER + 'header',
+        header: CLASSES_PREFIX + 'header',
 
-        navPrev: STRING_PREFIX_PICKER + 'nav--prev',
-        navNext: STRING_PREFIX_PICKER + 'nav--next',
-        navDisabled: STRING_PREFIX_PICKER + 'nav--disabled',
+        navPrev: CLASSES_PREFIX + 'nav--prev',
+        navNext: CLASSES_PREFIX + 'nav--next',
+        navDisabled: CLASSES_PREFIX + 'nav--disabled',
 
-        month: STRING_PREFIX_PICKER + 'month',
-        year: STRING_PREFIX_PICKER + 'year',
+        month: CLASSES_PREFIX + 'month',
+        year: CLASSES_PREFIX + 'year',
 
-        selectMonth: STRING_PREFIX_PICKER + 'select--month',
-        selectYear: STRING_PREFIX_PICKER + 'select--year',
+        selectMonth: CLASSES_PREFIX + 'select--month',
+        selectYear: CLASSES_PREFIX + 'select--year',
 
-        weekdays: STRING_PREFIX_PICKER + 'weekday',
+        weekdays: CLASSES_PREFIX + 'weekday',
 
-        day: STRING_PREFIX_PICKER + 'day',
-        disabled: STRING_PREFIX_PICKER + 'day--disabled',
-        selected: STRING_PREFIX_PICKER + 'day--selected',
-        highlighted: STRING_PREFIX_PICKER + 'day--highlighted',
-        now: STRING_PREFIX_PICKER + 'day--today',
-        infocus: STRING_PREFIX_PICKER + 'day--infocus',
-        outfocus: STRING_PREFIX_PICKER + 'day--outfocus',
+        day: CLASSES_PREFIX + 'day',
+        disabled: CLASSES_PREFIX + 'day--disabled',
+        selected: CLASSES_PREFIX + 'day--selected',
+        highlighted: CLASSES_PREFIX + 'day--highlighted',
+        now: CLASSES_PREFIX + 'day--today',
+        infocus: CLASSES_PREFIX + 'day--infocus',
+        outfocus: CLASSES_PREFIX + 'day--outfocus',
 
-        footer: STRING_PREFIX_PICKER + 'footer',
+        footer: CLASSES_PREFIX + 'footer',
 
-        buttonClear: STRING_PREFIX_PICKER + 'button--clear',
-        buttonToday: STRING_PREFIX_PICKER + 'button--today'
+        buttonClear: CLASSES_PREFIX + 'button--clear',
+        buttonToday: CLASSES_PREFIX + 'button--today'
     }
 }); //jQueryExtend
 

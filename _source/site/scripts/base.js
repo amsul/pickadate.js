@@ -34,12 +34,13 @@ $( '#date_demo__weekdaysShort' ).pickadate({
 /**
  * Translations
  */
-$( '#date_demo__translations' ).pickadate({
+$( '#date_demo__translations--a' ).pickadate({
     monthsFull: [ 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre' ],
     monthsShort: [ 'Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec' ],
     weekdaysShort: [ 'Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam' ],
     today: 'aujourd\'hui',
-    clear: 'effacer'
+    clear: 'effacer',
+    formatSubmit: 'yyyy/mm/dd'
 })
 
 
@@ -58,19 +59,29 @@ $( '#date_demo__buttons' ).pickadate({
 /**
  * Formats
  */
-$( '#date_demo__formats' ).pickadate({
+$( '#date_demo__formats--a' ).pickadate({
     format: 'You selecte!d: dddd, dd mmm, yyyy',
-    formatSubmit: 'yyyy-mm-dd',
+    formatSubmit: 'yyyy/mm/dd',
     hiddenSuffix: '--submit',
-    onSet: function() {
-        this.$node.
-            closest( '.js__fieldset' ).
-            after( '<div class="section__block section__block--notification-green">' +
-                '<p>Value to submit: <code>' +
-                    this.get( 'select', 'yyyy/mm/dd' ) +
-                '</code></p></div>'
-            )
+    onSet: function( event ) {
+        if ( event.select ) {
+            this.$node.
+                closest( '.js__fieldset' ).
+                after( '<div class="section__block section__block--notification-green">' +
+                    '<p>Value to submit: <code>' +
+                        this.get( 'select', 'yyyy/mm/dd' ) +
+                    '</code></p></div>'
+                )
+        }
     }
+})
+$( '#date_demo__formats--b' ).pickadate({
+    monthsFull: [ 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre' ],
+    monthsShort: [ 'Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec' ],
+    weekdaysShort: [ 'Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam' ],
+    today: 'aujourd\'hui',
+    clear: 'effacer',
+    formatSubmit: 'yyyy/mm/dd'
 })
 
 
@@ -223,14 +234,16 @@ $( '#time_demo__formats' ).pickatime({
     formatLabel: '<b>h</b>:i <!i>a</!i>',
     formatSubmit: 'HH:i',
     hiddenSuffix: '--submit',
-    onSet: function() {
-        this.$node.
-            closest( '.js__fieldset' ).
-            after( '<div class="section__block section__block--notification-green">' +
-                '<p>Value to submit: <code>' +
-                    this.get( 'select', 'HH:i' ) +
-                '</code></p></div>'
-            )
+    onSet: function( event ) {
+        if ( event.select ) {
+            this.$node.
+                closest( '.js__fieldset' ).
+                after( '<div class="section__block section__block--notification-green">' +
+                    '<p>Value to submit: <code>' +
+                        this.get( 'select', 'HH:i' ) +
+                    '</code></p></div>'
+                )
+        }
     }
 })
 
@@ -338,6 +351,52 @@ $( '#time_demo__events' ).pickatime({
 /* ==========================================================================
    API stuff
    ========================================================================== */
+
+
+
+/**
+ * API demo: events-basic
+ */
+var $input_events_basic = $( '#demo__api-events-basic' ).pickadate({
+        onOpen: function() {
+            console.log('Opened up!')
+        },
+        onClose: function() {
+            console.log('Closed now')
+        },
+        onRender: function() {
+            console.log('Just rendered anew')
+        },
+        onStart: function() {
+            console.log('Hello there :)')
+        },
+        onStop: function() {
+            console.log('See ya')
+        }
+    }),
+    picker_events_basic = $input_events_basic.pickadate( 'picker' )
+$( '#button__api-events-basic' ).on( 'click', function( event ) {
+    if ( this.innerHTML == 'Stop' ) {
+        picker_events_basic.stop()
+        this.innerHTML = 'Start'
+    }
+    else {
+        picker_events_basic.start()
+        this.innerHTML = 'Stop'
+    }
+    event.stopPropagation()
+})
+
+
+
+/**
+ * API demo: event-set
+ */
+$( '#demo__api-event-set' ).pickadate({
+    onSet: function( event ) {
+        console.log( event )
+    }
+})
 
 
 
@@ -774,6 +833,38 @@ $( '#button__api-set--max-time-true' ).on( 'click', function( event ) {
 })
 $( '#button__api-set--max-time-false' ).on( 'click', function( event ) {
     picker_set__max_time.set( 'max', false )
+    event.stopPropagation()
+})
+
+
+
+/**
+ * API objects
+ */
+
+//$node
+var $input_object__node = $( '#demo__api-object--node' ).pickadate(),
+    picker_object__node = $input_object__node.pickadate( 'picker' )
+$( '#button__api-object--node' ).on( 'click', function( event ) {
+    console.log( picker_object__node.$node )
+    event.stopPropagation()
+})
+
+//$holder
+var $input_object__holder = $( '#demo__api-object--holder' ).pickadate(),
+    picker_object__holder = $input_object__holder.pickadate( 'picker' )
+$( '#button__api-object--holder' ).on( 'click', function( event ) {
+    console.log( picker_object__holder.$holder )
+    event.stopPropagation()
+})
+
+//_hidden
+var $input_object__hidden = $( '#demo__api-object--hidden' ).pickadate({
+        formatSubmit: 'yyyy/mm/dd'
+    }),
+    picker_object__hidden = $input_object__hidden.pickadate( 'picker' )
+$( '#button__api-object--hidden' ).on( 'click', function( event ) {
+    console.log( picker_object__hidden._hidden )
     event.stopPropagation()
 })
 

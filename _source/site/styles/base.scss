@@ -261,9 +261,10 @@ code {
 
 pre {
     white-space: pre;
-    overflow-x: auto;
     padding: 1em;
     text-align: left;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     @include prefix( border-radius, 4px );
     @include demo-tag( "Code" );
 }
@@ -490,12 +491,23 @@ input[type=search] {
         float: none;
         @include list-item-inline;
     }
+
+    .menu__link {
+        display: block;
+        padding-bottom: 0.5em;
+    }
 }
 
 .menu__item--toggle {
     float: right;
     @include screen( medium ) {
         display: none;
+    }
+
+    .menu__link {
+        display: block;
+        padding-top: 1em;
+        padding-bottom: 1em;
     }
 }
 
@@ -537,11 +549,6 @@ input[type=search] {
         font-size: .8em;
     }
 }
-.menu--header .menu__link {
-    display: block;
-    min-height: 3em;
-    line-height: 3em;
-}
 
 
 
@@ -549,6 +556,9 @@ input[type=search] {
 .menu__item--responsive .menu__link {
     border-top: 1px solid $grey-lightest;
     text-align: center;
+    display: block;
+    min-height: 3em;
+    line-height: 3em;
 
     @include screen( medium ) {
         border-top: 0;
@@ -618,6 +628,7 @@ input[type=search] {
 .table th {
     background: #f5f7f7;
     font-weight: 500;
+    min-width: 40px;
 }
 
 .table th,
@@ -717,9 +728,6 @@ input[type=search] {
     .page-target__toggle {
         display: inline-block;
         vertical-align: top;
-        position: relative;
-        top: 20px;
-
         width: 28px;
         height: 4px;
         border-bottom: 12px double;

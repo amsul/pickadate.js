@@ -266,16 +266,16 @@ module.exports = function( grunt ) {
 
 
     // Register the tasks.
-    grunt.registerTask( 'default', [ 'clean', 'htmlify', 'concat', 'copy:site', 'copy:lib', 'sass', 'jshint', 'uglify', 'cssmin', 'copy:pkg' ] )
-    grunt.registerTask( 'quick', [ 'htmlify', 'concat', 'copy:site', 'copy:lib', 'sass' ] )
+    // * `copy:pkg` should come after `uglify` because some package files measure `.min` file sizes.
+    grunt.registerTask( 'default', [ 'clean', 'htmlify', 'concat', 'copy:site', 'copy:lib', 'sass', 'jshint', 'qunit', 'uglify', 'cssmin', 'copy:pkg' ] )
+    grunt.registerTask( 'quick', [ 'htmlify', 'concat', 'copy:site', 'copy:lib', 'sass'/*, 'uglify', 'cssmin', 'copy:pkg'*/ ] )
     grunt.registerTask( 'build', [ 'clean:lib', 'concat:lib', 'copy:lib', 'sass:lib', 'jshint:lib', 'qunit:lib', 'uglify:lib', 'cssmin:lib' ] )
     grunt.registerTask( 'site', [ 'clean:site', 'htmlify:site', 'concat:site', 'copy:site', 'sass:site', 'jshint:site' ] )
-    grunt.registerTask( 'travis', [ 'concat:lib', 'copy:lib', 'sass:lib', 'jshint:lib', 'qunit:lib' ] )
-    grunt.registerTask( 'everything', [ 'clean', 'htmlify', 'concat', 'copy:site', 'copy:lib', 'sass', 'jshint', 'qunit', 'uglify', 'cssmin', 'copy:pkg' ] )
+    grunt.registerTask( 'travis', [ 'jshint:lib', 'qunit:lib' ] )
 
 
 
-    // Register the task to build out the static HTML files.
+    // Create and register the task to build out the static HTML files.
     grunt.registerMultiTask( 'htmlify', 'Build static HTML files', function() {
 
         var task = this,

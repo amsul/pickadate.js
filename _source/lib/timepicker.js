@@ -596,27 +596,28 @@ jQueryExtend( TimePicker, 'pickatime', {
     // Classes
     klass: {
 
-        inputActive: STRING_PREFIX_PICKER + 'input--active',
+        input: CLASSES_PREFIX + 'input',
+        active: CLASSES_PREFIX + 'input--active',
 
-        holder: STRING_PREFIX_PICKER + 'holder ' + STRING_PREFIX_PICKER + 'holder--time',
-        opened: STRING_PREFIX_PICKER + 'holder--opened',
-        focused: STRING_PREFIX_PICKER + 'holder--focused',
+        holder: CLASSES_PREFIX + 'holder ' + CLASSES_PREFIX + 'holder--time',
+        opened: CLASSES_PREFIX + 'holder--opened',
+        focused: CLASSES_PREFIX + 'holder--focused',
 
-        frame: STRING_PREFIX_PICKER + 'frame',
-        wrap: STRING_PREFIX_PICKER + 'wrap',
+        frame: CLASSES_PREFIX + 'frame',
+        wrap: CLASSES_PREFIX + 'wrap',
 
-        box: STRING_PREFIX_PICKER + 'box',
+        box: CLASSES_PREFIX + 'box',
 
-        list: STRING_PREFIX_PICKER + 'list',
-        listItem: STRING_PREFIX_PICKER + 'list-item',
+        list: CLASSES_PREFIX + 'list',
+        listItem: CLASSES_PREFIX + 'list-item',
 
-        disabled: STRING_PREFIX_PICKER + 'list-item--disabled',
-        selected: STRING_PREFIX_PICKER + 'list-item--selected',
-        highlighted: STRING_PREFIX_PICKER + 'list-item--highlighted',
-        viewset: STRING_PREFIX_PICKER + 'list-item--viewset',
-        now: STRING_PREFIX_PICKER + 'list-item--now',
+        disabled: CLASSES_PREFIX + 'list-item--disabled',
+        selected: CLASSES_PREFIX + 'list-item--selected',
+        highlighted: CLASSES_PREFIX + 'list-item--highlighted',
+        viewset: CLASSES_PREFIX + 'list-item--viewset',
+        now: CLASSES_PREFIX + 'list-item--now',
 
-        buttonClear: STRING_PREFIX_PICKER + 'button--clear'
+        buttonClear: CLASSES_PREFIX + 'button--clear'
     }
 });
 

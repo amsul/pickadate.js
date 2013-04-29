@@ -32,11 +32,6 @@
   "dependencies": {
     "jquery": ">=1.7"
   },
-  "jam": {
-    "dependencies": {
-      "jquery": ">=1.7"
-    }
-  },
   "devDependencies": {
     "grunt": "~0.4.1",
     "phantomjs": "1.9.0-2",

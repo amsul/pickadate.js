@@ -1,14 +1,12 @@
 
 
-{%
-    dateDemoField = function( props ) {
-        props = props || {}
-        return '<fieldset class="fieldset fieldset--demo js__fieldset">' +
-            ( props.pre || '' ) +
-            '<input id="' + ( props.id || '' ) + '" class="fieldset__input ' + ( props.klass || '' ) + '" type=text placeholder="Try me&hellip;">' +
-        '</fieldset>'
-    }
-%}
+{% dateDemoField = function( props ) {
+    props = props || {}
+    return '<fieldset class="fieldset fieldset--demo js__fieldset">' +
+        ( props.pre || '' ) +
+        '<input id="' + ( props.id || '' ) + '" class="fieldset__input ' + ( props.klass || '' ) + '" type=text placeholder="Try me&hellip;">' +
+    '</fieldset>'
+} %}
 
 
 <section class="section">
@@ -25,7 +23,7 @@
 
         <div class="section__block section__block--notification">
             <p>Along with v3, the v2 options and API have effectively been deprecated. Read up on the <a href="{%= ___.gitrepo_url %}/tree/gh-pages/CHANGELOG.md">full changelog here</a>.</p>
-            <p>One of the most critical changes is that the “month”, just as in JavaScript’s native Date object, is now based on <a href="{%= ___.gitrepo_url %}/tree/gh-pages/CHANGELOG.md#zero-as-index">zero-as-index</a>.</p>
+            <p>One of the most critical changes is that the “month” used to create dates, just as in JavaScript’s native Date object, now has <a href="{%= ___.gitrepo_url %}/tree/gh-pages/CHANGELOG.md#zero-as-index">zero-as-index</a>.</p>
         </div>
 
     </div> <!-- .section__block -->
@@ -78,56 +76,57 @@ onStop: undefined,
 // <a href="#classes">Classes</a>
 klass: {
 
-    // "Activated" input
-    inputActive: 'pickadate__input--active',
+    // The element states
+    input: 'picker__input',
+    active: 'picker__input--active',
 
     // Picker holder states
-    holder: 'pickadate__holder',
-    opened: 'pickadate__holder--opened',
-    focused: 'pickadate__holder--focused',
+    holder: 'picker__holder',
+    opened: 'picker__holder--opened',
+    focused: 'picker__holder--focused',
 
     // Picker frame, wrapper, and box
-    frame: 'pickadate__frame',
-    wrap: 'pickadate__wrap',
-    box: 'pickadate__box',
+    frame: 'picker__frame',
+    wrap: 'picker__wrap',
+    box: 'picker__box',
 
     // Table of dates
-    table: 'pickadate__table',
+    table: 'picker__table',
 
     // Picker header
-    header: 'pickadate__header',
+    header: 'picker__header',
 
     // Month navigation
-    navPrev: 'pickadate__nav--prev',
-    navNext: 'pickadate__nav--next',
-    navDisabled: 'pickadate__nav--disabled',
+    navPrev: 'picker__nav--prev',
+    navNext: 'picker__nav--next',
+    navDisabled: 'picker__nav--disabled',
 
     // Month &amp; year labels
-    month: 'pickadate__month',
-    year: 'pickadate__year',
+    month: 'picker__month',
+    year: 'picker__year',
 
     // Month &amp; year dropdowns
-    selectMonth: 'pickadate__select--month',
-    selectYear: 'pickadate__select--year',
+    selectMonth: 'picker__select--month',
+    selectYear: 'picker__select--year',
 
     // Weekday labels
-    weekdays: 'pickadate__weekday',
+    weekdays: 'picker__weekday',
 
     // Day states
-    day: 'pickadate__day',
-    disabled: 'pickadate__day--disabled',
-    selected: 'pickadate__day--selected',
-    highlighted: 'pickadate__day--highlighted',
-    now: 'pickadate__day--today',
-    infocus: 'pickadate__day--infocus',
-    outfocus: 'pickadate__day--outfocus',
+    day: 'picker__day',
+    disabled: 'picker__day--disabled',
+    selected: 'picker__day--selected',
+    highlighted: 'picker__day--highlighted',
+    now: 'picker__day--today',
+    infocus: 'picker__day--infocus',
+    outfocus: 'picker__day--outfocus',
 
     // Picker footer
-    footer: 'pickadate__footer',
+    footer: 'picker__footer',
 
     // Today &amp; clear buttons
-    buttonClear: 'pickadate__button--clear',
-    buttonToday: 'pickadate__button--today'
+    buttonClear: 'picker__button--clear',
+    buttonToday: 'picker__button--today'
 }</code></pre>
 
     </div> <!-- .section__block -->
@@ -159,26 +158,15 @@ klass: {
 
     <div class="section__block section__block--scoped">
 
-        <h2 class="heading heading--divide"><span class="heading__text">translations<a class="heading__anchor" name="translations" href="#translations">&sect;</a></span></h2>
-        <p>The picker can be extended to add support for internationalization. There are translations available for <a href="{%= pkg.repository.url.replace(/.git$/,'') %}/tree/gh-pages/translations">{%= grunt.file.expand( dirs.lib.src + '/translations/*.js' ).length %} languages</a> which you can include in one of two ways:</p>
+        <h2 class="heading heading--divide"><span class="heading__text">buttons<a class="heading__anchor" name="buttons" href="#buttons">&sect;</a></span></h2>
+        <p>Change the text or hide a button completely by passing a false-y value:</p>
 
-        <pre class="pre--demo"><code data-language="javascript">// Extend the default picker options for <u>all instances</u>.
-$.extend($.fn.pickadate.defaults, {
-    monthsFull: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
-    weekdaysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
-    today: 'aujourd\'hui',
-    clear: 'effacer'
-})
-
-// Or, pass the months and weekdays as an array for <u>each invocation</u>.
-$('.datepicker').pickadate({
-    monthsFull: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
-    weekdaysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
-    today: 'aujourd\'hui',
-    clear: 'effacer'
+        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
+    today: '',
+    clear: 'Clear selection'
 })</code></pre>
 
-        {%= dateDemoField({ id: 'date_demo__translations' }) %}
+        {%= dateDemoField({ id: 'date_demo__buttons' }) %}
 
     </div> <!-- .section__block -->
 
@@ -189,15 +177,29 @@ $('.datepicker').pickadate({
 
     <div class="section__block section__block--scoped">
 
-        <h2 class="heading heading--divide"><span class="heading__text">buttons<a class="heading__anchor" name="buttons" href="#buttons">&sect;</a></span></h2>
-        <p>Change the text or hide a button completely by passing a false-y value:</p>
+        <h2 class="heading heading--divide"><span class="heading__text">translations<a class="heading__anchor" name="translations" href="#translations">&sect;</a></span></h2>
+        <p>The picker can be extended to add support for internationalization. There are translations available for <a href="{%= pkg.repository.url.replace(/.git$/,'') %}/tree/gh-pages/translations">{%= grunt.file.expand( dirs.lib.src + '/translations/*.js' ).length %} languages</a> which you can include in one of two ways:</p>
 
-        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
-    today: '',
-    clear: 'Clear selection'
+        <pre class="pre--demo"><code data-language="javascript">// Extend the default picker options for <u>all instances</u>.
+$.extend($.fn.pickadate.defaults, {
+    monthsFull: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+    weekdaysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+    today: 'aujourd\'hui',
+    clear: 'effacer',
+    formatSubmit: 'yyyy/mm/dd'
+})
+
+// Or, pass the months and weekdays as an array for <u>each invocation</u>.
+$('.datepicker').pickadate({
+    monthsFull: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+    weekdaysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+    today: 'aujourd\'hui',
+    clear: 'effacer',
+    formatSubmit: 'yyyy/mm/dd'
 })</code></pre>
+        {%= dateDemoField({ id: 'date_demo__translations' }) %}
 
-        {%= dateDemoField({ id: 'date_demo__buttons' }) %}
+        <p>When using translations, make sure to also <a href="#formats">specify the <code>formatSubmit</code> and <code class="attribute">data-value</code></a>.</p>
 
     </div> <!-- .section__block -->
 
@@ -219,7 +221,11 @@ $('.datepicker').pickadate({
     hiddenSuffix: '--submit'
 })</code></pre>
 
-        {%= dateDemoField({ id: 'date_demo__formats' }) %}
+        {%= dateDemoField({ id: 'date_demo__formats--a' }).replace( 'type=text', 'name=date_demo__formats type=text' ) %}
+
+        <p>When using <a href="#translations">translations</a>, the <code class="tag-name">input</code> element should be given a <code class="attribute">data-value</code> attribute formatted using the <code>formatSubmit</code> – the element’s <code class="attribute">value</code> can be left blank. This helps to parse the date into the various languages:</p>
+        <pre class="pre--demo"><code data-language="html">&lt;input data-value="2013/04/20"></code></pre>
+        {%= dateDemoField({ id: 'date_demo__formats--b' }).replace( 'type=text', 'name=date_demo__formats type=text data-value="2013/04/20"') %}
 
     </div> <!-- .section__block -->
 
