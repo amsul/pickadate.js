@@ -2,18 +2,18 @@
 a lot of the stuff below may never happen...
 
 
-docs
-----
+docs/fixes
+----------
 
-- examples page
-- classic and fixed styling
-- readme note on styling with sass
+- themes page
+- classic and fixed styling (classic needs max-height:auto)
+- “escape” on IE clears input value
+- remove “event” options
 
 
 tests
 -----
 
-- firstDay
 - clicks/mousedowns/focuses within datepicker
 - disable flip
 - highlight/select get shifted if disabled
@@ -27,6 +27,7 @@ future
 ------
 
 - future: time picker “period” translations
+- future: move events to `.on`
 - future: disable dates using js date objects
 - future: add .main to package.json
 - future: month and year labels using formattings

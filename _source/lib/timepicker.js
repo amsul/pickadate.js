@@ -94,7 +94,7 @@ function TimePicker( picker, settings ) {
         var $holder = this.$holder,
             $viewset = $holder.find( '.' + settings.klass.viewset )
         if ( $viewset.length ) {
-            $holder[ 0 ].scrollTop = $viewset.position().top - ~~( $holder[ 0 ].clientHeight / 4 )
+            $holder[ 0 ].scrollTop = ~~( $viewset.position().top - $viewset[ 0 ].clientHeight )
         }
         else {
             console.warn( 'Nothing to viewset with', clock.item.view )
@@ -569,7 +569,7 @@ TimePicker.prototype.nodes = function( isOpen ) {
                 'data-pick=' + loopedTime.pick
             ]
         }
-    }) + createNode( 'li', createNode( 'button', settings.clear, settings.klass.buttonClear, 'data-clear=1' + ( isOpen ? '' : ' disabled' ) ) ), settings.klass.list )
+    }) + createNode( 'li', createNode( 'button', settings.clear, settings.klass.buttonClear, 'data-clear=1' + ( isOpen ? '' : ' disable' ) ) ), settings.klass.list )
 } //TimePicker.prototype.nodes
 
 
@@ -579,10 +579,10 @@ TimePicker.prototype.nodes = function( isOpen ) {
 
 
 /* ==========================================================================
-   Extend jQuery with the component time picker and defaults
+   Extend the picker to add the component with the defaults.
    ========================================================================== */
 
-jQueryExtend( TimePicker, 'pickatime', {
+Picker.extend( 'pickatime', TimePicker, {
 
     // Clear
     clear: 'Clear',
@@ -619,7 +619,7 @@ jQueryExtend( TimePicker, 'pickatime', {
 
         buttonClear: CLASSES_PREFIX + 'button--clear'
     }
-});
+})
 
 
 

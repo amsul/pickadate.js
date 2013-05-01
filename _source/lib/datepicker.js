@@ -69,9 +69,7 @@ function DatePicker( picker, settings ) {
         set( 'highlight', calendar.item.select )
 
 
-    /**
-     * The keycode to movement mapping.
-     */
+    // The keycode to movement mapping.
     calendar.key = {
         40: 7, // Down
         38: -7, // Up
@@ -84,26 +82,25 @@ function DatePicker( picker, settings ) {
     }
 
 
-    /**
-     * The time picker events.
-     */
-    calendar.onRender = function() {
-        var picker = this
-        picker.$holder.find( '.' + settings.klass.selectMonth ).on( 'change', function() {
-            picker.set( 'highlight', [ calendar.get( 'view' ).year, this.value, calendar.get( 'highlight' ).date ] )
-            picker.$holder.find( '.' + settings.klass.selectMonth ).focus()
+    // Bind some picker events.
+    picker.
+        on( 'render', function() {
+            picker.$holder.find( '.' + settings.klass.selectMonth ).on( 'change', function() {
+                picker.set( 'highlight', [ picker.get( 'view' ).year, this.value, picker.get( 'highlight' ).date ] )
+                picker.$holder.find( '.' + settings.klass.selectMonth ).focus()
+            })
+            picker.$holder.find( '.' + settings.klass.selectYear ).on( 'change', function() {
+                picker.set( 'highlight', [ this.value, picker.get( 'view' ).month, picker.get( 'highlight' ).date ] )
+                picker.$holder.find( '.' + settings.klass.selectYear ).focus()
+            })
+        }).
+        on( 'open', function() {
+            picker.$holder.find( 'button, select' ).attr( 'disabled', false )
+        }).
+        on( 'close', function() {
+            picker.$holder.find( 'button, select' ).attr( 'disabled', true )
         })
-        picker.$holder.find( '.' + settings.klass.selectYear ).on( 'change', function() {
-            picker.set( 'highlight', [ this.value, calendar.get( 'view' ).month, calendar.get( 'highlight' ).date ] )
-            picker.$holder.find( '.' + settings.klass.selectYear ).focus()
-        })
-    }
-    calendar.onOpen = function() {
-        this.$holder.find( 'button, select' ).attr( 'disabled', false )
-    }
-    calendar.onClose = function() {
-        this.$holder.find( 'button, select' ).attr( 'disabled', true )
-    }
+
 } //DatePicker
 
 
@@ -824,10 +821,10 @@ DatePicker.prototype.nodes = function( isOpen ) {
 
 
 /* ==========================================================================
-   Extend jQuery with the component date picker and defaults
+   Add the date picker to the picker with the defaults.
    ========================================================================== */
 
-jQueryExtend( DatePicker, 'pickadate', {
+Picker.extend( 'pickadate', DatePicker, {
 
     // Months and weekdays
     monthsFull: [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ],
@@ -886,7 +883,7 @@ jQueryExtend( DatePicker, 'pickadate', {
         buttonClear: CLASSES_PREFIX + 'button--clear',
         buttonToday: CLASSES_PREFIX + 'button--today'
     }
-}); //jQueryExtend
+}) //Picker.extend
 
 
 

@@ -15,13 +15,13 @@
    ========================================================================== */
 
 var CLASSES_PREFIX = 'picker__',
-    $DOCUMENT = $( document ),
+    $DOCUMENT = $( document )
 
 
 /**
  * The picker constructor that creates a new date or time picker
  */
-Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
+ function Picker( $ELEMENT, SETTINGS, COMPONENT, NAME ) {
 
     var
         // The state of the picker.
@@ -58,9 +58,11 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
             start: function() {
 
                 // If it’s already started, do nothing.
-                if ( STATE.start ) return P
+                if ( STATE && STATE.start ) return P
 
-                // Update the picker state.
+
+                // Update the picker states.
+                STATE.methods = {}
                 STATE.start = true
                 STATE.open = false
                 STATE.type = ELEMENT.type
@@ -140,11 +142,11 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                 // Add the class and bind the events on the element.
                 $ELEMENT.addClass( CLASSES.input ).
 
-                    // On focus or click, open the calendar and add the “focused” state tothe holder.
-                    on( 'focus.P' + STATE.id + ' click.P' + STATE.id, function() {
-                        P.open()
-                        P.$holder.addClass( CLASSES.focused )
-                    }).
+                    // On focus open the picker and add the “focused” state tothe holder.
+                    on( 'focus.P' + STATE.id, focusToOpen ).
+
+                    // On click, open the picker.
+                    on( 'click.P' + STATE.id, P.open ).
 
                     // If the value changes, update the hidden input with the correct format.
                     on( 'change.P' + STATE.id, function() {
@@ -161,7 +163,7 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                             // Check if one of the delete keys was pressed
                             isKeycodeDelete = /^(8|46)$/.test( keycode )
 
-                        // Check if `space` or `delete` was pressed or the calendar is closed with a key movement.
+                        // Check if `space` or `delete` was pressed or the picker is closed with a key movement.
                         if ( keycode == 32 || isKeycodeDelete || !STATE.open && P.component.key[ keycode ] ) {
 
                             // Prevent it from moving the page and bubbling to doc.
@@ -169,7 +171,7 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                             event.stopPropagation()
 
                             // If `delete` was pressed, clear the values and close the picker.
-                            // Otherwise open the calendar.
+                            // Otherwise open the picker.
                             if ( isKeycodeDelete ) { P.clear().close() }
                             else { P.open() }
                         }
@@ -179,27 +181,30 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                     val( $ELEMENT.data( 'value' ) ? triggerFunction( P.component.formats.toString, P.component, [ SETTINGS.format, P.component.item.select ] ) : '' ).
 
                     // Insert the holder and hidden input after the element.
-                    after( P.$holder, P._hidden )
+                    after( P.$holder, P._hidden ).
+
+                    // Store the picker data by component name.
+                    data( NAME, P )
 
 
-                // Trigger the component “start” event within scope of the picker.
-                triggerFunction( P.component.onStart, P )
+                // Bind the default component and settings events.
+                P.
+                    on( 'start', P.component.onStart ).on( 'start', SETTINGS.onStart ).
+                    on( 'render', P.component.onRender ).on( 'render', SETTINGS.onRender ).
+                    on( 'stop', P.component.onStop ).on( 'stop', SETTINGS.onStop ).
+                    on( 'open', P.component.onOpen ).on( 'open', SETTINGS.onOpen ).
+                    on( 'close', P.component.onClose ).on( 'close', SETTINGS.onClose ).
+                    on( 'set', P.component.onSet ).on( 'set', SETTINGS.onSet )
 
-                // Trigger the settings “start” event within scope of the picker.
-                triggerFunction( SETTINGS.onStart, P )
 
-                // Trigger the component “render” event within scope of the picker.
-                triggerFunction( P.component.onRender, P )
-
-                // Trigger the settings “render” event within scope of the picker.
-                triggerFunction( SETTINGS.onRender, P )
-
-                // If the element has autofocus, open the calendar.
+                // If the element has autofocus, open the picker.
                 if ( ELEMENT.autofocus ) {
                     P.open()
                 }
 
-                return P
+
+                // Trigger queued the “start” and “render” events.
+                return P.trigger( 'start' ).trigger( 'render' )
             }, //start
 
 
@@ -211,13 +216,8 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                 // Insert a new component in the holder.
                 P.$holder.html( createWrappedComponent() )
 
-                // Trigger the component “render” event within scope of the picker.
-                triggerFunction( P.component.onRender, P )
-
-                // Trigger the settings “render” event within scope of the picker.
-                triggerFunction( SETTINGS.onRender, P )
-
-                return P
+                // Trigger the queued “render” events.
+                return P.trigger( 'render' )
             }, //render
 
 
@@ -229,18 +229,8 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                 // If it’s already stopped, do nothing.
                 if ( !STATE.start ) return P
 
-                // Update the picker state.
-                STATE.start = false
-
                 // Then close the picker.
                 P.close()
-
-                // Remove the input class and unbind the events.
-                $ELEMENT.removeClass( CLASSES.input ).off( '.P' + STATE.id )
-
-                // Restore the element state
-                ELEMENT.type = STATE.type
-                ELEMENT.readOnly = false
 
                 // Remove the hidden field.
                 if ( P._hidden ) {
@@ -250,15 +240,19 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                 // Remove the holder.
                 P.$holder.remove()
 
-                // Cache the stop event and then reset the component object.
-                var stopEvent = P.component.onStop
-                P.component = undefined
+                // Remove the input class, unbind the events, and remove the stored data.
+                $ELEMENT.removeClass( CLASSES.input ).off( '.P' + STATE.id ).removeData( NAME )
 
-                // Trigger the component “stop” event within scope of the picker.
-                triggerFunction( stopEvent, P )
+                // Restore the element state
+                ELEMENT.type = STATE.type
+                ELEMENT.readOnly = false
 
-                // Trigger the settings “stop” event within scope of the picker.
-                triggerFunction( SETTINGS.onStop, P )
+                // Trigger the queued “stop” events.
+                P.trigger( 'stop' )
+
+                // Reset the picker states.
+                STATE.methods = {}
+                STATE.start = false
 
                 return P
             }, //stop
@@ -335,13 +329,8 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                     }
                 })
 
-                // Trigger the component “open” event within scope of the picker.
-                triggerFunction( P.component.onOpen, P )
-
-                // Trigger the settings “open” event within scope of the picker.
-                triggerFunction( SETTINGS.onOpen, P )
-
-                return P
+                // Trigger the queued “open” events.
+                return P.trigger( 'open' )
             }, //open
 
 
@@ -351,7 +340,15 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
             close: function( giveFocus ) {
 
                 // If we need to give focus, do it before changing states.
-                if ( giveFocus ) ELEMENT.focus()
+                if ( giveFocus ) {
+                    // ....ah yes! It would’ve been incomplete without a crazy workaround for IE :|
+                    // The focus is triggered *after* the close has completed - causing it
+                    // to open again. So unbind and rebind the event at the next tick.
+                    $ELEMENT.off( 'focus.P' + STATE.id ).focus()
+                    setTimeout( function() {
+                        $ELEMENT.on( 'focus.P' + STATE.id, focusToOpen )
+                    }, 0 )
+                }
 
                 // If it’s already closed, do nothing.
                 if ( !STATE.open ) return P
@@ -362,19 +359,14 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                 // Remove the “active” class.
                 $ELEMENT.removeClass( CLASSES.active )
 
-                // Remove the “opened” class from the picker holder.
-                P.$holder.removeClass( CLASSES.opened )
+                // Remove the “opened” and “focused” class from the picker holder.
+                P.$holder.removeClass( CLASSES.opened + ' ' + CLASSES.focused )
 
                 // Bind the document events.
                 $DOCUMENT.off( '.P' + STATE.id )
 
-                // Trigger the component “close’ event within scope of the picker.
-                triggerFunction( P.component.onClose, P )
-
-                // Trigger the settings “close” event within scope of the picker.
-                triggerFunction( SETTINGS.onClose, P )
-
-                return P
+                // Trigger the queued “close” events.
+                return P.trigger( 'close' )
             }, //close
 
 
@@ -425,13 +417,8 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                     P.render()
                 }
 
-                // Trigger the component “set” event within scope of the picker.
-                triggerFunction( P.component.onSet, P )
-
-                // Trigger the settings “set” event within scope of the picker.
-                triggerFunction( SETTINGS.onSet, P, [ thingObject ] )
-
-                return P
+                // Trigger queued “set” events and pass the `thingObject`.
+                return P.trigger( 'set', thingObject )
             }, //set
 
 
@@ -460,7 +447,32 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
                     }
                     return P.component.get( thing )
                 }
-            } //get
+            }, //get
+
+
+
+            /**
+             * Bind events on the methods.
+             */
+            on: function( name, method ) {
+                STATE.methods[ name ] = STATE.methods[ name ] || []
+                STATE.methods[ name ].push( method )
+                return P
+            }, //on
+
+
+            /**
+             * Fire off method events.
+             */
+            trigger: function( name, data ) {
+                var methodList = STATE.methods[ name ]
+                if ( methodList ) {
+                    methodList.map( function( method ) {
+                        triggerFunction( method, P, [ data ] )
+                    })
+                }
+                return P
+            } //trigger
         } //PickerInstance.prototype
 
 
@@ -495,9 +507,52 @@ Picker = function( $ELEMENT, SETTINGS, COMPONENT ) {
     } //createWrappedComponent
 
 
+    // For IE
+    function focusToOpen() {
+        P.open()
+        P.$holder.addClass( CLASSES.focused )
+    }
+
+
     // Return a new picker instance.
     return new PickerInstance()
 } //Picker
+
+
+
+/**
+ * Extend the picker with a component and defaults.
+ */
+Picker.extend = function( name, Component, defaults ) {
+
+    // Extend jQuery.
+    $.fn[ name ] = function( options, action ) {
+
+        // Grab the component data.
+        var componentData = this.data( name )
+
+        // If the component data exists and `options` is a string, carry out the action.
+        if ( componentData && typeof options == 'string' ) {
+            return options == 'picker' ? componentData : triggerFunction( componentData[ options ], componentData, [ action ] )
+        }
+
+        // Otherwise go through each matched element and if the component
+        // doesn’t exist, create a new picker using `this` element
+        // and merging the defaults and options with a deep copy.
+        return this.each( function() {
+            var $this = $( this )
+            if ( !$this.data( name ) ) {
+                new Picker( $this, $.extend( true, {}, $.fn[ name ].defaults, options ), Component, name )
+            }
+        })
+    }
+
+    // Set the defaults.
+    $.fn[ name ].defaults = defaults
+} //Picker.extend
+
+
+
 
 
 
@@ -624,41 +679,5 @@ function isDate( value ) {
 function isInteger( value ) {
     return {}.toString.call( value ).indexOf( 'Number' ) > -1 && value % 1 === 0
 }
-
-
-
-/**
- * Extend jQuery with a picker type and defaults
- */
-function jQueryExtend( Component, name, defaults ) {
-
-    // Extend jQuery
-    $.fn[ name ] = function( options, action ) {
-
-        var
-            // Merge the options and defaults with a deep copy.
-            settings = $.extend( true, {}, $.fn[ name ].defaults, options ),
-
-            // Grab the picker data if that.
-            thisPickerData = this.data( name )
-
-        // If it's already invoked and `options` is a string, carry out the action.
-        if ( thisPickerData && typeof options == 'string' ) {
-            return options == 'picker' ? thisPickerData : triggerFunction( thisPickerData[ options ], thisPickerData, [ action ] )
-        }
-
-        // Otherwise look through each one of the matched elements
-        // and if it doesn't have any picker data, create and link one.
-        return this.each( function() {
-            var $this = $( this )
-            if ( !$this.data( name ) ) {
-                $this.data( name, new Picker( $this, settings, Component ) )
-            }
-        })
-    }
-
-    // Set the defaults
-    $.fn[ name ].defaults = defaults
-} //jQueryExtend
 
 
