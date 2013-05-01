@@ -188,13 +188,21 @@ var CLASSES_PREFIX = 'picker__',
 
 
                 // Bind the default component and settings events.
-                P.
-                    on( 'start', P.component.onStart ).on( 'start', SETTINGS.onStart ).
-                    on( 'render', P.component.onRender ).on( 'render', SETTINGS.onRender ).
-                    on( 'stop', P.component.onStop ).on( 'stop', SETTINGS.onStop ).
-                    on( 'open', P.component.onOpen ).on( 'open', SETTINGS.onOpen ).
-                    on( 'close', P.component.onClose ).on( 'close', SETTINGS.onClose ).
-                    on( 'set', P.component.onSet ).on( 'set', SETTINGS.onSet )
+                P.on({
+                    start: P.component.onStart,
+                    render: P.component.onRender,
+                    stop: P.component.onStop,
+                    open: P.component.onOpen,
+                    close: P.component.onClose,
+                    set: P.component.onSet
+                }).on({
+                    start: SETTINGS.onStart,
+                    render: SETTINGS.onRender,
+                    stop: SETTINGS.onStop,
+                    open: SETTINGS.onOpen,
+                    close: SETTINGS.onClose,
+                    set: SETTINGS.onSet
+                })
 
 
                 // If the element has autofocus, open the picker.
@@ -452,11 +460,35 @@ var CLASSES_PREFIX = 'picker__',
 
 
             /**
-             * Bind events on the methods.
+             * Bind events on the things.
              */
-            on: function( name, method ) {
-                STATE.methods[ name ] = STATE.methods[ name ] || []
-                STATE.methods[ name ].push( method )
+            on: function( thing, method ) {
+
+                var thingName, thingMethod,
+                    thingIsObject = isObject( thing ),
+                    thingObject = thingIsObject ? thing : {}
+
+                if ( thing ) {
+
+                    // If the thing isn’t an object, make it one.
+                    if ( !thingIsObject ) {
+                        thingObject[ thing ] = method
+                    }
+
+                    // Go through the things to bind to.
+                    for ( thingName in thingObject ) {
+
+                        // Grab the method of the thing.
+                        thingMethod = thingObject[ thingName ]
+
+                        // Make sure the thing methods collection exists.
+                        STATE.methods[ thingName ] = STATE.methods[ thingName ] || []
+
+                        // Add the method to the relative method collection.
+                        STATE.methods[ thingName ].push( thingMethod )
+                    }
+                }
+
                 return P
             }, //on
 
@@ -531,9 +563,15 @@ Picker.extend = function( name, Component, defaults ) {
         // Grab the component data.
         var componentData = this.data( name )
 
+        // If the picker is requested, return the data object.
+        if ( options == 'picker' ) {
+            return componentData
+        }
+
         // If the component data exists and `options` is a string, carry out the action.
         if ( componentData && typeof options == 'string' ) {
-            return options == 'picker' ? componentData : triggerFunction( componentData[ options ], componentData, [ action ] )
+            triggerFunction( componentData[ options ], componentData, [ action ] )
+            return this
         }
 
         // Otherwise go through each matched element and if the component

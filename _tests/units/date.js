@@ -51,6 +51,17 @@ test( 'Properties', function() {
     strictEqual( picker.get( 'view' ).pick, today.setDate( 1 ), 'Default “view” is ' + picker.get( 'view', 'yyyy/mm/dd' ) )
 })
 
+test( 'First weekday', function() {
+
+    var picker = this.picker,
+        $input = picker.$node
+
+    strictEqual( picker.$holder.find( '.' + $.fn.pickadate.defaults.klass.weekdays ).first().text(), $.fn.pickadate.defaults.weekdaysShort[0], 'Sunday is first day' )
+
+    picker.stop().$node.pickadate({ firstDay: 1 })
+    strictEqual( $input.pickadate( 'picker' ).$holder.find( '.' + $.fn.pickadate.defaults.klass.weekdays ).first().text(), $.fn.pickadate.defaults.weekdaysShort[1], 'Monday is first day' )
+})
+
 
 
 
@@ -451,7 +462,7 @@ test( '`disable` and `enable` using arrays', function() {
         nowMonth = now.getMonth(),
         disableCollection = [ [nowYear,nowMonth,1],[nowYear,nowMonth,17],[nowYear,nowMonth,25] ],
         picker = this.picker,
-        firstDay = picker.get( 'view' ).day,
+        viewday = picker.get( 'view' ).day,
         $holder = picker.$holder
 
 
@@ -459,7 +470,7 @@ test( '`disable` and `enable` using arrays', function() {
     deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled dates added to collection' )
 
     $holder.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
-        var index = indexCell - 1 + firstDay
+        var index = indexCell - viewday + 1
         if ( index === 1 || index === 17 || index === 25 ) {
             ok( $( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is disabled: ' + tableCell.innerHTML )
         }
@@ -473,7 +484,7 @@ test( '`disable` and `enable` using arrays', function() {
     deepEqual( picker.get( 'disable' ), [ [nowYear,nowMonth,1],[nowYear,nowMonth,25] ], 'Disabled date removed from collection' )
 
     $holder.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
-        var index = indexCell - 1 + firstDay
+        var index = indexCell - viewday + 1
         if ( index === 1 || index === 25 ) {
             ok( $( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is disabled: ' + tableCell.innerHTML )
         }
@@ -487,7 +498,7 @@ test( '`disable` and `enable` using arrays', function() {
     deepEqual( picker.get( 'disable' ), [ [nowYear,nowMonth,1],[nowYear,nowMonth,25] ], 'Disabled collection `enable` flipped' )
 
     $holder.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
-        var index = indexCell - 1 + firstDay
+        var index = indexCell - viewday + 1
         if ( index !== 1 && index !== 25 ) {
             ok( $( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is disabled: ' + tableCell.innerHTML )
         }
@@ -501,7 +512,7 @@ test( '`disable` and `enable` using arrays', function() {
     deepEqual( picker.get( 'disable' ), [ [nowYear,nowMonth,1],[nowYear,nowMonth,25] ], 'Disabled collection `disable` flipped' )
 
     $holder.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
-        var index = indexCell - 1 + firstDay
+        var index = indexCell - viewday + 1
         if ( index === 1 || index === 25 ) {
             ok( $( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is disabled: ' + tableCell.innerHTML )
         }
@@ -532,15 +543,12 @@ test( 'Select', function() {
         $holder = picker.$holder,
         viewsetObject = picker.get( 'view' ),
         interval = 86400000,
-        monthStart = viewsetObject.day,
-        monthEnd = new Date()
+        monthStartDay = viewsetObject.day,
+        monthEndDate = new Date( viewsetObject.year, viewsetObject.month + 1, 0 ).getDate()
 
-    monthEnd.setMonth( monthEnd.getMonth() + 1 )
-    monthEnd.setDate( 0 )
-
-    for ( var i = monthStart; i <= monthEnd.getDate(); i += 1 ) {
+    for ( var i = monthStartDay; i < monthStartDay + monthEndDate; i += 1 ) {
         $holder.find( '.' + $.fn.pickadate.defaults.klass.day ).eq( i ).click()
-        ok( picker.get( 'select' ).pick === viewsetObject.pick + ( i - 1 ) * interval, 'Selected ' + picker.get( 'select', 'yyyy/mm/dd' ) )
+        ok( picker.get( 'select' ).pick === viewsetObject.pick + ( i - monthStartDay ) * interval, 'Selected ' + picker.get( 'select', 'yyyy/mm/dd' ) )
         ok( picker.get( 'value' ) === picker.get( 'select', $.fn.pickadate.defaults.format ), 'Input value updated to ' + picker.get( 'value' ) )
     }
 })

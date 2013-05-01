@@ -40,7 +40,7 @@
         <form>
             <fieldset>
                 <h3><label for="input_01">Pick a date. Go ahead...</label></h3>
-                <input id="input_01" class="datepicker" name="date" type="date" valuee="12:00 PM" data-valuee="01:30" autofocus>
+                <input id="input_01" class="datepicker" name="date" type="date" valuee="12:00 PM" data-valuee="01:30" autofocusss>
                 <br><br><br><br><br>
                 <input class="button" type="submit" value="open">
             </fieldset>
@@ -76,13 +76,18 @@
                 // [8,45]
             ],
             // min: 4,
-            min: [ 7, 30 ],
+            // min: [ 7, 30 ],
             // max: -2,
-            max: [ 9, 0 ]
+            // max: [ 9, 0 ],
+            // onRender: function() {
+            //     var $viewset = this.$holder.find( '.picker__list-item--viewset' ),
+            //         $box = this.$holder.find( '.picker__box' )
+            //     $box[ 0 ].scrollTop = ~~$viewset.position().top - $viewset[0].offsetHeight
+            // }
         }),
         picker = $input.pickatime('picker')
 
-        console.log( picker.set( 'max', false ) )
+        // console.log( picker.set( 'max', false ) )
 
         // var $button = $( '.button' ).on( 'click', function( event ) {
         //     event.preventDefault()

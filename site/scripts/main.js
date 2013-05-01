@@ -75,6 +75,7 @@ $( '#date_demo__formats--a' ).pickadate({
         }
     }
 })
+
 $( '#date_demo__formats--b' ).pickadate({
     monthsFull: [ 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre' ],
     monthsShort: [ 'Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec' ],
@@ -315,7 +316,7 @@ $( '#time_demo__disable-times--c' ).pickatime({
 
 
 /**
- * Disable dates
+ * Disable times
  */
 $( '#time_demo__events' ).pickatime({
     onStart: function() {
@@ -355,52 +356,6 @@ $( '#time_demo__events' ).pickatime({
 
 
 /**
- * API demo: events-basic
- */
-var $input_events_basic = $( '#demo__api-events-basic' ).pickadate({
-        onOpen: function() {
-            console.log('Opened up!')
-        },
-        onClose: function() {
-            console.log('Closed now')
-        },
-        onRender: function() {
-            console.log('Just rendered anew')
-        },
-        onStart: function() {
-            console.log('Hello there :)')
-        },
-        onStop: function() {
-            console.log('See ya')
-        }
-    }),
-    picker_events_basic = $input_events_basic.pickadate( 'picker' )
-$( '#button__api-events-basic' ).on( 'click', function( event ) {
-    if ( this.innerHTML == 'Stop' ) {
-        picker_events_basic.stop()
-        this.innerHTML = 'Start'
-    }
-    else {
-        picker_events_basic.start()
-        this.innerHTML = 'Stop'
-    }
-    event.stopPropagation()
-})
-
-
-
-/**
- * API demo: event-set
- */
-$( '#demo__api-event-set' ).pickadate({
-    onSet: function( event ) {
-        console.log( event )
-    }
-})
-
-
-
-/**
  * API demo: open-close
  */
 var $button_open_close = $( '#button__api-open-close' ),
@@ -422,6 +377,7 @@ $button_open_close.on( 'click', function( event ) {
     }
     event.stopPropagation()
 })
+
 $( '#demo__api-close-focus' ).pickadate({
     onClose: function() {
         this.close(true)
@@ -431,37 +387,21 @@ $( '#demo__api-close-focus' ).pickadate({
 
 
 /**
- * API demo: isOpen
- */
-var $button_isOpen = $( '#button__api-isOpen' ),
-    $input_isOpen = $( '#demo__api-isOpen' ).pickadate({
-        onOpen: function() {
-            alert( 'The picker is open: ' + this.isOpen() )
-        }
-    }),
-    picker_isOpen = $input_isOpen.pickadate( 'picker' )
-$button_isOpen.on( 'click', function( event ) {
-    alert( 'The picker is open: ' + picker_isOpen.isOpen() )
-    event.stopPropagation()
-})
-
-
-
-/**
  * API demo: start-stop
  */
 var $button_start_stop = $( '#button__api-start-stop' ),
-    $input_start_stop = $( '#demo__api-start-stop' ).pickadate({
-        onStart: function() {
-            $button_start_stop.text( 'Stop' )
-        },
-        onStop: function() {
-            $button_start_stop.text( 'Start' )
-        }
-    }),
-    picker_start_stop = $input_start_stop.pickadate( 'picker' )
+    $input_start_stop = $( '#demo__api-start-stop' ).pickadate()
+
 $button_start_stop.on( 'click', function( event ) {
-    picker_start_stop[ $button_start_stop.text().toLowerCase() ]()
+    var text = $button_start_stop.text()
+    if ( text == 'Stop' ) {
+        $button_start_stop.text( 'Start' )
+        $input_start_stop.pickadate( 'picker' ).stop()
+    }
+    else {
+        $button_start_stop.text( 'Stop' )
+        $input_start_stop.pickadate()
+    }
     event.stopPropagation()
 })
 
@@ -602,11 +542,7 @@ $( '#button__api-get--open' ).on( 'click', function( event ) {
 })
 
 //start
-var $input_get__start = $( '#demo__api-get--start' ).pickadate({
-        onOpen: function() {
-            console.log( 'Open state:', picker_get__start.get( 'start' ) )
-        }
-    }),
+var $input_get__start = $( '#demo__api-get--start' ).pickadate(),
     picker_get__start = $input_get__start.pickadate( 'picker' )
 $( '#button__api-get--start' ).on( 'click', function( event ) {
     console.log( 'Start state:', picker_get__start.get( 'start' ) )
@@ -839,6 +775,61 @@ $( '#button__api-set--max-time-false' ).on( 'click', function( event ) {
 
 
 /**
+ * API events and methods
+ */
+
+// default events
+var $input_events_basic = $( '#demo__api-events-basic' ).pickadate({
+        onOpen: function() {
+            console.log('Opened up!')
+        },
+        onClose: function() {
+            console.log('Closed now')
+        },
+        onRender: function() {
+            console.log('Just rendered anew')
+        },
+        onStart: function() {
+            console.log('Hello there :)')
+        },
+        onStop: function() {
+            console.log('See ya')
+        },
+        onSet: function(event) {
+            console.log('Set stuff:', event)
+        }
+    }),
+    picker_events_basic = $input_events_basic.pickadate( 'picker' )
+$( '#button__api-events-basic' ).on( 'click', function( event ) {
+    if ( this.innerHTML == 'Stop' ) {
+        picker_events_basic.stop()
+        this.innerHTML = 'Start'
+    }
+    else {
+        picker_events_basic.start()
+        this.innerHTML = 'Stop'
+    }
+    event.stopPropagation()
+})
+
+//on: basic
+$( '#demo__api-method--on-basic' ).pickadate({
+    onOpen: function() {
+        console.log( this.get('select') )
+    }
+})
+
+//on: set
+$( '#demo__api-method--on-set' ).pickadate({
+    onSet: function( event ) {
+        console.log( event )
+    }
+})
+
+
+
+
+/**
  * API objects
  */
 
@@ -855,16 +846,6 @@ var $input_object__holder = $( '#demo__api-object--holder' ).pickadate(),
     picker_object__holder = $input_object__holder.pickadate( 'picker' )
 $( '#button__api-object--holder' ).on( 'click', function( event ) {
     console.log( picker_object__holder.$holder )
-    event.stopPropagation()
-})
-
-//_hidden
-var $input_object__hidden = $( '#demo__api-object--hidden' ).pickadate({
-        formatSubmit: 'yyyy/mm/dd'
-    }),
-    picker_object__hidden = $input_object__hidden.pickadate( 'picker' )
-$( '#button__api-object--hidden' ).on( 'click', function( event ) {
-    console.log( picker_object__hidden._hidden )
     event.stopPropagation()
 })
 
@@ -1951,6 +1932,10 @@ window.Rainbow.extend( 'javascript', [
     {
         'name': 'line-space',
         'pattern': / +/g
+    },
+    {
+        'name': 'html-link',
+        'pattern': /<a.+>.+<\/a>/g
     }
 ]);
 

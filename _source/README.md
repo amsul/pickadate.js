@@ -90,6 +90,26 @@ Before contributing any code to the project, please take a look at the [Contribu
 - `grunt --verbose` to confirm you have all the dependencies.
 
 
+Read the Gruntfile to see the build tasks and relative directories of the source files.
+
+
+
+
+<br>
+## Styling with Sass
+
+The picker themes are built using [Sass](http://sass-lang.com/) with Grunt. To customize the CSS output, read the `_variables.scss` file in the `_source/lib/themes` folder. You can specify:
+
+- colors for the theme,
+- pickers to include,
+- media-query breakpoints,
+- and a whole bunch of other options.
+
+
+After making any changes, run the relative Grunt task to compile into CSS.
+
+
+
 
 
 <br><br>

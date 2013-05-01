@@ -8,7 +8,9 @@ docs/fixes
 - themes page
 - classic and fixed styling (classic needs max-height:auto)
 - “escape” on IE clears input value
-- remove “event” options
+>>>>>> re-add “event” options on date/time
+- better example for event `.on`
+- docs on `.trigger` method
 
 
 tests
@@ -21,11 +23,14 @@ tests
 - various base picker `set` method invoking syntaxes
 - `set` something outside limits
 - formats verification
+- `.on` method tests
+- `.trigger` method tests
 
 
 future
 ------
 
+- future: improve base jquery extension `return`s
 - future: time picker “period” translations
 - future: move events to `.on`
 - future: disable dates using js date objects

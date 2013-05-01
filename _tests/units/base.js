@@ -92,7 +92,7 @@ module( 'Base events', {
             $input = $DOM.find( 'input' ).pickadate({
                 onStart: function() {
                     thisModule.started = true
-                    thisModule.retarted = true
+                    thisModule.restarted = true
                     thisModule.inputType = this.$node[ 0 ].type
                 },
                 onRender: function() {
@@ -112,7 +112,6 @@ module( 'Base events', {
                     thisModule.selected = thing
                 }
             })
-        this.picker = $input.pickadate( 'picker' )
         this.picker = $input.pickadate( 'picker' )
     },
     teardown: function() {
@@ -137,11 +136,11 @@ test( 'Options', function() {
     strictEqual( thisModule.closed, picker.get( 'open' ) === false, 'Fired: `onClose`' )
 
     picker.stop()
-    strictEqual( thisModule.stopped, picker.get( 'open' ) === false, 'Fired: `onStop`' )
+    strictEqual( thisModule.stopped, picker.get( 'start' ) === false, 'Fired: `onStop`' )
     strictEqual( thisModule.inputType, $INPUT[ 0 ].type, 'Restored input type' )
 
     picker.start()
-    strictEqual( thisModule.retarted, picker.get( 'open' ) === true, 'Restarted: `onStart`' )
+    strictEqual( thisModule.restarted, picker.get( 'start' ) === true, 'Restarted: `onStart`' )
 
     picker.set()
     deepEqual( thisModule.selected, {}, 'Fired: `onSet`' )

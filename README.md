@@ -32,9 +32,9 @@ The `lib` folder includes **three** `.js` files – alongside the `.min.js` coun
 
 File name               | Picker(s) included   | File size (min & gzip)
 ----------------------- | -------------------- | ----------------------
-`pickadate.datetime`    | Date and time        | 3.36kb
-`pickadate.date`        | Date                 | 2.76kb
-`pickadate.time`        | Time                 | 2.19kb
+`pickadate.datetime`    | Date and time        | 3.48kb
+`pickadate.date`        | Date                 | 2.86kb
+`pickadate.time`        | Time                 | 2.30kb
 
 
 _To support old browsers as well, namely IE7 and IE8, **also include** the `legacy.js` file._
@@ -84,6 +84,26 @@ Before contributing any code to the project, please take a look at the [Contribu
 
 - `npm install` to get the required node modules.
 - `grunt --verbose` to confirm you have all the dependencies.
+
+
+Read the Gruntfile to see the build tasks and relative directories of the source files.
+
+
+
+
+<br>
+## Styling with Sass
+
+The picker themes are built using [Sass](http://sass-lang.com/) with Grunt. To customize the CSS output, read the `_variables.scss` file in the `_source/lib/themes` folder. You can specify:
+
+- colors for the theme,
+- pickers to include,
+- media-query breakpoints,
+- and a whole bunch of other options.
+
+
+After making any changes, run the relative Grunt task to compile into CSS.
+
 
 
 

@@ -118,6 +118,8 @@
   margin: 0 auto;
   min-width: 256px;
   max-width: 666px;
+  width: 100%;
+  /* For IE9 & 10 to keep it centered */
   /* Hide it to begin with */
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
   filter: alpha(opacity=0);
@@ -533,7 +535,7 @@
 }
 @media (min-height: 33.875em) {
   .picker__holder--time .picker__frame {
-    font-size: .75em;
+    font-size: .875em;
   }
 }
 
@@ -648,33 +650,52 @@
 }
 
 /**
- * For wide enough screens, transform into an inline picker.
+ * For `large` screens, transform into an inline picker.
  * /
-
-@media (min-width: 640px) {
+@include min-screen( large ) {
 
     .picker__holder {
         position: relative;
-        overflow: visible;
-        background: none;
-        height: 0;
+        max-height: 25em;
+        background: red;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+        margin-top: 1em;
+        font-size: 11px;
+        border-radius: 5px;
     }
 
-    .picker__frame {
+    .picker__frame,
+    .picker__holder--time .picker__frame {
         position: relative;
-        margin: 1em 0;
+        bottom: auto;
+        max-height: none;
+        max-width: none;
+        margin-bottom: 0;
+        @include opacity( 1 );
     }
 
-    .picker__box {
-        border-color: #ccc;
-        box-shadow: 0 4px 18px 2px rgba(0,0,0,.12);
-        max-height: 20em;
-        overflow-y: scroll;
-        overflow-x: hidden;
-        -webkit-overflow-scrolling: touch;
+    .picker__box,
+    .picker__holder--time .picker__box {
+        box-shadow: none;
+        border: none;
+        margin-bottom: 0;
+        border-radius: 0;
     }
+}
 
-    .picker__list-item {
-        padding: .5em .75em;
+@include min-screen( large ) {
+
+    .picker__holder {
+        position: absolute;
+        top: auto;
+        bottom: auto;
+        max-height: 0;
+        @include opacity( 0 );
+        @include prefix( transition, all $speed-animate-in ease-out );
+    }
+    .picker__holder--opened {
+        max-height: 25em;
+        @include opacity( 1 );
     }
 }*/

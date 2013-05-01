@@ -14,9 +14,9 @@
 
     <div class="section__block section__block--scoped">
 
-        <h1 class="heading heading--divide-center heading--divide-first"><span class="heading__text">the date picker<a class="heading__anchor" name="picker" href="#picker">&sect;</a></span></h1>
+        <h1 class="heading heading--divide-center heading--divide-first"><span class="heading__text">The Date Picker<a class="heading__anchor" name="picker" href="#picker">&sect;</a></span></h1>
 
-        <h3 class="heading heading--thin">The basic setup requires targetting an <code class="tag-name">input</code> element and invoking the picker:</h3>
+        <h3 class="heading heading--thin">The basic setup requires targetting an <code class="tag-name">input</code> element and invoking the&nbsp;picker:</h3>
 
         <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate()</code></pre>
         {%= dateDemoField({ klass: 'js__datepicker' }) %}
@@ -31,7 +31,7 @@
 
     <div class="section__block section__block--scoped">
 
-        <h2 class="heading heading--divide"><span class="heading__text">the options<a class="heading__anchor" name="options" href="#options">&sect;</a></span></h2>
+        <h2 class="heading heading--divide"><span class="heading__text">Options<a class="heading__anchor" name="options" href="#options">&sect;</a></span></h2>
         <p>With the basic invocation above, these are the default settings:</p>
 
         <pre><code data-language="javascript">// <a href="#strings">Strings</a> and <a href="#translations">translations</a>
@@ -139,7 +139,7 @@ klass: {
 
     <div class="section__block section__block--scoped">
 
-        <h2 class="heading heading--divide"><span class="heading__text">strings<a class="heading__anchor" name="strings" href="#strings">&sect;</a></span></h2>
+        <h2 class="heading heading--divide"><span class="heading__text">Strings<a class="heading__anchor" name="strings" href="#strings">&sect;</a></span></h2>
         <p>Change the month and weekday labels as you find suitable:</p>
 
         <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
@@ -158,7 +158,7 @@ klass: {
 
     <div class="section__block section__block--scoped">
 
-        <h2 class="heading heading--divide"><span class="heading__text">buttons<a class="heading__anchor" name="buttons" href="#buttons">&sect;</a></span></h2>
+        <h2 class="heading heading--divide"><span class="heading__text">Buttons<a class="heading__anchor" name="buttons" href="#buttons">&sect;</a></span></h2>
         <p>Change the text or hide a button completely by passing a false-y value:</p>
 
         <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
@@ -177,7 +177,7 @@ klass: {
 
     <div class="section__block section__block--scoped">
 
-        <h2 class="heading heading--divide"><span class="heading__text">translations<a class="heading__anchor" name="translations" href="#translations">&sect;</a></span></h2>
+        <h2 class="heading heading--divide"><span class="heading__text">Translations<a class="heading__anchor" name="translations" href="#translations">&sect;</a></span></h2>
         <p>The picker can be extended to add support for internationalization. There are translations available for <a href="{%= pkg.repository.url.replace(/.git$/,'') %}/tree/gh-pages/translations">{%= grunt.file.expand( dirs.lib.src + '/translations/*.js' ).length %} languages</a> which you can include in one of two ways:</p>
 
         <pre class="pre--demo"><code data-language="javascript">// Extend the default picker options for <u>all instances</u>.
@@ -210,7 +210,7 @@ $('.datepicker').pickadate({
 
     <div class="section__block section__block--scoped">
 
-        <h2 class="heading heading--divide"><span class="heading__text">formats<a class="heading__anchor" name="formats" href="#formats">&sect;</a></span></h2>
+        <h2 class="heading heading--divide"><span class="heading__text">Formats<a class="heading__anchor" name="formats" href="#formats">&sect;</a></span></h2>
         <p>Display a human-friendly format and use an alternate one to submit.</p>
         <p>This is done by creating a new hidden <code class="tag-name">input</code> element with the same <code class="attribute">name</code> attribute as the original and a suffix:</p>
 
@@ -231,7 +231,7 @@ $('.datepicker').pickadate({
 
     <div class="section__block section__block--scoped">
 
-        <h2 class="heading heading--divide"><span class="heading__text">formatting rules<a class="heading__anchor" name="formatting-rules" href="#formatting-rules">&sect;</a></span></h2>
+        <h2 class="heading heading--divide"><span class="heading__text">Formatting Rules<a class="heading__anchor" name="formatting-rules" href="#formatting-rules">&sect;</a></span></h2>
         <p>The following rules can be used to format any date:</p>
 
         <table class="table">
@@ -313,7 +313,7 @@ $('.datepicker').pickadate({
 
     <div class="section__block section__block--scoped">
 
-        <h2 class="heading heading--divide"><span class="heading__text">dropdown selectors<a class="heading__anchor" name="selectors" href="#selectors">&sect;</a></span></h2>
+        <h2 class="heading heading--divide"><span class="heading__text">Dropdown Selectors<a class="heading__anchor" name="selectors" href="#selectors">&sect;</a></span></h2>
         <p>Display <code class="tag-name">select</code> menus to pick the month and year. Anything truth-y enables the selectors and anything false-y switches them into labels:</p>
 
         <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
@@ -341,7 +341,7 @@ $('.datepicker').pickadate({
 
     <div class="section__block section__block--scoped">
 
-        <h2 class="heading heading--divide"><span class="heading__text">first weekday<a class="heading__anchor" name="first-weekday" href="#first-weekday">&sect;</a></span></h2>
+        <h2 class="heading heading--divide"><span class="heading__text">First Weekday<a class="heading__anchor" name="first-weekday" href="#first-weekday">&sect;</a></span></h2>
         <p>The first day of the week can be set to either Sunday or Monday. Anything truth-y sets it as Monday and anything false-y as Sunday:</p>
 
         <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
@@ -359,7 +359,7 @@ $('.datepicker').pickadate({
 
     <div class="section__block section__block--scoped">
 
-        <h2 class="heading heading--divide"><span class="heading__text">date limits<a class="heading__anchor" name="limits" href="#limits">&sect;</a></span></h2>
+        <h2 class="heading heading--divide"><span class="heading__text">Date Limits<a class="heading__anchor" name="limits" href="#limits">&sect;</a></span></h2>
         <p>Set the minimum and maximum selectable dates on the picker.</p>
 
         <p><b>1)</b> Using JavaScript date objects:</p>
@@ -400,7 +400,7 @@ $('.datepicker').pickadate({
 
     <div class="section__block section__block--scoped">
 
-        <h2 class="heading heading--divide"><span class="heading__text">disable dates<a class="heading__anchor" name="disable-dates" href="#disable-dates">&sect;</a></span></h2>
+        <h2 class="heading heading--divide"><span class="heading__text">Disable Dates<a class="heading__anchor" name="disable-dates" href="#disable-dates">&sect;</a></span></h2>
         <p>Disable a specific or arbitrary set of dates selectable on the picker.</p>
 
         <p><b>1)</b> Using arrays formatted as <code>[YEAR,MONTH,DATE]</code>:</p>
@@ -446,6 +446,7 @@ $('.datepicker').pickadate({
 </section> <!-- .section -->
 
 
+
 <section class="section">
 
     <div class="section__block section__block--scoped">
@@ -483,5 +484,6 @@ $('.datepicker').pickadate({
     </div> <!-- .section__block -->
 
 </section> <!-- .section -->
+
 
 

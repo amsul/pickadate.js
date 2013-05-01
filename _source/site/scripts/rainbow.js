@@ -1072,6 +1072,10 @@ window.Rainbow.extend( 'javascript', [
     {
         'name': 'line-space',
         'pattern': / +/g
+    },
+    {
+        'name': 'html-link',
+        'pattern': /<a.+>.+<\/a>/g
     }
 ]);
 

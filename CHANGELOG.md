@@ -16,6 +16,7 @@ With this major release, the entire API has been rethought to allow the picker t
 - Updated themes to be Sass-based.
 - Removed “Inline” theme.
 - Removed jam.js bindings within `package.json`.
+- Removed official support for IE7. Still works but looks odd.
 
 To enable all this goodness, some **backward-incompatible changes** have been introduced. These are the main ones:
 

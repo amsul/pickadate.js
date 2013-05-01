@@ -505,7 +505,7 @@ body {
 
 h1, h2, h3, h4, h5, h6,
 .heading {
-  line-height: 1.25;
+  line-height: 1.4;
   font-weight: 400;
 }
 
@@ -570,6 +570,7 @@ h3,
 .heading--divide,
 .heading--divide-center,
 .heading--divide-first {
+  text-transform: lowercase;
   margin-top: 2.5em;
   border-top: 1px solid #d9d9d9;
   padding-top: 1.5em;
@@ -582,6 +583,11 @@ h3,
     padding-top: 0;
     border-top: 0;
   }
+}
+.heading--divide code,
+.heading--divide-center code,
+.heading--divide-first code {
+  text-transform: initial;
 }
 
 .heading--divide-center {
@@ -620,8 +626,10 @@ h3,
   }
 }
 
-.heading--divide-center .heading__text {
-  padding-left: .5em;
+@media (min-width: 33.75em) {
+  .heading--divide-center .heading__text {
+    padding-left: .5em;
+  }
 }
 
 /**

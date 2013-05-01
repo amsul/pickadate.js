@@ -137,6 +137,7 @@ $speed-animate-in: .15s;
 $breakpoint-tiny: 21.375em; // 324px @ 16px
 $breakpoint-small: 26.5em; // 424px @ 16px
 $breakpoint-medium: 33.875em; // 542px @ 16px
+$breakpoint-large: 40.125em; // 642px @ 16px
 
 @mixin min-screen( $media, $match: height ) {
     @if $media == tiny {
@@ -148,12 +149,9 @@ $breakpoint-medium: 33.875em; // 542px @ 16px
     @else if $media == medium {
         @media ( min-#{$match}: $breakpoint-medium ) { @content; }
     }
-    // @else if $media == large {
-    //     @media ( min-#{$match}: $breakpoint-large ) { @content; }
-    // }
-    // @else if $media == huge {
-    //     @media ( min-#{$match}: $breakpoint-huge ) { @content; }
-    // }
+    @else if $media == large {
+        @media ( min-#{$match}: $breakpoint-large ) { @content; }
+    }
 }
 
 
