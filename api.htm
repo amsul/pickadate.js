@@ -95,12 +95,12 @@ $input.pickadate(<a href="#objects">objectName</a>)</code></pre>
         <p>There are <i>six</i> default events available in the options:</p>
 
         <ol>
-            <li><code class="function"><a href="#events-default">onOpen</a></code></li>
-            <li><code class="function"><a href="#events-default">onClose</a></code></li>
-            <li><code class="function"><a href="#events-default">onStart</a></code></li>
-            <li><code class="function"><a href="#events-default">onStop</a></code></li>
-            <li><code class="function"><a href="#events-default">onRender</a></code></li>
-            <li><code class="function"><a href="#events-default">onSet</a></code></li>
+            <li><code class="function"><a href="#method-on">onOpen</a></code></li>
+            <li><code class="function"><a href="#method-on">onClose</a></code></li>
+            <li><code class="function"><a href="#method-on">onStart</a></code></li>
+            <li><code class="function"><a href="#method-on">onStop</a></code></li>
+            <li><code class="function"><a href="#method-on">onRender</a></code></li>
+            <li><code class="function"><a href="#method-on">onSet</a></code></li>
         </ol>
 
     </div> <!-- .section__block -->
@@ -300,16 +300,16 @@ picker.stop()</code></pre>
     pick: 1366430400000
 }</code></pre>
 
-        <p>Here’s a <b>time picker item object</b> for <u>4:44 AM</u>:</p>
+        <p>Here’s a <b>time picker item object</b> for <u>8:23 PM</u>:</p>
         <pre><code data-language="javascript">{
     // Hour of the day from 0 to 23.
-    hour: 4,
+    hour: 20,
 
     // The minutes of the hour from 0 to 59 (based on the interval).
-    mins: 60,
+    mins: 30,
 
     // The “pick” value used for comparisons.
-    pick: 300
+    pick: 1230
 }</code></pre>
 
     </div> <!-- .section__block -->
@@ -462,7 +462,6 @@ picker.stop()</code></pre>
     thing: value
 })</code></pre>
 
-        <br>
         <p>Both <code>thing</code> and <code>value</code> are required arguments. The <code>value</code>, is based on type of <code>thing</code> being set. The <code>thing</code>, is a string that can be:</p>
 
         <ul>
@@ -735,12 +734,18 @@ picker.set('max', false)</code></pre>
 
         <p>The <code>methodName</code> can be <code class="string">open</code>, <code class="string">close</code>, <code class="string">render</code>, <code class="string">start</code>, <code class="string">stop</code>, or <code class="string">set</code>.</p>
 
+        <pre><code data-language="javascript">picker.on('open', function() {
+    console.log( 'Opened.. and here I am!' )
+})</code></pre>
+
+        <fieldset class="fieldset fieldset--demo js__fieldset"><input id="demo__api-method-on" class="fieldset__input " type=text value="" placeholder="Open your console and try me&hellip;"></fieldset>
+
     </div> <!-- .section__block -->
 
 
     <div class="section__block section__block--scoped">
 
-        <h3 class="heading heading--divide"><span class="heading__text">Default Events<a class="heading__anchor--bigger" name="events-default" href="#events-default">&sect;</a></span></h3>
+        <h3 class="heading heading--divide"><span class="heading__text">Default Events<a class="heading__anchor--bigger" name="method-on-default-events" href="#method-on-default-events">&sect;</a></span></h3>
         <p>The <code class="function">on</code> method can only be used <i>after</i> the picker has been initiated. To set default events, pass them as options when invoking the picker:</p>
 
         <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
@@ -764,7 +769,7 @@ picker.set('max', false)</code></pre>
     }
 })</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><button id=button__api-events-basic class="fieldset__button button button--small">Stop</button><input id="demo__api-events-basic" class="fieldset__input " type=date value="" placeholder="Open your console and try me&hellip;"></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><button id=button__api-default-events class="fieldset__button button button--small">Stop</button><input id="demo__api-default-events" class="fieldset__input " type=date value="" placeholder="Open your console and try me&hellip;"></fieldset>
 
     </div> <!-- .section__block -->
 
@@ -772,8 +777,8 @@ picker.set('max', false)</code></pre>
     <div class="section__block section__block--scoped">
 
         <h3 class="heading heading--divide"><span class="heading__text">Scope and Arguments<a class="heading__anchor--bigger" name="method-on-scope-arguments" href="#method-on-scope-arguments">&sect;</a></span></h3>
-        <p>Within scope of all these callback events, <code class="keyword">this</code> refers to <a href="#picker">the picker object</a> – and for most events, no arguments are passed.</p>
-        <p>The callback for the <code class="function">set</code> method is the exception that is passed an argument that provides more context as to what is being “set”.</p>
+        <p>Within scope of the events’ callbacks, <code class="keyword">this</code> refers to <a href="#picker">the picker object</a> – and for most events, no arguments are passed.</p>
+        <p>The only exception is the <code class="function">set</code> method, which is passed an argument that provides more context as to what is being “set”.</p>
 
     </div> <!-- .section__block -->
 
@@ -785,11 +790,14 @@ picker.set('max', false)</code></pre>
     <div class="section__block section__block--scoped">
 
         <h2 class="heading heading--divide"><span class="heading__text">Event <code class="function">trigger</code><a class="heading__anchor" name="method-trigger" href="#method-trigger">&sect;</a></span></h2>
-        <p>Trigger callbacks bound to get fired off when the relative <a href="#methods">picker method</a> is called:</p>
+        <p>Trigger callbacks that have been queued up using the <a href="#method-on">the <code class="function">on</code> method</a>:</p>
 
-        <pre><code data-language="javascript">picker.trigger(<a href="#methods">methodName</a>)</code></pre>
+        <pre class="pre--demo"><code data-language="javascript">picker.on('open', function() {
+    console.log('Didn’t open.. yet here I am!')
+})
+picker.trigger('open')</code></pre>
 
-        <p>.......</p>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><button id=button__api-method-trigger class="fieldset__button button button--small">Trigger open</button><input id="demo__api-method-trigger" class="fieldset__input " type=text value="" placeholder="Open your console and try me&hellip;"></fieldset>
 
     </div> <!-- .section__block -->
 
@@ -857,7 +865,7 @@ picker.set('max', false)</code></pre>
     <div class="section__block section__block--scoped">
 
         <h2 class="heading heading--divide"><span class="heading__text">Object <code>component</code><a class="heading__anchor" name="object-component" href="#object-component">&sect;</a></span></h2>
-        <p>This is the picker’s relative component object that builds the date or time picker. This API is in flux – so avoid using it for now.</p>
+        <p>This is the picker’s relative component constructor that builds the date or time picker. This API is in flux – so avoid using it for now.</p>
 
     </div> <!-- .section__block -->
 

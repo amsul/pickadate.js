@@ -778,8 +778,16 @@ $( '#button__api-set--max-time-false' ).on( 'click', function( event ) {
  * API events and methods
  */
 
+// trigger events
+var $input_method_on = $( '#demo__api-method-on' ).pickadate(),
+    picker_method_on = $input_method_on.pickadate( 'picker' )
+picker_method_on.on( 'open', function() {
+    console.log( 'Opened.. and here I am!' )
+})
+
+
 // default events
-var $input_events_basic = $( '#demo__api-events-basic' ).pickadate({
+var $input_default_events = $( '#demo__api-default-events' ).pickadate({
         onOpen: function() {
             console.log('Opened up!')
         },
@@ -799,31 +807,29 @@ var $input_events_basic = $( '#demo__api-events-basic' ).pickadate({
             console.log('Set stuff:', event)
         }
     }),
-    picker_events_basic = $input_events_basic.pickadate( 'picker' )
-$( '#button__api-events-basic' ).on( 'click', function( event ) {
+    picker_default_events = $input_default_events.pickadate( 'picker' )
+$( '#button__api-default-events' ).on( 'click', function( event ) {
     if ( this.innerHTML == 'Stop' ) {
-        picker_events_basic.stop()
+        picker_default_events.stop()
         this.innerHTML = 'Start'
     }
     else {
-        picker_events_basic.start()
+        picker_default_events.start()
         this.innerHTML = 'Stop'
     }
     event.stopPropagation()
 })
 
-//on: basic
-$( '#demo__api-method--on-basic' ).pickadate({
-    onOpen: function() {
-        console.log( this.get('select') )
-    }
-})
 
-//on: set
-$( '#demo__api-method--on-set' ).pickadate({
-    onSet: function( event ) {
-        console.log( event )
-    }
+// trigger events
+var $input_method_trigger = $( '#demo__api-method-trigger' ).pickadate(),
+    picker_method_trigger = $input_method_trigger.pickadate( 'picker' )
+picker_method_trigger.on( 'open', function() {
+    console.log( 'Didn’t open.. yet here I am!' )
+})
+$( '#button__api-method-trigger' ).on( 'click', function( event ) {
+    picker_method_trigger.trigger( 'open' )
+    event.stopPropagation()
 })
 
 

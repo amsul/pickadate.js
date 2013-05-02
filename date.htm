@@ -501,30 +501,29 @@ $('.datepicker').pickadate({
 
         <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
     onStart: function() {
-        console.log( 'Hello there :)' )
+        console.log('Hello there :)')
     },
     onRender: function() {
-        console.log( 'Whoa.. rendered anew' )
+        console.log('Whoa.. rendered anew')
     },
     onOpen: function() {
-        console.log( 'Opened up' )
+        console.log('Opened up')
     },
     onClose: function() {
-        console.log( 'Closed now' )
+        console.log('Closed now')
     },
     onStop: function() {
-        console.log( 'See ya.' )
+        console.log('See ya.')
     },
-    onSet: function( event ) {
-        console.log( 'Just set stuff:', event )
+    onSet: function(event) {
+        console.log('Just set stuff:', event)
     }
 })</code></pre>
 
         <fieldset class="fieldset fieldset--demo js__fieldset"><input id="date_demo__events" class="fieldset__input " type=text placeholder="Open your console and try me&hellip;"></fieldset>
 
         <p>Within scope of all six of these events, <code class="keyword">this</code> refers to <a href="api.htm">the picker</a>.</p>
-
-        <p>The <code class="function">onSet</code> method is unique - in that it has an <code>event</code> argument that provides a bit of context as to which properties are being “set” through the <a href="api.htm">picker api</a>.</p>
+        <p>The <code class="function">onSet</code> event is the only callback that is passed an <code>event</code> argument that provides a bit of context as to which properties are being “set”.</p>
 
     </div> <!-- .section__block -->
 

@@ -8,9 +8,6 @@ docs/fixes
 - themes page
 - classic and fixed styling (classic needs max-height:auto)
 - “escape” on IE clears input value
->>>>>> re-add “event” options on date/time
-- better example for event `.on`
-- docs on `.trigger` method
 
 
 tests
