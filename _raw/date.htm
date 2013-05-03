@@ -1,59 +1,12 @@
-<!doctype html>
-
-<meta charset="utf-8">
-
-<meta name="author" content="Amsul - http://amsul.ca">
-
-<meta name="viewport" content="width=device-width">
-<meta http-equiv="cache-control" content="no-cache">
-<meta http-equiv="pragma" content="no-cache">
-<meta http-equiv="X-UA-Compatible" content="IE=Edge">
-
-<title>pickadate.js / date</title>
-
-<link rel="shortcut icon" href="demo/images/favicon.ico">
-<link rel="stylesheet" href="demo/styles/main.css">
-<link rel="stylesheet" href="lib/themes/default.css">
-<link rel="stylesheet" href="lib/themes/picker.date.css">
-<link rel="stylesheet" href="lib/themes/picker.time.css">
-
-<!--[if lt IE 9]>
-    <script>document.createElement('section')</script>
-<![endif]-->
 
 
-<body>
-
-
-    <header class="section section--header section--splash">
-
-        <div class="section__block section__block--scoped">
-            <nav class="menu menu--header page-target" id="menu">
-                <ul class="menu__list menu__list--header">
-                    <li class="menu__item menu__item--touch menu__item--logo"><a class="menu__link menu__link--dimmed" href="index.htm"><span class="logocon"><span class="logocon__p">p</span><span class="logocon__u"></span></span></a></li>
-                    <li class="menu__item menu__item--touch menu__item--toggle">
-                        <a class="menu__link menu__link--dimmed page-target__display" href="#menu"><span class="page-target__toggle"></span></a>
-                        <a class="menu__link menu__link--dimmed page-target__display--flip" href="#"><span class="page-target__toggle"></span></a>
-                    </li>
-                    <li class="menu__item menu__item--clear"></li>
-                    <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed menu__link--active" href="date.htm">Date picker</a></li>
-                    <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="time.htm">Time picker</a></li>
-                    <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="api.htm">API</a></li>
-                    <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="themes.htm">Themes</a></li>
-                    <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="v2/index.htm">v2 Docs</a></li>
-                    <li class="menu__item menu__item--responsive page-target__reveal menu__item--trail"><a class="menu__link menu__link--dimmed" href="https://github.com/amsul/pickadate.js">View on Github</a></li>
-                </ul>
-            </nav>
-        </div> <!-- .section__block -->
-
-        
-
-    </header> <!-- .section -->
-
-
-    
-
-
+{% dateDemoField = function( props ) {
+    props = props || {}
+    return '<fieldset class="fieldset fieldset--demo js__fieldset">' +
+        ( props.pre || '' ) +
+        '<input id="' + ( props.id || '' ) + '" class="fieldset__input ' + ( props.klass || '' ) + '" type=text placeholder="Try me&hellip;">' +
+    '</fieldset>'
+} %}
 
 
 <section class="section">
@@ -66,11 +19,11 @@
         <h3 class="heading heading--thin">The basic setup requires targetting an <code class="tag-name">input</code> element and invoking the&nbsp;picker:</h3>
 
         <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate()</code></pre>
-        <fieldset class="fieldset fieldset--demo js__fieldset"><input id="" class="fieldset__input js__datepicker" type=text placeholder="Try me&hellip;"></fieldset>
+        {%= dateDemoField({ klass: 'js__datepicker' }) %}
 
         <div class="section__block section__block--notification">
-            <p>Along with v3, the v2 options and API have effectively been deprecated. Read up on the <a href="https://github.com/amsul/pickadate.js/blob/v3.0.0/CHANGELOG.md">full changelog here</a>.</p>
-            <p>One of the most critical changes is that the “month” used to create dates, just as in JavaScript’s native Date object, now has <a href="https://github.com/amsul/pickadate.js/blob/v3.0.0/CHANGELOG.md#zero-as-index">zero-as-index</a>.</p>
+            <p>Along with v3, the v2 options and API have effectively been deprecated. Read up on the <a href="{%= meta.gitrepo_url %}/blob/v3.0.0/CHANGELOG.md">full changelog here</a>.</p>
+            <p>One of the most critical changes is that the “month” used to create dates, just as in JavaScript’s native Date object, now has <a href="{%= meta.gitrepo_url %}/blob/v3.0.0/CHANGELOG.md#zero-as-index">zero-as-index</a>.</p>
         </div>
 
     </div> <!-- .section__block -->
@@ -194,7 +147,7 @@ klass: {
     showMonthsShort: true
 })</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><input id="date_demo__weekdaysShort" class="fieldset__input " type=text placeholder="Try me&hellip;"></fieldset>
+        {%= dateDemoField({ id: 'date_demo__weekdaysShort' }) %}
 
     </div> <!-- .section__block -->
 
@@ -213,7 +166,7 @@ klass: {
     clear: 'Clear selection'
 })</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><input id="date_demo__buttons" class="fieldset__input " type=text placeholder="Try me&hellip;"></fieldset>
+        {%= dateDemoField({ id: 'date_demo__buttons' }) %}
 
     </div> <!-- .section__block -->
 
@@ -225,7 +178,7 @@ klass: {
     <div class="section__block section__block--scoped">
 
         <h2 class="heading heading--divide"><span class="heading__text">Translations<a class="heading__anchor" name="translations" href="#translations">&sect;</a></span></h2>
-        <p>The picker can be extended to add support for internationalization. There are translations available for <a href="https://github.com/amsul/pickadate.js/blob/v3.0.0/lib/translations">30 languages</a> which you can include in one of two ways:</p>
+        <p>The picker can be extended to add support for internationalization. There are translations available for <a href="{%= pkg.repository.url.replace(/.git$/,'') %}/blob/v3.0.0/lib/translations">{%= grunt.file.expand( dirs.min.translations + '/*.js' ).length %} languages</a> which you can include in one of two ways:</p>
 
         <pre class="pre--demo"><code data-language="javascript">// Extend the default picker options for <u>all instances</u>.
 $.extend($.fn.pickadate.defaults, {
@@ -244,7 +197,7 @@ $('.datepicker').pickadate({
     clear: 'effacer',
     formatSubmit: 'yyyy/mm/dd'
 })</code></pre>
-        <fieldset class="fieldset fieldset--demo js__fieldset"><input id="date_demo__translations" class="fieldset__input " type=text placeholder="Try me&hellip;"></fieldset>
+        {%= dateDemoField({ id: 'date_demo__translations' }) %}
 
         <p>When using translations, make sure to also <a href="#formats">specify the <code>formatSubmit</code> and <code class="attribute">data-value</code></a>.</p>
 
@@ -268,11 +221,11 @@ $('.datepicker').pickadate({
     hiddenSuffix: '--submit'
 })</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><input id="date_demo__formats--a" class="fieldset__input " name=date_demo__formats type=text placeholder="Try me&hellip;"></fieldset>
+        {%= dateDemoField({ id: 'date_demo__formats--a' }).replace( 'type=text', 'name=date_demo__formats type=text' ) %}
 
         <p>When using <a href="#translations">translations</a>, the <code class="tag-name">input</code> element should be given a <code class="attribute">data-value</code> attribute formatted using the <code>formatSubmit</code> – the element’s <code class="attribute">value</code> can be left blank. This helps to parse the date into the various languages:</p>
         <pre class="pre--demo"><code data-language="html">&lt;input data-value="2013/04/20"></code></pre>
-        <fieldset class="fieldset fieldset--demo js__fieldset"><input id="date_demo__formats--b" class="fieldset__input " name=date_demo__formats type=text data-value="2013/04/20" placeholder="Try me&hellip;"></fieldset>
+        {%= dateDemoField({ id: 'date_demo__formats--b' }).replace( 'type=text', 'name=date_demo__formats type=text data-value="2013/04/20"') %}
 
     </div> <!-- .section__block -->
 
@@ -368,7 +321,7 @@ $('.datepicker').pickadate({
     selectMonths: true
 })</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><input id="date_demo__selectors--a" class="fieldset__input " type=text placeholder="Try me&hellip;"></fieldset>
+        {%= dateDemoField({ id: 'date_demo__selectors--a' }) %}
 
         <p>Specify the number of years selectable using an even integer - half before and half after the year in focus:</p>
 
@@ -377,7 +330,7 @@ $('.datepicker').pickadate({
     selectYears: 4
 })</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><input id="date_demo__selectors--b" class="fieldset__input " type=text placeholder="Try me&hellip;"></fieldset>
+        {%= dateDemoField({ id: 'date_demo__selectors--b' }) %}
 
     </div> <!-- .section__block -->
 
@@ -395,7 +348,7 @@ $('.datepicker').pickadate({
     firstDay: 1
 })</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><input id="date_demo__firstDay" class="fieldset__input " type=text placeholder="Try me&hellip;"></fieldset>
+        {%= dateDemoField({ id: 'date_demo__firstDay' }) %}
 
     </div> <!-- .section__block -->
 
@@ -416,7 +369,7 @@ $('.datepicker').pickadate({
     max: new Date(2013,7,14)
 })</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><input id="date_demo__limits--a" class="fieldset__input " type=text placeholder="Try me&hellip;"></fieldset>
+        {%= dateDemoField({ id: 'date_demo__limits--a' }) %}
 
         <p><b>2)</b> Using arrays formatted as <code>[YEAR,MONTH,DATE]</code>:</p>
 
@@ -425,7 +378,7 @@ $('.datepicker').pickadate({
     max: [2013,7,14]
 })</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><input id="date_demo__limits--b" class="fieldset__input " type=text placeholder="Try me&hellip;"></fieldset>
+        {%= dateDemoField({ id: 'date_demo__limits--b' }) %}
 
         <p><b>3)</b> As dates relative to today using integers or a boolean:</p>
 
@@ -436,7 +389,7 @@ $('.datepicker').pickadate({
     max: true
 })</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><input id="date_demo__limits--c" class="fieldset__input " type=text placeholder="Try me&hellip;"></fieldset>
+        {%= dateDemoField({ id: 'date_demo__limits--c' }) %}
 
     </div> <!-- .section__block -->
 
@@ -461,7 +414,7 @@ $('.datepicker').pickadate({
     ]
 })</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><input id="date_demo__disable-dates--a" class="fieldset__input " type=text placeholder="Try me&hellip;"></fieldset>
+        {%= dateDemoField({ id: 'date_demo__disable-dates--a' }) %}
 
         <p><b>2)</b> Using integers representing days of the week (from 1 to 7):</p>
 
@@ -471,7 +424,7 @@ $('.datepicker').pickadate({
     ]
 })</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><input id="date_demo__disable-dates--b" class="fieldset__input " type=text placeholder="Try me&hellip;"></fieldset>
+        {%= dateDemoField({ id: 'date_demo__disable-dates--b' }) %}
 
         <p><b>3)</b> <i><u>Disabling all</u></i> except a specific or arbitrary set of dates by setting <code class="constant">true</code> as the first item in the collection:</p>
 
@@ -486,7 +439,7 @@ $('.datepicker').pickadate({
     ]
 })</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><input id="date_demo__disable-dates--c" class="fieldset__input " type=text placeholder="Try me&hellip;"></fieldset>
+        {%= dateDemoField({ id: 'date_demo__disable-dates--c' }) %}
 
     </div> <!-- .section__block -->
 
@@ -522,7 +475,7 @@ $('.datepicker').pickadate({
     }
 })</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><input id="date_demo__events" class="fieldset__input " type=text placeholder="Open your console and try me&hellip;"></fieldset>
+        {%= dateDemoField({ id: 'date_demo__events' }).replace( 'Try me', 'Open your console and try me' ) %}
 
         <p>Within scope of all six of these events, <code class="keyword">this</code> refers to <a href="api.htm">the picker</a>.</p>
         <p>The <code class="function">onSet</code> event is the only callback that is passed an <code>event</code> argument that provides a bit of context as to which properties are being “set”.</p>
@@ -533,35 +486,3 @@ $('.datepicker').pickadate({
 
 
 
-
-
-
-    <footer class="section section--footer">
-
-        <div class="section__block section__block--scoped text-center">
-            <h2 class="heading heading--one heading--divide-center"><span class="heading__text peace">&#x270C;</span></h2>
-            <p class="heading heading--three heading--thin">Made by <a href="http://twitter.com/amsul_">Amsul</a>.</p>
-            <p>Code licensed under <a href="http://amsul.ca/MIT">MIT</a>.</p>
-        </div> <!-- .section__block -->
-
-    </footer> <!-- .section -->
-
-
-    <script src="http://code.jquery.com/jquery-2.0.0.min.js"></script>
-    <script src="lib/picker.js"></script>
-    <script src="lib/picker.date.js"></script>
-    <script src="lib/picker.time.js"></script>
-    <script src="demo/scripts/main.js"></script>
-    <script type="text/javascript">
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-36321179-2']);
-        _gaq.push(['_trackPageview']);
-        (function() {
-            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-        })();
-    </script>
-
-
-</body>

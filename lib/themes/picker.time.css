@@ -1,0 +1,175 @@
+/* ==========================================================================
+   $TIME-PICKER
+   ========================================================================== */
+/* ==========================================================================
+   $VARIABLES
+   ========================================================================== */
+/**
+ * Colors
+ */
+/* Base */
+/* "Clear" indicator */
+/* Borders */
+/* Month & year labels */
+/* "Today" tag indicators */
+/* Disabled things.. such as days, month nav, etc */
+/* Clock */
+/* Active input border color */
+/**
+ * Typography
+ */
+/**
+ * Picker measurements
+ */
+/* Make sure nothing is above the overlay */
+/* The picker box styles */
+/* Date picker min & max widths */
+/* Time picker min & max widths */
+/**
+ * Animation speeds
+ */
+/* ==========================================================================
+   $MIXINS
+   ========================================================================== */
+/**
+ * Picker item states
+ */
+/**
+ * Opacity
+ */
+/**
+ * Media queries
+ */
+/**
+ * Vendor prefixes
+ */
+/**
+ * The frame the bounds the time picker
+ */
+.picker__holder--time .picker__frame {
+  /* Adjust the min & max widths */
+  min-width: 256px;
+  max-width: 320px;
+  /* For `small` screens, set a `max-height` to act as top spacing */
+  /* For `medium` screens, reduce the font-size a bit to get more in view */
+}
+@media (min-height: 26.5em) {
+  .picker__holder--time .picker__frame {
+    max-height: 80%;
+  }
+}
+@media (min-height: 33.875em) {
+  .picker__holder--time .picker__frame {
+    font-size: .875em;
+  }
+}
+
+/**
+ * The time picker box
+ */
+.picker__holder--time .picker__box {
+  /* Remove the side paddings */
+  padding: 0;
+  /* Add a slight background color */
+  background: #f2f2f2;
+  /* For `medium` screens, move it away from the bottom edge of the screen */
+}
+@media (min-height: 33.875em) {
+  .picker__holder--time .picker__box {
+    margin-bottom: 4em;
+  }
+}
+
+/**
+ * The clock list of times
+ */
+.picker__list {
+  padding: 0.75em 0 4.2em;
+  margin: 0;
+  list-style: none;
+}
+
+/**
+ * The times on the clock
+ */
+.picker__list-item {
+  padding: 0.75em 1.25em;
+  background: white;
+  border-bottom: 1px solid #dddddd;
+  border-top: 1px solid #dddddd;
+  margin-bottom: -1px;
+  position: relative;
+}
+
+/* Hovered time */
+.picker__list-item:hover,
+.picker__holder--time .picker__button--clear:hover {
+  cursor: pointer;
+  color: black;
+  background: #b1dcfb;
+  border-color: #0089ec;
+  z-index: 10;
+}
+
+/* Selected time */
+.picker__list-item--selected,
+.picker__list-item--selected:hover {
+  border-color: #0089ec;
+  z-index: 10;
+}
+
+/* Highlighted time */
+.picker__list-item--highlighted {
+  background: #b1dcfb;
+}
+
+/* Highlighted and hovered/focused time */
+.picker__list-item--highlighted:hover,
+.picker__holder--focused .picker__list-item--highlighted {
+  background: #0089ec;
+  color: white;
+}
+
+/* Disabled time */
+.picker__list-item--disabled,
+.picker__list-item--disabled:hover {
+  background: whitesmoke;
+  border-color: whitesmoke;
+  color: #dddddd;
+  cursor: default;
+  border-color: #dddddd;
+  z-index: auto;
+}
+
+/**
+ * The clear button
+ */
+.picker__holder--time .picker__button--clear {
+  display: block;
+  width: 80%;
+  margin: 1em auto 0;
+  padding: 1em 1.25em;
+  background: transparent;
+  border-color: transparent;
+  font-weight: 500;
+  font-size: .67em;
+  text-align: center;
+  text-transform: uppercase;
+  color: #666;
+}
+.picker__holder--time .picker__button--clear:before {
+  top: -.25em;
+  color: #666;
+  font-size: 1.25em;
+  font-weight: bold;
+}
+.picker__holder--time .picker__button--clear:hover, .picker__holder--time .picker__button--clear:focus {
+  background: #ee2200;
+  border-color: #ee2200;
+  cursor: pointer;
+  color: white;
+  outline: none;
+}
+.picker__holder--time .picker__button--clear:hover:before, .picker__holder--time .picker__button--clear:focus:before {
+  color: white;
+}

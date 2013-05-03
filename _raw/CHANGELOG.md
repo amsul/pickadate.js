@@ -5,11 +5,11 @@
 
 With this major release, the entire API has been rethought to allow the picker to be much more configurable and extensible. These are the most notable updates:
 
-- [#20](/issues/20): Introduced a new [time picker](http://amsul.github.io/pickadate.js/time.htm).
-- [#112](/issues/112): Firefox select month/year fix.
-- [#84](/issues/84): Scrollbar not hidden to avoid page shift.
-- [#89](/issues/89): Better event handling on clicks/focuses/keydowns within the holder.
-- [#98](/issues/98): Destroy picker data from element.
+- [#20]({%= gitrepo_url %}/issues/20): Introduced a new [time picker]({%= pkg.homepage %}/time.htm).
+- [#112]({%= gitrepo_url %}/issues/112): Firefox select month/year fix.
+- [#84]({%= gitrepo_url %}/issues/84): Scrollbar not hidden to avoid page shift.
+- [#89]({%= gitrepo_url %}/issues/89): Better event handling on clicks/focuses/keydowns within the holder.
+- [#98]({%= gitrepo_url %}/issues/98): Destroy picker data from element.
 - Added Grunt.js build system.
 - Added QUnit test suite.
 - Added Travis integration.
@@ -21,7 +21,7 @@ With this major release, the entire API has been rethought to allow the picker t
 To enable all this goodness, some **backward-incompatible changes** have been introduced. These are the main ones:
 
 <a name="zero-as-index"></a>
-- [#85](/issues/85): Months have __zero-as-index__:
+- [#85]({%= gitrepo_url %}/issues/85): Months have __zero-as-index__:
 
 	Just as in JavaScript’s native Date object, the `month` used to create dates is now 	based on zero as the first index. Meaning:
 
@@ -62,13 +62,13 @@ To enable all this goodness, some **backward-incompatible changes** have been in
 	```
 	To add labels for the month navigation tabs, use CSS pseudo-elements instead.
 
-- A few [HTML classes](http://amsul.github.io/pickadate.js/date.htm#classes) name and property changes.
+- A few [HTML classes]({%= pkg.homepage %}/date.htm#classes) name and property changes.
 
-- [Formatting rules](http://amsul.github.io/pickadate.js/date.htm#formats) that appear within a word need to be escaped with an exclamation mark (!).
+- [Formatting rules]({%= pkg.homepage %}/date.htm#formats) that appear within a word need to be escaped with an exclamation mark (!).
 
 
 <br>
-#### Please do read the [docs](http://amsul.github.io/pickadate.js/date.htm#options) and [api](http://amsul.github.io/pickadate.js/api.htm) to see exactly how these new options and methods work.
+#### Please do read the [docs]({%= pkg.homepage %}/date.htm#options) and [api]({%= pkg.homepage %}/api.htm) to see exactly how these new options and methods work.
 
 
 
@@ -76,7 +76,7 @@ To enable all this goodness, some **backward-incompatible changes** have been in
 <br>
 ## Older changelogs
 
-If you’re looking for changes in older versions, please [browse the tags](https://github.com/amsul/pickadate.js/tags) for the relevant commit archive and changelog file.
+If you’re looking for changes in older versions, please [browse the tags]({%= meta.gitrepo_url %}/tags) for the relevant commit archive and changelog file.
 
 
 

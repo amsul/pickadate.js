@@ -17,7 +17,7 @@ module.exports = function( grunt ) {
     var packageJSON = grunt.file.readJSON( 'package.json' )
 
 
-    // Add the "curly" delimiters.
+    // Add the “curly” template delimiters.
     grunt.template.addDelimiters( 'curly', '{%', '%}' )
 
 
@@ -33,7 +33,7 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks( 'grunt-contrib-uglify' )
 
 
-    // Create the initial grunt configurations.
+    // Setup the initial configurations.
     grunt.initConfig({
 
 
@@ -43,77 +43,75 @@ module.exports = function( grunt ) {
 
         // Set up the directories.
         dirs: {
-            site: {
-                src: '_source/site',
-                dest: 'site'
+            tests: 'tests',
+            src: {
+                raw: '_raw',
+                demos: '_raw/demo',
+                pickers: '_raw/lib',
+                themes: '_raw/lib/themes',
+                translations: '_raw/lib/translations'
             },
-            lib: {
-                src: '_source/lib',
-                dest: 'lib'
+            dest: {
+                demos: 'demo',
+                pickers: 'lib',
+                themes: 'lib/themes',
+                translations: 'lib/translations'
             },
-            tests: '_tests/'
+            min: {
+                pickers: 'lib/compressed',
+                themes: 'lib/compressed/themes',
+                translations: 'lib/compressed/translations'
+            }
+        },
+
+
+        // The banners to prepend to files.
+        banner: {
+            pickers: '/*!\n' +
+                     ' * <%= pkg.title %> v<%= pkg.version %>, <%= grunt.template.today("yyyy-mm-dd") %>\n' +
+                     ' * By <%= pkg.author.name %> (<%= pkg.author.url %>)\n' +
+                     ' * Hosted on <%= pkg.homepage %>\n' +
+                     ' * Licensed under <%= pkg.licenses[0].type %>\n' +
+                     ' */\n'
         },
 
 
         // Clean the destination files and directories.
         clean: {
-            site: [ '<%= dirs.site.dest %>', 'index.htm', 'date.htm', 'time.htm', 'api.htm' ],
-            lib: [ '<%= dirs.lib.dest %>' ],
-            pkg: [ '<%= pkg.name %>.jquery.json', 'README.md', 'LICENSE.md', 'CHANGELOG.md' ]
+            demos: [ '<%= dirs.dest.demos %>', '*.htm' ],
+            pickers: [ '<%= dirs.dest.pickers %>/*.js' ],
+            themes: [ '<%= dirs.dest.themes %>' ],
+            translations: [ '<%= dirs.dest.translations %>' ],
+            pkg: [ '<%= dirs.dest.pickers %>', '<%= pkg.name %>.jquery.json', '*.md' ]
         },
 
 
         // Generate static HTML templates.
         htmlify: {
-            site: {
-                options: {
-                    base: grunt.file.read( '_source/base.htm' )
-                },
-                files: [
-                    { 'index.htm': '_source/index.htm' },
-                    { 'date.htm': '_source/date.htm' },
-                    { 'time.htm': '_source/time.htm' },
-                    { 'api.htm': '_source/api.htm' }
-                ]
+            demos: {
+                expand: true,
+                cwd: '<%= dirs.src.raw %>',
+                src: [ '/!(base|hero)*.htm' ],
+                dest: '',
+                base: '/base.htm'
             }
-        },
-
-
-        // The banner to prepend.
-        banner: {
-            js: '/*!\n' +
-                ' * <%= pkg.title %> v<%= pkg.version %>, <%= grunt.template.today("yyyy-mm-dd") %>\n' +
-                ' * By <%= pkg.author.name %> (<%= pkg.author.url %>)\n' +
-                ' * Hosted on <%= pkg.homepage %>\n' +
-                ' * Licensed under <%= pkg.licenses[0].type %>\n' +
-                ' */\n',
-            css: '/*!\n' +
-                 ' * <%= pkg.title %> v<%= pkg.version %>, <%= grunt.template.today("yyyy-mm-dd") %>\n' +
-                 ' * <%= pkg.homepage %> : <%= grunt.task.current.filesSrc %>\n' +
-                 ' */'
         },
 
 
         // Copy over files to destination directions.
         copy: {
-
-            // Copy the site images over.
-            site: {
+            demos: {
                 expand: true,
-                cwd: '<%= dirs.site.src %>/',
-                src: [ 'images/*.{png,ico}' ],
-                dest: '<%= dirs.site.dest %>/'
+                cwd: '<%= dirs.src.demos %>',
+                src: [ 'styles/.css', 'images/*.{png,ico}' ],
+                dest: '<%= dirs.dest.demos %>'
             },
-
-            // Copy the lib files over that don't need concatenation.
-            lib: {
+            translations: {
                 expand: true,
-                cwd: '<%= dirs.lib.src %>',
-                src: [ 'translations/*.js' ],
-                dest: '<%= dirs.lib.dest %>/'
+                cwd: '<%= dirs.src.translations %>',
+                src: [ '*' ],
+                dest: '<%= dirs.dest.translations %>'
             },
-
-            // Copy the package settings into a jquery package.
             pkg: {
                 options: {
                     processContent: function( content ) {
@@ -122,28 +120,32 @@ module.exports = function( grunt ) {
                 },
                 files: [
                     { '<%= pkg.name %>.jquery.json': 'package.json' },
-                    { 'README.md': '<%= dirs.lib.src %>/../README.md' },
-                    { 'LICENSE.md': '<%= dirs.lib.src %>/../LICENSE.md' },
-                    { 'CHANGELOG.md': '<%= dirs.lib.src %>/../CHANGELOG.md' },
-                    { 'CONTRIBUTING.md': '<%= dirs.lib.src %>/../CONTRIBUTING.md' }
+                    { 'README.md': '<%= dirs.src.raw %>/README.md' },
+                    { 'LICENSE.md': '<%= dirs.src.raw %>/LICENSE.md' },
+                    { 'CHANGELOG.md': '<%= dirs.src.raw %>/CHANGELOG.md' },
+                    { 'CONTRIBUTING.md': '<%= dirs.src.raw %>/CONTRIBUTING.md' }
                 ]
             }
         },
 
 
-        // Convert Sass files into CSS.
+        // Compile Sass into CSS.
         sass: {
             options: {
                 style: 'expanded'
             },
-            site: {
+            demos: {
                 files: {
-                    '<%= dirs.site.dest %>/styles/main.css': '<%= dirs.site.src %>/styles/base.scss'
+                    '<%= dirs.dest.demos %>/styles/main.css': '<%= dirs.src.demos %>/styles/base.scss'
                 }
             },
-            lib: {
+            themes: {
                 files: {
-                    '<%= dirs.lib.dest %>/themes/default.css': '<%= dirs.lib.src %>/themes/default.scss'
+                    '<%= dirs.dest.themes %>/default.css': '<%= dirs.src.themes %>/default.scss',
+                    '<%= dirs.dest.themes %>/classic.css': '<%= dirs.src.themes %>/classic.scss',
+                    '<%= dirs.dest.themes %>/inline.css': '<%= dirs.src.themes %>/inline.scss',
+                    '<%= dirs.dest.themes %>/picker.date.css': '<%= dirs.src.themes %>/picker.date.scss',
+                    '<%= dirs.dest.themes %>/picker.time.css': '<%= dirs.src.themes %>/picker.time.scss'
                 }
             }
         },
@@ -151,29 +153,22 @@ module.exports = function( grunt ) {
 
         // Concatenate the files and add the banner.
         concat: {
-            site: {
-                files: { '<%= dirs.site.dest %>/scripts/main.js': '<%= dirs.site.src %>/scripts/*.js' }
-            },
-            lib: {
-                options: {
-                    banner: '<%= banner.js %>\n' + '(function( $, document, undefined ) {"use strict";',
-                    footer: '})( jQuery, document );'
-                },
-                files: {
-                    '<%= dirs.lib.dest %>/<%= pkg.name %>.datetime.js': [
-                        '<%= dirs.lib.src %>/basepicker.js',
-                        '<%= dirs.lib.src %>/datepicker.js',
-                        '<%= dirs.lib.src %>/timepicker.js'
-                    ],
-                    '<%= dirs.lib.dest %>/<%= pkg.name %>.date.js': [
-                        '<%= dirs.lib.src %>/basepicker.js',
-                        '<%= dirs.lib.src %>/datepicker.js'
-                    ],
-                    '<%= dirs.lib.dest %>/<%= pkg.name %>.time.js': [
-                        '<%= dirs.lib.src %>/basepicker.js',
-                        '<%= dirs.lib.src %>/timepicker.js'
-                    ]
+            options: {
+                process: function( content ) {
+                    return grunt.template.process( content, { delimiters: 'curly' } )
                 }
+            },
+            demos: {
+                files: { '<%= dirs.dest.demos %>/scripts/main.js': '<%= dirs.src.demos %>/scripts/*.js' }
+            },
+            pickers: {
+                options: {
+                    banner: '<%= banner.pickers %>\n'
+                },
+                expand: true,
+                cwd: '<%= dirs.src.pickers %>',
+                src: [ '*.js' ],
+                dest: '<%= dirs.dest.pickers %>'
             }
         },
 
@@ -181,46 +176,47 @@ module.exports = function( grunt ) {
         // Lint the files.
         jshint: {
             gruntfile: 'Gruntfile.js',
-            site: [ '<%= dirs.site.src %>/scripts/base.js' ],
-            lib: [ '<%= dirs.lib.dest %>/**/*.js', '!<%= dirs.lib.dest %>/legacy.js', '!<%= dirs.lib.dest %>/**/*.min.js', '<%= dirs.tests %>/tests.js' ]
+            demos: [ '<%= dirs.src.demos %>/scripts/base.js' ],
+            pickers: [
+                '<%= dirs.tests %>/units/*.js',
+                // '<%= dirs.dest.pickers %>/**/*.js',
+
+                // Ignore the legacy and minified files.
+                '!<%= dirs.dest.pickers %>/legacy.js',
+                '!<%= dirs.dest.pickers %>/compressed/**/*.js'
+            ]
         },
 
 
-        // Minify everything!
+        // Minify all the things!
         uglify: {
             options: {
                 preserveComments: 'some'
             },
-            lib: {
-                files: {
-                    '<%= dirs.lib.dest %>/<%= pkg.name %>.datetime.min.js': [ '<%= dirs.lib.dest %>/<%= pkg.name %>.datetime.js' ],
-                    '<%= dirs.lib.dest %>/<%= pkg.name %>.date.min.js': [ '<%= dirs.lib.dest %>/<%= pkg.name %>.date.js' ],
-                    '<%= dirs.lib.dest %>/<%= pkg.name %>.time.min.js': [ '<%= dirs.lib.dest %>/<%= pkg.name %>.time.js' ]
-                }
-            },
-            legacy: {
-                files: {
-                    '<%= dirs.lib.dest %>/legacy.js': [ '<%= dirs.lib.src %>/legacy.js' ]
-                }
+            pickers: {
+                files: [
+                    {
+                        expand : true,
+                        cwd : '<%= dirs.dest.pickers %>',
+                        src   : [ '**/*.js', '!compressed/**/*.js' ],
+                        dest : '<%= dirs.dest.pickers %>/compressed'
+                    }
+                ]
             }
         },
         cssmin: {
-            lib: {
-                options: {
-                    banner: '<%= banner.css %>'
-                },
+            pickers: {
                 expand: true,
-                cwd: '<%= dirs.lib.dest %>',
-                src: [ 'themes/*.css', '!themes/*.min.css' ],
-                dest: '<%= dirs.lib.dest %>/',
-                ext: '.min.css'
+                cwd: '<%= dirs.dest.pickers %>',
+                src: [ '**/*.css', '!compressed/**/*.css' ],
+                dest: '<%= dirs.dest.pickers %>/compressed'
             }
         },
 
 
         // Unit test the files.
         qunit: {
-            lib: [ '<%= dirs.tests %>/units/all.htm' ]
+            pickers: [ '<%= dirs.tests %>/units/all.htm' ]
         },
 
 
@@ -232,24 +228,34 @@ module.exports = function( grunt ) {
             },
             quick: {
                 files: [
-                    '<%= dirs.site.src %>/../*.htm', '<%= dirs.site.src %>/styles/*.scss', '<%= dirs.site.src %>/scripts/*.js',
-                    '<%= dirs.lib.src %>/**/*.js', '<%= dirs.lib.src %>/themes/*.scss'
+                    '<%= dirs.src.raw %>/*.htm',
+                    '<%= dirs.src.demos %>/styles/*.scss', '<%= dirs.src.demos %>/scripts/*.js',
+                    '<%= dirs.src.pickers %>/**/*.js', '<%= dirs.src.pickers %>/themes/*.css',
+                    '<%= dirs.src.themes %>/*.scss',
+                    '<%= dirs.src.translations %>/*.js'
                 ],
                 tasks: [ 'quick' ]
             },
-            site: {
-                files: [ '<%= dirs.site.src %>/../*.htm', '<%= dirs.site.src %>/styles/*.scss', '<%= dirs.site.src %>/scripts/*.js' ],
-                tasks: [ 'site' ]
+            demos: {
+                files: [
+                    '<%= dirs.src.raw %>/*.htm',
+                    '<%= dirs.src.demos %>/styles/*.scss', '<%= dirs.src.demos %>/scripts/*.js'
+                ],
+                tasks: [ 'demo' ]
             },
-            lib: {
-                files: [ '<%= dirs.lib.src %>/**/*.js', '<%= dirs.lib.src %>/themes/*.scss' ],
-                tasks: [ 'build' ]
+            pickers: {
+                files: [
+                    '<%= dirs.src.pickers %>/**/*.js', '<%= dirs.src.pickers %>/themes/*.css',
+                    '<%= dirs.src.themes %>/*.scss',
+                    '<%= dirs.src.translations %>/*.js'
+                ],
+                tasks: [ 'picker' ]
             }
         },
 
 
-        // Any extra data needed in the templates.
-        ___: {
+        // Any extra data needed in rendering static files.
+        meta: {
 
             // The sanitized github repo url.
             gitrepo_url: packageJSON.repository.url.replace( /.git$/, '' ),
@@ -266,43 +272,49 @@ module.exports = function( grunt ) {
 
 
     // Register the tasks.
-    // * `copy:pkg` should come after `uglify` because some package files measure `.min` file sizes.
-    grunt.registerTask( 'default', [ 'clean', 'htmlify', 'concat', 'copy:site', 'copy:lib', 'sass', 'jshint', 'qunit', 'uglify', 'cssmin', 'copy:pkg' ] )
-    grunt.registerTask( 'quick', [ 'htmlify', 'concat', 'copy:site', 'copy:lib', 'sass'/*, 'uglify', 'cssmin', 'copy:pkg'*/ ] )
-    grunt.registerTask( 'build', [ 'clean:lib', 'concat:lib', 'copy:lib', 'sass:lib', 'jshint:lib', 'qunit:lib', 'uglify:lib', 'cssmin:lib' ] )
-    grunt.registerTask( 'site', [ 'clean:site', 'htmlify:site', 'concat:site', 'copy:site', 'sass:site', 'jshint:site' ] )
-    grunt.registerTask( 'travis', [ 'jshint:lib', 'qunit:lib' ] )
+    // * `htmlify` and `copy:pkg` should come after `uglify` because some package files measure `.min` file sizes.
+    grunt.registerTask( 'default', [ 'clean', 'concat', 'copy:demos', 'copy:translations', 'sass', 'jshint', 'qunit', 'uglify', 'cssmin', 'htmlify', 'copy:pkg' ] )
+    grunt.registerTask( 'quick', [ 'concat', 'copy:demos', 'copy:translations', 'uglify', 'cssmin', 'htmlify', 'copy:pkg' ] )
+    grunt.registerTask( 'picker', [ 'clean:pickers', 'concat:pickers', 'copy:translations', 'sass:themes', 'jshint:pickers', 'qunit:pickers', 'uglify:pickers', 'cssmin:pickers' ] )
+    grunt.registerTask( 'demo', [ 'clean:demos', 'concat:demos', 'copy:demos', 'sass:demos', 'jshint:demos', 'htmlify:demos' ] )
+    grunt.registerTask( 'travis', [ 'jshint:pickers', 'qunit:pickers' ] )
 
 
 
     // Create and register the task to build out the static HTML files.
-    grunt.registerMultiTask( 'htmlify', 'Build static HTML files', function() {
+    grunt.registerMultiTask( 'htmlify', 'Recursively build static HTML files', function() {
 
         var task = this,
-            options = this.data.options,
-            files = this.data.files
+            options = task.options(),
 
-        files.map( function( file ) {
+            // Process the base file using the source file content.
+            processFile = function( fileSource ) {
 
-            for ( var dest in file ) {
+                grunt.verbose.writeln( 'Processing ' + fileSource )
 
-                // Process the source file.
-                var sourceContent = grunt.template.process( grunt.file.read( file[ dest ] ), { delimiters: 'curly' } )
-
-                // Process the base file using the source content.
-                var destinationContent = grunt.template.process( options.base, {
+                // Recursively process the base template using the file source content.
+                var processedContent = grunt.template.process( grunt.file.read( task.data.cwd + task.data.base ), {
                     delimiters: 'curly',
                     data: {
-                        content: sourceContent,
-                        pkg: grunt.config.data.pkg,
-                        page: dest.replace( '.htm', '' )
+                        pkg: packageJSON,
+                        page: fileSource.match( /\w+(?=\.htm$)/ )[ 0 ],
+                        content: grunt.file.read( fileSource ),
+                        meta: grunt.config.data.meta,
+                        dirs: grunt.config.data.dirs
                     }
                 })
 
-                // Create the actual file.
-                grunt.file.write( dest, destinationContent )
+                grunt.log.writeln( 'Writing ' + fileSource.cyan )
+
+                // Write the destination file by cleaning the file name.
+                grunt.file.write( task.data.dest + fileSource.match( /\w+\.htm$/ )[ 0 ], processedContent )
             }
-        })
+
+
+        grunt.log.writeln( 'Expanding ' + task.data.cwd.cyan )
+
+        // Map through the task directory and process the HTML files.
+        grunt.file.expand( task.data.cwd + task.data.src ).map( processFile )
     })
 
 } //module.exports

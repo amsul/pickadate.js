@@ -1,0 +1,144 @@
+
+/* ==========================================================================
+   $TIME-PICKER
+   ========================================================================== */
+
+@import "variables";
+
+
+/**
+ * The frame the bounds the time picker
+ */
+.picker__holder--time .picker__frame {
+
+    /* Adjust the min & max widths */
+    min-width: $picker-time-min-width;
+    max-width: $picker-time-max-width;
+
+    /* For `small` screens, set a `max-height` to act as top spacing */
+    @include min-screen( small ) {
+        max-height: 80%;
+    }
+
+    /* For `medium` screens, reduce the font-size a bit to get more in view */
+    @include min-screen( medium ) {
+        font-size: .875em;
+    }
+}
+
+
+
+/**
+ * The time picker box
+ */
+.picker__holder--time .picker__box {
+
+    /* Remove the side paddings */
+    padding: 0;
+
+    /* Add a slight background color */
+    background: $clock-bg;
+
+    /* For `medium` screens, move it away from the bottom edge of the screen */
+    @include min-screen( medium ) {
+        margin-bottom: 4em;
+    }
+}
+
+
+
+/**
+ * The clock list of times
+ */
+.picker__list {
+    padding: .75em 0 4.2em;
+    margin: 0;
+    list-style: none;
+}
+
+
+/**
+ * The times on the clock
+ */
+.picker__list-item {
+    padding: .75em 1.25em;
+    background: $white;
+    border-bottom: 1px solid $light-border;
+    border-top: 1px solid $light-border;
+    margin-bottom: -1px;
+    position: relative;
+}
+
+/* Hovered time */
+.picker__list-item:hover,
+.picker__holder--time .picker__button--clear:hover {
+    @include picker-item-hovered;
+    @include picker-item-selected;
+}
+
+/* Selected time */
+.picker__list-item--selected,
+.picker__list-item--selected:hover {
+    @include picker-item-selected;
+}
+
+/* Highlighted time */
+.picker__list-item--highlighted {
+    background: $blue-hover;
+}
+
+/* Highlighted and hovered/focused time */
+.picker__list-item--highlighted:hover,
+.picker__holder--focused .picker__list-item--highlighted {
+    @include picker-item-highlighted;
+}
+
+/* Disabled time */
+.picker__list-item--disabled,
+.picker__list-item--disabled:hover {
+    @include picker-item-disabled;
+    border-color: $light-border;
+    z-index: auto;
+}
+
+
+
+
+/**
+ * The clear button
+ */
+.picker__holder--time .picker__button--clear {
+    display: block;
+    width: 80%;
+    margin: 1em auto 0;
+    padding: 1em 1.25em;
+
+    background: transparent;
+    border-color: transparent;
+
+    font-weight: 500;
+    font-size: .67em;
+    text-align: center;
+    text-transform: uppercase;
+    color: #666;
+
+    &:before {
+        top: -.25em;
+        color: #666;
+        font-size: 1.25em;
+        font-weight: bold;
+    }
+
+    &:hover,
+    &:focus {
+        background: $red;
+        border-color: $red;
+        cursor: pointer;
+        color: $white;
+        outline: none;
+
+        &:before {
+            color: $white;
+        }
+    }
+}
