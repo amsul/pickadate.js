@@ -1,1 +1,175 @@
-/*classic*/
+/* ==========================================================================
+   $BASE-PICKER
+   ========================================================================== */
+/* ==========================================================================
+   $VARIABLES
+   ========================================================================== */
+/**
+ * Base colors
+ */
+/**
+ * Backgrounds
+ */
+/**
+ * Borders
+ */
+/**
+ * Buttons
+ */
+/**
+ * Picker base
+ */
+/**
+ * Date picker options
+ */
+/**
+ * Time picker options
+ */
+/**
+ * Theme configurations
+ */
+/* ==========================================================================
+   $MIXINS
+   ========================================================================== */
+/**
+ * Common picker item states
+ */
+/**
+ * Opacity
+ */
+/**
+ * Media queries
+ */
+/**
+ * Vendor prefixes
+ */
+/**
+ * Note: the root picker element should __NOT__ be styled
+ * more than what’s here. Style the `.picker__holder` instead.
+ */
+.picker {
+  font-size: 16px;
+  text-align: left;
+  line-height: 1.2;
+  color: black;
+  position: absolute;
+  z-index: 10000;
+}
+
+/**
+ * When the picker is opened, the input element is “activated”.
+ */
+.picker__input.picker__input--active {
+  border-color: #0089ec;
+}
+
+/**
+ * The holder is the only “scrollable” top-level container element.
+ */
+.picker__holder {
+  width: 100%;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ==========================================================================
+   $PICKER-CLASSIC
+   ========================================================================== */
+/* ==========================================================================
+   $VARIABLES
+   ========================================================================== */
+/**
+ * Base colors
+ */
+/**
+ * Backgrounds
+ */
+/**
+ * Borders
+ */
+/**
+ * Buttons
+ */
+/**
+ * Picker base
+ */
+/**
+ * Date picker options
+ */
+/**
+ * Time picker options
+ */
+/**
+ * Theme configurations
+ */
+/* ==========================================================================
+   $MIXINS
+   ========================================================================== */
+/**
+ * Common picker item states
+ */
+/**
+ * Opacity
+ */
+/**
+ * Media queries
+ */
+/**
+ * Vendor prefixes
+ */
+/**
+ * The input element shouldn’t be covered by the box-shadow
+ * or the content of the picker while it’s opening.
+ */
+.picker__input {
+  z-index: 10001;
+  position: relative;
+}
+
+/**
+ * Note: the root picker element should __NOT__ be styled
+ * more than what’s here. Style the `.picker__holder` instead.
+ */
+.picker {
+  width: 100%;
+}
+
+/**
+ * The holder is the base of the picker.
+ */
+.picker__holder {
+  position: absolute;
+  background: white;
+  border: 1px solid #aaaaaa;
+  border-top: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  max-height: 0;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  filter: alpha(opacity=0);
+  -moz-opacity: 0;
+  opacity: 0;
+  top: -1em;
+  -webkit-border-radius: 0 0 6px 6px;
+  -moz-border-radius: 0 0 6px 6px;
+  border-radius: 0 0 6px 6px;
+  -webkit-transition: all 0.15s ease-out;
+  -moz-transition: all 0.15s ease-out;
+  transition: all 0.15s ease-out;
+}
+
+/**
+ * When the picker opens...
+ */
+.picker--opened .picker__holder {
+  max-height: 20em;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+  filter: alpha(opacity=100);
+  -moz-opacity: 1;
+  opacity: 1;
+  top: 0;
+  -webkit-box-shadow: 0 6px 18px 1px rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 0 6px 18px 1px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 6px 18px 1px rgba(0, 0, 0, 0.12);
+}

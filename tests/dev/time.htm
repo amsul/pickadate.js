@@ -11,7 +11,8 @@
 <title>Pickadate.js</title>
 
 <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="../../lib/themes/default.css">
+<link rel="stylesheet" href="../../lib/themes/inline.css">
+<link rel="stylesheet" href="../../lib/themes/inline.time.css">
 
 <!--[if lt IE 9]>
     <script>document.createElement('section')</script>
@@ -40,7 +41,7 @@
         <form>
             <fieldset>
                 <h3><label for="input_01">Pick a date. Go ahead...</label></h3>
-                <input id="input_01" class="datepicker" name="date" type="date" valuee="12:00 PM" data-valuee="01:30" autofocusss>
+                <input id="input_01" class="datepicker" name="date" type="date" valuee="12:00 PM" data-valuee="01:30" autofocus>
                 <br><br><br><br><br>
                 <input class="button" type="submit" value="open">
             </fieldset>
@@ -57,8 +58,10 @@
     </section>
 
 
-    <script src="../jquery.1.9.1.js"></script>
-    <script src="../../lib/pickadate.time.js"></script>
+    <script src="../jquery.2.0.0.js"></script>
+    <script src="../../lib/picker.js"></script>
+    <script src="../../lib/picker.time.js"></script>
+    <script src="../../lib/legacy.js"></script>
 
     <script type="text/javascript">
 

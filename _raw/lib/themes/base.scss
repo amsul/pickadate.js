@@ -1,0 +1,45 @@
+
+/* ==========================================================================
+   $BASE-PICKER
+   ========================================================================== */
+
+@import "variables";
+
+
+/**
+ * Note: the root picker element should __NOT__ be styled
+ * more than what’s here. Style the `.picker__holder` instead.
+ */
+.picker {
+
+    // The base font stylings.
+    font-size: $base-font-size;
+    text-align: left;
+    line-height: $base-line-height;
+    color: $black;
+
+    // The picker shouldn’t affect or be affected by elements around it.
+    position: absolute;
+    z-index: $picker-z-index;
+}
+
+
+/**
+ * When the picker is opened, the input element is “activated”.
+ */
+.picker__input.picker__input--active {
+    border-color: $input-active-border;
+}
+
+
+/**
+ * The holder is the only “scrollable” top-level container element.
+ */
+.picker__holder {
+    width: 100%;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+}
+
+
+

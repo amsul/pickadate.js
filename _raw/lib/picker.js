@@ -10,18 +10,18 @@
  */
 
 
-/* ==========================================================================
-   The picker base
-   ========================================================================== */
-
-var CLASSES_PREFIX = 'picker__',
-    $DOCUMENT = $( document )
+// Create a global scope.
+window.Picker = (function( $document, undefined ) {
 
 
 /**
- * The picker constructor that creates a new date or time picker
+ * The picker constructor that creates a blank picker.
  */
- function Picker( $ELEMENT, SETTINGS, COMPONENT, NAME ) {
+function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
+
+    // If there’s no element, return the picker constructor.
+    if ( !ELEMENT ) return PickerConstructor
+
 
     var
         // The state of the picker.
@@ -30,21 +30,25 @@ var CLASSES_PREFIX = 'picker__',
         },
 
 
-        // Shorthand for the classes.
-        CLASSES = SETTINGS.klass,
+        // Merge the defaults and options passed.
+        SETTINGS = COMPONENT ? $.extend( true, {}, COMPONENT.defaults, OPTIONS ) : OPTIONS || {},
 
 
-        // The element node.
-        ELEMENT = $ELEMENT[ 0 ], //ELEMENT
+        // Merge the default classes with the settings classes.
+        CLASSES = $.extend( {}, PickerConstructor.klasses(), SETTINGS.klass ),
 
 
-        // Pseudo picker constructor
+        // The element node wrapper into a jQuery object.
+        $ELEMENT = $( ELEMENT ),
+
+
+        // Pseudo picker constructor.
         PickerInstance = function() {
             return this.start()
         },
 
 
-        // The picker prototype
+        // The picker prototype.
         P = PickerInstance.prototype = {
 
             constructor: PickerInstance,
@@ -80,7 +84,7 @@ var CLASSES_PREFIX = 'picker__',
 
 
                 // Create the picker holder with a new wrapped component and bind the events.
-                P.$holder = $( createNode( 'div', createWrappedComponent(), CLASSES.holder ) ).on({
+                P.$holder = $( PickerConstructor._.node( 'div', createWrappedComponent(), CLASSES.picker ) ).on({
 
                     // When something within the holder is focused, stop from bubbling
                     // to the doc and remove the “focused” state from the holder.
@@ -91,7 +95,7 @@ var CLASSES_PREFIX = 'picker__',
 
                     // If the event is not on the holder itself, stop it from bubbling to the doc.
                     mousedown: function( event ) {
-                        if ( event.target != P.$holder[ 0 ] ) {
+                        if ( event.target != P.$holder.children()[ 0 ] ) {
                             event.stopPropagation()
                         }
                     },
@@ -104,7 +108,7 @@ var CLASSES_PREFIX = 'picker__',
                             targetData = $target.data()
 
                         // If the event is not on the holder itself, handle the clicks within.
-                        if ( target != P.$holder[ 0 ] ) {
+                        if ( target != P.$holder.children()[ 0 ] ) {
 
                             // Stop it from propagating to the doc.
                             event.stopPropagation()
@@ -120,7 +124,7 @@ var CLASSES_PREFIX = 'picker__',
                             }
 
                             // If something is picked, set `select` and `highlight`, then close with focus.
-                            else if ( isInteger( targetData.pick ) && !$target.hasClass( CLASSES.disabled ) ) {
+                            else if ( PickerConstructor._.isInteger( targetData.pick ) && !$target.hasClass( CLASSES.disabled ) ) {
                                 P.set({ select: targetData.pick, highlight: targetData.pick }).close( true )
                             }
 
@@ -136,7 +140,7 @@ var CLASSES_PREFIX = 'picker__',
                 // If there’s a format for the hidden input element, create the element
                 // using the name of the original input plus suffix. Otherwise set it to null.
                 // If the element has a value, use either the `data-value` or `value`.
-                P._hidden = SETTINGS.formatSubmit ? $( '<input type=hidden name=' + ELEMENT.name + ( SETTINGS.hiddenSuffix || '_submit' ) + ( $ELEMENT.data( 'value' ) ? ' value="' + triggerFunction( P.component.formats.toString, P.component, [ SETTINGS.formatSubmit, P.component.item.select ] ) : '' ) + '">' )[ 0 ] : undefined
+                P._hidden = SETTINGS.formatSubmit ? $( '<input type=hidden name=' + ELEMENT.name + ( SETTINGS.hiddenSuffix || '_submit' ) + ( $ELEMENT.data( 'value' ) ? ' value="' + PickerConstructor._.trigger( P.component.formats.toString, P.component, [ SETTINGS.formatSubmit, P.component.item.select ] ) : '' ) + '">' )[ 0 ] : undefined
 
 
                 // Add the class and bind the events on the element.
@@ -151,7 +155,7 @@ var CLASSES_PREFIX = 'picker__',
                     // If the value changes, update the hidden input with the correct format.
                     on( 'change.P' + STATE.id, function() {
                         if ( P._hidden ) {
-                            P._hidden.value = ELEMENT.value ? triggerFunction( P.component.formats.toString, P.component, [ SETTINGS.formatSubmit, P.component.item.select ] ) : ''
+                            P._hidden.value = ELEMENT.value ? PickerConstructor._.trigger( P.component.formats.toString, P.component, [ SETTINGS.formatSubmit, P.component.item.select ] ) : ''
                         }
                     }).
 
@@ -178,7 +182,7 @@ var CLASSES_PREFIX = 'picker__',
                     }).
 
                     // If there’s a `data-value`, update the value of the element.
-                    val( $ELEMENT.data( 'value' ) ? triggerFunction( P.component.formats.toString, P.component, [ SETTINGS.format, P.component.item.select ] ) : '' ).
+                    val( $ELEMENT.data( 'value' ) ? PickerConstructor._.trigger( P.component.formats.toString, P.component, [ SETTINGS.format, P.component.item.select ] ) : '' ).
 
                     // Insert the holder and hidden input after the element.
                     after( P.$holder, P._hidden ).
@@ -266,7 +270,7 @@ var CLASSES_PREFIX = 'picker__',
             }, //stop
 
 
-            /**
+            /*
              * Open up the picker
              */
             open: function() {
@@ -284,7 +288,7 @@ var CLASSES_PREFIX = 'picker__',
                 P.$holder.addClass( CLASSES.opened )
 
                 // Bind the document events.
-                $DOCUMENT.on( 'click.P' + STATE.id + ' focusin.P' + STATE.id, function( event ) {
+                $document.on( 'click.P' + STATE.id + ' focusin.P' + STATE.id, function( event ) {
 
                     // If the target of the event is not the element, close the picker picker.
                     // * Don’t worry about clicks or focusins on the holder because those don’t bubble up.
@@ -319,7 +323,7 @@ var CLASSES_PREFIX = 'picker__',
 
                         // Trigger the key movement action.
                         if ( keycodeToMove ) {
-                            triggerFunction( P.component.key.go, P, [ keycodeToMove ] )
+                            PickerConstructor._.trigger( P.component.key.go, P, [ keycodeToMove ] )
                         }
 
                         // Or on “enter”, select the highlighted date and close.
@@ -371,7 +375,7 @@ var CLASSES_PREFIX = 'picker__',
                 P.$holder.removeClass( CLASSES.opened + ' ' + CLASSES.focused )
 
                 // Bind the document events.
-                $DOCUMENT.off( '.P' + STATE.id )
+                $document.off( '.P' + STATE.id )
 
                 // Trigger the queued “close” events.
                 return P.trigger( 'close' )
@@ -392,7 +396,7 @@ var CLASSES_PREFIX = 'picker__',
             set: function( thing, value, options ) {
 
                 var thingItem, thingValue,
-                    thingIsObject = isObject( thing ),
+                    thingIsObject = PickerConstructor._.isObject( thing ),
                     thingObject = thingIsObject ? thing : {}
 
                 if ( thing ) {
@@ -416,7 +420,7 @@ var CLASSES_PREFIX = 'picker__',
                         // Then, check to update the element value and broadcast a change.
                         if ( thingItem == 'select' || thingItem == 'clear' ) {
                             $ELEMENT.val( thingItem == 'clear' ? '' :
-                                triggerFunction( P.component.formats.toString, P.component, [ SETTINGS.format, P.component.get( thingItem ) ] )
+                                PickerConstructor._.trigger( P.component.formats.toString, P.component, [ SETTINGS.format, P.component.get( thingItem ) ] )
                             ).trigger( 'change' )
                         }
                     }
@@ -451,7 +455,7 @@ var CLASSES_PREFIX = 'picker__',
                 // Check if a component item exists, return that.
                 if ( P.component.item[ thing ] ) {
                     if ( typeof format == 'string' ) {
-                        return triggerFunction( P.component.formats.toString, P.component, [ format, P.component.get( thing ) ] )
+                        return PickerConstructor._.trigger( P.component.formats.toString, P.component, [ format, P.component.get( thing ) ] )
                     }
                     return P.component.get( thing )
                 }
@@ -465,7 +469,7 @@ var CLASSES_PREFIX = 'picker__',
             on: function( thing, method ) {
 
                 var thingName, thingMethod,
-                    thingIsObject = isObject( thing ),
+                    thingIsObject = PickerConstructor._.isObject( thing ),
                     thingObject = thingIsObject ? thing : {}
 
                 if ( thing ) {
@@ -500,7 +504,7 @@ var CLASSES_PREFIX = 'picker__',
                 var methodList = STATE.methods[ name ]
                 if ( methodList ) {
                     methodList.map( function( method ) {
-                        triggerFunction( method, P, [ data ] )
+                        PickerConstructor._.trigger( method, P, [ data ] )
                     })
                 }
                 return P
@@ -513,28 +517,35 @@ var CLASSES_PREFIX = 'picker__',
      */
     function createWrappedComponent() {
 
-        // Create a picker wrapper node
-        return createNode( 'div',
+        // Create a picker wrapper holder
+        return PickerConstructor._.node( 'div',
 
-            // Create a picker frame
-            createNode( 'div',
+            // Create a picker wrapper node
+            PickerConstructor._.node( 'div',
 
-                // Create a picker box node
-                createNode( 'div',
+                // Create a picker frame
+                PickerConstructor._.node( 'div',
 
-                    // Create the components nodes.
-                    P.component.nodes( STATE.open ),
+                    // Create a picker box node
+                    PickerConstructor._.node( 'div',
 
-                    // The picker box class
-                    CLASSES.box
+                        // Create the components nodes.
+                        P.component.nodes( STATE.open ),
+
+                        // The picker box class
+                        CLASSES.box
+                    ),
+
+                    // Picker wrap class
+                    CLASSES.wrap
                 ),
 
-                // Picker wrap class
-                CLASSES.wrap
+                // Picker frame class
+                CLASSES.frame
             ),
 
-            // Picker frame class
-            CLASSES.frame
+            // Picker holder class
+            CLASSES.holder
         ) //endreturn
     } //createWrappedComponent
 
@@ -548,14 +559,161 @@ var CLASSES_PREFIX = 'picker__',
 
     // Return a new picker instance.
     return new PickerInstance()
-} //Picker
+} //PickerConstructor
+
+
+
+/**
+ * The default classes and prefix to use for the HTML classes.
+ */
+PickerConstructor.klasses = function( prefix ) {
+    prefix = prefix || 'picker'
+    return {
+
+        picker: prefix,
+        opened: prefix + '--opened',
+        focused: prefix + '--focused',
+
+        input: prefix + '__input',
+        active: prefix + '__input--active',
+
+        holder: prefix + '__holder',
+
+        frame: prefix + '__frame',
+        wrap: prefix + '__wrap',
+
+        box: prefix + '__box'
+    }
+} //PickerConstructor.klasses
+
+
+
+/**
+ * PickerConstructor helper methods.
+ */
+PickerConstructor._ = {
+
+    /**
+     * Create a group of nodes. Expects:
+     * `
+        {
+            min:    {Integer},
+            max:    {Integer},
+            i:      {Integer},
+            node:   {String},
+            item:   {Function}
+        }
+     * `
+     */
+    group: function( groupObject ) {
+
+        var
+            // Scope for the looped object
+            loopObjectScope,
+
+            // Create the nodes list
+            nodesList = '',
+
+            // The counter starts from the `min`
+            counter = PickerConstructor._.trigger( groupObject.min, groupObject )
+
+
+        // Loop from the `min` to `max`, incrementing by `i`
+        for ( ; counter <= PickerConstructor._.trigger( groupObject.max, groupObject, [ counter ] ); counter += groupObject.i ) {
+
+            // Trigger the `item` function within scope of the object
+            loopObjectScope = PickerConstructor._.trigger( groupObject.item, groupObject, [ counter ] )
+
+            // Splice the subgroup and create nodes out of the sub nodes
+            nodesList += PickerConstructor._.node(
+                groupObject.node,
+                loopObjectScope[ 0 ],   // the node
+                loopObjectScope[ 1 ],   // the classes
+                loopObjectScope[ 2 ]    // the attributes
+            )
+        }
+
+        // Return the list of nodes
+        return nodesList
+    }, //group
+
+
+    /**
+     * Create a dom node string
+     */
+    node: function( wrapper, item, klass, attribute ) {
+
+        // If the item is false-y, just return an empty string
+        if ( !item ) return ''
+
+        // If the item is an array, do a join
+        item = Array.isArray( item ) ? item.join( '' ) : item
+
+        // Check for the class
+        klass = klass ? ' class="' + klass + '"' : ''
+
+        // Check for any attributes
+        attribute = attribute ? ' ' + attribute : ''
+
+        // Return the wrapped item
+        return '<' + wrapper + klass + attribute + '>' + item + '</' + wrapper + '>'
+    }, //node
+
+
+    /**
+     * Lead numbers below 10 with a zero.
+     */
+    lead: function( number ) {
+        return ( number < 10 ? '0': '' ) + number
+    },
+
+
+    /**
+     * Trigger a function otherwise return the value.
+     */
+    trigger: function( callback, scope, args ) {
+        return typeof callback == 'function' ? callback.apply( scope, args || [] ) : callback
+    },
+
+
+    /**
+     * If the second character is a digit, length is 2 otherwise 1.
+     */
+    digits: function( string ) {
+        return ( /\d/ ).test( string[ 1 ] ) ? 2 : 1
+    },
+
+
+    /**
+     * Tell if something is an object.
+     */
+    isObject: function( value ) {
+        return {}.toString.call( value ).indexOf( 'Object' ) > -1
+    },
+
+
+    /**
+     * Tell if something is a date object.
+     */
+    isDate: function( value ) {
+        return {}.toString.call( value ).indexOf( 'Date' ) > -1
+    },
+
+
+    /**
+     * Tell if something is an integer.
+     */
+    isInteger: function( value ) {
+        return {}.toString.call( value ).indexOf( 'Number' ) > -1 && value % 1 === 0
+    }
+} //PickerConstructor._
 
 
 
 /**
  * Extend the picker with a component and defaults.
  */
-Picker.extend = function( name, Component, defaults ) {
+PickerConstructor.extend = function( name, Component ) {
 
     // Extend jQuery.
     $.fn[ name ] = function( options, action ) {
@@ -570,7 +728,7 @@ Picker.extend = function( name, Component, defaults ) {
 
         // If the component data exists and `options` is a string, carry out the action.
         if ( componentData && typeof options == 'string' ) {
-            triggerFunction( componentData[ options ], componentData, [ action ] )
+            PickerConstructor._.trigger( componentData[ options ], componentData, [ action ] )
             return this
         }
 
@@ -580,142 +738,23 @@ Picker.extend = function( name, Component, defaults ) {
         return this.each( function() {
             var $this = $( this )
             if ( !$this.data( name ) ) {
-                new Picker( $this, $.extend( true, {}, $.fn[ name ].defaults, options ), Component, name )
+                new PickerConstructor( this, name, Component, options )
             }
         })
     }
 
     // Set the defaults.
-    $.fn[ name ].defaults = defaults
-} //Picker.extend
+    $.fn[ name ].defaults = Component.defaults
+} //PickerConstructor.extend
 
 
 
+// Return the picker constructor.
+return PickerConstructor
 
 
+// Close the global scope.
+})( $( document ) );
 
-
-
-
-
-
-
-/* ==========================================================================
-   Helper funtions
-   ========================================================================== */
-
-/**
- * Create a group of nodes. Expects:
- * `
-    {
-        min:    {Integer},
-        max:    {Integer},
-        i:      {Integer},
-        node:   {String},
-        item:   {Function}
-    }
- * `
- */
-function createGroupOfNodes( groupObject ) {
-
-    var
-        // Scope for the looped object
-        loopObjectScope,
-
-        // Create the nodes list
-        nodesList = '',
-
-        // The counter starts from the `min`
-        counter = triggerFunction( groupObject.min, groupObject )
-
-
-    // Loop from the `min` to `max`, incrementing by `i`
-    for ( ; counter <= triggerFunction( groupObject.max, groupObject, [ counter ] ); counter += groupObject.i ) {
-
-        // Trigger the `item` function within scope of the object
-        loopObjectScope = triggerFunction( groupObject.item, groupObject, [ counter ] )
-
-        // Splice the subgroup and create nodes out of the sub nodes
-        nodesList += createNode(
-            groupObject.node,
-            loopObjectScope[ 0 ],   // the node
-            loopObjectScope[ 1 ],   // the classes
-            loopObjectScope[ 2 ]    // the attributes
-        )
-    }
-
-    // Return the list of nodes
-    return nodesList
-} //createGroupOfNodes
-
-
-/**
- * Create a dom node string
- */
-function createNode( wrapper, item, klass, attribute ) {
-
-    // If the item is false-y, just return an empty string
-    if ( !item ) return ''
-
-    // If the item is an array, do a join
-    item = Array.isArray( item ) ? item.join( '' ) : item
-
-    // Check for the class
-    klass = klass ? ' class="' + klass + '"' : ''
-
-    // Check for any attributes
-    attribute = attribute ? ' ' + attribute : ''
-
-    // Return the wrapped item
-    return '<' + wrapper + klass + attribute + '>' + item + '</' + wrapper + '>'
-} //createNode
-
-
-/**
- * Lead numbers below 10 with a zero.
- */
-function leadZero( number ) {
-    return ( number < 10 ? '0': '' ) + number
-}
-
-
-/**
- * Trigger a function otherwise return the value.
- */
-function triggerFunction( callback, scope, args ) {
-    return typeof callback == 'function' ? callback.apply( scope, args || [] ) : callback
-}
-
-
-/**
- * If the second character is a digit, length is 2 otherwise 1.
- */
-function getDigitsLength( string ) {
-    return ( /\d/ ).test( string[ 1 ] ) ? 2 : 1
-}
-
-
-/**
- * Tell if something is an object.
- */
-function isObject( value ) {
-    return {}.toString.call( value ).indexOf( 'Object' ) > -1
-}
-
-
-/**
- * Tell if something is a date object.
- */
-function isDate( value ) {
-    return {}.toString.call( value ).indexOf( 'Date' ) > -1
-}
-
-
-/**
- * Tell if something is an integer.
- */
-function isInteger( value ) {
-    return {}.toString.call( value ).indexOf( 'Number' ) > -1 && value % 1 === 0
-}
 
 

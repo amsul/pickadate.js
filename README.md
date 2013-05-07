@@ -36,9 +36,9 @@ There are currently two pickers: **date** and **time**.
 
 File                    | Contents                 | Size (min & gzip)
 ----------------------- | ------------------------ | ----------------------
-`picker.js`             | Base __*__               | 1.16kb
-`picker.date.js`        | Date picker              | 1.91kb
-`picker.time.js`        | Time picker              | 1.37kb
+`picker.js`             | __Base *__               | 1.21kb
+`picker.date.js`        | Date picker              | 1.85kb
+`picker.time.js`        | Time picker              | 1.31kb
 
 __*__ The base script is **required** for any of the pickers to function.
 
@@ -51,13 +51,17 @@ All themes are [generated using Sass](#sass-styling) and compiled into the `them
 
 File                    | Contents                 | Size (min & gzip)
 ----------------------- | ------------------------ | ----------------------
-`default.css`           | Base __*__               | 0.43kb
-`classic.css`           | Base __*__               | 0.43kb
-`inline.css`            | Base __*__               | 0.43kb
-`picker.date.css`       | Date picker              | 0.70kb
-`picker.time.css`       | Time picker              | 0.34kb
+`default.css`           | __Base default *__       | 0.45kb
+`default.date.css`      | Default date picker      | 0.68kb
+`default.time.css`      | Default time picker      | 0.36kb
+`classic.css`           | __Base classic *__       | 0.24kb
+`classic.date.css`      | Classic date picker      | 0.68kb
+`classic.time.css`      | Classic time picker      | 0.35kb
+`inline.css`            | __Base inline *__        | 0.16kb
+`inline.date.css`       | Inline date picker       | 0.68kb
+`inline.time.css`       | Inline time picker       | 0.33kb
 
-__*__ Only one base stylesheet is **required**. Check out the [demos](http://amsul.github.io/pickadate.js/themes.htm) to choose one.
+__*__ One and only one base stylesheet is **required**. Check out the [demos](http://amsul.github.io/pickadate.js/themes.htm) to choose one – and then include the respective pickers as well.
 
 ### Translations
 
@@ -116,7 +120,7 @@ Read the Gruntfile to see the build tasks and relative directories of the source
 <a name="sass-styling"></a>
 ## Styling with Sass
 
-The picker themes are built using [Sass](http://sass-lang.com/) with Grunt. To customize the CSS output, read the `_variables.scss` file in the `_source/lib/themes` folder. You can specify:
+The picker themes are built using [Sass](http://sass-lang.com/) with Grunt. To customize the CSS output, read the `_variables.scss` file in the `_raw/lib/themes` folder. You can specify:
 
 - colors for the theme,
 - sizes for the picker,
@@ -136,4 +140,4 @@ After making any changes, run `grunt sass:themes` to compile it into CSS.
 
 © 2013 [Amsul](http://twitter.com/amsul_)
 
-Licensed under [MIT](http://amsul.ca/MIT).
+Licensed under [MIT](http://amsul.ca/MIT)

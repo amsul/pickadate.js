@@ -239,7 +239,7 @@ picker.stop()</code></pre>
 
         <pre class="pre--demo"><code data-language="javascript">picker.clear()</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><button id=button__api-clear class="fieldset__button button button--small">Clear</button><input id="demo__api-clear" class="fieldset__input " type=text value="3 May, 2013" placeholder="Try me&hellip;"></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><button id=button__api-clear class="fieldset__button button button--small">Clear</button><input id="demo__api-clear" class="fieldset__input " type=text value="7 May, 2013" placeholder="Try me&hellip;"></fieldset>
 
         <p>This is a shorthand that uses <a href="#method-set">the <code class="function">set</code> method</a> behind the scenes.</p>
 
@@ -281,7 +281,7 @@ picker.stop()</code></pre>
 
         <p>Each “date” or “time” within the picker has an item object accompanying it behind the scenes.</p>
 
-        <p>Here’s a <b>date picker item object</b> for <u>3 May, 2013</u>:</p>
+        <p>Here’s a <b>date picker item object</b> for <u>7 May, 2013</u>:</p>
         <pre><code data-language="javascript">{
     // The full year.
     year: 2013,
@@ -302,16 +302,16 @@ picker.stop()</code></pre>
     pick: 1366430400000
 }</code></pre>
 
-        <p>Here’s a <b>time picker item object</b> for <u>3:36 PM</u>:</p>
+        <p>Here’s a <b>time picker item object</b> for <u>3:14 AM</u>:</p>
         <pre><code data-language="javascript">{
     // Hour of the day from 0 to 23.
-    hour: 15,
+    hour: 3,
 
     // The minutes of the hour from 0 to 59 (based on the interval).
-    mins: 60,
+    mins: 30,
 
     // The “pick” value used for comparisons.
-    pick: 960
+    pick: 210
 }</code></pre>
 
     </div> <!-- .section__block -->
@@ -329,7 +329,7 @@ picker.stop()</code></pre>
 
         <pre class="pre--demo"><code data-language="javascript">picker.get() // Short for `picker.get('value')`.</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><button id=button__api-get--value class="fieldset__button button button--small">Log the value</button><input id="demo__api-get--value" class="fieldset__input " type=text value="3 May, 2013" placeholder="Open your console and try me&hellip;"></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><button id=button__api-get--value class="fieldset__button button button--small">Log the value</button><input id="demo__api-get--value" class="fieldset__input " type=text value="7 May, 2013" placeholder="Open your console and try me&hellip;"></fieldset>
 
     </div> <!-- .section__block -->
 
@@ -496,7 +496,7 @@ picker.stop()</code></pre>
 
         <pre class="pre--demo"><code data-language="javascript">picker.set('clear')</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><button id=button__api-set-clear class="fieldset__button button button--small">Clear</button><input id="demo__api-set-clear" class="fieldset__input " type=text value="3 May, 2013" placeholder="Try me&hellip;"></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><button id=button__api-set-clear class="fieldset__button button button--small">Clear</button><input id="demo__api-set-clear" class="fieldset__input " type=text value="7 May, 2013" placeholder="Try me&hellip;"></fieldset>
 
         <p>This is the full form of <a href="#method-clear">the <code class="function">clear</code> method</a>.</p>
 

@@ -1,0 +1,48 @@
+
+/* ==========================================================================
+   $DEFAULT-TIME-PICKER
+   ========================================================================== */
+
+@import "variables";
+
+
+/**
+ * The frame the bounds the time picker.
+ */
+.picker--time .picker__frame {
+
+    // Adjust the min & max widths.
+    min-width: $time-min-width;
+    max-width: $time-max-width;
+
+    // For `medium` screens, reduce the font-size a bit to get more in view.
+    @include min-screen( medium ) {
+        font-size: .875em;
+    }
+
+    // For `large screens, reduce the font-size further.
+    @include min-screen( large ) {
+        font-size: .6875em;
+    }
+}
+
+
+/**
+ * The picker box.
+ */
+.picker--time .picker__box {
+
+    // Add a slight background color.
+    background: $bg-grey-light;
+
+    // Remove the side paddings.
+    padding: 0;
+
+    // For `medium` screens, move it away from the bottom edge of the screen.
+    @include min-screen( medium ) {
+        margin-bottom: 5em;
+    }
+}
+
+
+

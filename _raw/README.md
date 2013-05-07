@@ -7,10 +7,14 @@
     fileSize_js_date = meta.fileSize( grunt.file.read( dirs.min.pickers + '/picker.date.js') )
     fileSize_js_time = meta.fileSize( grunt.file.read( dirs.min.pickers + '/picker.time.js') )
     fileSize_css_default = meta.fileSize( grunt.file.read( dirs.min.themes + '/default.css') )
-    fileSize_css_classic = meta.fileSize( grunt.file.read( dirs.min.themes + '/default.css') )
-    fileSize_css_inline = meta.fileSize( grunt.file.read( dirs.min.themes + '/default.css') )
-    fileSize_css_date = meta.fileSize( grunt.file.read( dirs.min.themes + '/picker.date.css') )
-    fileSize_css_time = meta.fileSize( grunt.file.read( dirs.min.themes + '/picker.time.css') )
+    fileSize_css_classic = meta.fileSize( grunt.file.read( dirs.min.themes + '/classic.css') )
+    fileSize_css_inline = meta.fileSize( grunt.file.read( dirs.min.themes + '/inline.css') )
+    fileSize_css_default_date = meta.fileSize( grunt.file.read( dirs.min.themes + '/default.date.css') )
+    fileSize_css_default_time = meta.fileSize( grunt.file.read( dirs.min.themes + '/default.time.css') )
+    fileSize_css_classic_date = meta.fileSize( grunt.file.read( dirs.min.themes + '/classic.date.css') )
+    fileSize_css_classic_time = meta.fileSize( grunt.file.read( dirs.min.themes + '/classic.time.css') )
+    fileSize_css_inline_date = meta.fileSize( grunt.file.read( dirs.min.themes + '/inline.date.css') )
+    fileSize_css_inline_time = meta.fileSize( grunt.file.read( dirs.min.themes + '/inline.time.css') )
 %}
 
 #### To get started, check out the:
@@ -45,7 +49,7 @@ There are currently two pickers: **date** and **time**.
 
 File                    | Contents                 | Size (min & gzip)
 ----------------------- | ------------------------ | ----------------------
-`picker.js`             | Base __*__               | {%= (fileSize_js_core.gzip/1024).toFixed(2) %}kb
+`picker.js`             | __Base *__               | {%= (fileSize_js_core.gzip/1024).toFixed(2) %}kb
 `picker.date.js`        | Date picker              | {%= (fileSize_js_date.gzip/1024).toFixed(2) %}kb
 `picker.time.js`        | Time picker              | {%= (fileSize_js_time.gzip/1024).toFixed(2) %}kb
 
@@ -60,13 +64,17 @@ All themes are [generated using Sass](#sass-styling) and compiled into the `them
 
 File                    | Contents                 | Size (min & gzip)
 ----------------------- | ------------------------ | ----------------------
-`default.css`           | Base __*__               | {%= (fileSize_css_default.gzip/1024).toFixed(2) %}kb
-`classic.css`           | Base __*__               | {%= (fileSize_css_classic.gzip/1024).toFixed(2) %}kb
-`inline.css`            | Base __*__               | {%= (fileSize_css_inline.gzip/1024).toFixed(2) %}kb
-`picker.date.css`       | Date picker              | {%= (fileSize_css_date.gzip/1024).toFixed(2) %}kb
-`picker.time.css`       | Time picker              | {%= (fileSize_css_time.gzip/1024).toFixed(2) %}kb
+`default.css`           | __Base default *__       | {%= (fileSize_css_default.gzip/1024).toFixed(2) %}kb
+`default.date.css`      | Default date picker      | {%= (fileSize_css_default_date.gzip/1024).toFixed(2) %}kb
+`default.time.css`      | Default time picker      | {%= (fileSize_css_default_time.gzip/1024).toFixed(2) %}kb
+`classic.css`           | __Base classic *__       | {%= (fileSize_css_classic.gzip/1024).toFixed(2) %}kb
+`classic.date.css`      | Classic date picker      | {%= (fileSize_css_classic_date.gzip/1024).toFixed(2) %}kb
+`classic.time.css`      | Classic time picker      | {%= (fileSize_css_classic_time.gzip/1024).toFixed(2) %}kb
+`inline.css`            | __Base inline *__        | {%= (fileSize_css_inline.gzip/1024).toFixed(2) %}kb
+`inline.date.css`       | Inline date picker       | {%= (fileSize_css_inline_date.gzip/1024).toFixed(2) %}kb
+`inline.time.css`       | Inline time picker       | {%= (fileSize_css_inline_time.gzip/1024).toFixed(2) %}kb
 
-__*__ Only one base stylesheet is **required**. Check out the [demos]({%= pkg.homepage %}/themes.htm) to choose one.
+__*__ One and only one base stylesheet is **required**. Check out the [demos]({%= pkg.homepage %}/themes.htm) to choose one – and then include the respective pickers as well.
 
 ### Translations
 
@@ -125,7 +133,7 @@ Read the Gruntfile to see the build tasks and relative directories of the source
 <a name="sass-styling"></a>
 ## Styling with Sass
 
-The picker themes are built using [Sass](http://sass-lang.com/) with Grunt. To customize the CSS output, read the `_variables.scss` file in the `_source/lib/themes` folder. You can specify:
+The picker themes are built using [Sass](http://sass-lang.com/) with Grunt. To customize the CSS output, read the `_variables.scss` file in the `{%= dirs.src.themes %}` folder. You can specify:
 
 - colors for the theme,
 - sizes for the picker,
@@ -145,4 +153,4 @@ After making any changes, run `grunt sass:themes` to compile it into CSS.
 
 © {%= grunt.template.date('yyyy') %} [Amsul](http://twitter.com/amsul_)
 
-Licensed under [{%= pkg.licenses[0].type %}]({%= pkg.licenses[0].url %}).
+Licensed under [{%= pkg.licenses[0].type %}]({%= pkg.licenses[0].url %})

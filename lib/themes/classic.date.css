@@ -1,38 +1,38 @@
 /* ==========================================================================
-   $DATE-PICKER
+   $BASE-DATE-PICKER
    ========================================================================== */
 /* ==========================================================================
    $VARIABLES
    ========================================================================== */
 /**
- * Colors
- */
-/* Base */
-/* "Clear" indicator */
-/* Borders */
-/* Month & year labels */
-/* "Today" tag indicators */
-/* Disabled things.. such as days, month nav, etc */
-/* Clock */
-/* Active input border color */
-/**
- * Typography
+ * Base colors
  */
 /**
- * Picker measurements
+ * Backgrounds
  */
-/* Make sure nothing is above the overlay */
-/* The picker box styles */
-/* Date picker min & max widths */
-/* Time picker min & max widths */
 /**
- * Animation speeds
+ * Borders
+ */
+/**
+ * Buttons
+ */
+/**
+ * Picker base
+ */
+/**
+ * Date picker options
+ */
+/**
+ * Time picker options
+ */
+/**
+ * Theme configurations
  */
 /* ==========================================================================
    $MIXINS
    ========================================================================== */
 /**
- * Picker item states
+ * Common picker item states
  */
 /**
  * Opacity
@@ -44,33 +44,14 @@
  * Vendor prefixes
  */
 /**
- * The calendar table of dates
+ * The picker box.
  */
-.picker__table {
-  text-align: center;
-  border-collapse: collapse;
-  border-spacing: 0;
-  table-layout: fixed;
-  font-size: inherit;
-  width: 100%;
-  margin-top: .75em;
-  margin-bottom: .5em;
-  /* Increase the spacing a tad */
-}
-@media (min-height: 26.5em) {
-  .picker__table {
-    margin-bottom: .75em;
-  }
-}
-
-/* Remove browser stylings on a table cell */
-.picker__table td {
-  margin: 0;
-  padding: 0;
+.picker__box {
+  padding: 0 1em;
 }
 
 /**
- * The header containing the month and year tags/selectors
+ * The header containing the month and year stuff.
  */
 .picker__header {
   text-align: center;
@@ -79,7 +60,51 @@
 }
 
 /**
- * The month navigation buttons
+ * The month and year labels.
+ */
+.picker__month,
+.picker__year {
+  font-weight: 500;
+  display: inline-block;
+  margin-left: .25em;
+  margin-right: .25em;
+}
+
+.picker__year {
+  color: #999999;
+  font-size: .8em;
+  font-style: italic;
+}
+
+/**
+ * The month and year selectors.
+ */
+.picker__select--month,
+.picker__select--year {
+  font-size: .8em;
+  border: 1px solid #b7b7b7;
+  height: 2.5em;
+  padding: 0.66em 0.25em;
+  margin-left: .25em;
+  margin-right: .25em;
+  margin-top: -.5em;
+}
+
+.picker__select--month {
+  width: 35%;
+}
+
+.picker__select--year {
+  width: 22.5%;
+}
+
+.picker__select--month:focus,
+.picker__select--year:focus {
+  border-color: #0089ec;
+}
+
+/**
+ * The month navigation buttons.
  */
 .picker__nav--prev,
 .picker__nav--next {
@@ -117,46 +142,45 @@
   border-left: 0.75em solid black;
 }
 
+.picker__nav--prev:hover,
+.picker__nav--next:hover {
+  cursor: pointer;
+  color: black;
+  background: #b1dcfb;
+}
+
+.picker__nav--disabled,
+.picker__nav--disabled:hover,
+.picker__nav--disabled:before,
+.picker__nav--disabled:before:hover {
+  cursor: default;
+  background: none;
+  border-right-color: whitesmoke;
+  border-left-color: whitesmoke;
+}
+
 /**
- * The month & year labels
+ * The calendar table of dates
  */
-.picker__month,
-.picker__year {
-  font-weight: 500;
-  display: inline-block;
+.picker__table {
+  text-align: center;
+  border-collapse: collapse;
+  border-spacing: 0;
+  table-layout: fixed;
+  font-size: inherit;
+  width: 100%;
+  margin-top: .75em;
+  margin-bottom: .5em;
+}
+@media (min-height: 26.5em) {
+  .picker__table {
+    margin-bottom: .75em;
+  }
 }
 
-.picker__year {
-  color: #999999;
-  font-size: .8em;
-  font-style: italic;
-  margin-left: .5em;
-}
-
-/**
- * The month & year selectors
- */
-.picker__select--month,
-.picker__select--year {
-  font-size: .8em;
-  border: 1px solid #cccccc;
-  height: 2.5em;
-  padding: 0.66em 0.25em;
-  margin-top: -.5em;
-}
-
-.picker__select--month {
-  width: 35%;
-}
-
-.picker__select--year {
-  width: 22.5%;
-  margin-left: .5em;
-}
-
-.picker__select--month:focus,
-.picker__select--year:focus {
-  border-color: #0089ec;
+.picker__table td {
+  margin: 0;
+  padding: 0;
 }
 
 /**
@@ -182,15 +206,14 @@
 .picker__day {
   padding: 0.3125em 0;
   font-weight: 200;
-  border: 1px solid white;
-  margin-bottom: 1px;
+  border: 1px solid transparent;
 }
 
-/* Today */
 .picker__day--today {
   color: #0089ec;
   position: relative;
 }
+
 .picker__day--today:before {
   content: " ";
   position: absolute;
@@ -202,24 +225,19 @@
   border-left: 0.5em solid transparent;
 }
 
-/* Selected day */
 .picker__day--selected,
 .picker__day--selected:hover {
   border-color: #0089ec;
-  z-index: 10;
 }
 
-/* Highlighted day */
 .picker__day--highlighted {
   background: #b1dcfb;
 }
 
-/* Disabled day */
 .picker__day--disabled:before {
   border-top-color: #aaaaaa;
 }
 
-/* Out of focus days */
 .picker__day--outfocus {
   color: #dddddd;
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=66)";
@@ -228,24 +246,19 @@
   opacity: 0.66;
 }
 
-/* Hovered date picker items */
 .picker__day--infocus:hover,
-.picker__day--outfocus:hover,
-.picker__nav--prev:hover,
-.picker__nav--next:hover {
+.picker__day--outfocus:hover {
   cursor: pointer;
   color: black;
   background: #b1dcfb;
 }
 
-/* Highlighted and hovered/focused dates */
 .picker__day--highlighted:hover,
-.picker__holder--focused .picker__day--highlighted {
+.picker--focused .picker__day--highlighted {
   background: #0089ec;
   color: white;
 }
 
-/* Disabled dates */
 .picker__day--disabled,
 .picker__day--disabled:hover {
   background: whitesmoke;
@@ -254,27 +267,8 @@
   cursor: default;
 }
 
-/* Disabled month nav */
-.picker__nav--disabled,
-.picker__nav--disabled:hover,
-.picker__nav--disabled:before,
-.picker__nav--disabled:before:hover {
-  cursor: default;
-  background: none;
-  border-right-color: whitesmoke;
-}
-.picker__nav--disabled.picker__nav--next:before, .picker__nav--disabled.picker__nav--next:before:hover,
-.picker__nav--disabled:hover.picker__nav--next:before,
-.picker__nav--disabled:hover.picker__nav--next:before:hover,
-.picker__nav--disabled:before.picker__nav--next:before,
-.picker__nav--disabled:before.picker__nav--next:before:hover,
-.picker__nav--disabled:before:hover.picker__nav--next:before,
-.picker__nav--disabled:before:hover.picker__nav--next:before:hover {
-  border-left-color: whitesmoke;
-}
-
 /**
- * The footer containing the "today" and "clear" buttons
+ * The footer containing the "today" and "clear" buttons.
  */
 .picker__footer {
   text-align: center;
@@ -291,12 +285,7 @@
   display: inline-block;
   vertical-align: bottom;
 }
-.picker__button--today:before,
-.picker__button--clear:before {
-  position: relative;
-  display: inline-block;
-  height: 0;
-}
+
 .picker__button--today:hover,
 .picker__button--clear:hover {
   cursor: pointer;
@@ -304,11 +293,19 @@
   background: #b1dcfb;
   border-bottom-color: #b1dcfb;
 }
+
 .picker__button--today:focus,
 .picker__button--clear:focus {
   background: #b1dcfb;
   border-color: #0089ec;
   outline: none;
+}
+
+.picker__button--today:before,
+.picker__button--clear:before {
+  position: relative;
+  display: inline-block;
+  height: 0;
 }
 
 .picker__button--today:before {
@@ -328,3 +325,49 @@
   vertical-align: top;
   font-size: 1.1em;
 }
+
+/* ==========================================================================
+   $CLASSIC-DATE-PICKER
+   ========================================================================== */
+/* ==========================================================================
+   $VARIABLES
+   ========================================================================== */
+/**
+ * Base colors
+ */
+/**
+ * Backgrounds
+ */
+/**
+ * Borders
+ */
+/**
+ * Buttons
+ */
+/**
+ * Picker base
+ */
+/**
+ * Date picker options
+ */
+/**
+ * Time picker options
+ */
+/**
+ * Theme configurations
+ */
+/* ==========================================================================
+   $MIXINS
+   ========================================================================== */
+/**
+ * Common picker item states
+ */
+/**
+ * Opacity
+ */
+/**
+ * Media queries
+ */
+/**
+ * Vendor prefixes
+ */

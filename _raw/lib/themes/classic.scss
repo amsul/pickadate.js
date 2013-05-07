@@ -1,1 +1,81 @@
-/*classic*/
+
+/* ==========================================================================
+   $PICKER-CLASSIC
+   ========================================================================== */
+
+@import "variables";
+
+
+/**
+ * The input element shouldn’t be covered by the box-shadow
+ * or the content of the picker while it’s opening.
+ */
+.picker__input {
+    z-index: $picker-z-index + 1;
+    position: relative;
+}
+
+
+/**
+ * Note: the root picker element should __NOT__ be styled
+ * more than what’s here. Style the `.picker__holder` instead.
+ */
+.picker {
+
+    // Make it full-width so that it doesn’t collapse.
+    width: 100%;
+}
+
+
+/**
+ * The holder is the base of the picker.
+ */
+.picker__holder {
+
+    // The base stylings.
+    position: absolute;
+    background: $bg-white;
+
+    // Add a light border - except at the top edge.
+    border: 1px solid lighten( $border-grey, 20% );
+    border-top: 0;
+
+    // Let’s not go 100% + 2px.
+    @include prefix( box-sizing, border-box );
+
+    // Hide everything to begin with.
+    max-height: 0;
+    @include opacity( 0 );
+
+    // Move it up a notch.
+    top: -1em;
+
+    // Round the bottom corners.
+    @include prefix( border-radius, 0 0 $picker-border-radius $picker-border-radius );
+
+    // Everything should be smoothly animated.
+    @include prefix( transition, all $speed-animate-in ease-out );
+}
+
+
+/**
+ * When the picker opens...
+ */
+.picker--opened {
+
+    .picker__holder {
+
+        // Reveal the content.
+        max-height: $classic-max-height;
+        @include opacity( 1 );
+
+        // Move it into positin.
+        top: 0;
+
+        // Add a light shadow.
+        @include prefix( box-shadow, $classic-box-shadow );
+    }
+}
+
+
+

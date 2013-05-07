@@ -1,42 +1,38 @@
-/**
- * Default mobile-first, responsive styling for pickadate.js
- * Demo: http://amsul.github.com/pickadate.js/themes.htm#default
- */
 /* ==========================================================================
-   $PICKER-BASE
+   $BASE-PICKER
    ========================================================================== */
 /* ==========================================================================
    $VARIABLES
    ========================================================================== */
 /**
- * Colors
- */
-/* Base */
-/* "Clear" indicator */
-/* Borders */
-/* Month & year labels */
-/* "Today" tag indicators */
-/* Disabled things.. such as days, month nav, etc */
-/* Clock */
-/* Active input border color */
-/**
- * Typography
+ * Base colors
  */
 /**
- * Picker measurements
+ * Backgrounds
  */
-/* Make sure nothing is above the overlay */
-/* The picker box styles */
-/* Date picker min & max widths */
-/* Time picker min & max widths */
 /**
- * Animation speeds
+ * Borders
+ */
+/**
+ * Buttons
+ */
+/**
+ * Picker base
+ */
+/**
+ * Date picker options
+ */
+/**
+ * Time picker options
+ */
+/**
+ * Theme configurations
  */
 /* ==========================================================================
    $MIXINS
    ========================================================================== */
 /**
- * Picker item states
+ * Common picker item states
  */
 /**
  * Opacity
@@ -48,66 +44,102 @@
  * Vendor prefixes
  */
 /**
- * When the picker is opened, add an "active" state to the input
+ * Note: the root picker element should __NOT__ be styled
+ * more than what’s here. Style the `.picker__holder` instead.
  */
-/*input*/
-.picker__input--active {
-  border-color: #0089ec !important;
+.picker {
+  font-size: 16px;
+  text-align: left;
+  line-height: 1.2;
+  color: black;
+  position: absolute;
+  z-index: 10000;
 }
 
 /**
- * Make the holder and frame fullscreen
+ * When the picker is opened, the input element is “activated”.
+ */
+.picker__input.picker__input--active {
+  border-color: #0089ec;
+}
+
+/**
+ * The holder is the only “scrollable” top-level container element.
+ */
+.picker__holder {
+  width: 100%;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ==========================================================================
+   $PICKER-DEFAULT
+   ========================================================================== */
+/* ==========================================================================
+   $VARIABLES
+   ========================================================================== */
+/**
+ * Base colors
+ */
+/**
+ * Backgrounds
+ */
+/**
+ * Borders
+ */
+/**
+ * Buttons
+ */
+/**
+ * Picker base
+ */
+/**
+ * Date picker options
+ */
+/**
+ * Time picker options
+ */
+/**
+ * Theme configurations
+ */
+/* ==========================================================================
+   $MIXINS
+   ========================================================================== */
+/**
+ * Common picker item states
+ */
+/**
+ * Opacity
+ */
+/**
+ * Media queries
+ */
+/**
+ * Vendor prefixes
+ */
+/**
+ * Make the holder and frame fullscreen.
  */
 .picker__holder,
 .picker__frame {
   bottom: 0;
   left: 0;
   right: 0;
-  /* Nudge everything off-screen to begin with */
   top: 100%;
 }
 
 /**
- * The holder that overlays the entire screen
+ * The holder should overlay the entire screen.
  */
 .picker__holder {
-  /* The base font stylings */
-  font-size: 16px;
-  text-align: left;
-  line-height: 1.2;
-  color: black;
-  /* Fill the screen */
   position: fixed;
-  z-index: 10000;
-  width: 100%;
-  height: 100%;
-  /* Allow the holder to be scrolled in case the content doesn't fit */
-  overflow-y: scroll;
-  -webkit-overflow-scrolling: touch;
-  /* Fade out the background, then immediately shift the holder out of view */
   -webkit-transition: background 0.15s ease-out, top 0s 0.15s;
   -moz-transition: background 0.15s ease-out, top 0s 0.15s;
   transition: background 0.15s ease-out, top 0s 0.15s;
 }
 
-/* When the picker opens, fade in an overlay */
-.picker__holder--opened {
-  /* Move it to the top edge */
-  top: 0;
-  /* Show a translucent black background (order is important for IE) */
-  background: transparent;
-  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#1E000000,endColorstr=#1E000000)";
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#1E000000,endColorstr=#1E000000);
-  zoom: 1;
-  background: rgba(0, 0, 0, 0.32);
-  /* Animate in the background */
-  -webkit-transition: background 0.15s ease-out;
-  -moz-transition: background 0.15s ease-out;
-  transition: background 0.15s ease-out;
-}
-
 /**
- * The frame that bounds the picker
+ * The frame that bounds the box contents of the picker.
  */
 .picker__frame {
   position: absolute;
@@ -115,59 +147,31 @@
   min-width: 256px;
   max-width: 666px;
   width: 100%;
-  /* For IE9 & 10 to keep it centered */
-  /* Hide it to begin with */
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
   filter: alpha(opacity=0);
   -moz-opacity: 0;
   opacity: 0;
-  /* Animate the frame in and out of view */
   -webkit-transition: all 0.15s ease-out;
   -moz-transition: all 0.15s ease-out;
   transition: all 0.15s ease-out;
-  /* For `small` screens, prevent from filling height to the top */
-  /* For `medium` screens, move away from the bottom edge */
-  /**
-   * When the picker opens...
-   */
 }
 @media (min-height: 26.5em) {
   .picker__frame {
     overflow: visible;
     top: auto;
     bottom: -100%;
-  }
-}
-@media (min-height: 33.875em) {
-  .picker__frame {
-    margin-bottom: 5%;
-  }
-}
-.picker__holder--opened .picker__frame {
-  /* Align it to the top */
-  top: 0;
-  /* Ånd then reveal it */
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
-  filter: alpha(opacity=100);
-  -moz-opacity: 1;
-  opacity: 1;
-  /* For `small` screens, align to the bottom instead. */
-}
-@media (min-height: 26.5em) {
-  .picker__holder--opened .picker__frame {
-    top: auto;
-    bottom: 0;
+    max-height: 80%;
+    margin-bottom: 7.5%;
   }
 }
 
 /**
- * The picker wrapper
+ * The wrapper sets the stage to vertically align the box contents.
  */
 .picker__wrap {
   display: table;
   width: 100%;
   height: 100%;
-  /* For `small` screens, remove the "middle-aligned" styling */
 }
 @media (min-height: 26.5em) {
   .picker__wrap {
@@ -176,16 +180,12 @@
 }
 
 /**
- * The picker box
+ * The box contains all the picker contents.
  */
 .picker__box {
+  background: white;
   display: table-cell;
   vertical-align: middle;
-  background: white;
-  padding: 0 1em;
-  /* For `tiny` screens, increase the font size a bit */
-  /* For `small` screens... */
-  /* For `medium` screens, increase the font size and round all corners */
 }
 @media (min-height: 21.375em) {
   .picker__box {
@@ -194,19 +194,14 @@
 }
 @media (min-height: 26.5em) {
   .picker__box {
-    /* Remove the "middle-aligned" styling */
     display: block;
-    /* Increase the font size a bit more */
     font-size: 1.33em;
-    /* Add the borders except the bottom one */
     border: 1px solid #777777;
     border-top-color: #898989;
     border-bottom-width: 0;
-    /* Make 'em rounded at the top corners */
     -webkit-border-radius: 6px 6px 0 0;
     -moz-border-radius: 6px 6px 0 0;
     border-radius: 6px 6px 0 0;
-    /* And finally, add a nice shadow */
     -webkit-box-shadow: 0 12px 36px 16px rgba(0, 0, 0, 0.24);
     -moz-box-shadow: 0 12px 36px 16px rgba(0, 0, 0, 0.24);
     box-shadow: 0 12px 36px 16px rgba(0, 0, 0, 0.24);
@@ -223,52 +218,33 @@
 }
 
 /**
- * For `large` screens, transform into an inline picker.
- * /
-@include min-screen( large ) {
-
-    .picker__holder {
-        position: relative;
-        max-height: 25em;
-        background: red;
-        border: 1px solid #ccc;
-        box-sizing: border-box;
-        margin-top: 1em;
-        font-size: 11px;
-        border-radius: 5px;
-    }
-
-    .picker__frame,
-    .picker__holder--time .picker__frame {
-        position: relative;
-        bottom: auto;
-        max-height: none;
-        max-width: none;
-        margin-bottom: 0;
-        @include opacity( 1 );
-    }
-
-    .picker__box,
-    .picker__holder--time .picker__box {
-        box-shadow: none;
-        border: none;
-        margin-bottom: 0;
-        border-radius: 0;
-    }
+ * When the picker opens...
+ */
+.picker--opened .picker__holder {
+  top: 0;
+  background: transparent;
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#1E000000,endColorstr=#1E000000)";
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#1E000000,endColorstr=#1E000000);
+  zoom: 1;
+  background: rgba(0, 0, 0, 0.32);
+  -webkit-transition: background 0.15s ease-out;
+  -moz-transition: background 0.15s ease-out;
+  transition: background 0.15s ease-out;
+}
+.picker--opened .picker__frame {
+  top: 0;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+  filter: alpha(opacity=100);
+  -moz-opacity: 1;
+  opacity: 1;
+}
+@media (min-height: 26.5em) {
+  .picker--opened .picker__frame {
+    top: auto;
+    bottom: 0;
+  }
 }
 
-@include min-screen( large ) {
-
-    .picker__holder {
-        position: absolute;
-        top: auto;
-        bottom: auto;
-        max-height: 0;
-        @include opacity( 0 );
-        @include prefix( transition, all $speed-animate-in ease-out );
-    }
-    .picker__holder--opened {
-        max-height: 25em;
-        @include opacity( 1 );
-    }
-}*/
+/**
+ * For `large` screens, transform into an inline picker.
+ */

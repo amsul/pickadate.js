@@ -5,72 +5,115 @@
 
 
 /**
- * Colors
+ * Base colors
  */
-
-/* Base */
 $blue: #0089ec;
 $blue-hover: #b1dcfb;
 $black: #000;
 $white: #fff;
 
-/* "Clear" indicator */
-$red: #e20;
 
-/* Borders */
-$light-border: #ddd;
-$grey-border: #777;
-$select-border: #ccc;
-
-/* Month & year labels */
-$grey-label: #999;
-
-/* "Today" tag indicators */
-$blue-tag: #0059bc;
-$disabled-tag: #aaa;
-
-/* Disabled things.. such as days, month nav, etc */
-$disabled-things-bg: #f5f5f5;
-$disabled-things-text: #ddd;
-
-/* Clock */
-$clock-bg: #f2f2f2;
-
-/* Active input border color */
-$input-active-border: $blue;
+/**
+ * Backgrounds
+ */
+$bg-white: $white;
+$bg-grey-light: #f2f2f2;
 
 
 /**
- * Typography
+ * Borders
  */
-$base-font-size: 16px;
-$base-line-height: 1.2;
+$border-grey: #777;
+$border-grey-light: #ddd;
+$border-select: darken( $border-grey-light, 15% );
 
 
 /**
- * Picker measurements
+ * Buttons
+ */
+$clear-red: #e20;
+
+
+
+
+
+/**
+ * Picker base
  */
 
-/* Make sure nothing is above the overlay */
-$overlay-z-index: 10000;
+// Make sure nothing is above the picker.
+$picker-z-index: 10000;
 
-/* The picker box styles */
-$picker-border-radius: 6px;
-$picker-box-shadow: 0 12px 36px 16px rgba(0,0,0,.24);
+// Animation speeds.
+$speed-animate-in: .15s;
 
-/* Date picker min & max widths */
+// The box widths.
 $picker-min-width: 256px;
 $picker-max-width: 666px;
 
-/* Time picker min & max widths */
-$picker-time-min-width: $picker-min-width;
-$picker-time-max-width: 320px;
+// Focused input border color.
+$input-active-border: $blue;
+
+// Typography.
+$base-font-size: 16px;
+$base-line-height: 1.2;
+
+// Corners.
+$picker-border-radius: 6px;
+
+// Drop shadows.
+$picker-box-shadow: 0 12px 36px 16px rgba(0,0,0,.24);
+$picker-box-shadow-light: 0 6px 18px 1px rgba(0,0,0,.12);
+
+
 
 
 /**
- * Animation speeds
+ * Date picker options
  */
-$speed-animate-in: .15s;
+
+// The year and weekday labels.
+$year-weekday-label: #999;
+
+// “Today” tag indicators.
+$blue-tag: #0059bc;
+$disabled-tag: #aaa;
+
+// Disabled things.. such as days, month nav, etc.
+$disabled-things-bg: #f5f5f5;
+$disabled-things-text: #ddd;
+
+
+
+
+
+/**
+ * Time picker options
+ */
+
+// The box widths.
+$time-min-width: $picker-min-width;
+$time-max-width: 320px;
+
+
+
+
+
+
+
+
+
+
+/**
+ * Theme configurations
+ */
+$classic-max-height: 20em;
+$classic-box-shadow: 0 6px 18px 1px rgba(0,0,0,.12);
+
+$inline-max-height: 20em;
+
+
+
 
 
 
@@ -81,29 +124,28 @@ $speed-animate-in: .15s;
    ========================================================================== */
 
 /**
- * Picker item states
+ * Common picker item states
  */
 
-// Highlighted
+// Highlighted.
 @mixin picker-item-highlighted {
     background: $blue;
     color: $white;
 }
 
-// Hovered
+// Hovered.
 @mixin picker-item-hovered {
     cursor: pointer;
     color: $black;
     background: $blue-hover;
 }
 
-// Selected
+// Selected.
 @mixin picker-item-selected {
     border-color: $blue;
-    z-index: 10;
 }
 
-// Disabled
+// Disabled.
 @mixin picker-item-disabled {
     background: $disabled-things-bg;
     border-color: $disabled-things-bg;
@@ -160,4 +202,6 @@ $breakpoint-large: 40.125em; // 642px @ 16px
        -moz-#{$property}: $value;
             #{$property}: $value;
 }
+
+
 

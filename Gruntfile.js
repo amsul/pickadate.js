@@ -69,7 +69,7 @@ module.exports = function( grunt ) {
         banner: {
             pickers: '/*!\n' +
                      ' * <%= pkg.title %> v<%= pkg.version %>, <%= grunt.template.today("yyyy-mm-dd") %>\n' +
-                     ' * By <%= pkg.author.name %> (<%= pkg.author.url %>)\n' +
+                     ' * By <%= pkg.author.name %>, <%= pkg.author.url %>\n' +
                      ' * Hosted on <%= pkg.homepage %>\n' +
                      ' * Licensed under <%= pkg.licenses[0].type %>\n' +
                      ' */\n'
@@ -141,11 +141,15 @@ module.exports = function( grunt ) {
             },
             themes: {
                 files: {
-                    '<%= dirs.dest.themes %>/default.css': '<%= dirs.src.themes %>/default.scss',
-                    '<%= dirs.dest.themes %>/classic.css': '<%= dirs.src.themes %>/classic.scss',
-                    '<%= dirs.dest.themes %>/inline.css': '<%= dirs.src.themes %>/inline.scss',
-                    '<%= dirs.dest.themes %>/picker.date.css': '<%= dirs.src.themes %>/picker.date.scss',
-                    '<%= dirs.dest.themes %>/picker.time.css': '<%= dirs.src.themes %>/picker.time.scss'
+                    '<%= dirs.dest.themes %>/default.css': [ '<%= dirs.src.themes %>/base.scss', '<%= dirs.src.themes %>/default.scss' ],
+                    '<%= dirs.dest.themes %>/classic.css': [ '<%= dirs.src.themes %>/base.scss', '<%= dirs.src.themes %>/classic.scss' ],
+                    '<%= dirs.dest.themes %>/inline.css': [ '<%= dirs.src.themes %>/base.scss', '<%= dirs.src.themes %>/inline.scss' ],
+                    '<%= dirs.dest.themes %>/default.date.css': [ '<%= dirs.src.themes %>/base.date.scss', '<%= dirs.src.themes %>/default.date.scss' ],
+                    '<%= dirs.dest.themes %>/default.time.css': [ '<%= dirs.src.themes %>/base.time.scss', '<%= dirs.src.themes %>/default.time.scss' ],
+                    '<%= dirs.dest.themes %>/classic.date.css': [ '<%= dirs.src.themes %>/base.date.scss', '<%= dirs.src.themes %>/classic.date.scss' ],
+                    '<%= dirs.dest.themes %>/classic.time.css': [ '<%= dirs.src.themes %>/base.time.scss', '<%= dirs.src.themes %>/classic.time.scss' ],
+                    '<%= dirs.dest.themes %>/inline.date.css': [ '<%= dirs.src.themes %>/base.date.scss', '<%= dirs.src.themes %>/inline.date.scss' ],
+                    '<%= dirs.dest.themes %>/inline.time.css': [ '<%= dirs.src.themes %>/base.time.scss', '<%= dirs.src.themes %>/inline.time.scss' ]
                 }
             }
         },
@@ -179,7 +183,7 @@ module.exports = function( grunt ) {
             demos: [ '<%= dirs.src.demos %>/scripts/base.js' ],
             pickers: [
                 '<%= dirs.tests %>/units/*.js',
-                // '<%= dirs.dest.pickers %>/**/*.js',
+                '<%= dirs.dest.pickers %>/**/*.js',
 
                 // Ignore the legacy and minified files.
                 '!<%= dirs.dest.pickers %>/legacy.js',
@@ -274,7 +278,7 @@ module.exports = function( grunt ) {
     // Register the tasks.
     // * `htmlify` and `copy:pkg` should come after `uglify` because some package files measure `.min` file sizes.
     grunt.registerTask( 'default', [ 'clean', 'concat', 'copy:demos', 'copy:translations', 'sass', 'jshint', 'qunit', 'uglify', 'cssmin', 'htmlify', 'copy:pkg' ] )
-    grunt.registerTask( 'quick', [ 'concat', 'copy:demos', 'copy:translations', 'uglify', 'cssmin', 'htmlify', 'copy:pkg' ] )
+    grunt.registerTask( 'quick', [ 'concat', 'copy:demos', 'copy:translations', 'sass', 'uglify', 'cssmin', 'htmlify', 'copy:pkg' ] )
     grunt.registerTask( 'picker', [ 'clean:pickers', 'concat:pickers', 'copy:translations', 'sass:themes', 'jshint:pickers', 'qunit:pickers', 'uglify:pickers', 'cssmin:pickers' ] )
     grunt.registerTask( 'demo', [ 'clean:demos', 'concat:demos', 'copy:demos', 'sass:demos', 'jshint:demos', 'htmlify:demos' ] )
     grunt.registerTask( 'travis', [ 'jshint:pickers', 'qunit:pickers' ] )

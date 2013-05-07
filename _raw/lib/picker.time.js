@@ -9,9 +9,9 @@
  */
 
 
-/* ==========================================================================
-   Build time picker components
-   ========================================================================== */
+// Create a new scope.
+(function() {
+
 
 /**
  * Globals and constants
@@ -72,9 +72,7 @@ function TimePicker( picker, settings ) {
         // Setting the `highlight` also sets the `view`.
         set( 'highlight', clock.item.select )
 
-    /**
-     * The keycode to movement mapping.
-     */
+    // The keycode to movement mapping.
     clock.key = {
         40: 1, // Down
         38: -1, // Up
@@ -87,25 +85,24 @@ function TimePicker( picker, settings ) {
     }
 
 
-    /**
-     * The time picker events.
-     */
-    clock.onRender = function() {
-        var $holder = this.$holder,
-            $viewset = $holder.find( '.' + settings.klass.viewset )
-        if ( $viewset.length ) {
-            $holder[ 0 ].scrollTop = ~~( $viewset.position().top - $viewset[ 0 ].clientHeight )
-        }
-        else {
-            console.warn( 'Nothing to viewset with', clock.item.view )
-        }
-    }
-    clock.onOpen = function() {
-        this.$holder.find( 'button' ).attr( 'disable', false )
-    }
-    clock.onClose = function() {
-        this.$holder.find( 'button' ).attr( 'disable', true )
-    }
+    // Bind some picker events.
+    picker.
+        on( 'render', function() {
+            var $pickerHolder = picker.$holder.children(),
+                $viewset = $pickerHolder.find( '.' + settings.klass.viewset )
+            if ( $viewset.length ) {
+                $pickerHolder[ 0 ].scrollTop = ~~( $viewset.position().top - $viewset[ 0 ].clientHeight )
+            }
+            else {
+                console.warn( 'Nothing to viewset with', clock.item.view )
+            }
+        }).
+        on( 'open', function() {
+            picker.$holder.find( 'button' ).attr( 'disable', false )
+        }).
+        on( 'close', function() {
+            picker.$holder.find( 'button' ).attr( 'disable', true )
+        })
 
 } //TimePicker
 
@@ -166,7 +163,7 @@ TimePicker.prototype.create = function( type, value, options ) {
     value = value === undefined ? type : value
 
     // If it's an object, use the "pick" value.
-    if ( isObject( value ) && isInteger( value.pick ) ) {
+    if ( Picker._.isObject( value ) && Picker._.isInteger( value.pick ) ) {
         value = value.pick
     }
 
@@ -176,7 +173,7 @@ TimePicker.prototype.create = function( type, value, options ) {
     }
 
     // If no valid value is passed, set it to "now".
-    else if ( !isInteger( value ) ) {
+    else if ( !Picker._.isInteger( value ) ) {
         value = clock.now( type, value, options )
     }
 
@@ -212,7 +209,7 @@ TimePicker.prototype.create = function( type, value, options ) {
 TimePicker.prototype.now = function( type, value/*, options*/ ) {
     var date = new Date()
     // Add an interval because the time has passed.
-    return ( ( isInteger( value ) ? value + 1 : 1 ) * this.item.interval ) + date.getHours() * MINUTES_IN_HOUR + date.getMinutes()
+    return ( ( Picker._.isInteger( value ) ? value + 1 : 1 ) * this.item.interval ) + date.getHours() * MINUTES_IN_HOUR + date.getMinutes()
 } //TimePicker.prototype.now
 
 
@@ -238,12 +235,12 @@ TimePicker.prototype.measure = function( type, value, options ) {
     }
 
     // If it's a literal true, or an integer, make it relative to now.
-    else if ( value === true || isInteger( value ) ) {
+    else if ( value === true || Picker._.isInteger( value ) ) {
         value = clock.now( type, value, options )
     }
 
     // If it's an object already, just normalize it.
-    else if ( isObject( value ) && isInteger( value.pick ) ) {
+    else if ( Picker._.isObject( value ) && Picker._.isInteger( value.pick ) ) {
         value = clock.normalize( value.pick, options )
     }
 
@@ -292,7 +289,7 @@ TimePicker.prototype.disabled = function( timeObject ) {
         isDisabledTime = clock.item.disable.filter( function( timeToDisable ) {
 
             // If the time is a number, match the hours.
-            if ( isInteger( timeToDisable ) ) {
+            if ( Picker._.isInteger( timeToDisable ) ) {
                 return timeObject.hour == timeToDisable
             }
 
@@ -351,7 +348,7 @@ TimePicker.prototype.parse = function( type, value, options ) {
         clock = this,
         parsingObject = {}
 
-    if ( !value || isInteger( value ) || Array.isArray( value ) || isDate( value ) || isObject( value ) && isInteger( value.pick ) ) {
+    if ( !value || Picker._.isInteger( value ) || Array.isArray( value ) || Picker._.isDate( value ) || Picker._.isObject( value ) && Picker._.isInteger( value.pick ) ) {
         return value
     }
 
@@ -369,7 +366,7 @@ TimePicker.prototype.parse = function( type, value, options ) {
 
             // The format length is from the formatting label function or the
             // label length without the escaping exclamation (!) mark.
-            formatLength = formattingLabel ? triggerFunction( formattingLabel, clock, [ value, parsingObject ] ) : label.replace( /^!/, '' ).length
+            formatLength = formattingLabel ? Picker._.trigger( formattingLabel, clock, [ value, parsingObject ] ) : label.replace( /^!/, '' ).length
 
         // If there's a format label, split the value up to the format length.
         // Then add it to the parsing object with appropriate label.
@@ -399,31 +396,31 @@ TimePicker.prototype.formats = {
 
         // If there's string, then get the digits length.
         // Otherwise return the selected hour in "standard" format.
-        return string ? getDigitsLength( string ) : timeObject.hour % HOURS_TO_NOON || HOURS_TO_NOON
+        return string ? Picker._.digits( string ) : timeObject.hour % HOURS_TO_NOON || HOURS_TO_NOON
     },
     hh: function( string, timeObject ) {
 
         // If there's a string, then the length is always 2.
         // Otherwise return the selected hour in "standard" format with a leading zero.
-        return string ? 2 : leadZero( timeObject.hour % HOURS_TO_NOON || HOURS_TO_NOON )
+        return string ? 2 : Picker._.lead( timeObject.hour % HOURS_TO_NOON || HOURS_TO_NOON )
     },
     H: function( string, timeObject ) {
 
         // If there's string, then get the digits length.
         // Otherwise return the selected hour in "military" format as a string.
-        return string ? getDigitsLength( string ) : '' + timeObject.hour
+        return string ? Picker._.digits( string ) : '' + timeObject.hour
     },
     HH: function( string, timeObject ) {
 
         // If there's string, then get the digits length.
         // Otherwise return the selected hour in "military" format with a leading zero.
-        return string ? getDigitsLength( string ) : leadZero( timeObject.hour )
+        return string ? Picker._.digits( string ) : Picker._.lead( timeObject.hour )
     },
     i: function( string, timeObject ) {
 
         // If there's a string, then the length is always 2.
         // Otherwise return the selected minutes.
-        return string ? 2 : leadZero( timeObject.mins )
+        return string ? 2 : Picker._.lead( timeObject.mins )
     },
     a: function( string, timeObject ) {
 
@@ -445,7 +442,7 @@ TimePicker.prototype.formats = {
     toString: function ( formatString, itemObject ) {
         var clock = this
         return clock.formats.toArray( formatString ).map( function( label ) {
-            return triggerFunction( clock.formats[ label ], clock, [ 0, itemObject ] ) || label.replace( /^!/, '' )
+            return Picker._.trigger( clock.formats[ label ], clock, [ 0, itemObject ] ) || label.replace( /^!/, '' )
         }).join( '' )
     }
 } //TimePicker.prototype.formats
@@ -520,7 +517,7 @@ TimePicker.prototype.filterDisabled = function( collection, timeUnit, isRemoving
  * The division to use for the range intervals.
  */
 TimePicker.prototype.i = function( type, value/*, options*/ ) {
-    return isInteger( value ) && value > 0 ? value : this.item.interval
+    return Picker._.isInteger( value ) && value > 0 ? value : this.item.interval
 }
 
 
@@ -537,7 +534,7 @@ TimePicker.prototype.nodes = function( isOpen ) {
         viewsetObject = clock.item.view,
         disabledCollection = clock.item.disable
 
-    return createNode( 'ul', createGroupOfNodes({
+    return Picker._.node( 'ul', Picker._.group({
         min: clock.item.min.pick,
         max: clock.item.max.pick,
         i: clock.item.interval,
@@ -545,7 +542,7 @@ TimePicker.prototype.nodes = function( isOpen ) {
         item: function( loopedTime ) {
             loopedTime = clock.create( loopedTime )
             return [
-                triggerFunction( clock.formats.toString, clock, [ settings.formatLabel || settings.format, loopedTime ] ),
+                Picker._.trigger( clock.formats.toString, clock, [ settings.formatLabel || settings.format, loopedTime ] ),
                 (function( klasses, timeMinutes ) {
 
                     if ( selectedObject && selectedObject.pick == timeMinutes ) {
@@ -569,7 +566,7 @@ TimePicker.prototype.nodes = function( isOpen ) {
                 'data-pick=' + loopedTime.pick
             ]
         }
-    }) + createNode( 'li', createNode( 'button', settings.clear, settings.klass.buttonClear, 'data-clear=1' + ( isOpen ? '' : ' disable' ) ) ), settings.klass.list )
+    }) + Picker._.node( 'li', Picker._.node( 'button', settings.clear, settings.klass.buttonClear, 'data-clear=1' + ( isOpen ? '' : ' disable' ) ) ), settings.klass.list )
 } //TimePicker.prototype.nodes
 
 
@@ -582,44 +579,51 @@ TimePicker.prototype.nodes = function( isOpen ) {
    Extend the picker to add the component with the defaults.
    ========================================================================== */
 
-Picker.extend( 'pickatime', TimePicker, {
+TimePicker.defaults = (function( prefix ) {
 
-    // Clear
-    clear: 'Clear',
+    return {
 
-    // The format to show on the `input` element
-    format: 'h:i A',
+        // Clear
+        clear: 'Clear',
 
-    // The interval between each time
-    interval: 30,
+        // The format to show on the `input` element
+        format: 'h:i A',
 
-    // Classes
-    klass: {
+        // The interval between each time
+        interval: 30,
 
-        input: CLASSES_PREFIX + 'input',
-        active: CLASSES_PREFIX + 'input--active',
+        // Classes
+        klass: {
 
-        holder: CLASSES_PREFIX + 'holder ' + CLASSES_PREFIX + 'holder--time',
-        opened: CLASSES_PREFIX + 'holder--opened',
-        focused: CLASSES_PREFIX + 'holder--focused',
+            picker: prefix + ' ' + prefix + '--time',
+            holder: prefix + '__holder',
 
-        frame: CLASSES_PREFIX + 'frame',
-        wrap: CLASSES_PREFIX + 'wrap',
+            list: prefix + '__list',
+            listItem: prefix + '__list-item',
 
-        box: CLASSES_PREFIX + 'box',
+            disabled: prefix + '__list-item--disabled',
+            selected: prefix + '__list-item--selected',
+            highlighted: prefix + '__list-item--highlighted',
+            viewset: prefix + '__list-item--viewset',
+            now: prefix + '__list-item--now',
 
-        list: CLASSES_PREFIX + 'list',
-        listItem: CLASSES_PREFIX + 'list-item',
-
-        disabled: CLASSES_PREFIX + 'list-item--disabled',
-        selected: CLASSES_PREFIX + 'list-item--selected',
-        highlighted: CLASSES_PREFIX + 'list-item--highlighted',
-        viewset: CLASSES_PREFIX + 'list-item--viewset',
-        now: CLASSES_PREFIX + 'list-item--now',
-
-        buttonClear: CLASSES_PREFIX + 'button--clear'
+            buttonClear: prefix + '__button--clear'
+        }
     }
-})
+})( Picker.klasses().picker )
+
+
+
+
+
+/**
+ * Extend the picker to add the date picker.
+ */
+Picker.extend( 'pickatime', TimePicker )
+
+
+// Close the scope.
+})();
 
 
 
