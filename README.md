@@ -28,7 +28,7 @@ The v3 API is significantly different from v2 (all for the greater good!). So if
 <br>
 ## Library files
 
-The `lib` folder includes all the compiled library files as well as a `compressed` folder with the minified counter-parts.
+The `lib` folder includes all the compiled files and a `compressed` folder with the minified counter-parts.
 
 ### Pickers
 
@@ -47,7 +47,7 @@ _To support old browsers, namely IE8, **also include** the `legacy.js` file._
 
 ### Themes
 
-All themes are [generated using Sass](#sass-styling) and compiled into the `themes` folder.
+All themes are [generated using Sass](#sass-styling) and compiled into the `lib/themes` folder.
 
 File                    | Contents                 | Size (min & gzip)
 ----------------------- | ------------------------ | ----------------------
@@ -57,15 +57,12 @@ File                    | Contents                 | Size (min & gzip)
 `classic.css`           | __Base classic *__       | 0.29kb
 `classic.date.css`      | Classic date picker      | 0.68kb
 `classic.time.css`      | Classic time picker      | 0.35kb
-`inline.css`            | __Base inline *__        | 0.16kb
-`inline.date.css`       | Inline date picker       | 0.68kb
-`inline.time.css`       | Inline time picker       | 0.35kb
 
 __*__ One and only one base stylesheet is **required**. Check out the [demos](http://amsul.github.io/pickadate.js/themes.htm) to choose one – and then include the respective pickers as well.
 
 ### Translations
 
-The translations are copied into the `translations` folder. There are currently [30 languages](https://github.com/amsul/pickadate.js/blob/v3.0.0/lib/translations) included.
+The translations are copied into the `lib/translations` folder. There are currently [30 languages](https://github.com/amsul/pickadate.js/blob/v3.0.0/lib/translations) included.
 
 
 <br>
@@ -88,7 +85,7 @@ Constructed as such:
 <br>
 ## Bugs
 
-Before opening a new issue, search the [Issues](https://github.com/amsul/pickadate.js/issues) to see if anything similar already exists - there might already be an answer to your problem. You might also wanna check out the [Contributing](https://github.com/amsul/pickadate.js/blob/v3.0.0/CONTRIBUTING.md) guide.
+Before opening a new issue, please search the existing [Issues](https://github.com/amsul/pickadate.js/issues) for anything similar – there might already be an answer to your problem. You might also wanna check out the [Contributing](https://github.com/amsul/pickadate.js/blob/v3.0.0/CONTRIBUTING.md) guide.
 
 
 

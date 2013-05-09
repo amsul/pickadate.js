@@ -5,10 +5,7 @@ a lot of the stuff below may never happen...
 docs/fixes
 ----------
 
-- fix banners on scss files
-- “escape” on IE clears input value
-- update `devDependencies`
-- default theme with “transformly responsive” option
+- “escape” on IE (while closed & focused) clears input value
 
 
 tests
@@ -28,6 +25,7 @@ tests
 future
 ------
 
+- future: default theme with “transformly responsive” option
 - future: month with 31st highlighted..click nav to next month skips month with less than 31 days
 - future: improve base jquery extension `return`s
 - future: time picker “period” translations

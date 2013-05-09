@@ -14,7 +14,7 @@ With this major release, the entire API has been rethought to allow the picker t
 - Added QUnit test suite.
 - Added Travis integration.
 - Updated themes to be Sass-based.
-- Removed “inline” collapsing theme.
+- Removed “inline” and “inline-fixed” themes.
 - Removed jam.js bindings within `package.json`.
 - Removed official support for IE7. Still works but looks odd.
 

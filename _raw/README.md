@@ -8,13 +8,10 @@
     fileSize_js_time = meta.fileSize( grunt.file.read( dirs.min.pickers + '/picker.time.js') )
     fileSize_css_default = meta.fileSize( grunt.file.read( dirs.min.themes + '/default.css') )
     fileSize_css_classic = meta.fileSize( grunt.file.read( dirs.min.themes + '/classic.css') )
-    fileSize_css_inline = meta.fileSize( grunt.file.read( dirs.min.themes + '/inline.css') )
     fileSize_css_default_date = meta.fileSize( grunt.file.read( dirs.min.themes + '/default.date.css') )
     fileSize_css_default_time = meta.fileSize( grunt.file.read( dirs.min.themes + '/default.time.css') )
     fileSize_css_classic_date = meta.fileSize( grunt.file.read( dirs.min.themes + '/classic.date.css') )
     fileSize_css_classic_time = meta.fileSize( grunt.file.read( dirs.min.themes + '/classic.time.css') )
-    fileSize_css_inline_date = meta.fileSize( grunt.file.read( dirs.min.themes + '/inline.date.css') )
-    fileSize_css_inline_time = meta.fileSize( grunt.file.read( dirs.min.themes + '/inline.time.css') )
 %}
 
 #### To get started, check out the:
@@ -41,7 +38,7 @@ The v3 API is significantly different from v2 (all for the greater good!). So if
 <br>
 ## Library files
 
-The `lib` folder includes all the compiled library files as well as a `compressed` folder with the minified counter-parts.
+The `{%= dirs.dest.pickers %}` folder includes all the compiled files and a `compressed` folder with the minified counter-parts.
 
 ### Pickers
 
@@ -60,7 +57,7 @@ _To support old browsers, namely IE8, **also include** the `legacy.js` file._
 
 ### Themes
 
-All themes are [generated using Sass](#sass-styling) and compiled into the `themes` folder.
+All themes are [generated using Sass](#sass-styling) and compiled into the `{%= dirs.dest.themes %}` folder.
 
 File                    | Contents                 | Size (min & gzip)
 ----------------------- | ------------------------ | ----------------------
@@ -70,15 +67,12 @@ File                    | Contents                 | Size (min & gzip)
 `classic.css`           | __Base classic *__       | {%= (fileSize_css_classic.gzip/1024).toFixed(2) %}kb
 `classic.date.css`      | Classic date picker      | {%= (fileSize_css_classic_date.gzip/1024).toFixed(2) %}kb
 `classic.time.css`      | Classic time picker      | {%= (fileSize_css_classic_time.gzip/1024).toFixed(2) %}kb
-`inline.css`            | __Base inline *__        | {%= (fileSize_css_inline.gzip/1024).toFixed(2) %}kb
-`inline.date.css`       | Inline date picker       | {%= (fileSize_css_inline_date.gzip/1024).toFixed(2) %}kb
-`inline.time.css`       | Inline time picker       | {%= (fileSize_css_inline_time.gzip/1024).toFixed(2) %}kb
 
 __*__ One and only one base stylesheet is **required**. Check out the [demos]({%= pkg.homepage %}/themes.htm) to choose one – and then include the respective pickers as well.
 
 ### Translations
 
-The translations are copied into the `translations` folder. There are currently [{%= grunt.file.expand(dirs.min.translations + '/*.js').length %} languages]({%= pkg.repository.url.replace(/.git$/,'') %}/blob/v{%= pkg.version.split('-')[0] %}/lib/translations) included.
+The translations are copied into the `{%= dirs.dest.translations %}` folder. There are currently [{%= grunt.file.expand(dirs.min.translations + '/*.js').length %} languages]({%= pkg.repository.url.replace(/.git$/,'') %}/blob/v{%= pkg.version.split('-')[0] %}/lib/translations) included.
 
 
 <br>
@@ -101,7 +95,7 @@ Constructed as such:
 <br>
 ## Bugs
 
-Before opening a new issue, search the [Issues]({%= pkg.bugs %}) to see if anything similar already exists - there might already be an answer to your problem. You might also wanna check out the [Contributing]({%= meta.gitrepo_url %}/blob/v3.0.0/CONTRIBUTING.md) guide.
+Before opening a new issue, please search the existing [Issues]({%= pkg.bugs %}) for anything similar – there might already be an answer to your problem. You might also wanna check out the [Contributing]({%= meta.gitrepo_url %}/blob/v3.0.0/CONTRIBUTING.md) guide.
 
 
 

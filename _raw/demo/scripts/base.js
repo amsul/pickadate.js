@@ -878,8 +878,26 @@ $( '.js__timepicker' ).pickatime()
    Themes demos
    ========================================================================== */
 
-$( '#theme__default_date, #theme__classic_date, #theme__inline_date' ).pickadate()
-$( '#theme__default_time, #theme__classic_time, #theme__inline_time' ).pickatime()
+$( '#theme__default_date, #theme__classic_date' ).pickadate()
+$( '#theme__default_time, #theme__classic_time' ).pickatime()
+
+
+$( '#theme__classic_date' ).pickadate( 'on', {
+    open: function() {
+        scrollPageTo( this.$node )
+    }
+})
+$( '#theme__classic_time' ).pickatime( 'on', {
+    open: function() {
+        scrollPageTo( this.$node )
+    }
+})
+
+function scrollPageTo( $node ) {
+    $( 'html, body' ).animate({
+        scrollTop: ~~$node.offset().top - 140
+    }, 150 )
+}
 
 
 

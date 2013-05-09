@@ -47,10 +47,6 @@ $picker-z-index: 10000;
 // Animation speeds.
 $speed-animate-in: .15s;
 
-// The box widths.
-$picker-min-width: 256px;
-$picker-max-width: 666px;
-
 // Focused input border color.
 $input-active-border: $blue;
 
@@ -87,14 +83,6 @@ $disabled-things-text: #ddd;
 
 
 
-/**
- * Time picker options
- */
-
-// The box widths.
-$time-min-width: $picker-min-width;
-$time-max-width: 320px;
-
 
 
 
@@ -107,14 +95,20 @@ $time-max-width: 320px;
 /**
  * Theme configurations
  */
+
+// The “default” min & max widths.
+$picker-min-width: 256px;
+$picker-max-width: 666px;
+
+// The time picker min & max widths.
+$time-min-width: $picker-min-width;
+$time-max-width: 320px;
+
+// The “classic” theme settings.
 $classic-max-width: $picker-max-width - 200px;
 $classic-min-width: $picker-min-width - 80px;
 $classic-max-height: 25em;
 $classic-box-shadow: 0 6px 18px 1px rgba(0,0,0,.12);
-
-$inline-max-width: $picker-max-width - 200px;
-$inline-min-width: $picker-min-width - 80px;
-$inline-max-height: 20em;
 
 
 

@@ -55,7 +55,8 @@
     <div class="section__block section__block--scoped">
 
         <h2 class="heading heading--one heading--divide-center heading--divide-first"><span class="heading__text">The Themes<a class="heading__anchor" name="picker-themes" href="#picker-themes">&sect;</a></span></h2>
-        <p class="heading--thin heading--three">There are two base themes available: <a href="#default"><b>default</b></a> and <a href="#classic"><b>classic</b></a>. Check the <a href="/blob/v3.0.0#themes">readme</a> file to read up on files for each theme.</p>
+        <p class="heading--thin heading--three">There are two base themes available: <a href="#default"><b>default</b></a> and <a href="#classic"><b>classic</b></a>. Check the <a href="https://github.com/amsul/pickadate.js/blob/v3.0.0#readme">readme</a> file to see which files to use for each theme.</p>
+        <p>The themes are generated using <a href="http://sass-lang.com/">Sass</a> and can be customized by changing the variables set in the <code>_raw/lib/themes/_variables.scss</code> file. Take a look at the notes on <a href="https://github.com/amsul/pickadate.js/blob/v3.0.0#building-with-grunt">compiling Sass using Grunt</a>.</p>
 
     </div> <!-- .section__block -->
 
@@ -117,37 +118,27 @@
 
     </div> <!-- .section__block -->
 
-</section> <!-- .section -->
-
-
-<!--<section class="section section--theme-inline">
-
     <div class="section__block section__block--scoped">
 
-        <h2 class="heading heading--divide"><span class="heading__text">Inline<a class="heading__anchor" name="inline" href="#inline">&sect;</a></span></h2>
+        <h3 class="heading heading--divide"><span class="heading__text">Scroll into view<a class="heading__anchor" name="scroll-view" href="#scroll-view">&sect;</a></span></h3>
 
-        <style>
-            { %= grunt.file.read( dirs.min.themes + '/inline.css' ).replace( /(\.picker)(.*?)(?=,|{)/g, '.section--theme-inline $1$2' ) %}
-            { %= grunt.file.read( dirs.min.themes + '/inline.date.css' ).replace( /(\.picker)(.*?)(?=,|{)/g, '.section--theme-inline $1$2' ) %}
-            { %= grunt.file.read( dirs.min.themes + '/inline.time.css' ).replace( /(\.picker)(.*?)(?=,|{)/g, '.section--theme-inline $1$2' ) %}
-        </style>
+        <p>For the classic theme, the <a href="#api.htm">API</a> is used to create this snippet to scroll the picker into view:</p>
 
-        <p>The inline date picker:</p>
+        <pre class="pre--demo"><code data-language="javascript">picker.on('open', function() {
+    scrollPageTo(this.$node)
+})
 
-        <pre class="pre--demo"><code data-language="html">&lt;link rel="stylesheet" href="lib/themes/inline.css">
-&lt;link rel="stylesheet" href="lib/themes/inline.date.css"></code></pre>
-        <fieldset class="fieldset fieldset--demo"><input id="theme__inline_date" class="fieldset__input" type="text" placeholder="Try me&hellip;"></fieldset>
+function scrollPageTo($node) {
+    $('html, body').animate({
+        scrollTop: ~~$node.offset().top - 140
+    }, 150)
+}</code></pre>
 
-        <p>The inline time picker:</p>
+        <p>The <code class="function">scrollPageTo</code> function can be elaborated further to only scroll the page when the picker is out of view.</p>
 
-        <pre class="pre--demo"><code data-language="html">&lt;link rel="stylesheet" href="lib/themes/inline.css">
-&lt;link rel="stylesheet" href="lib/themes/inline.time.css"></code></pre>
-        <fieldset class="fieldset fieldset--demo"><input id="theme__inline_time" class="fieldset__input" type="text" placeholder="Try me&hellip;"></fieldset>
-
-    </div> <!-- .section__block - ->
+    </div> <!-- .section__block -->
 
 </section> <!-- .section -->
-
 
 
 

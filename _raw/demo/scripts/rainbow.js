@@ -851,7 +851,8 @@ Rainbow.extend([
             1: 'storage.function',
             2: 'entity.name.function'
         },
-        'pattern': /(function)\s(.*?)(?=\()/g
+        // 'pattern': /(function)\s(.*?)(?=\()/g
+        'pattern': /(function)(?=\s)(.*?)(?=\()/g // <<< discard the whitespace match after `function`.
     }
 ]);
 
