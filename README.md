@@ -54,12 +54,12 @@ File                    | Contents                 | Size (min & gzip)
 `default.css`           | __Base default *__       | 0.45kb
 `default.date.css`      | Default date picker      | 0.68kb
 `default.time.css`      | Default time picker      | 0.36kb
-`classic.css`           | __Base classic *__       | 0.24kb
+`classic.css`           | __Base classic *__       | 0.29kb
 `classic.date.css`      | Classic date picker      | 0.68kb
 `classic.time.css`      | Classic time picker      | 0.35kb
 `inline.css`            | __Base inline *__        | 0.16kb
 `inline.date.css`       | Inline date picker       | 0.68kb
-`inline.time.css`       | Inline time picker       | 0.33kb
+`inline.time.css`       | Inline time picker       | 0.35kb
 
 __*__ One and only one base stylesheet is **required**. Check out the [demos](http://amsul.github.io/pickadate.js/themes.htm) to choose one – and then include the respective pickers as well.
 

@@ -7,6 +7,18 @@
 
 
 /**
+ * Note: the root picker element should __NOT__ be styled
+ * more than what’s here. Style the `.picker__holder` instead.
+ */
+.picker--time {
+
+    // Adjust the min & max widths.
+    min-width: $time-min-width;
+    max-width: $time-max-width;
+}
+
+
+/**
  * The holder is the base of the picker.
  */
 .picker--time .picker__holder {
@@ -18,6 +30,14 @@
     @include min-screen( medium ) {
         font-size: .875em;
     }
+}
+
+
+/**
+ * The box contains the list of times.
+ */
+.picker--time .picker__box {
+    padding: 0;
 }
 
 

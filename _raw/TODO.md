@@ -6,8 +6,6 @@ docs/fixes
 ----------
 
 - fix banners on scss files
-- themes page
-- add `.picker` root class option to date & time docs
 - “escape” on IE clears input value
 - update `devDependencies`
 - default theme with “transformly responsive” option

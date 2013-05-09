@@ -13,9 +13,7 @@
 
 <link rel="shortcut icon" href="demo/images/favicon.ico">
 <link rel="stylesheet" href="demo/styles/main.css">
-<link rel="stylesheet" href="lib/themes/default.css">
-<link rel="stylesheet" href="lib/themes/picker.date.css">
-<link rel="stylesheet" href="lib/themes/picker.time.css">
+<link rel="stylesheet" href="lib/themes/default.css"><link rel="stylesheet" href="lib/themes/default.date.css"><link rel="stylesheet" href="lib/themes/default.time.css">
 
 <!--[if lt IE 9]>
     <script>document.createElement('section')</script>
@@ -127,20 +125,20 @@ klass: {
     input: 'picker__input',
     active: 'picker__input--active',
 
-    // Picker holder states
-    holder: 'picker__holder',
-    opened: 'picker__holder--opened',
-    focused: 'picker__holder--focused',
+    // The root picker and states *
+    picker: 'picker',
+    opened: 'picker--opened',
+    focused: 'picker--focused',
 
-    // Picker frame, wrapper, and box
+    // The picker holder
+    holder: 'picker__holder',
+
+    // The picker frame, wrapper, and box
     frame: 'picker__frame',
     wrap: 'picker__wrap',
     box: 'picker__box',
 
-    // Table of dates
-    table: 'picker__table',
-
-    // Picker header
+    // The picker header
     header: 'picker__header',
 
     // Month navigation
@@ -156,6 +154,9 @@ klass: {
     selectMonth: 'picker__select--month',
     selectYear: 'picker__select--year',
 
+    // Table of dates
+    table: 'picker__table',
+
     // Weekday labels
     weekdays: 'picker__weekday',
 
@@ -168,13 +169,17 @@ klass: {
     infocus: 'picker__day--infocus',
     outfocus: 'picker__day--outfocus',
 
-    // Picker footer
+    // The picker footer
     footer: 'picker__footer',
 
     // Today &amp; clear buttons
     buttonClear: 'picker__button--clear',
     buttonToday: 'picker__button--today'
 }</code></pre>
+
+    <div class="section__block section__block--notification">
+        <p><b>*</b> It is important to not add any stylings to the picker’s root element. Instead, target the <code>.picker__holder</code> element (or any other within) based on the state of the root element.</p>
+    </div>
 
     </div> <!-- .section__block -->
 

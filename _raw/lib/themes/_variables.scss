@@ -107,9 +107,13 @@ $time-max-width: 320px;
 /**
  * Theme configurations
  */
-$classic-max-height: 20em;
+$classic-max-width: $picker-max-width - 200px;
+$classic-min-width: $picker-min-width - 80px;
+$classic-max-height: 25em;
 $classic-box-shadow: 0 6px 18px 1px rgba(0,0,0,.12);
 
+$inline-max-width: $picker-max-width - 200px;
+$inline-min-width: $picker-min-width - 80px;
 $inline-max-height: 20em;
 
 

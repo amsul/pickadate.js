@@ -835,6 +835,10 @@ input[type=search] {
   border-radius: 0 0 4px 0;
 }
 
+.fieldset__wrapper {
+  position: relative;
+}
+
 .fieldset--demo .fieldset__button {
   margin-bottom: 1em;
   margin-right: 1em;

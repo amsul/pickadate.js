@@ -867,3 +867,19 @@ $( '#button__api-object--holder' ).on( 'click', function( event ) {
 $( '.js__datepicker' ).pickadate()
 $( '.js__timepicker' ).pickatime()
 
+
+
+
+
+
+
+
+/* ==========================================================================
+   Themes demos
+   ========================================================================== */
+
+$( '#theme__default_date, #theme__classic_date, #theme__inline_date' ).pickadate()
+$( '#theme__default_time, #theme__classic_time, #theme__inline_time' ).pickatime()
+
+
+

@@ -394,6 +394,10 @@ input[type=search] {
     @include demo-tag( "Demo" );
 }
 
+.fieldset__wrapper {
+    position: relative;
+}
+
 .fieldset--demo .fieldset__button {
     margin-bottom: 1em;
     margin-right: 1em;

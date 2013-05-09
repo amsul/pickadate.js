@@ -294,30 +294,30 @@ module.exports = function( grunt ) {
             // Process the base file using the source file content.
             processFile = function( fileSource ) {
 
-                grunt.verbose.writeln( 'Processing ' + fileSource )
+                var processedContent = '',
+                    fileNameMatch = fileSource.match( /([\w-]+)(\.htm)$/ )
 
                 // Recursively process the base template using the file source content.
-                var processedContent = grunt.template.process( grunt.file.read( task.data.cwd + task.data.base ), {
+                grunt.verbose.writeln( 'Processing ' + fileSource )
+                processedContent = grunt.template.process( grunt.file.read( task.data.cwd + task.data.base ), {
                     delimiters: 'curly',
                     data: {
                         pkg: packageJSON,
-                        page: fileSource.match( /\w+(?=\.htm$)/ )[ 0 ],
+                        page: fileSource.match( /[\w-]+(?=\.htm$)/ )[ 0 ],
                         content: grunt.file.read( fileSource ),
                         meta: grunt.config.data.meta,
                         dirs: grunt.config.data.dirs
                     }
                 })
 
-                grunt.log.writeln( 'Writing ' + fileSource.cyan )
-
                 // Write the destination file by cleaning the file name.
-                grunt.file.write( task.data.dest + fileSource.match( /\w+\.htm$/ )[ 0 ], processedContent )
+                grunt.log.writeln( 'Writing ' + fileSource.cyan )
+                grunt.file.write( task.data.dest + fileSource.match( /[\w-]+\.htm$/ )[ 0 ], processedContent )
             }
 
 
-        grunt.log.writeln( 'Expanding ' + task.data.cwd.cyan )
-
         // Map through the task directory and process the HTML files.
+        grunt.log.writeln( 'Expanding ' + task.data.cwd.cyan )
         grunt.file.expand( task.data.cwd + task.data.src ).map( processFile )
     })
 

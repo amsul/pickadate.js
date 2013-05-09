@@ -211,3 +211,10 @@
     font-size: .875em;
   }
 }
+
+/**
+ * The box contains the list of times.
+ */
+.picker--time .picker__box {
+  padding: 0;
+}

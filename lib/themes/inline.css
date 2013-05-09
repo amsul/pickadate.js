@@ -123,8 +123,8 @@
  */
 .picker {
   position: initial;
-  min-width: 256px;
-  max-width: 666px;
+  min-width: 176px;
+  max-width: 466px;
 }
 
 /**
