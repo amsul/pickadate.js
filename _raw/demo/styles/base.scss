@@ -569,7 +569,7 @@ input[type=search] {
     text-align: center;
     display: block;
     min-height: 3em;
-    line-height: 3em;
+    line-height: 3;
 
     @include screen( medium ) {
         border-top: 0;
@@ -585,6 +585,26 @@ input[type=search] {
     @include screen( medium ) {
         margin-bottom: 0;
     }
+}
+
+
+
+/**
+ * Theme switcher
+ */
+.theme-toggle__label {
+    cursor: pointer;
+    padding: 2px 5px 3px;
+    background: $white;
+    border: 1px solid $grey-lighter;
+    border-bottom-color: $grey-darker;
+    @include prefix( border-radius, 4px );
+    @include prefix( box-shadow, 0 1px 2px rgba(0,0,0,.05) );
+}
+.theme-toggle__input:checked + .theme-toggle__label {
+    background: $blue;
+    border-color: $blue;
+    color: $white;
 }
 
 

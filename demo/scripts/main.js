@@ -8,11 +8,14 @@
  */
 
 
+
+
 /* ==========================================================================
    Globals
    ========================================================================== */
 
 var TODAY = new Date(2013,3,20)
+
 
 
 
@@ -900,6 +903,36 @@ $( '.js__timepicker' ).pickatime()
 
 $( '#theme__default_date, #theme__classic_date' ).pickadate()
 $( '#theme__default_time, #theme__classic_time' ).pickatime()
+
+
+
+
+
+
+/* ==========================================================================
+   Theme switcher widget
+   ========================================================================== */
+
+var themeSelected = window.localStorage ? localStorage.getItem( 'theme' ) : '',
+    $themeLinks = $( '#theme_base, #theme_date, #theme_time' ),
+    updateStylingLinks = function( value ) {
+        $( '#show_theme_' + value ).attr( 'checked', true )
+        $themeLinks.each( function() {
+            this.href = this.href.replace( /(.+\/)(\w+)(.+)/, '$1' + value + '$3' )
+        })
+    }
+
+if ( themeSelected ) {
+    updateStylingLinks( themeSelected )
+}
+
+$( '[name=show_theme]' ).on( 'change', function() {
+    var value = this.value
+    updateStylingLinks( value )
+    if ( window.localStorage ) {
+        localStorage.setItem( 'theme', value )
+    }
+})
 
 
 

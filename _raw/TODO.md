@@ -5,7 +5,6 @@ a lot of the stuff below may never happen...
 docs/fixes
 ----------
 
-- “escape” on IE (while closed & focused) clears input value
 
 
 tests
@@ -29,7 +28,6 @@ future
 - future: month with 31st highlighted..click nav to next month skips month with less than 31 days
 - future: improve base jquery extension `return`s
 - future: time picker “period” translations
-- future: move events to `.on`
 - future: disable dates using js date objects
 - future: update `htmlify` to merge paths correctly & use recursive templates with correctly delimiters
 - future: add .main to package.json
