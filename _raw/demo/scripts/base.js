@@ -230,7 +230,7 @@ $( '#time_demo__buttons' ).pickatime({
 /**
  * Formats
  */
-$( '#time_demo__formats' ).pickatime({
+$( '#time_demo__formats--a' ).pickatime({
     format: 'T!ime selected: h:i a',
     formatLabel: '<b>h</b>:i <!i>a</!i>',
     formatSubmit: 'HH:i',
@@ -245,6 +245,13 @@ $( '#time_demo__formats' ).pickatime({
                     '</code></p></div>'
                 )
         }
+    }
+})
+$( '#time_demo__formats--b' ).pickatime({
+    formatLabel: function(time) {
+        var hours = ( time.pick - this.get('now').pick ) / 60,
+            label = hours < 0 ? ' !hours to now' : hours > 0 ? ' !hours from now' : 'now'
+        return 'h:i a <sm!all>' + ( hours ? Math.abs( hours ) : '' ) + label + '</sm!all>'
     }
 })
 
@@ -384,6 +391,19 @@ $( '#demo__api-close-focus' ).pickadate({
     }
 })
 
+var $input_open_focus = $( '#demo__api-open-focus' ).pickadate(),
+    picker_open_focus = $input_open_focus.pickadate( 'picker' )
+$( '#button__api-open-focus' ).on( 'click', function( event ) {
+    picker_open_focus.open( false )
+    event.stopPropagation()
+    $(document).on( 'click.open_focus', function() {
+        picker_open_focus.close()
+        $(document).off( '.open_focus' )
+    })
+})
+
+
+
 
 
 /**
@@ -413,7 +433,7 @@ $button_start_stop.on( 'click', function( event ) {
 var addStuff = function( picker ) {
         var today = new Date(),
             todayString = today.getDate() + '/' + (today.getMonth()+1) + '/' + today.getFullYear()
-        picker.$holder.find( '.pickadate__box' ).
+        picker.$root.find( '.pickadate__box' ).
             prepend('<p class="text-center" style="padding:.25em;border:2px solid red">Hello there! Today is <code>' + todayString + '</code></p>')
     },
     $button_render = $( '#button__api-render' ),
@@ -851,11 +871,11 @@ $( '#button__api-object--node' ).on( 'click', function( event ) {
     event.stopPropagation()
 })
 
-//$holder
+//$root
 var $input_object__holder = $( '#demo__api-object--holder' ).pickadate(),
     picker_object__holder = $input_object__holder.pickadate( 'picker' )
 $( '#button__api-object--holder' ).on( 'click', function( event ) {
-    console.log( picker_object__holder.$holder )
+    console.log( picker_object__holder.$root )
     event.stopPropagation()
 })
 
@@ -880,24 +900,6 @@ $( '.js__timepicker' ).pickatime()
 
 $( '#theme__default_date, #theme__classic_date' ).pickadate()
 $( '#theme__default_time, #theme__classic_time' ).pickatime()
-
-
-$( '#theme__classic_date' ).pickadate( 'on', {
-    open: function() {
-        scrollPageTo( this.$node )
-    }
-})
-$( '#theme__classic_time' ).pickatime( 'on', {
-    open: function() {
-        scrollPageTo( this.$node )
-    }
-})
-
-function scrollPageTo( $node ) {
-    $( 'html, body' ).animate({
-        scrollTop: ~~$node.offset().top - 140
-    }, 150 )
-}
 
 
 

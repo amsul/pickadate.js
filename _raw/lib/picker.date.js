@@ -1,4 +1,9 @@
 
+/*!
+ * Date picker for {%= pkg.title %} v{%= pkg.version %}
+ * {%= pkg.homepage %}/date.htm
+ */
+
 /*jshint
    debug: true,
    devel: true,
@@ -55,6 +60,8 @@ function DatePicker( picker, settings ) {
         set( 'min', settings.min ).
         set( 'max', settings.max ).
         set( 'now' ).
+
+        // Setting the `select` also sets the `highlight` and `view`.
         set( 'select',
 
             // If there's a `value` or `data-value`, use that with formatting.
@@ -63,10 +70,7 @@ function DatePicker( picker, settings ) {
 
             // Use the relevant format and data property.
             { format: elementDataValue ? settings.formatSubmit : settings.format, data: !!elementDataValue }
-        ).
-
-        // Setting the `highlight` also sets the `view`.
-        set( 'highlight', calendar.item.select )
+        )
 
 
     // The keycode to movement mapping.
@@ -85,20 +89,20 @@ function DatePicker( picker, settings ) {
     // Bind some picker events.
     picker.
         on( 'render', function() {
-            picker.$holder.find( '.' + settings.klass.selectMonth ).on( 'change', function() {
+            picker.$root.find( '.' + settings.klass.selectMonth ).on( 'change', function() {
                 picker.set( 'highlight', [ picker.get( 'view' ).year, this.value, picker.get( 'highlight' ).date ] )
-                picker.$holder.find( '.' + settings.klass.selectMonth ).focus()
+                picker.$root.find( '.' + settings.klass.selectMonth ).focus()
             })
-            picker.$holder.find( '.' + settings.klass.selectYear ).on( 'change', function() {
+            picker.$root.find( '.' + settings.klass.selectYear ).on( 'change', function() {
                 picker.set( 'highlight', [ this.value, picker.get( 'view' ).month, picker.get( 'highlight' ).date ] )
-                picker.$holder.find( '.' + settings.klass.selectYear ).focus()
+                picker.$root.find( '.' + settings.klass.selectYear ).focus()
             })
         }).
         on( 'open', function() {
-            picker.$holder.find( 'button, select' ).attr( 'disabled', false )
+            picker.$root.find( 'button, select' ).attr( 'disabled', false )
         }).
         on( 'close', function() {
-            picker.$holder.find( 'button, select' ).attr( 'disabled', true )
+            picker.$root.find( 'button, select' ).attr( 'disabled', true )
         })
 
 } //DatePicker
@@ -120,7 +124,10 @@ DatePicker.prototype.set = function( type, value, options ) {
     }).pop()
 
     // Check if we need to cascade through more updates.
-    if ( type == 'highlight' ) {
+    if ( type == 'select' ) {
+        calendar.set( 'highlight', calendar.item.select, options )
+    }
+    else if ( type == 'highlight' ) {
         calendar.set( 'view', calendar.item.highlight, options )
     }
     else if ( ( type == 'flip' || type == 'min' || type == 'max' || type == 'disable' || type == 'enable' ) && calendar.item.select && calendar.item.highlight ) {

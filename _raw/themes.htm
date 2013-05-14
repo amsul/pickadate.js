@@ -67,25 +67,5 @@
 
     </div> <!-- .section__block -->
 
-    <div class="section__block section__block--scoped">
-
-        <h3 class="heading heading--divide"><span class="heading__text">Scroll into view<a class="heading__anchor" name="scroll-view" href="#scroll-view">&sect;</a></span></h3>
-
-        <p>For the classic theme, the <a href="#api.htm">API</a> is used to create this snippet to scroll the picker into view:</p>
-
-        <pre class="pre--demo"><code data-language="javascript">picker.on('open', function() {
-    scrollPageTo(this.$node)
-})
-
-function scrollPageTo($node) {
-    $('html, body').animate({
-        scrollTop: ~~$node.offset().top - 140
-    }, 150)
-}</code></pre>
-
-        <p>The <code class="function">scrollPageTo</code> function can be elaborated further to only scroll the page when the picker is out of view.</p>
-
-    </div> <!-- .section__block -->
-
 </section> <!-- .section -->
 

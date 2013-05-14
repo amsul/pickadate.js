@@ -33,7 +33,7 @@ module( 'Time picker setup', {
 })
 
 test( 'Clock stage', function() {
-    ok( this.picker.$holder.find( '[data-pick]' ).length === 48, '48 selectable times' )
+    ok( this.picker.$root.find( '[data-pick]' ).length === 48, '48 selectable times' )
 })
 
 test( 'Properties', function() {
@@ -71,13 +71,13 @@ module( 'Time picker `set`', {
 test( '`interval`', function() {
 
     var picker = this.picker,
-        $holder = picker.$holder
+        $root = picker.$root
 
     picker.set( 'interval', 120 )
     ok( picker.get( 'interval' ) === 120, '`interval` updated' )
     ok( picker.get( 'min' ).pick % 120 === 0, '`min` updated' )
     ok( picker.get( 'max' ).pick % 120 === 0, '`max` updated' )
-    ok( $holder.find( '.' + $.fn.pickatime.defaults.klass.listItem ).length === 12, '12 selectable times' )
+    ok( $root.find( '.' + $.fn.pickatime.defaults.klass.listItem ).length === 12, '12 selectable times' )
 
     picker.set( 'interval', 'lol' )
     ok( picker.get( 'interval' ) === 120, 'Interval unaffected by non-integer' )
@@ -90,16 +90,16 @@ test( '`select`', function() {
     // Using numbers
     picker.set( 'select', 180 )
     ok( picker.get( 'select' ).pick === 180, '`select` using a number: ' + picker.get( 'select', 'HH:i' ) )
-    ok( picker.get( 'highlight' ).pick === 0, '`highlight` unaffected' )
-    ok( picker.get( 'view' ).pick === 0, '`view` unaffected' )
+    ok( picker.get( 'highlight' ).pick === 180, '`highlight` updated' )
+    ok( picker.get( 'view' ).pick === 180, '`view` updated' )
     ok( picker.get( 'min' ).pick === 0, '`min` unaffected' )
     ok( picker.get( 'max' ).pick === 1410, '`max` unaffected' )
 
     // Using arrays
     picker.set( 'select', [9,0] )
     ok( picker.get( 'select' ).pick === 540, '`select` using an array: ' + picker.get( 'select', 'HH:i' ) )
-    ok( picker.get( 'highlight' ).pick === 0, '`highlight` unaffected' )
-    ok( picker.get( 'view' ).pick === 0, '`view` unaffected' )
+    ok( picker.get( 'highlight' ).pick === 540, '`highlight` updated' )
+    ok( picker.get( 'view' ).pick === 540, '`view` updated' )
     ok( picker.get( 'min' ).pick === 0, '`min` unaffected' )
     ok( picker.get( 'max' ).pick === 1410, '`max` unaffected' )
 })
@@ -291,13 +291,13 @@ test( '`disable` and `enable` using integers', function() {
 
     var disableCollection = [1,4,7],
         picker = this.picker,
-        $holder = picker.$holder
+        $root = picker.$root
 
     picker.set( 'disable', disableCollection )
 
     deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled times added' )
 
-    $holder.find( '[data-pick]' ).each( function() {
+    $root.find( '[data-pick]' ).each( function() {
         var $this = $( this ),
             hour = ~~( $this.data('pick')/60 )
         if ( disableCollection.indexOf( hour ) > -1 ) {
@@ -311,7 +311,7 @@ test( '`disable` and `enable` using integers', function() {
     picker.set( 'enable', [1] )
     deepEqual( picker.get( 'disable' ), [4,7], 'Disabled time removed' )
 
-    $holder.find( '[data-pick]' ).each( function() {
+    $root.find( '[data-pick]' ).each( function() {
         var $this = $( this ),
             hour = ~~( $this.data('pick')/60 )
         if ( [4,7].indexOf( hour ) > -1 ) {
@@ -325,7 +325,7 @@ test( '`disable` and `enable` using integers', function() {
     picker.set( 'enable', 'flip' )
     deepEqual( picker.get( 'disable' ), [4,7], 'Disabled collection `enable` flipped' )
 
-    $holder.find( '[data-pick]' ).each( function() {
+    $root.find( '[data-pick]' ).each( function() {
         var $this = $( this ),
             hour = ~~( $this.data('pick')/60 )
         if ( [4,7].indexOf( hour ) < 0 ) {
@@ -339,7 +339,7 @@ test( '`disable` and `enable` using integers', function() {
     picker.set( 'disable', 'flip' )
     deepEqual( picker.get( 'disable' ), [4,7], 'Disabled collection `disable` flipped' )
 
-    $holder.find( '[data-pick]' ).each( function() {
+    $root.find( '[data-pick]' ).each( function() {
         var $this = $( this ),
             hour = ~~( $this.data('pick')/60 )
         if ( [4,7].indexOf( hour ) > -1 ) {
@@ -354,13 +354,13 @@ test( '`disable` and `enable` using integers', function() {
 test( '`disable` and `enable` using arrays', function() {
 
     var picker = this.picker,
-        $holder = picker.$holder,
+        $root = picker.$root,
         disableCollection = [ [1,0],[4,30],[18,0],[23,30] ]
 
     picker.set( 'disable', disableCollection )
     deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled times added' )
 
-    $holder.find( '.' + $.fn.pickatime.defaults.klass.listItem ).each( function( index, item ) {
+    $root.find( '.' + $.fn.pickatime.defaults.klass.listItem ).each( function( index, item ) {
         if ( index === 2 || index === 9 || index === 36 || index === 47 ) {
             ok( $( item ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is disabled: ' + item.innerHTML )
         }
@@ -372,7 +372,7 @@ test( '`disable` and `enable` using arrays', function() {
     picker.set( 'enable', [ [4,30] ] )
     deepEqual( picker.get( 'disable' ), [ [1,0],[18,0],[23,30] ], 'Disabled time removed' )
 
-    $holder.find( '.' + $.fn.pickatime.defaults.klass.listItem ).each( function( index, item ) {
+    $root.find( '.' + $.fn.pickatime.defaults.klass.listItem ).each( function( index, item ) {
         if ( index === 2 || index === 36 || index === 47 ) {
             ok( $( item ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is disabled: ' + item.innerHTML )
         }
@@ -384,7 +384,7 @@ test( '`disable` and `enable` using arrays', function() {
     picker.set( 'enable', 'flip' )
     deepEqual( picker.get( 'disable' ), [ [1,0],[18,0],[23,30] ], 'Disabled collection `enable` flipped' )
 
-    $holder.find( '[data-pick]' ).each( function( index, item ) {
+    $root.find( '[data-pick]' ).each( function( index, item ) {
         if ( index !== 2 && index !== 36 && index !== 47 ) {
             ok( $( item ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is disabled: ' + item.innerHTML )
         }
@@ -396,7 +396,7 @@ test( '`disable` and `enable` using arrays', function() {
     picker.set( 'disable', 'flip' )
     deepEqual( picker.get( 'disable' ), [ [1,0],[18,0],[23,30] ], 'Disabled collection `disable` flipped' )
 
-    $holder.find( '[data-pick]' ).each( function( index, item ) {
+    $root.find( '[data-pick]' ).each( function( index, item ) {
         if ( index === 2 || index === 36 || index === 47 ) {
             ok( $( item ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is disabled: ' + item.innerHTML )
         }
@@ -424,11 +424,11 @@ module( 'Time picker mouse events', {
 test( 'Select', function() {
 
     var picker = this.picker,
-        $holder = picker.$holder,
+        $root = picker.$root,
         interval = picker.get( 'interval' )
 
     for ( var i = 0; i < 48; i += 1 ) {
-        $holder.find( '.' + $.fn.pickatime.defaults.klass.listItem ).eq( i ).click()
+        $root.find( '.' + $.fn.pickatime.defaults.klass.listItem ).eq( i ).click()
         ok( picker.get( 'select' ).pick === i * interval, 'Selected ' + picker.get( 'select', 'h:i A' ) )
         ok( picker.get( 'value' ) === picker.get( 'select', 'h:i A' ), 'Input value updated to ' + picker.get( 'value' ) )
     }
@@ -441,7 +441,7 @@ test( 'Clear', function() {
     picker.set( 'select', [2,0] )
     ok( picker.get( 'value' ) === picker.get( 'select', $.fn.pickatime.defaults.format ), 'Value updated' )
 
-    picker.$holder.find( '.' + $.fn.pickatime.defaults.klass.buttonClear ).click()
+    picker.$root.find( '.' + $.fn.pickatime.defaults.klass.buttonClear ).click()
     ok( picker.get( 'value' ) === '', 'Value cleared' )
 })
 

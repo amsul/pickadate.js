@@ -65,17 +65,6 @@ module.exports = function( grunt ) {
         },
 
 
-        // The banners to prepend to files.
-        banner: {
-            pickers: '/*!\n' +
-                     ' * <%= pkg.title %> v<%= pkg.version %>, <%= grunt.template.today("yyyy-mm-dd") %>\n' +
-                     ' * By <%= pkg.author.name %>, <%= pkg.author.url %>\n' +
-                     ' * Hosted on <%= pkg.homepage %>\n' +
-                     ' * Licensed under <%= pkg.licenses[0].type %>\n' +
-                     ' */\n'
-        },
-
-
         // Clean the destination files and directories.
         clean: {
             demos: [ '<%= dirs.dest.demos %>', '*.htm' ],
@@ -163,9 +152,6 @@ module.exports = function( grunt ) {
                 files: { '<%= dirs.dest.demos %>/scripts/main.js': '<%= dirs.src.demos %>/scripts/*.js' }
             },
             pickers: {
-                options: {
-                    banner: '<%= banner.pickers %>\n'
-                },
                 expand: true,
                 cwd: '<%= dirs.src.pickers %>',
                 src: [ '*.js' ],

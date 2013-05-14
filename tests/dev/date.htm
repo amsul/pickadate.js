@@ -41,7 +41,7 @@
         <form>
             <fieldset>
                 <h3><label for="input_01">Pick a date. Go ahead...</label></h3>
-                <input id="input_01" class="datepicker" name="date" type="date" valuee="22 January, 2012" data-valuee="2012/01/22" autofocus>
+                <input id="input_01" class="datepicker" name="date" type="date" value="22 April, 2013" data-valuee="2012/01/22" autofocuss>
                 <br><br><br><br><br>
                 <input class="button" type="submit" value="open">
             </fieldset>
@@ -58,7 +58,7 @@
     </section>
 
 
-    <script src="../jquery.2.0.0.js"></script>
+    <script src="../jquery.1.9.1.js"></script>
     <script src="../../lib/picker.js"></script>
     <script src="../../lib/picker.date.js"></script>
     <script src="../../lib/legacy.js"></script>
@@ -93,7 +93,11 @@
             }
         })
 
-        // console.dir( Picker )
+        $('.datepickerr').focus( function() {
+            picker.open(false)
+        }).blur( function() {
+            picker.close()
+        })
 
         // var $button = $( '.button' ).on( 'click', function( event ) {
         //     event.preventDefault()

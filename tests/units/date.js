@@ -33,7 +33,7 @@ module( 'Date picker setup', {
 })
 
 test( 'Calendar stage', function() {
-    ok( this.picker.$holder.find( '.' + $.fn.pickadate.defaults.klass.table + ' [data-pick]' ).length === 42, '42 selectables dates' )
+    ok( this.picker.$root.find( '.' + $.fn.pickadate.defaults.klass.table + ' [data-pick]' ).length === 42, '42 selectables dates' )
 })
 
 test( 'Properties', function() {
@@ -56,10 +56,10 @@ test( 'First weekday', function() {
     var picker = this.picker,
         $input = picker.$node
 
-    strictEqual( picker.$holder.find( '.' + $.fn.pickadate.defaults.klass.weekdays ).first().text(), $.fn.pickadate.defaults.weekdaysShort[0], 'Sunday is first day' )
+    strictEqual( picker.$root.find( '.' + $.fn.pickadate.defaults.klass.weekdays ).first().text(), $.fn.pickadate.defaults.weekdaysShort[0], 'Sunday is first day' )
 
     picker.stop().$node.pickadate({ firstDay: 1 })
-    strictEqual( $input.pickadate( 'picker' ).$holder.find( '.' + $.fn.pickadate.defaults.klass.weekdays ).first().text(), $.fn.pickadate.defaults.weekdaysShort[1], 'Monday is first day' )
+    strictEqual( $input.pickadate( 'picker' ).$root.find( '.' + $.fn.pickadate.defaults.klass.weekdays ).first().text(), $.fn.pickadate.defaults.weekdaysShort[1], 'Monday is first day' )
 })
 
 
@@ -89,9 +89,9 @@ test( '`select`', function() {
     picker.set( 'select', playdate.getTime() )
     deepEqual( picker.get( 'select' ).obj, playdate, '`select` using a number: ' + playdate )
     strictEqual( picker.get( 'value' ), picker.get( 'select', $.fn.pickadate.defaults.format ), '`value` matches' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'select' ), '`highlight` updated' )
+    strictEqual( picker.get( 'view', 'yyyy/mm/dd' ), picker.get( 'highlight', 'yyyy/mm/01' ), '`view` updated' )
     deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
-    deepEqual( picker.get( 'highlight' ), picker.get( 'now' ), '`highlight` unaffected' )
-    strictEqual( picker.get( 'view', 'yyyy/mm/dd' ), picker.get( 'highlight', 'yyyy/mm/01' ), '`view` unaffected' )
     deepEqual( picker.get( 'min' ).pick, -Infinity, '`min` unaffected' )
     deepEqual( picker.get( 'max' ).pick, Infinity, '`max` unaffected' )
 
@@ -100,9 +100,9 @@ test( '`select`', function() {
     picker.set( 'select', [playdate.getFullYear(),playdate.getMonth(),playdate.getDate()] )
     deepEqual( picker.get( 'select' ).obj, playdate, '`select` using an array: ' + playdate )
     strictEqual( picker.get( 'value' ), picker.get( 'select', $.fn.pickadate.defaults.format ), '`value` matches' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'select' ), '`highlight` updated' )
+    strictEqual( picker.get( 'view', 'yyyy/mm/dd' ), picker.get( 'highlight', 'yyyy/mm/01' ), '`view` updated' )
     deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
-    deepEqual( picker.get( 'highlight' ), picker.get( 'now' ), '`highlight` unaffected' )
-    strictEqual( picker.get( 'view', 'yyyy/mm/dd' ), picker.get( 'highlight', 'yyyy/mm/01' ), '`view` unaffected' )
     deepEqual( picker.get( 'min' ).pick, -Infinity, '`min` unaffected' )
     deepEqual( picker.get( 'max' ).pick, Infinity, '`max` unaffected' )
 
@@ -111,9 +111,9 @@ test( '`select`', function() {
     picker.set( 'select', playdate )
     deepEqual( picker.get( 'select' ).obj, playdate, '`select` using a JS date object: ' + playdate )
     strictEqual( picker.get( 'value' ), picker.get( 'select', $.fn.pickadate.defaults.format ), '`value` matches' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'select' ), '`highlight` updated' )
+    strictEqual( picker.get( 'view', 'yyyy/mm/dd' ), picker.get( 'highlight', 'yyyy/mm/01' ), '`view` updated' )
     deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
-    deepEqual( picker.get( 'highlight' ), picker.get( 'now' ), '`highlight` unaffected' )
-    strictEqual( picker.get( 'view', 'yyyy/mm/dd' ), picker.get( 'highlight', 'yyyy/mm/01' ), '`view` unaffected' )
     deepEqual( picker.get( 'min' ).pick, -Infinity, '`min` unaffected' )
     deepEqual( picker.get( 'max' ).pick, Infinity, '`max` unaffected' )
 })
@@ -389,7 +389,7 @@ test( '`disable` and `enable` using integers', function() {
     var today = new Date(),
         disableCollection = [1,4,7],
         picker = this.picker,
-        $holder = picker.$holder
+        $root = picker.$root
 
     today.setHours(0,0,0,0)
 
@@ -401,7 +401,7 @@ test( '`disable` and `enable` using integers', function() {
 
     deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled dates added to collection' )
 
-    $holder.find( 'tr' ).each( function( indexRow, tableRow ) {
+    $root.find( 'tr' ).each( function( indexRow, tableRow ) {
         $( tableRow ).find( '[data-pick]' ).each( function( indexCell, tableCell ) {
             if ( disableCollection.indexOf( indexCell + 1 ) > -1 ) {
                 ok( $( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Disabled as day of week: ' + ( indexCell + 1 ) + '. Date: ' + tableCell.innerHTML )
@@ -415,7 +415,7 @@ test( '`disable` and `enable` using integers', function() {
     picker.set( 'enable', [1] )
     deepEqual( picker.get( 'disable' ), [4,7], 'Disabled time removed from collection' )
 
-    $holder.find( 'tr' ).each( function( indexRow, tableRow ) {
+    $root.find( 'tr' ).each( function( indexRow, tableRow ) {
         $( tableRow ).find( '[data-pick]' ).each( function( indexCell, tableCell ) {
             if ( [4,7].indexOf( indexCell + 1 ) > -1 ) {
                 ok( $( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Disabled as day of week: ' + ( indexCell + 1 ) + '. Date: ' + tableCell.innerHTML )
@@ -429,7 +429,7 @@ test( '`disable` and `enable` using integers', function() {
     picker.set( 'enable', 'flip' )
     deepEqual( picker.get( 'disable' ), [4,7], 'Disabled collection `enable` flipped' )
 
-    $holder.find( 'tr' ).each( function( indexRow, tableRow ) {
+    $root.find( 'tr' ).each( function( indexRow, tableRow ) {
         $( tableRow ).find( '[data-pick]' ).each( function( indexCell, tableCell ) {
             if ( [4,7].indexOf( indexCell + 1 ) < 0 ) {
                 ok( $( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Disabled as day of week: ' + ( indexCell + 1 ) + '. Date: ' + tableCell.innerHTML )
@@ -443,7 +443,7 @@ test( '`disable` and `enable` using integers', function() {
     picker.set( 'disable', 'flip' )
     deepEqual( picker.get( 'disable' ), [4,7], 'Disabled collection `disable` flipped' )
 
-    $holder.find( 'tr' ).each( function( indexRow, tableRow ) {
+    $root.find( 'tr' ).each( function( indexRow, tableRow ) {
         $( tableRow ).find( '[data-pick]' ).each( function( indexCell, tableCell ) {
             if ( [4,7].indexOf( indexCell + 1 ) > -1 ) {
                 ok( $( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Disabled as day of week: ' + ( indexCell + 1 ) + '. Date: ' + tableCell.innerHTML )
@@ -463,13 +463,13 @@ test( '`disable` and `enable` using arrays', function() {
         disableCollection = [ [nowYear,nowMonth,1],[nowYear,nowMonth,17],[nowYear,nowMonth,25] ],
         picker = this.picker,
         viewday = picker.get( 'view' ).day,
-        $holder = picker.$holder
+        $root = picker.$root
 
 
     picker.set( 'disable', disableCollection )
     deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled dates added to collection' )
 
-    $holder.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
+    $root.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
         var index = indexCell - viewday + 1
         if ( index === 1 || index === 17 || index === 25 ) {
             ok( $( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is disabled: ' + tableCell.innerHTML )
@@ -483,7 +483,7 @@ test( '`disable` and `enable` using arrays', function() {
     picker.set( 'enable', [ [nowYear,nowMonth,17] ] )
     deepEqual( picker.get( 'disable' ), [ [nowYear,nowMonth,1],[nowYear,nowMonth,25] ], 'Disabled date removed from collection' )
 
-    $holder.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
+    $root.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
         var index = indexCell - viewday + 1
         if ( index === 1 || index === 25 ) {
             ok( $( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is disabled: ' + tableCell.innerHTML )
@@ -497,7 +497,7 @@ test( '`disable` and `enable` using arrays', function() {
     picker.set( 'enable', 'flip' )
     deepEqual( picker.get( 'disable' ), [ [nowYear,nowMonth,1],[nowYear,nowMonth,25] ], 'Disabled collection `enable` flipped' )
 
-    $holder.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
+    $root.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
         var index = indexCell - viewday + 1
         if ( index !== 1 && index !== 25 ) {
             ok( $( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is disabled: ' + tableCell.innerHTML )
@@ -511,7 +511,7 @@ test( '`disable` and `enable` using arrays', function() {
     picker.set( 'disable', 'flip' )
     deepEqual( picker.get( 'disable' ), [ [nowYear,nowMonth,1],[nowYear,nowMonth,25] ], 'Disabled collection `disable` flipped' )
 
-    $holder.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
+    $root.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
         var index = indexCell - viewday + 1
         if ( index === 1 || index === 25 ) {
             ok( $( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is disabled: ' + tableCell.innerHTML )
@@ -540,14 +540,14 @@ module( 'Date picker mouse events', {
 test( 'Select', function() {
 
     var picker = this.picker,
-        $holder = picker.$holder,
+        $root = picker.$root,
         viewsetObject = picker.get( 'view' ),
         interval = 86400000,
         monthStartDay = viewsetObject.day,
         monthEndDate = new Date( viewsetObject.year, viewsetObject.month + 1, 0 ).getDate()
 
     for ( var i = monthStartDay; i < monthStartDay + monthEndDate; i += 1 ) {
-        $holder.find( '.' + $.fn.pickadate.defaults.klass.day ).eq( i ).click()
+        $root.find( '.' + $.fn.pickadate.defaults.klass.day ).eq( i ).click()
         ok( picker.get( 'select' ).pick === viewsetObject.pick + ( i - monthStartDay ) * interval, 'Selected ' + picker.get( 'select', 'yyyy/mm/dd' ) )
         ok( picker.get( 'value' ) === picker.get( 'select', $.fn.pickadate.defaults.format ), 'Input value updated to ' + picker.get( 'value' ) )
     }
@@ -556,14 +556,14 @@ test( 'Select', function() {
 test( 'Highlight', function() {
 
     var picker = this.picker,
-        $holder = picker.$holder,
+        $root = picker.$root,
         today = new Date(),
         playdate = new Date()
 
     today.setHours(0,0,0,0)
     playdate.setHours(0,0,0,0)
 
-    $holder.find( '.' + $.fn.pickadate.defaults.klass.navPrev ).click()
+    $root.find( '.' + $.fn.pickadate.defaults.klass.navPrev ).click()
     playdate.setMonth( playdate.getMonth() - 1 )
     deepEqual( picker.get( 'highlight' ).obj, playdate, 'Previous month: ' + playdate )
     deepEqual( picker.get( 'select' ).obj, today, 'Select unaffected' )
@@ -571,8 +571,8 @@ test( 'Highlight', function() {
     playdate.setDate( 1 )
     deepEqual( picker.get( 'view' ).obj, playdate, 'View updated' )
 
-    $holder.find( '.' + $.fn.pickadate.defaults.klass.navNext ).click()
-    $holder.find( '.' + $.fn.pickadate.defaults.klass.navNext ).click()
+    $root.find( '.' + $.fn.pickadate.defaults.klass.navNext ).click()
+    $root.find( '.' + $.fn.pickadate.defaults.klass.navNext ).click()
     playdate.setMonth( today.getMonth() + 1 )
     playdate.setDate( today.getDate() )
     deepEqual( picker.get( 'highlight' ).obj, playdate, 'Next month: ' + playdate )
@@ -586,7 +586,7 @@ test( 'Today', function() {
 
     var picker = this.picker
 
-    picker.$holder.find( '.' + $.fn.pickadate.defaults.klass.buttonToday ).click()
+    picker.$root.find( '.' + $.fn.pickadate.defaults.klass.buttonToday ).click()
     ok( picker.get( 'value' ) === picker.get( 'select', $.fn.pickadate.defaults.format ), 'Value set to today' )
 })
 
@@ -597,7 +597,7 @@ test( 'Clear', function() {
     picker.set( 'select', new Date() )
     ok( picker.get( 'value' ) === picker.get( 'select', $.fn.pickadate.defaults.format ), 'Value updated' )
 
-    picker.$holder.find( '.' + $.fn.pickadate.defaults.klass.buttonClear ).click()
+    picker.$root.find( '.' + $.fn.pickadate.defaults.klass.buttonClear ).click()
     ok( picker.get( 'value' ) === '', 'Value cleared' )
 })
 

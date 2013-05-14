@@ -41,14 +41,14 @@
         <form>
             <fieldset>
                 <h3><label for="input_01">Pick a date. Go ahead...</label></h3>
-                <input id="input_01" class="datepicker" name="date" type="date" valuee="12:00 PM" data-valuee="01:30" autofocus>
+                <input id="input_from" class="datepicker" name="date" type="date" value="10:00 AM" data-valuee="01:30" autofocusss>
                 <br><br><br><br><br>
                 <input class="button" type="submit" value="open">
             </fieldset>
         </form>
 
         <fieldset>
-            <input type="text" class="datepickerr">
+            <input id="input_to" type="text" class="datepickerr">
         </fieldset>
 
         <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
@@ -58,7 +58,7 @@
     </section>
 
 
-    <script src="../jquery.2.0.0.js"></script>
+    <script src="../jquery.1.9.1.js"></script>
     <script src="../../lib/picker.js"></script>
     <script src="../../lib/picker.time.js"></script>
     <script src="../../lib/legacy.js"></script>
@@ -83,8 +83,8 @@
             // max: -2,
             // max: [ 9, 0 ],
             // onRender: function() {
-            //     var $viewset = this.$holder.find( '.picker__list-item--viewset' ),
-            //         $box = this.$holder.find( '.picker__box' )
+            //     var $viewset = this.$root.find( '.picker__list-item--viewset' ),
+            //         $box = this.$root.find( '.picker__box' )
             //     $box[ 0 ].scrollTop = ~~$viewset.position().top - $viewset[0].offsetHeight
             // }
         }),

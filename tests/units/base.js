@@ -42,7 +42,7 @@ test( 'Input stage and attributes', function() {
     ok( input.type === 'text', 'Type updated' )
     ok( input.readOnly === true, 'Readonly set' )
     ok( input.value === '', 'No value' )
-    ok( this.picker.$holder.length, 'Holder exists' )
+    ok( this.picker.$root.length, 'Root holder exists' )
     ok( !this.picker._hidden, 'Hidden input doesn’t exist' )
 })
 
@@ -230,10 +230,10 @@ test( 'Set and clear', function() {
 
     picker.open()
     picker.$node.trigger({ type: 'keydown', keyCode: 13 })
-    ok( picker.get( 'value' ) === picker.get( 'select', $.fn.pickadate.defaults.format ), 'Set value as default selection after “enter”' )
+    strictEqual( picker.get( 'value' ), picker.get( 'select', $.fn.pickadate.defaults.format ), 'Set value as default selection after “enter”' )
 
     picker.$node.trigger({ type: 'keydown', keyCode: 8 })
-    ok( picker.get( 'value' ) === '', 'Clear input value after “backspace”' )
+    strictEqual( picker.get( 'value' ), '', 'Clear input value after “backspace”' )
 })
 
 

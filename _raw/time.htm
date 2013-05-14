@@ -147,7 +147,30 @@ klass: {
     hiddenSuffix: '--submit'
 })</code></pre>
 
-        {%= timeDemoField({ id: 'time_demo__formats' }).replace( 'type=text', 'name=time_demo__formats type=text' ) %}
+        {%= timeDemoField({ id: 'time_demo__formats--a' }).replace( 'type=text', 'name=time_demo__formats type=text' ) %}
+
+        <p><code>formatLabel</code> is unique. It can contain HTML and it can also be a function if you want to create the label during run-time:</p>
+
+        <style>
+            .picker__list small {
+                color: #999;
+                float: right;
+                line-height: 1.5;
+            }
+            .picker__list .picker__list-item--highlighted small {
+                color: #fff;
+            }
+        </style>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.timepicker').pickatime({
+    formatLabel: function(time) {
+        var hours = ( time.pick - this.get('now').pick ) / 60,
+            label = hours &lt; 0 ? ' !hours to now' : hours > 0 ? ' !hours from now' : 'now'
+        return 'h:i a &lt;sm!all>' + ( hours ? Math.abs(hours) : '' ) + label + '&lt;/sm!all>'
+    }
+})</code></pre>
+
+        {%= timeDemoField({ id: 'time_demo__formats--b' }).replace( 'type=text', 'name=time_demo__formats type=text' ) %}
 
     </div> <!-- .section__block -->
 

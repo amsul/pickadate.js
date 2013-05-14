@@ -103,7 +103,7 @@ $input.pickadate(<a href="#objects">objectName</a>)</code></pre>
 
         <ol>
             <li><code><a href="#object-node">$node</a></code></li>
-            <li><code><a href="#object-holder">$holder</a></code></li>
+            <li><code><a href="#object-root">$root</a></code></li>
             <li><code><a href="#object-hidden">_hidden</a></code></li>
             <li><code><a href="#object-component">component</a></code></li>
         </ol>
@@ -142,11 +142,38 @@ event.stopPropagation()</code></pre>
             pre: '<button id=button__api-open-close class="fieldset__button button button--small">Open</button>'
         }) %}
 
-        <p>To close the picker while focusing onto the <code class="tag-name">input</code> element, pass a truth-y first argument.</p>
+    </div> <!-- .section__block -->
+
+    <div class="section__block section__block--scoped">
+
+        <h3 class="heading heading--divide"><span class="heading__text">Close with focus<a class="heading__anchor" name="method-close-focus" href="#method-close-focus">&sect;</a></span></h3>
+
+        <p>Close the picker while focusing onto the <code class="tag-name">input</code> element by passing a truth-y first argument.</p>
 
         <pre class="pre--demo"><code data-language="javascript">picker.close(true)</code></pre>
 
         {%= dateDemoField({ id: 'demo__api-close-focus' }) %}
+
+    </div> <!-- .section__block -->
+
+    <div class="section__block section__block--scoped">
+
+        <h3 class="heading heading--divide"><span class="heading__text">Open without focus<a class="heading__anchor" name="method-open-focus" href="#method-open-focus">&sect;</a></span></h3>
+
+        <p>Open the picker without focusing onto the <code class="tag-name">input</code> element by passing <code class="constant">false</code> as the first argument. Opening the picker this way, there’s a couple of things to note:</p>
+        <p><b>(1)</b> The only way to close it is with a separate custom binding – in this example, on document click.</p>
+        <p><b>(2)</b> <a href="#method-on">The “opening” events</a> are still triggered – however, using <a href="#method-get">the <code>get</code> method</a> to see if the picker is open will return <code class="constant">false</code>.</p>
+        <p>If any of the picker elements is focused/clicked, it resumes normal behavior.</p>
+
+        <pre class="pre--demo"><code data-language="javascript">picker.open(false)
+$(document).on('click', function() {
+    picker.close()
+})</code></pre>
+
+        {%= dateDemoField({
+            id: 'demo__api-open-focus',
+            pre: '<button id=button__api-open-focus class="fieldset__button button button--small">Open without focus</button>'
+        }) %}
 
     </div> <!-- .section__block -->
 
@@ -542,7 +569,7 @@ picker.stop()</code></pre>
     <div class="section__block section__block--scoped">
 
         <h2 class="heading heading--divide"><span class="heading__text">Set <code class="string">select</code><a class="heading__anchor" name="method-set-select" href="#method-set-select">&sect;</a></span></h2>
-        <p>Setting <code class="string">select</code> has a <a href="#cascading-changes">cascading change</a> that updates the value of the <code class="tag-name">input</code> element based on the settings <code>format</code>.</p>
+        <p>Setting <code class="string">select</code> has <a href="#cascading-changes">cascading changes</a> that update the <code>highlight</code>, the <code>view</code>, and the value of the <code class="tag-name">input</code> element based on the settings <code>format</code>.</p>
 
         <h3 class="heading heading--divide"><span class="heading__text">Select a date <a href="#item-objects">item object</a><a class="heading__anchor--bigger" name="method-set-select-date" href="#method-set-select-date">&sect;</a></span></h3>
 
@@ -937,14 +964,14 @@ picker.trigger('open')</code></pre>
 
     <div class="section__block section__block--scoped">
 
-        <h2 class="heading heading--divide"><span class="heading__text">Object <code>$holder</code><a class="heading__anchor" name="object-holder" href="#object-holder">&sect;</a></span></h2>
-        <p>This is the picker’s relative holder element wrapped as a jQuery object.</p>
+        <h2 class="heading heading--divide"><span class="heading__text">Object <code>$root</code><a class="heading__anchor" name="object-root" href="#object-root">&sect;</a></span></h2>
+        <p>This is the picker’s relative root holder element wrapped as a jQuery object.</p>
 
-        <pre class="pre--demo"><code data-language="javascript">picker.$holder</code></pre>
+        <pre class="pre--demo"><code data-language="javascript">picker.$root</code></pre>
 
         {%= dateDemoField({
             id: 'demo__api-object--holder',
-            pre: '<button id=button__api-object--holder class="fieldset__button button button--small">Get the holder</button>',
+            pre: '<button id=button__api-object--holder class="fieldset__button button button--small">Get the root</button>',
             placeholder: 'Open your console and try me&hellip;'
         }) %}
 

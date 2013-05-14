@@ -1,4 +1,9 @@
 
+/*!
+ * Time picker for {%= pkg.title %} v{%= pkg.version %}
+ * {%= pkg.homepage %}/time.htm
+ */
+
 /*jshint
    debug: true,
    devel: true,
@@ -59,6 +64,8 @@ function TimePicker( picker, settings ) {
         set( 'min', settings.min ).
         set( 'max', settings.max ).
         set( 'now' ).
+
+        // Setting the `select` also sets the `highlight` and `view`.
         set( 'select',
 
             // If there's a `value` or `data-value`, use that with formatting.
@@ -67,10 +74,7 @@ function TimePicker( picker, settings ) {
 
             // Use the relevant format.
             { format: elementDataValue ? settings.formatSubmit : settings.format }
-        ).
-
-        // Setting the `highlight` also sets the `view`.
-        set( 'highlight', clock.item.select )
+        )
 
     // The keycode to movement mapping.
     clock.key = {
@@ -88,20 +92,20 @@ function TimePicker( picker, settings ) {
     // Bind some picker events.
     picker.
         on( 'render', function() {
-            var $pickerHolder = picker.$holder.children(),
+            var $pickerHolder = picker.$root.children(),
                 $viewset = $pickerHolder.find( '.' + settings.klass.viewset )
             if ( $viewset.length ) {
-                $pickerHolder[ 0 ].scrollTop = ~~( $viewset.position().top - $viewset[ 0 ].clientHeight )
+                $pickerHolder[ 0 ].scrollTop = ~~( $viewset.position().top - ( $viewset[ 0 ].clientHeight * 2 ) )
             }
             else {
                 console.warn( 'Nothing to viewset with', clock.item.view )
             }
         }).
         on( 'open', function() {
-            picker.$holder.find( 'button' ).attr( 'disable', false )
+            picker.$root.find( 'button' ).attr( 'disable', false )
         }).
         on( 'close', function() {
-            picker.$holder.find( 'button' ).attr( 'disable', true )
+            picker.$root.find( 'button' ).attr( 'disable', true )
         })
 
 } //TimePicker
@@ -123,7 +127,10 @@ TimePicker.prototype.set = function( type, value, options ) {
     }).pop()
 
     // Check if we need to cascade through more updates.
-    if ( type == 'highlight' ) {
+    if ( type == 'select' ) {
+        clock.set( 'highlight', clock.item.select, options )
+    }
+    else if ( type == 'highlight' ) {
         clock.set( 'view', clock.item.highlight, options )
     }
     else if ( type == 'interval' ) {
@@ -382,7 +389,7 @@ TimePicker.prototype.parse = function( type, value, options ) {
 
         +( parsingObject.H || parsingObject.HH ) ||
 
-        ( +( parsingObject.h || parsingObject.hh ) + ( /^p/i.test( parsingObject.A || parsingObject.a ) ? 12 : 0 ) )
+        ( +( parsingObject.h || parsingObject.hh ) % 12 + ( /^p/i.test( parsingObject.A || parsingObject.a ) ? 12 : 0 ) )
     )
 } //TimePicker.prototype.parse
 
@@ -542,7 +549,7 @@ TimePicker.prototype.nodes = function( isOpen ) {
         item: function( loopedTime ) {
             loopedTime = clock.create( loopedTime )
             return [
-                Picker._.trigger( clock.formats.toString, clock, [ settings.formatLabel || settings.format, loopedTime ] ),
+                Picker._.trigger( clock.formats.toString, clock, [ Picker._.trigger( settings.formatLabel, clock, [ loopedTime ] ) || settings.format, loopedTime ] ),
                 (function( klasses, timeMinutes ) {
 
                     if ( selectedObject && selectedObject.pick == timeMinutes ) {
