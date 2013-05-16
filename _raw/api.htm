@@ -2,10 +2,10 @@
 
 {% dateDemoField = function( props ) {
     props = props || {}
-    return '<fieldset class="fieldset fieldset--demo js__fieldset">' +
+    return '<fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper">' +
         ( props.pre || '' ) +
         '<input id="' + ( props.id || '' ) + '" class="fieldset__input ' + ( props.klass || '' ) + '" type=text value="' + ( props.value || '' ) + '" placeholder="' + ( props.placeholder || 'Try me&hellip;' ) + '">' +
-    '</fieldset>'
+    '</div></fieldset>'
 } %}
 
 {% today = new Date(2013,3,20); today.setHours(0,0,0,0) %}

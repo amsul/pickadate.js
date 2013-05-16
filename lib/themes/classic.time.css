@@ -60,11 +60,6 @@
   background: white;
   padding: 0.75em 1.25em;
 }
-@media (min-height: 40.125em) {
-  .picker__list-item {
-    padding: 0.5em 1em;
-  }
-}
 
 /* Hovered time */
 .picker__list-item:hover {
@@ -200,7 +195,7 @@
 .picker--time .picker__holder {
   background: #f2f2f2;
 }
-@media (min-height: 33.875em) {
+@media (min-height: 40.125em) {
   .picker--time .picker__holder {
     font-size: .875em;
   }

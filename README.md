@@ -51,12 +51,12 @@ All themes are [generated using Sass](#sass-styling) and compiled into the `lib/
 
 File                    | Contents                 | Size (min & gzip)
 ----------------------- | ------------------------ | ----------------------
-`default.css`           | __Base default *__       | 0.45kb
+`default.css`           | __Base default *__       | 0.46kb
 `default.date.css`      | Default date picker      | 0.68kb
-`default.time.css`      | Default time picker      | 0.36kb
+`default.time.css`      | Default time picker      | 0.34kb
 `classic.css`           | __Base classic *__       | 0.29kb
 `classic.date.css`      | Classic date picker      | 0.68kb
-`classic.time.css`      | Classic time picker      | 0.35kb
+`classic.time.css`      | Classic time picker      | 0.34kb
 
 __*__ One and only one base stylesheet is **required**. Check out the [demos](http://amsul.github.io/pickadate.js/themes.htm) to choose one – and then include the respective pickers as well.
 

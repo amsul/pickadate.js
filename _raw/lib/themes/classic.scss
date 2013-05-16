@@ -28,7 +28,6 @@
 
     // Add a light border - except at the top edge.
     border: 1px solid lighten( $border-grey, 20% );
-    border-top: 0;
 
     // Let’s not go 100% + 2px.
     @include prefix( box-sizing, border-box );

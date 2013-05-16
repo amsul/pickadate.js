@@ -55,7 +55,7 @@ $base-font-size: 16px;
 $base-line-height: 1.2;
 
 // Corners.
-$picker-border-radius: 6px;
+$picker-border-radius: 5px;
 
 // Drop shadows.
 $picker-box-shadow: 0 12px 36px 16px rgba(0,0,0,.24);
@@ -170,10 +170,9 @@ $classic-box-shadow: 0 6px 18px 1px rgba(0,0,0,.12);
  * Media queries
  */
 
-$breakpoint-tiny: 21.375em; // 324px @ 16px
-$breakpoint-small: 26.5em; // 424px @ 16px
-$breakpoint-medium: 33.875em; // 542px @ 16px
-$breakpoint-large: 40.125em; // 642px @ 16px
+$breakpoint-tiny: 26.5em; // 424px @ 16px
+$breakpoint-small: 33.875em; // 542px @ 16px
+$breakpoint-medium: 40.125em; // 642px @ 16px
 
 @mixin min-screen( $media, $match: height ) {
     @if $media == tiny {
@@ -184,9 +183,6 @@ $breakpoint-large: 40.125em; // 642px @ 16px
     }
     @else if $media == medium {
         @media ( min-#{$match}: $breakpoint-medium ) { @content; }
-    }
-    @else if $media == large {
-        @media ( min-#{$match}: $breakpoint-large ) { @content; }
     }
 }
 

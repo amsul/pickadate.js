@@ -916,10 +916,13 @@ $( '#theme__default_time, #theme__classic_time' ).pickatime()
 var themeSelected = window.localStorage ? localStorage.getItem( 'theme' ) : '',
     $themeLinks = $( '#theme_base, #theme_date, #theme_time' ),
     updateStylingLinks = function( value ) {
+        value = value || 'default'
         $( '#show_theme_' + value ).attr( 'checked', true )
+        $themeLinks.detach()
         $themeLinks.each( function() {
             this.href = this.href.replace( /(.+\/)(\w+)(.+)/, '$1' + value + '$3' )
         })
+        $themeLinks.appendTo( 'head' )
     }
 
 if ( themeSelected ) {

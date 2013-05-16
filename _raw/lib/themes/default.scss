@@ -53,7 +53,7 @@
     // Animate the frame in and out of view.
     @include prefix( transition, all $speed-animate-in ease-out );
 
-    // For `small` screens....
+    // For `small` screens...
     @include min-screen( small ) {
 
         // Reveal what’s beyond to allow drop shadows, et al.
@@ -65,6 +65,10 @@
 
         // Prevent it from overflowing over the top edge.
         max-height: 80%;
+    }
+
+    // For `medium` screens...
+    @include min-screen( medium ) {
 
         // Move away from the bottom edge.
         margin-bottom: 7.5%;

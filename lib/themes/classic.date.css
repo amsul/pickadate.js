@@ -169,7 +169,7 @@
   margin-top: .75em;
   margin-bottom: .5em;
 }
-@media (min-height: 26.5em) {
+@media (min-height: 33.875em) {
   .picker__table {
     margin-bottom: .75em;
   }
@@ -191,7 +191,7 @@
   font-weight: 500;
   /* Increase the spacing a tad */
 }
-@media (min-height: 26.5em) {
+@media (min-height: 33.875em) {
   .picker__weekday {
     padding-bottom: .5em;
   }

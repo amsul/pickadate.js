@@ -60,11 +60,6 @@
   background: white;
   padding: 0.75em 1.25em;
 }
-@media (min-height: 40.125em) {
-  .picker__list-item {
-    padding: 0.5em 1em;
-  }
-}
 
 /* Hovered time */
 .picker__list-item:hover {
@@ -192,25 +187,16 @@
   min-width: 256px;
   max-width: 320px;
 }
-@media (min-height: 33.875em) {
-  .picker--time .picker__frame {
-    font-size: .875em;
-  }
-}
-@media (min-height: 40.125em) {
-  .picker--time .picker__frame {
-    font-size: .6875em;
-  }
-}
 
 /**
  * The picker box.
  */
 .picker--time .picker__box {
+  font-size: 1em;
   background: #f2f2f2;
   padding: 0;
 }
-@media (min-height: 33.875em) {
+@media (min-height: 40.125em) {
   .picker--time .picker__box {
     margin-bottom: 5em;
   }

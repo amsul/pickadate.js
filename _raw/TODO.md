@@ -24,6 +24,7 @@ tests
 future
 ------
 
+- future: prevent body overflowing scroll
 - future: default theme with “transformly responsive” option
 - future: month with 31st highlighted..click nav to next month skips month with less than 31 days
 - future: improve base jquery extension `return`s
