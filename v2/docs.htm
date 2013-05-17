@@ -1,0 +1,1300 @@
+<!doctype html>
+
+<meta charset="utf-8">
+
+<meta name="author" content="Amsul - http://amsul.ca">
+<meta name="viewport" content="width=device-width,maximum-scale=1">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+<title>Pickadate.js &#8226; Documentation</title>
+
+<link rel="stylesheet" href="demo/style.css">
+<link rel="stylesheet" href="themes/pickadate.01.default.css">
+
+<!--[if lt IE 9]>
+    <script>document.createElement('section')</script>
+<![endif]-->
+
+
+<body>
+
+
+    <section class="holder holder-top holder-clean">
+
+        <h1><a href="http://amsul.github.com/pickadate.js" class="link-inherit"><strong title="Pick a Date" class="underline-highlight">pickadate.js</strong></a><a class="button button-header" href="../index.htm">Back to v3</a></h1>
+        <h2>A mobile-friendly, responsive, and lightweight jQuery dateinput picker<br><small class="dimmed"><small><small>9.6kb min, 4.0kb gzipped</small></small></small></h2>
+
+        <h4><a href="https://github.com/amsul/pickadate.js/archive/2.1.8.zip">Download pickadate.js v2.1.8</a> (<a href="#legacy">for old browsers</a>) or <a href="themes.htm" id="theme">view the themes</a></h4>
+        <h4><a href="#api">Jump to api documentation</a> &darr;</h4>
+
+    </section>
+
+
+    <section class="holder" id="options">
+
+        <h3><a class="link-anchor" href="#options">&sect;</a><strong class="underline-highlight">Default options</strong></h3>
+
+        <pre><code data-language="javascript">// <a href="#strings">Strings</a> and <a href="#translations">translations</a>
+monthsFull: [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ],
+monthsShort: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
+weekdaysFull: [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ],
+weekdaysShort: [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ],
+
+// <a href="#strings">Display strings</a>
+monthPrev: '&amp;amp;#9664;',
+monthNext: '&amp;amp;#9654;',
+showMonthsFull: true,
+showWeekdaysShort: true,
+
+// <a href="#buttons">Today and clear</a>
+today: 'Today',
+clear: 'Clear',
+
+// <a href="#formats">Date formats</a>
+format: 'd mmmm, yyyy',
+formatSubmit: false,
+hiddenSuffix: '_submit',
+
+// <a href="#first_day">First day of week</a>
+firstDay: 0,
+
+// <a href="#selectors">Month &amp; year dropdown selectors</a>
+monthSelector: false,
+yearSelector: false,
+
+// <a href="#ranges">Date ranges</a>
+dateMin: false,
+dateMax: false,
+
+// <a href="#disable_dates">Dates disabled</a>
+datesDisabled: false,
+
+// <a href="#disable">Disable picker</a>
+disablePicker: false,
+
+// <a href="#events">Calendar events</a>
+onStart: null,
+onOpen: null,
+onClose: null,
+onSelect: null,
+onRender: null,
+
+// <a href="themes.htm" id="options_styling">Themes</a>
+klass: {
+    active: 'pickadate__active',
+    input: 'pickadate__input',
+
+    // Picker holder states
+    holder: 'pickadate__holder',
+    opened: 'pickadate__holder--opened',
+    focused: 'pickadate__holder--focused',
+
+    // Picker frame and wrapper
+    frame: 'pickadate__frame',
+    wrap: 'pickadate__wrap',
+
+    // Picker calendar
+    calendar: 'pickadate__calendar',
+
+    // Picker header
+    header: 'pickadate__header',
+
+    // Month navigation
+    monthPrev: 'pickadate__nav--prev',
+    monthNext: 'pickadate__nav--next',
+
+    // Month &amp; year labels
+    month: 'pickadate__month',
+    year: 'pickadate__year',
+
+    // Select menus
+    selectMonth: 'pickadate__select--month',
+    selectYear: 'pickadate__select--year',
+
+    // Picker table
+    table: 'pickadate__table',
+
+    // Weekday labels
+    weekdays: 'pickadate__weekday',
+
+    // Calendar body
+    body: 'pickadate__body',
+
+    // Day states
+    day: 'pickadate__day',
+    dayDisabled: 'pickadate__day--disabled',
+    daySelected: 'pickadate__day--selected',
+    dayHighlighted: 'pickadate__day--highlighted',
+    dayToday: 'pickadate__day--today',
+    dayInfocus: 'pickadate__day--infocus',
+    dayOutfocus: 'pickadate__day--outfocus',
+
+    // Footer
+    footer: 'pickadate__footer',
+
+    // Today and clear buttons
+    buttonClear: 'pickadate__button--clear',
+    buttonToday: 'pickadate__button--today'
+}</code></pre>
+
+    </section>
+
+
+    <section class="holder" id="simple">
+
+        <h3><a class="link-anchor" href="#simple">&sect;</a><strong class="underline-highlight">Simple setup</strong></h3>
+
+        <p>For the basic setup with the <a href="#options">default options</a>, invoke the picker on an <code>input</code> element. The <code class="attribute">type</code> of the element doesn&rsquo;t matter, but it must be an <code>input</code> element.</p>
+
+        <pre><code data-language="javascript">$( '.datepicker' ).pickadate()</code></pre>
+
+        <fieldset>
+            <input id="picker_simple" class="datepicker" type="text">
+        </fieldset>
+
+        <p>A core behaviour is to give the <code>input</code> field a <code class="attribute">readonly</code> attribute. This is done to prevent the keyboard from popping up on smartphones and also to maintain &ldquo;pretty&rdquo; dates that are simple to handle.</p>
+
+        <p class="notification"><b>If you require the input to be editable</b>, I would suggest using a date parsing library (such as <a href="http://www.datejs.com/" target="_blank">datejs</a>) along with the <a href="#api">pickadate.js api</a> to achieve <a href="http://codepen.io/amsul/pen/sJuqa" target="_blank">this effect</a>.</p>
+
+    </section>
+
+
+    <section class="holder" id="strings">
+
+        <h3><a class="link-anchor" href="#strings">&sect;</a><strong class="underline-highlight">Custom month and weekday tags</strong></h3>
+
+        <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
+    monthPrev: '&amp;amp;larr;',
+    monthNext: '&amp;amp;rarr;',
+    weekdaysShort: [ 'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa' ],
+    showMonthsFull: false
+})</code></pre>
+
+        <fieldset>
+            <input id="picker_strings" class="datepicker" type="text">
+        </fieldset>
+
+    </section>
+
+
+    <section class="holder" id="buttons">
+
+        <h3><a class="link-anchor" href="#buttons">&sect;</a><strong class="underline-highlight">Today and clear buttons</strong></h3>
+
+        <p>As a default, <code>today</code> is set to <code class="string">'Today'</code> and <code>clear</code> is set to <code class="string">'Clear'</code>.</p>
+
+        <p>If either of the options is <code class="constant">false</code>, the button is not displayed.</p>
+
+        <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
+    today: false,
+    clear: 'Clear date'
+})</code></pre>
+
+        <fieldset>
+            <input id="picker_buttons" class="datepicker" type="text">
+        </fieldset>
+
+        <p>For a custom &ldquo;clear&rdquo; button, check out the api for the <a href="#api_clear"><code>clear</code></a> method.</p>
+
+    </section>
+
+
+    <section class="holder" id="translations">
+
+        <h3><a class="link-anchor" href="#translations">&sect;</a><strong class="underline-highlight">Any language support</strong></h3>
+
+        <p>You can add support for any language in one of two ways.</p>
+
+        <p><b>(1)</b> By passing the months and weekdays as an array for <i>each invocation</i>:</p>
+
+        <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
+    formatSubmit: 'dd/mm/yyyy',
+    monthsFull: [ 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre' ],
+    monthsShort: [ 'Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec' ],
+    weekdaysShort: [ 'Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam' ],
+    today: 'aujourd\'hui',
+    clear: 'effacer'
+})</code></pre>
+
+        <p><b>(2)</b> Or by globally extending the default picker options for <i>all instances</i>:</p>
+
+        <pre><code data-language="javascript">$.extend( $.fn.pickadate.defaults, {
+    formatSubmit: 'dd/mm/yyyy',
+    monthsFull: [ 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre' ],
+    monthsShort: [ 'Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec' ],
+    weekdaysShort: [ 'Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam' ],
+    today: 'aujourd\'hui',
+    clear: 'effacer'
+})</code></pre>
+
+        <fieldset>
+            <input id="picker_strings_b" class="datepicker" type="text">
+        </fieldset>
+
+        <p>There are <a href="https://github.com/amsul/pickadate.js/tree/gh-pages/translations">extensions for 28 languages</a> already available.</p>
+
+        <p class="notification notification--highlight">The <code class="tag-name">data-value</code> attribute and <code>formatSubmit</code> option are both required to parse your dates correctly. <a href="#formats">Read more</a> &darr;</p>
+
+    </section>
+
+
+    <section class="holder holder-clean" id="formats">
+
+        <h3><a class="link-anchor" href="#formats">&sect;</a><strong class="underline-highlight">Custom date formats</strong></h3>
+
+        <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
+    format: 'You selected: dddd, dd mmm, yyyy',
+    formatSubmit: 'yyyy/mm/dd'
+})</code></pre>
+
+        <p>Display human-friendly date formats while using a different format to submit to the server. Pick a date:</p>
+
+        <fieldset>
+            <input id="picker_formats" class="datepicker" name="custom_date" type="text">
+        </fieldset>
+
+        <p>This is done by creating a hidden input field using the <code class="attribute">name</code> attribute of the original input element <i>plus</i> the string set in the <code>hiddenSuffix</code> option.</p>
+
+        <p>As a default, <code>hiddenSuffix</code> is <code class="string">'_submit'</code>.</p>
+
+        <p id="formatting_rules">The dates can be formatted using the following rules:</p>
+
+        <table class="table" width="100%">
+            <thead>
+                <tr>
+                    <th>Rule</th>
+                    <th>Result</th>
+                    <th>Example</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>d</code></td>
+                    <td>Date</td>
+                    <td>1-31</td>
+                </tr>
+                <tr>
+                    <td><code>dd</code></td>
+                    <td>Date with leading zero</td>
+                    <td>01-31</td>
+                </tr>
+                <tr>
+                    <td><code>ddd</code></td>
+                    <td>Weekday &ndash; short</td>
+                    <td>Sun-Sat</td>
+                </tr>
+                <tr>
+                    <td><code>dddd</code></td>
+                    <td>Weekday &ndash; full</td>
+                    <td>Sunday-Saturday</td>
+                </tr>
+                <tr>
+                    <td><code>m</code></td>
+                    <td>Month</td>
+                    <td>1-12</td>
+                </tr>
+                <tr>
+                    <td><code>mm</code></td>
+                    <td>Month with leading zero</td>
+                    <td>01-12</td>
+                </tr>
+                <tr>
+                    <td><code>mmm</code></td>
+                    <td>Month name &ndash; short</td>
+                    <td>Jan-Dec</td>
+                </tr>
+                <tr>
+                    <td><code>mmmm</code></td>
+                    <td>Month name &ndash; full</td>
+                    <td>January-December</td>
+                </tr>
+                <tr>
+                    <td><code>yy</code></td>
+                    <td>Year &ndash; short *</td>
+                    <td>00-99</td>
+                </tr>
+                <tr>
+                    <td><code>yyyy</code></td>
+                    <td>Year &ndash; full</td>
+                    <td>2000-2999</td>
+                </tr>
+            </tbody>
+        </table>
+
+
+        <p class="notification notification--highlight"><b>&#42;</b> The &ldquo;short&rdquo; year ( <code>yy</code> ) format is quite vague and <b>should be avoided</b> within <code>formatSubmit</code> so dates can be accurately parsed.</p>
+
+    </section>
+
+
+    <section class="holder" id="formats_hidden">
+
+        <h3><a class="link-anchor" href="#formats_hidden">&sect;</a><strong class="underline-highlight">Custom format parsing</strong></h3>
+
+        <p>If your <code class="tag-name">input</code> field has a custom date format or language that doesn't <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Date/parse" target="_blank">easily parse as a date</a>, you can specify the date using the <code class="attribute">data-value</code> attribute:</p>
+
+        <pre><code data-language="html">&amp;lt;input&nbsp;value="August 14"&nbsp;data-value="1988/08/14"&nbsp;class="datepicker"&nbsp;type="text"&gt;</code></pre>
+
+        <fieldset>
+            <input id="picker_formats_b" class="datepicker" type="text" value="August 14" data-value="1988/08/14">
+        </fieldset>
+
+        <p>The <code class="attribute">data-value</code> attribute must be <a href="#formats">formatted</a> using the <code>formatSubmit</code> option:</p>
+
+        <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
+    format: 'mmmm dd',
+    formatSubmit: 'yyyy/mm/dd'
+})</code></pre>
+
+    </section>
+
+
+    <section class="holder" id="first_day">
+
+        <h3><a class="link-anchor" href="#first_day">&sect;</a><strong class="underline-highlight">Set Monday as the first day</strong></h3>
+
+        <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
+    firstDay: 1
+})
+</code></pre>
+
+        <p>Set <code>firstDay</code> to <code class="constant">1</code> for Monday and <code class="constant">0</code> for Sunday.</p>
+
+        <fieldset>
+            <input id="picker_dates_first_day" class="datepicker" type="text">
+        </fieldset>
+
+    </section>
+
+
+    <section class="holder" id="selectors">
+
+        <h3><a class="link-anchor" href="#selectors">&sect;</a><strong class="underline-highlight">Month and year dropdowns</strong></h3>
+
+        <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
+    monthSelector: true,
+    yearSelector: true
+})</code></pre>
+
+        <p>If <code>monthSelector</code> or <code>yearSelector</code> is <code class="constant">true</code>, a select menu is displayed:</p>
+
+        <fieldset>
+            <input id="picker_selectors" class="datepicker" type="text">
+        </fieldset>
+
+        <p>To change the number of years in the dropdown, set <code>yearSelector</code> as an even integer (half before the year in focus and half after). If set to <code class="constant">true</code>, it defaults to <code class="constant">10</code>.</p>
+
+        <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
+    yearSelector: 4
+})</code></pre>
+
+        <fieldset>
+            <input id="picker_selectors_b" class="datepicker" type="text">
+        </fieldset>
+
+    </section>
+
+
+    <section class="holder" id="ranges">
+
+        <h3><a class="link-anchor" href="#ranges">&sect;</a><strong class="underline-highlight">Minimum and maximum date range</strong></h3>
+
+        <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
+    dateMin: [ 2012, 10, 14 ],
+    dateMax: 5
+})</code></pre>
+
+        <fieldset>
+            <input id="picker_ranges_a" class="datepicker" type="text">
+        </fieldset>
+
+        <p><code>dateMin</code> and <code>dateMax</code> can be either</p>
+        <ol>
+            <li>an array representing a date (<code>[ yyyy, mm, dd ]</code>)</li>
+            <li>a boolean (<code class="constant">true</code> or <code class="constant">false</code>)</li>
+            <li>or an integer</li>
+        </ol>
+
+        <p>If <code>dateMax</code> or <code>dateMin</code> is <code class="constant">true</code>, the range limit is set to today.</p>
+
+        <p>If <code>dateMax</code> or <code>dateMin</code> is <code class="constant">false</code>, the range limit is removed.</p>
+
+        <p>If <code>dateMax</code> or <code>dateMin</code> is an integer, it represents the relative number of days till the min or max date.</p>
+
+        <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
+    dateMin: -8,
+    dateMax: true
+})</code></pre>
+
+        <fieldset>
+            <input id="picker_ranges_b" class="datepicker" type="text">
+        </fieldset>
+
+    </section>
+
+
+    <section class="holder holder-clean" id="disable_dates">
+
+        <h3><a class="link-anchor" href="#disable_dates">&sect;</a><strong class="underline-highlight">Disable arbitrary dates</strong></h3>
+
+        <p>Pass an array of arbitrary dates (each formatted as <code>[ yyyy, mm, dd ]</code>) to disable them.</p>
+
+        <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
+    datesDisabled: [
+        [ 2013, 3, 2 ],
+        [ 2013, 3, 5 ],
+        [ 2013, 3, 28 ]
+    ]
+})</code></pre>
+
+        <fieldset>
+            <input id="picker_dates_disabled_a" class="datepicker" type="text">
+        </fieldset>
+
+    </section>
+
+
+    <section class="holder holder-clean" id="disable_weekdays">
+
+        <h3><a class="link-anchor" href="#disable_weekdays">&sect;</a><strong class="underline-highlight">Disable days of the week</strong></h3>
+
+        <p>Disable certain days of the week, such as all Saturdays (7<sup>th</sup> day of week) and Sundays (1<sup>st</sup> day of week), by passing an integer between 1 and 7:</p>
+
+        <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
+    datesDisabled: [
+        1, 7,
+        [ 2013, 3, 2 ],
+        [ 2013, 3, 5 ],
+        [ 2013, 3, 28 ]
+    ]
+})</code></pre>
+
+        <fieldset>
+            <input id="picker_dates_disabled_b" class="datepicker" type="text">
+        </fieldset>
+
+    </section>
+
+
+    <section class="holder" id="disable_everyday">
+
+        <h3><a class="link-anchor" href="#disable_everyday">&sect;</a><strong class="underline-highlight">Disable all dates.. except some</strong></h3>
+
+        <p>Alternatively, disable <strong><i>all</i></strong> the dates in the calendar, <strong><i>except</i></strong> the ones specified if you set <code class="constant">true</code> as the first item in the array.</p>
+
+        <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
+    datesDisabled: [
+        true,
+        1, 7,
+        [ 2013, 3, 2 ],
+        [ 2013, 3, 5 ],
+        [ 2013, 3, 28 ]
+    ]
+})</code></pre>
+
+        <fieldset>
+            <input id="picker_dates_disabled_c" class="datepicker" type="text">
+        </fieldset>
+
+    </section>
+
+
+    <section class="holder" id="disable">
+
+        <h3><a class="link-anchor" href="#disable">&sect;</a><strong class="underline-highlight">Disable picker for native calendar</strong></h3>
+
+        <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
+    disablePicker: true
+})</code></pre>
+
+        <fieldset>
+            <input id="picker_disable" class="datepicker" type="date">
+        </fieldset>
+
+        <p>Some mobile browsers have good native support for <code data-language="html">type="date"</code>.</p>
+        <p>If you want to selectively disable the picker for these browsers, I would suggest detecing for support with something like <a target="_blank" href="http://modernizr.com/">Modernizr</a> and then setting <code>disablePicker</code> to <code class="constant">true</code>.</p>
+
+    </section>
+
+
+    <section class="holder" id="events">
+
+        <h3><a class="link-anchor" href="#events">&sect;</a><strong class="underline-highlight">Do stuff on calendar events</strong></h3>
+
+        <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
+    onOpen: function() {
+        console.log( 'Opened' )
+    },
+    onClose: function() {
+        console.log( 'Closed' )
+    },
+    onSelect: function() {
+        console.log( 'Selected: '&nbsp;+&nbsp;this.getDate() )
+    },
+    onStart: function() {
+        console.log( 'Hello there :)' )
+    },
+    onRender: function() {
+      console.log( 'New calendar rendered!' )
+    }
+})</code></pre>
+
+        <p>Have events trigger as the user interacts with the picker.</p>
+
+        <p>Within scope of these methods, <code class="keyword">this</code> refers to the <a href="#api">calendar picker</a>. Open up your console and pick a date:</p>
+
+        <fieldset>
+            <input id="picker_events" class="datepicker" type="date">
+        </fieldset>
+
+    </section>
+
+
+    <section class="holder" id="api">
+
+        <h1><a class="link-anchor" href="#api">&sect;</a><strong class="underline-highlight">api</strong></h1>
+
+        <p>There are 5 basic events in the options:</p>
+
+        <ol>
+            <li><code class="method">onStart</code>: invoked when the picker is initiated.</li>
+            <li><code class="method">onOpen</code>: invoked when the picker is opened.</li>
+            <li><code class="method">onSelect</code>: invoked when a date is selected or cleared.</li>
+            <li><code class="method">onClose</code>: invoked when the picker is closed.</li>
+            <li><code class="method">onRender</code>: invoked when the picker is rendered, including month changes.</li>
+        </ol>
+
+        <p>Within the scope of these methods, <code class="keyword">this</code> refers to the calendar object.</p>
+
+        <pre><code data-language="javascript">$( '.datepicker' ).pickadate({
+    onStart: function() {
+        var calendar =&nbsp;this
+    }
+})</code></pre>
+
+        <p>Alternatively, you can grab the calendar object like this:</p>
+
+        <pre><code data-language="javascript">var input = $( '.datepicker' ).pickadate()
+var calendar = input.data( 'pickadate' )
+</code></pre>
+
+        <p>The following methods are available on the calendar object:</p>
+
+        <ol>
+            <li><code><a href="#api_open_close">open</a></code></li>
+            <li><code><a href="#api_open_close">close</a></code></li>
+            <li><code><a href="#api_isOpen">isOpen</a></code></li>
+            <li><code><a href="#api_show">show</a></code></li>
+            <li><code><a href="#api_clear">clear</a></code></li>
+            <li><code><a href="#api_getDate">getDate</a></code></li>
+            <li><code><a href="#api_setDate">setDate</a></code></li>
+            <li><code><a href="#api_getDateLimit">getDateLimit</a></code></li>
+            <li><code><a href="#api_setDateLimit">setDateLimit</a></code></li>
+        </ol>
+
+        <p id="api_$node">You can also grab the jQuery object of the input element from the calendar like this:</p>
+
+        <pre><code data-language="javascript">this.$node</code></pre>
+
+        <small class="dimmed"><p>The <code>$</code> prefix is used to signify a jQuery object.</p></small>
+
+    </section>
+
+
+    <section class="holder" id="api_open_close">
+
+        <h3><a class="link-anchor" href="#api_open_close">&sect;</a><strong class="underline-highlight">Open &amp; close calendar</strong></h3>
+
+        <pre><code data-language="javascript">calendar.open()
+calendar.close()</code></pre>
+
+        <p>
+            <button id="api_button_open" class="button" type="button">Open</button>
+            <button id="api_button_close" class="button" type="button" style="display:none">Close</button>
+        </p>
+
+        <fieldset>
+            <input id="api_picker_open" class="datepicker" type="text">
+        </fieldset>
+
+        <p>If you want to open the calendar on page load, you can add the <code>autofocus</code> attribute to the <code class="tag-name">input</code> element:</p>
+
+        <pre><code data-language="html">&amp;lt;input&nbsp;autofocus&nbsp;class="datepicker"&nbsp;type="text"&gt;</code></pre>
+
+    </section>
+
+
+    <section class="holder" id="api_isOpen">
+
+        <h3><a class="link-anchor" href="#api_isOpen">&sect;</a><strong class="underline-highlight">Check if calendar is open</strong></h3>
+
+        <pre><code data-language="javascript">calendar.isOpen()</code></pre>
+
+        <p>This method returns a <code class="constant">true</code> or <code class="constant">false</code> based on the state of the calendar.</p>
+
+        <p>
+            <button id="api_button_isOpen" class="button" type="button">Check if open</button>
+        </p>
+
+        <fieldset>
+            <input id="api_picker_isOpen" class="datepicker" type="text">
+        </fieldset>
+
+    </section>
+
+
+    <section class="holder" id="api_show">
+
+        <h3><a class="link-anchor" href="#api_show">&sect;</a><strong class="underline-highlight">Show a specific month</strong></h3>
+
+        <pre><code data-language="javascript">calendar.show( month, year )</code></pre>
+
+        <p><code>month</code> and <code>year</code> have to be integers representing the month and year to show on the calendar.</p>
+
+        <p><code>year</code> is optional. If none is specified, it shows the month of the year already in focus.</p>
+
+        <pre><code data-language="javascript">calendar.show( 4 )</code></pre>
+
+        <p>
+            <button id="api_button_show" class="button" type="button">Show</button>
+        </p>
+
+        <fieldset>
+            <input id="api_picker_show" class="datepicker" type="text">
+        </fieldset>
+
+        <p>This method does <strong><i>not</i></strong> open the calendar. However, the methods <strong><i>are</i></strong> chainable. So you can do this:</p>
+
+        <pre><code data-language="javascript">calendar.show( 10, 2015 ).open()</code></pre>
+
+        <p>
+            <button id="api_button_show_open" class="button" type="button">Show &amp; open</button>
+        </p>
+
+        <fieldset>
+            <input id="api_picker_show_open" class="datepicker" type="text">
+        </fieldset>
+
+    </section>
+
+
+    <section class="holder" id="api_clear">
+
+        <h3><a class="link-anchor" href="#api_clear">&sect;</a><strong class="underline-highlight">Clear the date</strong></h3>
+
+        <pre><code data-language="javascript">calendar.clear()</code></pre>
+
+        <p>Clears the selected date value from the <code class="tag-name">input</code> element.</p>
+
+        <p>
+            <button id="api_button_clear" class="button" type="button">Clear date</button>
+        </p>
+
+        <fieldset>
+            <input id="api_picker_clear" class="datepicker" value="15 October, 2010" data-value="2012-10-15" type="text">
+        </fieldset>
+
+        <p>With some custom stylings and api mastery, you can do something like this:</p>
+
+        <pre><code data-language="javascript">// Grab the clear button and bind the event<br>
+// to clear the input value on click<br>
+var clearButton = $( '#clearButton' ).on({
+    click: function() {
+        inputElement.data( 'pickadate' ).clear()
+    }
+})
+
+// Grab the input element and trigger the picker<br>
+// with the onStart and onSelect methods to<br>
+// toggle the clear button visibility<br>
+var inputElement = $( '.datepicker' ).pickadate({
+    format: 'dd mmmm, yyyy',
+    formatSubmit: 'yyyy-mm-dd',
+    clear: false,
+    onStart: showOrHideClear,
+    onSelect: showOrHideClear
+})
+
+// Check if the input element has a value<br>
+// and show or hide the button as needed<br>
+function&nbsp;showOrHideClear() {
+    if ( this.$node.val() ) clearButton.show()
+    else clearButton.hide()
+}</code></pre>
+
+        <fieldset>
+            <a id="api_button_clear_b" class="input-clear">&times;</a>
+            <input id="api_picker_clear_b" class="datepicker" value="15 October, 2010" data-value="2012-10-15" type="text">
+        </fieldset>
+
+    </section>
+
+
+    <section class="holder" id="api_getDate">
+
+        <h3><a class="link-anchor" href="#api_getDate">&sect;</a><strong class="underline-highlight">Get the date</strong></h3>
+
+        <p>Get the date selected on the calendar:</p>
+
+        <pre><code data-language="javascript">calendar.getDate()</code></pre>
+
+        <p>
+            <button id="api_button_getDate" class="button" type="button">Get date</button>
+        </p>
+
+        <fieldset>
+            <input id="api_picker_getDate" class="datepicker" type="text" value="14 August, 1988">
+        </fieldset>
+
+        <p>Optionally, you can pass a <a href="#formatting_rules">format</a> in which you would like to get the date:</p>
+
+        <pre><code data-language="javascript">calendar.getDate( 'yyyy-mm-dd' )</code></pre>
+
+        <p>
+            <button id="api_button_getDate_b" class="button" type="button">Get date formatted</button>
+        </p>
+
+        <fieldset>
+            <input id="api_picker_getDate_b" class="datepicker" type="text" value="14 August, 1988">
+        </fieldset>
+
+        <p>To get the underlying JavaScript Date object, set <code>format</code> to <code class="constant">true</code>:</p>
+
+        <pre><code data-language="javascript">calendar.getDate( true )</code></pre>
+
+        <p>
+            <button id="api_button_getDate_c" class="button" type="button">Get date object</button>
+        </p>
+
+        <fieldset>
+            <input id="api_picker_getDate_c" class="datepicker" type="text" value="14 August, 1988">
+        </fieldset>
+
+    </section>
+
+
+    <section class="holder" id="api_setDate">
+
+        <h3><a class="link-anchor" href="#api_setDate">&sect;</a><strong class="underline-highlight">Set the date</strong></h3>
+
+        <pre><code data-language="javascript">calendar.setDate( year, month, date, superficial )</code></pre>
+
+        <p><code>year</code>, <code>month</code>, <code>date</code> are required integers representing the date to select on the calendar.</p>
+
+        <pre><code data-language="javascript">calendar.setDate( 2020, 2, 14 )</code></pre>
+
+        <p>
+            <button id="api_button_setDate" class="button" type="button">Set date</button>
+        </p>
+
+        <fieldset>
+            <input id="api_picker_setDate" class="datepicker" type="text">
+        </fieldset>
+
+
+        <p><code>superficial</code> is optional. If <code>superficial</code> is <code class="constant">true</code>, the date will only be superficially selected. This means the <code class="tag-name">input</code> value won't change.</p>
+
+        <pre><code data-language="javascript">calendar.setDate( 2020, 2, 14, true )</code></pre>
+
+        <p>
+            <button id="api_button_setDate_b" class="button" type="button">Set date superficially</button>
+        </p>
+
+        <fieldset>
+            <input id="api_picker_setDate_b" class="datepicker" type="text">
+        </fieldset>
+
+    </section>
+
+
+    <section class="holder" id="api_getDateLimit">
+
+        <h3><a class="link-anchor" href="#api_getDateLimit">&sect;</a><strong class="underline-highlight">Get the min or max date</strong></h3>
+
+        <pre><code data-language="javascript">calendar.getDateLimit( upper, format )</code></pre>
+
+        <p><code>upper</code> is optional. If <code>upper</code> is <code class="constant">true</code>, it returns the maximum date. Otherwise it gets the minimum date.</p>
+
+        <p><code>format</code> is also optional. If none is specified, it falls back to the default <code>format</code> option in your invocation. Dates can be formatted with <a href="#formatting_rules">these rules</a>.</p>
+
+        <pre><code data-language="javascript">calendar.getDateLimit()
+calendar.getDateLimit( true, 'yyyy-mm-dd' )</code></pre>
+
+        <p>
+            <button id="api_button_getDateLimit_a" class="button" type="button">Get min date</button>
+            <button id="api_button_getDateLimit_b" class="button" type="button">Get max date formatted</button>
+        </p>
+
+        <fieldset>
+            <input id="api_picker_getDateLimit" class="datepicker" type="text">
+        </fieldset>
+
+    </section>
+
+
+    <section class="holder" id="api_setDateLimit">
+
+        <h3><a class="link-anchor" href="#api_setDateLimit">&sect;</a><strong class="underline-highlight">Set the min or max date</strong></h3>
+
+        <pre><code data-language="javascript">calendar.setDateLimit( date, upper )</code></pre>
+
+        <p><code>date</code> is a required <a href="#ranges">array, integer, or boolean</a> – similar to the <code>dateMin</code> and <code>dateMax</code> options in your invocation. This date is used to set the limit.</p>
+
+        <p><code>upper</code> is optional. If <code>upper</code> is <code class="constant">true</code>, it will set the date as the maximum date selectable. Otherwise it sets it as the minimum date selectable.</p>
+
+        <pre><code data-language="javascript">calendar.setDateLimit( 40 )
+calendar.setDateLimit( [ 2013, 6, 23 ], true )</code></pre>
+
+        <p>
+            <button id="api_button_setDateLimit_a" class="button" type="button">Set min date</button>
+            <button id="api_button_setDateLimit_b" class="button" type="button">Set max date</button>
+        </p>
+
+        <fieldset>
+            <input id="api_picker_setDateLimit" class="datepicker" type="text">
+        </fieldset>
+
+    </section>
+
+
+    <section class="holder" id="api_from_to">
+
+        <h3><a class="link-anchor" href="#api_from_to">&sect;</a><strong class="underline-highlight">From &amp; to calendars</strong></h3>
+
+        <p>Using the calendar API, you can create two calendars with a &ldquo;from&rdquo; and &ldquo;to&rdquo; interaction.</p>
+
+        <fieldset>
+            <p><strong><label for="picker_from">Select a &ldquo;from&rdquo; date:</label></strong></p>
+            <input id="picker_from" class="datepicker" type="date">
+        </fieldset>
+
+        <fieldset>
+            <p><strong><label for="picker_to">Select a &ldquo;to&rdquo; date:</label></strong></p>
+            <input id="picker_to" class="datepicker" type="date">
+        </fieldset>
+
+        <pre><code data-language="javascript">// When a date is selected on the "from" picker,<br>
+// get the date and split into an array.<br>
+// Then set the lower limit of the "to" picker.<br>
+var picker_from = $( '#picker_from' ).pickadate({
+    onSelect: function() {
+        var fromDate =&nbsp;createDateArray( this.getDate( 'yyyy-mm-dd' ) )
+        picker_to.data( 'pickadate' ).setDateLimit( fromDate )
+    }
+})
+
+// When a date is selected on the "to" picker,<br>
+// get the date and split into an array.<br>
+// Then set the upper limit of the "from" picker.<br>
+var picker_to = $( '#picker_to' ).pickadate({
+    onSelect: function() {
+        var toDate =&nbsp;createDateArray( this.getDate( 'yyyy-mm-dd' ) )
+        picker_from.data( 'pickadate' ).setDateLimit( toDate, 1 )
+    }
+})
+
+
+// Create an array from the date while parsing each date unit as an integer<br>
+function&nbsp;createDateArray( date ) {
+    return date.split( '-' ).map(function( value ) { return&nbsp;+value })
+}</code></pre>
+
+    </section>
+
+
+    <section class="holder aligncenter" id="legacy">
+
+        <p><a class="button-full" href="https://github.com/amsul/pickadate.js/archive/2.1.8.zip">Download pickadate.js v2.1.8</a></p>
+        <p><a class="button-full--secondary" href="themes.htm">View calendar themes</a></p>
+        <small class="dimmed">
+            <p>Browser support: IE7+, Chrome, Firefox, Safari, Opera, iOS Safari, Android browser</p>
+            <p>Dependency: jQuery 1.7+</p>
+        </small>
+        <p class="notification notification--highlight"><b>Note on browser support</b><br>The <code>pickadate.js</code> script supports IE 9+ by default. To support IE 7+ and other old browsers, use the <code>pickadate.legacy.js</code> script instead.</p>
+        <p><a href="https://github.com/amsul/pickadate.js">View project on Github</a></p>
+
+    </section>
+
+
+    <section class="holder holder-clean aligncenter">
+        <h2><a href="http://blog.teamtreehouse.com/" target="_blank"><img width="158" height="33" src="demo/TreehouseShowFeature.png" alt="Featured on The Treehouse Show"></a></h2>
+        <p class="dimmed"><small>Made by <a class="dimmed" href="https://twitter.com/amsul_" target="_blank">Amsul</a><span class="peace"></span></small></p>
+    </section>
+
+
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="demo/rainbow.js"></script>
+    <script src="source/pickadate.legacy.js"></script>
+
+
+    <script type="text/javascript">
+
+        $( '#picker_simple' ).pickadate()
+
+        $( '#picker_strings' ).pickadate({
+            monthPrev: '&larr;',
+            monthNext: '&rarr;',
+            weekdaysShort: [ 'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa' ],
+            showMonthsFull: false
+        })
+
+        $( '#picker_strings_b' ).pickadate({
+            formatSubmit: 'dd/mm/yyyy',
+            monthsFull: [ 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre' ],
+            monthsShort: [ 'Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc' ],
+            weekdaysShort: [ 'Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam' ],
+            today: 'aujourd\'hui',
+            clear: 'effacer'
+        })
+
+        $( '#picker_buttons' ).pickadate({
+            today: false,
+            clear: 'Clear date'
+        })
+
+        var $custom_date = $( '#picker_formats' ).pickadate({
+            format: 'You selected: dddd, dd mmm, yyyy',
+            formatSubmit: 'yyyy/mm/dd',
+            onSelect: function() {
+                $custom_date.next().after( '<p class="notification">Date to submit: <code>' + $picker.getDate( 'yyyy/mm/dd' ) + '</code></p>' )
+            }
+        })
+        var $picker = $custom_date.data( 'pickadate' )
+
+        $( '#picker_formats_b' ).pickadate({
+            format: 'mmmm dd',
+            formatSubmit: 'yyyy/mm/dd'
+        })
+
+        $( '#picker_selectors' ).pickadate({
+            monthSelector: true,
+            yearSelector: true
+        })
+
+        $( '#picker_selectors_b' ).pickadate({
+            yearSelector: 4
+        })
+
+        $( '#picker_disable' ).pickadate({
+            disablePicker: true
+        })
+
+        $( '#picker_events' ).pickadate({
+            onOpen: function() {
+                if ( window.console && window.console.log ) {
+                    window.console.log( 'Opened' )
+                }
+            },
+            onClose: function() {
+                if ( window.console && window.console.log ) {
+                    window.console.log( 'Closed' )
+                }
+            },
+            onSelect: function() {
+                if ( window.console && window.console.log ) {
+                    window.console.log( 'Selected: ' + this.getDate() )
+                }
+            },
+            onStart: function() {
+                if ( window.console && window.console.log ) {
+                    window.console.log( 'Hello there :)' )
+                }
+            },
+            onRender: function() {
+                if ( window.console && window.console.log ) {
+                  window.console.log( 'New calendar rendered!' )
+                }
+            }
+
+        })
+
+        $( '#picker_ranges_a' ).pickadate({
+            dateMin: [ 2012, 10, 14 ],
+            dateMax: 5
+        })
+
+        $( '#picker_ranges_b' ).pickadate({
+            dateMin: -8,
+            dateMax: true
+        })
+
+        $( '#picker_dates_disabled_a' ).pickadate({
+            datesDisabled: [
+                [ 2013, 3, 2 ],
+                [ 2013, 3, 5 ],
+                [ 2013, 3, 28 ]
+            ]
+        })
+
+        $( '#picker_dates_disabled_b' ).pickadate({
+            datesDisabled: [
+                1, 7,
+                [ 2013, 3, 2 ],
+                [ 2013, 3, 5 ],
+                [ 2013, 3, 28 ]
+            ]
+        })
+
+        $( '#picker_dates_disabled_c' ).pickadate({
+            datesDisabled: [
+                true,
+                1, 7,
+                [ 2013, 3, 2 ],
+                [ 2013, 3, 5 ],
+                [ 2013, 3, 28 ]
+            ]
+        })
+
+        $( '#picker_dates_first_day' ).pickadate({
+            firstDay: 1
+        })
+
+        $( '#picker_themed' ).pickadate({
+            monthPrev: '&#9664;&nbsp;&nbsp;Prev',
+            monthNext: 'Next&nbsp;&nbsp;&#9654;',
+            monthSelector: true,
+            yearSelector: true,
+            datesDisabled: [ 1, 7 ]
+        })
+
+
+        /**
+         * API stuff
+         */
+
+        var
+            api_picker_open = $( '#api_picker_open' ).pickadate({
+                onOpen: function() {
+                    api_button_close.show()
+                    api_button_open.hide()
+                },
+                onClose: function() {
+                    api_button_open.show()
+                    api_button_close.hide()
+                }
+            }),
+            api_calendar_open = api_picker_open.data( 'pickadate' ),
+            api_button_open = $( '#api_button_open' ).on({
+                click: function() {
+                    setTimeout( function() {
+                        api_calendar_open.open()
+                    }, 0)
+                }
+            }),
+            api_button_close = $( '#api_button_close' ).on({
+                click: function() {
+                    api_calendar_open.close()
+                }
+            })
+
+        var
+            api_picker_isOpen = $( '#api_picker_isOpen' ).pickadate({
+                onOpen: function() {
+                    alert( 'Calendar opened: ' + this.isOpen() )
+                }
+            }),
+            api_calendar_isOpen = api_picker_isOpen.data( 'pickadate' ),
+            api_button_isOpen = $( '#api_button_isOpen' ).on({
+                click: function() {
+                    setTimeout( function() {
+                        alert( 'Calendar opened: ' + api_calendar_isOpen.isOpen() )
+                    }, 0)
+                }
+            })
+
+
+        var
+            api_picker_show = $( '#api_picker_show' ).pickadate(),
+            api_calendar_show = api_picker_show.data( 'pickadate' ),
+            api_button_show = $( '#api_button_show' ).on({
+                click: function() {
+                    api_calendar_show.show( 4 )
+                }
+            })
+
+
+        var
+            api_picker_show_open = $( '#api_picker_show_open' ).pickadate(),
+            api_calendar_show_open = api_picker_show_open.data( 'pickadate' ),
+            api_button_show_open = $( '#api_button_show_open' ).on({
+                click: function() {
+                    setTimeout( function() {
+                        api_calendar_show_open.show( 10, 2015 ).open()
+                    }, 0)
+                }
+            })
+
+
+        var
+            // Grab the clear button and bind the event
+            // to clear the input value on click
+            api_button_clear_b = $( '#api_button_clear_b' ).on({
+                click: function() {
+                    api_picker_clear_b.data( 'pickadate' ).clear()
+                }
+            }),
+
+            // Grab the input element and trigger the picker
+            // with the onStart and onSelect methods to
+            // toggle the clear button visibility
+            api_picker_clear_b = $( '#api_picker_clear_b' ).pickadate({
+                format: 'dd mmmm, yyyy',
+                formatSubmit: 'yyyy-mm-dd',
+                clear: 0,
+                onStart: showOrHideClear,
+                onSelect: showOrHideClear
+            })
+
+        // Check if the input element has a value
+        // and show or hide the button as needed
+        function showOrHideClear() {
+            if ( this.$node.val() ) api_button_clear_b.show()
+            else api_button_clear_b.hide()
+        }
+
+
+        var
+            api_picker_getDate = $( '#api_picker_getDate' ).pickadate(),
+            api_calendar_getDate = api_picker_getDate.data( 'pickadate' ),
+            api_button_getDate = $( '#api_button_getDate' ).on({
+                click: function() {
+                    alert( api_calendar_getDate.getDate() )
+                }
+            })
+
+        var
+            api_picker_getDate_b = $( '#api_picker_getDate_b' ).pickadate(),
+            api_calendar_getDate_b = api_picker_getDate_b.data( 'pickadate' ),
+            api_button_getDate_b = $( '#api_button_getDate_b' ).on({
+                click: function() {
+                    alert( api_calendar_getDate_b.getDate( 'yyyy-mm-dd' ) )
+                }
+            })
+
+        var
+            api_picker_getDate_c = $( '#api_picker_getDate_c' ).pickadate(),
+            api_calendar_getDate_c = api_picker_getDate_c.data( 'pickadate' ),
+            api_button_getDate_c = $( '#api_button_getDate_c' ).on({
+                click: function() {
+                    alert( api_calendar_getDate_c.getDate( true ) )
+                }
+            })
+
+
+        var
+            api_picker_setDate = $( '#api_picker_setDate' ).pickadate(),
+            api_calendar_setDate = api_picker_setDate.data( 'pickadate' ),
+            api_button_setDate = $( '#api_button_setDate' ).on({
+                click: function() {
+                    api_calendar_setDate.setDate( 2020, 2, 14 )
+                }
+            })
+
+
+        var
+            api_picker_setDate_b = $( '#api_picker_setDate_b' ).pickadate(),
+            api_calendar_setDate_b = api_picker_setDate_b.data( 'pickadate' ),
+            api_button_setDate_b = $( '#api_button_setDate_b' ).on({
+                click: function() {
+                    api_calendar_setDate_b.setDate( 2020, 2, 14, true )
+                }
+            })
+
+
+        var
+            api_picker_clear = $( '#api_picker_clear' ).pickadate({
+                format: 'dd mmmm, yyyy',
+                formatSubmit: 'yyyy-mm-dd'
+            }),
+            api_calendar_clear = api_picker_clear.data( 'pickadate' ),
+            api_button_clear = $( '#api_button_clear' ).on({
+                click: function() {
+                    api_calendar_clear.clear()
+                }
+            })
+
+
+        var
+            api_picker_getDateLimit = $( '#api_picker_getDateLimit' ).pickadate({
+                dateMin: -5,
+                dateMax: [2013,8,14]
+            }),
+            api_calendar_getDateLimit = api_picker_getDateLimit.data( 'pickadate' ),
+            api_button_getDateLimit_a = $( '#api_button_getDateLimit_a' ).on({
+                click: function() {
+                    alert( api_calendar_getDateLimit.getDateLimit() )
+                }
+            }),
+            api_button_getDateLimit_b = $( '#api_button_getDateLimit_b' ).on({
+                click: function() {
+                    alert( api_calendar_getDateLimit.getDateLimit( true, 'yyyy-mm-dd' ) )
+                }
+            })
+
+
+        var
+            api_picker_setDateLimit = $( '#api_picker_setDateLimit' ).pickadate(),
+            api_calendar_setDateLimit = api_picker_setDateLimit.data( 'pickadate' ),
+            api_button_setDateLimit_a = $( '#api_button_setDateLimit_a' ).on({
+                click: function() {
+                    api_calendar_setDateLimit.setDateLimit( 40 )
+                }
+            }),
+            api_button_setDateLimit_b = $( '#api_button_setDateLimit_b' ).on({
+                click: function() {
+                    api_calendar_setDateLimit.setDateLimit( [ 2013, 6, 23 ], true )
+                }
+            })
+
+
+
+        /**
+         * Picker "from" & "to"
+         */
+        var
+
+            // When a date is selected on the "from" picker,
+            // get the date and split into an array.
+            // Then set the lower limit of the "to" picker.
+            picker_from = $( '#picker_from' ).pickadate({
+                onSelect: function() {
+                    var fromDate = createDateArray( this.getDate( 'yyyy-mm-dd' )  )
+                    picker_to.data( 'pickadate' ).setDateLimit( fromDate )
+                }
+            }),
+
+            // When a date is selected on the "to" picker,
+            // get the date and split into an array.
+            // Then set the upper limit of the "from" picker.
+            picker_to = $( '#picker_to' ).pickadate({
+                onSelect: function() {
+                    var toDate = createDateArray( this.getDate( 'yyyy-mm-dd' )  )
+                    picker_from.data( 'pickadate' ).setDateLimit( toDate, 1 )
+                }
+            })
+
+
+        // Create an array from the date while parsing each date unit as an integer
+        function createDateArray( date ) {
+            return date.split( '-' ).map(function( value ) { return +value })
+        }
+
+    </script>
+
+
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-36321179-2']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+
+
+</body>
