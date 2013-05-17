@@ -3,7 +3,7 @@
    $BASE-TIME-PICKER
    ========================================================================== */
 
-@import "variables";
+@import "_variables.less";
 
 
 /**
@@ -20,49 +20,49 @@
  * The times on the clock.
  */
 .picker__list-item {
-    border-bottom: 1px solid $border-grey-light;
-    border-top: 1px solid $border-grey-light;
+    border-bottom: 1px solid @border-grey-light;
+    border-top: 1px solid @border-grey-light;
     margin-bottom: -1px; // Prevent border from doubling up.
     position: relative;
-    background: $bg-white;
+    background: @bg-white;
     padding: .75em 1.25em;
 
     // For `large` screens, reduce the padding to show more in view.
-    @include min-screen( large ) {
+    @media ( min-height: @breakpoint-large ) {
         padding: .5em 1em;
     }
 }
 
 /* Hovered time */
 .picker__list-item:hover {
-    @include picker-item-hovered;
-    border-color: $blue;
+    .picker-item-hovered;
+    border-color: @blue;
     z-index: 10;
 }
 
 /* Selected time */
 .picker__list-item--selected,
 .picker__list-item--selected:hover {
-    @include picker-item-selected;
+    .picker-item-selected;
     z-index: 10;
 }
 
 /* Highlighted time */
 .picker__list-item--highlighted {
-    background: $blue-hover;
+    background: @blue-hover;
 }
 
 /* Highlighted and hovered/focused time */
 .picker__list-item--highlighted:hover,
 .picker--focused .picker__list-item--highlighted {
-    @include picker-item-highlighted;
+    .picker-item-highlighted;
 }
 
 /* Disabled time */
 .picker__list-item--disabled,
 .picker__list-item--disabled:hover {
-    @include picker-item-disabled;
-    border-color: $border-grey;
+    .picker-item-disabled;
+    border-color: @border-grey;
     z-index: auto;
 }
 
@@ -92,11 +92,11 @@
 
     .picker__button--clear:hover,
     .picker__button--clear:focus {
-        @include picker-item-hovered;
-        background: $clear-red;
-        border-color: $clear-red;
+        .picker-item-hovered;
+        background: @clear-red;
+        border-color: @clear-red;
         cursor: pointer;
-        color: $white;
+        color: @white;
         outline: none;
     }
 
@@ -109,7 +109,7 @@
 
     .picker__button--clear:hover:before,
     .picker__button--clear:focus:before {
-        color: $white;
+        color: @white;
     }
 }
 

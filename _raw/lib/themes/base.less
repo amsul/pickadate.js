@@ -3,7 +3,7 @@
    $BASE-PICKER
    ========================================================================== */
 
-@import "variables";
+@import "_variables.less";
 
 
 /**
@@ -13,14 +13,14 @@
 .picker {
 
     // The base font stylings.
-    font-size: $base-font-size;
+    font-size: @base-font-size;
     text-align: left;
-    line-height: $base-line-height;
-    color: $black;
+    line-height: @base-line-height;
+    color: @black;
 
     // The picker shouldn’t affect or be affected by elements around it.
     position: absolute;
-    z-index: $picker-z-index;
+    z-index: @picker-z-index;
 }
 
 
@@ -28,7 +28,7 @@
  * When the picker is opened, the input element is “activated”.
  */
 .picker__input.picker__input--active {
-    border-color: $input-active-border;
+    border-color: @input-active-border;
 }
 
 

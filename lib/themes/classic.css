@@ -35,9 +35,6 @@
  * Opacity
  */
 /**
- * Media queries
- */
-/**
  * Vendor prefixes
  */
 /**
@@ -48,18 +45,16 @@
   font-size: 16px;
   text-align: left;
   line-height: 1.2;
-  color: black;
+  color: #000000;
   position: absolute;
   z-index: 10000;
 }
-
 /**
  * When the picker is opened, the input element is “activated”.
  */
 .picker__input.picker__input--active {
   border-color: #0089ec;
 }
-
 /**
  * The holder is the only “scrollable” top-level container element.
  */
@@ -69,7 +64,7 @@
   -webkit-overflow-scrolling: touch;
 }
 
-/*
+/*!
  * Classic picker styling for pickadate.js
  * Demo: http://amsul.github.io/pickadate.js/themes.htm#classic
  */
@@ -107,9 +102,6 @@
  * Opacity
  */
 /**
- * Media queries
- */
-/**
  * Vendor prefixes
  */
 /**
@@ -119,13 +111,12 @@
 .picker {
   width: 100%;
 }
-
 /**
  * The holder is the base of the picker.
  */
 .picker__holder {
   position: absolute;
-  background: white;
+  background: #ffffff;
   border: 1px solid #aaaaaa;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -147,7 +138,6 @@
   -moz-transition: all 0.15s ease-out, max-height 0 0.15s;
   transition: all 0.15s ease-out, max-height 0 0.15s;
 }
-
 /**
  * When the picker opens...
  */

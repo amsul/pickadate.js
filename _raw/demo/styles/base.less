@@ -27,8 +27,8 @@
    $IMPORTS
    ========================================================================== */
 
-@import "variables";
-@import "normalize";
+@import "_variables.less";
+@import "_normalize.less";
 
 
 
@@ -44,7 +44,7 @@ hr {
     display: block;
     height: 1px;
     border: 0;
-    border-top: 1px solid $grey;
+    border-top: 1px solid @grey;
     margin: 1em 0;
     padding: 0;
 }
@@ -63,9 +63,9 @@ img {
 a {
     text-decoration: underline;
     cursor: pointer;
-    color: $blue;
+    color: @blue;
 
-    @include prefix( transition, $smooth-fast );
+    .transition( @smooth-fast );
 }
 a:focus {
     outline: 2px dotted;
@@ -95,7 +95,7 @@ body {
     font-size: 16px;
     line-height: 1.6;
 
-    @include screen( medium ) {
+    @media ( min-width: @breakpoint-medium ) {
         font-size: 20px;
     }
 }
@@ -117,10 +117,11 @@ h1,
 .heading--one {
     font-size: 2em;
 
-    @include screen( tiny ) {
+    @media ( min-width: @breakpoint-tiny ) {
         font-size: 2.125em;
     }
-    @include screen( small ) {
+
+    @media ( min-width: @breakpoint-small ) {
         font-size: 2.4em;
     }
 }
@@ -129,7 +130,7 @@ h2,
 .heading--two {
     font-size: 1.5em;
 
-    @include screen( small ) {
+    @media ( min-width: @breakpoint-small ) {
         font-size: 1.8em;
     }
 }
@@ -150,7 +151,7 @@ h3,
     margin-right: auto;
     margin-top: .5em;
 
-    @include screen( medium ) {
+    @media ( min-width: @breakpoint-medium ) {
         margin-top: 1em;
     }
 }
@@ -166,10 +167,10 @@ h3,
 .heading--divide-first {
     text-transform: lowercase;
     margin-top: 2.5em;
-    border-top: 1px solid $grey-lighter;
+    border-top: 1px solid @grey-lighter;
     padding-top: 1.5em;
 
-    @include screen( small ) {
+    @media ( min-width: @breakpoint-small ) {
         position: relative;
         padding-top: 0;
         border-top: 0;
@@ -191,9 +192,9 @@ h3,
 .heading--divide:after,
 .heading--divide-center:after,
 .heading--divide-first:after {
-    @include screen( small ) {
+    @media ( min-width: @breakpoint-small ) {
         content: " ";
-        border-bottom: 1px solid $grey-lighter;
+        border-bottom: 1px solid @grey-lighter;
         height: 0;
         position: absolute;
         bottom: .5em;
@@ -207,14 +208,14 @@ h3,
 .heading--divide .heading__text,
 .heading--divide-center .heading__text,
 .heading--divide-first .heading__text {
-    @include screen( small ) {
-        background: $white;
+    @media ( min-width: @breakpoint-small ) {
+        background: @white;
         display: inline-block;
         padding-right: .5em;
     }
 }
 .heading--divide-center .heading__text {
-    @include screen( small ) {
+    @media ( min-width: @breakpoint-small ) {
         padding-left: .5em;
     }
 }
@@ -224,8 +225,9 @@ h3,
 /**
  * Anchor for a heading
  */
-.heading__anchor {
-    color: $grey-darker;
+.heading__anchor,
+.heading__anchor--bigger {
+    color: @grey-darker;
     font-weight: 100;
     text-decoration: none;
     margin-left: .5em;
@@ -233,15 +235,16 @@ h3,
     font-size: .75em;
     vertical-align: 3px;
 }
-.heading__text .heading__anchor:hover,
-.heading__text .heading__anchor:focus {
-    color: $blue;
-    text-decoration: none;
-}
 .heading__anchor--bigger {
-    @extend .heading__anchor;
     font-size: 1em;
     vertical-align: 1px;
+}
+.heading__text .heading__anchor:hover,
+.heading__text .heading__anchor:focus,
+.heading__text .heading__anchor--bigger:hover,
+.heading__text .heading__anchor--bigger:focus {
+    color: @blue;
+    text-decoration: none;
 }
 
 
@@ -256,14 +259,14 @@ h3,
 
 pre,
 code {
-    font-family: $code-family;
+    font-family: @code-family;
     border: 1px solid #e9ebeb;
     background: #f5f8f8;
-    color: $dark-grey;
+    color: @dark-grey;
     font-size: .9em;
     padding: 0 .125em;
     word-break: break-word;
-    @include prefix( border-radius, 3px );
+    .border-radius( 3px );
 }
 
 pre {
@@ -272,8 +275,8 @@ pre {
     text-align: left;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    @include prefix( border-radius, 4px );
-    @include demo-tag( "Code" );
+    .border-radius( 4px );
+    .demo-tag( "Code" );
 }
 
 pre > code {
@@ -303,7 +306,7 @@ fieldset {
 
 label:hover,
 label:focus {
-    color: $blue;
+    color: @blue;
 }
 
 
@@ -318,14 +321,14 @@ input[type=date],
 input[type=number],
 input[type=search],
 textarea {
-    border: 3px solid $grey;
+    border: 3px solid @grey;
     padding: .6em 1em;
     font-weight: 200;
     width: 100%;
     -webkit-appearance: none;
 
-    @include prefix( box-shadow, none );
-    @include prefix( box-sizing, border-box );
+    .box-shadow( none );
+    .box-sizing( border-box );
 }
 
 textarea {
@@ -340,7 +343,7 @@ input[type=number]:focus,
 input[type=search]:focus,
 textarea:focus {
     outline: none;
-    border-color: $blue;
+    border-color: @blue;
 }
 
 
@@ -360,8 +363,8 @@ input[type=radio] {
  */
 
 select {
-    border: 1px solid $medium-grey;
-    background: $white;
+    border: 1px solid @medium-grey;
+    background: @white;
     padding: 3px 5px;
     height: 29px;
     white-space: nowrap;
@@ -371,7 +374,7 @@ input[type=search] {
     padding-left: 0;
     padding-right: 0;
 
-    @include prefix( border-radius, 14px );
+    .border-radius( 14px );
 }
 
 
@@ -382,16 +385,16 @@ input[type=search] {
  */
 .pre--demo {
     margin-bottom: 0;
-    @include prefix( border-radius, 4px 4px 0 0 );
+    .border-radius( 4px 4px 0 0 );
 }
 .fieldset--demo {
     margin-top: 0;
     padding: 1em;
     background: #f8faf9;
-    border: 1px solid $grey-lightest;
+    border: 1px solid @grey-lightest;
     border-top: 0;
-    @include prefix( border-radius, 0 0 4px 4px );
-    @include demo-tag( "Demo" );
+    .border-radius( 0 0 4px 4px );
+    .demo-tag( "Demo" );
 }
 
 .fieldset__wrapper {
@@ -410,7 +413,7 @@ input[type=search] {
 .fieldset--splash .fieldset__input {
     margin: 0 auto;
     width: 80%;
-    @include screen( small ) {
+    @media ( min-width: @breakpoint-small ) {
         width: 70%;
     }
 }
@@ -426,9 +429,9 @@ input[type=search] {
 
 .button {
     display: inline-block;
-    border: 2px solid $blue;
-    background: $blue;
-    color: $white;
+    border: 2px solid @blue;
+    background: @blue;
+    color: @white;
     text-decoration: none;
     padding: .67em 1.25em;
 }
@@ -436,8 +439,8 @@ input[type=search] {
 .button:hover,
 .button:focus {
     text-decoration: none;
-    background: $green;
-    border-color: $green;
+    background: @green;
+    border-color: @green;
 }
 
 .button--small {
@@ -473,22 +476,22 @@ input[type=search] {
 
 /* Dimmed links */
 .menu__link--dimmed {
-    color: $grey-darkest;
+    color: @grey-darkest;
 }
 
 /* Active or dimmed and hovered/focused links */
 .menu__link--active,
 .menu__link--dimmed:hover,
 .menu__link--dimmed:focus {
-    color: $black;
+    color: @black;
 }
 
 /* Touch friendly links */
 .menu__item--touch .menu__link {
-    margin-right: -$gutter;
-    padding-right: $gutter;
-    margin-left: -$gutter;
-    padding-left: $gutter;
+    margin-right: -@gutter;
+    padding-right: @gutter;
+    margin-left: -@gutter;
+    padding-left: @gutter;
 }
 
 
@@ -498,9 +501,10 @@ input[type=search] {
 
 .menu__item--logo {
     float: left;
-    @include screen( medium ) {
+
+    @media ( min-width: @breakpoint-medium ) {
         float: none;
-        @include list-item-inline;
+        .list-item-inline;
     }
 
     .menu__link {
@@ -511,7 +515,8 @@ input[type=search] {
 
 .menu__item--toggle {
     float: right;
-    @include screen( medium ) {
+
+    @media ( min-width: @breakpoint-medium ) {
         display: none;
     }
 
@@ -523,17 +528,17 @@ input[type=search] {
 }
 
 .menu__item--clear {
-    @include clearfix;
-    @include screen( medium ) {
+    .clearfix;
+    @media ( min-width: @breakpoint-medium ) {
         display: none;
     }
 }
 
 .menu__item--responsive {
 
-    @include screen( medium ) {
+    @media ( min-width: @breakpoint-medium ) {
         vertical-align: top;
-        @include list-item-inline;
+        .list-item-inline;
         &:last-child {
             margin-right: 0;
         }
@@ -542,8 +547,7 @@ input[type=search] {
 
 /* Trailing items sit separately */
 .menu__item--trail {
-
-    @include screen( medium ) {
+    @media ( min-width: @breakpoint-medium ) {
         float: right;
     }
 }
@@ -556,7 +560,7 @@ input[type=search] {
     font-size: 1.25em;
     font-weight: 500;
 
-    @include screen( medium ) {
+    @media ( min-width: @breakpoint-medium ) {
         font-size: .8em;
     }
 }
@@ -565,13 +569,13 @@ input[type=search] {
 
 /* Add a border to the block links */
 .menu__item--responsive .menu__link {
-    border-top: 1px solid $grey-lightest;
+    border-top: 1px solid @grey-lightest;
     text-align: center;
     display: block;
     min-height: 3em;
     line-height: 3;
 
-    @include screen( medium ) {
+    @media ( min-width: @breakpoint-medium ) {
         border-top: 0;
         padding-top: 1em;
     }
@@ -582,7 +586,7 @@ input[type=search] {
 .menu__item:last-child .menu__link {
     margin-bottom: 2em;
 
-    @include screen( medium ) {
+    @media ( min-width: @breakpoint-medium ) {
         margin-bottom: 0;
     }
 }
@@ -595,16 +599,16 @@ input[type=search] {
 .theme-toggle__label {
     cursor: pointer;
     padding: 2px 5px 3px;
-    background: $white;
-    border: 1px solid $grey-lighter;
-    border-bottom-color: $grey-darker;
-    @include prefix( border-radius, 4px );
-    @include prefix( box-shadow, 0 1px 2px rgba(0,0,0,.05) );
+    background: @white;
+    border: 1px solid @grey-lighter;
+    border-bottom-color: @grey-darker;
+    .border-radius( 4px );
+    .box-shadow( 0 1px 2px rgba(0,0,0,.05) );
 }
 .theme-toggle__input:checked + .theme-toggle__label {
-    background: $blue;
-    border-color: $blue;
-    color: $white;
+    background: @blue;
+    border-color: @blue;
+    color: @white;
 }
 
 
@@ -680,17 +684,17 @@ input[type=search] {
 }
 
 .table thead:first-child tr:first-child th:first-child {
-    @include prefix( border-radius, 4px 0 0 0 );
+    .border-radius( 4px 0 0 0 );
 }
 .table thead:first-child tr:first-child th:last-child {
-    @include prefix( border-radius, 0 4px 0 0 );
+    .border-radius( 0 4px 0 0 );
 }
 
 .table tbody:last-child tr:last-child td:first-child {
-    @include prefix( border-radius, 0 0 0 4px );
+    .border-radius( 0 0 0 4px );
 }
 .table tbody:last-child tr:last-child td:last-child {
-    @include prefix( border-radius, 0 0 4px 0 );
+    .border-radius( 0 0 4px 0 );
 }
 
 
@@ -706,7 +710,7 @@ input[type=search] {
  * Sections of content
  */
 .section {
-    padding: 0 $gutter;
+    padding: 0 @gutter;
 }
 .section--header {
     background: url(../images/bg.png) #fafbfb 50% 0;
@@ -732,17 +736,17 @@ input[type=search] {
 /* Notification blocks */
 .section__block--notification,
 .section__block--notification-green {
-    background: $yellow-faded;
-    border: 1px solid $yellow-faded-darker;
+    background: @yellow-faded;
+    border: 1px solid @yellow-faded-darker;
     padding: 5px 30px;
     margin-top: 1em;
     margin-bottom: 1em;
-    color: $dark-brown;
+    color: @dark-brown;
 }
 .section__block--notification-green {
-    background: $green-faded;
-    border-color: $green-faded-darker;
-    color: $green-darker;
+    background: @green-faded;
+    border-color: @green-faded-darker;
+    color: @green-darker;
 }
 
 
@@ -753,10 +757,8 @@ input[type=search] {
    $TARGETS
    ========================================================================== */
 
-
-@include screen( medium, max ) {
-
-    .page-target__toggle {
+.page-target__toggle {
+    @media ( max-width: @breakpoint-medium ) {
         display: inline-block;
         vertical-align: top;
         width: 28px;
@@ -764,7 +766,9 @@ input[type=search] {
         border-bottom: 12px double;
         border-top: 12px double;
     }
-    .page-target:target .page-target__toggle {
+}
+.page-target:target .page-target__toggle {
+    @media ( max-width: @breakpoint-medium ) {
         width: 4px;
         height: 28px;
         border-bottom: 0;
@@ -772,24 +776,32 @@ input[type=search] {
         border-right: 12px double;
         border-left: 12px double;
     }
+}
 
-    .page-target__display--flip,
-    .page-target:target .page-target__display {
+.page-target__display--flip,
+.page-target:target .page-target__display {
+    @media ( max-width: @breakpoint-medium ) {
         display: none !important;
     }
-    .page-target:target .page-target__display--flip {
+}
+.page-target:target .page-target__display--flip {
+    @media ( max-width: @breakpoint-medium ) {
         display: inherit !important;
     }
-    .page-target__reveal {
+}
+.page-target__reveal {
+    @media ( max-width: @breakpoint-medium ) {
         max-height: 0;
         overflow: hidden;
+        .transition( @smooth-fast );
+    }
+}
+.page-target:target .page-target__reveal {
+    @media ( max-width: @breakpoint-medium ) {
+        max-height: 7em;
+    }
+}
 
-        @include prefix( transition, $smooth-fast );
-    }
-    .page-target:target .page-target__reveal {
-        max-height: 5em;
-    }
-} /* max-width: 740px */
 
 
 
@@ -812,16 +824,16 @@ input[type=search] {
 
 .comment,
 .comment a {
-    color: $blue;
+    color: @blue;
     font-style: italic;
 }
 .comment a {
     padding: 2px 0;
-    @include prefix( border-radius, 3px );
+    .border-radius( 3px );
 }
 .comment a:hover {
-    background: $blue;
-    color: $white;
+    background: @blue;
+    color: @white;
 }
 
 .constant,
@@ -854,7 +866,7 @@ input[type=search] {
 
 .text-dimmed,
 a.text-dimmed {
-    color: $grey-darker;
+    color: @grey-darker;
 }
 
 .text-center {
@@ -862,7 +874,7 @@ a.text-dimmed {
 }
 
 .text-warning {
-    color: $red;
+    color: @red;
 }
 
 .text-tiny {
@@ -913,7 +925,7 @@ a.text-dimmed {
 .menu__link--dimmed:hover .logocon__p,
 .menu__link--dimmed:focus .logocon__p {
     font-family: Peace;
-    color: $black;
+    color: @black;
     display: inline;
 }
 .logocon__u,
@@ -922,19 +934,19 @@ a.text-dimmed {
     position: absolute;
     bottom: 0;
     right: .05em;
-    background: $blue;
+    background: @blue;
     height: .09em;
     left: .25em;
 }
 .menu__link--dimmed .logocon__p,
 .menu__link--dimmed .logocon__u {
-    @include prefix( transition, $smooth-fast );
+    .transition( @smooth-fast );
 }
 .menu__link--dimmed .logocon__p {
-    color: $grey-darker;
+    color: @grey-darker;
 }
 .menu__link--dimmed .logocon__u {
-    background: $grey-darker;
+    background: @grey-darker;
 }
 
 

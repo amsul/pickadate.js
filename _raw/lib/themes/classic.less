@@ -3,7 +3,7 @@
  * Demo: http://amsul.github.io/pickadate.js/themes.htm#classic
  */
 
-@import "variables";
+@import "_variables.less";
 
 
 /**
@@ -24,30 +24,31 @@
 
     // The base stylings.
     position: absolute;
-    background: $bg-white;
+    background: @bg-white;
 
     // Add a light border - except at the top edge.
-    border: 1px solid lighten( $border-grey, 20% );
+    border: 1px solid lighten( @border-grey, 20% );
 
     // Let’s not go 100% + 2px.
-    @include prefix( box-sizing, border-box );
+    .box-sizing( border-box );
 
     // Specify the min & max widths.
-    min-width: $classic-min-width;
-    max-width: $classic-max-width;
+    min-width: @classic-min-width;
+    max-width: @classic-max-width;
 
     // Round the bottom corners.
-    @include prefix( border-radius, 0 0 $picker-border-radius $picker-border-radius );
+    .border-radius( 0 0 @picker-border-radius @picker-border-radius );
 
     // Hide everything to begin with.
     max-height: 0;
-    @include opacity( 0 );
+    .opacity( 0 );
 
     // Tilt the picker.
-    @include prefix( transform, translateY( -1em ) perspective( 600px ) rotateX( 10deg ) );
+    .transform( translateY( -1em ) perspective( 600px ) rotateX( 10deg ) );
 
     // Everything should be smoothly animated – the height should wait till the rest is done.
-    @include prefix( transition, (all $speed-animate-in ease-out, max-height 0 $speed-animate-in) );
+    @transition: all @speed-animate-in ease-out, max-height 0 @speed-animate-in;
+    .transition( @transition );
 }
 
 
@@ -59,17 +60,18 @@
     .picker__holder {
 
         // Reveal the content.
-        max-height: $classic-max-height;
-        @include opacity( 1 );
+        max-height: @classic-max-height;
+        .opacity( 1 );
 
         // Straighten the picker.
-        @include prefix( transform, translateY( 0 ) perspective( 600px ) rotateX( 0 ) );
+        .transform( translateY( 0 ) perspective( 600px ) rotateX( 0 ) );
 
         // Everything should be smoothly animated – except the height.
-        @include prefix( transition, (all $speed-animate-in ease-out, max-height 0) );
+        @transition: all @speed-animate-in ease-out, max-height 0;
+        .transition( @transition );
 
         // Add a light shadow.
-        @include prefix( box-shadow, $classic-box-shadow );
+        .box-shadow( @classic-box-shadow );
     }
 }
 

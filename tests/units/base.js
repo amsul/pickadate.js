@@ -180,7 +180,6 @@ test( 'As individual methods', 6, function() {
     picker.
         trigger( 'start' ).
         trigger( 'open' ).
-        trigger( 'close' ).
         trigger( 'render' ).
         trigger( 'set' )
 })
@@ -214,7 +213,6 @@ test( 'As multiple methods', 6, function() {
     picker.
         trigger( 'start' ).
         trigger( 'open' ).
-        trigger( 'close' ).
         trigger( 'render' ).
         trigger( 'set' )
 })

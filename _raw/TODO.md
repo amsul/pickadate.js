@@ -5,6 +5,9 @@ a lot of the stuff below may never happen...
 docs/fixes/tests
 ----------------
 
+- test: close with focus (currently crashes on tab)
+- test: open without focus
+
 - disable dates using js date objects
 - add .main to package.json
 - prevent body overflowing scroll

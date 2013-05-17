@@ -27,7 +27,7 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks( 'grunt-contrib-jshint' )
     grunt.loadNpmTasks( 'grunt-contrib-qunit' )
     grunt.loadNpmTasks( 'grunt-contrib-copy' )
-    grunt.loadNpmTasks( 'grunt-contrib-sass' )
+    grunt.loadNpmTasks( 'grunt-contrib-less' )
     grunt.loadNpmTasks( 'grunt-contrib-clean' )
     grunt.loadNpmTasks( 'grunt-contrib-cssmin' )
     grunt.loadNpmTasks( 'grunt-contrib-uglify' )
@@ -118,24 +118,24 @@ module.exports = function( grunt ) {
         },
 
 
-        // Compile Sass into CSS.
-        sass: {
+        // Compile LESS into CSS.
+        less: {
             options: {
                 style: 'expanded'
             },
             demos: {
                 files: {
-                    '<%= dirs.dest.demos %>/styles/main.css': '<%= dirs.src.demos %>/styles/base.scss'
+                    '<%= dirs.dest.demos %>/styles/main.css': '<%= dirs.src.demos %>/styles/base.less'
                 }
             },
             themes: {
                 files: {
-                    '<%= dirs.dest.themes %>/default.css': [ '<%= dirs.src.themes %>/base.scss', '<%= dirs.src.themes %>/default.scss' ],
-                    '<%= dirs.dest.themes %>/classic.css': [ '<%= dirs.src.themes %>/base.scss', '<%= dirs.src.themes %>/classic.scss' ],
-                    '<%= dirs.dest.themes %>/default.date.css': [ '<%= dirs.src.themes %>/base.date.scss', '<%= dirs.src.themes %>/default.date.scss' ],
-                    '<%= dirs.dest.themes %>/default.time.css': [ '<%= dirs.src.themes %>/base.time.scss', '<%= dirs.src.themes %>/default.time.scss' ],
-                    '<%= dirs.dest.themes %>/classic.date.css': [ '<%= dirs.src.themes %>/base.date.scss', '<%= dirs.src.themes %>/classic.date.scss' ],
-                    '<%= dirs.dest.themes %>/classic.time.css': [ '<%= dirs.src.themes %>/base.time.scss', '<%= dirs.src.themes %>/classic.time.scss' ]
+                    '<%= dirs.dest.themes %>/default.css': [ '<%= dirs.src.themes %>/base.less', '<%= dirs.src.themes %>/default.less' ],
+                    '<%= dirs.dest.themes %>/classic.css': [ '<%= dirs.src.themes %>/base.less', '<%= dirs.src.themes %>/classic.less' ],
+                    '<%= dirs.dest.themes %>/default.date.css': [ '<%= dirs.src.themes %>/base.date.less', '<%= dirs.src.themes %>/default.date.less' ],
+                    '<%= dirs.dest.themes %>/default.time.css': [ '<%= dirs.src.themes %>/base.time.less', '<%= dirs.src.themes %>/default.time.less' ],
+                    '<%= dirs.dest.themes %>/classic.date.css': [ '<%= dirs.src.themes %>/base.date.less', '<%= dirs.src.themes %>/classic.date.less' ],
+                    '<%= dirs.dest.themes %>/classic.time.css': [ '<%= dirs.src.themes %>/base.time.less', '<%= dirs.src.themes %>/classic.time.less' ]
                 }
             }
         },
@@ -216,9 +216,9 @@ module.exports = function( grunt ) {
             quick: {
                 files: [
                     '<%= dirs.src.raw %>/*.htm',
-                    '<%= dirs.src.demos %>/styles/*.scss', '<%= dirs.src.demos %>/scripts/*.js',
+                    '<%= dirs.src.demos %>/styles/*.less', '<%= dirs.src.demos %>/scripts/*.js',
                     '<%= dirs.src.pickers %>/**/*.js', '<%= dirs.src.pickers %>/themes/*.css',
-                    '<%= dirs.src.themes %>/*.scss',
+                    '<%= dirs.src.themes %>/*.less',
                     '<%= dirs.src.translations %>/*.js'
                 ],
                 tasks: [ 'quick' ]
@@ -226,14 +226,14 @@ module.exports = function( grunt ) {
             demos: {
                 files: [
                     '<%= dirs.src.raw %>/*.htm',
-                    '<%= dirs.src.demos %>/styles/*.scss', '<%= dirs.src.demos %>/scripts/*.js'
+                    '<%= dirs.src.demos %>/styles/*.less', '<%= dirs.src.demos %>/scripts/*.js'
                 ],
                 tasks: [ 'demo' ]
             },
             pickers: {
                 files: [
                     '<%= dirs.src.pickers %>/**/*.js', '<%= dirs.src.pickers %>/themes/*.css',
-                    '<%= dirs.src.themes %>/*.scss',
+                    '<%= dirs.src.themes %>/*.less',
                     '<%= dirs.src.translations %>/*.js'
                 ],
                 tasks: [ 'picker' ]
@@ -260,10 +260,10 @@ module.exports = function( grunt ) {
 
     // Register the tasks.
     // * `htmlify` and `copy:pkg` should come after `uglify` because some package files measure `.min` file sizes.
-    grunt.registerTask( 'default', [ 'clean', 'concat', 'copy:demos', 'copy:translations', 'sass', 'jshint', 'qunit', 'uglify', 'cssmin', 'htmlify', 'copy:pkg' ] )
-    grunt.registerTask( 'quick', [ 'concat', 'copy:demos', 'copy:translations', 'sass', 'uglify', 'cssmin', 'htmlify', 'copy:pkg' ] )
-    grunt.registerTask( 'picker', [ 'clean:pickers', 'concat:pickers', 'copy:translations', 'sass:themes', 'jshint:pickers', 'qunit:pickers', 'uglify:pickers', 'cssmin:pickers' ] )
-    grunt.registerTask( 'demo', [ 'clean:demos', 'concat:demos', 'copy:demos', 'sass:demos', 'jshint:demos', 'htmlify:demos' ] )
+    grunt.registerTask( 'default', [ 'clean', 'concat', 'copy:demos', 'copy:translations', 'less', 'jshint', 'qunit', 'uglify', 'cssmin', 'htmlify', 'copy:pkg' ] )
+    grunt.registerTask( 'quick', [ 'concat', 'copy:demos', 'copy:translations', 'less', 'uglify', 'cssmin', 'htmlify', 'copy:pkg' ] )
+    grunt.registerTask( 'picker', [ 'clean:pickers', 'concat:pickers', 'copy:translations', 'less:themes', 'jshint:pickers', 'qunit:pickers', 'uglify:pickers', 'cssmin:pickers' ] )
+    grunt.registerTask( 'demo', [ 'clean:demos', 'concat:demos', 'copy:demos', 'less:demos', 'jshint:demos', 'htmlify:demos' ] )
     grunt.registerTask( 'travis', [ 'jshint:pickers', 'qunit:pickers' ] )
 
 

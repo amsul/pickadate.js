@@ -35,9 +35,6 @@
  * Opacity
  */
 /**
- * Media queries
- */
-/**
  * Vendor prefixes
  */
 /**
@@ -48,7 +45,6 @@
   padding: 0.75em 0 4.2em;
   margin: 0;
 }
-
 /**
  * The times on the clock.
  */
@@ -57,49 +53,48 @@
   border-top: 1px solid #dddddd;
   margin-bottom: -1px;
   position: relative;
-  background: white;
-  padding: 0.75em 1.25em;
+  background: #ffffff;
+  padding: .75em 1.25em;
 }
-
+@media (min-height: 46.75em) {
+  .picker__list-item {
+    padding: .5em 1em;
+  }
+}
 /* Hovered time */
 .picker__list-item:hover {
   cursor: pointer;
-  color: black;
+  color: #000000;
   background: #b1dcfb;
   border-color: #0089ec;
   z-index: 10;
 }
-
 /* Selected time */
 .picker__list-item--selected,
 .picker__list-item--selected:hover {
   border-color: #0089ec;
   z-index: 10;
 }
-
 /* Highlighted time */
 .picker__list-item--highlighted {
   background: #b1dcfb;
 }
-
 /* Highlighted and hovered/focused time */
 .picker__list-item--highlighted:hover,
 .picker--focused .picker__list-item--highlighted {
   background: #0089ec;
-  color: white;
+  color: #ffffff;
 }
-
 /* Disabled time */
 .picker__list-item--disabled,
 .picker__list-item--disabled:hover {
-  background: whitesmoke;
-  border-color: whitesmoke;
+  background: #f5f5f5;
+  border-color: #f5f5f5;
   color: #dddddd;
   cursor: default;
   border-color: #777777;
   z-index: auto;
 }
-
 /**
  * The clear button
  */
@@ -118,24 +113,23 @@
 }
 .picker--time .picker__button--clear:hover,
 .picker--time .picker__button--clear:focus {
-  cursor: pointer;
-  color: black;
+  color: #000000;
   background: #b1dcfb;
   background: #ee2200;
   border-color: #ee2200;
   cursor: pointer;
-  color: white;
+  color: #ffffff;
   outline: none;
 }
 .picker--time .picker__button--clear:before {
-  top: -.25em;
+  top: -0.25em;
   color: #666;
   font-size: 1.25em;
   font-weight: bold;
 }
 .picker--time .picker__button--clear:hover:before,
 .picker--time .picker__button--clear:focus:before {
-  color: white;
+  color: #ffffff;
 }
 
 /* ==========================================================================
@@ -175,9 +169,6 @@
  * Opacity
  */
 /**
- * Media queries
- */
-/**
  * Vendor prefixes
  */
 /**
@@ -187,7 +178,6 @@
   min-width: 256px;
   max-width: 320px;
 }
-
 /**
  * The picker box.
  */

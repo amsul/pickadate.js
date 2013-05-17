@@ -47,16 +47,16 @@ _To support old browsers, namely IE8, **also include** the `legacy.js` file._
 
 ### Themes
 
-All themes are [generated using Sass](#sass-styling) and compiled into the `lib/themes` folder.
+All themes are [generated using LESS](#less-styling) and compiled into the `lib/themes` folder.
 
 File                    | Contents                 | Size (min & gzip)
 ----------------------- | ------------------------ | ----------------------
-`default.css`           | __Base default *__       | 0.48kb
-`default.date.css`      | Default date picker      | 0.74kb
-`default.time.css`      | Default time picker      | 0.38kb
-`classic.css`           | __Base classic *__       | 0.37kb
-`classic.date.css`      | Classic date picker      | 0.74kb
-`classic.time.css`      | Classic time picker      | 0.39kb
+`default.css`           | __Base default *__       | 0.49kb
+`default.date.css`      | Default date picker      | 0.69kb
+`default.time.css`      | Default time picker      | 0.35kb
+`classic.css`           | __Base classic *__       | 0.32kb
+`classic.date.css`      | Classic date picker      | 0.69kb
+`classic.time.css`      | Classic time picker      | 0.35kb
 
 __*__ One and only one base stylesheet is **required**. Check out the [demos](http://amsul.github.io/pickadate.js/themes.htm) to choose one – and then include the respective pickers as well.
 
@@ -114,10 +114,10 @@ Read the Gruntfile to see the build tasks and relative directories of the source
 
 
 <br>
-<a name="sass-styling"></a>
-## Styling with Sass
+<a name="less-styling"></a>
+## Styling with LESS
 
-The picker themes are built using [Sass](http://sass-lang.com/) with Grunt. To customize the CSS output, read the `_variables.scss` file in the `_raw/lib/themes` folder. You can specify:
+The picker themes are built using [LESS](http://lesscss.org/) with Grunt. To customize the CSS output, read the `_variables.less` file in the `_raw/lib/themes` folder. You can specify:
 
 - colors for the theme,
 - sizes for the picker,
@@ -125,7 +125,7 @@ The picker themes are built using [Sass](http://sass-lang.com/) with Grunt. To c
 - and a whole bunch of other stuff.
 
 
-After making any changes, run `grunt sass:themes` to compile it into CSS.
+After making any changes, run `grunt less:themes` to compile it into CSS.
 
 
 

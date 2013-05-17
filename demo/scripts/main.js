@@ -433,10 +433,10 @@ $button_start_stop.on( 'click', function( event ) {
 /**
  * API demo: render
  */
-var addStuff = function( picker ) {
+var addStuff = function( $element ) {
         var today = new Date(),
             todayString = today.getDate() + '/' + (today.getMonth()+1) + '/' + today.getFullYear()
-        picker.$root.find( '.pickadate__box' ).
+        $element.find( '.picker__box' ).
             prepend('<p class="text-center" style="padding:.25em;border:2px solid red">Hello there! Today is <code>' + todayString + '</code></p>')
     },
     $button_render = $( '#button__api-render' ),
@@ -448,7 +448,7 @@ $button_render.on( 'click', function( event ) {
         $button_render.text( 'Add stuff' )
     }
     else {
-        addStuff( picker_render )
+        addStuff( picker_render.$root )
         $button_render.text( 'Render' )
     }
     event.stopPropagation()

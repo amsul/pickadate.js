@@ -3,7 +3,7 @@
  * Demo: http://amsul.github.io/pickadate.js/themes.htm#default
  */
 
-@import "variables";
+@import "_variables.less";
 
 
 /**
@@ -29,7 +29,8 @@
     position: fixed;
 
     // Fade out the background, then immediately shift the holder out of view.
-    @include prefix( transition, (background $speed-animate-in ease-out, top 0s $speed-animate-in ) );
+    @transition: background @speed-animate-in ease-out, top 0s @speed-animate-in;
+    .transition( @transition );
 }
 
 
@@ -43,18 +44,18 @@
 
     // Specify the min & max widths and center align it.
     margin: 0 auto;
-    min-width: $picker-min-width;
-    max-width: $picker-max-width;
+    min-width: @picker-min-width;
+    max-width: @picker-max-width;
     width: 100%; // For IE9 & 10 to keep it centered.
 
     // Hide it to begin with.
-    @include opacity( 0 );
+    .opacity( 0 );
 
     // Animate the frame in and out of view.
-    @include prefix( transition, all $speed-animate-in ease-out );
+    .transition( all @speed-animate-in ease-out );
 
     // For `small` screens...
-    @include min-screen( small ) {
+    @media ( min-height: @breakpoint-small ) {
 
         // Reveal what’s beyond to allow drop shadows, et al.
         overflow: visible;
@@ -68,7 +69,7 @@
     }
 
     // For `medium` screens...
-    @include min-screen( medium ) {
+    @media ( min-height: @breakpoint-medium ) {
 
         // Move away from the bottom edge.
         margin-bottom: 7.5%;
@@ -84,7 +85,7 @@
     height: 100%;
 
     // For `small` screens, remove the “middle-aligned” styling
-    @include min-screen( small ) {
+    @media ( min-height: @breakpoint-small ) {
         display: block;
     }
 }
@@ -95,19 +96,19 @@
  * The box contains all the picker contents.
  */
 .picker__box {
-    background: $bg-white;
+    background: @bg-white;
 
     // To start with, vertically align to center
     display: table-cell;
     vertical-align: middle;
 
     // For `tiny` screens, increase the font size a bit
-    @include min-screen( tiny ) {
+    @media ( min-height: @breakpoint-tiny ) {
         font-size: 1.25em;
     }
 
     // For `small` screens...
-    @include min-screen( small ) {
+    @media ( min-height: @breakpoint-small ) {
 
         // Remove the “middle-aligned” styling
         display: block;
@@ -116,26 +117,26 @@
         font-size: 1.33em;
 
         // Add the borders except the bottom one
-        border: 1px solid $border-grey;
-        border-top-color: lighten( $border-grey, 7% );
+        border: 1px solid @border-grey;
+        border-top-color: lighten( @border-grey, 7% );
         border-bottom-width: 0;
 
         // Make ‘em rounded at the top corners
-        @include prefix( border-radius, $picker-border-radius $picker-border-radius 0 0 );
+        .border-radius( @picker-border-radius @picker-border-radius 0 0 );
 
         // And finally, add a nice shadow
-        @include prefix( box-shadow, $picker-box-shadow );
+        .box-shadow( @picker-box-shadow );
     }
 
     // For `medium` screens...
-    @include min-screen( medium ) {
+    @media ( min-height: @breakpoint-medium ) {
 
         // Increase the font size.
         font-size: 1.5em;
 
         // Reveal all borders and round all corners.
         border-bottom-width: 1px;
-        @include prefix( border-radius, $picker-border-radius );
+        .border-radius( @picker-border-radius );
     }
 }
 
@@ -154,12 +155,12 @@
         // Show a translucent black background (order is important for IE)
         background: transparent;
         -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#1E000000,endColorstr=#1E000000)"; // IE8
-            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#1E000000,endColorstr=#1E000000); // IE6 & 7
               zoom: 1;
         background: rgba(0,0,0,.32); // Normal browsers
 
         // Animate in the background
-        @include prefix( transition, background $speed-animate-in ease-out );
+        @transition: background @speed-animate-in ease-out;
+        .transition( @transition );
     }
 
 
@@ -170,10 +171,10 @@
         top: 0;
 
         // Ånd then reveal the content
-        @include opacity( 1 );
+        .opacity( 1 );
 
         // For `small` screens, move to the bottom edge instead
-        @include min-screen( small ) {
+        @media ( min-height: @breakpoint-small ) {
             top: auto;
             bottom: 0;
         }
@@ -196,8 +197,8 @@
 
 //     .picker__holder,
 //     .picker--opened .picker__holder {
-//         background: $white;
-//         @include prefix( transition, all $speed-animate-in ease-out );
+//         background: @white;
+//         @include prefix( transition, all @speed-animate-in ease-out );
 //     }
 
 //     .picker__holder {
@@ -205,12 +206,12 @@
 //         position: relative;
 //         max-height: 0;
 //         border: 1px solid transparent;
-//         @include prefix( border-radius, $picker-border-radius );
+//         @include prefix( border-radius, @picker-border-radius );
 //         @include prefix( box-sizing, border-box );
 //     }
 //     .picker--opened .picker__holder {
 //         @include picker-holder-open;
-//         @include prefix( box-shadow, $picker-box-shadow-light );
+//         @include prefix( box-shadow, @picker-box-shadow-light );
 //     }
 
 //     .picker__frame,

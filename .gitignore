@@ -6,5 +6,3 @@
 *.sublime-workspace
 
 node_modules/*
-
-.sass-cache/*

@@ -3,7 +3,7 @@
    $BASE-DATE-PICKER
    ========================================================================== */
 
-@import "variables";
+@import "_variables.less";
 
 
 /**
@@ -35,7 +35,7 @@
     margin-right: .25em;
 }
 .picker__year {
-    color: $year-weekday-label;
+    color: @year-weekday-label;
     font-size: .8em;
     font-style: italic;
 }
@@ -47,7 +47,7 @@
 .picker__select--month,
 .picker__select--year {
     font-size: .8em;
-    border: 1px solid $border-select;
+    border: 1px solid @border-select;
     height: 2.5em;
     padding: .66em .25em; // For firefox
     margin-left: .25em;
@@ -64,7 +64,7 @@
 }
 .picker__select--month:focus,
 .picker__select--year:focus {
-    border-color: $blue;
+    border-color: @blue;
 }
 
 
@@ -92,7 +92,7 @@
     content: " ";
     border-top: .5em solid transparent;
     border-bottom: .5em solid transparent;
-    border-right: .75em solid $black;
+    border-right: .75em solid @black;
     width: 0;
     height: 0;
     display: block;
@@ -100,13 +100,13 @@
 }
 .picker__nav--next:before {
     border-right: 0;
-    border-left: .75em solid $black;
+    border-left: .75em solid @black;
 }
 
 // Hovered date picker items.
 .picker__nav--prev:hover,
 .picker__nav--next:hover {
-    @include picker-item-hovered;
+    .picker-item-hovered;
 }
 
 // Disabled month nav.
@@ -116,8 +116,8 @@
 .picker__nav--disabled:before:hover {
     cursor: default;
     background: none;
-    border-right-color: $disabled-things-bg;
-    border-left-color: $disabled-things-bg;
+    border-right-color: @disabled-things-bg;
+    border-left-color: @disabled-things-bg;
 }
 
 
@@ -137,7 +137,7 @@
     margin-bottom: .5em;
 
     // For `small` screens, increase the spacing a tad.
-    @include min-screen( small ) {
+    @media ( min-height: @breakpoint-small ) {
         margin-bottom: .75em;
     }
 }
@@ -156,11 +156,11 @@
     width: 14.285714286%; // 100/7
     font-size: .75em;
     padding-bottom: .25em;
-    color: $year-weekday-label;
+    color: @year-weekday-label;
     font-weight: 500;
 
     /* Increase the spacing a tad */
-    @include min-screen( small ) {
+    @media ( min-height: @breakpoint-small ) {
         padding-bottom: .5em;
     }
 }
@@ -177,7 +177,7 @@
 
 // Today.
 .picker__day--today {
-    color: $blue;
+    color: @blue;
     position: relative;
 }
 .picker__day--today:before {
@@ -187,48 +187,48 @@
     right: 2px;
     width: 0;
     height: 0;
-    border-top: .5em solid $blue-tag;
+    border-top: .5em solid @blue-tag;
     border-left: .5em solid transparent;
 }
 
 // Selected day.
 .picker__day--selected,
 .picker__day--selected:hover {
-    @include picker-item-selected;
+    .picker-item-selected;
 }
 
 // Highlighted day.
 .picker__day--highlighted {
-    background: $blue-hover;
+    background: @blue-hover;
 }
 
 // Disabled day.
 .picker__day--disabled:before {
-    border-top-color: $disabled-tag;
+    border-top-color: @disabled-tag;
 }
 
 // Out of focus days.
 .picker__day--outfocus {
-    color: $disabled-things-text;
-    @include opacity( .66 );
+    color: @disabled-things-text;
+    .opacity( .66 );
 }
 
 // Hovered date picker items.
 .picker__day--infocus:hover,
 .picker__day--outfocus:hover {
-    @include picker-item-hovered;
+    .picker-item-hovered;
 }
 
 // Highlighted and hovered/focused dates.
 .picker__day--highlighted:hover,
 .picker--focused .picker__day--highlighted {
-    @include picker-item-highlighted;
+    .picker-item-highlighted;
 }
 
 // Disabled dates.
 .picker__day--disabled,
 .picker__day--disabled:hover {
-    @include picker-item-disabled;
+    .picker-item-disabled;
 }
 
 
@@ -242,8 +242,8 @@
 // Today and clear buttons.
 .picker__button--today,
 .picker__button--clear {
-    border: 1px solid $white;
-    background: $white;
+    border: 1px solid @white;
+    background: @white;
     font-size: .8em;
     padding: .66em 0;
     font-weight: bold;
@@ -253,13 +253,13 @@
 }
 .picker__button--today:hover,
 .picker__button--clear:hover {
-    @include picker-item-hovered;
-    border-bottom-color: $blue-hover;
+    .picker-item-hovered;
+    border-bottom-color: @blue-hover;
 }
 .picker__button--today:focus,
 .picker__button--clear:focus {
-    background: $blue-hover;
-    border-color: $blue;
+    background: @blue-hover;
+    border-color: @blue;
     outline: none;
 }
 
@@ -275,14 +275,14 @@
     margin-right: .45em;
     top: -.05em;
     width: 0;
-    border-top: .66em solid $blue-tag;
+    border-top: .66em solid @blue-tag;
     border-left: .66em solid transparent;
 }
 .picker__button--clear:before {
     content: "\D7"; // ×
     margin-right: .35em;
     top: -.1em;
-    color: $clear-red;
+    color: @clear-red;
     vertical-align: top;
     font-size: 1.1em;
 }

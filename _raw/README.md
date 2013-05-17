@@ -57,7 +57,7 @@ _To support old browsers, namely IE8, **also include** the `legacy.js` file._
 
 ### Themes
 
-All themes are [generated using Sass](#sass-styling) and compiled into the `{%= dirs.dest.themes %}` folder.
+All themes are [generated using LESS](#less-styling) and compiled into the `{%= dirs.dest.themes %}` folder.
 
 File                    | Contents                 | Size (min & gzip)
 ----------------------- | ------------------------ | ----------------------
@@ -124,10 +124,10 @@ Read the Gruntfile to see the build tasks and relative directories of the source
 
 
 <br>
-<a name="sass-styling"></a>
-## Styling with Sass
+<a name="less-styling"></a>
+## Styling with LESS
 
-The picker themes are built using [Sass](http://sass-lang.com/) with Grunt. To customize the CSS output, read the `_variables.scss` file in the `{%= dirs.src.themes %}` folder. You can specify:
+The picker themes are built using [LESS](http://lesscss.org/) with Grunt. To customize the CSS output, read the `_variables.less` file in the `{%= dirs.src.themes %}` folder. You can specify:
 
 - colors for the theme,
 - sizes for the picker,
@@ -135,7 +135,7 @@ The picker themes are built using [Sass](http://sass-lang.com/) with Grunt. To c
 - and a whole bunch of other stuff.
 
 
-After making any changes, run `grunt sass:themes` to compile it into CSS.
+After making any changes, run `grunt less:themes` to compile it into CSS.
 
 
 
