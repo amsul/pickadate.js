@@ -62,6 +62,54 @@ test( 'First weekday', function() {
     strictEqual( $input.pickadate( 'picker' ).$root.find( '.' + $.fn.pickadate.defaults.klass.weekdays ).first().text(), $.fn.pickadate.defaults.weekdaysShort[1], 'Monday is first day' )
 })
 
+test( 'Formats', function() {
+
+    var picker = this.picker,
+        today = new Date(),
+        leadZero = function( number ) {
+            return ( number < 10 ? '0' : '' ) + number
+        },
+        formats = {
+            d: function() {
+                return '' + today.getDate()
+            },
+            dd: function() {
+                return leadZero( today.getDate() )
+            },
+            ddd: function() {
+                return $.fn.pickadate.defaults.weekdaysShort[ today.getDay() ]
+            },
+            dddd: function() {
+                return $.fn.pickadate.defaults.weekdaysFull[ today.getDay() ]
+            },
+            m: function() {
+                return '' + ( today.getMonth() + 1 )
+            },
+            mm: function() {
+                return leadZero( ( today.getMonth() + 1 ) )
+            },
+            mmm: function() {
+                return $.fn.pickadate.defaults.monthsShort[ today.getMonth() ]
+            },
+            mmmm: function() {
+                return $.fn.pickadate.defaults.monthsFull[ today.getMonth() ]
+            },
+            yy: function() {
+                return ( '' + today.getFullYear() ).slice(2)
+            },
+            yyyy: function() {
+                return '' + today.getFullYear()
+            }
+        }
+
+    today.setHours(0,0,0,0)
+
+    ;([ 'd', 'dd', 'ddd', 'dddd', 'm', 'mm', 'mmm', 'mmmm', 'yy', 'yyyy' ]).forEach( function( format ) {
+        var expect = formats[ format ]()
+        deepEqual( picker.get( 'now', format ), expect, '`' + format + '`: ' + expect )
+    })
+})
+
 
 
 
@@ -520,6 +568,71 @@ test( '`disable` and `enable` using arrays', function() {
             ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is enabled: ' + tableCell.innerHTML )
         }
     })
+})
+
+
+
+
+module( 'Date picker `set` beyond limits', {
+    setup: function() {
+        $DOM.append( $INPUT.clone() )
+        var $input = $DOM.find( 'input' ).pickadate({
+            min: -40,
+            max: 40
+        })
+        this.picker = $input.pickadate( 'picker' )
+    },
+    teardown: function() {
+        this.picker.stop()
+        $DOM.empty()
+    }
+})
+
+test( '`select`', function() {
+
+    var picker = this.picker,
+        today = new Date()
+
+    today.setHours(0,0,0,0)
+
+    picker.set( 'select', new Date( today.getFullYear(), today.getMonth(), today.getDate() - 60 ) )
+    deepEqual( picker.get( 'select' ), picker.get( 'min' ), 'Able to not `select` beyond lower limit' )
+
+    picker.set( 'select', new Date( today.getFullYear(), today.getMonth(), today.getDate() + 60 ) )
+    deepEqual( picker.get( 'select' ), picker.get( 'max' ), 'Able to not `select` beyond upper limit' )
+})
+
+test( '`highlight`', function() {
+
+    var picker = this.picker,
+        today = new Date()
+
+    today.setHours(0,0,0,0)
+
+    picker.set( 'highlight', new Date( today.getFullYear(), today.getMonth(), today.getDate() - 60 ) )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'min' ), 'Able to not `highlight` beyond lower limit' )
+
+    picker.set( 'highlight', new Date( today.getFullYear(), today.getMonth(), today.getDate() + 60 ) )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'max' ), 'Able to not `highlight` beyond upper limit' )
+})
+
+test( '`view`', function() {
+
+    var picker = this.picker,
+        today = new Date(),
+        viewset,
+        min = picker.get( 'min' ),
+        max = picker.get( 'max' )
+
+    today.setHours(0,0,0,0)
+
+    picker.set( 'view', new Date( today.getFullYear(), today.getMonth(), today.getDate() - 60 ) )
+    viewset = picker.get( 'view' )
+    deepEqual( [viewset.year,viewset.month,viewset.date], [min.year,min.month,1], 'Able to not `view` beyond lower limit' )
+
+    picker.set( 'view', new Date( today.getFullYear(), today.getMonth(), today.getDate() + 60 ) )
+    viewset = picker.get( 'view' )
+    deepEqual( [viewset.year,viewset.month,viewset.date], [max.year,max.month,1], 'Able to not `view` beyond upper limit' )
 })
 
 

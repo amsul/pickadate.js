@@ -43,7 +43,7 @@ function DatePicker( picker, settings ) {
         now: 'now create',
         select: 'parse create validate',
         highlight: 'navigate create validate',
-        view: 'create viewset',
+        view: 'create validate viewset',
         disable: 'flipItem',
         enable: 'flipItem'
     }

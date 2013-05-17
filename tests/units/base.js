@@ -56,6 +56,12 @@ test( 'Picker states', function() {
     picker.open()
     ok( picker.get( 'open' ) === true, 'Opened with trigger' )
 
+    picker.$root.find( 'button' )[0].focus()
+    ok( picker.get( 'open' ) === true, 'Remains open with focus within' )
+
+    picker.$root.click()
+    ok( picker.get( 'open' ) === true, 'Remains open with click within' )
+
     picker.close()
     ok( picker.get( 'open' ) === false, 'Closed with trigger' )
 
@@ -120,7 +126,7 @@ module( 'Base events', {
     }
 })
 
-test( 'Options', function() {
+test( 'As options', function() {
 
     var thisModule = this,
         picker = thisModule.picker
@@ -144,6 +150,73 @@ test( 'Options', function() {
 
     picker.set()
     deepEqual( thisModule.selected, {}, 'Fired: `onSet`' )
+})
+
+test( 'As individual methods', 6, function() {
+
+    var picker = this.picker
+
+    // Register the events
+    picker.
+        on( 'open', function() {
+            ok( true, 'Opened' )
+        }).
+        on( 'close', function() {
+            ok( true, 'Closed' )
+        }).
+        on( 'render', function() {
+            ok( true, 'Rendered' )
+        }).
+        on( 'set', function() {
+            ok( true, 'Set' )
+        }).
+        on( 'stop', function() {
+            ok( true, 'Stopped' )
+        }).
+        on( 'start', function() {
+            ok( true, 'Started' )
+        })
+
+    picker.
+        trigger( 'start' ).
+        trigger( 'open' ).
+        trigger( 'close' ).
+        trigger( 'render' ).
+        trigger( 'set' )
+})
+
+test( 'As multiple methods', 6, function() {
+
+    var picker = this.picker
+
+    // Register the events
+    picker.on({
+        open: function() {
+            ok( true, 'Opened' )
+        },
+        close: function() {
+            ok( true, 'Closed' )
+        },
+        render: function() {
+            ok( true, 'Rendered' )
+        },
+        set: function() {
+            ok( true, 'Set' )
+        },
+        stop: function() {
+            ok( true, 'Stopped' )
+        },
+        start: function() {
+            ok( true, 'Started' )
+        }
+    })
+
+    picker.
+        trigger( 'start' ).
+        trigger( 'open' ).
+        trigger( 'close' ).
+        trigger( 'render' ).
+        trigger( 'set' )
 })
 
 

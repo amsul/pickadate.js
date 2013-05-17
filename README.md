@@ -1,4 +1,4 @@
-# pickadate v3.0.0-alpha [![pickadate build status](https://travis-ci.org/amsul/pickadate.js.png?branch=time-picker)](https://travis-ci.org/amsul/pickadate.js)
+# pickadate v3.0.0-beta [![pickadate build status](https://travis-ci.org/amsul/pickadate.js.png?branch=time-picker)](https://travis-ci.org/amsul/pickadate.js)
 
 The mobile-friendly, responsive, and lightweight jQuery date & time input picker.
 
@@ -11,7 +11,7 @@ The mobile-friendly, responsive, and lightweight jQuery date & time input picker
 
 #### To get it:
 
-[Download v3.0.0-alpha](https://github.com/amsul/pickadate.js/archive/v3.0.0.zip) or `git clone git://github.com/amsul/pickadate.js.git` or `bower install pickadate`
+[Download v3.0.0-beta](https://github.com/amsul/pickadate.js/archive/v3.0.0.zip) or `git clone git://github.com/amsul/pickadate.js.git` or `bower install pickadate`
 
 
 
@@ -51,12 +51,12 @@ All themes are [generated using Sass](#sass-styling) and compiled into the `lib/
 
 File                    | Contents                 | Size (min & gzip)
 ----------------------- | ------------------------ | ----------------------
-`default.css`           | __Base default *__       | 0.46kb
-`default.date.css`      | Default date picker      | 0.68kb
-`default.time.css`      | Default time picker      | 0.34kb
-`classic.css`           | __Base classic *__       | 0.29kb
-`classic.date.css`      | Classic date picker      | 0.68kb
-`classic.time.css`      | Classic time picker      | 0.34kb
+`default.css`           | __Base default *__       | 0.48kb
+`default.date.css`      | Default date picker      | 0.74kb
+`default.time.css`      | Default time picker      | 0.38kb
+`classic.css`           | __Base classic *__       | 0.37kb
+`classic.date.css`      | Classic date picker      | 0.74kb
+`classic.time.css`      | Classic time picker      | 0.39kb
 
 __*__ One and only one base stylesheet is **required**. Check out the [demos](http://amsul.github.io/pickadate.js/themes.htm) to choose one – and then include the respective pickers as well.
 

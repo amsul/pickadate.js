@@ -53,6 +53,48 @@ test( 'Properties', function() {
     deepEqual( picker.get( 'view' ), picker.get( 'highlight' ), 'Default “view” is “highlight”' )
 })
 
+test( 'Formats', function() {
+
+    var picker = this.picker,
+        interval = $.fn.pickatime.defaults.interval,
+        today = new Date(),
+        minutes = today.getHours() * 60 + today.getMinutes(),
+        leadZero = function( number ) {
+            return ( number < 10 ? '0' : '' ) + number
+        },
+        formats = {
+            h: function() {
+                return '' + ( ~~( minutes/60 ) % 12 )
+            },
+            hh: function() {
+                return leadZero( ~~( minutes/60 ) % 12 )
+            },
+            H: function() {
+                return '' + ( ~~( minutes/60 ) )
+            },
+            HH: function() {
+                return leadZero( ~~( minutes/60 ) )
+            },
+            i: function() {
+                return leadZero( minutes%60 )
+            },
+            a: function() {
+                return ~~( minutes/60 ) > 12 ? 'p.m.' : 'a.m.'
+            },
+            A: function() {
+                return ~~( minutes/60 ) > 12 ? 'PM' : 'AM'
+            }
+        }
+
+    minutes = interval + minutes - minutes % interval
+
+    ;([ 'h', 'hh', 'H', 'HH', 'i', 'a', 'A' ]).forEach( function( format ) {
+        var expect = formats[ format ]()
+        deepEqual( picker.get( 'now', format ), expect, '`' + format + '`: ' + expect )
+    })
+
+})
+
 
 
 
@@ -404,6 +446,57 @@ test( '`disable` and `enable` using arrays', function() {
             ok( !$( item ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is enabled: ' + item.innerHTML )
         }
     })
+})
+
+
+
+
+module( 'Time picker `set` beyond limits', {
+    setup: function() {
+        $DOM.append( $INPUT.clone() )
+        var $input = $DOM.find( 'input' ).val( '5:30 a.m.' ).pickatime({
+            min: [2,30],
+            max: [17,0]
+        })
+        this.picker = $input.pickatime( 'picker' )
+    },
+    teardown: function() {
+        this.picker.stop()
+        $DOM.empty()
+    }
+})
+
+test( '`select`', function() {
+
+    var picker = this.picker
+
+    picker.set( 'select', [1,0] )
+    deepEqual( picker.get( 'select' ), picker.get( 'min' ), 'Able to not `select` beyond lower limit' )
+
+    picker.set( 'select', [19,0] )
+    deepEqual( picker.get( 'select' ), picker.get( 'max' ), 'Able to not `select` beyond upper limit' )
+})
+
+test( '`highlight`', function() {
+
+    var picker = this.picker
+
+    picker.set( 'highlight', [1,0] )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'min' ), 'Able to not `highlight` beyond lower limit' )
+
+    picker.set( 'highlight', [19,0] )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'max' ), 'Able to not `highlight` beyond upper limit' )
+})
+
+test( '`view`', function() {
+
+    var picker = this.picker
+
+    picker.set( 'view', [1,0] )
+    deepEqual( picker.get( 'view' ), picker.get( 'min' ), 'Able to not `view` beyond lower limit' )
+
+    picker.set( 'view', [19,0] )
+    deepEqual( picker.get( 'view' ), picker.get( 'max' ), 'Able to not `view` beyond upper limit' )
 })
 
 

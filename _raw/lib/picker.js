@@ -389,14 +389,15 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                 // Remove the “opened” and “focused” class from the picker root.
                 P.$root.removeClass( CLASSES.opened + ' ' + CLASSES.focused )
 
-                // If it’s already closed, do nothing.
-                if ( !STATE.open ) return P
+                // If it’s open, update the state.
+                if ( STATE.open ) {
 
-                // Set it as closed.
-                STATE.open = false
+                    // Set it as closed.
+                    STATE.open = false
 
-                // Unbind the document events.
-                $document.off( '.P' + STATE.id )
+                    // Unbind the document events.
+                    $document.off( '.P' + STATE.id )
+                }
 
                 // Trigger the queued “close” events.
                 return P.trigger( 'close' )
