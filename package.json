@@ -2,6 +2,7 @@
     "name": "pickadate",
     "version": "2.1.8",
     "title": "pickadate.js",
+    "main": "source/pickadate.js",
     "author": {
         "name" : "Amsul",
         "email" : "reach@amsul.ca",
