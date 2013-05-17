@@ -148,11 +148,14 @@ event.stopPropagation()</code></pre>
 
         <h3 class="heading heading--divide"><span class="heading__text">Close with focus<a class="heading__anchor" name="method-close-focus" href="#method-close-focus">&sect;</a></span></h3>
 
-        <p>Close the picker while focusing onto the <code class="tag-name">input</code> element by passing a truth-y first argument.</p>
+        <p>Close the picker while keeping focus on the <code class="tag-name">input</code> element by passing a truth-y first argument.</p>
 
         <pre class="pre--demo"><code data-language="javascript">picker.close(true)</code></pre>
 
-        {%= dateDemoField({ id: 'demo__api-close-focus' }) %}
+        {%= dateDemoField({
+            id: 'demo__api-close-focus',
+            pre: '<button id=button__api-close-focus class="fieldset__button button button--small">Close with focus</button>'
+        }) %}
 
     </div> <!-- .section__block -->
 

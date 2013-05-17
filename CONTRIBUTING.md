@@ -32,10 +32,10 @@ If you’re submitting a pull request, please respect the coding standards used 
 A few other things to keep in mind:
 
 - Make sure the changes are suitable within the scope of this project.
-- Discuss any significant features before endeavoring into developing them. I‘d hate to have anyone spend effort on something only for me to not merge it into the main project.
+- Discuss any significant features before endeavoring into developing them. I’d hate to have anyone spend effort on something only for me to not merge it into the main project.
 - Include the relevant test coverage if any JavaScript files are involved.
 - Compile the project using `grunt --verbose` to make sure everything passes with a green flag.
-- Use the Semantic Versioning guide, as mentioned in the [readme file](/blob/v3.0.0/README.md), in the case a version bump is due.
+- Use the Semantic Versioning guide, as mentioned in the [readme file](/blob/v3.0.0/README.md), in the case that a version bump is due.
 
 
 #### All pull requests should be submitted to the `dev` branch.
@@ -47,7 +47,7 @@ A few other things to keep in mind:
 <a name="features"></a>
 ## Feature requests
 
-Feature requests are welcome. But take a moment to find out whether your idea fits with in the scope and aims of this project. It’s up to *you* to make a strong case to the merits of this feature. Please provide as much detail and context as possible.
+Feature requests are welcome. But take a moment to find out whether your idea fits within the scope and aims of this project. It’s up to *you* to make a strong case to the merits of this feature. Please provide as much detail and context as possible.
 
 
 

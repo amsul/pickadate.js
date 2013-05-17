@@ -223,7 +223,7 @@ test( 'Open/close alternate focus', function() {
         klasses = Picker.klasses()
 
     picker.open( false )
-    ok( !picker.get( 'open' ) && picker.$node[0].className === klasses.input && picker.$root[0].className === klasses.picker + ' ' + klasses.opened && document.activeElement !== picker.$node[0], 'Opened without focus' )
+    ok( !picker.get( 'open' ) && picker.$node[0].className === klasses.input + ' ' + klasses.active && picker.$root[0].className === klasses.picker + ' ' + klasses.opened && document.activeElement !== picker.$node[0], 'Opened without focus' )
 
     picker.close( true )
     ok( !picker.get( 'open' ) && picker.$node[0].className === klasses.input && picker.$root[0].className === klasses.picker && document.activeElement === picker.$node[0], 'Closed with focus' )

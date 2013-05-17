@@ -388,10 +388,10 @@ $button_open_close.on( 'click', function( event ) {
     event.stopPropagation()
 })
 
-$( '#demo__api-close-focus' ).pickadate({
-    onClose: function() {
-        this.close(true)
-    }
+var $input_close_focus = $( '#demo__api-close-focus' ).pickadate(),
+    picker_close_focus = $input_close_focus.pickadate( 'picker' )
+$( '#button__api-close-focus' ).on( 'click', function() {
+    picker_close_focus.close( true )
 })
 
 var $input_open_focus = $( '#demo__api-open-focus' ).pickadate(),

@@ -194,11 +194,11 @@ event.stopPropagation()</code></pre>
 
         <h3 class="heading heading--divide"><span class="heading__text">Close with focus<a class="heading__anchor" name="method-close-focus" href="#method-close-focus">&sect;</a></span></h3>
 
-        <p>Close the picker while focusing onto the <code class="tag-name">input</code> element by passing a truth-y first argument.</p>
+        <p>Close the picker while keeping focus on the <code class="tag-name">input</code> element by passing a truth-y first argument.</p>
 
         <pre class="pre--demo"><code data-language="javascript">picker.close(true)</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="demo__api-close-focus" class="fieldset__input " type=text value="" placeholder="Try me&hellip;"></div></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-close-focus class="fieldset__button button button--small">Close with focus</button><input id="demo__api-close-focus" class="fieldset__input " type=text value="" placeholder="Try me&hellip;"></div></fieldset>
 
     </div> <!-- .section__block -->
 
@@ -328,16 +328,16 @@ picker.stop()</code></pre>
     pick: 1366430400000
 }</code></pre>
 
-        <p>Here’s a <b>time picker item object</b> for <u>3:27 PM</u>:</p>
+        <p>Here’s a <b>time picker item object</b> for <u>6:37 PM</u>:</p>
         <pre><code data-language="javascript">{
     // Hour of the day from 0 to 23.
-    hour: 15,
+    hour: 18,
 
     // The minutes of the hour from 0 to 59 (based on the interval).
-    mins: 30,
+    mins: 60,
 
     // The “pick” value used for comparisons.
-    pick: 930
+    pick: 1140
 }</code></pre>
 
     </div> <!-- .section__block -->
