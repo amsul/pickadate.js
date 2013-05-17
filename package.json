@@ -30,6 +30,7 @@
         "jquery": ">=1.7"
     },
     "jam": {
+        "main": "pickadate.js",
         "dependencies": {
             "jquery": ">=1.7"
         }
