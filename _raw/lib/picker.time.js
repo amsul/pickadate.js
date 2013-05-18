@@ -214,9 +214,24 @@ TimePicker.prototype.create = function( type, value, options ) {
  * Get the time relative to now.
  */
 TimePicker.prototype.now = function( type, value/*, options*/ ) {
-    var date = new Date()
-    // Add an interval because the time has passed.
-    return ( ( Picker._.isInteger( value ) ? value + 1 : 1 ) * this.item.interval ) + date.getHours() * MINUTES_IN_HOUR + date.getMinutes()
+
+    var date = new Date(),
+        dateMinutes = date.getHours() * MINUTES_IN_HOUR + date.getMinutes()
+
+    // If the value is a number, adjust by that many intervals because
+    // the time has passed. In the case of “midnight” and a negative `min`,
+    // increase the value by 2. Otherwise increase it by 1.
+    if ( Picker._.isInteger( value ) ) {
+        value += type == 'min' && value < 0 && dateMinutes === 0 ? 2 : 1
+    }
+
+    // If the value isn’t a number, default to 1 passed interval.
+    else {
+        value = 1
+    }
+
+    // Calculate the final relative time.
+    return value * this.item.interval + dateMinutes
 } //TimePicker.prototype.now
 
 

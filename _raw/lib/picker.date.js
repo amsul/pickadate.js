@@ -671,7 +671,7 @@ DatePicker.prototype.nodes = function( isOpen ) {
                             )
                         ]
                     }
-                }), settings.klass.selectMonth )
+                }), settings.klass.selectMonth, isOpen ? '' : 'disabled' )
             }
 
             // If there's a need for a month selector
@@ -731,7 +731,7 @@ DatePicker.prototype.nodes = function( isOpen ) {
                             'value=' + loopedYear + ( focusedYear == loopedYear ? ' selected' : '' )
                         ]
                     }
-                }), settings.klass.selectYear )
+                }), settings.klass.selectYear, isOpen ? '' : 'disabled' )
             }
 
             // Otherwise just return the year focused
