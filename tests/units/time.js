@@ -62,12 +62,16 @@ test( 'Formats', function() {
         leadZero = function( number ) {
             return ( number < 10 ? '0' : '' ) + number
         },
+        toHours = function( mins ) {
+            var hours = ~~( mins/60 ) % 12
+            return hours ? hours : 12
+        },
         formats = {
             h: function() {
-                return '' + ( ~~( minutes/60 ) % 12 )
+                return '' + toHours( minutes )
             },
             hh: function() {
-                return leadZero( ~~( minutes/60 ) % 12 )
+                return leadZero( toHours( minutes ) )
             },
             H: function() {
                 return '' + ( ~~( minutes/60 ) )
@@ -236,15 +240,15 @@ test( '`min` using booleans', function() {
     deepEqual( picker.get( 'select' ), picker.get( 'min' ), '`select` updated' )
     deepEqual( picker.get( 'highlight' ), picker.get( 'min' ), '`highlight` updated' )
     deepEqual( picker.get( 'view' ), picker.get( 'min' ), '`view` updated' )
-    deepEqual( picker.get( 'max' ).pick, 1410, '`max` unaffected' )
+    deepEqual( picker.get( 'max' ).time, 1410, '`max` unaffected' )
 
     // Boolean false
     picker.set( 'min', false )
-    strictEqual( picker.get( 'min' ).pick, 0, '`min` using `false`: ' + picker.get( 'min', 'HH:i' ) )
+    strictEqual( picker.get( 'min' ).time, 0, '`min` using `false`: ' + picker.get( 'min', 'HH:i' ) )
     deepEqual( picker.get( 'select' ), picker.get( 'now' ), '`select` unaffected' )
     deepEqual( picker.get( 'highlight' ), picker.get( 'now' ), '`highlight` unaffected' )
     deepEqual( picker.get( 'view' ), picker.get( 'now' ), '`view` unaffected' )
-    deepEqual( picker.get( 'max' ).pick, 1410, '`max` unaffected' )
+    deepEqual( picker.get( 'max' ).time, 1410, '`max` unaffected' )
 })
 
 test( '`min` specific', function() {
