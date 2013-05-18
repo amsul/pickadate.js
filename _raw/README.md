@@ -1,4 +1,4 @@
-# {%= pkg.name %} v{%= pkg.version %} [![{%= pkg.name %} build status](https://travis-ci.org/amsul/pickadate.js.png?branch=time-picker)](https://travis-ci.org/amsul/pickadate.js)
+# {%= pkg.name %} v{%= pkg.version %} [![{%= pkg.name %} build status](https://travis-ci.org/amsul/pickadate.js.png?branch=gh-pages)](https://travis-ci.org/amsul/pickadate.js)
 
 {%= pkg.description %}
 
@@ -21,7 +21,7 @@
 
 #### To get it:
 
-[Download v{%= pkg.version %}]({%= meta.gitrepo_url %}/archive/v{%= pkg.version.split('-')[0] %}.zip) or `git clone git://github.com/amsul/pickadate.js.git` or `bower install pickadate`
+[Download v{%= pkg.version %}]({%= meta.gitrepo_url %}/archive/{%= pkg.version %}.zip) or `git clone git://github.com/amsul/pickadate.js.git` or `bower install pickadate`
 
 
 
