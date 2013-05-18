@@ -3,15 +3,19 @@
 <meta charset="utf-8">
 
 <meta name="author" content="Amsul - http://amsul.ca">
-<meta name="viewport" content="width=device-width,maximum-scale=1">
+
+<meta name="viewport" content="width=device-width">
 <meta http-equiv="cache-control" content="no-cache">
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 
-<title>Pickadate.js</title>
+<title>pickadate.js</title>
 
-<link rel="stylesheet" href="demo/style.css">
-<link rel="stylesheet" href="themes/pickadate.01.default.css">
+<link rel="shortcut icon" href="demo/images/favicon.ico">
+<link rel="stylesheet" href="demo/styles/main.css">
+<link rel="stylesheet" href="lib/themes/default.css" id="theme_base">
+<link rel="stylesheet" href="lib/themes/default.date.css" id="theme_date">
+<link rel="stylesheet" href="lib/themes/default.time.css" id="theme_time">
 
 <!--[if lt IE 9]>
     <script>document.createElement('section')</script>
@@ -21,73 +25,127 @@
 <body>
 
 
-    <section class="holder holder-top">
+    <header class="section section--header section--splash">
 
-        <h1><strong title="Pick a Date" class="underline-highlight">pickadate.js</strong><a class="button button-header" href="v3/index.htm">Try v3.0.0-beta</a></h1>
-        <h2>A mobile-friendly, responsive, and lightweight jQuery dateinput picker<br><small class="dimmed"><small><small>9.6kb min, 4.0kb gzipped</small></small></small></h2>
+        <div class="section__block section__block--scoped">
+            <nav class="menu menu--header page-target" id="menu">
+                <ul class="menu__list menu__list--header">
+                    <li class="menu__item menu__item--touch menu__item--logo"><a class="menu__link menu__link--dimmed" href="index.htm"><span class="logocon"><span class="logocon__p">p</span><span class="logocon__u"></span></span></a></li>
+                    <li class="menu__item menu__item--touch menu__item--toggle">
+                        <a class="menu__link menu__link--dimmed page-target__display" href="#menu"><span class="page-target__toggle"></span></a>
+                        <a class="menu__link menu__link--dimmed page-target__display--flip" href="#"><span class="page-target__toggle"></span></a>
+                    </li>
+                    <li class="menu__item menu__item--clear"></li>
+                    <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="date.htm">Date picker</a></li>
+                    <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="time.htm">Time picker</a></li>
+                    <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="api.htm">API</a></li>
+                    <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="v2/index.htm">v2.1.8</a></li>
+                    <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="https://github.com/amsul/pickadate.js">Github</a></li>
+                    <li class="menu__item menu__item--responsive page-target__reveal menu__item--trail">
+                        <span class="menu__link">Themes: <input class="theme-toggle__input" type="radio" id="show_theme_default" name="show_theme" value="default" checked hidden><label class="theme-toggle__label" for="show_theme_default">default</label> and <input class="theme-toggle__input" type="radio" id="show_theme_classic" name="show_theme" value="classic" hidden><label class="theme-toggle__label" for="show_theme_classic" class="checked-negative">classic</label></span>
+                    </li>
+                </ul>
+            </nav>
+        </div> <!-- .section__block -->
 
-        <h3>As easy as: <code data-language="javascript">$('.datepicker').pickadate()</code>.</h3>
-        <h3>Go ahead&hellip; pick a date.</h3>
-
-        <fieldset>
-            <input id="input_01" class="datepicker" type="text">
-        </fieldset>
-
-        <ul class="list-inline clear">
-            <li><a class="button-pill" href="docs.htm#selectors">Month &amp; year dropdowns</a></li>
-            <li><a class="button-pill" href="docs.htm#translations">Translations</a></li>
-            <li><a class="button-pill" href="docs.htm#first_day">First day of week</a></li>
-            <li><a class="button-pill" href="docs.htm#strings">Custom strings</a></li>
-            <li><a class="button-pill" href="docs.htm#formats">Date formats</a></li>
-            <li><a class="button-pill" href="docs.htm#ranges">Date ranges</a></li>
-            <li><a class="button-pill" href="docs.htm#disable_dates">Dates disabled</a></li>
-            <li><a class="button-pill" href="docs.htm#events">Calendar events</a></li>
-            <li><a class="button-pill" href="docs.htm#api_clear">Inline &ldquo;clear&rdquo; button</a></li>
-            <li><a class="button-pill" href="docs.htm#api_from_to">&ldquo;From&rdquo; and &ldquo;to&rdquo; pickers</a></li>
-            <li><a class="button-pill" href="docs.htm#simple">Editable input</a></li>
-            <li><a class="button-pill" href="themes.htm">Easy theming</a></li>
-            <li><small>And <a href="docs.htm">many more options</a>.</small></li>
-        </ul>
+        
+<div class="section__block text-center">
+    <h1 class="heading heading--splash"><img src="demo/images/logo.png" alt="pickadate.js" width="478" height="90"></h1>
+    <h2 class="heading heading--thin">The mobile-friendly, responsive, and&nbsp;lightweight<br>jQuery date <span class="ampersand">&amp;</span> time input picker.</h2>
+    <h3 class="heading heading--thin"><a class="button" href="https://github.com/amsul/pickadate.js/archive/v3.0.0.zip">Download pickadate.js v3.0.0</a></h3>
+    <div class="groupset groupset--splash">
+        <span class="groupset__item"><iframe src="http://ghbtns.com/github-btn.html?user=amsul&repo=pickadate.js&size=large&type=watch&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="145" height="30"></iframe></span>
+        <span class="groupset__item"><iframe src="http://ghbtns.com/github-btn.html?user=amsul&repo=pickadate.js&size=large&type=fork&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="135" height="30"></iframe></span>
+    </div>
+</div> <!-- .section__block -->
 
 
-        <div class="aligncenter">
-            <p><a class="button-full" href="https://github.com/amsul/pickadate.js/archive/gh-pages.zip">Download pickadate.js v2.1.8</a></p>
-            <p><a class="button-full--secondary" href="themes.htm">View calendar themes</a></p>
-            <small class="dimmed">
-                <p>Browser support: <a class="dimmed" href="docs.htm#legacy">IE7+</a>, Chrome, Firefox, Safari, Opera, iOS Safari, Android browser</p>
-                <p>Dependency: jQuery 1.7+</p>
-            </small>
-            <p><a href="docs.htm">Read the docs</a> or <a href="https://github.com/amsul/pickadate.js">view project on Github</a></p>
+    </header> <!-- .section -->
+
+
+    
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--one heading--divide-center heading--divide-first"><span class="heading__text">The Date Picker<a class="heading__anchor" name="date-picker" href="#date-picker">&sect;</a></span></h2>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate()</code></pre>
+        <fieldset class="fieldset fieldset--demo"><div class="fieldset__wrapper"><input class="fieldset__input js__datepicker" type="text" placeholder="Try me&hellip;"></div></fieldset>
+
+        <p class="heading--three heading--thin">Customize it with <a href="date.htm#selectors">dropdown selectors</a>, <a href="date.htm#formats">date formats</a>, and <a href="date.htm"><i>lots more</i></a>.</p>
+
+    </div> <!-- .section__block -->
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--one heading--divide-center"><span class="heading__text">The Time Picker<a class="heading__anchor" name="time-picker" href="#time-picker">&sect;</a></span></h2>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.timepicker').pickatime()</code></pre>
+        <fieldset class="fieldset fieldset--demo"><div class="fieldset__wrapper"><input class="fieldset__input js__timepicker" type="text" placeholder="Try me&hellip;"></div></fieldset>
+
+        <p class="heading--three heading--thin">Customize it with <a href="time.htm#intervals">time intervals</a>, <a href="time.htm#formats">time formats</a>, and <a href="time.htm"><i>lots more</i></a>.</p>
+
+    </div> <!-- .section__block -->
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--one heading--divide-center"><span class="heading__text">Features<a class="heading__anchor" name="features" href="#features">&sect;</a></span></h2>
+
+        <p class="heading--three heading--thin">Some highlights include support for <a href="http://jquery.com/">jQuery</a> 1.7 and up, touch &amp; keyboard friendliness, <a href="http://bem.info/">BEM</a> style class naming, <a href="http://lesscss.org/">LESS</a> based stylesheets, and a <a href="http://gruntjs.com/">Grunt</a> based build system.</p>
+
+        <p>The picker is built to be <b>extended</b>. Check the <a href="api.htm">API</a> to see how you can add in custom functionality. Extensions – such as keyboard typing, “from” and “to” pickers, “clear” and “close” buttons – can be viewed on&nbsp;<a href="http://codepen.io/collection/vLcih">Codepen</a>.</p>
+
+    </div> <!-- .section__block -->
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--one heading--divide-center"><span class="heading__text">Browser Support<a class="heading__anchor" name="browser-support" href="#browser-support">&sect;</a></span></h2>
+
+        <p class="heading--three heading--thin">Supports all modern browsers – and IE8+.</p>
+        <p>Specifically, v3 has been tested with <a href="https://www.google.com/chrome/">Chrome</a> <small class="text-dimmed text-tiny">MWA</small>, <a href="http://www.mozilla.org/firefox/">Firefox</a> <small class="text-dimmed text-tiny">MWA</small>, <a href="http://www.opera.com/">Opera</a> <small class="text-dimmed text-tiny">MWA</small>, <a href="http://www.apple.com/ca/safari/">Safari</a> <small class="text-dimmed text-tiny">Mi</small>, <a href="http://windows.microsoft.com/ie/">Internet Explorer</a> <small class="text-dimmed text-tiny">W</small>, <a href="http://www.blackberry.com/">Blackberry</a> 6.0+ and <a href="http://www.android.com/">Android</a> 3.2+ browsers.</p>
+
+        <small class="text-dimmed text-tiny">
+            <p>M = Mac, W = Windows, A = Android, i = iOS</p>
+        </small>
+
+        <div class="section__block section__block--notification">
+            <p>Make sure to also include the <code>legacy.js</code> file along for the oldie&nbsp;browsers.</p>
         </div>
 
-    </section>
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
 
 
-    <section class="holder holder-clean aligncenter">
-        <h2><a href="http://blog.teamtreehouse.com/" target="_blank"><img width="158" height="33" src="demo/TreehouseShowFeature.png" alt="Featured on The Treehouse Show"></a></h2>
-        <p class="dimmed"><small>Made by <a class="dimmed" href="https://twitter.com/amsul_" target="_blank">Amsul</a><span class="peace"></span></small></p>
-    </section>
 
 
-    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-    <script src="demo/rainbow.js"></script>
-    <script src="source/pickadate.legacy.js"></script>
+    <footer class="section section--footer">
 
+        <div class="section__block section__block--scoped text-center">
+            <h2 class="heading heading--one heading--divide-center"><span class="heading__text peace">&#x270C;</span></h2>
+            <p class="heading heading--three heading--thin">Made by <a href="http://twitter.com/amsul_">Amsul</a>.</p>
+            <p>Code licensed under <a href="http://amsul.ca/MIT">MIT</a>.</p>
+        </div> <!-- .section__block -->
+
+    </footer> <!-- .section -->
+
+
+    <script src="http://code.jquery.com/jquery-2.0.0.min.js"></script>
+    <script src="lib/picker.js"></script>
+    <script src="lib/picker.date.js"></script>
+    <script src="lib/picker.time.js"></script>
+    <script src="lib/legacy.js"></script>
+    <script src="demo/scripts/main.js"></script>
     <script type="text/javascript">
-        $( '[type=date], .datepicker' ).pickadate()
-    </script>
-
-
-    <script type="text/javascript">
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-36321179-2']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-36321179-2']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
     </script>
 
 

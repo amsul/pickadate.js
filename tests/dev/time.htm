@@ -1,0 +1,107 @@
+<!doctype html>
+
+<meta charset="utf-8">
+
+<meta name="author" content="Amsul - http://amsul.ca">
+<meta name="viewport" content="width=device-width">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+<title>Pickadate.js</title>
+
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="../../lib/themes/classic.css">
+<link rel="stylesheet" href="../../lib/themes/classic.time.css">
+
+<!--[if lt IE 9]>
+    <script>document.createElement('section')</script>
+    <style type="text/css">
+        .holder {
+            position: relative;
+            z-index: 10000;
+        }
+        .datepicker {
+            display: block;
+        }
+    </style>
+<![endif]-->
+
+
+<body>
+
+    <section class="holder holder-top holder-clean">
+
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+        <fieldset>
+            <input type="text">
+        </fieldset>
+
+        <form>
+            <fieldset>
+                <h3><label for="input_01">Pick a date. Go ahead...</label></h3>
+                <input id="input_from" class="datepicker" name="date" type="date" value="10:00 AM" data-valuee="01:30" autofocusss>
+                <br><br><br><br><br>
+                <input class="button" type="submit" value="open">
+            </fieldset>
+        </form>
+
+        <fieldset>
+            <input id="input_to" type="text" class="datepickerr">
+        </fieldset>
+
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+    </section>
+
+
+    <script src="../jquery.1.9.1.js"></script>
+    <script src="../../lib/picker.js"></script>
+    <script src="../../lib/picker.time.js"></script>
+    <script src="../../lib/legacy.js"></script>
+
+    <script type="text/javascript">
+
+        var $input = $( '.datepicker' ).pickatime({
+            // format: 'h:i a',
+            formatLabel: '<b>h</b>:i <!i>a</!i>',
+            // formatSubmit: 'HH:i',
+            // interval: 120,
+            disable: [
+                // true,
+                // 0,
+                // 1,
+                // 4,
+                // [3,30],
+                // [8,45]
+            ],
+            // min: 4,
+            // min: [ 7, 30 ],
+            // max: -2,
+            // max: [ 9, 0 ],
+            // onRender: function() {
+            //     var $viewset = this.$root.find( '.picker__list-item--viewset' ),
+            //         $box = this.$root.find( '.picker__box' )
+            //     $box[ 0 ].scrollTop = ~~$viewset.position().top - $viewset[0].offsetHeight
+            // }
+        }),
+        picker = $input.pickatime('picker')
+
+        // console.log( picker.set( 'max', false ) )
+
+        // var $button = $( '.button' ).on( 'click', function( event ) {
+        //     event.preventDefault()
+        //     event.stopPropagation()
+        //     $input.pickatime( 'open' )
+        // })
+
+    </script>
+
+
+</body>
+
+
+

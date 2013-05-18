@@ -1,78 +1,82 @@
-## Changelog
 
-### 2.1.8
-- Added Catalan translations
+# Changelog
 
-### 2.1.7
-- [Added `isOpen` method](http://amsul.ca/pickadate.js/docs.htm#api_isOpen)
+## v3.0.0
 
-### 2.1.6
-- [Added `onRender` callback](http://amsul.github.com/pickadate.js/docs.htm#events)
-- [Swedish translation fix](https://github.com/amsul/pickadate.js/pull/105)
+With this major release, the entire API has been rethought to allow the picker to be much more configurable and extensible. These are the most notable updates:
 
-### 2.1.5
-- [Turkish translation fix](https://github.com/amsul/pickadate.js/issues/103)
+- [#20](/issues/20): Introduced a new [time picker](http://amsul.github.io/pickadate.js/time.htm).
+- [#112](/issues/112): Firefox select month/year fix.
+- [#84](/issues/84): Scrollbar not hidden to avoid page shift.
+- [#89](/issues/89): Better event handling on clicks/focuses/keydowns within the holder.
+- [#98](/issues/98): Destroy picker data from element.
+- Added Grunt.js build system.
+- Added QUnit test suite.
+- Added Travis integration.
+- Updated themes to be LESS-based.
+- Removed “inline” and “inline-fixed” themes.
+- Removed jam.js bindings within `package.json`.
+- Removed official support for IE7. Still works but looks odd.
 
-### 2.1.4
-- Improved mirroring of hidden `input` value
-- Some under the hood stuff
+To enable all this goodness, some **backward-incompatible changes** have been introduced. These are the main ones:
 
-### 2.1.3
-- [Patch up for Sunday not disabling with `firstday: 1`](https://github.com/amsul/pickadate.js/issues/80)
+<a name="zero-as-index"></a>
+- [#85](/issues/85): Months have __zero-as-index__:
 
-### 2.1.2
-- [Fix for infinite loop on stream of disabled dates](https://github.com/amsul/pickadate.js/issues/77)
-- Faster search for enabled dates
+	Just as in JavaScript’s native Date object, the `month` used to create dates is now 	based on zero as the first index. Meaning:
 
-#### 2.1.0
-- [Fix for disabled calendar that loops infinitely](https://github.com/amsul/pickadate.js/issues/73)
-- Bug fix for "click" not propagating to calendar holder
+	```
+	[2013,0,1] → January 01, 2013
+	[2013,11,1] → December 01, 2013
+	```
 
-#### 2.0.7
-- ["Enter" key default action allowed when calendar is closed](https://github.com/amsul/pickadate.js/issues/72)
+- API revised:
 
-#### 2.0.5
-- [IE click-to-close bug fix](https://github.com/amsul/pickadate.js/issues/67)
-- [IE styling fix where calendar appears left-aligned](https://github.com/amsul/pickadate.js/issues/67#issuecomment-12367491)
+	```
+	isOpen → get('open')
+	getDate → get('select')
+	getDateLimit → get('min') or get('max')
+	setDate → set('select', …)
+	setDateLimit → set('min', …) or set('max', …)
+	show → set('view', …)
+	```
 
-#### 2.0.1
-- [Broadcast the `input` change event](https://github.com/amsul/pickadate.js/issues/63)
+- Options revised:
 
-#### 2.0
-- A version bump due to changes in the [default layout and styling](http://amsul.github.com/pickadate.js/docs.htm#options_styling) that will cause _**old stylings to break.**_
-- [New fully responsive default theme](http://amsul.github.com/pickadate.js)
-- [4 themes to chose from](http://amsul.github.com/pickadate.js/themes.htm)
-- [Today & clear buttons](http://amsul.github.com/pickadate.js/docs.htm#buttons)
-- [Clear method](http://amsul.github.com/pickadate.js/docs.htm#api_clear)
-- [Grab input element from calendar object](http://amsul.github.com/pickadate.js/docs.htm#api_$node)
-- As well as several bug fixes and improvements (especially for iOS and IE)
+	```
+	showMonthsFull → showMonthsShort
+	showWeekdaysShort → showWeekdaysFull
+	yearSelector → selectYears
+	monthSelector → selectMonths
+	dateMin → min
+	dateMax → max
+	datesDisabled → disable
+	onSelect → onSet
+	```
 
-#### 1.4.0
-- [Get min & max date](http://amsul.github.com/pickadate.js/docs.htm#api_getDateLimit)
-- [Set min & max date](http://amsul.github.com/pickadate.js/docs.htm#api_setDateLimit)
+- Options removed:
 
-#### 1.3.8
-- [Translations](http://amsul.github.com/pickadate.js/docs.htm#translations)
+	```
+	monthPrev
+	monthNext
+	```
+	To add labels for the month navigation tabs, use CSS pseudo-elements instead.
 
-#### 1.3.7
-- [Default value formatting](http://amsul.github.com/pickadate.js/docs.htm#formats_hidden)
+- A few [HTML classes](http://amsul.github.io/pickadate.js/date.htm#classes) name and property changes.
 
-#### 1.3.6
-- Added support for legacy browsers
-
-#### 1.3.5
-
-- [All options are now camelCased](http://amsul.github.com/pickadate.js/docs.htm#options)
-- [Keyboard accessibility](http://amsul.github.com/pickadate.js/docs.htm)
-- [`minDate`](http://amsul.github.com/pickadate.js/docs.htm#ranges) & [`maxDate`](http://amsul.github.com/pickadate.js/docs.htm#ranges) more flexible
-- [`getDate`](http://amsul.github.com/pickadate.js/docs.htm#api_getDate) & [`setDate`](http://amsul.github.com/pickadate.js/docs.htm#api_setDate) options
-- Few other bug fixes & improvements under the hood.
+- [Formatting rules](http://amsul.github.io/pickadate.js/date.htm#formats) that appear within a word need to be escaped with an exclamation mark (!).
 
 
-#### 1.3.0
+<br>
+#### Please do read the [docs](http://amsul.github.io/pickadate.js/date.htm#options) and [api](http://amsul.github.io/pickadate.js/api.htm) to see exactly how these new options and methods work.
 
-- [Month & year selector](http://amsul.github.com/pickadate.js/docs.htm#selectors)
-- [Selectively disable dates](http://amsul.github.com/pickadate.js/docs.htm#dates_disabled)
-- [Calendar events](http://amsul.github.com/pickadate.js/docs.htm#events) and [api]((http://amsul.github.com/pickadate.js/docs.htm#api)
-- [Inline calendar](http://amsul.github.com/pickadate.js/docs.htm#theme)
-- [Classes option revised](http://amsul.github.com/pickadate.js/docs.htm#classes)
+
+
+
+<br>
+## Older changelogs
+
+If you’re looking for changes in older versions, please [browse the tags](https://github.com/amsul/pickadate.js/tags) for the relevant commit archive and changelog file.
+
+
+

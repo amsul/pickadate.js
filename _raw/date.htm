@@ -1,0 +1,495 @@
+
+
+{% dateDemoField = function( props ) {
+    props = props || {}
+    return '<fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper">' +
+        ( props.pre || '' ) +
+        '<input id="' + ( props.id || '' ) + '" class="fieldset__input ' + ( props.klass || '' ) + '" type=text placeholder="Try me&hellip;">' +
+    '</div></fieldset>'
+} %}
+
+
+<section class="section">
+
+
+    <div class="section__block section__block--scoped">
+
+        <h1 class="heading heading--divide-center heading--divide-first"><span class="heading__text">The Date Picker<a class="heading__anchor" name="picker" href="#picker">&sect;</a></span></h1>
+
+        <h3 class="heading heading--thin">The basic setup requires targetting an <code class="tag-name">input</code> element and invoking the&nbsp;picker:</h3>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate()</code></pre>
+        {%= dateDemoField({ klass: 'js__datepicker' }) %}
+
+        <div class="section__block section__block--notification">
+            <p>Along with v3, the v2 options and API have effectively been deprecated. Read up on the <a href="{%= meta.gitrepo_url %}/blob/v3.0.0/CHANGELOG.md">full changelog here</a>.</p>
+            <p>One of the most critical changes is that the “month” used to create dates, just as in JavaScript’s native Date object, now has <a href="{%= meta.gitrepo_url %}/blob/v3.0.0/CHANGELOG.md#zero-as-index">zero-as-index</a>.</p>
+        </div>
+
+    </div> <!-- .section__block -->
+
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Options<a class="heading__anchor" name="options" href="#options">&sect;</a></span></h2>
+        <p>With the basic invocation above, these are the default settings:</p>
+
+        <pre><code data-language="javascript">// <a href="#strings">Strings</a> and <a href="#translations">translations</a>
+monthsFull: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+weekdaysFull: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+weekdaysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+showMonthsShort: undefined,
+showWeekdaysFull: undefined,
+
+// <a href="#buttons">Buttons</a>
+today: 'Today',
+clear: 'Clear',
+
+// <a href="#formats">Formats</a>
+format: 'd mmmm, yyyy',
+formatSubmit: undefined,
+hiddenSuffix: '_submit',
+
+// <a href="#selectors">Dropdown selectors</a>
+selectYears: undefined,
+selectMonths: undefined,
+
+// <a href="#first-weekday">First day of the week</a>
+firstDay: undefined,
+
+// <a href="#limits">Date limits</a>
+min: undefined,
+max: undefined,
+
+// <a href="#disable-dates">Disable dates</a>
+disable: undefined,
+
+// <a href="#events">Events</a>
+onStart: undefined,
+onRender: undefined,
+onOpen: undefined,
+onClose: undefined,
+onSet: undefined,
+onStop: undefined,
+
+// <a href="#classes">Classes</a>
+klass: {
+
+    // The element states
+    input: 'picker__input',
+    active: 'picker__input--active',
+
+    // The root picker and states *
+    picker: 'picker',
+    opened: 'picker--opened',
+    focused: 'picker--focused',
+
+    // The picker holder
+    holder: 'picker__holder',
+
+    // The picker frame, wrapper, and box
+    frame: 'picker__frame',
+    wrap: 'picker__wrap',
+    box: 'picker__box',
+
+    // The picker header
+    header: 'picker__header',
+
+    // Month navigation
+    navPrev: 'picker__nav--prev',
+    navNext: 'picker__nav--next',
+    navDisabled: 'picker__nav--disabled',
+
+    // Month &amp; year labels
+    month: 'picker__month',
+    year: 'picker__year',
+
+    // Month &amp; year dropdowns
+    selectMonth: 'picker__select--month',
+    selectYear: 'picker__select--year',
+
+    // Table of dates
+    table: 'picker__table',
+
+    // Weekday labels
+    weekdays: 'picker__weekday',
+
+    // Day states
+    day: 'picker__day',
+    disabled: 'picker__day--disabled',
+    selected: 'picker__day--selected',
+    highlighted: 'picker__day--highlighted',
+    now: 'picker__day--today',
+    infocus: 'picker__day--infocus',
+    outfocus: 'picker__day--outfocus',
+
+    // The picker footer
+    footer: 'picker__footer',
+
+    // Today &amp; clear buttons
+    buttonClear: 'picker__button--clear',
+    buttonToday: 'picker__button--today'
+}</code></pre>
+
+    <div class="section__block section__block--notification">
+        <p><b>*</b> It is important to not add any stylings to the picker’s root element. Instead, target the <code>.picker__holder</code> element (or any other within) based on the state of the root element.</p>
+    </div>
+
+    </div> <!-- .section__block -->
+
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Strings<a class="heading__anchor" name="strings" href="#strings">&sect;</a></span></h2>
+        <p>Change the month and weekday labels as you find suitable:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
+    weekdaysShort: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+    showMonthsShort: true
+})</code></pre>
+
+        {%= dateDemoField({ id: 'date_demo__weekdaysShort' }) %}
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Buttons<a class="heading__anchor" name="buttons" href="#buttons">&sect;</a></span></h2>
+        <p>Change the text or hide a button completely by passing a false-y value:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
+    today: '',
+    clear: 'Clear selection'
+})</code></pre>
+
+        {%= dateDemoField({ id: 'date_demo__buttons' }) %}
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Translations<a class="heading__anchor" name="translations" href="#translations">&sect;</a></span></h2>
+        <p>The picker can be extended to add support for internationalization. There are translations available for <a href="{%= pkg.repository.url.replace(/.git$/,'') %}/blob/v3.0.0/lib/translations">{%= grunt.file.expand( dirs.min.translations + '/*.js' ).length %} languages</a> which you can include in one of two ways:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">// Extend the default picker options for <u>all instances</u>.
+$.extend($.fn.pickadate.defaults, {
+    monthsFull: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+    weekdaysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+    today: 'aujourd\'hui',
+    clear: 'effacer',
+    formatSubmit: 'yyyy/mm/dd'
+})
+
+// Or, pass the months and weekdays as an array for <u>each invocation</u>.
+$('.datepicker').pickadate({
+    monthsFull: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+    weekdaysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+    today: 'aujourd\'hui',
+    clear: 'effacer',
+    formatSubmit: 'yyyy/mm/dd'
+})</code></pre>
+        {%= dateDemoField({ id: 'date_demo__translations' }) %}
+
+        <p>When using translations, make sure to also <a href="#formats">specify the <code>formatSubmit</code> and <code class="attribute">data-value</code></a>.</p>
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Formats<a class="heading__anchor" name="formats" href="#formats">&sect;</a></span></h2>
+        <p>Display a human-friendly format and use an alternate one to submit.</p>
+        <p>This is done by creating a new hidden <code class="tag-name">input</code> element with the same <code class="attribute">name</code> attribute as the original and a suffix:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
+    // Escape any “<a href="#formatting-rules">rule</a>” characters with an exclamation mark (!).
+    format: 'You selecte!d: dddd, dd mmm, yyyy',
+    formatSubmit: 'yyyy/mm/dd',
+    hiddenSuffix: '--submit'
+})</code></pre>
+
+        {%= dateDemoField({ id: 'date_demo__formats--a' }).replace( 'type=text', 'name=date_demo__formats type=text' ) %}
+
+        <p>When using <a href="#translations">translations</a>, the <code class="tag-name">input</code> element should be given a <code class="attribute">data-value</code> attribute formatted using the <code>formatSubmit</code> – the element’s <code class="attribute">value</code> can be left blank. This helps to parse the date into the various languages:</p>
+        <pre class="pre--demo"><code data-language="html">&lt;input data-value="2013/04/20"></code></pre>
+        {%= dateDemoField({ id: 'date_demo__formats--b' }).replace( 'type=text', 'name=date_demo__formats type=text data-value="2013/04/20"') %}
+
+    </div> <!-- .section__block -->
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Formatting Rules<a class="heading__anchor" name="formatting-rules" href="#formatting-rules">&sect;</a></span></h2>
+        <p>The following rules can be used to format any date:</p>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Rule</th>
+                    <th>Description</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>d</code></td>
+                    <td>Date of the month</td>
+                    <td>1 &ndash; 31</td>
+                </tr>
+                <tr>
+                    <td><code>dd</code></td>
+                    <td>Date of the month with a leading zero</td>
+                    <td>01 &ndash; 31</td>
+                </tr>
+                <tr>
+                    <td><code>ddd</code></td>
+                    <td>Day of the week in short form</td>
+                    <td>Sun &ndash; Sat</td>
+                </tr>
+                <tr>
+                    <td><code>dddd</code></td>
+                    <td>Day of the week in full form</td>
+                    <td>Sunday &ndash; Saturday</td>
+                </tr>
+            </tbody>
+            <tbody>
+                <tr>
+                    <td><code>m</code></td>
+                    <td>Month of the year</td>
+                    <td>1 &ndash; 12</td>
+                </tr>
+                <tr>
+                    <td><code>mm</code></td>
+                    <td>Month of the year with a leading zero</td>
+                    <td>01 &ndash; 12</td>
+                </tr>
+                <tr>
+                    <td><code>mmm</code></td>
+                    <td>Month name in short form</td>
+                    <td>Jan &ndash; Dec</td>
+                </tr>
+                <tr>
+                    <td><code>mmmm</code></td>
+                    <td>Month name in full form</td>
+                    <td>January &ndash; December</td>
+                </tr>
+            </tbody>
+            <tbody>
+                <tr>
+                    <td><code>yy</code></td>
+                    <td>Year in short form <b>*</b></td>
+                    <td>00 &ndash; 99</td>
+                </tr>
+                <tr>
+                    <td><code>yyyy</code></td>
+                    <td>Year in full form</td>
+                    <td>2000 &ndash; 2999</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="section__block section__block--notification">
+            <p><b>*</b> Avoid using the <code>yy</code> format within <code>formatSubmit</code> because it leads to assumptions that could parse inaccurately.</p>
+        </div>
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Dropdown Selectors<a class="heading__anchor" name="selectors" href="#selectors">&sect;</a></span></h2>
+        <p>Display <code class="tag-name">select</code> menus to pick the month and year. Anything truth-y enables the selectors and anything false-y switches them into labels:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
+    selectYears: true,
+    selectMonths: true
+})</code></pre>
+
+        {%= dateDemoField({ id: 'date_demo__selectors--a' }) %}
+
+        <p>Specify the number of years selectable using an even integer - half before and half after the year in focus:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
+    // `true` defaults to 10.
+    selectYears: 4
+})</code></pre>
+
+        {%= dateDemoField({ id: 'date_demo__selectors--b' }) %}
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">First Weekday<a class="heading__anchor" name="first-weekday" href="#first-weekday">&sect;</a></span></h2>
+        <p>The first day of the week can be set to either Sunday or Monday. Anything truth-y sets it as Monday and anything false-y as Sunday:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
+    firstDay: 1
+})</code></pre>
+
+        {%= dateDemoField({ id: 'date_demo__firstDay' }) %}
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Date Limits<a class="heading__anchor" name="limits" href="#limits">&sect;</a></span></h2>
+        <p>Set the minimum and maximum selectable dates on the picker.</p>
+
+        <p><b>1)</b> Using JavaScript date objects:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
+    min: new Date(2013,3,20),
+    max: new Date(2013,7,14)
+})</code></pre>
+
+        {%= dateDemoField({ id: 'date_demo__limits--a' }) %}
+
+        <p><b>2)</b> Using arrays formatted as <code>[YEAR,MONTH,DATE]</code>:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
+    min: [2013,3,20],
+    max: [2013,7,14]
+})</code></pre>
+
+        {%= dateDemoField({ id: 'date_demo__limits--b' }) %}
+
+        <p><b>3)</b> As dates relative to today using integers or a boolean:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
+    // An integer (positive/negative) sets it relative to today.
+    min: -15,
+    // `true` sets it to today. `false` removes any limits.
+    max: true
+})</code></pre>
+
+        {%= dateDemoField({ id: 'date_demo__limits--c' }) %}
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Disable Dates<a class="heading__anchor" name="disable-dates" href="#disable-dates">&sect;</a></span></h2>
+        <p>Disable a specific or arbitrary set of dates selectable on the picker.</p>
+
+        <p><b>1)</b> Using arrays formatted as <code>[YEAR,MONTH,DATE]</code>:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
+    disable: [
+        [2013,3,3],
+        [2013,3,12],
+        [2013,3,20],
+        [2013,3,29]
+    ]
+})</code></pre>
+
+        {%= dateDemoField({ id: 'date_demo__disable-dates--a' }) %}
+
+        <p><b>2)</b> Using integers representing days of the week (from 1 to 7):</p>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
+    disable: [
+        1, 4, 7
+    ]
+})</code></pre>
+
+        {%= dateDemoField({ id: 'date_demo__disable-dates--b' }) %}
+
+        <p><b>3)</b> <i><u>Disabling all</u></i> except a specific or arbitrary set of dates by setting <code class="constant">true</code> as the first item in the collection:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
+    disable: [
+        true,
+        1, 4, 7,
+        [2013,3,3],
+        [2013,3,12],
+        [2013,3,20],
+        [2013,3,29]
+    ]
+})</code></pre>
+
+        {%= dateDemoField({ id: 'date_demo__disable-dates--c' }) %}
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">events<a class="heading__anchor" name="events" href="#events">&sect;</a></span></h2>
+        <p>Fire off events as the user interacts with the picker:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
+    onStart: function() {
+        console.log('Hello there :)')
+    },
+    onRender: function() {
+        console.log('Whoa.. rendered anew')
+    },
+    onOpen: function() {
+        console.log('Opened up')
+    },
+    onClose: function() {
+        console.log('Closed now')
+    },
+    onStop: function() {
+        console.log('See ya.')
+    },
+    onSet: function(event) {
+        console.log('Just set stuff:', event)
+    }
+})</code></pre>
+
+        {%= dateDemoField({ id: 'date_demo__events' }).replace( 'Try me', 'Open your console and try me' ) %}
+
+        <p>Within scope of all six of these events, <code class="keyword">this</code> refers to <a href="api.htm">the picker</a>.</p>
+        <p>The <code class="function">onSet</code> event is the only callback that is passed an <code>event</code> argument that provides a bit of context as to which properties are being “set”.</p>
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+

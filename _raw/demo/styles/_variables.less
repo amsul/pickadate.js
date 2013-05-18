@@ -1,0 +1,144 @@
+
+/* ==========================================================================
+   $VARIABLES
+   ========================================================================== */
+
+/**
+ * Font families
+ */
+@code-family: Monaco, Consolas, "Liberation Mono", monospace;
+
+/**
+ * Colors
+ */
+@blue: #0089ec;
+
+@red: #e20;
+
+@black: #000;
+@white: #fff;
+
+@green: #5c2;
+@green-darker: #342;
+@green-faded: #ecffdd;
+@green-faded-darker: darken( desaturate( @green-faded, 50% ), 12.5% ); /* #cbe7b6 */
+
+@dark-brown: #442;
+
+@grey: #ccc;
+@grey-lighter: lighten( @grey, 5% ); /* #d9d9d9 */
+@grey-lightest: lighten( @grey-lighter, 8% ); /* #ededed */
+@grey-darker: darken( @grey, 5% ); /* #bfbfbf */
+@grey-darkest: darken( @grey-darker, 8% ); /* #ababab */
+
+@medium-grey: #999;
+
+@dark-grey: #333;
+
+@yellow-faded: #ffd;
+@yellow-faded-darker: darken( desaturate( @yellow-faded, 45% ), 8% ); /* #eeeec5 */
+
+
+/**
+ * Widths
+ */
+@breakpoint-tiny: 18.75em; /* 300px */
+@breakpoint-small: 33.75em; /* 540px */
+@breakpoint-medium: 46.25em; /* 740px */
+// @breakpoint-large: 72em; /* 1152px */
+// @breakpoint-huge: 80em; /* 1280px */
+
+@gutter: 20px;
+
+
+/**
+ * Transitions
+ */
+@smooth-fast: all linear .15s;
+
+
+
+
+
+/* ==========================================================================
+   $MIXINS
+   ========================================================================== */
+
+/**
+ * Lists
+ */
+.list-item-inline {
+    display: inline-block;
+    margin-right: 1em;
+}
+
+
+/**
+ * Demo tags
+ */
+.demo-tag ( @tag-text ) {
+    padding-top: 30px;
+    position: relative;
+
+    &:before {
+        content: @tag-text;
+        position: absolute;
+        top: 0;
+        left: 0;
+        font-family: @code-family;
+        font-weight: 500;
+        font-size: 10px;
+        line-height: 1;
+        background: @white;
+        padding: 5px 6px 4px 6px;
+        color: #989a99;
+        border-right: 1px solid @grey-lightest;
+        border-bottom: 1px solid @grey-lightest;
+        .border-radius( 0 0 4px 0 );
+    }
+}
+
+
+
+/**
+ * Clear fix
+ */
+.clearfix {
+    &:before,
+    &:after {
+        content: " ";
+        display: table;
+    }
+    &:after {
+        clear: both;
+    }
+}
+
+
+
+/**
+ * Vendor prefixes
+ */
+.box-shadow ( @rest... ) {
+    -webkit-box-shadow: @rest;
+       -moz-box-shadow: @rest;
+            box-shadow: @rest;
+}
+.box-sizing ( @rest... ) {
+    -webkit-box-sizing: @rest;
+       -moz-box-sizing: @rest;
+            box-sizing: @rest;
+}
+.border-radius ( @rest... ) {
+    -webkit-border-radius: @rest;
+       -moz-border-radius: @rest;
+            border-radius: @rest;
+}
+.transition ( @rest... ) {
+    -webkit-transition: @rest;
+       -moz-transition: @rest;
+            transition: @rest;
+}
+
+
+

@@ -1,0 +1,1011 @@
+
+
+{% dateDemoField = function( props ) {
+    props = props || {}
+    return '<fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper">' +
+        ( props.pre || '' ) +
+        '<input id="' + ( props.id || '' ) + '" class="fieldset__input ' + ( props.klass || '' ) + '" type=text value="' + ( props.value || '' ) + '" placeholder="' + ( props.placeholder || 'Try me&hellip;' ) + '">' +
+    '</div></fieldset>'
+} %}
+
+{% today = new Date(2013,3,20); today.setHours(0,0,0,0) %}
+{% nowDate = new Date(); now = nowDate.getHours() * 60 + nowDate.getMinutes(); now = now - now%30 %}
+{% playDate = new Date( today.getFullYear(), today.getMonth(), today.getDate() + 10 ) %}
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h1 class="heading heading--divide-center heading--divide-first"><span class="heading__text">The API<a class="heading__anchor" name="picker" href="#picker">&sect;</a></span></h1>
+
+        <h3 class="heading heading--thin">You can play with the picker API to extend and create custom functionality:</h3>
+
+        <pre><code data-language="javascript">var $input = $('.datepicker').pickadate()
+
+// Use the picker object directly.
+var picker = $input.pickadate('picker')
+picker.<a href="#methods">methodName</a>(argument1, argument2, ...)
+picker.<a href="#objects">objectName</a>
+
+// Or pass through the element’s plugin data.
+$input.pickadate(<a href="#methods">methodName</a>, argument1, argument2, ...)
+$input.pickadate(<a href="#objects">objectName</a>)</code></pre>
+
+        <div class="section__block section__block--notification">
+            <p>For most examples on this page, the date picker is used, but the same API applies to the time picker as well.</p>
+        </div>
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Events<a class="heading__anchor" name="events" href="#events">&sect;</a></span></h2>
+
+        <p>There are <i>six</i> default events available in the options:</p>
+
+        <ol>
+            <li><code class="function"><a href="#method-on">onOpen</a></code></li>
+            <li><code class="function"><a href="#method-on">onClose</a></code></li>
+            <li><code class="function"><a href="#method-on">onStart</a></code></li>
+            <li><code class="function"><a href="#method-on">onStop</a></code></li>
+            <li><code class="function"><a href="#method-on">onRender</a></code></li>
+            <li><code class="function"><a href="#method-on">onSet</a></code></li>
+        </ol>
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Methods<a class="heading__anchor" name="methods" href="#methods">&sect;</a></span></h2>
+
+        <p>There are <i>ten</i> methods available on the picker:</p>
+
+        <ol>
+            <li><code class="function"><a href="#method-open-close">open</a></code></li>
+            <li><code class="function"><a href="#method-open-close">close</a></code></li>
+            <li><code class="function"><a href="#method-start-stop">start</a></code></li>
+            <li><code class="function"><a href="#method-start-stop">stop</a></code></li>
+            <li><code class="function"><a href="#method-render">render</a></code></li>
+            <li><code class="function"><a href="#method-clear">clear</a></code></li>
+            <li><code class="function"><a href="#method-get">get</a></code></li>
+            <li><code class="function"><a href="#method-set">set</a></code></li>
+            <li><code class="function"><a href="#method-on">on</a></code></li>
+            <li><code class="function"><a href="#method-trigger">trigger</a></code></li>
+        </ol>
+
+        <p>All these methods (except <code class="function">get</code>) return the picker object and are therefore chainable:</p>
+
+        <pre><code data-language="javascript">picker.open().clear().close()...</code></pre>
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Objects<a class="heading__anchor" name="objects" href="#objects">&sect;</a></span></h2>
+
+        <p>There are <i>four</i> objects available through the picker:</p>
+
+        <ol>
+            <li><code><a href="#object-node">$node</a></code></li>
+            <li><code><a href="#object-root">$root</a></code></li>
+            <li><code><a href="#object-hidden">_hidden</a></code></li>
+            <li><code><a href="#object-component">component</a></code></li>
+        </ol>
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h1 class="heading heading--divide-center"><span class="heading__text">The Methods</span></h1>
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Open and Close<a class="heading__anchor" name="method-open-close" href="#method-open-close">&sect;</a></span></h2>
+        <p>Open and close the picker holder. To check if it’s already open, use <a href="#method-get">the <code class="function">get</code> method</a>.</p>
+
+        <pre class="pre--demo"><code data-language="javascript">picker.open()
+picker.close()
+
+// If a “click” is involved, prevent the event bubbling.
+event.stopPropagation()</code></pre>
+
+        {%= dateDemoField({
+            id: 'demo__api-open-close',
+            pre: '<button id=button__api-open-close class="fieldset__button button button--small">Open</button>'
+        }) %}
+
+    </div> <!-- .section__block -->
+
+    <div class="section__block section__block--scoped">
+
+        <h3 class="heading heading--divide"><span class="heading__text">Close with focus<a class="heading__anchor" name="method-close-focus" href="#method-close-focus">&sect;</a></span></h3>
+
+        <p>Close the picker while keeping focus on the <code class="tag-name">input</code> element by passing a truth-y first argument.</p>
+
+        <pre class="pre--demo"><code data-language="javascript">picker.close(true)</code></pre>
+
+        {%= dateDemoField({
+            id: 'demo__api-close-focus',
+            pre: '<button id=button__api-close-focus class="fieldset__button button button--small">Close with focus</button>'
+        }) %}
+
+    </div> <!-- .section__block -->
+
+    <div class="section__block section__block--scoped">
+
+        <h3 class="heading heading--divide"><span class="heading__text">Open without focus<a class="heading__anchor" name="method-open-focus" href="#method-open-focus">&sect;</a></span></h3>
+
+        <p>Open the picker without focusing onto the <code class="tag-name">input</code> element by passing <code class="constant">false</code> as the first argument. Opening the picker this way, there’s a couple of things to note:</p>
+        <p><b>(1)</b> The only way to close it is with a separate custom binding – in this example, on document click.</p>
+        <p><b>(2)</b> <a href="#method-on">The “opening” events</a> are still triggered – however, using <a href="#method-get">the <code>get</code> method</a> to see if the picker is open will return <code class="constant">false</code>.</p>
+        <p>If any of the picker elements is focused/clicked, it resumes normal behavior.</p>
+
+        <pre class="pre--demo"><code data-language="javascript">picker.open(false)
+$(document).on('click', function() {
+    picker.close()
+})</code></pre>
+
+        {%= dateDemoField({
+            id: 'demo__api-open-focus',
+            pre: '<button id=button__api-open-focus class="fieldset__button button button--small">Open without focus</button>'
+        }) %}
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Start and Stop<a class="heading__anchor" name="method-start-stop" href="#method-start-stop">&sect;</a></span></h2>
+        <p>Destroy and rebuild the picker.</p>
+
+        <pre class="pre--demo"><code data-language="javascript">picker.start()
+picker.stop()</code></pre>
+
+        {%= dateDemoField({
+            id: 'demo__api-start-stop',
+            pre: '<button id=button__api-start-stop class="fieldset__button button button--small">Stop</button>'
+        }).replace( 'type=text', 'type=date' ) %}
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Render<a class="heading__anchor" name="method-render" href="#method-render">&sect;</a></span></h2>
+        <p>Refresh the picker after adding something to the holder.</p>
+
+        <pre class="pre--demo"><code data-language="javascript">picker.render()</code></pre>
+
+        {%= dateDemoField({
+            id: 'demo__api-render',
+            pre: '<button id=button__api-render class="fieldset__button button button--small">Add stuff</button>'
+        }) %}
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Clear<a class="heading__anchor" name="method-clear" href="#method-clear">&sect;</a></span></h2>
+        <p>Clear the value in the picker’s <code class="tag-name">input</code> element.</p>
+
+        <pre class="pre--demo"><code data-language="javascript">picker.clear()</code></pre>
+
+        {%= dateDemoField({
+            id: 'demo__api-clear',
+            pre: '<button id=button__api-clear class="fieldset__button button button--small">Clear</button>',
+            value: grunt.template.date('d mmmm, yyyy')
+        }) %}
+
+        <p>This is a shorthand that uses <a href="#method-set">the <code class="function">set</code> method</a> behind the scenes.</p>
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Get<a class="heading__anchor" name="method-get" href="#method-get">&sect;</a></span></h2>
+
+        <p>Get the properties, objects, and states that make up the current state of the picker.</p>
+
+        <pre><code data-language="javascript">picker.get(thing)</code></pre>
+
+        <p>The <code>thing</code> argument is an optional string and can be one of the following:</p>
+
+        <ul>
+            <li><code><a href="#get-value">value</a></code> (default)</li>
+            <li><code><a href="#get-select">select</a></code> <b>*</b></li>
+            <li><code><a href="#get-highlight">highlight</a></code> <b>*</b></li>
+            <li><code><a href="#get-view">view</a></code> <b>*</b></li>
+            <li><code><a href="#get-min">min</a></code> <b>*</b></li>
+            <li><code><a href="#get-max">max</a></code> <b>*</b></li>
+            <li><code><a href="#get-open">open</a></code></li>
+            <li><code><a href="#get-start">start</a></code></li>
+            <li><code><a href="#get-id">id</a></code></li>
+            <li><code><a href="#get-disable">disable</a></code></li>
+            <li><code><a href="#get-enable">enable</a></code></li>
+        </ul>
+
+        <h3 class="heading heading--divide"><span class="heading__text"><b>*</b> Item Objects<a class="heading__anchor--bigger" name="item-objects" href="#item-objects">&sect;</a></span></h3>
+
+        <p>The <code>thing</code>s denoted in the list above with an asterisk (<b>*</b>) return a picker item object that can be formatted by passing a second string argument using the <a href="date.htm#formats">date</a> or <a href="time.htm#formats">time</a> formatting rules:</p>
+        <pre><code data-language="javascript">picker.get(thing, format)</code></pre>
+
+        <p>Each “date” or “time” within the picker has an item object accompanying it behind the scenes.</p>
+
+        <p>Here’s a <b>date picker item object</b> for <u>{%= grunt.template.date('d mmmm, yyyy') %}</u>:</p>
+        <pre><code data-language="javascript">{
+    // The full year.
+    year: {%= today.getFullYear() %},
+
+    // The month with zero-as-index.
+    month: {%= today.getMonth() %},
+
+    // The date of the month.
+    date: {%= today.getDate() %},
+
+    // The day of the week with zero-as-index.
+    day: {%= today.getDay() %},
+
+    // The underlying JavaScript Date object.
+    obj: { '{%= today %}' },
+
+    // The “pick” value used for comparisons.
+    pick: {%= today.getTime() %}
+}</code></pre>
+
+        <p>Here’s a <b>time picker item object</b> for <u>{%= grunt.template.date('h:MM TT') %}</u>:</p>
+        <pre><code data-language="javascript">{
+    // Hour of the day from 0 to 23.
+    hour: {%= ~~(now/60) %},
+
+    // The minutes of the hour from 0 to 59 (based on the interval).
+    mins: {%= 30 + (now/60%1) * 60 %},
+
+    // The “pick” value used for comparisons.
+    pick: {%= 30 + now %}
+}</code></pre>
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Get <code class="string">value</code><a class="heading__anchor" name="method-get-value" href="#method-get-value">&sect;</a></span></h2>
+
+        <p>Returns the string value of the picker’s <code>input</code> element.</p>
+
+        <pre class="pre--demo"><code data-language="javascript">picker.get() // Short for `picker.get('value')`.</code></pre>
+
+        {%= dateDemoField({
+            id: 'demo__api-get--value',
+            pre: '<button id=button__api-get--value class="fieldset__button button button--small">Log the value</button>',
+            value: grunt.template.date('d mmmm, yyyy'),
+            placeholder: 'Open your console and try me&hellip;'
+        }) %}
+
+    </div> <!-- .section__block -->
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Get <code class="string">select</code><a class="heading__anchor" name="method-get-select" href="#method-get-select">&sect;</a></span></h2>
+
+        <p>Returns the <a href="#item-objects">item object</a> that is visually selected.</p>
+        <pre class="pre--demo"><code data-language="javascript">picker.get('select')</code></pre>
+        {%= dateDemoField({
+            id: 'demo__api-get--select',
+            pre: '<button id=button__api-get--select class="fieldset__button button button--small">Log the select</button>',
+            placeholder: 'Open your console and try me&hellip;'
+        }) %}
+
+        <p>Returns a formatted string for the <a href="#item-objects">item object</a> that is visually selected.</p>
+        <pre class="pre--demo"><code data-language="javascript">picker.get('select', 'yyyy/mm/dd')</code></pre>
+        {%= dateDemoField({
+            id: 'demo__api-get--select-format',
+            pre: '<button id=button__api-get--select-format class="fieldset__button button button--small">Log the select formatted</button>',
+            placeholder: 'Open your console and try me&hellip;'
+        }) %}
+
+    </div> <!-- .section__block -->
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Get <code class="string">highlight</code><a class="heading__anchor" name="method-get-highlight" href="#method-get-highlight">&sect;</a></span></h2>
+
+        <p>Returns the <a href="#item-objects">item object</a> that is visually highlighted.</p>
+        <pre class="pre--demo"><code data-language="javascript">picker.get('highlight')</code></pre>
+        {%= dateDemoField({
+            id: 'demo__api-get--highlight',
+            pre: '<button id=button__api-get--highlight class="fieldset__button button button--small">Log the highlight</button>',
+            placeholder: 'Open your console and try me&hellip;'
+        }) %}
+
+        <p>Returns a formatted string for the <a href="#item-objects">item object</a> that is visually highlighted.</p>
+        <pre class="pre--demo"><code data-language="javascript">picker.get('highlight', 'yyyy/mm/dd')</code></pre>
+        {%= dateDemoField({
+            id: 'demo__api-get--highlight-format',
+            pre: '<button id=button__api-get--highlight-format class="fieldset__button button button--small">Log the highlight formatted</button>',
+            placeholder: 'Open your console and try me&hellip;'
+        }) %}
+
+    </div> <!-- .section__block -->
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Get <code class="string">view</code><a class="heading__anchor" name="method-get-view" href="#method-get-view">&sect;</a></span></h2>
+
+        <p>Returns the <a href="#item-objects">item object</a> that sets the current view.</p>
+        <pre class="pre--demo"><code data-language="javascript">picker.get('view')</code></pre>
+        {%= dateDemoField({
+            id: 'demo__api-get--view',
+            pre: '<button id=button__api-get--view class="fieldset__button button button--small">Log the view</button>',
+            placeholder: 'Open your console and try me&hellip;'
+        }) %}
+
+        <p>Returns a formatted string for the <a href="#item-objects">item object</a> that sets the current view.</p>
+        <pre class="pre--demo"><code data-language="javascript">picker.get('view', 'yyyy/mm/dd')</code></pre>
+        {%= dateDemoField({
+            id: 'demo__api-get--view-format',
+            pre: '<button id=button__api-get--view-format class="fieldset__button button button--small">Log the view formatted</button>',
+            placeholder: 'Open your console and try me&hellip;'
+        }) %}
+
+    </div> <!-- .section__block -->
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Get <code class="string">min</code><a class="heading__anchor" name="method-get-min" href="#method-get-min">&sect;</a></span></h2>
+
+        <p>Returns the <a href="#item-objects">item object</a> that limits the picker’s lower range.</p>
+        <pre class="pre--demo"><code data-language="javascript">picker.get('min')</code></pre>
+        {%= dateDemoField({
+            id: 'demo__api-get--min',
+            pre: '<button id=button__api-get--min class="fieldset__button button button--small">Log the min</button>',
+            placeholder: 'Open your console and try me&hellip;'
+        }) %}
+
+        <p>Returns a formatted string for the <a href="#item-objects">item object</a> that limits the picker’s lower range.</p>
+        <pre class="pre--demo"><code data-language="javascript">picker.get('min', 'yyyy/mm/dd')</code></pre>
+        {%= dateDemoField({
+            id: 'demo__api-get--min-format',
+            pre: '<button id=button__api-get--min-format class="fieldset__button button button--small">Log the min formatted</button>',
+            placeholder: 'Open your console and try me&hellip;'
+        }) %}
+
+    </div> <!-- .section__block -->
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Get <code class="string">max</code><a class="heading__anchor" name="method-get-max" href="#method-get-max">&sect;</a></span></h2>
+
+        <p>Returns the <a href="#item-objects">item object</a> that limits the picker’s upper range.</p>
+        <pre class="pre--demo"><code data-language="javascript">picker.get('max')</code></pre>
+        {%= dateDemoField({
+            id: 'demo__api-get--max',
+            pre: '<button id=button__api-get--max class="fieldset__button button button--small">Log the max</button>',
+            placeholder: 'Open your console and try me&hellip;'
+        }) %}
+
+        <p>Returns a formatted string for the <a href="#item-objects">item object</a> that limits the picker’s upper range.</p>
+        <pre class="pre--demo"><code data-language="javascript">picker.get('max', 'yyyy/mm/dd')</code></pre>
+        {%= dateDemoField({
+            id: 'demo__api-get--max-format',
+            pre: '<button id=button__api-get--max-format class="fieldset__button button button--small">Log the max formatted</button>',
+            placeholder: 'Open your console and try me&hellip;'
+        }) %}
+
+    </div> <!-- .section__block -->
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Get <code class="string">open</code><a class="heading__anchor" name="method-get-open" href="#method-get-open">&sect;</a></span></h2>
+
+        <p>Returns a boolean value of whether the picker is open or not.</p>
+        <pre class="pre--demo"><code data-language="javascript">picker.get('open')</code></pre>
+        {%= dateDemoField({
+            id: 'demo__api-get--open',
+            pre: '<button id=button__api-get--open class="fieldset__button button button--small">Log the open state</button>',
+            placeholder: 'Open your console and try me&hellip;'
+        }) %}
+
+    </div> <!-- .section__block -->
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Get <code class="string">start</code><a class="heading__anchor" name="method-get-start" href="#method-get-start">&sect;</a></span></h2>
+
+        <p>Returns a boolean value of whether the picker has started or not.</p>
+        <pre class="pre--demo"><code data-language="javascript">picker.get('start')</code></pre>
+        {%= dateDemoField({
+            id: 'demo__api-get--start',
+            pre: '<button id=button__api-get--start class="fieldset__button button button--small">Log the start state</button>' +
+                '<button id=button__api-get--start-stop class="fieldset__button button button--small">Stop picker</button>',
+            placeholder: 'Open your console and try me&hellip;'
+        }).replace( 'type=text', 'type=date' ) %}
+
+    </div> <!-- .section__block -->
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Get <code class="string">id</code><a class="heading__anchor" name="method-get-id" href="#method-get-id">&sect;</a></span></h2>
+
+        <p>Returns a unique 9-digit integer that is the ID of the picker.</p>
+        <pre class="pre--demo"><code data-language="javascript">picker.get('id')</code></pre>
+        {%= dateDemoField({
+            id: 'demo__api-get--id',
+            pre: '<button id=button__api-get--id class="fieldset__button button button--small">Log the picker ID</button>',
+            placeholder: 'Open your console and try me&hellip;'
+        }) %}
+
+    </div> <!-- .section__block -->
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Get <code class="string">disable</code><a class="heading__anchor" name="method-get-disable" href="#method-get-disable">&sect;</a></span></h2>
+
+        <p>Returns an array of items that determine which <a href="#item-objects">item objects</a> to disable on the picker.</p>
+        <pre class="pre--demo"><code data-language="javascript">picker.get('disable')</code></pre>
+        {%= dateDemoField({
+            id: 'demo__api-get--disable',
+            pre: '<button id=button__api-get--disable class="fieldset__button button button--small">Log the disabled collection</button>',
+            placeholder: 'Open your console and try me&hellip;'
+        }) %}
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Set<a class="heading__anchor" name="method-set" href="#method-set">&sect;</a></span></h2>
+
+        <p>Set the properties, objects, and states to change the state of the picker.</p>
+
+        <pre><code data-language="javascript">picker.set(thing, value)</code></pre>
+
+        <p>An alternate syntax can be used to set multiple things at once:</p>
+
+        <pre><code data-language="javascript">picker.set({
+    thing: value,
+    thing: value,
+    thing: value
+})</code></pre>
+
+        <p>Both <code>thing</code> and <code>value</code> are required arguments. The <code>value</code>, is based on type of <code>thing</code> being set. The <code>thing</code>, is a string that can be:</p>
+
+        <ul>
+            <li><code><a href="#method-set-clear">clear</a></code></li>
+            <li><code><a href="#method-set-select">select</a></code> <b>*</b></li>
+            <li><code><a href="#method-set-highlight">highlight</a></code> <b>*</b></li>
+            <li><code><a href="#method-set-view">view</a></code></li>
+            <li><code><a href="#method-set-min">min</a></code> <b>*</b></li>
+            <li><code><a href="#method-set-max">max</a></code> <b>*</b></li>
+            <li><code><a href="#method-set-disable">disable</a></code> <b>*</b></li>
+            <li><code><a href="#method-set-enable">enable</a></code> <b>*</b></li>
+            <li><code><a href="#method-set-interval">interval</a></code> (time picker only) <b>*</b></li>
+        </ul>
+
+        <h3 class="heading heading--divide"><span class="heading__text"><b>*</b> cascading changes<a class="heading__anchor--bigger" name="cascading-changes" href="#cascading-changes">&sect;</a></span></h3>
+
+        <p>When the <code>thing</code>s denoted in the list above with an asterisk (<b>*</b>) are set, they cascade into updating other things using the same value.</p>
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Set <code class="string">clear</code><a class="heading__anchor" name="method-set-clear" href="#method-set-clear">&sect;</a></span></h2>
+        <p>Clear the value in the picker’s <code class="tag-name">input</code> element.</p>
+
+        <pre class="pre--demo"><code data-language="javascript">picker.set('clear')</code></pre>
+
+        {%= dateDemoField({
+            id: 'demo__api-set-clear',
+            pre: '<button id=button__api-set-clear class="fieldset__button button button--small">Clear</button>',
+            value: grunt.template.date('d mmmm, yyyy')
+        }) %}
+
+        <p>This is the full form of <a href="#method-clear">the <code class="function">clear</code> method</a>.</p>
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Set <code class="string">select</code><a class="heading__anchor" name="method-set-select" href="#method-set-select">&sect;</a></span></h2>
+        <p>Setting <code class="string">select</code> has <a href="#cascading-changes">cascading changes</a> that update the <code>highlight</code>, the <code>view</code>, and the value of the <code class="tag-name">input</code> element based on the settings <code>format</code>.</p>
+
+        <h3 class="heading heading--divide"><span class="heading__text">Select a date <a href="#item-objects">item object</a><a class="heading__anchor--bigger" name="method-set-select-date" href="#method-set-select-date">&sect;</a></span></h3>
+
+        <pre class="pre--demo"><code data-language="javascript">// Using arrays formatted as [YEAR,MONTH,DATE].
+picker.set('select', [{%= today.getFullYear() + ',' + today.getMonth() + ',' + today.getDate() %}])
+
+// Using JavaScript Date objects.
+picker.set('select', { '{%= playDate %}' })
+
+// Using positive integers as UNIX timestamps.
+picker.set('select', {%= today.getTime() - 468487654 %})</code></pre>
+
+        {%= dateDemoField({
+            id: 'demo__api-set--select-date',
+            pre: '<button id=button__api-set--select-date-array class="fieldset__button button button--small">Select using an array</button>' +
+                '<button id=button__api-set--select-date-js class="fieldset__button button button--small">Select using a JS Date</button>' +
+                '<button id=button__api-set--select-date-integer class="fieldset__button button button--small">Select using an integer</button>'
+        }) %}
+
+        <h3 class="heading heading--divide"><span class="heading__text">Select a time <a href="#item-objects">item object</a><a class="heading__anchor--bigger" name="method-set-select-time" href="#method-set-select-time">&sect;</a></span></h3>
+
+        <pre class="pre--demo"><code data-language="javascript">// Using arrays formatted as [HOUR,MINUTE].
+picker.set('select', [3,0])
+
+// Using positive integers as minutes.
+picker.set('select', 540)</code></pre>
+
+        {%= dateDemoField({
+            id: 'demo__api-set--select-time',
+            pre: '<button id=button__api-set--select-time-array class="fieldset__button button button--small">Select using an array</button>' +
+                '<button id=button__api-set--select-time-integer class="fieldset__button button button--small">Select using an integer</button>'
+        }) %}
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Set <code class="string">highlight</code><a class="heading__anchor" name="method-set-highlight" href="#method-set-highlight">&sect;</a></span></h2>
+        <p>Setting <code class="string">highlight</code> has a <a href="#cascading-changes">cascading change</a> that updates the <a href="#item-objects">item object</a> that sets the <code>view</code> of the picker.</p>
+
+        <h3 class="heading heading--divide"><span class="heading__text">Highlight a date <a href="#item-objects">item object</a><a class="heading__anchor--bigger" name="method-set-highlight-date" href="#method-set-highlight-date">&sect;</a></span></h3>
+
+        <pre class="pre--demo"><code data-language="javascript">// Using arrays formatted as [YEAR,MONTH,DATE].
+picker.set('highlight', [{%= today.getFullYear() + ',' + today.getMonth() + ',' + today.getDate() %}])
+
+// Using JavaScript Date objects.
+picker.set('highlight', { '{%= playDate %}' })
+
+// Using positive integers as UNIX timestamps.
+picker.set('highlight', {%= today.getTime() - 468487654 %})</code></pre>
+
+        {%= dateDemoField({
+            id: 'demo__api-set--highlight-date',
+            pre: '<button id=button__api-set--highlight-date-array class="fieldset__button button button--small">Highlight using an array</button>' +
+                '<button id=button__api-set--highlight-date-js class="fieldset__button button button--small">Highlight using a JS Date</button>' +
+                '<button id=button__api-set--highlight-date-integer class="fieldset__button button button--small">Highlight using an integer</button>'
+        }) %}
+
+        <h3 class="heading heading--divide"><span class="heading__text">Highlight a time <a href="#item-objects">item object</a><a class="heading__anchor--bigger" name="method-set-highlight-time" href="#method-set-highlight-time">&sect;</a></span></h3>
+
+        <pre class="pre--demo"><code data-language="javascript">// Using arrays formatted as [HOUR,MINUTE].
+picker.set('highlight', [15,30])
+
+// Using positive integers as minutes.
+picker.set('highlight', 1080)</code></pre>
+
+        {%= dateDemoField({
+            id: 'demo__api-set--highlight-time',
+            pre: '<button id=button__api-set--highlight-time-array class="fieldset__button button button--small">Highlight using an array</button>' +
+                '<button id=button__api-set--highlight-time-integer class="fieldset__button button button--small">Highlight using an integer</button>'
+        }) %}
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Set <code class="string">view</code><a class="heading__anchor" name="method-set-view" href="#method-set-view">&sect;</a></span></h2>
+        <p>Setting <code class="string">view</code> has no <a href="#cascading-changes">cascading changes</a> and the <code class="string">highlight</code> remains unaffected.</p>
+
+        <h3 class="heading heading--divide"><span class="heading__text">Viewset a date <a href="#item-objects">item object</a><a class="heading__anchor--bigger" name="method-set-view-date" href="#method-set-view-date">&sect;</a></span></h3>
+
+        <p>The <code>value</code> passed gets normalized to the first date of the month to bring into view.</p>
+
+        <pre class="pre--demo"><code data-language="javascript">// Using arrays formatted as [YEAR,MONTH,DATE].
+picker.set('view', [2000,3,20])
+
+// Using JavaScript Date objects.
+picker.set('view', { '{%= new Date(1988,7,14) %}' })
+
+// Using positive integers as UNIX timestamps.
+picker.set('view', 1587355200000)</code></pre>
+
+        {%= dateDemoField({
+            id: 'demo__api-set--view-date',
+            pre: '<button id=button__api-set--view-date-array class="fieldset__button button button--small">Viewset using an array</button>' +
+                '<button id=button__api-set--view-date-js class="fieldset__button button button--small">Viewset using a JS Date</button>' +
+                '<button id=button__api-set--view-date-integer class="fieldset__button button button--small">Viewset using an integer</button>'
+        }) %}
+
+        <h3 class="heading heading--divide"><span class="heading__text">Viewset a time <a href="#item-objects">item object</a><a class="heading__anchor--bigger" name="method-set-view-time" href="#method-set-view-time">&sect;</a></span></h3>
+
+        <pre class="pre--demo"><code data-language="javascript">// Using arrays formatted as [HOUR,MINUTE].
+picker.set('view', [15,30])
+
+// Using positive integers as minutes.
+picker.set('view', 1080)</code></pre>
+
+        {%= dateDemoField({
+            id: 'demo__api-set--view-time',
+            pre: '<button id=button__api-set--view-time-array class="fieldset__button button button--small">Viewset using an array</button>' +
+                '<button id=button__api-set--view-time-integer class="fieldset__button button button--small">Viewset using an integer</button>'
+        }) %}
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Set <code class="string">min</code><a class="heading__anchor" name="method-set-min" href="#method-set-min">&sect;</a></span></h2>
+        <p>Setting <code class="string">min</code> has <a href="#cascading-changes">cascading changes</a> on the <code class="string">select</code>, <code class="string">highlight</code>, and <code class="string">view</code> only when the particular <a href="#item-objects">item object</a> goes out of range.</p>
+
+        <h3 class="heading heading--divide"><span class="heading__text">Scope the date <a href="#item-objects">item objects</a><a class="heading__anchor--bigger" name="method-set-min-date" href="#method-set-min-date">&sect;</a></span></h3>
+
+        <pre class="pre--demo"><code data-language="javascript">// Using arrays formatted as [YEAR,MONTH,DATE].
+picker.set('min', [2013,3,20])
+
+// Using JavaScript Date objects.
+picker.set('min', { '{%= new Date(2013,7,14) %}' })
+
+// Using integers as days relative to today.
+picker.set('min', -4)
+
+// Using `true` for “today”.
+picker.set('min', true)
+
+// Using `false` to remove.
+picker.set('min', false)</code></pre>
+
+        {%= dateDemoField({
+            id: 'demo__api-set--min-date',
+            pre: '<button id=button__api-set--min-date-array class="fieldset__button button button--small">Scope using an array</button>' +
+                '<button id=button__api-set--min-date-js class="fieldset__button button button--small">Scope using a JS Date</button>' +
+                '<button id=button__api-set--min-date-integer class="fieldset__button button button--small">Scope using an integer</button>' +
+                '<button id=button__api-set--min-date-true class="fieldset__button button button--small">Scope using `true`</button>' +
+                '<button id=button__api-set--min-date-false class="fieldset__button button button--small">Scope using `false`</button>'
+        }) %}
+
+        <h3 class="heading heading--divide"><span class="heading__text">Scope the time <a href="#item-objects">item objects</a><a class="heading__anchor--bigger" name="method-set-min-time" href="#method-set-min-time">&sect;</a></span></h3>
+
+        <pre class="pre--demo"><code data-language="javascript">// Using arrays formatted as [HOUR,MINUTE].
+picker.set('min', [15,30])
+
+// Using integers as intervals relative from now.
+picker.set('min', -4)
+
+// Using `true` for “now”.
+picker.set('min', true)
+
+// Using `false` to remove.
+picker.set('min', false)</code></pre>
+
+        {%= dateDemoField({
+            id: 'demo__api-set--min-time',
+            pre: '<button id=button__api-set--min-time-array class="fieldset__button button button--small">Scope using an array</button>' +
+                '<button id=button__api-set--min-time-integer class="fieldset__button button button--small">Scope using an integer</button>' +
+                '<button id=button__api-set--min-time-true class="fieldset__button button button--small">Scope using `true`</button>' +
+                '<button id=button__api-set--min-time-false class="fieldset__button button button--small">Scope using `false`</button>'
+        }) %}
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Set <code class="string">max</code><a class="heading__anchor" name="method-set-max" href="#method-set-max">&sect;</a></span></h2>
+        <p>Setting <code class="string">max</code> has <a href="#cascading-changes">cascading changes</a> on the <code class="string">select</code>, <code class="string">highlight</code>, and <code class="string">view</code> only when the particular <a href="#item-objects">item object</a> goes out of range.</p>
+
+        <h3 class="heading heading--divide"><span class="heading__text">Scope the date <a href="#item-objects">item objects</a><a class="heading__anchor--bigger" name="method-set-max-date" href="#method-set-max-date">&sect;</a></span></h3>
+
+        <pre class="pre--demo"><code data-language="javascript">// Using arrays formatted as [YEAR,MONTH,DATE].
+picker.set('max', [2013,3,20])
+
+// Using JavaScript Date objects.
+picker.set('max', { '{%= new Date(2013,7,14) %}' })
+
+// Using integers as days relative to today.
+picker.set('max', 4)
+
+// Using `true` for “today”.
+picker.set('max', true)
+
+// Using `false` to remove.
+picker.set('max', false)</code></pre>
+
+        {%= dateDemoField({
+            id: 'demo__api-set--max-date',
+            pre: '<button id=button__api-set--max-date-array class="fieldset__button button button--small">Scope using an array</button>' +
+                '<button id=button__api-set--max-date-js class="fieldset__button button button--small">Scope using a JS Date</button>' +
+                '<button id=button__api-set--max-date-integer class="fieldset__button button button--small">Scope using an integer</button>' +
+                '<button id=button__api-set--max-date-true class="fieldset__button button button--small">Scope using `true`</button>' +
+                '<button id=button__api-set--max-date-false class="fieldset__button button button--small">Scope using `false`</button>'
+        }) %}
+
+        <h3 class="heading heading--divide"><span class="heading__text">Scope the time <a href="#item-objects">item objects</a><a class="heading__anchor--bigger" name="method-set-max-time" href="#method-set-max-time">&sect;</a></span></h3>
+
+        <pre class="pre--demo"><code data-language="javascript">// Using arrays formatted as [HOUR,MINUTE].
+picker.set('max', [15,30])
+
+// Using integers as intervals relative from now.
+picker.set('max', 4)
+
+// Using `true` for “now”.
+picker.set('max', true)
+
+// Using `false` to remove.
+picker.set('max', false)</code></pre>
+
+        {%= dateDemoField({
+            id: 'demo__api-set--max-time',
+            pre: '<button id=button__api-set--max-time-array class="fieldset__button button button--small">Scope using an array</button>' +
+                '<button id=button__api-set--max-time-integer class="fieldset__button button button--small">Scope using an integer</button>' +
+                '<button id=button__api-set--max-time-true class="fieldset__button button button--small">Scope using `true`</button>' +
+                '<button id=button__api-set--max-time-false class="fieldset__button button button--small">Scope using `false`</button>'
+        }) %}
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h1 class="heading heading--divide-center"><span class="heading__text">The Events and Methods</span></h1>
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Event <code class="function">on</code><a class="heading__anchor" name="method-on" href="#method-on">&sect;</a></span></h2>
+        <p>Bind callbacks to get fired off when the relative <a href="#methods">picker method</a> is called:</p>
+
+        <pre><code data-language="javascript">picker.on(methodName, function() { &hellip; })</code></pre>
+
+        <p>An alternate syntax can be used to bind multiple callbacks at once:</p>
+
+        <pre><code data-language="javascript">picker.on({
+    methodName: function() { &hellip; },
+    methodName: function() { &hellip; },
+    methodName: function() { &hellip; }
+})</code></pre>
+
+        <p>The <code>methodName</code> can be <code class="string">open</code>, <code class="string">close</code>, <code class="string">render</code>, <code class="string">start</code>, <code class="string">stop</code>, or <code class="string">set</code>.</p>
+
+        <pre><code data-language="javascript">picker.on('open', function() {
+    console.log( 'Opened.. and here I am!' )
+})</code></pre>
+
+        {%= dateDemoField({
+            id: 'demo__api-method-on',
+            placeholder: 'Open your console and try me&hellip;'
+        }) %}
+
+    </div> <!-- .section__block -->
+
+
+    <div class="section__block section__block--scoped">
+
+        <h3 class="heading heading--divide"><span class="heading__text">Default Events<a class="heading__anchor--bigger" name="method-on-default-events" href="#method-on-default-events">&sect;</a></span></h3>
+        <p>The <code class="function">on</code> method can only be used <i>after</i> the picker has been initiated. To set default events, pass them as options when invoking the picker:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
+    onOpen: function() {
+        console.log('Opened up!')
+    },
+    onClose: function() {
+        console.log('Closed now')
+    },
+    onRender: function() {
+        console.log('Just rendered anew')
+    },
+    onStart: function() {
+        console.log('Hello there :)')
+    },
+    onStop: function() {
+        console.log('See ya')
+    },
+    onSet: function(<a href="#method-on-scope-arguments">event</a>) {
+        console.log('Set stuff:', <a href="#method-on-scope-arguments">event</a>)
+    }
+})</code></pre>
+
+        {%= dateDemoField({
+            id: 'demo__api-default-events',
+            placeholder: 'Open your console and try me&hellip;',
+            pre: '<button id=button__api-default-events class="fieldset__button button button--small">Stop</button>'
+        }).replace( 'type=text', 'type=date' ) %}
+
+    </div> <!-- .section__block -->
+
+
+    <div class="section__block section__block--scoped">
+
+        <h3 class="heading heading--divide"><span class="heading__text">Scope and Arguments<a class="heading__anchor--bigger" name="method-on-scope-arguments" href="#method-on-scope-arguments">&sect;</a></span></h3>
+        <p>Within scope of the events’ callbacks, <code class="keyword">this</code> refers to <a href="#picker">the picker object</a> – and for most events, no arguments are passed.</p>
+        <p>The only exception is the <code class="function">set</code> method, which is passed an argument that provides more context as to what is being “set”.</p>
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Event <code class="function">trigger</code><a class="heading__anchor" name="method-trigger" href="#method-trigger">&sect;</a></span></h2>
+        <p>Trigger callbacks that have been queued up using the <a href="#method-on">the <code class="function">on</code> method</a>:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">picker.on('open', function() {
+    console.log('Didn’t open.. yet here I am!')
+})
+picker.trigger('open')</code></pre>
+
+        {%= dateDemoField({
+            id: 'demo__api-method-trigger',
+            placeholder: 'Open your console and try me&hellip;',
+            pre: '<button id=button__api-method-trigger class="fieldset__button button button--small">Trigger open</button>'
+        }) %}
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h1 class="heading heading--divide-center"><span class="heading__text">The Objects</span></h1>
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Object <code>$node</code><a class="heading__anchor" name="object-node" href="#object-node">&sect;</a></span></h2>
+        <p>This is the picker’s relative <code class="tag-name">input</code> element wrapped as a jQuery object.</p>
+
+        <pre class="pre--demo"><code data-language="javascript">picker.$node</code></pre>
+
+        {%= dateDemoField({
+            id: 'demo__api-object--node',
+            pre: '<button id=button__api-object--node class="fieldset__button button button--small">Get the node</button>',
+            placeholder: 'Open your console and try me&hellip;'
+        }) %}
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Object <code>$root</code><a class="heading__anchor" name="object-root" href="#object-root">&sect;</a></span></h2>
+        <p>This is the picker’s relative root holder element wrapped as a jQuery object.</p>
+
+        <pre class="pre--demo"><code data-language="javascript">picker.$root</code></pre>
+
+        {%= dateDemoField({
+            id: 'demo__api-object--holder',
+            pre: '<button id=button__api-object--holder class="fieldset__button button button--small">Get the root</button>',
+            placeholder: 'Open your console and try me&hellip;'
+        }) %}
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Object <code>_hidden</code><a class="heading__anchor" name="object-hidden" href="#object-hidden">&sect;</a></span></h2>
+        <p>This is the picker’s relative hidden element, which is <code class="null">undefined</code> if there’s no <code>formatSubmit</code> option.</p>
+        <p>There should be no reason to use this – it’s mostly for internal use. If you have a valid reason for using this, please mention it in the <a href="{%= meta.gitrepo_url %}/issues">Issues</a>.</p>
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Object <code>component</code><a class="heading__anchor" name="object-component" href="#object-component">&sect;</a></span></h2>
+        <p>This is the picker’s relative component constructor that builds the date or time picker. This API is in flux – so avoid using it for now.</p>
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+
