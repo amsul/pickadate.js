@@ -29,7 +29,7 @@
 <br>
 ## Upgrading from v2 to v3
 
-The v3 API is significantly different from v2 (all for the greater good!). So if you’re upgrading to v3, make sure to read the [changelog]({%= meta.gitrepo_url %}/blob/v3.0.0/CHANGELOG.md).
+The v3 API is significantly different from v2 (all for the greater good!). So if you’re upgrading to v3, make sure to read the [changelog]({%= meta.gitrepo_url %}/blob/gh-pages/CHANGELOG.md).
 
 
 
@@ -68,7 +68,7 @@ File                    | Contents                 | Size (min & gzip)
 `classic.date.css`      | Classic date picker      | {%= (fileSize_css_classic_date.gzip/1024).toFixed(2) %}kb
 `classic.time.css`      | Classic time picker      | {%= (fileSize_css_classic_time.gzip/1024).toFixed(2) %}kb
 
-__*__ One and only one base stylesheet is **required**. Check out the [demos]({%= pkg.homepage %}/themes.htm) to choose one – and then include the respective pickers as well.
+__*__ One and only one base stylesheet is **required**. [Choose a theme]({%= pkg.homepage %}) then include the respective pickers as well.
 
 ### Translations
 
@@ -95,7 +95,7 @@ Constructed as such:
 <br>
 ## Bugs
 
-Before opening a new issue, please search the existing [Issues]({%= pkg.bugs %}) for anything similar – there might already be an answer to your problem. You might also wanna check out the [Contributing]({%= meta.gitrepo_url %}/blob/v3.0.0/CONTRIBUTING.md) guide.
+Before opening a new issue, please search the existing [Issues]({%= pkg.bugs %}) for anything similar – there might already be an answer to your problem. You might also wanna check out the [Contributing]({%= meta.gitrepo_url %}/blob/gh-pages/CONTRIBUTING.md) guide.
 
 
 
@@ -104,7 +104,7 @@ Before opening a new issue, please search the existing [Issues]({%= pkg.bugs %})
 <br>
 ## Contributing
 
-Before contributing any code to the project, please take a look at the [Contributing]({%= meta.gitrepo_url %}/blob/v3.0.0/CONTRIBUTING.md) guide.
+Before contributing any code to the project, please take a look at the [Contributing]({%= meta.gitrepo_url %}/blob/gh-pages/CONTRIBUTING.md) guide.
 
 
 

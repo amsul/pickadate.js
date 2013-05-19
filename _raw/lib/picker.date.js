@@ -212,12 +212,25 @@ DatePicker.prototype.now = function( type, value, options ) {
 /**
  * Navigate to next/prev month.
  */
-DatePicker.prototype.navigate = function( type, dateObject, options ) {
-    if ( Picker._.isObject( dateObject ) ) {
-        dateObject = [ dateObject.year, dateObject.month + ( options && options.nav ? options.nav : 0 ), dateObject.date ]
+DatePicker.prototype.navigate = function( type, value, options ) {
+
+    if ( Picker._.isObject( value ) ) {
+
+        var year = value.year,
+            month = value.month + ( options && options.nav ? options.nav : 0 ),
+            date = value.date
+
+        // If the month we’re going to doesn’t have enough days,
+        // keep decreasing the date until we reach the month’s last date.
+        while ( new Date( year, month, date ).getMonth() !== month ) {
+            date -= 1
+        }
+
+        value = [ year, month, date ]
     }
-    return dateObject
-}
+
+    return value
+} //DatePicker.prototype.navigate
 
 
 /**
