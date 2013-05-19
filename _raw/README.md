@@ -29,7 +29,7 @@
 <br>
 ## Upgrading from v2 to v3
 
-The v3 API is significantly different from v2 (all for the greater good!). So if you’re upgrading to v3, make sure to read the [changelog]({%= meta.gitrepo_url %}/blob/v3.0.0/CHANGELOG.md).
+The v3 API is significantly different from v2 (all for the greater good!). So if you’re upgrading to v3, make sure to read the [changelog]({%= meta.gitrepo_url %}/blob/gh-pages/CHANGELOG.md).
 
 
 
@@ -95,7 +95,7 @@ Constructed as such:
 <br>
 ## Bugs
 
-Before opening a new issue, please search the existing [Issues]({%= pkg.bugs %}) for anything similar – there might already be an answer to your problem. You might also wanna check out the [Contributing]({%= meta.gitrepo_url %}/blob/v3.0.0/CONTRIBUTING.md) guide.
+Before opening a new issue, please search the existing [Issues]({%= pkg.bugs %}) for anything similar – there might already be an answer to your problem. You might also wanna check out the [Contributing]({%= meta.gitrepo_url %}/blob/gh-pages/CONTRIBUTING.md) guide.
 
 
 
@@ -104,7 +104,7 @@ Before opening a new issue, please search the existing [Issues]({%= pkg.bugs %})
 <br>
 ## Contributing
 
-Before contributing any code to the project, please take a look at the [Contributing]({%= meta.gitrepo_url %}/blob/v3.0.0/CONTRIBUTING.md) guide.
+Before contributing any code to the project, please take a look at the [Contributing]({%= meta.gitrepo_url %}/blob/gh-pages/CONTRIBUTING.md) guide.
 
 
 

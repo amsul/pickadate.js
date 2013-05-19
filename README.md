@@ -19,7 +19,7 @@ The mobile-friendly, responsive, and lightweight jQuery date & time input picker
 <br>
 ## Upgrading from v2 to v3
 
-The v3 API is significantly different from v2 (all for the greater good!). So if you’re upgrading to v3, make sure to read the [changelog](https://github.com/amsul/pickadate.js/blob/v3.0.0/CHANGELOG.md).
+The v3 API is significantly different from v2 (all for the greater good!). So if you’re upgrading to v3, make sure to read the [changelog](https://github.com/amsul/pickadate.js/blob/gh-pages/CHANGELOG.md).
 
 
 
@@ -85,7 +85,7 @@ Constructed as such:
 <br>
 ## Bugs
 
-Before opening a new issue, please search the existing [Issues](https://github.com/amsul/pickadate.js/issues) for anything similar – there might already be an answer to your problem. You might also wanna check out the [Contributing](https://github.com/amsul/pickadate.js/blob/v3.0.0/CONTRIBUTING.md) guide.
+Before opening a new issue, please search the existing [Issues](https://github.com/amsul/pickadate.js/issues) for anything similar – there might already be an answer to your problem. You might also wanna check out the [Contributing](https://github.com/amsul/pickadate.js/blob/gh-pages/CONTRIBUTING.md) guide.
 
 
 
@@ -94,7 +94,7 @@ Before opening a new issue, please search the existing [Issues](https://github.c
 <br>
 ## Contributing
 
-Before contributing any code to the project, please take a look at the [Contributing](https://github.com/amsul/pickadate.js/blob/v3.0.0/CONTRIBUTING.md) guide.
+Before contributing any code to the project, please take a look at the [Contributing](https://github.com/amsul/pickadate.js/blob/gh-pages/CONTRIBUTING.md) guide.
 
 
 
