@@ -11,8 +11,8 @@
 <title>Pickadate.js</title>
 
 <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="../../lib/themes/classic.css">
-<link rel="stylesheet" href="../../lib/themes/classic.time.css">
+<link rel="stylesheet" href="../../lib/themes/default.css">
+<link rel="stylesheet" href="../../lib/themes/default.time.css">
 
 <!--[if lt IE 9]>
     <script>document.createElement('section')</script>
@@ -82,11 +82,12 @@
             // min: [ 7, 30 ],
             // max: -2,
             // max: [ 9, 0 ],
-            // onRender: function() {
-            //     var $viewset = this.$root.find( '.picker__list-item--viewset' ),
-            //         $box = this.$root.find( '.picker__box' )
-            //     $box[ 0 ].scrollTop = ~~$viewset.position().top - $viewset[0].offsetHeight
-            // }
+            onOpen: function() {
+                $('body').css('overflow','hidden')
+            },
+            onClose: function() {
+                $('body').css('overflow','')
+            }
         }),
         picker = $input.pickatime('picker')
 

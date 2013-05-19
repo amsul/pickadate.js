@@ -1,4 +1,4 @@
-# pickadate v3.0.0 [![pickadate build status](https://travis-ci.org/amsul/pickadate.js.png?branch=gh-pages)](https://travis-ci.org/amsul/pickadate.js)
+# pickadate v3.0.1 [![pickadate build status](https://travis-ci.org/amsul/pickadate.js.png?branch=gh-pages)](https://travis-ci.org/amsul/pickadate.js)
 
 The mobile-friendly, responsive, and lightweight jQuery date & time input picker.
 
@@ -11,7 +11,7 @@ The mobile-friendly, responsive, and lightweight jQuery date & time input picker
 
 #### To get it:
 
-[Download v3.0.0](https://github.com/amsul/pickadate.js/archive/3.0.0.zip) or `git clone git://github.com/amsul/pickadate.js.git` or `bower install pickadate`
+[Download v3.0.1](https://github.com/amsul/pickadate.js/archive/3.0.1.zip) or `git clone git://github.com/amsul/pickadate.js.git` or `bower install pickadate`
 
 
 
@@ -37,7 +37,7 @@ There are currently two pickers: **date** and **time**.
 File                    | Contents                 | Size (min & gzip)
 ----------------------- | ------------------------ | ----------------------
 `picker.js`             | __Base *__               | 1.24kb
-`picker.date.js`        | Date picker              | 1.84kb
+`picker.date.js`        | Date picker              | 1.86kb
 `picker.time.js`        | Time picker              | 1.30kb
 
 __*__ The base script is **required** for any of the pickers to function.
@@ -58,11 +58,11 @@ File                    | Contents                 | Size (min & gzip)
 `classic.date.css`      | Classic date picker      | 0.69kb
 `classic.time.css`      | Classic time picker      | 0.35kb
 
-__*__ One and only one base stylesheet is **required**. Check out the [demos](http://amsul.github.io/pickadate.js/themes.htm) to choose one – and then include the respective pickers as well.
+__*__ One and only one base stylesheet is **required**. [Choose a theme](http://amsul.github.io/pickadate.js) then include the respective pickers as well.
 
 ### Translations
 
-The translations are copied into the `lib/translations` folder. There are currently [30 languages](https://github.com/amsul/pickadate.js/blob/v3.0.0/lib/translations) included.
+The translations are copied into the `lib/translations` folder. There are currently [30 languages](https://github.com/amsul/pickadate.js/blob/v3.0.1/lib/translations) included.
 
 
 <br>

@@ -68,7 +68,7 @@ File                    | Contents                 | Size (min & gzip)
 `classic.date.css`      | Classic date picker      | {%= (fileSize_css_classic_date.gzip/1024).toFixed(2) %}kb
 `classic.time.css`      | Classic time picker      | {%= (fileSize_css_classic_time.gzip/1024).toFixed(2) %}kb
 
-__*__ One and only one base stylesheet is **required**. Check out the [demos]({%= pkg.homepage %}/themes.htm) to choose one – and then include the respective pickers as well.
+__*__ One and only one base stylesheet is **required**. [Choose a theme]({%= pkg.homepage %}) then include the respective pickers as well.
 
 ### Translations
 
