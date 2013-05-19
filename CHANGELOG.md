@@ -1,15 +1,20 @@
 
 # Changelog
 
+## v3.0.1
+
+- [#123](https://github.com/amsul/pickadate.js/issues/123): Removed `hiddenSuffix` extra quote character.
+- Fixed issue with month navigation on the 31st date.
+
 ## v3.0.0
 
 With this major release, the entire API has been rethought to allow the picker to be much more configurable and extensible. These are the most notable updates:
 
-- [#20](/issues/20): Introduced a new [time picker](http://amsul.github.io/pickadate.js/time.htm).
-- [#112](/issues/112): Firefox select month/year fix.
-- [#84](/issues/84): Scrollbar not hidden to avoid page shift.
-- [#89](/issues/89): Better event handling on clicks/focuses/keydowns within the holder.
-- [#98](/issues/98): Destroy picker data from element.
+- [#20](https://github.com/amsul/pickadate.js/issues/20): Introduced a new [time picker](http://amsul.github.io/pickadate.js/time.htm).
+- [#112](https://github.com/amsul/pickadate.js/issues/112): Firefox select month/year fix.
+- [#84](https://github.com/amsul/pickadate.js/issues/84): Scrollbar not hidden to avoid page shift.
+- [#89](https://github.com/amsul/pickadate.js/issues/89): Better event handling on clicks/focuses/keydowns within the holder.
+- [#98](https://github.com/amsul/pickadate.js/issues/98): Destroy picker data from element.
 - Added Grunt.js build system.
 - Added QUnit test suite.
 - Added Travis integration.
@@ -21,7 +26,7 @@ With this major release, the entire API has been rethought to allow the picker t
 To enable all this goodness, some **backward-incompatible changes** have been introduced. These are the main ones:
 
 <a name="zero-as-index"></a>
-- [#85](/issues/85): Months have __zero-as-index__:
+- [#85](https://github.com/amsul/pickadate.js/issues/85): Months have __zero-as-index__:
 
 	Just as in JavaScript’s native Date object, the `month` used to create dates is now 	based on zero as the first index. Meaning:
 
