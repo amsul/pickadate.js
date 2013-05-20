@@ -1,6 +1,10 @@
 
 # Changelog
 
+## v3.0.2
+
+- [#124]({%= meta.gitrepo_url %}/issues/124): Fixed bug with navigating past year.
+
 ## v3.0.1
 
 - [#123]({%= meta.gitrepo_url %}/issues/123): Removed `hiddenSuffix` extra quote character.

@@ -1,6 +1,10 @@
 
 # Changelog
 
+## v3.0.2
+
+- [#124](https://github.com/amsul/pickadate.js/issues/124): Fixed bug with navigating past year.
+
 ## v3.0.1
 
 - [#123](https://github.com/amsul/pickadate.js/issues/123): Removed `hiddenSuffix` extra quote character.
