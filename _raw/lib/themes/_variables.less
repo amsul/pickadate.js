@@ -84,6 +84,7 @@
 // Disabled things.. such as days, month nav, etc.
 @disabled-things-bg: #f5f5f5;
 @disabled-things-text: #ddd;
+@disabled-highlighted-things-bg: #bbb;
 
 
 
@@ -156,7 +157,6 @@
  */
 .opacity( @decimal ) {
     @percent: @decimal * 100;
-    // @args: ~`"@{arguments}".replace(/[\[\]]|\,\sX/g, '')`;
     -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=@{percent})";
     filter: ~"alpha(opacity=@{percent})";
     -moz-opacity: @decimal;
