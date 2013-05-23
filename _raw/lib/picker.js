@@ -18,7 +18,7 @@
 
 
 // Create a global scope.
-window.Picker = (function( $document, undefined ) {
+window.Picker = (function( $, $document, undefined ) {
 
 
 /**
@@ -342,8 +342,8 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                                 PickerConstructor._.trigger( P.component.key.go, P, [ keycodeToMove ] )
                             }
 
-                            // Or on “enter”, set the value and close.
-                            else {
+                            // On “enter”, if the highlighted item isn’t disabled, set the value and close.
+                            else if ( !P.$root.find( '.' + CLASSES.highlighted ).hasClass( CLASSES.disabled ) ) {
                                 P.set( 'select', P.component.item.highlight ).close()
                             }
                         }
@@ -779,7 +779,7 @@ return PickerConstructor
 
 
 // Close the global scope.
-})( $( document ) );
+})( jQuery, jQuery( document ) );
 
 
 
