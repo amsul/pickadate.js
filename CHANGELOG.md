@@ -1,6 +1,12 @@
 
 # Changelog
 
+## v3.0.3
+
+- [#126](https://github.com/amsul/pickadate.js/issues/126): Fix for all dates disabled.
+- [#127](https://github.com/amsul/pickadate.js/issues/127): Fix for jQuery no conflict.
+- [#129](https://github.com/amsul/pickadate.js/issues/129): Fix for month nav wrapping around same year.
+
 ## v3.0.2
 
 - [#124](https://github.com/amsul/pickadate.js/issues/124): Fixed bug with navigating past year.

@@ -1,6 +1,12 @@
 
 # Changelog
 
+## v3.0.3
+
+- [#126]({%= meta.gitrepo_url %}/issues/126): Fix for all dates disabled.
+- [#127]({%= meta.gitrepo_url %}/issues/127): Fix for jQuery no conflict.
+- [#129]({%= meta.gitrepo_url %}/issues/129): Fix for month nav wrapping around same year.
+
 ## v3.0.2
 
 - [#124]({%= meta.gitrepo_url %}/issues/124): Fixed bug with navigating past year.
