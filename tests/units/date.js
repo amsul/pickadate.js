@@ -60,6 +60,9 @@ test( 'First weekday', function() {
 
     picker.stop().$node.pickadate({ firstDay: 1 })
     strictEqual( $input.pickadate( 'picker' ).$root.find( '.' + $.fn.pickadate.defaults.klass.weekdays ).first().text(), $.fn.pickadate.defaults.weekdaysShort[1], 'Monday is first day' )
+
+    picker.set( 'select', [ 2013, 8, 14 ] )
+    ok( picker.$root.find( 'td' ).first().text() === '1', 'Months starting on Sunday shift back a week' )
 })
 
 test( 'Formats', function() {

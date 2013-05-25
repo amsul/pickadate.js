@@ -75,6 +75,24 @@ __*__ One and only one base stylesheet is **required**. [Choose a theme]({%= pkg
 The translations are copied into the `{%= dirs.dest.translations %}` folder. There are currently [{%= grunt.file.expand(dirs.min.translations + '/*.js').length %} languages]({%= pkg.repository.url.replace(/.git$/,'') %}/blob/v{%= pkg.version.split('-')[0] %}/lib/translations) included.
 
 
+
+
+<br>
+<a name="less-styling"></a>
+## Styling with LESS
+
+The picker themes are built using [LESS](http://lesscss.org/) with Grunt. To customize the CSS output, read the `_variables.less` file in the `{%= dirs.src.themes %}` folder. You can specify:
+
+- colors for the theme,
+- sizes for the picker,
+- media-query breakpoints,
+- and a whole bunch of other stuff.
+
+
+After making any changes, run `grunt less:themes` to compile it into CSS.
+
+
+
 <br>
 ## Versioning
 
@@ -119,23 +137,6 @@ Before contributing any code to the project, please take a look at the [Contribu
 
 
 Read the Gruntfile to see the build tasks and relative directories of the source files.
-
-
-
-
-<br>
-<a name="less-styling"></a>
-## Styling with LESS
-
-The picker themes are built using [LESS](http://lesscss.org/) with Grunt. To customize the CSS output, read the `_variables.less` file in the `{%= dirs.src.themes %}` folder. You can specify:
-
-- colors for the theme,
-- sizes for the picker,
-- media-query breakpoints,
-- and a whole bunch of other stuff.
-
-
-After making any changes, run `grunt less:themes` to compile it into CSS.
 
 
 
