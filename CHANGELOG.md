@@ -1,6 +1,11 @@
 
 # Changelog
 
+## v3.0.4
+
+- [#132](https://github.com/amsul/pickadate.js/issues/132): Fix for using `firstDay` with month starting on Sunday.
+- Improved disabled dates validation.
+
 ## v3.0.3
 
 - [#126](https://github.com/amsul/pickadate.js/issues/126): Fix for all dates disabled.
