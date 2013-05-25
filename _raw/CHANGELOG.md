@@ -1,6 +1,11 @@
 
 # Changelog
 
+## v3.0.4
+
+- [#132]({%= meta.gitrepo_url %}/issues/132): Fix for using `firstDay` with month starting on Sunday.
+- Improved disabled dates validation.
+
 ## v3.0.3
 
 - [#126]({%= meta.gitrepo_url %}/issues/126): Fix for all dates disabled.
