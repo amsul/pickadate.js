@@ -122,6 +122,9 @@ onClose: undefined,
 onSet: undefined,
 onStop: undefined,
 
+// <a href="#container">Container</a>
+container: undefined,
+
 // <a href="#classes">Classes</a>
 klass: {
 
@@ -535,6 +538,30 @@ $('.datepicker').pickadate({
 
         <p>Within scope of all six of these events, <code class="keyword">this</code> refers to <a href="api.htm">the picker</a>.</p>
         <p>The <code class="function">onSet</code> event is the only callback that is passed an <code>event</code> argument that provides a bit of context as to which properties are being “set”.</p>
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">container<a class="heading__anchor" name="container" href="#container">&sect;</a></span></h2>
+        <p>Customize the container element of the picker:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
+    container: '#my-container'
+})</code></pre>
+
+        <div id="my-container" class="container--demo"></div>
+
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__container" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
+
+        <p>By default, the picker is inserted just after the <code class="keyword">input</code> element.</p>
+        <p>The option <code class="function">container</code> allows you to insert the picker wherever you want in the page (the classic theme is used in this example).</p>
 
     </div> <!-- .section__block -->
 

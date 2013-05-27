@@ -200,6 +200,18 @@ $( '#date_demo__events' ).pickadate({
 
 
 
+/**
+ * Container
+ */
+$( '#date_demo__container' ).pickadate({
+    container: '#my-container',
+    onOpen: function() {
+        updateStylingLinks( 'classic' )
+    }
+})
+
+
+
 
 
 

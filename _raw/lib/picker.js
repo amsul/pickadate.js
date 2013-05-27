@@ -1,9 +1,9 @@
 
 /*!
- * {%= pkg.title %} v{%= pkg.version %}, {%= grunt.template.today("yyyy/mm/dd") %}
- * By {%= pkg.author.name %}, {%= pkg.author.url %}
- * Hosted on {%= pkg.homepage %}
- * Licensed under {%= pkg.licenses[0].type %}
+ * pickadate.js v3.1.0, 2013/05/27
+ * By Amsul, http://amsul.ca
+ * Hosted on http://amsul.github.io/pickadate.js
+ * Licensed under MIT
  */
 
 /*jshint
@@ -194,12 +194,18 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                     // If there’s a `data-value`, update the value of the element.
                     val( $ELEMENT.data( 'value' ) ? PickerConstructor._.trigger( P.component.formats.toString, P.component, [ SETTINGS.format, P.component.item.select ] ) : ELEMENT.value ).
 
-                    // Insert the root and hidden input after the element.
-                    after( P.$root, P._hidden ).
+                    // Insert the hidden input after the element.
+                    after( P._hidden ).
 
                     // Store the picker data by component name.
                     data( NAME, P )
 
+                // Append the root in the container if specified in the settings or after the element.
+                if ( SETTINGS.container ) {
+                    $( SETTINGS.container ).append( P.$root )
+                } else {
+                    $ELEMENT.after( P.$root )
+                }
 
                 // Bind the default component and settings events.
                 P.on({
