@@ -813,6 +813,37 @@ input[type=search] {
     width: 70%;
   }
 }
+.container--demo {
+  height: 15em;
+  margin-top: 0;
+  padding: 1em;
+  background: #f8faf9;
+  border: 1px solid #ededed;
+  border-top: 0;
+  -webkit-border-radius: 0 0 4px 4px;
+  -moz-border-radius: 0 0 4px 4px;
+  border-radius: 0 0 4px 4px;
+  padding-top: 30px;
+  position: relative;
+}
+.container--demo:before {
+  content: "Container";
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-family: Monaco, Consolas, "Liberation Mono", monospace;
+  font-weight: 500;
+  font-size: 10px;
+  line-height: 1;
+  background: #ffffff;
+  padding: 5px 6px 4px 6px;
+  color: #989a99;
+  border-right: 1px solid #ededed;
+  border-bottom: 1px solid #ededed;
+  -webkit-border-radius: 0 0 4px 0;
+  -moz-border-radius: 0 0 4px 0;
+  border-radius: 0 0 4px 0;
+}
 /* ==========================================================================
    $BUTTONS
    ========================================================================== */

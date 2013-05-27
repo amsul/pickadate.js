@@ -1,6 +1,10 @@
 
 # Changelog
 
+## v3.1.0
+
+- Added the "container" option.
+
 ## v3.0.4
 
 - [#132]({%= meta.gitrepo_url %}/issues/132): Fix for using `firstDay` with month starting on Sunday.
