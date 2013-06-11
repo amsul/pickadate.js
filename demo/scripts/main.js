@@ -88,6 +88,10 @@ $( '#date_demo__formats--b' ).pickadate({
     formatSubmit: 'yyyy/mm/dd'
 })
 
+$( '#date_demo__formats--c' ).pickadate({
+    formatShortYear: 2000,
+    formatSubmit: 'yy/mm/dd'
+})
 
 
 /**
@@ -100,7 +104,6 @@ $( '#date_demo__selectors--a' ).pickadate({
 $( '#date_demo__selectors--b' ).pickadate({
     selectYears: 4
 })
-
 
 
 /**

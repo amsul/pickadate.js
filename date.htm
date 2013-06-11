@@ -97,6 +97,7 @@ clear: 'Clear',
 
 // <a href="#formats">Formats</a>
 format: 'd mmmm, yyyy',
+formatShortYear: undefined,
 formatSubmit: undefined,
 hiddenSuffix: '_submit',
 
@@ -357,7 +358,14 @@ $('.datepicker').pickadate({
         </table>
 
         <div class="section__block section__block--notification">
-            <p><b>*</b> Avoid using the <code>yy</code> format within <code>formatSubmit</code> because it leads to assumptions that could parse inaccurately.</p>
+            <p><b>*</b> If you want to use the <code>yy</code> format in the <code>formatSubmit</code> attribute, the datepicker will asume this year belongs the 20th Century. If you want to 
+            change this asumption, you can change the <code>formatShortYear</code> attribute.</p>
+
+            <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
+    formatShortYear: 2000,
+    formatSubmit: 'yy/mm/dd'
+})</code></pre>
+            <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__formats--c" class="fieldset__input " name=date_demo__formats type=text data-value="13/04/20" placeholder="Try me&hellip;"></div></fieldset>           
         </div>
 
     </div> <!-- .section__block -->
