@@ -6,7 +6,7 @@ The mobile-friendly, responsive, and lightweight jQuery date & time input picker
 
 #### To get started, check out the:
 
-[Homepage](http://amsul.github.io/pickadate.js) - [Date picker](http://amsul.github.io/pickadate.js/date.htm) - [Time picker](http://amsul.github.io/pickadate.js/time.htm) - [API]({http://amsul.github.io/pickadate.js/api.htm)
+[Homepage](http://amsul.github.io/pickadate.js) - [Date picker](http://amsul.github.io/pickadate.js/date.htm) - [Time picker](http://amsul.github.io/pickadate.js/time.htm) - [API](http://amsul.github.io/pickadate.js/api.htm)
 
 
 #### To get it:
