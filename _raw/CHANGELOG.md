@@ -1,6 +1,11 @@
 
 # Changelog
 
+## v3.0.5
+
+- [#145]({%= meta.gitrepo_url %}/issues/145): Fix for `getFirstWordLength` not being defined.
+- [#137]({%= meta.gitrepo_url %}/issues/137): Corrected Norwegian translation.
+
 ## v3.0.4
 
 - [#132]({%= meta.gitrepo_url %}/issues/132): Fix for using `firstDay` with month starting on Sunday.
