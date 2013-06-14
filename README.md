@@ -1,4 +1,4 @@
-# pickadate v3.0.4 [![pickadate build status](https://travis-ci.org/amsul/pickadate.js.png?branch=gh-pages)](https://travis-ci.org/amsul/pickadate.js)
+# pickadate v3.0.5 [![pickadate build status](https://travis-ci.org/amsul/pickadate.js.png?branch=gh-pages)](https://travis-ci.org/amsul/pickadate.js)
 
 The mobile-friendly, responsive, and lightweight jQuery date & time input picker.
 
@@ -6,12 +6,12 @@ The mobile-friendly, responsive, and lightweight jQuery date & time input picker
 
 #### To get started, check out the:
 
-[Homepage](http://amsul.github.io/pickadate.js) - [Date picker](http://amsul.github.io/pickadate.js/date.htm) - [Time picker](http://amsul.github.io/pickadate.js/time.htm) - [API]({http://amsul.github.io/pickadate.js/api.htm)
+[Homepage](http://amsul.github.io/pickadate.js) - [Date picker](http://amsul.github.io/pickadate.js/date.htm) - [Time picker](http://amsul.github.io/pickadate.js/time.htm) - [API](http://amsul.github.io/pickadate.js/api.htm)
 
 
 #### To get it:
 
-[Download v3.0.4](https://github.com/amsul/pickadate.js/archive/3.0.4.zip) or `git clone git://github.com/amsul/pickadate.js.git` or `bower install pickadate`
+[Download v3.0.5](https://github.com/amsul/pickadate.js/archive/3.0.5.zip) or `git clone git://github.com/amsul/pickadate.js.git` or `bower install pickadate`
 
 
 
@@ -37,7 +37,7 @@ There are currently two pickers: **date** and **time**.
 File                    | Contents                 | Size (min & gzip)
 ----------------------- | ------------------------ | ----------------------
 `picker.js`             | __Base *__               | 1.26kb
-`picker.date.js`        | Date picker              | 1.89kb
+`picker.date.js`        | Date picker              | 1.90kb
 `picker.time.js`        | Time picker              | 1.30kb
 
 __*__ The base script is **required** for any of the pickers to function.
@@ -62,7 +62,7 @@ __*__ One and only one base stylesheet is **required**. [Choose a theme](http://
 
 ### Translations
 
-The translations are copied into the `lib/translations` folder. There are currently [30 languages](https://github.com/amsul/pickadate.js/blob/v3.0.4/lib/translations) included.
+The translations are copied into the `lib/translations` folder. There are currently [30 languages](https://github.com/amsul/pickadate.js/blob/v3.0.5/lib/translations) included.
 
 
 
@@ -80,6 +80,20 @@ The picker themes are built using [LESS](http://lesscss.org/) with Grunt. To cus
 
 
 After making any changes, run `grunt less:themes` to compile it into CSS.
+
+
+
+
+<br>
+## Building with Grunt
+
+[Grunt](http://gruntjs.com/) `~0.4.1` is used to build the project files. To get started, clone the project and then run:
+
+- `npm install` to get the required node modules.
+- `grunt --verbose` to confirm you have all the dependencies.
+
+
+Read the Gruntfile to see the build tasks and relative directories of the source files.
 
 
 
@@ -113,20 +127,6 @@ Before opening a new issue, please search the existing [Issues](https://github.c
 ## Contributing
 
 Before contributing any code to the project, please take a look at the [Contributing](https://github.com/amsul/pickadate.js/blob/gh-pages/CONTRIBUTING.md) guide.
-
-
-
-
-<br>
-## Building with Grunt
-
-[Grunt](http://gruntjs.com/) `~0.4.1` is used to build the project files. To get started, clone the project and then run:
-
-- `npm install` to get the required node modules.
-- `grunt --verbose` to confirm you have all the dependencies.
-
-
-Read the Gruntfile to see the build tasks and relative directories of the source files.
 
 
 

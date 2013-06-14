@@ -16,7 +16,7 @@
 
 #### To get started, check out the:
 
-[Homepage]({%= pkg.homepage %}) - [Date picker]({%= pkg.homepage %}/date.htm) - [Time picker]({%= pkg.homepage %}/time.htm) - [API]({{%= pkg.homepage %}/api.htm)
+[Homepage]({%= pkg.homepage %}) - [Date picker]({%= pkg.homepage %}/date.htm) - [Time picker]({%= pkg.homepage %}/time.htm) - [API]({%= pkg.homepage %}/api.htm)
 
 
 #### To get it:
@@ -93,6 +93,20 @@ After making any changes, run `grunt less:themes` to compile it into CSS.
 
 
 
+
+<br>
+## Building with Grunt
+
+[Grunt](http://gruntjs.com/) `~{%= grunt.version %}` is used to build the project files. To get started, clone the project and then run:
+
+- `npm install` to get the required node modules.
+- `grunt --verbose` to confirm you have all the dependencies.
+
+
+Read the Gruntfile to see the build tasks and relative directories of the source files.
+
+
+
 <br>
 ## Versioning
 
@@ -123,20 +137,6 @@ Before opening a new issue, please search the existing [Issues]({%= pkg.bugs %})
 ## Contributing
 
 Before contributing any code to the project, please take a look at the [Contributing]({%= meta.gitrepo_url %}/blob/gh-pages/CONTRIBUTING.md) guide.
-
-
-
-
-<br>
-## Building with Grunt
-
-[Grunt](http://gruntjs.com/) `~{%= grunt.version %}` is used to build the project files. To get started, clone the project and then run:
-
-- `npm install` to get the required node modules.
-- `grunt --verbose` to confirm you have all the dependencies.
-
-
-Read the Gruntfile to see the build tasks and relative directories of the source files.
 
 
 
