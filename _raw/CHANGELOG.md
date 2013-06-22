@@ -1,6 +1,12 @@
 
 # Changelog
 
+## 3.1.0
+
+- [#140]({%= meta.gitrepo_url %}/issues/145): Fix for freezing with unexpected date format.
+- [#154]({%= meta.gitrepo_url %}/issues/145): Fix for “mm” and “m” formats opening with incorrect month.
+- Border styling adjusted for disabled times.
+
 ## v3.0.5
 
 - [#145]({%= meta.gitrepo_url %}/issues/145): Fix for `getFirstWordLength` not being defined.
