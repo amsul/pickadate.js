@@ -3,8 +3,8 @@
 
 ## 3.1.0
 
-- [#140](https://github.com/amsul/pickadate.js/issues/145): Fix for freezing with unexpected date format.
-- [#154](https://github.com/amsul/pickadate.js/issues/145): Fix for “mm” and “m” formats opening with incorrect month.
+- [#140](https://github.com/amsul/pickadate.js/issues/140): Fix for freezing with unexpected date format.
+- [#154](https://github.com/amsul/pickadate.js/issues/154): Fix for “mm” and “m” formats opening with incorrect month.
 - Border styling adjusted for disabled times.
 
 ## v3.0.5
