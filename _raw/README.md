@@ -72,7 +72,7 @@ __*__ One and only one base stylesheet is **required**. [Choose a theme]({%= pkg
 
 ### Translations
 
-The translations are copied into the `{%= dirs.dest.translations %}` folder. There are currently [{%= grunt.file.expand(dirs.min.translations + '/*.js').length %} languages]({%= pkg.repository.url.replace(/.git$/,'') %}/blob/v{%= pkg.version.split('-')[0] %}/lib/translations) included.
+The translations are copied into the `{%= dirs.dest.translations %}` folder. There are currently [{%= grunt.file.expand(dirs.min.translations + '/*.js').length %} languages]({%= pkg.repository.url.replace(/.git$/,'') %}/blob/{%= pkg.version.split('-')[0] %}/lib/translations) included.
 
 
 
