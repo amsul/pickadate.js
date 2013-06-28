@@ -1,6 +1,12 @@
 
 # Changelog
 
+## 3.1.1
+
+- [#161]({%= meta.gitrepo_url %}/issues/161): Corrected “no-drop” cursor on input element for certain browsers.
+- [#158]({%= meta.gitrepo_url %}/issues/158): Fixed CSS for disabled dates with unfocused input.
+- [#155]({%= meta.gitrepo_url %}/issues/155): Corrected unescaped translations.
+
 ## 3.1.0
 
 - [#140]({%= meta.gitrepo_url %}/issues/140): Fix for freezing with unexpected date format.
