@@ -7,6 +7,6 @@ $.extend( $.fn.pickadate.defaults, {
     weekdaysShort: [ 'dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab' ],
     today: 'hoje',
     clear: 'excluir',
-    format: 'dddd, d de mmmm de yyyy',
+    format: 'dddd, d !de mmmm !de yyyy',
     formatSubmit: 'yyyy/mm/dd'
 });

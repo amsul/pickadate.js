@@ -8,6 +8,6 @@ $.extend( $.fn.pickadate.defaults, {
     today: 'avui',
     clear: 'esborrar',
     firstDay: 1,
-    format: 'dddd d de mmmm de yyyy',
+    format: 'dddd d !de mmmm !de yyyy',
     formatSubmit: 'yyyy/mm/dd'
 });
