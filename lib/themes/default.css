@@ -50,6 +50,12 @@
   z-index: 10000;
 }
 /**
+ * The picker input element.
+ */
+.picker__input {
+  cursor: default;
+}
+/**
  * When the picker is opened, the input element is “activated”.
  */
 .picker__input.picker__input--active {
