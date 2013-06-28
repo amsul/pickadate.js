@@ -227,15 +227,15 @@
   background: #0089ec;
   color: #ffffff;
 }
-.picker__day--disabled:hover,
-.picker--focused .picker__day--disabled {
+.picker__day--disabled,
+.picker__day--disabled:hover {
   background: #f5f5f5;
   border-color: #f5f5f5;
   color: #dddddd;
   cursor: default;
 }
-.picker__day--highlighted.picker__day--disabled:hover,
-.picker--focused .picker__day--highlighted.picker__day--disabled {
+.picker__day--highlighted.picker__day--disabled,
+.picker__day--highlighted.picker__day--disabled:hover {
   background: #bbbbbb;
 }
 /**
