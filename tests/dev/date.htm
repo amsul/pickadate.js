@@ -41,7 +41,7 @@
         <form>
             <fieldset>
                 <h3><label for="input_01">Pick a date. Go ahead...</label></h3>
-                <input id="input_01" class="datepicker" name="date" type="date" value="21 July 2013" data-valuee="2013-07-21">
+                <input id="input_01" class="datepicker" name="date" type="date" valuee="21 July 2013" data-valuee="2013-07-21" autofocus>
                 <br><br><br><br><br>
                 <input class="button" type="submit" value="open">
             </fieldset>
@@ -66,22 +66,15 @@
     <script type="text/javascript">
 
         var $input = $( '.datepicker' ).pickadate({
+            disable: [ true, [2013,3,1], [2013,6,1] ]
             // format: 'dd mmmm yyyy',
             // formatSubmit: 'yyyy-mm-dd',
             // hiddenSuffix: '-submit',
-            clear: '',
-            min: new Date(),
-            selectMonths: true,
-            format: 'mmmm dd, yyyy',
+            // clear: '',
+            // min: new Date(),
+            // selectMonths: true,
+            // format: 'mmmm dd, yyyy',
         })//,
-        // picker = $input.pickadate('picker').on({
-        //     open: function() {
-        //         console.log( 'hi' )
-        //     },
-        //     close: function() {
-        //         console.log( 'bye' )
-        //     }
-        // })
 
         // $('.datepickerr').focus( function() {
         //     picker.open(false)
