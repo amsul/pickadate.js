@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 3.1.2
+
+- [#168]({%= meta.gitrepo_url %}/issues/168): Fixed month navigation with disabled dates.
+
 ## 3.1.1
 
 - [#161]({%= meta.gitrepo_url %}/issues/161): Corrected “no-drop” cursor on input element for certain browsers.

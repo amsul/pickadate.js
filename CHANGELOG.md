@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 3.1.2
+
+- [#168](https://github.com/amsul/pickadate.js/issues/168): Fixed month navigation with disabled dates.
+
 ## 3.1.1
 
 - [#161](https://github.com/amsul/pickadate.js/issues/161): Corrected “no-drop” cursor on input element for certain browsers.
