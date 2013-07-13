@@ -185,7 +185,7 @@ klass: {
     <div class="section__block section__block--scoped">
 
         <h2 class="heading heading--divide"><span class="heading__text">Translations<a class="heading__anchor" name="translations" href="#translations">&sect;</a></span></h2>
-        <p>The picker can be extended to add support for internationalization. There are translations available for <a href="{%= pkg.repository.url.replace(/.git$/,'') %}/blob/v3.0.0/lib/translations">{%= grunt.file.expand( dirs.min.translations + '/*.js' ).length %} languages</a> which you can include in one of two ways:</p>
+        <p>The picker can be extended to add support for internationalization. There are translations available for <a href="{%= pkg.repository.url.replace(/.git$/,'') %}/blob/{%= pkg.version %}/lib/translations">{%= grunt.file.expand( dirs.min.translations + '/*.js' ).length %} languages</a> which you can include in one of two ways:</p>
 
         <pre class="pre--demo"><code data-language="javascript">// Extend the default picker options for <u>all instances</u>.
 $.extend($.fn.pickadate.defaults, {

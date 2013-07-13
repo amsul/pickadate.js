@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 3.1.3
+
+- Korean translations added.
+
 ## 3.1.2
 
 - [#168]({%= meta.gitrepo_url %}/issues/168): Fixed month navigation with disabled dates.
