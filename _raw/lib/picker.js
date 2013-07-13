@@ -1,6 +1,6 @@
 
 /*!
- * {%= pkg.title %} v{%= pkg.version %}, {%= grunt.template.today("yyyy/mm/dd") %}
+ * {%= pkg.title %} v{%= pkg.version %}, {%= grunt.template.today("yyyy/mm/dd") %}
  * By {%= pkg.author.name %}, {%= pkg.author.url %}
  * Hosted on {%= pkg.homepage %}
  * Licensed under {%= pkg.licenses[0].type %}
@@ -87,7 +87,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
 
 
                 // Create a new picker component with the settings.
-                P.component = new COMPONENT( P, SETTINGS )
+                P.component = new COMPONENT( P, SETTINGS )
 
 
                 // Create the picker root with a new wrapped holder and bind the events.
@@ -147,7 +147,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                 // If there’s a format for the hidden input element, create the element
                 // using the name of the original input plus suffix. Otherwise set it to null.
                 // If the element has a value, use either the `data-value` or `value`.
-                P._hidden = SETTINGS.formatSubmit ? $( '<input type=hidden name=' + ELEMENT.name + ( SETTINGS.hiddenSuffix || '_submit' ) + ( $ELEMENT.data( 'value' ) ? ' value="' + PickerConstructor._.trigger( P.component.formats.toString, P.component, [ SETTINGS.formatSubmit, P.component.item.select ] ) + '"' : '' ) + '>' )[ 0 ] : undefined
+                P._hidden = SETTINGS.formatSubmit ? $( '<input type=hidden name=' + ELEMENT.name + ( SETTINGS.hiddenSuffix || '_submit' ) + ( $ELEMENT.data( 'value' ) ? ' value="' + PickerConstructor._.trigger( P.component.formats.toString, P.component, [ SETTINGS.formatSubmit, P.component.item.select ] ) + '"' : '' ) + '>' )[ 0 ] : undefined
 
 
                 // Add the class and bind the events on the element.
@@ -186,7 +186,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
 
                             // If `delete` was pressed, clear the values and close the picker.
                             // Otherwise open the picker.
-                            if ( isKeycodeDelete ) { P.clear().close() }
+                            if ( isKeycodeDelete ) { P.clear().close() }
                             else { P.open() }
                         }
                     }).
@@ -255,7 +255,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                 P.close()
 
                 // Remove the hidden field.
-                if ( P._hidden ) {
+                if ( P._hidden ) {
                     P._hidden.parentNode.removeChild( P._hidden )
                 }
 

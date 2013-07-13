@@ -227,7 +227,7 @@ DatePicker.prototype.navigate = function( type, value, options ) {
 
     if ( Picker._.isObject( value ) ) {
 
-        var targetDateObject = new Date( value.year, value.month + ( options && options.nav ? options.nav : 0 ), 1 ),
+        var targetDateObject = new Date( value.year, value.month + ( options && options.nav ? options.nav : 0 ), 1 ),
             year = targetDateObject.getFullYear(),
             month = targetDateObject.getMonth(),
             date = value.date
@@ -331,10 +331,10 @@ DatePicker.prototype.validate = function( type, dateObject, options ) {
     // [3] Out of range.
     //
     // Cases to **not** validate for:
-    // • Navigating months.
+    // • Navigating months.
     // • Not inverted and date enabled.
     // • Inverted and all dates disabled.
-    // • ..and anything else.
+    // • ..and anything else.
     if ( !options.nav ) if (
         /* 1 */ ( !isInverted && calendar.disabled( dateObject ) ) ||
         /* 2 */ ( isInverted && calendar.disabled( dateObject ) && ( hasEnabledWeekdays || hasEnabledBeforeTarget || hasEnabledAfterTarget ) ) ||
@@ -427,7 +427,7 @@ DatePicker.prototype.parse = function( type, value, options ) {
     var calendar = this,
         parsingObject = {}
 
-    if ( !value || Picker._.isInteger( value ) || Array.isArray( value ) || Picker._.isDate( value ) || Picker._.isObject( value ) && Picker._.isInteger( value.pick ) ) {
+    if ( !value || Picker._.isInteger( value ) || Array.isArray( value ) || Picker._.isDate( value ) || Picker._.isObject( value ) && Picker._.isInteger( value.pick ) ) {
         return value
     }
 
@@ -773,7 +773,7 @@ DatePicker.prototype.nodes = function( isOpen ) {
                     highestYear = maxYear
                 }
 
-                return Picker._.node( 'select', Picker._.group({
+                return Picker._.node( 'select', Picker._.group({
                     min: lowestYear,
                     max: highestYear,
                     i: 1,

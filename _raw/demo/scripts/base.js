@@ -238,7 +238,7 @@ $( '#time_demo__formats--a' ).pickatime({
     formatLabel: '<b>h</b>:i <!i>a</!i>',
     formatSubmit: 'HH:i',
     hiddenSuffix: '--submit',
-    onSet: function( event ) {
+    onSet: function( event ) {
         if ( event.select ) {
             this.$node.
                 closest( '.js__fieldset' ).
