@@ -304,7 +304,7 @@ picker.stop()</code></pre>
     hour: {%= ~~(now/60) %},
 
     // The minutes of the hour from 0 to 59 (based on the interval).
-    mins: {%= 30 + (now/60%1) * 60 %},
+    mins: {%= ( 30 + (now/60%1) * 60 ) % 60 %},
 
     // The “pick” value used for comparisons.
     pick: {%= 30 + now %}

@@ -3,8 +3,9 @@
 
 ## 3.1.4
 
-- Polish translation fix.
+- Fix for Polish translation.
 - Added a `container` option to specify the picker root element’s outlet.
+- Fix for `$` conflict in translation files.
 
 ## 3.1.3
 
