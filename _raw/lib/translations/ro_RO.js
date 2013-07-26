@@ -1,6 +1,6 @@
 // Romanian
 
-$.extend( $.fn.pickadate.defaults, {
+jQuery.extend( jQuery.fn.pickadate.defaults, {
     monthsFull: [ 'ianuarie', 'februarie', 'martie', 'aprilie', 'mai', 'iunie', 'iulie', 'august', 'septembrie', 'octombrie', 'noiembrie', 'decembrie' ],
     monthsShort: [ 'ian', 'feb', 'mar', 'apr', 'mai', 'iun', 'iul', 'aug', 'sep', 'oct', 'noi', 'dec' ],
     weekdaysFull: [ 'duminică', 'luni', 'marţi', 'miercuri', 'joi', 'vineri', 'sâmbătă' ],

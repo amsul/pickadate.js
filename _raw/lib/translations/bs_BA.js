@@ -1,6 +1,6 @@
 // Bosnian
 
-$.extend( $.fn.pickadate.defaults, {
+jQuery.extend( jQuery.fn.pickadate.defaults, {
     monthsFull: [ 'januar', 'februar', 'mart', 'april', 'maj', 'juni', 'juli', 'august', 'septembar', 'oktobar', 'novembar', 'decembar' ],
     monthsShort: [ 'jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec' ],
     weekdaysFull: [ 'nedjelja', 'ponedjeljak', 'utorak', 'srijeda', 'cetvrtak', 'petak', 'subota' ],

@@ -1,6 +1,6 @@
 // Slovak
 
-$.extend( $.fn.pickadate.defaults, {
+jQuery.extend( jQuery.fn.pickadate.defaults, {
     monthsFull: [ 'január', 'február', 'marec', 'apríl', 'máj', 'jún', 'júl', 'august', 'september', 'október', 'november', 'december' ],
     monthsShort: [ 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII' ],
     weekdaysFull: [ 'nedeļľa', 'pondelok', 'utorok', 'streda', 'š̌švrtok', 'piatok', 'sobota' ],

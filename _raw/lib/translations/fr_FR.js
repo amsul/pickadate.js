@@ -1,6 +1,6 @@
 // French
 
-$.extend( $.fn.pickadate.defaults, {
+jQuery.extend( jQuery.fn.pickadate.defaults, {
     monthsFull: [ 'janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre' ],
     monthsShort: [ 'jan', 'fev', 'mar', 'avr', 'mai', 'juin', 'juil', 'aou', 'sep', 'oct', 'nov', 'dec' ],
     weekdaysFull: [ 'dimanche', 'lundi', 'mardy', 'mercredi', 'jeudi', 'vendredi', 'samedi' ],
