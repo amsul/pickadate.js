@@ -1134,6 +1134,11 @@ input[type=search] {
     transition: all linear 0.15s;
   }
 }
+@media (min-width: 46.25em) {
+  .page-target .page-target__reveal {
+    max-height: 7em;
+  }
+}
 @media (max-width: 46.25em) {
   .page-target:target .page-target__reveal {
     max-height: 7em;

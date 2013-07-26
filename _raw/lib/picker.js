@@ -194,11 +194,16 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                     // If there’s a `data-value`, update the value of the element.
                     val( $ELEMENT.data( 'value' ) ? PickerConstructor._.trigger( P.component.formats.toString, P.component, [ SETTINGS.format, P.component.item.select ] ) : ELEMENT.value ).
 
-                    // Insert the root and hidden input after the element.
-                    after( P.$root, P._hidden ).
+                    // Insert the hidden input after the element.
+                    after( P._hidden ).
 
                     // Store the picker data by component name.
                     data( NAME, P )
+
+
+                // Insert the root as specified in the settings.
+                if ( SETTINGS.container ) $( SETTINGS.container ).append( P.$root )
+                else $ELEMENT.after( P.$root )
 
 
                 // Bind the default component and settings events.

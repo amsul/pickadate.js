@@ -71,8 +71,8 @@
         <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="" class="fieldset__input js__datepicker" type=text placeholder="Try me&hellip;"></div></fieldset>
 
         <div class="section__block section__block--notification">
-            <p>Along with v3, the v2 options and API have effectively been deprecated. Read up on the <a href="https://github.com/amsul/pickadate.js/blob/v3.0.0/CHANGELOG.md">full changelog here</a>.</p>
-            <p>One of the most critical changes is that the “month” used to create dates, just as in JavaScript’s native Date object, now has <a href="https://github.com/amsul/pickadate.js/blob/v3.0.0/CHANGELOG.md#zero-as-index">zero-as-index</a>.</p>
+            <p>Along with v3, the v2 options and API have effectively been deprecated. Read up on the <a href="https://github.com/amsul/pickadate.js/blob/3.1.4/CHANGELOG.md">full changelog here</a>.</p>
+            <p>One of the most critical changes is that the “month” used to create dates, just as in JavaScript’s native Date object, now has <a href="https://github.com/amsul/pickadate.js/blob/3.1.4/CHANGELOG.md#zero-as-index">zero-as-index</a>.</p>
         </div>
 
     </div> <!-- .section__block -->
@@ -113,6 +113,9 @@ max: undefined,
 
 // <a href="#disable-dates">Disable dates</a>
 disable: undefined,
+
+// <a href="#container">Root container</a>
+container: undefined,
 
 // <a href="#events">Events</a>
 onStart: undefined,
@@ -234,7 +237,7 @@ klass: {
     <div class="section__block section__block--scoped">
 
         <h2 class="heading heading--divide"><span class="heading__text">Translations<a class="heading__anchor" name="translations" href="#translations">&sect;</a></span></h2>
-        <p>The picker can be extended to add support for internationalization. There are translations available for <a href="https://github.com/amsul/pickadate.js/blob/3.1.3/lib/translations">31 languages</a> which you can include in one of two ways:</p>
+        <p>The picker can be extended to add support for internationalization. There are translations available for <a href="https://github.com/amsul/pickadate.js/blob/3.1.4/lib/translations">31 languages</a> which you can include in one of two ways:</p>
 
         <pre class="pre--demo"><code data-language="javascript">// Extend the default picker options for <u>all instances</u>.
 $.extend($.fn.pickadate.defaults, {
@@ -496,6 +499,29 @@ $('.datepicker').pickadate({
 })</code></pre>
 
         <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__disable-dates--c" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">container<a class="heading__anchor" name="container" href="#container">&sect;</a></span></h2>
+        <p>Specify where to insert the picker’s root element by passing any valid CSS selector to this option:</p>
+
+        <div id="root-outlet" style="position:relative"></div>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
+    container: '#root-outlet'
+})</code></pre>
+
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__container" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
+
+        <p>By default, the picker root is inserted right after the <code class="keyword">input</code> element.</p>
 
     </div> <!-- .section__block -->
 

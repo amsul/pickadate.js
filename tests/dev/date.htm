@@ -55,6 +55,8 @@
         <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
         <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
+        <div class="outlet"></div>
+
     </section>
 
 
@@ -66,7 +68,8 @@
     <script type="text/javascript">
 
         var $input = $( '.datepicker' ).pickadate({
-            disable: [ true, [2013,3,1], [2013,6,1] ]
+            container: '.outlet',
+            // disable: [ true, [2013,3,1], [2013,6,1] ]
             // format: 'dd mmmm yyyy',
             // formatSubmit: 'yyyy-mm-dd',
             // hiddenSuffix: '-submit',

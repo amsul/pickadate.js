@@ -1,4 +1,4 @@
-# pickadate v3.1.3 [![pickadate build status](https://travis-ci.org/amsul/pickadate.js.png?branch=gh-pages)](https://travis-ci.org/amsul/pickadate.js)
+# pickadate v3.1.4 [![pickadate build status](https://travis-ci.org/amsul/pickadate.js.png?branch=gh-pages)](https://travis-ci.org/amsul/pickadate.js)
 
 The mobile-friendly, responsive, and lightweight jQuery date & time input picker.
 
@@ -11,7 +11,7 @@ The mobile-friendly, responsive, and lightweight jQuery date & time input picker
 
 #### To get it:
 
-[Download v3.1.3](https://github.com/amsul/pickadate.js/archive/3.1.3.zip) or `git clone git://github.com/amsul/pickadate.js.git` or `bower install pickadate`
+[Download v3.1.4](https://github.com/amsul/pickadate.js/archive/3.1.4.zip) or `git clone git://github.com/amsul/pickadate.js.git` or `bower install pickadate`
 
 
 
@@ -36,8 +36,8 @@ There are currently two pickers: **date** and **time**.
 
 File                    | Contents                 | Size (min & gzip)
 ----------------------- | ------------------------ | ----------------------
-`picker.js`             | __Base *__               | 1.26kb
-`picker.date.js`        | Date picker              | 1.94kb
+`picker.js`             | __Base *__               | 1.28kb
+`picker.date.js`        | Date picker              | 1.93kb
 `picker.time.js`        | Time picker              | 1.30kb
 
 __*__ The base script is **required** for any of the pickers to function.
@@ -62,7 +62,7 @@ __*__ One and only one base stylesheet is **required**. [Choose a theme](http://
 
 ### Translations
 
-The translations are copied into the `lib/translations` folder. There are currently [31 languages](https://github.com/amsul/pickadate.js/blob/3.1.3/lib/translations) included.
+The translations are copied into the `lib/translations` folder. There are currently [31 languages](https://github.com/amsul/pickadate.js/blob/3.1.4/lib/translations) included.
 
 
 

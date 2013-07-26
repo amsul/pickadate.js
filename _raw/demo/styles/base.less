@@ -796,6 +796,11 @@ input[type=search] {
         .transition( @smooth-fast );
     }
 }
+.page-target .page-target__reveal {
+    @media ( min-width: @breakpoint-medium ) {
+        max-height: 7em;
+    }
+}
 .page-target:target .page-target__reveal {
     @media ( max-width: @breakpoint-medium ) {
         max-height: 7em;

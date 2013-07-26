@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 3.1.4
+
+- Polish translation fix.
+- Added a `container` option to specify the picker root element’s outlet.
+
 ## 3.1.3
 
 - Korean translations added.

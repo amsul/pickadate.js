@@ -65,6 +65,9 @@ max: undefined,
 // <a href="#disable-dates">Disable dates</a>
 disable: undefined,
 
+// <a href="#container">Root container</a>
+container: undefined,
+
 // <a href="#events">Events</a>
 onStart: undefined,
 onRender: undefined,
@@ -447,6 +450,29 @@ $('.datepicker').pickadate({
 })</code></pre>
 
         {%= dateDemoField({ id: 'date_demo__disable-dates--c' }) %}
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">container<a class="heading__anchor" name="container" href="#container">&sect;</a></span></h2>
+        <p>Specify where to insert the picker’s root element by passing any valid CSS selector to this option:</p>
+
+        <div id="root-outlet" style="position:relative"></div>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
+    container: '#root-outlet'
+})</code></pre>
+
+        {%= dateDemoField({ id: 'date_demo__container' }) %}
+
+        <p>By default, the picker root is inserted right after the <code class="keyword">input</code> element.</p>
 
     </div> <!-- .section__block -->
 

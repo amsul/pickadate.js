@@ -48,6 +48,9 @@ max: undefined,
 // <a href="#disable-times">Disable times</a>
 disable: undefined,
 
+// <a href="#container">Root container</a>
+container: undefined,
+
 // <a href="#events">Events</a>
 onStart: undefined,
 onRender: undefined,
@@ -329,6 +332,29 @@ klass: {
 })</code></pre>
 
         {%= timeDemoField({ id: 'time_demo__disable-times--c' }) %}
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">container<a class="heading__anchor" name="container" href="#container">&sect;</a></span></h2>
+        <p>Specify where to insert the picker’s root element by passing any valid CSS selector to this option:</p>
+
+        <div id="root-outlet" style="position:relative"></div>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.timepicker').pickatime({
+    container: '#root-outlet'
+})</code></pre>
+
+        {%= timeDemoField({ id: 'time_demo__container' }) %}
+
+        <p>By default, the picker root is inserted right after the <code class="keyword">input</code> element.</p>
 
     </div> <!-- .section__block -->
 

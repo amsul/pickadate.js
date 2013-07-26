@@ -175,7 +175,16 @@ $( '#date_demo__disable-dates--c' ).pickadate({
 
 
 /**
- * Disable dates
+ * Outlet container
+ */
+$( '#date_demo__container' ).pickadate({
+    container: '#root-outlet'
+})
+
+
+
+/**
+ * Date picker events
  */
 $( '#date_demo__events' ).pickadate({
     onStart: function() {
@@ -326,7 +335,16 @@ $( '#time_demo__disable-times--c' ).pickatime({
 
 
 /**
- * Disable times
+ * Outlet container
+ */
+$( '#time_demo__container' ).pickatime({
+    container: '#root-outlet'
+})
+
+
+
+/**
+ * Time picker events
  */
 $( '#time_demo__events' ).pickatime({
     onStart: function() {
