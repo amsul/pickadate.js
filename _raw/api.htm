@@ -277,7 +277,7 @@ picker.stop()</code></pre>
 
         <p>Each “date” or “time” within the picker has an item object accompanying it behind the scenes.</p>
 
-        <p>Here’s a <b>date picker item object</b> for <u>{%= grunt.template.date('d mmmm, yyyy') %}</u>:</p>
+        <p>Here’s a <b>date picker item object</b> for <u>{%= grunt.template.date( today.getTime(), 'd mmmm, yyyy') %}</u>:</p>
         <pre><code data-language="javascript">{
     // The full year.
     year: {%= today.getFullYear() %},
