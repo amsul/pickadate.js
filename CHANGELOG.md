@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 3.2.0
+
+- [#178](https://github.com/amsul/pickadate.js/issues/178): Fix for flicker on iOS while changing months.
+- Added `render(true)` option to render full picker or just the “face” ([read more](http://amsul.github.io/pickadate.js/api.htm#method-render)).
+
 ## 3.1.4
 
 - Fix for Polish translation.

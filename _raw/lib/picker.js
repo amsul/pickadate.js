@@ -236,12 +236,13 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
 
 
             /**
-             * Render a new picker within the root
+             * Render a new picker
              */
-            render: function() {
+            render: function( entireComponent ) {
 
-                // Insert a new component holder in the root.
-                P.$root.html( createWrappedComponent() )
+                // Insert a new component holder in the root or box.
+                if ( entireComponent ) P.$root.html( createWrappedComponent() )
+                else P.$root.find( '.' + CLASSES.box ).html( P.component.nodes( STATE.open ) )
 
                 // Trigger the queued “render” events.
                 return P.trigger( 'render' )
