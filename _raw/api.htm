@@ -164,8 +164,8 @@ event.stopPropagation()</code></pre>
         <h3 class="heading heading--divide"><span class="heading__text">Open without focus<a class="heading__anchor" name="method-open-focus" href="#method-open-focus">&sect;</a></span></h3>
 
         <p>Open the picker without focusing onto the <code class="tag-name">input</code> element by passing <code class="constant">false</code> as the first argument. Opening the picker this way, there’s a couple of things to note:</p>
-        <p><b>(1)</b> The only way to close it is with a separate custom binding – in this example, on document click.</p>
-        <p><b>(2)</b> <a href="#method-on">The “opening” events</a> are still triggered – however, using <a href="#method-get">the <code>get</code> method</a> to see if the picker is open will return <code class="constant">false</code>.</p>
+        <p><b>(1)</b> The only way to close it is with a separate custom binding – in this example, on document click.</p>
+        <p><b>(2)</b> <a href="#method-on">The “opening” events</a> are still triggered – however, using <a href="#method-get">the <code>get</code> method</a> to see if the picker is open will return <code class="constant">false</code>.</p>
         <p>If any of the picker elements is focused/clicked, it resumes normal behavior.</p>
 
         <pre class="pre--demo"><code data-language="javascript">picker.open(false)
@@ -905,7 +905,7 @@ picker.set('max', false)</code></pre>
     <div class="section__block section__block--scoped">
 
         <h3 class="heading heading--divide"><span class="heading__text">Scope and Arguments<a class="heading__anchor--bigger" name="method-on-scope-arguments" href="#method-on-scope-arguments">&sect;</a></span></h3>
-        <p>Within scope of the events’ callbacks, <code class="keyword">this</code> refers to <a href="#picker">the picker object</a> – and for most events, no arguments are passed.</p>
+        <p>Within scope of the events’ callbacks, <code class="keyword">this</code> refers to <a href="#picker">the picker object</a> – and for most events, no arguments are passed.</p>
         <p>The only exception is the <code class="function">set</code> method, which is passed an argument that provides more context as to what is being “set”.</p>
 
     </div> <!-- .section__block -->
@@ -993,7 +993,7 @@ picker.trigger('open')</code></pre>
 
         <h2 class="heading heading--divide"><span class="heading__text">Object <code>_hidden</code><a class="heading__anchor" name="object-hidden" href="#object-hidden">&sect;</a></span></h2>
         <p>This is the picker’s relative hidden element, which is <code class="null">undefined</code> if there’s no <code>formatSubmit</code> option.</p>
-        <p>There should be no reason to use this – it’s mostly for internal use. If you have a valid reason for using this, please mention it in the <a href="{%= meta.gitrepo_url %}/issues">Issues</a>.</p>
+        <p>There should be no reason to use this – it’s mostly for internal use. If you have a valid reason for using this, please mention it in the <a href="{%= meta.gitrepo_url %}/issues">Issues</a>.</p>
 
     </div> <!-- .section__block -->
 

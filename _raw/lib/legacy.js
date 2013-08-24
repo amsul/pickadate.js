@@ -12,13 +12,6 @@
  * Legacy browser support
  */
 
-// isArray support
-if ( !Array.isArray ) {
-    Array.isArray = function( value ) {
-        return {}.toString.call( value ) == '[object Array]'
-    }
-}
-
 
 // Map array support
 if ( ![].map ) {

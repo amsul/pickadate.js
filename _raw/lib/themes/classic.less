@@ -46,7 +46,7 @@
     // Tilt the picker.
     .transform( translateY( -1em ) perspective( 600px ) rotateX( 10deg ) );
 
-    // Everything should be smoothly animated – the height should wait till the rest is done.
+    // Everything should be smoothly animated – the height should wait till the rest is done.
     @transition: all @speed-animate-in ease-out, max-height 0 @speed-animate-in;
     .transition( @transition );
 }
@@ -66,7 +66,7 @@
         // Straighten the picker.
         .transform( translateY( 0 ) perspective( 600px ) rotateX( 0 ) );
 
-        // Everything should be smoothly animated – except the height.
+        // Everything should be smoothly animated – except the height.
         @transition: all @speed-animate-in ease-out, max-height 0;
         .transition( @transition );
 

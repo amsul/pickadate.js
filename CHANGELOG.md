@@ -1,6 +1,12 @@
 
 # Changelog
 
+## 3.2.1
+
+- [#210](https://github.com/amsul/pickadate.js/issues/210): Wrapped files using UMD patterns.
+- [#207](https://github.com/amsul/pickadate.js/issues/207): Japanese translations added.
+- Some other slight improvements.
+
 ## 3.2.0
 
 - [#178](https://github.com/amsul/pickadate.js/issues/178): Fix for flicker on iOS while changing months.

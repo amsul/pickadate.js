@@ -9,7 +9,7 @@
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 
-<title>pickadate.js / date</title>
+<title>pickadate.js / date</title>
 
 <link rel="shortcut icon" href="demo/images/favicon.ico">
 <link rel="stylesheet" href="demo/styles/main.css">
@@ -71,8 +71,8 @@
         <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="" class="fieldset__input js__datepicker" type=text placeholder="Try me&hellip;"></div></fieldset>
 
         <div class="section__block section__block--notification">
-            <p>Along with v3, the v2 options and API have effectively been deprecated. Read up on the <a href="https://github.com/amsul/pickadate.js/blob/3.2.0/CHANGELOG.md">full changelog here</a>.</p>
-            <p>One of the most critical changes is that the “month” used to create dates, just as in JavaScript’s native Date object, now has <a href="https://github.com/amsul/pickadate.js/blob/3.2.0/CHANGELOG.md#zero-as-index">zero-as-index</a>.</p>
+            <p>Along with v3, the v2 options and API have effectively been deprecated. Read up on the <a href="https://github.com/amsul/pickadate.js/blob/3.2.1/CHANGELOG.md">full changelog here</a>.</p>
+            <p>One of the most critical changes is that the “month” used to create dates, just as in JavaScript’s native Date object, now has <a href="https://github.com/amsul/pickadate.js/blob/3.2.1/CHANGELOG.md#zero-as-index">zero-as-index</a>.</p>
         </div>
 
     </div> <!-- .section__block -->
@@ -237,7 +237,7 @@ klass: {
     <div class="section__block section__block--scoped">
 
         <h2 class="heading heading--divide"><span class="heading__text">Translations<a class="heading__anchor" name="translations" href="#translations">&sect;</a></span></h2>
-        <p>The picker can be extended to add support for internationalization. There are translations available for <a href="https://github.com/amsul/pickadate.js/blob/3.2.0/lib/translations">31 languages</a> which you can include in one of two ways:</p>
+        <p>The picker can be extended to add support for internationalization. There are translations available for <a href="https://github.com/amsul/pickadate.js/blob/3.2.1/lib/translations">32 languages</a> which you can include in one of two ways:</p>
 
         <pre class="pre--demo"><code data-language="javascript">// Extend the default picker options for <u>all instances</u>.
 $.extend($.fn.pickadate.defaults, {
@@ -282,7 +282,7 @@ $('.datepicker').pickadate({
 
         <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__formats--a" class="fieldset__input " name=date_demo__formats type=text placeholder="Try me&hellip;"></div></fieldset>
 
-        <p>When using <a href="#translations">translations</a>, the <code class="tag-name">input</code> element should be given a <code class="attribute">data-value</code> attribute formatted using the <code>formatSubmit</code> – the element’s <code class="attribute">value</code> can be left blank. This helps to parse the date into the various languages:</p>
+        <p>When using <a href="#translations">translations</a>, the <code class="tag-name">input</code> element should be given a <code class="attribute">data-value</code> attribute formatted using the <code>formatSubmit</code> – the element’s <code class="attribute">value</code> can be left blank. This helps to parse the date into the various languages:</p>
         <pre class="pre--demo"><code data-language="html">&lt;input data-value="2013/04/20"></code></pre>
         <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__formats--b" class="fieldset__input " name=date_demo__formats type=text data-value="2013/04/20" placeholder="Try me&hellip;"></div></fieldset>
 
