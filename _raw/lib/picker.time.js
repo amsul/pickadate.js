@@ -13,9 +13,16 @@
    boss: true
  */
 
+(function ( factory ) {
 
-// Create a new scope.
-(function() {
+    // Register as an anonymous module.
+    if ( typeof define === 'function' && define.amd )
+        define( ['picker'], factory )
+
+    // Or using browser globals.
+    else factory( Picker )
+
+}(function( Picker ) {
 
 
 /**
@@ -644,8 +651,7 @@ TimePicker.defaults = (function( prefix ) {
 Picker.extend( 'pickatime', TimePicker )
 
 
-// Close the scope.
-})();
+}));
 
 
 
