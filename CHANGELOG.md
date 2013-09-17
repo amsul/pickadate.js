@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 3.2.2
+
+- [#210](https://github.com/amsul/pickadate.js/issues/210): Fixed jQuery conflict in picker extension files.
+- [#223](https://github.com/amsul/pickadate.js/issues/223): Time picker “disabled” attribute fix.
+
 ## 3.2.1
 
 - [#210](https://github.com/amsul/pickadate.js/issues/210): Wrapped files using UMD patterns.
