@@ -17,3 +17,5 @@ COUNTRY = The uppercase ISO 3166-1 country code.
 ```
 
 > See http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements
+
+When there is no `COUNTRY` in the filename, it is assumed the generic language is used in multiple countries.

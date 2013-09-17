@@ -3,6 +3,7 @@
 
 ## 3.2.2
 
+- [#216](https://github.com/amsul/pickadate.js/issues/216): Added generic Arabic translations.
 - [#210](https://github.com/amsul/pickadate.js/issues/210): Fixed jQuery conflict in picker extension files.
 - [#223](https://github.com/amsul/pickadate.js/issues/223): Time picker “disabled” attribute fix.
 

@@ -62,7 +62,7 @@ __*__ One and only one base stylesheet is **required**. [Choose a theme](http://
 
 ### Translations
 
-The translations are copied into the `lib/translations` folder. There are currently [32 languages](https://github.com/amsul/pickadate.js/blob/3.2.2/lib/translations) included.
+The translations are copied into the `lib/translations` folder. There are currently [33 languages](https://github.com/amsul/pickadate.js/blob/3.2.2/lib/translations) included.
 
 
 
