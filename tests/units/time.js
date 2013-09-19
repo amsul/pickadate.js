@@ -68,10 +68,10 @@ test( 'Formats', function() {
         },
         formats = {
             h: function() {
-                return '' + toHours( minutes )
+                return '' + ( toHours( minutes ) % 24 )
             },
             hh: function() {
-                return leadZero( toHours( minutes ) )
+                return leadZero( toHours( minutes ) % 24 )
             },
             H: function() {
                 return '' + ( ~~( minutes/60 ) )
@@ -83,10 +83,10 @@ test( 'Formats', function() {
                 return leadZero( minutes%60 )
             },
             a: function() {
-                return ~~( minutes/60 ) > 12 ? 'p.m.' : 'a.m.'
+                return ~~( minutes/60 ) % 24 > 12 ? 'p.m.' : 'a.m.'
             },
             A: function() {
-                return ~~( minutes/60 ) > 12 ? 'PM' : 'AM'
+                return ~~( minutes/60 ) % 24 > 12 ? 'PM' : 'AM'
             }
         }
 
