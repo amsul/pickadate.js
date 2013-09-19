@@ -702,6 +702,8 @@ test( 'Today', function() {
 
     var picker = this.picker
 
+    picker.open()
+
     picker.$root.find( '.' + $.fn.pickadate.defaults.klass.buttonToday ).click()
     ok( picker.get( 'value' ) === picker.get( 'select', $.fn.pickadate.defaults.format ), 'Value set to today' )
 })
@@ -709,6 +711,8 @@ test( 'Today', function() {
 test( 'Clear', function() {
 
     var picker = this.picker
+
+    picker.open()
 
     picker.set( 'select', new Date() )
     ok( picker.get( 'value' ) === picker.get( 'select', $.fn.pickadate.defaults.format ), 'Value updated' )

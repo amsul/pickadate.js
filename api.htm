@@ -269,7 +269,7 @@ picker.stop()</code></pre>
 
         <pre class="pre--demo"><code data-language="javascript">picker.clear()</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-clear class="fieldset__button button button--small">Clear</button><input id="demo__api-clear" class="fieldset__input " type=text value="17 September, 2013" placeholder="Try me&hellip;"></div></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-clear class="fieldset__button button button--small">Clear</button><input id="demo__api-clear" class="fieldset__input " type=text value="19 September, 2013" placeholder="Try me&hellip;"></div></fieldset>
 
         <p>This is a shorthand that uses <a href="#method-set">the <code class="function">set</code> method</a> behind the scenes.</p>
 
@@ -291,17 +291,17 @@ picker.stop()</code></pre>
         <p>The <code>thing</code> argument is an optional string and can be one of the following:</p>
 
         <ul>
-            <li><code><a href="#get-value">value</a></code> (default)</li>
-            <li><code><a href="#get-select">select</a></code> <b>*</b></li>
-            <li><code><a href="#get-highlight">highlight</a></code> <b>*</b></li>
-            <li><code><a href="#get-view">view</a></code> <b>*</b></li>
-            <li><code><a href="#get-min">min</a></code> <b>*</b></li>
-            <li><code><a href="#get-max">max</a></code> <b>*</b></li>
-            <li><code><a href="#get-open">open</a></code></li>
-            <li><code><a href="#get-start">start</a></code></li>
-            <li><code><a href="#get-id">id</a></code></li>
-            <li><code><a href="#get-disable">disable</a></code></li>
-            <li><code><a href="#get-enable">enable</a></code></li>
+            <li><code><a href="#method-get-value">value</a></code> (default)</li>
+            <li><code><a href="#method-get-select">select</a></code> <b>*</b></li>
+            <li><code><a href="#method-get-highlight">highlight</a></code> <b>*</b></li>
+            <li><code><a href="#method-get-view">view</a></code> <b>*</b></li>
+            <li><code><a href="#method-get-min">min</a></code> <b>*</b></li>
+            <li><code><a href="#method-get-max">max</a></code> <b>*</b></li>
+            <li><code><a href="#method-get-open">open</a></code></li>
+            <li><code><a href="#method-get-start">start</a></code></li>
+            <li><code><a href="#method-get-id">id</a></code></li>
+            <li><code><a href="#method-get-disable">disable</a></code></li>
+            <li><code><a href="#method-get-enable">enable</a></code></li>
         </ul>
 
         <h3 class="heading heading--divide"><span class="heading__text"><b>*</b> Item Objects<a class="heading__anchor--bigger" name="item-objects" href="#item-objects">&sect;</a></span></h3>
@@ -332,16 +332,16 @@ picker.stop()</code></pre>
     pick: 1366430400000
 }</code></pre>
 
-        <p>Here’s a <b>time picker item object</b> for <u>12:28 PM</u>:</p>
+        <p>Here’s a <b>time picker item object</b> for <u>7:47 PM</u>:</p>
         <pre><code data-language="javascript">{
     // Hour of the day from 0 to 23.
-    hour: 12,
+    hour: 19,
 
     // The minutes of the hour from 0 to 59 (based on the interval).
-    mins: 30,
+    mins: 0,
 
     // The “pick” value used for comparisons.
-    pick: 750
+    pick: 1200
 }</code></pre>
 
     </div> <!-- .section__block -->
@@ -359,7 +359,7 @@ picker.stop()</code></pre>
 
         <pre class="pre--demo"><code data-language="javascript">picker.get() // Short for `picker.get('value')`.</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-get--value class="fieldset__button button button--small">Log the value</button><input id="demo__api-get--value" class="fieldset__input " type=text value="17 September, 2013" placeholder="Open your console and try me&hellip;"></div></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-get--value class="fieldset__button button button--small">Log the value</button><input id="demo__api-get--value" class="fieldset__input " type=text value="19 September, 2013" placeholder="Open your console and try me&hellip;"></div></fieldset>
 
     </div> <!-- .section__block -->
 
@@ -526,7 +526,7 @@ picker.stop()</code></pre>
 
         <pre class="pre--demo"><code data-language="javascript">picker.set('clear')</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-set-clear class="fieldset__button button button--small">Clear</button><input id="demo__api-set-clear" class="fieldset__input " type=text value="17 September, 2013" placeholder="Try me&hellip;"></div></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-set-clear class="fieldset__button button button--small">Clear</button><input id="demo__api-set-clear" class="fieldset__input " type=text value="19 September, 2013" placeholder="Try me&hellip;"></div></fieldset>
 
         <p>This is the full form of <a href="#method-clear">the <code class="function">clear</code> method</a>.</p>
 

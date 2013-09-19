@@ -6,6 +6,8 @@
 - [#216](https://github.com/amsul/pickadate.js/issues/216): Added generic Arabic translations.
 - [#210](https://github.com/amsul/pickadate.js/issues/210): Fixed jQuery conflict in picker extension files.
 - [#223](https://github.com/amsul/pickadate.js/issues/223): Time picker “disabled” attribute fix.
+- Fixed issue with IE losing key bindings when clicked within picker.
+- Improved delegated click handling on picker elements.
 
 ## 3.2.1
 
