@@ -109,6 +109,7 @@ module.exports = function( grunt ) {
                 },
                 files: [
                     { '<%= pkg.name %>.jquery.json': 'package.json' },
+                    { 'bower.json': 'package.json' },
                     { 'README.md': '<%= dirs.src.raw %>/README.md' },
                     { 'LICENSE.md': '<%= dirs.src.raw %>/LICENSE.md' },
                     { 'CHANGELOG.md': '<%= dirs.src.raw %>/CHANGELOG.md' },

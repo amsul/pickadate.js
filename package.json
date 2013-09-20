@@ -21,6 +21,10 @@
     "input",
     "responsive"
   ],
+  "ignore": [
+    "*",
+    "!lib/**/*"
+  ],
   "main": "lib/picker.js",
   "homepage": "http://amsul.github.io/pickadate.js",
   "docs": "http://amsul.github.io/pickadate.js",
