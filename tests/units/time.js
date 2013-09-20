@@ -68,10 +68,10 @@ test( 'Formats', function() {
         },
         formats = {
             h: function() {
-                return '' + ( toHours( minutes ) % 24 )
+                return '' + toHours( minutes )
             },
             hh: function() {
-                return leadZero( toHours( minutes ) % 24 )
+                return leadZero( toHours( minutes ) )
             },
             H: function() {
                 return '' + ( ~~( minutes/60 ) )
