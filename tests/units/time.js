@@ -74,10 +74,10 @@ test( 'Formats', function() {
                 return leadZero( toHours( minutes ) )
             },
             H: function() {
-                return '' + ( ~~( minutes/60 ) )
+                return '' + ( ~~( minutes/60 ) % 24 )
             },
             HH: function() {
-                return leadZero( ~~( minutes/60 ) )
+                return leadZero( ~~( minutes/60 ) % 24 )
             },
             i: function() {
                 return leadZero( minutes%60 )

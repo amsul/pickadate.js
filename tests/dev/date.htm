@@ -75,21 +75,25 @@
     <script src="../../lib/picker.js"></script>
     <script src="../../lib/picker.date.js"></script>
     <script src="../../lib/legacy.js"></script>
-    <script src="../../lib/translations/ar.js"></script>
+    <!--<script src="../../lib/translations/ar.js"></script>
 
-    <style>.picker{direction:rtl}</style>
+    <style>
+        .picker {
+            direction: rtl;
+        }
+    </style>-->
 
     <script type="text/javascript">
 
         var $input = $( '.datepicker' ).pickadate({
-            container: '.outlet',
-            // disable: [ true, [2013,3,1], [2013,6,1] ]
+            // container: '.outlet',
+            disable: [ 1, 2, 7, [2013,6,1] ],
             // format: 'dd mmmm yyyy',
             // formatSubmit: 'yyyy-mm-dd',
             // hiddenSuffix: '-submit',
             // clear: '',
-            // min: new Date(),
-            // selectMonths: true,
+            min: +2,
+            max: +30,
             // format: 'mmmm dd, yyyy',
         })//,
 

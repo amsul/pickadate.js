@@ -397,32 +397,33 @@ DatePicker.prototype.validate = function( type, dateObject, options ) {
 
 
 /**
- * Check if an object is disabled.
+ * Check if a date is disabled.
  */
 DatePicker.prototype.disabled = function( dateObject ) {
 
     var calendar = this,
 
         // Filter through the disabled dates to check if this is one.
-        isDisabledDate = calendar.item.disable.filter( function( dateToDisable ) {
+        isDisabledDate = !!calendar.item.disable.filter( function( dateToDisable ) {
 
             // If the date is a number, match the weekday with 0index and `firstDay` check.
             if ( Picker._.isInteger( dateToDisable ) ) {
                 return dateObject.day === ( calendar.settings.firstDay ? dateToDisable : dateToDisable - 1 ) % 7
             }
 
-            // If it's an array, create the object and match the exact date.
+            // If it’s an array, create the object and match the exact date.
             if ( $.isArray( dateToDisable ) ) {
                 return dateObject.pick === calendar.create( dateToDisable ).pick
             }
         }).length
 
 
-    // It’s disabled beyond the min/max limits. If within the limits, check the
-    // calendar “enabled” flag is flipped and respectively flip the condition.
-    return dateObject.pick < calendar.item.min.pick ||
-        dateObject.pick > calendar.item.max.pick ||
-        calendar.item.enable === -1 ? !isDisabledDate : isDisabledDate
+    // Check the calendar “enabled” flag and respectively flip the
+    // disabled state. Then also check if it’s beyond the min/max limits.
+    return calendar.item.enable === -1 ? !isDisabledDate : isDisabledDate ||
+        dateObject.pick < calendar.item.min.pick ||
+        dateObject.pick > calendar.item.max.pick
+
 } //DatePicker.prototype.disabled
 
 
