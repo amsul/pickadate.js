@@ -355,7 +355,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
 
                             // Trigger the key movement action.
                             if ( keycodeToMove ) {
-                                PickerConstructor._.trigger( P.component.key.go, P, [ keycodeToMove ] )
+                                PickerConstructor._.trigger( P.component.key.go, P, [ PickerConstructor._.trigger( keycodeToMove ) ] )
                             }
 
                             // On “enter”, if the highlighted item isn’t disabled, set the value and close.
