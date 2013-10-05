@@ -45,6 +45,19 @@ $( '#date_demo__translations' ).pickadate({
     clear: 'effacer',
     formatSubmit: 'yyyy/mm/dd'
 })
+$( '#date_demo__translations_rtl' ).pickadate({
+    monthsFull: [ 'يناير', 'فبراير', 'مارس', 'ابريل', 'مايو', 'يونيو', 'يوليو', 'اغسطس', 'سبتمبر', 'اكتوبر', 'نوفمبر', 'ديسمبر' ],
+    monthsShort: [ 'يناير', 'فبراير', 'مارس', 'ابريل', 'مايو', 'يونيو', 'يوليو', 'اغسطس', 'سبتمبر', 'اكتوبر', 'نوفمبر', 'ديسمبر' ],
+    weekdaysFull: [ 'الاحد', 'الاثنين', 'الثلاثاء', 'الاربعاء', 'الخميس', 'الجمعة', 'السبت' ],
+    weekdaysShort: [ 'الاحد', 'الاثنين', 'الثلاثاء', 'الاربعاء', 'الخميس', 'الجمعة', 'السبت' ],
+    today: 'اليوم',
+    clear: 'مسح',
+    format: 'yyyy mmmm dd',
+    formatSubmit: 'yyyy/mm/dd',
+    onStart: function() {
+        console.log( this )
+    }
+})
 
 
 

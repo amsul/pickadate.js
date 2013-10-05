@@ -19,6 +19,7 @@
  * TARGETS....................Page focus targets
  * RAINBOW....................Syntax highlighting
  * TEXT-HELPERS...............
+ * DEMOS......................
  */
 
 
@@ -860,6 +861,23 @@ input[type=search] {
     color: #585856;
 }
 
+.class,
+.pseudo {
+    color: #68c244;
+}
+
+.css-property {
+    color: @blue;
+}
+
+.css-value {
+    color: #0069bc;
+}
+
+.hex-color {
+
+}
+
 
 
 
@@ -952,6 +970,36 @@ a.text-dimmed {
 }
 .menu__link--dimmed .logocon__u {
     background: @grey-darker;
+}
+
+
+
+
+
+
+/* ==========================================================================
+   $DEMOS
+   ========================================================================== */
+
+// Right-to-left languages
+ #date_demo__translations_rtl + .picker {
+    direction: rtl;
+}
+ #date_demo__translations_rtl + .picker .picker__nav--next {
+    right: auto;
+    left: -1em;
+}
+#date_demo__translations_rtl + .picker .picker__nav--prev {
+    left: auto;
+    right: -1em;
+}
+#date_demo__translations_rtl + .picker .picker__nav--next:before {
+    border-left: 0;
+    border-right: .75em solid #000;
+}
+#date_demo__translations_rtl + .picker .picker__nav--prev:before {
+    border-right: 0;
+    border-left: .75em solid #000;
 }
 
 

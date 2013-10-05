@@ -258,7 +258,47 @@ $('.datepicker').pickadate({
 })</code></pre>
         <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__translations" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
 
-        <p>When using translations, make sure to also <a href="#formats">specify the <code>formatSubmit</code> and <code class="attribute">data-value</code></a>.</p>
+        <div class="section__block section__block--notification">
+            <p>When using translations, make sure to also <a href="#formats">specify the <code>formatSubmit</code> and <code class="attribute">data-value</code></a>.</p>
+        </div>
+
+        <h3 class="heading heading--divide"><span class="heading__text">RTL languages<a class="heading__anchor" name="translations_rtl" href="#translations_rtl">&sect;</a></span></h3>
+        <p>For right-to-left (RTL) languages you’ll need to switch the arrows and text direction by adding the following styling:</p>
+
+        <pre><code data-language="css">/**
+ * Switch the direction - only really necessary if
+ * you haven’t already applied it higher up in the DOM
+ */
+<br>
+.picker {
+    direction: rtl;
+}
+
+/**
+ * Flip around the “next” and “previous” buttons
+ */
+<br>
+.picker__nav--next {
+    right: auto;
+    left: -1em;
+}
+.picker__nav--prev {
+    left: auto;
+    right: -1em;
+}
+.picker__nav--next:before {
+    border-left: 0;
+    border-right: 0.75em solid #000000;
+}
+.picker__nav--prev:before {
+    border-right: 0;
+    border-left: 0.75em solid #000000;
+}</code></pre>
+
+        <p>Then add the language to get this result:</p>
+
+        <pre class="pre--demo"><code data-language="html">&lt;script src="lib/translations/ar.js"&gt;&lt;/script&gt;</code></pre>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__translations_rtl" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
 
     </div> <!-- .section__block -->
 
