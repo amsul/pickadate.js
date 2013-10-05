@@ -211,10 +211,6 @@
 }
 .picker__day--outfocus {
   color: #dddddd;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=66)";
-  filter: alpha(opacity=66);
-  -moz-opacity: 0.66;
-  opacity: 0.66;
 }
 .picker__day--infocus:hover,
 .picker__day--outfocus:hover {
