@@ -886,10 +886,11 @@ DatePicker.prototype.nodes = function( isOpen ) {
         settings.klass.table
     ) +
 
+    // * For Firefox forms to submit, make sure to set the buttons’ `type` attributes as “button”.
     Picker._.node(
         'div',
-        Picker._.node( 'button', settings.today, settings.klass.buttonToday, 'data-pick=' + nowObject.pick + ( isOpen ? '' : ' disabled' ) ) +
-        Picker._.node( 'button', settings.clear, settings.klass.buttonClear, 'data-clear=1' + ( isOpen ? '' : ' disabled' ) ),
+        Picker._.node( 'button', settings.today, settings.klass.buttonToday, 'type=button data-pick=' + nowObject.pick + ( isOpen ? '' : ' disabled' ) ) +
+        Picker._.node( 'button', settings.clear, settings.klass.buttonClear, 'type=button data-clear=1' + ( isOpen ? '' : ' disabled' ) ),
         settings.klass.footer
     ) //endreturn
 } //DatePicker.prototype.nodes
