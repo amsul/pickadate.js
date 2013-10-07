@@ -508,7 +508,7 @@ test( '`disable` and `enable` using integers', function() {
 
 test( '`disable` and `enable` using arrays', function() {
 
-    var now = new Date()
+    var now = new Date(),
         nowYear = now.getFullYear(),
         nowMonth = now.getMonth(),
         disableCollection = [ [nowYear,nowMonth,1],[nowYear,nowMonth,17],[nowYear,nowMonth,25] ],
@@ -570,6 +570,27 @@ test( '`disable` and `enable` using arrays', function() {
         else {
             ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is enabled: ' + tableCell.innerHTML )
         }
+    })
+})
+
+test( '`disable` using booleans', function() {
+
+    var now = new Date(),
+        nowYear = now.getFullYear(),
+        nowMonth = now.getMonth(),
+        disableCollection = [ [nowYear,nowMonth,1],[nowYear,nowMonth,17],[nowYear,nowMonth,25] ],
+        picker = this.picker,
+        $root = picker.$root
+
+
+    picker.set( 'disable', disableCollection )
+    deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled dates added to collection' )
+
+    picker.set('disable', false)
+    deepEqual( picker.get('disable'), [], 'Disabled collection reset' )
+
+    $root.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
+        ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is enabled: ' + tableCell.innerHTML )
     })
 })
 

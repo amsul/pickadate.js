@@ -36,9 +36,9 @@ There are currently two pickers: **date** and **time**.
 
 File                    | Contents                 | Size (min & gzip)
 ----------------------- | ------------------------ | ----------------------
-`picker.js`             | __Base *__               | 1.32kb
-`picker.date.js`        | Date picker              | 1.96kb
-`picker.time.js`        | Time picker              | 1.32kb
+`picker.js`             | __Base *__               | 1.31kb
+`picker.date.js`        | Date picker              | 1.99kb
+`picker.time.js`        | Time picker              | 1.33kb
 
 __*__ The base script is **required** for any of the pickers to function.
 
@@ -52,10 +52,10 @@ All themes are [generated using LESS](#less-styling) and compiled into the `lib/
 File                    | Contents                 | Size (min & gzip)
 ----------------------- | ------------------------ | ----------------------
 `default.css`           | __Base default *__       | 0.50kb
-`default.date.css`      | Default date picker      | 0.70kb
+`default.date.css`      | Default date picker      | 0.67kb
 `default.time.css`      | Default time picker      | 0.35kb
 `classic.css`           | __Base classic *__       | 0.33kb
-`classic.date.css`      | Classic date picker      | 0.70kb
+`classic.date.css`      | Classic date picker      | 0.67kb
 `classic.time.css`      | Classic time picker      | 0.35kb
 
 __*__ One and only one base stylesheet is **required**. [Choose a theme](http://amsul.github.io/pickadate.js) then include the respective pickers as well.

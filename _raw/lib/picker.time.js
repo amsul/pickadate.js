@@ -508,7 +508,8 @@ TimePicker.prototype.flipItem = function( type, value/*, options*/ ) {
  */
 TimePicker.prototype.addDisabled = function( collection, item ) {
     var clock = this
-    item.map( function( timeUnit ) {
+    if ( item === false ) collection = []
+    else item.map( function( timeUnit ) {
         if ( !clock.filterDisabled( collection, timeUnit ).length ) {
             collection.push( timeUnit )
         }

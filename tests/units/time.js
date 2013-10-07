@@ -452,6 +452,24 @@ test( '`disable` and `enable` using arrays', function() {
     })
 })
 
+test( '`disable` using booleans', function() {
+
+    var picker = this.picker,
+        $root = picker.$root,
+        disableCollection = [ [1,0],[4,30],[18,0],[23,30] ]
+
+
+    picker.set( 'disable', disableCollection )
+    deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled times added to collection' )
+
+    picker.set('disable', false)
+    deepEqual( picker.get('disable'), [], 'Disabled collection reset' )
+
+    $root.find( '[data-pick]' ).each( function( indexCell, tableCell ) {
+        ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Time is enabled: ' + tableCell.innerHTML )
+    })
+})
+
 
 
 

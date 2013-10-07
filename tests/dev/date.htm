@@ -110,6 +110,8 @@
         var $input = $( '.datepicker' ).pickadate({
             // container: '.outlet',
             disable: [ 1, 2, 7, [2013,6,1] ],
+            selectYears: true,
+            selectMonths: true,
             // format: 'dd mmmm yyyy',
             // formatSubmit: 'yyyy-mm-dd',
             // hiddenSuffix: '-submit',
@@ -117,19 +119,13 @@
             // min: +2,
             // max: +30,
             // format: 'mmmm dd, yyyy',
-        })//,
+        })
 
-        // $('.datepickerr').focus( function() {
-        //     picker.open(false)
-        // }).blur( function() {
-        //     picker.close()
-        // })
+        var picker = $input.pickadate('picker')
 
-        // var $button = $( '.button' ).on( 'click', function( event ) {
-        //     event.preventDefault()
-        //     event.stopPropagation()
-        //     picker.close(true)
-        // })
+        console.log( picker.get('disable') )
+        picker.set('disable', false)
+        console.log( picker.get('disable') )
 
     </script>
 
