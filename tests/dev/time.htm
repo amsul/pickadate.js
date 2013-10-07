@@ -11,8 +11,8 @@
 <title>Pickadate.js</title>
 
 <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="../../lib/themes/default.css">
-<link rel="stylesheet" href="../../lib/themes/default.time.css">
+<link rel="stylesheet" href="../../lib/themes/classic.css">
+<link rel="stylesheet" href="../../lib/themes/classic.time.css">
 
 <!--[if lt IE 9]>
     <script>document.createElement('section')</script>
@@ -41,7 +41,7 @@
         <form>
             <fieldset>
                 <h3><label for="input_01">Pick a date. Go ahead...</label></h3>
-                <input id="input_from" class="datepicker" name="date" type="date" value="2:30 AM" data-valuee="01:30" autofocus>
+                <input id="input_from" class="datepicker" name="date" type="date" valuee="2:30 AM" data-valuee="01:30" autofocus>
                 <br><br><br><br><br>
                 <input class="button" type="submit" value="open">
             </fieldset>
@@ -70,24 +70,18 @@
             formatLabel: '<b>h</b>:i <!i>a</!i>',
             // formatSubmit: 'HH:i',
             // interval: 120,
-            disable: [
-                // true,
-                0,
-                1,
-                4,
-                [3,30],
-                [8,45]
-            ],
+            // disable: [
+            //     // true,
+            //     0,
+            //     1,
+            //     4,
+            //     [3,30],
+            //     [8,45]
+            // ],
             // min: 4,
             // min: [ 7, 30 ],
             // max: -2,
             // max: [ 9, 0 ],
-            onOpen: function() {
-                $('body').css('overflow','hidden')
-            },
-            onClose: function() {
-                $('body').css('overflow','')
-            }
         }),
         picker = $input.pickatime('picker')
 
