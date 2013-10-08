@@ -104,9 +104,51 @@ module( 'Formatting setup', {
     }
 })
 
-test( 'Hidden suffix', function() {
+test( 'Default hidden prefix & suffix', function() {
     var picker = this.picker
-    strictEqual( picker.$node[0].name + '_submit', picker._hidden.name, 'Correct hidden element `name` suffix' )
+    strictEqual( picker.$node[0].name + '_submit', picker._hidden.name, 'Correct hidden element `name`' )
+})
+
+module( 'Formatting setup', {
+    setup: function() {
+        $DOM.append( $INPUT.clone().attr( 'name', 'picker' ) )
+        var $input = $DOM.find( 'input' ).pickadate({
+            formatSubmit: 'yyyy/mm/dd',
+            hiddenPrefix: 'prefixed__',
+            hiddenSuffix: '__suffixed'
+        })
+        this.picker = $input.pickadate( 'picker' )
+    },
+    teardown: function() {
+        this.picker.stop()
+        $DOM.empty()
+    }
+})
+
+test( 'Custom hidden prefix & suffix', function() {
+    var picker = this.picker
+    strictEqual( 'prefixed__' + picker.$node[0].name + '__suffixed', picker._hidden.name, 'Correct hidden element `name`' )
+})
+
+module( 'Formatting setup', {
+    setup: function() {
+        $DOM.append( $INPUT.clone().attr( 'name', 'picker' ) )
+        var $input = $DOM.find( 'input' ).pickadate({
+            formatSubmit: 'yyyy/mm/dd',
+            hiddenPrefix: '',
+            hiddenSuffix: ''
+        })
+        this.picker = $input.pickadate( 'picker' )
+    },
+    teardown: function() {
+        this.picker.stop()
+        $DOM.empty()
+    }
+})
+
+test( 'No hidden prefix & suffix', function() {
+    var picker = this.picker
+    strictEqual( picker.$node[0].name, picker._hidden.name, 'Correct hidden element `name`' )
 })
 
 

@@ -152,11 +152,26 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                     }) //P.$root
 
 
-                // If there’s a format for the hidden input element, create the element
-                // using the name of the original input plus suffix. Otherwise set it to undefined.
-                // If the element has a value, use either the `data-value` or `value`.
+                // If there’s a format for the hidden input element, create the element.
                 if ( SETTINGS.formatSubmit ) {
-                    P._hidden = $( '<input type=hidden name="' + ELEMENT.name + ( SETTINGS.hiddenSuffix || '_submit' ) + '"' + ( $ELEMENT.data( 'value' ) ? ' value="' + PickerConstructor._.trigger( P.component.formats.toString, P.component, [ SETTINGS.formatSubmit, P.component.item.select ] ) + '"' : '' ) + '>' )[ 0 ]
+
+                    P._hidden = $(
+                        '<input ' +
+                        'type=hidden ' +
+
+                        // Create the name by using the original input plus a prefix and suffix.
+                        'name="' + ( typeof SETTINGS.hiddenPrefix == 'string' ? SETTINGS.hiddenPrefix : '' ) +
+                            ELEMENT.name +
+                            ( typeof SETTINGS.hiddenSuffix == 'string' ? SETTINGS.hiddenSuffix : '_submit' ) +
+                        '"' +
+
+                        // If the element has a `data-value`, set the element `value` as well.
+                        ( $ELEMENT.data( 'value' ) ?
+                            ' value="' + PickerConstructor._.trigger( P.component.formats.toString, P.component, [ SETTINGS.formatSubmit, P.component.item.select ] ) + '"' :
+                            ''
+                        ) +
+                        '>'
+                    )[ 0 ]
                 }
 
 
