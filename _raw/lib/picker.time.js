@@ -488,12 +488,28 @@ TimePicker.prototype.flipItem = function( type, value/*, options*/ ) {
         clock.item.enable = isFlipped ? 1 : -1
     }
 
-    // Check if we have to add/remove from collection.
-    else if ( !isFlipped && type == 'enable' || isFlipped && type == 'disable' ) {
-        collection = clock.removeDisabled( collection, value )
+    // Reset the collection and enable the base state.
+    else if ( ( type == 'enable' && value === true ) || ( type == 'disable' && value === false ) ) {
+        clock.item.enable = 1
+        collection = []
     }
-    else if ( !isFlipped && type == 'disable' || isFlipped && type == 'enable' ) {
-        collection = clock.addDisabled( collection, value )
+
+    // Reset the collection and disable the base state.
+    else if ( ( type == 'enable' && value === false ) || ( type == 'disable' && value === true ) ) {
+        clock.item.enable = -1
+        collection = []
+    }
+
+    // Make sure a collection of things was passed to add/remove.
+    else if ( $.isArray( value ) ) {
+
+        // Check if we have to add/remove from collection.
+        if ( !isFlipped && type == 'enable' || isFlipped && type == 'disable' ) {
+            collection = clock.removeDisabled( collection, value )
+        }
+        else if ( !isFlipped && type == 'disable' || isFlipped && type == 'enable' ) {
+            collection = clock.addDisabled( collection, value )
+        }
     }
 
     return collection

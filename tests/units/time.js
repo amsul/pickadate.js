@@ -452,7 +452,7 @@ test( '`disable` and `enable` using arrays', function() {
     })
 })
 
-test( '`disable` using booleans', function() {
+test( '`disable` and `enable` using booleans', function() {
 
     var picker = this.picker,
         $root = picker.$root,
@@ -466,7 +466,47 @@ test( '`disable` using booleans', function() {
     deepEqual( picker.get('disable'), [], 'Disabled collection reset' )
 
     $root.find( '[data-pick]' ).each( function( indexCell, tableCell ) {
-        ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Time is enabled: ' + tableCell.innerHTML )
+        ok( !$( tableCell ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is enabled: ' + tableCell.innerHTML )
+    })
+
+
+    picker.set( 'disable', disableCollection )
+    deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled times added to collection' )
+
+    picker.set('disable', true)
+    deepEqual( picker.get('disable'), [], 'Disabled collection reset' )
+    deepEqual( picker.get('enable'), -1, 'Disabled collection `enable` flipped' )
+
+    $root.find( '[data-pick]' ).each( function( indexCell, tableCell ) {
+        ok( $( tableCell ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is disabled: ' + tableCell.innerHTML )
+    })
+
+
+    picker.set( 'enable', 'flip' )
+    deepEqual( picker.get('enable'), 1, 'Disabled collection `enable` flipped' )
+
+    picker.set( 'disable', disableCollection )
+    deepEqual( picker.get('disable'), disableCollection, 'Disabled times added to collection' )
+
+
+    picker.set('enable', true)
+    deepEqual( picker.get('disable'), [], 'Disabled collection reset' )
+
+    $root.find( '[data-pick]' ).each( function( indexCell, tableCell ) {
+        ok( !$( tableCell ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is enabled: ' + tableCell.innerHTML )
+    })
+
+
+    picker.set( 'disable', disableCollection )
+    deepEqual( picker.get('disable'), disableCollection, 'Disabled times added to collection' )
+
+
+    picker.set('enable', false)
+    deepEqual( picker.get('disable'), [], 'Disabled collection reset' )
+    deepEqual( picker.get('enable'), -1, 'Disabled collection `enable` flipped' )
+
+    $root.find( '[data-pick]' ).each( function( indexCell, tableCell ) {
+        ok( $( tableCell ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is disabled: ' + tableCell.innerHTML )
     })
 })
 
