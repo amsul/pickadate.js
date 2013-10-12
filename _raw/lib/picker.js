@@ -332,7 +332,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                     STATE.open = true
 
                     // Pass focus to the element’s jQuery object.
-                    $ELEMENT.focus()
+                    $ELEMENT.trigger( 'focus' )
 
                     // Bind the document events.
                     $document.on( 'click.P' + STATE.id + ' focusin.P' + STATE.id, function( event ) {
@@ -404,7 +404,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                     // ....ah yes! It would’ve been incomplete without a crazy workaround for IE :|
                     // The focus is triggered *after* the close has completed - causing it
                     // to open again. So unbind and rebind the event at the next tick.
-                    $ELEMENT.off( 'focus.P' + STATE.id ).focus()
+                    $ELEMENT.off( 'focus.P' + STATE.id ).trigger( 'focus' )
                     setTimeout( function() {
                         $ELEMENT.on( 'focus.P' + STATE.id, focusToOpen )
                     }, 0 )

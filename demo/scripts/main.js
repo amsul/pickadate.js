@@ -1020,37 +1020,39 @@ $( '#button__api-callback-options' ).on( 'click', function( event ) {
 // callback: bindings
 var $input_callback_bindings = $( '#demo__api-callback-bindings' ).pickadate()
     picker_callback_bindings = $input_callback_bindings.pickadate( 'picker' )
-picker_callback_bindings.on({
-    open: function() {
-        console.log('Opened up!')
-    },
-    close: function() {
-        console.log('Closed now')
-    },
-    render: function() {
-        console.log('Just rendered anew')
-    },
-    start: function() {
-        console.log('Hello there :)')
-    },
-    stop: function() {
-        console.log('See ya')
-    },
-    set: function(thingSet) {
-        console.log('Set stuff:', thingSet)
-    }
-})
-$( '#button__api-callback-bindings' ).on( 'click', function( event ) {
-    if ( this.innerHTML == 'Stop' ) {
-        picker_callback_bindings.stop()
-        this.innerHTML = 'Start'
-    }
-    else {
-        picker_callback_bindings.start()
-        this.innerHTML = 'Stop'
-    }
-    event.stopPropagation()
-})
+if ( picker_callback_bindings ) {
+    picker_callback_bindings.on({
+        open: function() {
+            console.log('Opened up!')
+        },
+        close: function() {
+            console.log('Closed now')
+        },
+        render: function() {
+            console.log('Just rendered anew')
+        },
+        start: function() {
+            console.log('Hello there :)')
+        },
+        stop: function() {
+            console.log('See ya')
+        },
+        set: function(thingSet) {
+            console.log('Set stuff:', thingSet)
+        }
+    })
+    $( '#button__api-callback-bindings' ).on( 'click', function( event ) {
+        if ( this.innerHTML == 'Stop' ) {
+            picker_callback_bindings.stop()
+            this.innerHTML = 'Start'
+        }
+        else {
+            picker_callback_bindings.start()
+            this.innerHTML = 'Stop'
+        }
+        event.stopPropagation()
+    })
+}
 
 
 // trigger events
