@@ -36,6 +36,7 @@ clear: 'Clear',
 format: 'h:i A',
 formatLabel: undefined,
 formatSubmit: undefined,
+hiddenPrefix: undefined,
 hiddenSuffix: '_submit',
 
 // <a href="#intervals">Time intervals</a>
@@ -140,19 +141,20 @@ klass: {
 
         <h2 class="heading heading--divide"><span class="heading__text">Formats<a class="heading__anchor" name="formats" href="#formats">&sect;</a></span></h2>
         <p>Display a human-friendly label and input format and use an alternate one to submit.</p>
-        <p>This is done by creating a new hidden <code class="tag-name">input</code> element with the same <code class="attribute">name</code> attribute as the original and a suffix:</p>
+        <p>This is done by creating a new hidden <code class="tag-name">input</code> element with the same <code class="attribute">name</code> attribute as the original and an optional prefix/suffix:</p>
 
         <pre class="pre--demo"><code data-language="javascript">$('.timepicker').pickatime({
     // Escape any “<a href="#formatting-rules">rule</a>” characters with an exclamation mark (!).
     format: 'T!ime selected: h:i a',
     formatLabel: '&lt;b>h&lt;/b>:i &lt;!i>a&lt;/!i>',
     formatSubmit: 'HH:i',
-    hiddenSuffix: '--submit'
+    hiddenPrefix: 'prefix__',
+    hiddenSuffix: '__suffix'
 })</code></pre>
 
-        {%= timeDemoField({ id: 'time_demo__formats--a' }).replace( 'type=text', 'name=time_demo__formats type=text' ) %}
+        {%= timeDemoField({ id: 'time_demo__formats--a' }).replace( 'type=text', 'name=time_input type=text' ) %}
 
-        <p><code>formatLabel</code> is unique. It can contain HTML and it can also be a function if you want to create the label during run-time:</p>
+        <p>The <code>formatLabel</code> option is unique. It can contain HTML and it can also be a function if you want to create the label during run-time:</p>
 
         <style>
             .picker__list small {
@@ -169,17 +171,14 @@ klass: {
     formatLabel: function(time) {
         var hours = ( time.pick - this.get('now').pick ) / 60,
             label = hours &lt; 0 ? ' !hours to now' : hours > 0 ? ' !hours from now' : 'now'
-        return 'h:i a &lt;sm!all>' + ( hours ? Math.abs(hours) : '' ) + label + '&lt;/sm!all>'
+        return&nbsp; 'h:i a &lt;sm!all>' + ( hours ? Math.abs(hours) : '' ) + label + '&lt;/sm!all>'
     }
 })</code></pre>
 
         {%= timeDemoField({ id: 'time_demo__formats--b' }).replace( 'type=text', 'name=time_demo__formats type=text' ) %}
 
-    </div> <!-- .section__block -->
 
-    <div class="section__block section__block--scoped">
-
-        <h2 class="heading heading--divide"><span class="heading__text">Formatting Rules<a class="heading__anchor" name="formatting-rules" href="#formatting-rules">&sect;</a></span></h2>
+        <h3 class="heading heading--divide"><span class="heading__text">Formatting Rules<a class="heading__anchor" name="formatting-rules" href="#formatting-rules">&sect;</a></span></h3>
         <p>The following rules can be used to format any time:</p>
 
         <table class="table">

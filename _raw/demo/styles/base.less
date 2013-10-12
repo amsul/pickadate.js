@@ -288,6 +288,20 @@ pre > code {
     padding: 0 4.2em 0 0;
 }
 
+pre > code[data-language]:before {
+    content: attr(data-language);
+    position: absolute;
+    top: 2px;
+    left: 42px;
+    font-size: 10px;
+    opacity: .5;
+    @transition: all .1s;
+    .transition( @transition );
+}
+pre:hover > code[data-language]:before {
+    opacity: 1;
+}
+
 
 
 

@@ -53,10 +53,7 @@ $( '#date_demo__translations_rtl' ).pickadate({
     today: 'اليوم',
     clear: 'مسح',
     format: 'yyyy mmmm dd',
-    formatSubmit: 'yyyy/mm/dd',
-    onStart: function() {
-        console.log( this )
-    }
+    formatSubmit: 'yyyy/mm/dd'
 })
 
 
@@ -78,7 +75,8 @@ $( '#date_demo__buttons' ).pickadate({
 $( '#date_demo__formats--a' ).pickadate({
     format: 'You selecte!d: dddd, dd mmm, yyyy',
     formatSubmit: 'yyyy/mm/dd',
-    hiddenSuffix: '--submit',
+    hiddenPrefix: 'prefix__',
+    hiddenSuffix: '__suffix',
     onSet: function( event ) {
         if ( event.select ) {
             this.$node.
@@ -86,6 +84,9 @@ $( '#date_demo__formats--a' ).pickadate({
                 after( '<div class="section__block section__block--notification-green">' +
                     '<p>Value to submit: <code>' +
                         this.get( 'select', 'yyyy/mm/dd' ) +
+                    '</code></p>' +
+                    '<p>Using the name: <code>' +
+                        this._hidden.name +
                     '</code></p></div>'
                 )
         }
@@ -153,20 +154,28 @@ $( '#date_demo__limits--c' ).pickadate({
  * Disable dates
  */
 
+// Disable a specific set of dates using native
+// JavaScript Date objects.
+$( '#date_demo__disable-dates--a' ).pickadate({
+    disable: [
+        new Date(2013,3,13),
+        new Date(2013,3,29)
+    ]
+})
+
 // Disable a specific set of dates using arrays
 // formatted as [ YEAR, MONTH, DATE ].
-$( '#date_demo__disable-dates--a' ).pickadate({
+$( '#date_demo__disable-dates--b' ).pickadate({
     disable: [
         [2013,3,3],
         [2013,3,12],
-        [2013,3,20],
-        [2013,3,29]
+        [2013,3,20]
     ]
 })
 
 // Disable an arbitrary set of dates using integers
 // from 1 - 7 representing the day of week.
-$( '#date_demo__disable-dates--b' ).pickadate({
+$( '#date_demo__disable-dates--c' ).pickadate({
     disable: [
         1, 4, 7
     ]
@@ -174,14 +183,15 @@ $( '#date_demo__disable-dates--b' ).pickadate({
 
 // Set the first array item to `true` to disable all the dates.
 // Then selectively enable specific or arbitrary sets of dates.
-$( '#date_demo__disable-dates--c' ).pickadate({
+$( '#date_demo__disable-dates--d' ).pickadate({
     disable: [
         true,
         1, 4, 7,
         [2013,3,3],
         [2013,3,12],
         [2013,3,20],
-        [2013,3,29]
+        new Date(2013,3,13),
+        new Date(2013,3,29)
     ]
 })
 
@@ -259,7 +269,8 @@ $( '#time_demo__formats--a' ).pickatime({
     format: 'T!ime selected: h:i a',
     formatLabel: '<b>h</b>:i <!i>a</!i>',
     formatSubmit: 'HH:i',
-    hiddenSuffix: '--submit',
+    hiddenPrefix: 'prefix__',
+    hiddenSuffix: '__suffix',
     onSet: function( event ) {
         if ( event.select ) {
             this.$node.
@@ -267,6 +278,9 @@ $( '#time_demo__formats--a' ).pickatime({
                 after( '<div class="section__block section__block--notification-green">' +
                     '<p>Value to submit: <code>' +
                         this.get( 'select', 'HH:i' ) +
+                    '</code></p>' +
+                    '<p>Using the name: <code>' +
+                        this._hidden.name +
                     '</code></p></div>'
                 )
         }
@@ -629,12 +643,28 @@ var $input_get__disable = $( '#demo__api-get--disable' ).pickadate({
             1,4,7,
             [TODAY.getFullYear(),TODAY.getMonth(),8],
             [TODAY.getFullYear(),TODAY.getMonth(),19],
-            [TODAY.getFullYear(),TODAY.getMonth(),27]
+            new Date(TODAY.getFullYear(),TODAY.getMonth(),26)
         ]
     }),
     picker_get__disable = $input_get__disable.pickadate( 'picker' )
 $( '#button__api-get--disable' ).on( 'click', function( event ) {
-    console.log( picker_get__disable.get( 'disable' ) )
+    console.log( 'Base picker state:', picker_get__disable.get( 'enable' ) )
+    console.log( 'Dates to disabled:', picker_get__disable.get( 'disable' ) )
+    event.stopPropagation()
+})
+var $input_get__enable = $( '#demo__api-get--enable' ).pickadate({
+        disable: [
+            true,
+            1,4,7,
+            [TODAY.getFullYear(),TODAY.getMonth(),8],
+            [TODAY.getFullYear(),TODAY.getMonth(),19],
+            new Date(TODAY.getFullYear(),TODAY.getMonth(),26)
+        ]
+    }),
+    picker_get__enable = $input_get__enable.pickadate( 'picker' )
+$( '#button__api-get--enable' ).on( 'click', function( event ) {
+    console.log( 'Base picker state:', picker_get__enable.get( 'enable' ) )
+    console.log( 'Dates *not* to disabled:', picker_get__enable.get( 'disable' ) )
     event.stopPropagation()
 })
 
@@ -826,24 +856,134 @@ $( '#button__api-set--max-time-false' ).on( 'click', function( event ) {
     event.stopPropagation()
 })
 
+//disable: date
+var $input_set__disable_date = $( '#demo__api-set--disable-date' ).pickadate(),
+    picker_set__disable_date = $input_set__disable_date.pickadate( 'picker' )
+$( '#button__api-set--disable-date-array' ).on( 'click', function( event ) {
+    picker_set__disable_date.set( 'disable', [ [2013,9,3], [2013,9,9], [2013,9,20] ])
+    event.stopPropagation()
+})
+$( '#button__api-set--disable-date-js' ).on( 'click', function( event ) {
+    picker_set__disable_date.set( 'disable', [ new Date(2013,9,13), new Date(2013,9,24) ])
+    event.stopPropagation()
+})
+$( '#button__api-set--disable-date-integer' ).on( 'click', function( event ) {
+    picker_set__disable_date.set( 'disable', [ 1, 4, 7 ])
+    event.stopPropagation()
+})
+$( '#button__api-set--disable-date-true' ).on( 'click', function( event ) {
+    picker_set__disable_date.set( 'disable', true )
+    event.stopPropagation()
+})
+$( '#button__api-set--disable-date-false' ).on( 'click', function( event ) {
+    picker_set__disable_date.set( 'disable', false )
+    event.stopPropagation()
+})
+$( '#button__api-set--disable-date-flip' ).on( 'click', function( event ) {
+    picker_set__disable_date.set( 'disable', 'flip' )
+    event.stopPropagation()
+})
+
+//disable: time
+var $input_set__disable_time = $( '#demo__api-set--disable-time' ).pickatime(),
+    picker_set__disable_time = $input_set__disable_time.pickatime( 'picker' )
+$( '#button__api-set--disable-time-array' ).on( 'click', function( event ) {
+    picker_set__disable_time.set( 'disable', [ [2,30], [4,30], [9,0] ])
+    event.stopPropagation()
+})
+$( '#button__api-set--disable-time-integer' ).on( 'click', function( event ) {
+    picker_set__disable_time.set( 'disable', [ 1, 4, 7 ])
+    event.stopPropagation()
+})
+$( '#button__api-set--disable-time-true' ).on( 'click', function( event ) {
+    picker_set__disable_time.set( 'disable', true )
+    event.stopPropagation()
+})
+$( '#button__api-set--disable-time-false' ).on( 'click', function( event ) {
+    picker_set__disable_time.set( 'disable', false )
+    event.stopPropagation()
+})
+$( '#button__api-set--disable-time-flip' ).on( 'click', function( event ) {
+    picker_set__disable_time.set( 'disable', 'flip' )
+    event.stopPropagation()
+})
+
+//enable: date
+var $input_set__enable_date = $( '#demo__api-set--enable-date' ).pickadate(),
+    picker_set__enable_date = $input_set__enable_date.pickadate( 'picker' )
+$( '#button__api-set--enable-date-array' ).on( 'click', function( event ) {
+    picker_set__enable_date.set( 'enable', [ [2013,9,3], [2013,9,9], [2013,9,20] ])
+    event.stopPropagation()
+})
+$( '#button__api-set--enable-date-js' ).on( 'click', function( event ) {
+    picker_set__enable_date.set( 'enable', [ new Date(2013,9,13), new Date(2013,9,24) ])
+    event.stopPropagation()
+})
+$( '#button__api-set--enable-date-integer' ).on( 'click', function( event ) {
+    picker_set__enable_date.set( 'enable', [ 1, 4, 7 ])
+    event.stopPropagation()
+})
+$( '#button__api-set--enable-date-true' ).on( 'click', function( event ) {
+    picker_set__enable_date.set( 'enable', true )
+    event.stopPropagation()
+})
+$( '#button__api-set--enable-date-false' ).on( 'click', function( event ) {
+    picker_set__enable_date.set( 'enable', false )
+    event.stopPropagation()
+})
+$( '#button__api-set--enable-date-flip' ).on( 'click', function( event ) {
+    picker_set__enable_date.set( 'enable', 'flip' )
+    event.stopPropagation()
+})
+
+//enable: time
+var $input_set__enable_time = $( '#demo__api-set--enable-time' ).pickatime(),
+    picker_set__enable_time = $input_set__enable_time.pickatime( 'picker' )
+$( '#button__api-set--enable-time-array' ).on( 'click', function( event ) {
+    picker_set__enable_time.set( 'enable', [ [2,30], [4,30], [9,0] ])
+    event.stopPropagation()
+})
+$( '#button__api-set--enable-time-integer' ).on( 'click', function( event ) {
+    picker_set__enable_time.set( 'enable', [ 1, 4, 7 ])
+    event.stopPropagation()
+})
+$( '#button__api-set--enable-time-true' ).on( 'click', function( event ) {
+    picker_set__enable_time.set( 'enable', true )
+    event.stopPropagation()
+})
+$( '#button__api-set--enable-time-false' ).on( 'click', function( event ) {
+    picker_set__enable_time.set( 'enable', false )
+    event.stopPropagation()
+})
+$( '#button__api-set--enable-time-flip' ).on( 'click', function( event ) {
+    picker_set__enable_time.set( 'enable', 'flip' )
+    event.stopPropagation()
+})
+
+//interval: time
+var $input_set__interval_time = $( '#demo__api-set--interval' ).pickatime(),
+    picker_set__interval_time = $input_set__interval_time.pickatime( 'picker' )
+$( '#button__api-set--interval-fifteen' ).on( 'click', function( event ) {
+    picker_set__interval_time.set( 'interval', 15 )
+    event.stopPropagation()
+})
+$( '#button__api-set--interval-twenty' ).on( 'click', function( event ) {
+    picker_set__interval_time.set( 'interval', 20 )
+    event.stopPropagation()
+})
+$( '#button__api-set--interval-onetwenty' ).on( 'click', function( event ) {
+    picker_set__interval_time.set( 'interval', 120 )
+    event.stopPropagation()
+})
+
 
 
 /**
- * API events and methods
+ * API events and callbacks
  */
 
-// trigger events
-var $input_method_on = $( '#demo__api-method-on' ).pickadate(),
-    picker_method_on = $input_method_on.pickadate( 'picker' )
-if ( picker_method_on ) {
-    picker_method_on.on( 'open', function() {
-        console.log( 'Opened.. and here I am!' )
-    })
-}
-
-
-// default events
-var $input_default_events = $( '#demo__api-default-events' ).pickadate({
+// callback: options
+var $input_callback_options = $( '#demo__api-callback-options' ).pickadate({
         onOpen: function() {
             console.log('Opened up!')
         },
@@ -859,18 +999,54 @@ var $input_default_events = $( '#demo__api-default-events' ).pickadate({
         onStop: function() {
             console.log('See ya')
         },
-        onSet: function(event) {
-            console.log('Set stuff:', event)
+        onSet: function(thingSet) {
+            console.log('Set stuff:', thingSet)
         }
     }),
-    picker_default_events = $input_default_events.pickadate( 'picker' )
-$( '#button__api-default-events' ).on( 'click', function( event ) {
+    picker_callback_options = $input_callback_options.pickadate( 'picker' )
+$( '#button__api-callback-options' ).on( 'click', function( event ) {
     if ( this.innerHTML == 'Stop' ) {
-        picker_default_events.stop()
+        picker_callback_options.stop()
         this.innerHTML = 'Start'
     }
     else {
-        picker_default_events.start()
+        picker_callback_options.start()
+        this.innerHTML = 'Stop'
+    }
+    event.stopPropagation()
+})
+
+
+// callback: bindings
+var $input_callback_bindings = $( '#demo__api-callback-bindings' ).pickadate()
+    picker_callback_bindings = $input_callback_bindings.pickadate( 'picker' )
+picker_callback_bindings.on({
+    open: function() {
+        console.log('Opened up!')
+    },
+    close: function() {
+        console.log('Closed now')
+    },
+    render: function() {
+        console.log('Just rendered anew')
+    },
+    start: function() {
+        console.log('Hello there :)')
+    },
+    stop: function() {
+        console.log('See ya')
+    },
+    set: function(thingSet) {
+        console.log('Set stuff:', thingSet)
+    }
+})
+$( '#button__api-callback-bindings' ).on( 'click', function( event ) {
+    if ( this.innerHTML == 'Stop' ) {
+        picker_callback_bindings.stop()
+        this.innerHTML = 'Start'
+    }
+    else {
+        picker_callback_bindings.start()
         this.innerHTML = 'Stop'
     }
     event.stopPropagation()

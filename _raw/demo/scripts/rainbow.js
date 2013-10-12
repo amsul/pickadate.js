@@ -957,7 +957,7 @@ Rainbow.extend('javascript', [
             2: 'entity.function'
         },
         // Fix for not capturing the space after `new`
-        'pattern': /(new\s+)(.*)(?=\()/g
+        'pattern': /(new\s+)(.*)(?=\(.+\)$)/g
     },
 
     /**
@@ -1140,8 +1140,8 @@ Rainbow.extend('css', [
 // Extend rainbow javascript
 window.Rainbow.extend( 'javascript', [
     {
-        name: 'null',
-        pattern: /\b(null|undefined)\b/g
+        'name': 'null',
+        'pattern': /\b(null|undefined)\b/g
     },
     {
         'name': 'line-break',

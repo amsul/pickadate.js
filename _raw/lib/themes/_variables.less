@@ -1,45 +1,45 @@
 
-/* ==========================================================================
-   $VARIABLES
-   ========================================================================== */
+// ==========================================================================
+// $VARIABLES
+// ==========================================================================
 
 
-/**
- * Base colors
- */
+//
+// Base colors
+//
 @blue: #0089ec;
 @blue-hover: #b1dcfb;
 @black: #000;
 @white: #fff;
 
 
-/**
- * Backgrounds
- */
+//
+// Backgrounds
+//
 @bg-white: @white;
 @bg-grey-light: #f2f2f2;
 
 
-/**
- * Borders
- */
+//
+// Borders
+//
 @border-grey: #777;
 @border-grey-light: #ddd;
 @border-select: darken( @border-grey-light, 15% );
 
 
-/**
- * Buttons
- */
+//
+// Buttons
+//
 @clear-red: #e20;
 
 
 
 
 
-/**
- * Picker base
- */
+//
+// Picker base
+//
 
 // Make sure nothing is above the picker.
 @picker-z-index: 10000;
@@ -70,9 +70,9 @@
 
 
 
-/**
- * Date picker options
- */
+//
+// Date picker options
+//
 
 // The year and weekday labels.
 @year-weekday-label: #999;
@@ -90,9 +90,9 @@
 
 
 
-/**
- * Theme configurations
- */
+//
+// Theme configurations
+//
 
 // The “default” min & max widths.
 @picker-min-width: 256px;
@@ -115,13 +115,14 @@
 
 
 
-/* ==========================================================================
-   $MIXINS
-   ========================================================================== */
+// ==========================================================================
+// $MIXINS
+// ==========================================================================
 
-/**
- * Common picker item states
- */
+
+//
+// Common picker item states
+//
 
 // Highlighted.
 .picker-item-highlighted () {
@@ -152,9 +153,9 @@
 
 
 
-/**
- * Opacity
- */
+//
+// Opacity
+//
 .opacity( @decimal ) {
     @percent: @decimal * 100;
     -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=@{percent})";
@@ -165,9 +166,9 @@
 
 
 
-/**
- * Vendor prefixes
- */
+//
+// Vendor prefixes
+//
 .box-shadow ( @rest... ) {
     -webkit-box-shadow: @rest;
        -moz-box-shadow: @rest;

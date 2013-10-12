@@ -1,42 +1,6 @@
 /* ==========================================================================
    $BASE-PICKER
    ========================================================================== */
-/* ==========================================================================
-   $VARIABLES
-   ========================================================================== */
-/**
- * Base colors
- */
-/**
- * Backgrounds
- */
-/**
- * Borders
- */
-/**
- * Buttons
- */
-/**
- * Picker base
- */
-/**
- * Date picker options
- */
-/**
- * Theme configurations
- */
-/* ==========================================================================
-   $MIXINS
-   ========================================================================== */
-/**
- * Common picker item states
- */
-/**
- * Opacity
- */
-/**
- * Vendor prefixes
- */
 /**
  * Note: the root picker element should __NOT__ be styled
  * more than what’s here. Style the `.picker__holder` instead.
@@ -72,43 +36,7 @@
 
 /*!
  * Classic picker styling for pickadate.js
- * Demo: http://amsul.github.io/pickadate.js/themes.htm#classic
- */
-/* ==========================================================================
-   $VARIABLES
-   ========================================================================== */
-/**
- * Base colors
- */
-/**
- * Backgrounds
- */
-/**
- * Borders
- */
-/**
- * Buttons
- */
-/**
- * Picker base
- */
-/**
- * Date picker options
- */
-/**
- * Theme configurations
- */
-/* ==========================================================================
-   $MIXINS
-   ========================================================================== */
-/**
- * Common picker item states
- */
-/**
- * Opacity
- */
-/**
- * Vendor prefixes
+ * Demo: http://amsul.github.io/pickadate.js
  */
 /**
  * Note: the root picker element should __NOT__ be styled

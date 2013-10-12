@@ -12,6 +12,7 @@
     fileSize_css_default_time = meta.fileSize( grunt.file.read( dirs.min.themes + '/default.time.css') )
     fileSize_css_classic_date = meta.fileSize( grunt.file.read( dirs.min.themes + '/classic.date.css') )
     fileSize_css_classic_time = meta.fileSize( grunt.file.read( dirs.min.themes + '/classic.time.css') )
+    fileSize_css_rtl = meta.fileSize( grunt.file.read( dirs.min.themes + '/rtl.css') )
 %}
 
 #### To get started, check out the:
@@ -38,7 +39,7 @@ The v3 API is significantly different from v2 (all for the greater good!). So if
 <br>
 ## Library files
 
-The `{%= dirs.dest.pickers %}` folder includes all the compiled files and a `compressed` folder with the minified counter-parts.
+The `{%= dirs.dest.pickers %}` folder includes all the compiled files and a `compressed` folder with the minified counter-parts. These files are all generated from the `_raw` folder using [Grunt](#building-with-grunt).
 
 ### Pickers
 
@@ -59,20 +60,37 @@ _To support old browsers, namely IE8, **also include** the `legacy.js` file._
 
 All themes are [generated using LESS](#less-styling) and compiled into the `{%= dirs.dest.themes %}` folder.
 
-File                    | Contents                 | Size (min & gzip)
------------------------ | ------------------------ | ----------------------
-`default.css`           | __Base default *__       | {%= (fileSize_css_default.gzip/1024).toFixed(2) %}kb
-`default.date.css`      | Default date picker      | {%= (fileSize_css_default_date.gzip/1024).toFixed(2) %}kb
-`default.time.css`      | Default time picker      | {%= (fileSize_css_default_time.gzip/1024).toFixed(2) %}kb
-`classic.css`           | __Base classic *__       | {%= (fileSize_css_classic.gzip/1024).toFixed(2) %}kb
-`classic.date.css`      | Classic date picker      | {%= (fileSize_css_classic_date.gzip/1024).toFixed(2) %}kb
-`classic.time.css`      | Classic time picker      | {%= (fileSize_css_classic_time.gzip/1024).toFixed(2) %}kb
+File                    | Contents                     | Size (min & gzip)
+----------------------- | ---------------------------- | ----------------------
+`default.css`           | __Base default *__           | {%= (fileSize_css_default.gzip/1024).toFixed(2) %}kb
+`default.date.css`      | Default date picker          | {%= (fileSize_css_default_date.gzip/1024).toFixed(2) %}kb
+`default.time.css`      | Default time picker          | {%= (fileSize_css_default_time.gzip/1024).toFixed(2) %}kb
+`classic.css`           | __Base classic *__           | {%= (fileSize_css_classic.gzip/1024).toFixed(2) %}kb
+`classic.date.css`      | Classic date picker          | {%= (fileSize_css_classic_date.gzip/1024).toFixed(2) %}kb
+`classic.time.css`      | Classic time picker          | {%= (fileSize_css_classic_time.gzip/1024).toFixed(2) %}kb
+`rtl.css`               | __RTL language stylings **__ | {%= (fileSize_css_rtl.gzip/1024).toFixed(2) %}kb
 
-__*__ One and only one base stylesheet is **required**. [Choose a theme]({%= pkg.homepage %}) then include the respective pickers as well.
+__*__ One and only one base stylesheet is **required**. [Choose a theme]({%= pkg.homepage %}#menu) then include the respective pickers as well.
+
+__**__ For languages with text flowing from right-to-left, also include the `rtl.css` stylesheet.
 
 ### Translations
 
 The translations are copied into the `{%= dirs.dest.translations %}` folder. There are currently [{%= grunt.file.expand(dirs.min.translations + '/*.js').length %} languages]({%= pkg.repository.url.replace(/.git$/,'') %}/blob/{%= pkg.version.split('-')[0] %}/lib/translations) included.
+
+
+
+
+<br>
+## Building with Grunt
+
+[Grunt](http://gruntjs.com/) `~{%= grunt.version %}` is used to build the project files. To get started, clone the project and then run:
+
+- `npm install` to get the required node modules.
+- `grunt --verbose` to confirm you have all the dependencies.
+
+
+Read the Gruntfile to see the build tasks and relative directories of the source files.
 
 
 
@@ -90,20 +108,6 @@ The picker themes are built using [LESS](http://lesscss.org/) with Grunt. To cus
 
 
 After making any changes, run `grunt less:themes` to compile it into CSS.
-
-
-
-
-<br>
-## Building with Grunt
-
-[Grunt](http://gruntjs.com/) `~{%= grunt.version %}` is used to build the project files. To get started, clone the project and then run:
-
-- `npm install` to get the required node modules.
-- `grunt --verbose` to confirm you have all the dependencies.
-
-
-Read the Gruntfile to see the build tasks and relative directories of the source files.
 
 
 

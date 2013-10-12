@@ -98,6 +98,7 @@ clear: 'Clear',
 // <a href="#formats">Formats</a>
 format: 'd mmmm, yyyy',
 formatSubmit: undefined,
+hiddenPrefix: undefined,
 hiddenSuffix: '_submit',
 
 // <a href="#selectors">Dropdown selectors</a>
@@ -259,45 +260,17 @@ $('.datepicker').pickadate({
         <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__translations" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
 
         <div class="section__block section__block--notification">
-            <p>When using translations, make sure to also <a href="#formats">specify the <code>formatSubmit</code> and <code class="attribute">data-value</code></a>.</p>
+            <p>When using translations, <a href="#formats">specify the <code>formatSubmit</code> and <code class="attribute">data-value</code></a> to ensure the date parses correctly regardless of locale.</p>
         </div>
 
         <h3 class="heading heading--divide"><span class="heading__text">RTL languages<a class="heading__anchor" name="translations_rtl" href="#translations_rtl">&sect;</a></span></h3>
-        <p>For right-to-left (RTL) languages you’ll need to switch the arrows and text direction by adding the following styling:</p>
+        <p>For right-to-left (RTL) languages you’ll need to switch the arrows and text direction by linking along the <code>rtl.css</code> file:</p>
 
-        <pre><code data-language="css">/**
- * Switch the direction - only really necessary if
- * you haven’t already applied it higher up in the DOM
- */
-<br>
-.picker {
-    direction: rtl;
-}
+        <pre class="pre--demo"><code data-language="html">&lt;!-- Add the stylings after the pickadate theme files --&gt;
+&lt;link rel="stylesheet" href="lib/themes/rtl.css"&gt;
 
-/**
- * Flip around the “next” and “previous” buttons
- */
-<br>
-.picker__nav--next {
-    right: auto;
-    left: -1em;
-}
-.picker__nav--prev {
-    left: auto;
-    right: -1em;
-}
-.picker__nav--next:before {
-    border-left: 0;
-    border-right: 0.75em solid #000000;
-}
-.picker__nav--prev:before {
-    border-right: 0;
-    border-left: 0.75em solid #000000;
-}</code></pre>
-
-        <p>Then add the language to get this result:</p>
-
-        <pre class="pre--demo"><code data-language="html">&lt;script src="lib/translations/ar.js"&gt;&lt;/script&gt;</code></pre>
+&lt;!-- Add the language after the pickadate script files --&gt;
+&lt;script src="lib/translations/ar.js"&gt;&lt;/script&gt;</code></pre>
         <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__translations_rtl" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
 
     </div> <!-- .section__block -->
@@ -311,26 +284,27 @@ $('.datepicker').pickadate({
 
         <h2 class="heading heading--divide"><span class="heading__text">Formats<a class="heading__anchor" name="formats" href="#formats">&sect;</a></span></h2>
         <p>Display a human-friendly format and use an alternate one to submit.</p>
-        <p>This is done by creating a new hidden <code class="tag-name">input</code> element with the same <code class="attribute">name</code> attribute as the original and a suffix:</p>
+        <p>This is done by creating a new hidden <code class="tag-name">input</code> element with the same <code class="attribute">name</code> attribute as the original and an optional prefix/suffix:</p>
 
         <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
-    // Escape any “<a href="#formatting-rules">rule</a>” characters with an exclamation mark (!).
+    // Escape any <a href="#formatting-rules">“rule” characters</a> with an exclamation mark (!).
     format: 'You selecte!d: dddd, dd mmm, yyyy',
     formatSubmit: 'yyyy/mm/dd',
-    hiddenSuffix: '--submit'
+    hiddenPrefix: 'prefix__',
+    hiddenSuffix: '__suffix'
 })</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__formats--a" class="fieldset__input " name=date_demo__formats type=text placeholder="Try me&hellip;"></div></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__formats--a" class="fieldset__input " name=date_input type=text placeholder="Try me&hellip;"></div></fieldset>
+
+
+        <h3 class="heading heading--divide"><span class="heading__text">Formatting with translations<a class="heading__anchor" name="formats_translations" href="#formats_translations">&sect;</a></span></h3>
 
         <p>When using <a href="#translations">translations</a>, the <code class="tag-name">input</code> element should be given a <code class="attribute">data-value</code> attribute formatted using the <code>formatSubmit</code> – the element’s <code class="attribute">value</code> can be left blank. This helps to parse the date into the various languages:</p>
         <pre class="pre--demo"><code data-language="html">&lt;input data-value="2013/04/20"></code></pre>
         <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__formats--b" class="fieldset__input " name=date_demo__formats type=text data-value="2013/04/20" placeholder="Try me&hellip;"></div></fieldset>
 
-    </div> <!-- .section__block -->
 
-    <div class="section__block section__block--scoped">
-
-        <h2 class="heading heading--divide"><span class="heading__text">Formatting Rules<a class="heading__anchor" name="formatting-rules" href="#formatting-rules">&sect;</a></span></h2>
+        <h3 class="heading heading--divide"><span class="heading__text">Formatting Rules<a class="heading__anchor" name="formatting-rules" href="#formatting-rules">&sect;</a></span></h3>
         <p>The following rules can be used to format any date:</p>
 
         <table class="table">
@@ -502,20 +476,30 @@ $('.datepicker').pickadate({
         <h2 class="heading heading--divide"><span class="heading__text">Disable Dates<a class="heading__anchor" name="disable-dates" href="#disable-dates">&sect;</a></span></h2>
         <p>Disable a specific or arbitrary set of dates selectable on the picker.</p>
 
-        <p><b>1)</b> Using arrays formatted as <code>[YEAR,MONTH,DATE]</code>:</p>
+        <p><b>1)</b> Using JavaScript Date objects:</p>
 
         <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
     disable: [
-        [2013,3,3],
-        [2013,3,12],
-        [2013,3,20],
-        [2013,3,29]
+        new Date(2013,3,13),
+        new Date(2013,3,29)
     ]
 })</code></pre>
 
         <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__disable-dates--a" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
 
-        <p><b>2)</b> Using integers representing days of the week (from 1 to 7):</p>
+        <p><b>2)</b> Using arrays formatted as <code>[YEAR,MONTH,DATE]</code>:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
+    disable: [
+        [2013,3,3],
+        [2013,3,12],
+        [2013,3,20]
+    ]
+})</code></pre>
+
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__disable-dates--b" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
+
+        <p><b>3)</b> Using integers representing days of the week (from 1 to 7):</p>
 
         <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
     disable: [
@@ -523,9 +507,9 @@ $('.datepicker').pickadate({
     ]
 })</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__disable-dates--b" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__disable-dates--c" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
 
-        <p><b>3)</b> <i><u>Disabling all</u></i> except a specific or arbitrary set of dates by setting <code class="constant">true</code> as the first item in the collection:</p>
+        <p><b>4)</b> <i><u>Disabling all</u></i> except a specific or arbitrary set of dates by setting <code class="constant">true</code> as the first item in the collection:</p>
 
         <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
     disable: [
@@ -534,11 +518,12 @@ $('.datepicker').pickadate({
         [2013,3,3],
         [2013,3,12],
         [2013,3,20],
-        [2013,3,29]
+        new Date(2013,3,13),
+        new Date(2013,3,29)
     ]
 })</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__disable-dates--c" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__disable-dates--d" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
 
     </div> <!-- .section__block -->
 
@@ -622,7 +607,7 @@ $('.datepicker').pickadate({
     </footer> <!-- .section -->
 
 
-    <script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="lib/picker.js"></script>
     <script src="lib/picker.date.js"></script>
     <script src="lib/picker.time.js"></script>

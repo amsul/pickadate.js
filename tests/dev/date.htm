@@ -11,8 +11,8 @@
 <title>Pickadate.js</title>
 
 <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="../../lib/themes/classic.css">
-<link rel="stylesheet" href="../../lib/themes/classic.date.css">
+<link rel="stylesheet" href="../../lib/themes/default.css">
+<link rel="stylesheet" href="../../lib/themes/default.date.css">
 
 <!--[if lt IE 9]>
     <script>document.createElement('section')</script>
@@ -41,7 +41,7 @@
         <form>
             <fieldset>
                 <h3><label for="input_01">Pick a date. Go ahead...</label></h3>
-                <input id="input_01" class="datepicker" name="date" type="date" valuee="21 July 2013" data-valuee="2013-07-21" autofocussss>
+                <input id="input_01" class="datepicker" name="date" type="date" valuee="21 July 2013" data-valuee="2013-07-21" autofocus>
                 <br><br><br><br><br>
                 <input class="button" type="submit" value="open">
             </fieldset>
@@ -54,7 +54,7 @@
             <input type="text">
             <input type="text">
             <input type="text">
-            <input class="date" autofocus>
+            <input class="date" autofocussss>
             <input type="submit">
         </form>
 
@@ -107,7 +107,7 @@
 
     <script type="text/javascript">
 
-        var $input = $( '.date'/*'.datepicker'*/ ).pickadate({
+        var $input = $( /*'.date'*/ '.datepicker' ).pickadate({
             // container: '.outlet',
             disable: [ 1, 2, 7, [2013,6,1] ],
             selectYears: true,
