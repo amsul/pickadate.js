@@ -39,7 +39,7 @@ The v3 API is significantly different from v2 (all for the greater good!). So if
 <br>
 ## Library files
 
-The `{%= dirs.dest.pickers %}` folder includes all the compiled files and a `compressed` folder with the minified counter-parts. These files are all generated from the `_raw` folder using [Grunt](#building-with-grunt).
+The `{%= dirs.dest.pickers %}` folder includes all the compiled files and a `compressed` folder with the minified counter-parts. These files are all generated from the `_raw/lib` folder using [Grunt](#building-with-grunt).
 
 ### Pickers
 
