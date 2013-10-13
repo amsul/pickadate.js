@@ -1,5 +1,23 @@
 # Changelog
 
+## 3.3.0
+
+- [#238](https://github.com/amsul/pickadate.js/issues/238): Improved disabled dates validation.
+- [#236](https://github.com/amsul/pickadate.js/issues/236): Fixed transparency issue in IE8 on XP.
+- [#159](https://github.com/amsul/pickadate.js/issues/159): Added functionality to reset disabled dates/times.
+- [#232](https://github.com/amsul/pickadate.js/issues/232): Dropdown styling tweaked.
+- [#197](https://github.com/amsul/pickadate.js/issues/197): Fixed issue with forms not submitting on Firefox.
+- [#230](https://github.com/amsul/pickadate.js/issues/230): Fixed issue with selected time scrolling into view.
+- [#208](https://github.com/amsul/pickadate.js/issues/208) & [#209](https://github.com/amsul/pickadate.js/issues/209): Added `hiddenPrefix` option for hidden input element’s name attribute.
+- [#130](https://github.com/amsul/pickadate.js/issues/130): Fixed issue with passing focus to an element with custom jQuery builds.
+- [#246](https://github.com/amsul/pickadate.js/issues/246) & [#242](https://github.com/amsul/pickadate.js/issues/242): Resolved jQuery conflict.
+- [#247](https://github.com/amsul/pickadate.js/issues/247): Fixed issue with time picker intervals and the min selectable time.
+- Added option to disabled/enable dates using JavaScript Date objects.
+- Tweaked functionality in enabling/disabling dates and times.
+- Improved support for RTL languages and keyboard navigation.
+- Added `rtl.css` for styling RTL languages appropriatey.
+
+
 ## 3.2.2
 
 - [#216](https://github.com/amsul/pickadate.js/issues/216): Added generic Arabic translations.
