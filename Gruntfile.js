@@ -137,7 +137,7 @@ module.exports = function( grunt ) {
                     '<%= dirs.dest.themes %>/default.time.css': [ '<%= dirs.src.themes %>/base.time.less', '<%= dirs.src.themes %>/default.time.less' ],
                     '<%= dirs.dest.themes %>/classic.date.css': [ '<%= dirs.src.themes %>/base.date.less', '<%= dirs.src.themes %>/classic.date.less' ],
                     '<%= dirs.dest.themes %>/classic.time.css': [ '<%= dirs.src.themes %>/base.time.less', '<%= dirs.src.themes %>/classic.time.less' ],
-                    '<%= dirs.dest.themes %>/rtl.css': [ '<%= dirs.src.themes %>/rtl.less' ],
+                    '<%= dirs.dest.themes %>/rtl.css': [ '<%= dirs.src.themes %>/rtl.less' ]
                 }
             }
         },
