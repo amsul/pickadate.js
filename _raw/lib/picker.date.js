@@ -17,12 +17,12 @@
 
     // Register as an anonymous module.
     if ( typeof define === 'function' && define.amd )
-        define( ['picker'], factory )
+        define( ['picker','jquery'], factory )
 
     // Or using browser globals.
-    else factory( Picker )
+    else factory( Picker, jQuery )
 
-}(function( Picker ) {
+}(function( Picker, $ ) {
 
 
 /**

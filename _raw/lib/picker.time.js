@@ -17,12 +17,12 @@
 
     // Register as an anonymous module.
     if ( typeof define === 'function' && define.amd )
-        define( ['picker'], factory )
+        define( ['picker','jquery'], factory )
 
     // Or using browser globals.
-    else factory( Picker )
+    else factory( Picker, jQuery )
 
-}(function( Picker ) {
+}(function( Picker, $ ) {
 
 
 /**
@@ -194,7 +194,7 @@ TimePicker.prototype.create = function( type, value, options ) {
     }
 
     // Normalize it into a "reachable" interval.
-    value = clock.normalize( value, options )
+    value = clock.normalize( type, value, options )
 
     // Return the compiled object.
     return {
@@ -240,11 +240,19 @@ TimePicker.prototype.now = function( type, value/*, options*/ ) {
 
 
 /**
- * Normalize minutes or an object to be "reachable" based on the interval.
+ * Normalize minutes to be “reachable” based on the min and interval.
  */
-TimePicker.prototype.normalize = function( value/*, options*/ ) {
-    // If it's a negative value, add one interval to keep it as "passed".
-    return value - ( ( value < 0 ? this.item.interval : 0 ) + value % this.item.interval )
+TimePicker.prototype.normalize = function( type, value/*, options*/ ) {
+
+    var minObject = this.item.min, interval = this.item.interval,
+
+        // If setting min and it doesn’t exist, don’t shift anything.
+        // Otherwise get the value and min difference and then
+        // normalize the difference with the interval.
+        difference = type == 'min' && !minObject ? 0 : ( value - minObject.pick ) % interval
+
+    // If it’s a negative value, add one interval to keep it as “passed”.
+    return value - ( difference + ( value < 0 ? interval : 0 ) )
 } //TimePicker.prototype.normalize
 
 
@@ -267,7 +275,7 @@ TimePicker.prototype.measure = function( type, value, options ) {
 
     // If it's an object already, just normalize it.
     else if ( Picker._.isObject( value ) && Picker._.isInteger( value.pick ) ) {
-        value = clock.normalize( value.pick, options )
+        value = clock.normalize( type, value.pick, options )
     }
 
     return value
@@ -335,17 +343,20 @@ TimePicker.prototype.disabled = function( timeObject ) {
  */
 TimePicker.prototype.shift = function( timeObject, interval ) {
 
-    var
-        clock = this
+    var clock = this,
+        minLimit = clock.item.min.pick,
+        maxLimit = clock.item.max.pick
+
+    interval = interval || clock.item.interval
 
     // Keep looping as long as the time is disabled.
     while ( clock.disabled( timeObject ) ) {
 
         // Increase/decrease the time by the interval and keep looping.
-        timeObject = clock.create( timeObject.pick += interval || clock.item.interval )
+        timeObject = clock.create( timeObject.pick += interval )
 
         // If we've looped beyond the limits, break out of the loop.
-        if ( timeObject.pick <= clock.item.min.pick || timeObject.pick >= clock.item.max.pick ) {
+        if ( timeObject.pick <= minLimit || timeObject.pick >= maxLimit ) {
             break
         }
     }
@@ -370,8 +381,7 @@ TimePicker.prototype.scope = function( timeObject ) {
  */
 TimePicker.prototype.parse = function( type, value, options ) {
 
-    var
-        clock = this,
+    var clock = this,
         parsingObject = {}
 
     if ( !value || Picker._.isInteger( value ) || $.isArray( value ) || Picker._.isDate( value ) || Picker._.isObject( value ) && Picker._.isInteger( value.pick ) ) {
