@@ -1,4 +1,3 @@
-
 /*!
  * Date picker for {%= pkg.title %} v{%= pkg.version %}
  * {%= pkg.homepage %}/date.htm
@@ -177,10 +176,14 @@ DatePicker.prototype.create = function( type, value, options ) {
 
     // If there’s no value, use the type as the value.
     value = value === undefined ? type : value
-
+    
+    // If value and type are undefined set it to now -> otherwise crashes on value.pick
+    if ( !value && !type ) {
+       value = calendar.now( type, value, options )
+    }
 
     // If it’s infinity, update the value.
-    if ( value == -Infinity || value == Infinity ) {
+    else if ( value == -Infinity || value == Infinity ) {
         isInfiniteValue = value
     }
 
