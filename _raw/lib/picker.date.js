@@ -173,6 +173,7 @@ DatePicker.prototype.get = function( type ) {
 DatePicker.prototype.create = function( type, value, options ) {
 
     var isInfiniteValue,
+        isInverted = false,
         calendar = this
 
     // If there’s no value, use the type as the value.
@@ -192,6 +193,8 @@ DatePicker.prototype.create = function( type, value, options ) {
     // If it’s an array, convert it into a date and make sure
     // that it’s a valid date – otherwise default to today.
     else if ( $.isArray( value ) ) {
+        isInverted = value[ 3 ] === 'inverted'
+
         value = new Date( value[ 0 ], value[ 1 ], value[ 2 ] )
         value = Picker._.isDate( value ) ? value : calendar.create().obj
     }
@@ -213,7 +216,8 @@ DatePicker.prototype.create = function( type, value, options ) {
         date: isInfiniteValue || value.getDate(),
         day: isInfiniteValue || value.getDay(),
         obj: isInfiniteValue || value,
-        pick: isInfiniteValue || value.getTime()
+        pick: isInfiniteValue || value.getTime(),
+        isInverted: isInverted
     }
 } //DatePicker.prototype.create
 
@@ -407,7 +411,7 @@ DatePicker.prototype.disabled = function( dateObject ) {
     var calendar = this,
 
         // Filter through the disabled dates to check if this is one.
-        isDisabledDate = !!calendar.item.disable.filter( function( dateToDisable ) {
+        disabledRules = calendar.item.disable.filter( function( dateToDisable ) {
 
             // If the date is a number, match the weekday with 0index and `firstDay` check.
             if ( Picker._.isInteger( dateToDisable ) ) {
@@ -418,7 +422,11 @@ DatePicker.prototype.disabled = function( dateObject ) {
             if ( $.isArray( dateToDisable ) || Picker._.isDate( dateToDisable ) ) {
                 return dateObject.pick === calendar.create( dateToDisable ).pick
             }
-        }).length
+        }),
+
+        isDisabledDate = !!disabledRules.length && !disabledRules.filter( function( rule ) {
+          return $.isArray(rule) && rule[3] === 'inverted'
+        } ).length
 
 
     // Check the calendar “enabled” flag and respectively flip the
@@ -610,7 +618,10 @@ DatePicker.prototype.flipItem = function( type, value/*, options*/ ) {
     else if ( $.isArray( value ) ) {
 
         // Check if we have to add/remove from collection.
-        if ( !isInverted && type == 'enable' || isInverted && type == 'disable' ) {
+        if ( !isInverted && type == 'enable') {
+            collection = calendar.addEnabled( collection, value )
+        }
+        else if (isInverted && type == 'disable' ) {
             collection = calendar.removeDisabled( collection, value )
         }
         else if ( !isInverted && type == 'disable' || isInverted && type == 'enable' ) {
@@ -620,6 +631,29 @@ DatePicker.prototype.flipItem = function( type, value/*, options*/ ) {
 
     return collection
 } //DatePicker.prototype.flipItem
+
+
+ /**
+ * Add an enabled (inverted) item to the disabled collection.
+ */
+DatePicker.prototype.addEnabled = function( collection, item ) {
+    var calendar = this
+
+    collection = calendar.removeDisabled( collection, item )
+
+    item.map( function( timeUnit ) {
+        if ( !timeUnit.push ) {
+          return
+        }
+
+        timeUnit.push('inverted')
+
+        if ( !calendar.filterDisabled( collection, timeUnit ).length ) {
+            collection.push( timeUnit )
+        }
+    })
+    return collection
+} //DatePicker.prototype.addEnabled
 
 
 /**
