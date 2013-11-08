@@ -252,7 +252,7 @@ picker.start()</code></pre>
 
         <pre class="pre--demo"><code data-language="javascript">picker.clear()</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-clear class="fieldset__button button button--small">Clear</button><input id="demo__api-clear" class="fieldset__input " type=text value="13 October, 2013" placeholder="Try me&hellip;"></div></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-clear class="fieldset__button button button--small">Clear</button><input id="demo__api-clear" class="fieldset__input " type=text value="8 November, 2013" placeholder="Try me&hellip;"></div></fieldset>
 
         <p>This is a shorthand that uses <a href="#method-set">the <code class="function">set</code> method</a> behind the scenes.</p>
 
@@ -309,10 +309,10 @@ picker.start()</code></pre>
     day: 6,
 
     // The underlying JavaScript Date object.
-    obj: { 'Sat Apr 20 2013 00:00:00 GMT-0400 (EDT)' },
+    obj: { 'Sat Apr 20 2013 00:00:00 GMT+0200 (CEST)' },
 
     // The “pick” value used for comparisons.
-    pick: 1366430400000
+    pick: 1366408800000
 }</code></pre>
 
         <p>Here’s a <b>time picker item object</b> for <u>4:20 PM</u>:</p>
@@ -342,7 +342,7 @@ picker.start()</code></pre>
 
         <pre class="pre--demo"><code data-language="javascript">picker.get() // Short for `picker.get('value')`.</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-get--value class="fieldset__button button button--small">Log the value</button><input id="demo__api-get--value" class="fieldset__input " type=text value="13 October, 2013" placeholder="Open your console and try me&hellip;"></div></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-get--value class="fieldset__button button button--small">Log the value</button><input id="demo__api-get--value" class="fieldset__input " type=text value="8 November, 2013" placeholder="Open your console and try me&hellip;"></div></fieldset>
 
     </div> <!-- .section__block -->
 
@@ -527,7 +527,7 @@ picker.set({
 
         <pre class="pre--demo"><code data-language="javascript">picker.set('clear')</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-set-clear class="fieldset__button button button--small">Clear</button><input id="demo__api-set-clear" class="fieldset__input " type=text value="13 October, 2013" placeholder="Try me&hellip;"></div></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-set-clear class="fieldset__button button button--small">Clear</button><input id="demo__api-set-clear" class="fieldset__input " type=text value="8 November, 2013" placeholder="Try me&hellip;"></div></fieldset>
 
         <p>This is the full form of <a href="#method-clear">the <code class="function">clear</code> method</a>.</p>
 
@@ -549,10 +549,10 @@ picker.set({
 picker.set('select', [2013,3,20])
 
 // Using JavaScript Date objects.
-picker.set('select', { 'Tue Apr 30 2013 00:00:00 GMT-0400 (EDT)' })
+picker.set('select', { 'Tue Apr 30 2013 00:00:00 GMT+0200 (CEST)' })
 
 // Using positive integers as UNIX timestamps.
-picker.set('select', 1365961912346)</code></pre>
+picker.set('select', 1365940312346)</code></pre>
 
         <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-set--select-date-array class="fieldset__button button button--small">Select using an array</button><button id=button__api-set--select-date-js class="fieldset__button button button--small">Select using a JS Date</button><button id=button__api-set--select-date-integer class="fieldset__button button button--small">Select using an integer</button><input id="demo__api-set--select-date" class="fieldset__input " type=text value="" placeholder="Try me&hellip;"></div></fieldset>
 
@@ -584,10 +584,10 @@ picker.set('select', 540)</code></pre>
 picker.set('highlight', [2013,3,20])
 
 // Using JavaScript Date objects.
-picker.set('highlight', { 'Tue Apr 30 2013 00:00:00 GMT-0400 (EDT)' })
+picker.set('highlight', { 'Tue Apr 30 2013 00:00:00 GMT+0200 (CEST)' })
 
 // Using positive integers as UNIX timestamps.
-picker.set('highlight', 1365961912346)</code></pre>
+picker.set('highlight', 1365940312346)</code></pre>
 
         <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-set--highlight-date-array class="fieldset__button button button--small">Highlight using an array</button><button id=button__api-set--highlight-date-js class="fieldset__button button button--small">Highlight using a JS Date</button><button id=button__api-set--highlight-date-integer class="fieldset__button button button--small">Highlight using an integer</button><input id="demo__api-set--highlight-date" class="fieldset__input " type=text value="" placeholder="Try me&hellip;"></div></fieldset>
 
@@ -621,7 +621,7 @@ picker.set('highlight', 1080)</code></pre>
 picker.set('view', [2000,3,20])
 
 // Using JavaScript Date objects.
-picker.set('view', { 'Sun Aug 14 1988 00:00:00 GMT-0400 (EDT)' })
+picker.set('view', { 'Sun Aug 14 1988 00:00:00 GMT+0200 (CEST)' })
 
 // Using positive integers as UNIX timestamps.
 picker.set('view', 1587355200000)</code></pre>
@@ -656,7 +656,7 @@ picker.set('view', 1080)</code></pre>
 picker.set('min', [2013,3,20])
 
 // Using JavaScript Date objects.
-picker.set('min', { 'Wed Aug 14 2013 00:00:00 GMT-0400 (EDT)' })
+picker.set('min', { 'Wed Aug 14 2013 00:00:00 GMT+0200 (CEST)' })
 
 // Using integers as days relative to today.
 picker.set('min', -4)
@@ -703,7 +703,7 @@ picker.set('min', false)</code></pre>
 picker.set('max', [2013,3,20])
 
 // Using JavaScript Date objects.
-picker.set('max', { 'Wed Aug 14 2013 00:00:00 GMT-0400 (EDT)' })
+picker.set('max', { 'Wed Aug 14 2013 00:00:00 GMT+0200 (CEST)' })
 
 // Using integers as days relative to today.
 picker.set('max', 4)

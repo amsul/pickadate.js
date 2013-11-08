@@ -532,7 +532,7 @@ test( '`disable` and `enable` using arrays', function() {
 
 
     picker.set( 'enable', [ [nowYear,nowMonth,17] ] )
-    deepEqual( picker.get( 'disable' ), [ [nowYear,nowMonth,1],[nowYear,nowMonth,25] ], 'Disabled date removed from collection' )
+    deepEqual( picker.get( 'disable' ), [ [nowYear,nowMonth,1],[nowYear,nowMonth,25],[nowYear,nowMonth,17,'inverted'] ], 'Disabled date removed from collection' )
 
     $root.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
         var index = indexCell - viewday + 1
@@ -546,7 +546,7 @@ test( '`disable` and `enable` using arrays', function() {
 
 
     picker.set( 'enable', 'flip' )
-    deepEqual( picker.get( 'disable' ), [ [nowYear,nowMonth,1],[nowYear,nowMonth,25] ], 'Disabled collection `enable` flipped' )
+    deepEqual( picker.get( 'disable' ), [ [nowYear,nowMonth,1],[nowYear,nowMonth,25],[nowYear,nowMonth,17,'inverted'] ], 'Disabled collection `enable` flipped' )
 
     $root.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
         var index = indexCell - viewday + 1
@@ -560,7 +560,7 @@ test( '`disable` and `enable` using arrays', function() {
 
 
     picker.set( 'disable', 'flip' )
-    deepEqual( picker.get( 'disable' ), [ [nowYear,nowMonth,1],[nowYear,nowMonth,25] ], 'Disabled collection `disable` flipped' )
+    deepEqual( picker.get( 'disable' ), [ [nowYear,nowMonth,1],[nowYear,nowMonth,25],[nowYear,nowMonth,17,'inverted'] ], 'Disabled collection `disable` flipped' )
 
     $root.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
         var index = indexCell - viewday + 1
