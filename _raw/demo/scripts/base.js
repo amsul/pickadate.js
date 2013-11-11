@@ -570,13 +570,17 @@ $( '#button__api-get--view-format' ).on( 'click', function( event ) {
 })
 
 //min
-var $input_get__min = $( '#demo__api-get--min' ).pickadate(),
+var $input_get__min = $( '#demo__api-get--min' ).pickadate({
+        min: [TODAY.getFullYear(),TODAY.getMonth(),TODAY.getDate()]
+    }),
     picker_get__min = $input_get__min.pickadate( 'picker' )
 $( '#button__api-get--min' ).on( 'click', function( event ) {
     console.log( picker_get__min.get( 'min' ) )
     event.stopPropagation()
 })
-var $input_get__min_format = $( '#demo__api-get--min-format' ).pickadate(),
+var $input_get__min_format = $( '#demo__api-get--min-format' ).pickadate({
+        min: [TODAY.getFullYear(),TODAY.getMonth(),TODAY.getDate()]
+    }),
     picker_get__min_format = $input_get__min_format.pickadate( 'picker' )
 $( '#button__api-get--min-format' ).on( 'click', function( event ) {
     console.log( picker_get__min_format.get( 'min', 'yyyy/mm/dd' ) )
@@ -584,13 +588,17 @@ $( '#button__api-get--min-format' ).on( 'click', function( event ) {
 })
 
 //max
-var $input_get__max = $( '#demo__api-get--max' ).pickadate(),
+var $input_get__max = $( '#demo__api-get--max' ).pickadate({
+        max: [TODAY.getFullYear()+2,TODAY.getMonth(),TODAY.getDate()]
+    }),
     picker_get__max = $input_get__max.pickadate( 'picker' )
 $( '#button__api-get--max' ).on( 'click', function( event ) {
     console.log( picker_get__max.get( 'max' ) )
     event.stopPropagation()
 })
-var $input_get__max_format = $( '#demo__api-get--max-format' ).pickadate(),
+var $input_get__max_format = $( '#demo__api-get--max-format' ).pickadate({
+        max: [TODAY.getFullYear()+2,TODAY.getMonth(),TODAY.getDate()]
+    }),
     picker_get__max_format = $input_get__max_format.pickadate( 'picker' )
 $( '#button__api-get--max-format' ).on( 'click', function( event ) {
     console.log( picker_get__max_format.get( 'max', 'yyyy/mm/dd' ) )

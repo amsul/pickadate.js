@@ -857,6 +857,14 @@ input[type=search] {
   list-style: none;
   padding: 0;
 }
+.menu__list--header:before,
+.menu__list--header:after {
+  content: " ";
+  display: table;
+}
+.menu__list--header:after {
+  clear: both;
+}
 /**
  * Menu links
  */
@@ -885,13 +893,7 @@ input[type=search] {
  */
 .menu__item--logo {
   float: left;
-}
-@media (min-width: 46.25em) {
-  .menu__item--logo {
-    float: none;
-    display: inline-block;
-    margin-right: 1em;
-  }
+  margin-right: 1em;
 }
 .menu__item--logo .menu__link {
   display: block;
@@ -925,8 +927,7 @@ input[type=search] {
 }
 @media (min-width: 46.25em) {
   .menu__item--responsive {
-    vertical-align: top;
-    display: inline-block;
+    float: left;
     margin-right: 1em;
   }
   .menu__item--responsive:last-child {
