@@ -786,14 +786,13 @@ test( 'Select', function() {
     var picker = this.picker,
         $root = picker.$root,
         viewsetObject = picker.get( 'view' ),
-        interval = 86400000,
         monthStartDay = viewsetObject.day,
         monthEndDate = new Date( viewsetObject.year, viewsetObject.month + 1, 0 ).getDate()
 
     for ( var i = monthStartDay; i < monthStartDay + monthEndDate; i += 1 ) {
         $root.find( '.' + $.fn.pickadate.defaults.klass.day ).eq( i ).click()
-        ok( picker.get( 'select' ).pick === viewsetObject.pick + ( i - monthStartDay ) * interval, 'Selected ' + picker.get( 'select', 'yyyy/mm/dd' ) )
-        ok( picker.get( 'value' ) === picker.get( 'select', $.fn.pickadate.defaults.format ), 'Input value updated to ' + picker.get( 'value' ) )
+        strictEqual( picker.get( 'select' ).pick, new Date( viewsetObject.year, viewsetObject.month, viewsetObject.date + i - monthStartDay ).getTime(), 'Selected ' + picker.get( 'select', 'yyyy/mm/dd' ) )
+        strictEqual( picker.get( 'value' ), picker.get( 'select', $.fn.pickadate.defaults.format ), 'Input value updated to ' + picker.get( 'value' ) )
     }
 })
 
