@@ -110,10 +110,28 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                             event.stopPropagation()
                         },
 
-                        // If the click is not on the root holder, stop it from bubbling to the doc.
+                        // When something within the root holder is clicked, stop it
+                        // from bubbling to the doc.
                         'mousedown click': function( event ) {
-                            if ( event.target != P.$root.children()[ 0 ] ) {
+
+                            var target = event.target
+
+                            // Make sure the target isn’t the root holder so it can bubble up.
+                            if ( target != P.$root.children()[ 0 ] ) {
+
                                 event.stopPropagation()
+
+                                // * For mousedown events, cancel the default action in order to
+                                //   prevent cases where focus is shifted onto external elements
+                                //   when using things like jQuery mobile or MagnificPopup (ref: #249 & #120).
+                                if ( event.type == 'mousedown' && !$( target ).is( ':input' ) ) {
+
+                                    event.preventDefault()
+
+                                    // Re-focus onto the element so that users can click away
+                                    // from elements focused within the picker.
+                                    ELEMENT.focus()
+                                }
                             }
                         }
                     }).

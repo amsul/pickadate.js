@@ -21,6 +21,9 @@
     // The picker shouldn’t affect or be affected by elements around it.
     position: absolute;
     z-index: @picker-z-index;
+
+    // The picker shouldn’t be selectable.
+    .user-select( none );
 }
 
 

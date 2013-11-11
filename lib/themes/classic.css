@@ -12,6 +12,10 @@
   color: #000000;
   position: absolute;
   z-index: 10000;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 /**
  * The picker input element.
