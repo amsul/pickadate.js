@@ -71,15 +71,16 @@
             formatSubmit: 'HH:i',
             hiddenPrefix: 'prefixed__',
             hiddenSuffix: '',
-            interval: 40,
-            // disable: [
-            //     // true,
-            //     0,
-            //     1,
-            //     4,
-            //     [3,30],
-            //     [8,45]
-            // ],
+            // interval: 40,
+            disable: [
+                // true,
+                0,
+                1,
+                4,
+                [3,30],
+                [8,45],
+                [1,30,'inverted']
+            ],
             // min: 4,
             // min: [ 5, 40 ],
             // max: -2,
@@ -87,8 +88,8 @@
         }),
         picker = $input.pickatime('picker')
 
-        picker.set('min',[5,40])
-        picker.set('max',[22,20])
+        // picker.set('min',[5,40])
+        // picker.set('max',[22,20])
 
     </script>
 

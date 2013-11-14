@@ -401,7 +401,7 @@ test( '`disable` and `enable` using arrays', function() {
 
     var picker = this.picker,
         $root = picker.$root,
-        disableCollection = [ [1,0],[4,30],[18,0],[23,30] ]
+        disableCollection = [ [1,0],[18,0],[23,30],[4,30] ]
 
     picker.set( 'disable', disableCollection )
     deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled times added' )
@@ -415,8 +415,9 @@ test( '`disable` and `enable` using arrays', function() {
         }
     })
 
+    disableCollection.pop()
     picker.set( 'enable', [ [4,30] ] )
-    deepEqual( picker.get( 'disable' ), [ [1,0],[18,0],[23,30] ], 'Disabled time removed' )
+    deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled time removed' )
 
     $root.find( '.' + $.fn.pickatime.defaults.klass.listItem ).each( function( index, item ) {
         if ( index === 2 || index === 36 || index === 47 ) {
@@ -428,7 +429,8 @@ test( '`disable` and `enable` using arrays', function() {
     })
 
     picker.set( 'enable', 'flip' )
-    deepEqual( picker.get( 'disable' ), [ [1,0],[18,0],[23,30] ], 'Disabled collection `enable` flipped' )
+    deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled collection `enable` flipped' )
+    deepEqual( picker.get( 'enable' ), -1, 'Base state disabled' )
 
     $root.find( '[data-pick]' ).each( function( index, item ) {
         if ( index !== 2 && index !== 36 && index !== 47 ) {
@@ -440,7 +442,8 @@ test( '`disable` and `enable` using arrays', function() {
     })
 
     picker.set( 'disable', 'flip' )
-    deepEqual( picker.get( 'disable' ), [ [1,0],[18,0],[23,30] ], 'Disabled collection `disable` flipped' )
+    deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled collection `disable` flipped' )
+    deepEqual( picker.get( 'enable' ), 1, 'Base state enabled' )
 
     $root.find( '[data-pick]' ).each( function( index, item ) {
         if ( index === 2 || index === 36 || index === 47 ) {
@@ -450,6 +453,14 @@ test( '`disable` and `enable` using arrays', function() {
             ok( !$( item ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is enabled: ' + item.innerHTML )
         }
     })
+
+
+    picker.set( 'disable', [1] )
+    var disabledTimeArray = [ 1, 30 ]
+    picker.set( 'enable', [ disabledTimeArray ] )
+    disabledTimeArray.push( 'inverted' )
+    disableCollection = disableCollection.concat([ 1, disabledTimeArray ])
+    deepEqual( picker.get('disable'), disableCollection, 'Disabled collection with specified time inverted' )
 })
 
 test( '`disable` and `enable` using booleans', function() {
