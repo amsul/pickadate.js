@@ -22,8 +22,10 @@
     "responsive"
   ],
   "ignore": [
-    "*",
-    "!lib/**/*"
+    "_raw",
+    "demo",
+    "tests",
+    "v2-(deprecated)"
   ],
   "main": "lib/picker.js",
   "homepage": "http://amsul.github.io/pickadate.js",
