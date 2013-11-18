@@ -33,7 +33,7 @@ module( 'Date picker setup', {
 })
 
 test( 'Calendar stage', function() {
-    ok( this.picker.$root.find( '.' + $.fn.pickadate.defaults.klass.table + ' [data-pick]' ).length === 42, '42 selectables dates' )
+    strictEqual( this.picker.$root.find( '.' + $.fn.pickadate.defaults.klass.table + ' [data-pick]' ).length, 42, '42 selectables dates' )
 })
 
 test( 'Properties', function() {
@@ -62,7 +62,7 @@ test( 'First weekday', function() {
     strictEqual( $input.pickadate( 'picker' ).$root.find( '.' + $.fn.pickadate.defaults.klass.weekdays ).first().text(), $.fn.pickadate.defaults.weekdaysShort[1], 'Monday is first day' )
 
     picker.set( 'select', [ 2013, 8, 14 ] )
-    ok( picker.$root.find( 'td' ).first().text() === '1', 'Months starting on Sunday shift back a week' )
+    strictEqual( picker.$root.find( 'td' ).first().text(), '1', 'Months starting on Sunday shift back a week' )
 })
 
 test( 'Formats', function() {
@@ -844,7 +844,7 @@ test( 'Today', function() {
     picker.open()
 
     picker.$root.find( '.' + $.fn.pickadate.defaults.klass.buttonToday ).click()
-    ok( picker.get( 'value' ) === picker.get( 'select', $.fn.pickadate.defaults.format ), 'Value set to today' )
+    strictEqual( picker.get( 'value' ), picker.get( 'select', $.fn.pickadate.defaults.format ), 'Value set to today' )
 })
 
 test( 'Clear', function() {
@@ -854,10 +854,10 @@ test( 'Clear', function() {
     picker.open()
 
     picker.set( 'select', new Date() )
-    ok( picker.get( 'value' ) === picker.get( 'select', $.fn.pickadate.defaults.format ), 'Value updated' )
+    strictEqual( picker.get( 'value' ), picker.get( 'select', $.fn.pickadate.defaults.format ), 'Value updated' )
 
     picker.$root.find( '.' + $.fn.pickadate.defaults.klass.buttonClear ).click()
-    ok( picker.get( 'value' ) === '', 'Value cleared' )
+    strictEqual( picker.get( 'value' ), '', 'Value cleared' )
 })
 
 
@@ -916,8 +916,8 @@ test( 'Highlight', function() {
 
         $input.trigger({ type: 'keydown', keyCode: 40 })
         playdate.setDate( playdate.getDate() + 7 )
-        ok( picker.get( 'highlight' ).date === playdate.getDate(), 'Keyed "down" to: ' + picker.get( 'highlight', 'yyyy/mm/dd' ) )
-        ok( picker.get( 'view' ).month === picker.get( 'highlight' ).month, 'Updated "view" to: ' + picker.get( 'view', 'yyyy/mm/dd' ) )
+        strictEqual( picker.get( 'highlight' ).date, playdate.getDate(), 'Keyed "down" to: ' + picker.get( 'highlight', 'yyyy/mm/dd' ) )
+        strictEqual( picker.get( 'view' ).month, picker.get( 'highlight' ).month, 'Updated "view" to: ' + picker.get( 'view', 'yyyy/mm/dd' ) )
     }
 
     // Up
@@ -925,8 +925,8 @@ test( 'Highlight', function() {
 
         $input.trigger({ type: 'keydown', keyCode: 38 })
         playdate.setDate( playdate.getDate() - 7 )
-        ok( picker.get( 'highlight' ).date === playdate.getDate(), 'Keyed "up" to: ' + picker.get( 'highlight', 'yyyy/mm/dd' ) )
-        ok( picker.get( 'view' ).month === picker.get( 'highlight' ).month, 'Updated "view" to: ' + picker.get( 'view', 'yyyy/mm/dd' ) )
+        strictEqual( picker.get( 'highlight' ).date, playdate.getDate(), 'Keyed "up" to: ' + picker.get( 'highlight', 'yyyy/mm/dd' ) )
+        strictEqual( picker.get( 'view' ).month, picker.get( 'highlight' ).month, 'Updated "view" to: ' + picker.get( 'view', 'yyyy/mm/dd' ) )
     }
 
     // Left
@@ -935,7 +935,7 @@ test( 'Highlight', function() {
         $input.trigger({ type: 'keydown', keyCode: 37 })
         playdate.setDate( playdate.getDate() - 1 )
         ok( picker.get( 'highlight' ).date === playdate.getDate() && picker.get( 'highlight' ).day === playdate.getDay(), 'Keyed "left" to: ' + picker.get( 'highlight', 'yyyy/mm/dd' ) )
-        ok( picker.get( 'view' ).month === picker.get( 'highlight' ).month, 'Updated "view" to: ' + picker.get( 'view', 'yyyy/mm/dd' ) )
+        strictEqual( picker.get( 'view' ).month, picker.get( 'highlight' ).month, 'Updated "view" to: ' + picker.get( 'view', 'yyyy/mm/dd' ) )
     }
 
     // Right
@@ -944,7 +944,7 @@ test( 'Highlight', function() {
         $input.trigger({ type: 'keydown', keyCode: 39 })
         playdate.setDate( playdate.getDate() + 1 )
         ok( picker.get( 'highlight' ).date === playdate.getDate() && picker.get( 'highlight' ).day === playdate.getDay(), 'Keyed "right" to: ' + picker.get( 'highlight', 'yyyy/mm/dd' ) )
-        ok( picker.get( 'view' ).month === picker.get( 'highlight' ).month, 'Updated "view" to: ' + picker.get( 'view', 'yyyy/mm/dd' ) )
+        strictEqual( picker.get( 'view' ).month, picker.get( 'highlight' ).month, 'Updated "view" to: ' + picker.get( 'view', 'yyyy/mm/dd' ) )
     }
 })
 
@@ -993,7 +993,7 @@ test( '`data-value` to select, highlight, and view', function() {
     var picker = this.picker
 
     ok( picker._hidden, 'Has hidden input' )
-    ok( picker._hidden.value === '1988/08/14', 'Hidden input value' )
+    strictEqual( picker._hidden.value, '1988/08/14', 'Hidden input value' )
     deepEqual( picker.get( 'select' ).obj, new Date(1988,7,14), 'Selects date' )
     deepEqual( picker.get( 'highlight' ).obj, new Date(1988,7,14), 'Highlights date' )
     deepEqual( picker.get( 'view' ).obj, new Date(1988,7,1), 'Viewsets date' )

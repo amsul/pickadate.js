@@ -33,7 +33,7 @@ module( 'Time picker setup', {
 })
 
 test( 'Clock stage', function() {
-    ok( this.picker.$root.find( '[data-pick]' ).length === 48, '48 selectable times' )
+    strictEqual( this.picker.$root.find( '[data-pick]' ).length, 48, '48 selectable times' )
 })
 
 test( 'Properties', function() {
@@ -120,13 +120,13 @@ test( '`interval`', function() {
         $root = picker.$root
 
     picker.set( 'interval', 120 )
-    ok( picker.get( 'interval' ) === 120, '`interval` updated' )
-    ok( picker.get( 'min' ).pick % 120 === 0, '`min` updated' )
-    ok( picker.get( 'max' ).pick % 120 === 0, '`max` updated' )
-    ok( $root.find( '.' + $.fn.pickatime.defaults.klass.listItem ).length === 12, '12 selectable times' )
+    strictEqual( picker.get( 'interval' ), 120, '`interval` updated' )
+    strictEqual( picker.get( 'min' ).pick % 120, 0, '`min` updated' )
+    strictEqual( picker.get( 'max' ).pick % 120, 0, '`max` updated' )
+    strictEqual( $root.find( '.' + $.fn.pickatime.defaults.klass.listItem ).length, 12, '12 selectable times' )
 
     picker.set( 'interval', 'lol' )
-    ok( picker.get( 'interval' ) === 120, 'Interval unaffected by non-integer' )
+    strictEqual( picker.get( 'interval' ), 120, 'Interval unaffected by non-integer' )
 })
 
 test( '`select`', function() {
@@ -135,19 +135,29 @@ test( '`select`', function() {
 
     // Using numbers
     picker.set( 'select', 180 )
-    ok( picker.get( 'select' ).pick === 180, '`select` using a number: ' + picker.get( 'select', 'HH:i' ) )
-    ok( picker.get( 'highlight' ).pick === 180, '`highlight` updated' )
-    ok( picker.get( 'view' ).pick === 180, '`view` updated' )
-    ok( picker.get( 'min' ).pick === 0, '`min` unaffected' )
-    ok( picker.get( 'max' ).pick === 1410, '`max` unaffected' )
+    strictEqual( picker.get( 'select' ).pick, 180, '`select` using a number: ' + picker.get( 'select', 'HH:i' ) )
+    strictEqual( picker.get( 'highlight' ).pick, 180, '`highlight` updated' )
+    strictEqual( picker.get( 'view' ).pick, 180, '`view` updated' )
+    strictEqual( picker.get( 'min' ).pick, 0, '`min` unaffected' )
+    strictEqual( picker.get( 'max' ).pick, 1410, '`max` unaffected' )
+
+    // Using JavaScript date objects
+    var dateObject = new Date()
+    dateObject.setHours(4,20)
+    picker.set( 'select', dateObject )
+    strictEqual( picker.get('select').pick, 270, '`select` using a JS date object: ' + picker.get( 'select', 'HH:i' ) )
+    strictEqual( picker.get( 'highlight' ).pick, 270, '`highlight` updated' )
+    strictEqual( picker.get( 'view' ).pick, 270, '`view` updated' )
+    strictEqual( picker.get( 'min' ).pick, 0, '`min` unaffected' )
+    strictEqual( picker.get( 'max' ).pick, 1410, '`max` unaffected' )
 
     // Using arrays
     picker.set( 'select', [9,0] )
-    ok( picker.get( 'select' ).pick === 540, '`select` using an array: ' + picker.get( 'select', 'HH:i' ) )
-    ok( picker.get( 'highlight' ).pick === 540, '`highlight` updated' )
-    ok( picker.get( 'view' ).pick === 540, '`view` updated' )
-    ok( picker.get( 'min' ).pick === 0, '`min` unaffected' )
-    ok( picker.get( 'max' ).pick === 1410, '`max` unaffected' )
+    strictEqual( picker.get( 'select' ).pick, 540, '`select` using an array: ' + picker.get( 'select', 'HH:i' ) )
+    strictEqual( picker.get( 'highlight' ).pick, 540, '`highlight` updated' )
+    strictEqual( picker.get( 'view' ).pick, 540, '`view` updated' )
+    strictEqual( picker.get( 'min' ).pick, 0, '`min` unaffected' )
+    strictEqual( picker.get( 'max' ).pick, 1410, '`max` unaffected' )
 })
 
 test( '`highlight`', function() {
@@ -156,19 +166,29 @@ test( '`highlight`', function() {
 
     // Using numbers
     picker.set( 'highlight', 180 )
-    ok( picker.get( 'highlight' ).pick === 180, '`highlight` using a number: ' + picker.get( 'highlight', 'HH:i' ) )
+    strictEqual( picker.get( 'highlight' ).pick, 180, '`highlight` using a number: ' + picker.get( 'highlight', 'HH:i' ) )
     deepEqual( picker.get( 'view' ), picker.get( 'highlight' ), '`view` updated' )
-    ok( picker.get( 'select' ).pick === 0, '`select` unaffected' )
-    ok( picker.get( 'min' ).pick === 0, '`min` unaffected' )
-    ok( picker.get( 'max' ).pick === 1410, '`max` unaffected' )
+    strictEqual( picker.get( 'select' ).pick, 0, '`select` unaffected' )
+    strictEqual( picker.get( 'min' ).pick, 0, '`min` unaffected' )
+    strictEqual( picker.get( 'max' ).pick, 1410, '`max` unaffected' )
+
+    // Using JavaScript date objects
+    var dateObject = new Date()
+    dateObject.setHours(4,20)
+    picker.set( 'highlight', dateObject )
+    strictEqual( picker.get('highlight').pick, 270, '`highlight` using a JS date object: ' + picker.get( 'highlight', 'HH:i' ) )
+    deepEqual( picker.get( 'view' ), picker.get( 'highlight' ), '`view` updated' )
+    strictEqual( picker.get( 'select' ).pick, 0, '`select` unaffected' )
+    strictEqual( picker.get( 'min' ).pick, 0, '`min` unaffected' )
+    strictEqual( picker.get( 'max' ).pick, 1410, '`max` unaffected' )
 
     // Using arrays
     picker.set( 'highlight', [9,0] )
-    ok( picker.get( 'highlight' ).pick === 540, '`highlight` using an array: ' + picker.get( 'highlight', 'HH:i' ) )
+    strictEqual( picker.get( 'highlight' ).pick, 540, '`highlight` using an array: ' + picker.get( 'highlight', 'HH:i' ) )
     deepEqual( picker.get( 'view' ), picker.get( 'highlight' ), '`view` updated' )
-    ok( picker.get( 'select' ).pick === 0, '`select` unaffected' )
-    ok( picker.get( 'min' ).pick === 0, '`min` unaffected' )
-    ok( picker.get( 'max' ).pick === 1410, '`max` unaffected' )
+    strictEqual( picker.get( 'select' ).pick, 0, '`select` unaffected' )
+    strictEqual( picker.get( 'min' ).pick, 0, '`min` unaffected' )
+    strictEqual( picker.get( 'max' ).pick, 1410, '`max` unaffected' )
 })
 
 test( '`view`', function() {
@@ -177,19 +197,29 @@ test( '`view`', function() {
 
     // Using numbers
     picker.set( 'view', 180 )
-    ok( picker.get( 'view' ).pick === 180, '`view` using a number: ' + picker.get( 'view', 'HH:i' ) )
-    ok( picker.get( 'highlight' ).pick === 0, '`highlight` unaffected' )
-    ok( picker.get( 'select' ).pick === 0, '`select` unaffected' )
-    ok( picker.get( 'min' ).pick === 0, '`min` unaffected' )
-    ok( picker.get( 'max' ).pick === 1410, '`max` unaffected' )
+    strictEqual( picker.get( 'view' ).pick, 180, '`view` using a number: ' + picker.get( 'view', 'HH:i' ) )
+    strictEqual( picker.get( 'highlight' ).pick, 0, '`highlight` unaffected' )
+    strictEqual( picker.get( 'select' ).pick, 0, '`select` unaffected' )
+    strictEqual( picker.get( 'min' ).pick, 0, '`min` unaffected' )
+    strictEqual( picker.get( 'max' ).pick, 1410, '`max` unaffected' )
+
+    // Using JavaScript date objects
+    var dateObject = new Date()
+    dateObject.setHours(4,20)
+    picker.set( 'view', dateObject )
+    strictEqual( picker.get('view').pick, 270, '`view` using a JS date object: ' + picker.get( 'view', 'HH:i' ) )
+    strictEqual( picker.get( 'highlight' ).pick, 0, '`highlight` unaffected' )
+    strictEqual( picker.get( 'select' ).pick, 0, '`select` unaffected' )
+    strictEqual( picker.get( 'min' ).pick, 0, '`min` unaffected' )
+    strictEqual( picker.get( 'max' ).pick, 1410, '`max` unaffected' )
 
     // Using arrays
     picker.set( 'view', [9,0] )
-    ok( picker.get( 'view' ).pick === 540, '`view` using an array: ' + picker.get( 'view', 'HH:i' ) )
-    ok( picker.get( 'highlight' ).pick === 0, '`highlight` unaffected' )
-    ok( picker.get( 'select' ).pick === 0, '`select` unaffected' )
-    ok( picker.get( 'min' ).pick === 0, '`min` unaffected' )
-    ok( picker.get( 'max' ).pick === 1410, '`max` unaffected' )
+    strictEqual( picker.get( 'view' ).pick, 540, '`view` using an array: ' + picker.get( 'view', 'HH:i' ) )
+    strictEqual( picker.get( 'highlight' ).pick, 0, '`highlight` unaffected' )
+    strictEqual( picker.get( 'select' ).pick, 0, '`select` unaffected' )
+    strictEqual( picker.get( 'min' ).pick, 0, '`min` unaffected' )
+    strictEqual( picker.get( 'max' ).pick, 1410, '`max` unaffected' )
 })
 
 test( '`min` using integers', function() {
@@ -211,7 +241,7 @@ test( '`min` using integers', function() {
         strictEqual( picker.get( 'highlight' ).pick, 0, '`highlight` unaffected' )
         strictEqual( picker.get( 'view' ).pick, 0, '`view` unaffected' )
     }
-    ok( picker.get( 'max' ).pick === 1410, '`max` unaffected' )
+    strictEqual( picker.get( 'max' ).pick, 1410, '`max` unaffected' )
 
 
     // Using positive numbers
@@ -223,10 +253,10 @@ test( '`min` using integers', function() {
     deepEqual( picker.get( 'view' ), picker.get( 'min' ), '`view` updated' )
 
     if ( picker.get( 'min' ).pick > 1410 ) {
-        ok( picker.get( 'max' ).pick === 1410 + 1440, '`max` updated' )
+        strictEqual( picker.get( 'max' ).pick, 1410 + 1440, '`max` updated' )
     }
     else {
-        ok( picker.get( 'max' ).pick === 1410, '`max` unaffected' )
+        strictEqual( picker.get( 'max' ).pick, 1410, '`max` unaffected' )
     }
 })
 
@@ -251,16 +281,32 @@ test( '`min` using booleans', function() {
     deepEqual( picker.get( 'max' ).time, 1410, '`max` unaffected' )
 })
 
-test( '`min` specific', function() {
+test( '`min` using arrays', function() {
 
     var picker = this.picker
 
+    // Using arrays
     picker.set( 'min', [2,0] )
     strictEqual( picker.get( 'min' ).pick, 120, '`min` using an array: ' + picker.get( 'min', 'HH:i' ) )
     deepEqual( picker.get( 'select' ), picker.get( 'min' ), '`select` updated' )
     deepEqual( picker.get( 'highlight' ), picker.get( 'min' ), '`highlight` updated' )
     deepEqual( picker.get( 'view' ), picker.get( 'min' ), '`view` updated' )
     deepEqual( picker.get( 'max' ).pick, 1410, '`max` unaffected' )
+})
+
+test( '`min` using JS dates', function() {
+
+    var picker = this.picker
+
+    // Using JavaScript date objects
+    var dateObject = new Date()
+    dateObject.setHours(4,20)
+    picker.set( 'min', dateObject )
+    strictEqual( picker.get( 'min' ).pick, 260, '`min` using an array: ' + picker.get( 'min', 'HH:i' ) )
+    deepEqual( picker.get( 'select' ), picker.get( 'min' ), '`select` updated' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'min' ), '`highlight` updated' )
+    deepEqual( picker.get( 'view' ), picker.get( 'min' ), '`view` updated' )
+    deepEqual( picker.get( 'max' ).pick, 1400, '`max` updated' )
 })
 
 test( '`max` using integers', function() {
@@ -321,16 +367,32 @@ test( '`max` using booleans', function() {
     strictEqual( picker.get( 'min' ).pick, 0, '`min` unaffected' )
 })
 
-test( '`max` specific', function() {
+test( '`max` using arrays', function() {
 
     var picker = this.picker
 
+    // Using arrays
     picker.set( 'max', [14,30] )
     strictEqual( picker.get( 'max' ).pick, 870, '`max` using an array: ' + picker.get( 'max', 'HH:i' ) )
     strictEqual( picker.get( 'select' ).pick, 0, '`select` unaffected' )
     strictEqual( picker.get( 'highlight' ).pick, 0, '`highlight` unaffected' )
     strictEqual( picker.get( 'view' ).pick, 0, '`view` unaffected' )
     strictEqual( picker.get( 'min' ).pick, 0, '`min` unaffected' )
+})
+
+test( '`max` using JS dates', function() {
+
+    var picker = this.picker
+
+    // Using JavaScript date objects
+    var dateObject = new Date()
+    dateObject.setHours(16,20)
+    picker.set( 'max', dateObject )
+    strictEqual( picker.get( 'max' ).pick, 960, '`max` using an array: ' + picker.get( 'max', 'HH:i' ) )
+    deepEqual( picker.get( 'select' ).pick, 0, '`select` unaffected' )
+    deepEqual( picker.get( 'highlight' ).pick, 0, '`highlight` unaffected' )
+    deepEqual( picker.get( 'view' ).pick, 0, '`view` unaffected' )
+    deepEqual( picker.get( 'min' ).pick, 0, '`min` unaffected' )
 })
 
 test( '`disable` and `enable` using integers', function() {
@@ -575,6 +637,60 @@ test( '`view`', function() {
 
 
 
+module( 'Time picker `set` outsite interval scope', {
+    setup: function() {
+        $DOM.append( $INPUT.clone() )
+        var $input = $DOM.find( 'input' ).pickatime()
+        this.picker = $input.pickatime( 'picker' )
+    },
+    teardown: function() {
+        this.picker.stop()
+        $DOM.empty()
+    }
+})
+
+test( '`select`', function() {
+
+    var picker = this.picker
+
+    picker.set( 'select', [1,10] )
+    var selected = picker.get('select')
+    deepEqual( [selected.hour, selected.mins], [1,30], 'Scoped `select` into interval range' )
+
+    picker.set( 'select', [19,49] )
+    selected = picker.get('select')
+    deepEqual( [selected.hour, selected.mins], [20,0], 'Scoped `select` into interval range' )
+})
+
+test( '`highlight`', function() {
+
+    var picker = this.picker
+
+    picker.set( 'highlight', [1,10] )
+    var highlighted = picker.get('highlight')
+    deepEqual( [highlighted.hour, highlighted.mins], [1,30], 'Scoped `highlight` into interval range' )
+
+    picker.set( 'highlight', [19,49] )
+    highlighted = picker.get('highlight')
+    deepEqual( [highlighted.hour, highlighted.mins], [20,0], 'Scoped `highlight` into interval range' )
+})
+
+test( '`view`', function() {
+
+    var picker = this.picker
+
+    picker.set( 'view', [1,10] )
+    var viewset = picker.get('view')
+    deepEqual( [viewset.hour, viewset.mins], [1,30], 'Scoped `view` into interval range' )
+
+    picker.set( 'view', [19,49] )
+    viewset = picker.get('view')
+    deepEqual( [viewset.hour, viewset.mins], [20,0], 'Scoped `view` into interval range' )
+})
+
+
+
+
 module( 'Time picker mouse events', {
     setup: function() {
         $DOM.append( $INPUT.clone() )
@@ -595,8 +711,8 @@ test( 'Select', function() {
 
     for ( var i = 0; i < 48; i += 1 ) {
         $root.find( '.' + $.fn.pickatime.defaults.klass.listItem ).eq( i ).click()
-        ok( picker.get( 'select' ).pick === i * interval, 'Selected ' + picker.get( 'select', 'h:i A' ) )
-        ok( picker.get( 'value' ) === picker.get( 'select', 'h:i A' ), 'Input value updated to ' + picker.get( 'value' ) )
+        strictEqual( picker.get( 'select' ).pick, i * interval, 'Selected ' + picker.get( 'select', 'h:i A' ) )
+        strictEqual( picker.get( 'value' ), picker.get( 'select', 'h:i A' ), 'Input value updated to ' + picker.get( 'value' ) )
     }
 })
 
@@ -605,10 +721,10 @@ test( 'Clear', function() {
     var picker = this.picker
 
     picker.set( 'select', [2,0] )
-    ok( picker.get( 'value' ) === picker.get( 'select', $.fn.pickatime.defaults.format ), 'Value updated' )
+    strictEqual( picker.get( 'value' ), picker.get( 'select', $.fn.pickatime.defaults.format ), 'Value updated' )
 
     picker.$root.find( '.' + $.fn.pickatime.defaults.klass.buttonClear ).click()
-    ok( picker.get( 'value' ) === '', 'Value cleared' )
+    strictEqual( picker.get( 'value' ), '', 'Value cleared' )
 })
 
 
@@ -658,28 +774,28 @@ test( 'Highlight', function() {
     // Down
     for ( var i = 1; i < 48; i += 1 ) {
         $input.trigger({ type: 'keydown', keyCode: 40 })
-        ok( picker.get( 'highlight' ).pick === 30 * i, 'Key “down” to `highlight`: ' + picker.get( 'highlight', 'h:i A' ) )
+        strictEqual( picker.get( 'highlight' ).pick, 30 * i, 'Key “down” to `highlight`: ' + picker.get( 'highlight', 'h:i A' ) )
         deepEqual( picker.get( 'view' ), picker.get( 'highlight' ), 'Updated `view`' )
     }
 
     // Up
     for ( var j = 2; j < 49; j += 1 ) {
         $input.trigger({ type: 'keydown', keyCode: 38 })
-        ok( picker.get( 'highlight' ).pick === 1440 - 30 * j, 'Key “up” to `highlight`: ' + picker.get( 'highlight', 'h:i A' ) )
+        strictEqual( picker.get( 'highlight' ).pick, 1440 - 30 * j, 'Key “up” to `highlight`: ' + picker.get( 'highlight', 'h:i A' ) )
         deepEqual( picker.get( 'view' ), picker.get( 'highlight' ), 'Updated `view`' )
     }
 
     // Right
     for ( var k = 1; k < 48; k += 1 ) {
         $input.trigger({ type: 'keydown', keyCode: 39 })
-        ok( picker.get( 'highlight' ).pick === 30 * k, 'Key “right” to `highlight`: ' + picker.get( 'highlight', 'h:i A' ) )
+        strictEqual( picker.get( 'highlight' ).pick, 30 * k, 'Key “right” to `highlight`: ' + picker.get( 'highlight', 'h:i A' ) )
         deepEqual( picker.get( 'view' ), picker.get( 'highlight' ), 'Updated `view`' )
     }
 
     // Left
     for ( var l = 2; l < 49; l += 1 ) {
         $input.trigger({ type: 'keydown', keyCode: 37 })
-        ok( picker.get( 'highlight' ).pick === 1440 - 30 * l, 'Key “up” to `highlight`: ' + picker.get( 'highlight', 'h:i A' ) )
+        strictEqual( picker.get( 'highlight' ).pick, 1440 - 30 * l, 'Key “up” to `highlight`: ' + picker.get( 'highlight', 'h:i A' ) )
         deepEqual( picker.get( 'view' ), picker.get( 'highlight' ), 'Updated `view`' )
     }
 })
@@ -729,7 +845,7 @@ test( '`data-value` to select, highlight, and view', function() {
     var picker = this.picker
 
     ok( picker._hidden, 'Has hidden input' )
-    ok( picker._hidden.value === '14:00', 'Hidden input value' )
+    strictEqual( picker._hidden.value, '14:00', 'Hidden input value' )
     strictEqual( picker.get( 'select' ).pick, 840, 'Selects time' )
     strictEqual( picker.get( 'highlight' ).pick, 840, 'Highlights time' )
     strictEqual( picker.get( 'view' ).pick, 840, 'Viewsets time' )
