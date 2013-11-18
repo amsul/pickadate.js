@@ -252,7 +252,7 @@ picker.start()</code></pre>
 
         <pre class="pre--demo"><code data-language="javascript">picker.clear()</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-clear class="fieldset__button button button--small">Clear</button><input id="demo__api-clear" class="fieldset__input " type=text value="13 November, 2013" placeholder="Try me&hellip;"></div></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-clear class="fieldset__button button button--small">Clear</button><input id="demo__api-clear" class="fieldset__input " type=text value="17 November, 2013" placeholder="Try me&hellip;"></div></fieldset>
 
         <p>This is a shorthand that uses <a href="#method-set">the <code class="function">set</code> method</a> behind the scenes.</p>
 
@@ -342,7 +342,7 @@ picker.start()</code></pre>
 
         <pre class="pre--demo"><code data-language="javascript">picker.get() // Short for `picker.get('value')`.</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-get--value class="fieldset__button button button--small">Log the value</button><input id="demo__api-get--value" class="fieldset__input " type=text value="13 November, 2013" placeholder="Open your console and try me&hellip;"></div></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-get--value class="fieldset__button button button--small">Log the value</button><input id="demo__api-get--value" class="fieldset__input " type=text value="17 November, 2013" placeholder="Open your console and try me&hellip;"></div></fieldset>
 
     </div> <!-- .section__block -->
 
@@ -527,7 +527,7 @@ picker.set({
 
         <pre class="pre--demo"><code data-language="javascript">picker.set('clear')</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-set-clear class="fieldset__button button button--small">Clear</button><input id="demo__api-set-clear" class="fieldset__input " type=text value="13 November, 2013" placeholder="Try me&hellip;"></div></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-set-clear class="fieldset__button button button--small">Clear</button><input id="demo__api-set-clear" class="fieldset__input " type=text value="17 November, 2013" placeholder="Try me&hellip;"></div></fieldset>
 
         <p>This is the full form of <a href="#method-clear">the <code class="function">clear</code> method</a>.</p>
 
@@ -552,7 +552,7 @@ picker.set('select', [2013,3,20])
 picker.set('select', { 'Tue Apr 30 2013 00:00:00 GMT-0400 (EDT)' })
 
 // Using positive integers as UNIX timestamps.
-picker.set('select', 1365961912346)</code></pre>
+picker.set('select', 1366898887654)</code></pre>
 
         <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-set--select-date-array class="fieldset__button button button--small">Select using an array</button><button id=button__api-set--select-date-js class="fieldset__button button button--small">Select using a JS Date</button><button id=button__api-set--select-date-integer class="fieldset__button button button--small">Select using an integer</button><input id="demo__api-set--select-date" class="fieldset__input " type=text value="" placeholder="Try me&hellip;"></div></fieldset>
 
@@ -561,10 +561,13 @@ picker.set('select', 1365961912346)</code></pre>
         <pre class="pre--demo"><code data-language="javascript">// Using arrays formatted as [HOUR,MINUTE].
 picker.set('select', [3,0])
 
+// Using JavaScript Date objects.
+picker.set('select', { 'Thu Apr 25 2013 10:08:07 GMT-0400 (EDT)' })
+
 // Using positive integers as minutes.
 picker.set('select', 540)</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-set--select-time-array class="fieldset__button button button--small">Select using an array</button><button id=button__api-set--select-time-integer class="fieldset__button button button--small">Select using an integer</button><input id="demo__api-set--select-time" class="fieldset__input " type=text value="" placeholder="Try me&hellip;"></div></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-set--select-time-array class="fieldset__button button button--small">Select using an array</button><button id=button__api-set--select-time-js class="fieldset__button button button--small">Select using a JS Date</button><button id=button__api-set--select-time-integer class="fieldset__button button button--small">Select using an integer</button><input id="demo__api-set--select-time" class="fieldset__input " type=text value="" placeholder="Try me&hellip;"></div></fieldset>
 
     </div> <!-- .section__block -->
 
@@ -587,7 +590,7 @@ picker.set('highlight', [2013,3,20])
 picker.set('highlight', { 'Tue Apr 30 2013 00:00:00 GMT-0400 (EDT)' })
 
 // Using positive integers as UNIX timestamps.
-picker.set('highlight', 1365961912346)</code></pre>
+picker.set('highlight', 1366898887654)</code></pre>
 
         <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-set--highlight-date-array class="fieldset__button button button--small">Highlight using an array</button><button id=button__api-set--highlight-date-js class="fieldset__button button button--small">Highlight using a JS Date</button><button id=button__api-set--highlight-date-integer class="fieldset__button button button--small">Highlight using an integer</button><input id="demo__api-set--highlight-date" class="fieldset__input " type=text value="" placeholder="Try me&hellip;"></div></fieldset>
 
@@ -596,10 +599,13 @@ picker.set('highlight', 1365961912346)</code></pre>
         <pre class="pre--demo"><code data-language="javascript">// Using arrays formatted as [HOUR,MINUTE].
 picker.set('highlight', [15,30])
 
+// Using JavaScript Date objects.
+picker.set('highlight', { 'Thu Apr 25 2013 10:08:07 GMT-0400 (EDT)' })
+
 // Using positive integers as minutes.
 picker.set('highlight', 1080)</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-set--highlight-time-array class="fieldset__button button button--small">Highlight using an array</button><button id=button__api-set--highlight-time-integer class="fieldset__button button button--small">Highlight using an integer</button><input id="demo__api-set--highlight-time" class="fieldset__input " type=text value="" placeholder="Try me&hellip;"></div></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-set--highlight-time-array class="fieldset__button button button--small">Highlight using an array</button><button id=button__api-set--highlight-time-js class="fieldset__button button button--small">Highlight using a JS Date</button><button id=button__api-set--highlight-time-integer class="fieldset__button button button--small">Highlight using an integer</button><input id="demo__api-set--highlight-time" class="fieldset__input " type=text value="" placeholder="Try me&hellip;"></div></fieldset>
 
     </div> <!-- .section__block -->
 
@@ -633,10 +639,13 @@ picker.set('view', 1587355200000)</code></pre>
         <pre class="pre--demo"><code data-language="javascript">// Using arrays formatted as [HOUR,MINUTE].
 picker.set('view', [15,30])
 
+// Using JavaScript Date objects.
+picker.set('view', { 'Thu Apr 25 2013 10:08:07 GMT-0400 (EDT)' })
+
 // Using positive integers as minutes.
 picker.set('view', 1080)</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-set--view-time-array class="fieldset__button button button--small">Viewset using an array</button><button id=button__api-set--view-time-integer class="fieldset__button button button--small">Viewset using an integer</button><input id="demo__api-set--view-time" class="fieldset__input " type=text value="" placeholder="Try me&hellip;"></div></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-set--view-time-array class="fieldset__button button button--small">Viewset using an array</button><button id=button__api-set--view-time-js class="fieldset__button button button--small">Select using a JS Date</button><button id=button__api-set--view-time-integer class="fieldset__button button button--small">Viewset using an integer</button><input id="demo__api-set--view-time" class="fieldset__input " type=text value="" placeholder="Try me&hellip;"></div></fieldset>
 
     </div> <!-- .section__block -->
 
@@ -674,6 +683,9 @@ picker.set('min', false)</code></pre>
         <pre class="pre--demo"><code data-language="javascript">// Using arrays formatted as [HOUR,MINUTE].
 picker.set('min', [15,30])
 
+// Using JavaScript Date objects.
+picker.set('min', { 'Thu Apr 25 2013 10:08:07 GMT-0400 (EDT)' })
+
 // Using integers as intervals relative from now.
 picker.set('min', -4)
 
@@ -683,7 +695,7 @@ picker.set('min', true)
 // Using `false` to remove.
 picker.set('min', false)</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-set--min-time-array class="fieldset__button button button--small">Limit using an array</button><button id=button__api-set--min-time-integer class="fieldset__button button button--small">Limit using an integer</button><button id=button__api-set--min-time-true class="fieldset__button button button--small">Limit using `true`</button><button id=button__api-set--min-time-false class="fieldset__button button button--small">Limit using `false`</button><input id="demo__api-set--min-time" class="fieldset__input " type=text value="" placeholder="Try me&hellip;"></div></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-set--min-time-array class="fieldset__button button button--small">Limit using an array</button><button id=button__api-set--min-time-js class="fieldset__button button button--small">Select using a JS Date</button><button id=button__api-set--min-time-integer class="fieldset__button button button--small">Limit using an integer</button><button id=button__api-set--min-time-true class="fieldset__button button button--small">Limit using `true`</button><button id=button__api-set--min-time-false class="fieldset__button button button--small">Limit using `false`</button><input id="demo__api-set--min-time" class="fieldset__input " type=text value="" placeholder="Try me&hellip;"></div></fieldset>
 
     </div> <!-- .section__block -->
 
@@ -721,6 +733,9 @@ picker.set('max', false)</code></pre>
         <pre class="pre--demo"><code data-language="javascript">// Using arrays formatted as [HOUR,MINUTE].
 picker.set('max', [15,30])
 
+// Using JavaScript Date objects.
+picker.set('max', { 'Thu Apr 25 2013 10:08:07 GMT-0400 (EDT)' })
+
 // Using integers as intervals relative from now.
 picker.set('max', 4)
 
@@ -730,7 +745,7 @@ picker.set('max', true)
 // Using `false` to remove.
 picker.set('max', false)</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-set--max-time-array class="fieldset__button button button--small">Limit using an array</button><button id=button__api-set--max-time-integer class="fieldset__button button button--small">Limit using an integer</button><button id=button__api-set--max-time-true class="fieldset__button button button--small">Limit using `true`</button><button id=button__api-set--max-time-false class="fieldset__button button button--small">Limit using `false`</button><input id="demo__api-set--max-time" class="fieldset__input " type=text value="" placeholder="Try me&hellip;"></div></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-set--max-time-array class="fieldset__button button button--small">Limit using an array</button><button id=button__api-set--max-time-js class="fieldset__button button button--small">Limit using a JS Date</button><button id=button__api-set--max-time-integer class="fieldset__button button button--small">Limit using an integer</button><button id=button__api-set--max-time-true class="fieldset__button button button--small">Limit using `true`</button><button id=button__api-set--max-time-false class="fieldset__button button button--small">Limit using `false`</button><input id="demo__api-set--max-time" class="fieldset__input " type=text value="" placeholder="Try me&hellip;"></div></fieldset>
 
     </div> <!-- .section__block -->
 
@@ -797,6 +812,9 @@ picker.set('enable', 'flip')</code></pre>
         <pre class="pre--demo"><code data-language="javascript">// Using arrays formatted as [HOUR,MINUTES].
 picker.set('disable', [ [2,30], [4,30], [9,0] ])
 
+// Using JavaScript Date objects.
+picker.set('disable', [ new Date(2013,9,13,6), new Date(2013,9,13,12,30) ])
+
 // Using integers representing the days of the week (from 1 to 7).
 picker.set('disable', [ 1, 4, 7 ])
 
@@ -809,12 +827,15 @@ picker.set('disable', false)
 // Or “flip” to switch the enabled and disabled times.
 picker.set('disable', 'flip')</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-set--disable-time-array class="fieldset__button button button--small">Disable using arrays</button><button id=button__api-set--disable-time-integer class="fieldset__button button button--small">Disable using integers</button><button id=button__api-set--disable-time-true class="fieldset__button button button--small">Disable using `true`</button><button id=button__api-set--disable-time-false class="fieldset__button button button--small">Disable using `false`</button><button id=button__api-set--disable-time-flip class="fieldset__button button button--small">Disable using “flip”</button><input id="demo__api-set--disable-time" class="fieldset__input " type=text value="" placeholder="Try me&hellip;"></div></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-set--disable-time-array class="fieldset__button button button--small">Disable using arrays</button><button id=button__api-set--disable-time-js class="fieldset__button button button--small">Disable using JS Dates</button><button id=button__api-set--disable-time-integer class="fieldset__button button button--small">Disable using integers</button><button id=button__api-set--disable-time-true class="fieldset__button button button--small">Disable using `true`</button><button id=button__api-set--disable-time-false class="fieldset__button button button--small">Disable using `false`</button><button id=button__api-set--disable-time-flip class="fieldset__button button button--small">Disable using “flip”</button><input id="demo__api-set--disable-time" class="fieldset__input " type=text value="" placeholder="Try me&hellip;"></div></fieldset>
 
         <h3 class="heading heading--divide"><span class="heading__text">Enable times <a class="heading__anchor--bigger" name="method-set-enable-times" href="#method-set-enable-times">&sect;</a></span></h3>
 
         <pre class="pre--demo"><code data-language="javascript">// Using arrays formatted as [HOUR,MINUTES].
 picker.set('enable', [ [2,30], [4,30], [9,0] ])
+
+// Using JavaScript Date objects.
+picker.set('enable', [ new Date(2013,9,13,6), new Date(2013,9,13,12,30) ])
 
 // Using integers representing the days of the week (from 1 to 7).
 picker.set('enable', [ 1, 4, 7 ])
@@ -828,7 +849,21 @@ picker.set('enable', false)
 // Or “flip” to switch the enabled and disabled times.
 picker.set('enable', 'flip')</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-set--enable-time-array class="fieldset__button button button--small">Enable using arrays</button><button id=button__api-set--enable-time-integer class="fieldset__button button button--small">Enable using integers</button><button id=button__api-set--enable-time-true class="fieldset__button button button--small">Enable using `true`</button><button id=button__api-set--enable-time-false class="fieldset__button button button--small">Enable using `false`</button><button id=button__api-set--enable-time-flip class="fieldset__button button button--small">Enable using “flip”</button><input id="demo__api-set--enable-time" class="fieldset__input " type=text value="" placeholder="Try me&hellip;"></div></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-set--enable-time-array class="fieldset__button button button--small">Enable using arrays</button><button id=button__api-set--enable-time-js class="fieldset__button button button--small">Enable using JS Dates</button><button id=button__api-set--enable-time-integer class="fieldset__button button button--small">Enable using integers</button><button id=button__api-set--enable-time-true class="fieldset__button button button--small">Enable using `true`</button><button id=button__api-set--enable-time-false class="fieldset__button button button--small">Enable using `false`</button><button id=button__api-set--enable-time-flip class="fieldset__button button button--small">Enable using “flip”</button><input id="demo__api-set--enable-time" class="fieldset__input " type=text value="" placeholder="Try me&hellip;"></div></fieldset>
+
+        <h3 class="heading heading--divide"><span class="heading__text">Enable/disable within a range <a class="heading__anchor--bigger" name="method-set-enable-disable-in-range" href="#method-set-enable-disable-in-range">&sect;</a></span></h3>
+
+        <p>When a date or time you want to enable/disable falls within a range of the opposite state, pass <code class="string">'inverted'</code> as the last item in the array:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">// Disable all Mondays, except November 17<sup>th</sup>, 2013.
+picker.set('disable', [ 1, [2013, 10, 17, 'inverted'] ])</code></pre>
+
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="demo__api-set--enable-disable-in-range-date" class="fieldset__input " type=text value="" placeholder="Try me&hellip;"></div></fieldset>
+
+        <pre class="pre--demo"><code data-language="javascript">// Disable all times from 1:00 AM to 1:59 AM, except 1:30 AM.
+picker.set('disable', [ 1, [1, 30, 'inverted'] ])</code></pre>
+
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="demo__api-set--enable-disable-in-range-time" class="fieldset__input " type=text value="" placeholder="Try me&hellip;"></div></fieldset>
 
     </div> <!-- .section__block -->
 
@@ -1058,6 +1093,7 @@ picker.trigger('open')</code></pre>
 
 
     <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script>jQuery||document.write('<script src="tests/jquery.2.0.0.js"><\/script>')</script>
     <script src="lib/picker.js"></script>
     <script src="lib/picker.date.js"></script>
     <script src="lib/picker.time.js"></script>

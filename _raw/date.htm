@@ -476,6 +476,18 @@ $('.datepicker').pickadate({
 
         {%= dateDemoField({ id: 'date_demo__disable-dates--d' }) %}
 
+        <p><b>5)</b> <i>Enabling/disabling ranges with exceptions</i> by passing <code class="string">'inverted'</code> as the last parameter in the item within the collection:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
+    disable: [
+        1,
+        [2013, 10, 17, 'inverted']
+    ]
+})</code></pre>
+
+        {%= dateDemoField({ id: 'date_demo__disable-dates--e' }) %}
+
+
     </div> <!-- .section__block -->
 
 </section> <!-- .section -->

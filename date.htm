@@ -525,6 +525,18 @@ $('.datepicker').pickadate({
 
         <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__disable-dates--d" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
 
+        <p><b>5)</b> <i>Enabling/disabling ranges with exceptions</i> by passing <code class="string">'inverted'</code> as the last parameter in the item within the collection:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
+    disable: [
+        1,
+        [2013, 10, 17, 'inverted']
+    ]
+})</code></pre>
+
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__disable-dates--e" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
+
+
     </div> <!-- .section__block -->
 
 </section> <!-- .section -->
@@ -608,6 +620,7 @@ $('.datepicker').pickadate({
 
 
     <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script>jQuery||document.write('<script src="tests/jquery.2.0.0.js"><\/script>')</script>
     <script src="lib/picker.js"></script>
     <script src="lib/picker.date.js"></script>
     <script src="lib/picker.time.js"></script>

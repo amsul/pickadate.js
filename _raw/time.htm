@@ -332,6 +332,17 @@ klass: {
 
         {%= timeDemoField({ id: 'time_demo__disable-times--c' }) %}
 
+        <p><b>4)</b> <i>Enabling/disabling ranges with exceptions</i> by passing <code class="string">'inverted'</code> as the last parameter in the item within the collection:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.timepicker').pickatime({
+    disable: [
+        1,
+        [1, 30, 'inverted']
+    ]
+})</code></pre>
+
+        {%= timeDemoField({ id: 'time_demo__disable-times--d' }) %}
+
     </div> <!-- .section__block -->
 
 </section> <!-- .section -->
