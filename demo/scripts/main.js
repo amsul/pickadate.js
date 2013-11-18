@@ -3,8 +3,7 @@
     debug: true,
     devel: true,
     browser: true,
-    asi: true,
-    unused: true
+    asi: true
  */
 
 
@@ -41,8 +40,8 @@ $( '#date_demo__translations' ).pickadate({
     monthsFull: [ 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre' ],
     monthsShort: [ 'Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec' ],
     weekdaysShort: [ 'Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam' ],
-    today: 'aujourd\'hui',
-    clear: 'effacer',
+    today: 'Aujourd\'hui',
+    clear: 'Effacer',
     formatSubmit: 'yyyy/mm/dd'
 })
 $( '#date_demo__translations_rtl' ).pickadate({
