@@ -463,7 +463,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
             set: function( thing, value, options ) {
 
                 var thingItem, thingValue,
-                    thingIsObject = PickerConstructor._.isObject( thing ),
+                    thingIsObject = $.isPlainObject( thing ),
                     thingObject = thingIsObject ? thing : {}
 
                 if ( thing ) {
@@ -536,7 +536,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
             on: function( thing, method ) {
 
                 var thingName, thingMethod,
-                    thingIsObject = PickerConstructor._.isObject( thing ),
+                    thingIsObject = $.isPlainObject( thing ),
                     thingObject = thingIsObject ? thing : {}
 
                 if ( thing ) {
@@ -755,14 +755,6 @@ PickerConstructor._ = {
      */
     digits: function( string ) {
         return ( /\d/ ).test( string[ 1 ] ) ? 2 : 1
-    },
-
-
-    /**
-     * Tell if something is an object.
-     */
-    isObject: function( value ) {
-        return {}.toString.call( value ).indexOf( 'Object' ) > -1
     },
 
 
