@@ -360,6 +360,7 @@ test( '`max`', function() {
     deepEqual( picker.get( 'select' ), picker.get( 'now' ), '`select` unaffected' )
     deepEqual( picker.get( 'highlight' ), picker.get( 'select' ), '`highlight` unaffected' )
 
+    playdate.setYear( today.getFullYear() )
     playdate.setMonth( today.getMonth() )
     playdate.setDate( 1 )
     deepEqual( picker.get( 'view' ).obj, playdate, '`view` unaffected' )
