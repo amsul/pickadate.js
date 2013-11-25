@@ -88,6 +88,9 @@ formatSubmit: undefined,
 hiddenPrefix: undefined,
 hiddenSuffix: '_submit',
 
+// <a href="#editable">Editable input</a>
+editable: undefined,
+
 // <a href="#intervals">Time intervals</a>
 interval: 30,
 
@@ -290,6 +293,29 @@ klass: {
 
     <div class="section__block section__block--scoped">
 
+        <h2 class="heading heading--divide"><span class="heading__text">Editable input<a class="heading__anchor" name="editable" href="#editable">&sect;</a></span></h2>
+        <p>By default, typing into the input is disabled by giving it a <code class="attribute">readOnly</code> attribute. Doing so ensures that virtual keyboards don’t pop open on touch devices. It is also a confirmation that formats passed to the server will be consistent.</p>
+        <p>However, this behavior can be changed using the <code>editable</code> option:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
+    editable: true
+})</code></pre>
+
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="time_demo__editable" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
+
+        <div class="section__block section__block--notification">
+            <p>An important thing to note here is that this disables keyboard bindings on the input element, such as arrow keys opening the picker. You will have to add your own bindings as you see fit.</p>
+        </div>
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
         <h2 class="heading heading--divide"><span class="heading__text">Intervals<a class="heading__anchor" name="intervals" href="#intervals">&sect;</a></span></h2>
         <p>Choose the minutes interval between each time in the list:</p>
 
@@ -403,7 +429,7 @@ klass: {
     <div class="section__block section__block--scoped">
 
         <h2 class="heading heading--divide"><span class="heading__text">container<a class="heading__anchor" name="container" href="#container">&sect;</a></span></h2>
-        <p>Specify where to insert the picker’s root element by passing any valid CSS selector to this option:</p>
+        <p>By default, the picker’s root element is inserted right after the <code class="keyword">input</code> element. Specify where to insert the root element by passing any valid CSS selector to this option:</p>
 
         <div id="root-outlet" style="position:relative"></div>
 
@@ -413,7 +439,9 @@ klass: {
 
         <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="time_demo__container" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
 
-        <p>By default, the picker root is inserted right after the <code class="keyword">input</code> element.</p>
+        <div class="section__block section__block--notification">
+            <p>This is especially important when the <code class="keyword">input</code> falls within a <code class="keyword">label</code> element because click events bubble up to the <code class="keyword">label</code> element and re-open the picker.</p>
+        </div>
 
     </div> <!-- .section__block -->
 

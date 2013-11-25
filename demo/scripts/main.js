@@ -117,6 +117,15 @@ $( '#date_demo__selectors--b' ).pickadate({
 
 
 /**
+ * Editable input
+ */
+$( '#date_demo__editable' ).pickadate({
+    editable: true
+})
+
+
+
+/**
  * First weekday
  */
 $( '#date_demo__firstDay' ).pickadate({
@@ -299,6 +308,15 @@ $( '#time_demo__formats--b' ).pickatime({
             label = hours < 0 ? ' !hours to now' : hours > 0 ? ' !hours from now' : 'now'
         return 'h:i a <sm!all>' + ( hours ? Math.abs( hours ) : '' ) + label + '</sm!all>'
     }
+})
+
+
+
+/**
+ * Editable input
+ */
+$( '#time_demo__editable' ).pickatime({
+    editable: true
 })
 
 

@@ -36,7 +36,7 @@ There are currently two pickers: **date** and **time**.
 
 File                    | Contents                 | Size (min & gzip)
 ----------------------- | ------------------------ | ----------------------
-`picker.js`             | __Base *__               | 1.35kb
+`picker.js`             | __Base *__               | 1.36kb
 `picker.date.js`        | Date picker              | 2.14kb
 `picker.time.js`        | Time picker              | 1.49kb
 
@@ -54,7 +54,7 @@ File                    | Contents                     | Size (min & gzip)
 `default.css`           | __Base default *__           | 0.51kb
 `default.date.css`      | Default date picker          | 0.67kb
 `default.time.css`      | Default time picker          | 0.35kb
-`classic.css`           | __Base classic *__           | 0.36kb
+`classic.css`           | __Base classic *__           | 0.37kb
 `classic.date.css`      | Classic date picker          | 0.67kb
 `classic.time.css`      | Classic time picker          | 0.35kb
 `rtl.css`               | __RTL language stylings **__ | 0.10kb
