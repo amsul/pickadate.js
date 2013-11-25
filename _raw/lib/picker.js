@@ -92,7 +92,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                 // and set as readonly to prevent keyboard popup.
                 ELEMENT.autofocus = ELEMENT == document.activeElement
                 ELEMENT.type = 'text'
-                ELEMENT.readOnly = true
+                ELEMENT.readOnly = !SETTINGS.editable
 
 
                 // Create a new picker component with the settings.
@@ -193,8 +193,20 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                 }
 
 
-                // Add the class and bind the events on the element.
-                $ELEMENT.addClass( CLASSES.input ).
+                // Prepare the input element.
+                $ELEMENT.
+
+                    // Store the picker data by component name.
+                    data( NAME, P ).
+
+                    // Add the “input” class name.
+                    addClass( CLASSES.input ).
+
+                    // If there’s a `data-value`, update the value of the element.
+                    val( $ELEMENT.data( 'value' ) ? PickerConstructor._.trigger( P.component.formats.toString, P.component, [ SETTINGS.format, P.component.item.select ] ) : ELEMENT.value ).
+
+                    // Insert the hidden input after the element.
+                    after( P._hidden ).
 
                     // On focus/click, open the picker and adjust the root “focused” state.
                     on( 'focus.P' + STATE.id + ' click.P' + STATE.id, focusToOpen ).
@@ -204,7 +216,10 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                         if ( P._hidden ) {
                             P._hidden.value = ELEMENT.value ? PickerConstructor._.trigger( P.component.formats.toString, P.component, [ SETTINGS.formatSubmit, P.component.item.select ] ) : ''
                         }
-                    }).
+                    })
+
+                // Only bind keydown events if the element isn’t editable.
+                if ( !SETTINGS.editable ) $ELEMENT.
 
                     // Handle keyboard event based on the picker being opened or not.
                     on( 'keydown.P' + STATE.id, function( event ) {
@@ -232,16 +247,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                             if ( isKeycodeDelete ) { P.clear().close() }
                             else { P.open() }
                         }
-                    }).
-
-                    // If there’s a `data-value`, update the value of the element.
-                    val( $ELEMENT.data( 'value' ) ? PickerConstructor._.trigger( P.component.formats.toString, P.component, [ SETTINGS.format, P.component.item.select ] ) : ELEMENT.value ).
-
-                    // Insert the hidden input after the element.
-                    after( P._hidden ).
-
-                    // Store the picker data by component name.
-                    data( NAME, P )
+                    })
 
 
                 // Insert the root as specified in the settings.
@@ -355,11 +361,18 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                     // Bind the document events.
                     $document.on( 'click.P' + STATE.id + ' focusin.P' + STATE.id, function( event ) {
 
+                        var target = event.target
+
                         // If the target of the event is not the element, close the picker picker.
                         // * Don’t worry about clicks or focusins on the root because those don’t bubble up.
                         //   Also, for Firefox, a click on an `option` element bubbles up directly
                         //   to the doc. So make sure the target wasn't the doc.
-                        if ( event.target != ELEMENT && event.target != document ) P.close()
+                        if ( target != ELEMENT && target != document ) {
+
+                            // If the target was the holder that covers the screen,
+                            // keep the element focused to maintain tabindex.
+                            P.close( target === P.$root.children()[0] )
+                        }
 
                     }).on( 'keydown.P' + STATE.id, function( event ) {
 

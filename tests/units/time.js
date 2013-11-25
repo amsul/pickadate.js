@@ -99,6 +99,25 @@ test( 'Formats', function() {
 
 })
 
+module( 'Time picker setup', {
+    teardown: function() {
+        $DOM.empty()
+    }
+})
+
+test( 'Editable', function() {
+
+    $DOM.append( $INPUT.clone()).append( $INPUT.clone() )
+
+    var $input1 = $DOM.find( 'input' ).eq(0).pickadate()
+    var $input2 = $DOM.find( 'input' ).eq(1).pickadate({
+        editable: true
+    })
+
+    strictEqual( $input1[0].readOnly, true, 'Editable: false' )
+    strictEqual( $input2[0].readOnly, false, 'Editable: true' )
+})
+
 
 
 

@@ -2,8 +2,7 @@
    $BASE-PICKER
    ========================================================================== */
 /**
- * Note: the root picker element should __NOT__ be styled
- * more than what’s here. Style the `.picker__holder` instead.
+ * Note: the root picker element should *NOT* be styled more than what’s here.
  */
 .picker {
   font-size: 16px;
@@ -41,6 +40,9 @@
 /*!
  * Default mobile-first, responsive styling for pickadate.js
  * Demo: http://amsul.github.io/pickadate.js
+ */
+/**
+ * Note: the root picker element should *NOT* be styled more than what’s here.
  */
 /**
  * Make the holder and frame fullscreen.

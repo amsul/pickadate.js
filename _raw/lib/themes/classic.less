@@ -7,14 +7,14 @@
 
 
 /**
- * Note: the root picker element should __NOT__ be styled
- * more than what’s here. Style the `.picker__holder` instead.
+ * Note: the root picker element should *NOT* be styled more than what’s here.
  */
 .picker {
 
     // Make it full-width so that it doesn’t collapse.
     width: 100%;
 }
+
 
 
 /**
@@ -31,15 +31,15 @@
     border-top-width: 0;
     border-bottom-width: 0;
 
+    // Round the bottom corners.
+    .border-radius( 0 0 @picker-border-radius @picker-border-radius );
+
     // Let’s not go 100% + 2px.
     .box-sizing( border-box );
 
     // Specify the min & max widths.
     min-width: @classic-min-width;
     max-width: @classic-max-width;
-
-    // Round the bottom corners.
-    .border-radius( 0 0 @picker-border-radius @picker-border-radius );
 
     // Hide everything to begin with.
     max-height: 0;
@@ -52,6 +52,20 @@
     @transition: all @speed-animate-in ease-out, max-height 0 @speed-animate-in, border-width 0 @speed-animate-in;
     .transition( @transition );
 }
+
+
+
+/**
+ * The frame and wrap work together to ensure that
+ * clicks within the picker don’t reach the holder.
+ */
+.picker__frame {
+    padding: 1px;
+}
+.picker__wrap {
+    margin: -1px;
+}
+
 
 
 /**
