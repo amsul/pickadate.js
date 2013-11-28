@@ -896,6 +896,10 @@ DatePicker.prototype.nodes = function( isOpen ) {
                                                 klasses.push( settings.klass.highlighted )
                                             }
 
+                                            if ( settings.highlightWeekends && (!targetDate.day || targetDate.day === 6)){
+                                                klasses.push( settings.klass.weekend )
+                                            }
+
                                             // Add the `disabled` class if something's disabled and the object matches.
                                             if ( disabledCollection && calendar.disabled( targetDate ) || targetDate.pick < minLimitObject.pick || targetDate.pick > maxLimitObject.pick ) {
                                                 klasses.push( settings.klass.disabled )
@@ -973,6 +977,7 @@ DatePicker.defaults = (function( prefix ) {
             now: prefix + 'day--today',
             infocus: prefix + 'day--infocus',
             outfocus: prefix + 'day--outfocus',
+            weekend: prefix + 'day--weekend',
 
             footer: prefix + 'footer',
 

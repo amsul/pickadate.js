@@ -59,6 +59,9 @@ selectMonths: undefined,
 // <a href="#first-weekday">First day of the week</a>
 firstDay: undefined,
 
+// <a href="#highlight-weekends">Highlight weekends</a>
+highlightWeekends: undefined,
+
 // <a href="#limits">Date limits</a>
 min: undefined,
 max: undefined,
@@ -373,6 +376,24 @@ $('.datepicker').pickadate({
 })</code></pre>
 
         {%= dateDemoField({ id: 'date_demo__firstDay' }) %}
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Highlight Weekends<a class="heading__anchor" name="highlight-weekends" href="#highlight-weekends">&sect;</a></span></h2>
+        <p>Highlight Saturdays and Sundays:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
+            highlightWeekends: true
+            })</code></pre>
+
+        {%= dateDemoField({ id: 'date_demo__highlightWeekends' }) %}
 
     </div> <!-- .section__block -->
 

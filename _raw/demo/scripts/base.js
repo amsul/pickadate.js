@@ -125,6 +125,13 @@ $( '#date_demo__firstDay' ).pickadate({
 })
 
 
+/**
+ * Highlight weekends
+ */
+$( '#date_demo__highlightWeekends' ).pickadate({
+    highlightWeekends: true
+})
+
 
 /**
  * Limits
