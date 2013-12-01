@@ -149,7 +149,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                             activeElement = activeElement && ( activeElement.type || activeElement.href )
 
                         // If it’s disabled or nothing inside is actively focused, re-focus the element.
-                        if ( targetDisabled || !$.contains( P.$root[0], activeElement ) ) {
+                        if ( targetDisabled || activeElement && !$.contains( P.$root[0], activeElement ) ) {
                             ELEMENT.focus()
                         }
 
