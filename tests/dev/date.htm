@@ -100,6 +100,14 @@
 
         var picker = $input.pickadate('picker')
 
+        picker.on('set', function(selection) {
+            console.log( selection )
+        })
+
+        picker.set('select', new Date())
+        picker.set('select', new Date(), { muted: true })
+        picker.set({ select: new Date() }, { muted: true })
+
     </script>
 
 
