@@ -102,7 +102,7 @@ function TimePicker( picker, settings ) {
             var $pickerHolder = picker.$root.children(),
                 $viewset = $pickerHolder.find( '.' + settings.klass.viewset )
             if ( $viewset.length ) {
-                $pickerHolder[ 0 ].scrollTop += $viewset.position().top - ( $viewset[ 0 ].clientHeight * 2 )
+                $pickerHolder[ 0 ].scrollTop = ~~$viewset.position().top - ( $viewset[ 0 ].clientHeight * 2 )
             }
         }).
         on( 'open', function() {
@@ -170,30 +170,41 @@ TimePicker.prototype.create = function( type, value, options ) {
 
     var clock = this
 
-    // If there's no value, use the type as the value.
+    // If there’s no value, use the type as the value.
     value = value === undefined ? type : value
 
-    // If it's an object, use the "pick" value.
-    if ( Picker._.isObject( value ) && Picker._.isInteger( value.pick ) ) {
+    // If it’s a date object, convert it into an array.
+    if ( Picker._.isDate( value ) ) {
+        value = [ value.getHours(), value.getMinutes() ]
+    }
+
+    // If it’s an object, use the “pick” value.
+    if ( $.isPlainObject( value ) && Picker._.isInteger( value.pick ) ) {
         value = value.pick
     }
 
-    // If it's an array, convert it into minutes.
+    // If it’s an array, convert it into minutes.
     else if ( $.isArray( value ) ) {
         value = +value[ 0 ] * MINUTES_IN_HOUR + (+value[ 1 ])
     }
 
-    // If no valid value is passed, set it to "now".
+    // If no valid value is passed, set it to “now”.
     else if ( !Picker._.isInteger( value ) ) {
         value = clock.now( type, value, options )
     }
 
-    // If we're setting the max, make sure it's greater than the min.
+    // If we’re setting the max, make sure it’s greater than the min.
     if ( type == 'max' && value < clock.item.min.pick ) {
         value += MINUTES_IN_DAY
     }
 
-    // Normalize it into a "reachable" interval.
+    // If the value doesn’t fall directly on the interval,
+    // add one interval to indicate it as “passed”.
+    if ( type != 'min' && type != 'max' && (value - clock.item.min.pick) % clock.item.interval !== 0 ) {
+        value += clock.item.interval
+    }
+
+    // Normalize it into a “reachable” interval.
     value = clock.normalize( type, value, options )
 
     // Return the compiled object.
@@ -208,7 +219,7 @@ TimePicker.prototype.create = function( type, value, options ) {
         // The time in total minutes.
         time: ( MINUTES_IN_DAY + value ) % MINUTES_IN_DAY,
 
-        // Reference to the "relative" value to pick.
+        // Reference to the “relative” value to pick.
         pick: value
     }
 } //TimePicker.prototype.create
@@ -221,6 +232,9 @@ TimePicker.prototype.now = function( type, value/*, options*/ ) {
 
     var date = new Date(),
         dateMinutes = date.getHours() * MINUTES_IN_HOUR + date.getMinutes()
+
+    // Make sure “now” falls within the interval range.
+    dateMinutes -= dateMinutes % this.item.interval
 
     // If the value is a number, adjust by that many intervals because
     // the time has passed. In the case of “midnight” and a negative `min`,
@@ -244,12 +258,12 @@ TimePicker.prototype.now = function( type, value/*, options*/ ) {
  */
 TimePicker.prototype.normalize = function( type, value/*, options*/ ) {
 
-    var minObject = this.item.min, interval = this.item.interval,
+    var interval = this.item.interval,
 
-        // If setting min and it doesn’t exist, don’t shift anything.
+        // If setting min time, don’t shift anything.
         // Otherwise get the value and min difference and then
         // normalize the difference with the interval.
-        difference = type == 'min' && !minObject ? 0 : ( value - minObject.pick ) % interval
+        difference = type == 'min' ? 0 : ( value - this.item.min.pick ) % interval
 
     // If it’s a negative value, add one interval to keep it as “passed”.
     return value - ( difference + ( value < 0 ? interval : 0 ) )
@@ -263,18 +277,18 @@ TimePicker.prototype.measure = function( type, value, options ) {
 
     var clock = this
 
-    // If it's anything false-y, set it to the default.
+    // If it’s anything false-y, set it to the default.
     if ( !value ) {
         value = type == 'min' ? [ 0, 0 ] : [ HOURS_IN_DAY - 1, MINUTES_IN_HOUR - 1 ]
     }
 
-    // If it's a literal true, or an integer, make it relative to now.
+    // If it’s a literal true, or an integer, make it relative to now.
     else if ( value === true || Picker._.isInteger( value ) ) {
         value = clock.now( type, value, options )
     }
 
-    // If it's an object already, just normalize it.
-    else if ( Picker._.isObject( value ) && Picker._.isInteger( value.pick ) ) {
+    // If it’s an object already, just normalize it.
+    else if ( $.isPlainObject( value ) && Picker._.isInteger( value.pick ) ) {
         value = clock.normalize( type, value.pick, options )
     }
 
@@ -320,21 +334,28 @@ TimePicker.prototype.disabled = function( timeObject ) {
         clock = this,
 
         // Filter through the disabled times to check if this is one.
-        isDisabledTime = clock.item.disable.filter( function( timeToDisable ) {
+        isDisabledMatch = clock.item.disable.filter( function( timeToDisable ) {
 
             // If the time is a number, match the hours.
             if ( Picker._.isInteger( timeToDisable ) ) {
                 return timeObject.hour == timeToDisable
             }
 
-            // If it's an array, create the object and match the times.
-            if ( $.isArray( timeToDisable ) ) {
+            // If it’s an array, create the object and match the times.
+            if ( $.isArray( timeToDisable ) || Picker._.isDate( timeToDisable ) ) {
                 return timeObject.pick == clock.create( timeToDisable ).pick
             }
-        }).length
+        })
+
+    // If this time matches a disabled time, confirm it’s not inverted.
+    isDisabledMatch = isDisabledMatch.length && !isDisabledMatch.filter(function( timeToDisable ) {
+        return $.isArray( timeToDisable ) && timeToDisable[2] == 'inverted'
+    }).length
 
     // If the clock is "enabled" flag is flipped, flip the condition.
-    return clock.item.enable === -1 ? !isDisabledTime : isDisabledTime
+    return clock.item.enable === -1 ? !isDisabledMatch : isDisabledMatch ||
+        timeObject.pick < clock.item.min.pick ||
+        timeObject.pick > clock.item.max.pick
 } //TimePicker.prototype.disabled
 
 
@@ -384,7 +405,7 @@ TimePicker.prototype.parse = function( type, value, options ) {
     var clock = this,
         parsingObject = {}
 
-    if ( !value || Picker._.isInteger( value ) || $.isArray( value ) || Picker._.isDate( value ) || Picker._.isObject( value ) && Picker._.isInteger( value.pick ) ) {
+    if ( !value || Picker._.isInteger( value ) || $.isArray( value ) || Picker._.isDate( value ) || $.isPlainObject( value ) && Picker._.isInteger( value.pick ) ) {
         return value
     }
 
@@ -491,11 +512,11 @@ TimePicker.prototype.flipItem = function( type, value/*, options*/ ) {
 
     var clock = this,
         collection = clock.item.disable,
-        isFlipped = clock.item.enable === -1
+        isFlippedBase = clock.item.enable === -1
 
     // Flip the enabled and disabled times.
     if ( value == 'flip' ) {
-        clock.item.enable = isFlipped ? 1 : -1
+        clock.item.enable = isFlippedBase ? 1 : -1
     }
 
     // Reset the collection and enable the base state.
@@ -514,11 +535,14 @@ TimePicker.prototype.flipItem = function( type, value/*, options*/ ) {
     else if ( $.isArray( value ) ) {
 
         // Check if we have to add/remove from collection.
-        if ( !isFlipped && type == 'enable' || isFlipped && type == 'disable' ) {
-            collection = clock.removeDisabled( collection, value )
-        }
-        else if ( !isFlipped && type == 'disable' || isFlipped && type == 'enable' ) {
+        if ( isFlippedBase && type == 'enable' || !isFlippedBase && type == 'disable' ) {
             collection = clock.addDisabled( collection, value )
+        }
+        else if ( !isFlippedBase && type == 'enable' ) {
+            collection = clock.addEnabled( collection, value )
+        }
+        else if ( isFlippedBase && type == 'disable' ) {
+            collection = clock.removeDisabled( collection, value )
         }
     }
 
@@ -527,16 +551,63 @@ TimePicker.prototype.flipItem = function( type, value/*, options*/ ) {
 
 
 /**
+ * Add an enabled (inverted) item to the disabled collection.
+ */
+TimePicker.prototype.addEnabled = function( collection, item ) {
+
+    var clock = this
+
+    // Go through each item to enable.
+    item.map( function( timeUnit ) {
+
+        // Check if the time unit is already within the collection.
+        if ( clock.filterDisabled( collection, timeUnit, 1 ).length ) {
+
+            // Remove the unit directly from the collection.
+            collection = clock.removeDisabled( collection, [timeUnit] )
+
+            // If the unit is an array and it falls within a
+            // disabled weekday, invert it and then insert it.
+            if (
+                $.isArray( timeUnit ) &&
+                collection.filter( function( disabledHour ) {
+                    return Picker._.isInteger( disabledHour ) && clock.create( timeUnit ).hour === disabledHour
+                }).length
+            ) {
+                timeUnit = timeUnit.slice(0)
+                timeUnit.push( 'inverted' )
+                collection.push( timeUnit )
+            }
+        }
+    })
+
+    // Return the final collection.
+    return collection
+} //TimePicker.prototype.addEnabled
+
+
+/**
  * Add an item to the disabled collection.
  */
 TimePicker.prototype.addDisabled = function( collection, item ) {
+
     var clock = this
-    if ( item === false ) collection = []
-    else item.map( function( timeUnit ) {
+
+    // Go through each item to disable.
+    item.map( function( timeUnit ) {
+
+        // Add the time unit if it isn’t already within the collection.
         if ( !clock.filterDisabled( collection, timeUnit ).length ) {
             collection.push( timeUnit )
         }
+
+        // If the time unit is an array and falls within the range, just remove it.
+        else if ( $.isArray( timeUnit ) && clock.filterDisabled( collection, timeUnit, 1 ).length ) {
+            collection = clock.removeDisabled( collection, [timeUnit] )
+        }
     })
+
+    // Return the final collection.
     return collection
 } //TimePicker.prototype.addDisabled
 
@@ -545,10 +616,17 @@ TimePicker.prototype.addDisabled = function( collection, item ) {
  * Remove an item from the disabled collection.
  */
 TimePicker.prototype.removeDisabled = function( collection, item ) {
+
     var clock = this
+
+    // Go through each item to enable.
     item.map( function( timeUnit ) {
+
+        // Filter each item out of the collection.
         collection = clock.filterDisabled( collection, timeUnit, 1 )
     })
+
+    // Return the final colleciton.
     return collection
 } //TimePicker.prototype.removeDisabled
 

@@ -75,41 +75,18 @@
     <script src="../../lib/picker.js"></script>
     <script src="../../lib/picker.date.js"></script>
     <script src="../../lib/legacy.js"></script>
-    <!--<script src="../../lib/translations/ar.js"></script>
-
-    <style>
-
-        /**
-         * Styling for RTL languages.
-         */
-        .picker {
-            direction: rtl;
-        }
-
-            .picker__nav--next {
-                right: auto;
-                left: -1em;
-            }
-            .picker__nav--prev {
-                left: auto;
-                right: -1em;
-            }
-
-                .picker__nav--next:before {
-                    border-left: 0;
-                    border-right: 0.75em solid #000000;
-                }
-                .picker__nav--prev:before {
-                    border-right: 0;
-                    border-left: 0.75em solid #000000;
-                }
-    </style>-->
 
     <script type="text/javascript">
 
         var $input = $( /*'.date'*/ '.datepicker' ).pickadate({
+            editable: true,
             // container: '.outlet',
-            disable: [ 1, 2, 7, [2013,6,1] ],
+            // disable: [ 1, 2, 7, [2013,6,1],[2013,10,12],
+            //     [
+            //         2013,10,10
+            //         // ,'inverted'
+            //     ]
+            // ],
             selectYears: true,
             selectMonths: true,
             // format: 'dd mmmm yyyy',
@@ -122,6 +99,14 @@
         })
 
         var picker = $input.pickadate('picker')
+
+        picker.on('set', function(selection) {
+            console.log( selection )
+        })
+
+        picker.set('select', new Date())
+        picker.set('select', new Date(), { muted: true })
+        picker.set({ select: new Date() }, { muted: true })
 
     </script>
 

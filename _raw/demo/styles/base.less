@@ -481,6 +481,10 @@ input[type=search] {
     padding: 0;
 }
 
+.menu__list--header {
+    .clearfix;
+}
+
 
 /**
  * Menu links
@@ -516,11 +520,7 @@ input[type=search] {
 
 .menu__item--logo {
     float: left;
-
-    @media ( min-width: @breakpoint-medium ) {
-        float: none;
-        .list-item-inline;
-    }
+    margin-right: 1em;
 
     .menu__link {
         display: block;
@@ -552,8 +552,8 @@ input[type=search] {
 .menu__item--responsive {
 
     @media ( min-width: @breakpoint-medium ) {
-        vertical-align: top;
-        .list-item-inline;
+        float: left;
+        margin-right: 1em;
         &:last-child {
             margin-right: 0;
         }

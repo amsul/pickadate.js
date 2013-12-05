@@ -3,8 +3,7 @@
     debug: true,
     devel: true,
     browser: true,
-    asi: true,
-    unused: true
+    asi: true
  */
 
 
@@ -41,8 +40,8 @@ $( '#date_demo__translations' ).pickadate({
     monthsFull: [ 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre' ],
     monthsShort: [ 'Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec' ],
     weekdaysShort: [ 'Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam' ],
-    today: 'aujourd\'hui',
-    clear: 'effacer',
+    today: 'Aujourd\'hui',
+    clear: 'Effacer',
     formatSubmit: 'yyyy/mm/dd'
 })
 $( '#date_demo__translations_rtl' ).pickadate({
@@ -113,6 +112,15 @@ $( '#date_demo__selectors--a' ).pickadate({
 })
 $( '#date_demo__selectors--b' ).pickadate({
     selectYears: 4
+})
+
+
+
+/**
+ * Editable input
+ */
+$( '#date_demo__editable' ).pickadate({
+    editable: true
 })
 
 
@@ -192,6 +200,14 @@ $( '#date_demo__disable-dates--d' ).pickadate({
         [2013,3,20],
         new Date(2013,3,13),
         new Date(2013,3,29)
+    ]
+})
+
+// Pass “inverted” as the last paramter to flip within a range.
+$( '#date_demo__disable-dates--e' ).pickadate({
+    disable: [
+        1,
+        [2013,10,17,'inverted']
     ]
 })
 
@@ -297,6 +313,15 @@ $( '#time_demo__formats--b' ).pickatime({
 
 
 /**
+ * Editable input
+ */
+$( '#time_demo__editable' ).pickatime({
+    editable: true
+})
+
+
+
+/**
  * Time intervals
  */
 $( '#time_demo__interval' ).pickatime({
@@ -356,6 +381,15 @@ $( '#time_demo__disable-times--c' ).pickatime({
         [2,0],
         [8,30],
         [9,0]
+    ]
+})
+
+// Pass “inverted” as the last paramter to flip within a range.
+$( '#time_demo__disable-times--d' ).pickatime({
+    interval: 15,
+    disable: [
+        1,
+        [1,30,'inverted']
     ]
 })
 
@@ -570,13 +604,17 @@ $( '#button__api-get--view-format' ).on( 'click', function( event ) {
 })
 
 //min
-var $input_get__min = $( '#demo__api-get--min' ).pickadate(),
+var $input_get__min = $( '#demo__api-get--min' ).pickadate({
+        min: [TODAY.getFullYear(),TODAY.getMonth(),TODAY.getDate()]
+    }),
     picker_get__min = $input_get__min.pickadate( 'picker' )
 $( '#button__api-get--min' ).on( 'click', function( event ) {
     console.log( picker_get__min.get( 'min' ) )
     event.stopPropagation()
 })
-var $input_get__min_format = $( '#demo__api-get--min-format' ).pickadate(),
+var $input_get__min_format = $( '#demo__api-get--min-format' ).pickadate({
+        min: [TODAY.getFullYear(),TODAY.getMonth(),TODAY.getDate()]
+    }),
     picker_get__min_format = $input_get__min_format.pickadate( 'picker' )
 $( '#button__api-get--min-format' ).on( 'click', function( event ) {
     console.log( picker_get__min_format.get( 'min', 'yyyy/mm/dd' ) )
@@ -584,13 +622,17 @@ $( '#button__api-get--min-format' ).on( 'click', function( event ) {
 })
 
 //max
-var $input_get__max = $( '#demo__api-get--max' ).pickadate(),
+var $input_get__max = $( '#demo__api-get--max' ).pickadate({
+        max: [TODAY.getFullYear()+2,TODAY.getMonth(),TODAY.getDate()]
+    }),
     picker_get__max = $input_get__max.pickadate( 'picker' )
 $( '#button__api-get--max' ).on( 'click', function( event ) {
     console.log( picker_get__max.get( 'max' ) )
     event.stopPropagation()
 })
-var $input_get__max_format = $( '#demo__api-get--max-format' ).pickadate(),
+var $input_get__max_format = $( '#demo__api-get--max-format' ).pickadate({
+        max: [TODAY.getFullYear()+2,TODAY.getMonth(),TODAY.getDate()]
+    }),
     picker_get__max_format = $input_get__max_format.pickadate( 'picker' )
 $( '#button__api-get--max-format' ).on( 'click', function( event ) {
     console.log( picker_get__max_format.get( 'max', 'yyyy/mm/dd' ) )
@@ -706,6 +748,10 @@ $( '#button__api-set--select-time-array' ).on( 'click', function( event ) {
     picker_set__select_time.set( 'select', [3,0] )
     event.stopPropagation()
 })
+$( '#button__api-set--select-time-js' ).on( 'click', function( event ) {
+    picker_set__select_time.set( 'select', new Date( TODAY.getTime() + 468487654 ) )
+    event.stopPropagation()
+})
 $( '#button__api-set--select-time-integer' ).on( 'click', function( event ) {
     picker_set__select_time.set( 'select', 540 )
     event.stopPropagation()
@@ -724,7 +770,7 @@ $( '#button__api-set--highlight-date-js' ).on( 'click', function( event ) {
     event.stopPropagation()
 })
 $( '#button__api-set--highlight-date-integer' ).on( 'click', function( event ) {
-    picker_set__highlight_date.set( 'highlight', TODAY.getTime() - 468487654 )
+    picker_set__highlight_date.set( 'highlight', TODAY.getTime() + 468487654 )
     event.stopPropagation()
 })
 
@@ -733,6 +779,10 @@ var $input_set__highlight_time = $( '#demo__api-set--highlight-time' ).pickatime
     picker_set__highlight_time = $input_set__highlight_time.pickatime( 'picker' )
 $( '#button__api-set--highlight-time-array' ).on( 'click', function( event ) {
     picker_set__highlight_time.set( 'highlight', [15,30] )
+    event.stopPropagation()
+})
+$( '#button__api-set--highlight-time-js' ).on( 'click', function( event ) {
+    picker_set__highlight_time.set( 'highlight', new Date( TODAY.getTime() + 468487654 ) )
     event.stopPropagation()
 })
 $( '#button__api-set--highlight-time-integer' ).on( 'click', function( event ) {
@@ -761,6 +811,10 @@ var $input_set__view_time = $( '#demo__api-set--view-time' ).pickatime(),
     picker_set__view_time = $input_set__view_time.pickatime( 'picker' )
 $( '#button__api-set--view-time-array' ).on( 'click', function( event ) {
     picker_set__view_time.set( 'view', [15,30] )
+    event.stopPropagation()
+})
+$( '#button__api-set--view-time-js' ).on( 'click', function( event ) {
+    picker_set__view_time.set( 'view', new Date( TODAY.getTime() + 468487654 ) )
     event.stopPropagation()
 })
 $( '#button__api-set--view-time-integer' ).on( 'click', function( event ) {
@@ -797,6 +851,10 @@ var $input_set__min_time = $( '#demo__api-set--min-time' ).pickatime(),
     picker_set__min_time = $input_set__min_time.pickatime( 'picker' )
 $( '#button__api-set--min-time-array' ).on( 'click', function( event ) {
     picker_set__min_time.set( 'min', [15,30] )
+    event.stopPropagation()
+})
+$( '#button__api-set--min-time-js' ).on( 'click', function( event ) {
+    picker_set__min_time.set( 'min', new Date( TODAY.getTime() + 468487654 ) )
     event.stopPropagation()
 })
 $( '#button__api-set--min-time-integer' ).on( 'click', function( event ) {
@@ -841,6 +899,10 @@ var $input_set__max_time = $( '#demo__api-set--max-time' ).pickatime(),
     picker_set__max_time = $input_set__max_time.pickatime( 'picker' )
 $( '#button__api-set--max-time-array' ).on( 'click', function( event ) {
     picker_set__max_time.set( 'max', [15,30] )
+    event.stopPropagation()
+})
+$( '#button__api-set--max-time-js' ).on( 'click', function( event ) {
+    picker_set__max_time.set( 'max', new Date( TODAY.getTime() + 468487654 ) )
     event.stopPropagation()
 })
 $( '#button__api-set--max-time-integer' ).on( 'click', function( event ) {
@@ -891,6 +953,10 @@ $( '#button__api-set--disable-time-array' ).on( 'click', function( event ) {
     picker_set__disable_time.set( 'disable', [ [2,30], [4,30], [9,0] ])
     event.stopPropagation()
 })
+$( '#button__api-set--disable-time-js' ).on( 'click', function( event ) {
+    picker_set__disable_time.set( 'disable', [ new Date(2013,9,13,6), new Date(2013,9,13,12,30) ])
+    event.stopPropagation()
+})
 $( '#button__api-set--disable-time-integer' ).on( 'click', function( event ) {
     picker_set__disable_time.set( 'disable', [ 1, 4, 7 ])
     event.stopPropagation()
@@ -913,6 +979,10 @@ var $input_set__enable_date = $( '#demo__api-set--enable-date' ).pickadate(),
     picker_set__enable_date = $input_set__enable_date.pickadate( 'picker' )
 $( '#button__api-set--enable-date-array' ).on( 'click', function( event ) {
     picker_set__enable_date.set( 'enable', [ [2013,9,3], [2013,9,9], [2013,9,20] ])
+    event.stopPropagation()
+})
+$( '#button__api-set--enable-time-js' ).on( 'click', function( event ) {
+    picker_set__enable_time.set( 'enable', [ new Date(2013,9,13,6), new Date(2013,9,13,12,30) ])
     event.stopPropagation()
 })
 $( '#button__api-set--enable-date-js' ).on( 'click', function( event ) {
@@ -959,6 +1029,17 @@ $( '#button__api-set--enable-time-flip' ).on( 'click', function( event ) {
     picker_set__enable_time.set( 'enable', 'flip' )
     event.stopPropagation()
 })
+
+//enable/disable: range
+var $input_set__enable_disable_in_range_date = $( '#demo__api-set--enable-disable-in-range-date' ).pickadate({
+        disable: [ 1, [2013, 10, 17, 'inverted'] ]
+    }),
+    picker_set__enable_disable_in_range_date = $input_set__enable_disable_in_range_date.pickadate( 'picker' )
+var $input_set__enable_disable_in_range_time = $( '#demo__api-set--enable-disable-in-range-time' ).pickatime({
+        disable: [ 1, [1, 30, 'inverted'] ],
+        interval: 15
+    }),
+    picker_set__enable_disable_in_range_time = $input_set__enable_disable_in_range_time.pickatime( 'picker' )
 
 //interval: time
 var $input_set__interval_time = $( '#demo__api-set--interval' ).pickatime(),

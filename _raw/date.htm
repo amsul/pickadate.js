@@ -52,6 +52,9 @@ formatSubmit: undefined,
 hiddenPrefix: undefined,
 hiddenSuffix: '_submit',
 
+// <a href="#editable">Editable input</a>
+editable: undefined,
+
 // <a href="#selectors">Dropdown selectors</a>
 selectYears: undefined,
 selectMonths: undefined,
@@ -337,6 +340,29 @@ $('.datepicker').pickadate({
 
     <div class="section__block section__block--scoped">
 
+        <h2 class="heading heading--divide"><span class="heading__text">Editable input<a class="heading__anchor" name="editable" href="#editable">&sect;</a></span></h2>
+        <p>By default, typing into the input is disabled by giving it a <code class="attribute">readOnly</code> attribute. Doing so ensures that virtual keyboards don’t pop open on touch devices. It is also a confirmation that formats passed to the server will be consistent.</p>
+        <p>However, this behavior can be changed using the <code>editable</code> option:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
+    editable: true
+})</code></pre>
+
+        {%= dateDemoField({ id: 'date_demo__editable' }) %}
+
+        <div class="section__block section__block--notification">
+            <p>An important thing to note here is that this disables keyboard bindings on the input element, such as arrow keys opening the picker. You will have to add your own bindings as you see fit.</p>
+        </div>
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
         <h2 class="heading heading--divide"><span class="heading__text">Dropdown Selectors<a class="heading__anchor" name="selectors" href="#selectors">&sect;</a></span></h2>
         <p>Display <code class="tag-name">select</code> menus to pick the month and year. Anything truth-y enables the selectors and anything false-y switches them into labels:</p>
 
@@ -476,6 +502,18 @@ $('.datepicker').pickadate({
 
         {%= dateDemoField({ id: 'date_demo__disable-dates--d' }) %}
 
+        <p><b>5)</b> <i>Enabling/disabling ranges with exceptions</i> by passing <code class="string">'inverted'</code> as the last parameter in the item within the collection:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
+    disable: [
+        1,
+        [2013, 10, 17, 'inverted']
+    ]
+})</code></pre>
+
+        {%= dateDemoField({ id: 'date_demo__disable-dates--e' }) %}
+
+
     </div> <!-- .section__block -->
 
 </section> <!-- .section -->
@@ -487,7 +525,7 @@ $('.datepicker').pickadate({
     <div class="section__block section__block--scoped">
 
         <h2 class="heading heading--divide"><span class="heading__text">container<a class="heading__anchor" name="container" href="#container">&sect;</a></span></h2>
-        <p>Specify where to insert the picker’s root element by passing any valid CSS selector to this option:</p>
+        <p>By default, the picker’s root element is inserted right after the <code class="keyword">input</code> element. Specify where to insert the root element by passing any valid CSS selector to this option:</p>
 
         <div id="root-outlet" style="position:relative"></div>
 
@@ -497,7 +535,9 @@ $('.datepicker').pickadate({
 
         {%= dateDemoField({ id: 'date_demo__container' }) %}
 
-        <p>By default, the picker root is inserted right after the <code class="keyword">input</code> element.</p>
+        <div class="section__block section__block--notification">
+            <p>This is especially important when the <code class="keyword">input</code> falls within a <code class="keyword">label</code> element because click events bubble up to the <code class="keyword">label</code> element and re-open the picker.</p>
+        </div>
 
     </div> <!-- .section__block -->
 
