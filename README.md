@@ -1,4 +1,4 @@
-# pickadate v3.3.0 [![pickadate build status](https://travis-ci.org/amsul/pickadate.js.png?branch=gh-pages)](https://travis-ci.org/amsul/pickadate.js)
+# pickadate v3.3.1 [![pickadate build status](https://travis-ci.org/amsul/pickadate.js.png?branch=gh-pages)](https://travis-ci.org/amsul/pickadate.js)
 
 The mobile-friendly, responsive, and lightweight jQuery date & time input picker.
 
@@ -11,7 +11,7 @@ The mobile-friendly, responsive, and lightweight jQuery date & time input picker
 
 #### To get it:
 
-[Download v3.3.0](https://github.com/amsul/pickadate.js/archive/3.3.0.zip) or `git clone git://github.com/amsul/pickadate.js.git` or `bower install pickadate`
+[Download v3.3.1](https://github.com/amsul/pickadate.js/archive/3.3.1.zip) or `git clone git://github.com/amsul/pickadate.js.git` or `bower install pickadate`
 
 
 
@@ -36,9 +36,9 @@ There are currently two pickers: **date** and **time**.
 
 File                    | Contents                 | Size (min & gzip)
 ----------------------- | ------------------------ | ----------------------
-`picker.js`             | __Base *__               | 1.33kb
-`picker.date.js`        | Date picker              | 2.05kb
-`picker.time.js`        | Time picker              | 1.38kb
+`picker.js`             | __Base *__               | 1.37kb
+`picker.date.js`        | Date picker              | 2.14kb
+`picker.time.js`        | Time picker              | 1.50kb
 
 __*__ The base script is **required** for any of the pickers to function.
 
@@ -51,10 +51,10 @@ All themes are [generated using LESS](#less-styling) and compiled into the `lib/
 
 File                    | Contents                     | Size (min & gzip)
 ----------------------- | ---------------------------- | ----------------------
-`default.css`           | __Base default *__           | 0.49kb
+`default.css`           | __Base default *__           | 0.51kb
 `default.date.css`      | Default date picker          | 0.67kb
 `default.time.css`      | Default time picker          | 0.35kb
-`classic.css`           | __Base classic *__           | 0.32kb
+`classic.css`           | __Base classic *__           | 0.37kb
 `classic.date.css`      | Classic date picker          | 0.67kb
 `classic.time.css`      | Classic time picker          | 0.35kb
 `rtl.css`               | __RTL language stylings **__ | 0.10kb
@@ -65,7 +65,7 @@ __**__ For languages with text flowing from right-to-left, also include the `rtl
 
 ### Translations
 
-The translations are copied into the `lib/translations` folder. There are currently [33 languages](https://github.com/amsul/pickadate.js/blob/3.3.0/lib/translations) included.
+The translations are copied into the `lib/translations` folder. There are currently [34 languages](https://github.com/amsul/pickadate.js/blob/3.3.1/lib/translations) included.
 
 
 

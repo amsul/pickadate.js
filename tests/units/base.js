@@ -306,6 +306,21 @@ test( 'As multiple methods', 6, function() {
         trigger( 'set' )
 })
 
+test( 'As muted methods', 1, function() {
+
+    var picker = this.picker
+
+    // Bind the callback.
+    picker.on('set', function() {
+        ok( true, 'An outspoken method' )
+    })
+
+    // Do the selections.
+    picker.set('select', new Date())
+    picker.set('select', new Date(), { muted: true })
+    picker.set({ select: new Date() }, { muted: true })
+})
+
 test( 'Open/close alternate focus', function() {
 
     var picker = this.picker,

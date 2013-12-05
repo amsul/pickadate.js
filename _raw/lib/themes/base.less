@@ -7,8 +7,7 @@
 
 
 /**
- * Note: the root picker element should __NOT__ be styled
- * more than what’s here. Style the `.picker__holder` instead.
+ * Note: the root picker element should *NOT* be styled more than what’s here.
  */
 .picker {
 
@@ -21,6 +20,9 @@
     // The picker shouldn’t affect or be affected by elements around it.
     position: absolute;
     z-index: @picker-z-index;
+
+    // The picker shouldn’t be selectable.
+    .user-select( none );
 }
 
 

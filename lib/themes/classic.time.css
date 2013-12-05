@@ -124,4 +124,5 @@
  */
 .picker--time .picker__box {
   padding: 0;
+  position: relative;
 }
