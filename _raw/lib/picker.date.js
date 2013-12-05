@@ -653,7 +653,8 @@ DatePicker.prototype.addEnabled = function( collection, item ) {
                     return Picker._.isInteger( disabledDate ) && calendar.create( timeUnit ).day === disabledDate - 1
                 }).length
             ) {
-                timeUnit.slice(0).push( 'inverted' )
+                timeUnit = timeUnit.slice(0)
+                timeUnit.push( 'inverted' )
                 collection.push( timeUnit )
             }
         }

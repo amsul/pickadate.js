@@ -37,7 +37,7 @@ There are currently two pickers: **date** and **time**.
 File                    | Contents                 | Size (min & gzip)
 ----------------------- | ------------------------ | ----------------------
 `picker.js`             | __Base *__               | 1.37kb
-`picker.date.js`        | Date picker              | 2.13kb
+`picker.date.js`        | Date picker              | 2.14kb
 `picker.time.js`        | Time picker              | 1.50kb
 
 __*__ The base script is **required** for any of the pickers to function.

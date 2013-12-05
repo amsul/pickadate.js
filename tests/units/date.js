@@ -596,12 +596,8 @@ test( '`disable` and `enable` using arrays', function() {
 
 
     picker.set( 'disable', [1] )
-    var today = new Date()
-    var disabledMonthDate = ~~$root.find( 'td [data-pick]' )[0].innerHTML
-    var disabledDateArray = [ today.getFullYear(), today.getMonth() - (disabledMonthDate > 7 ? 1 : 0), disabledMonthDate ]
-    picker.set( 'enable', [ disabledDateArray ] )
-    disabledDateArray.push( 'inverted' )
-    disableCollection = disableCollection.concat([ 1, disabledDateArray ])
+    picker.set( 'enable', [ [2013,11,1] ] )
+    disableCollection = [ [2013,11,25], 1, [2013,11,1,'inverted'] ]
     deepEqual( picker.get('disable'), disableCollection, 'Disabled collection with specified date inverted' )
 })
 
