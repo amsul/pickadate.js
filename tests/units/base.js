@@ -270,7 +270,8 @@ test( 'As individual methods', 6, function() {
         trigger( 'start' ).
         trigger( 'open' ).
         trigger( 'render' ).
-        trigger( 'set' )
+        trigger( 'set' ).
+        trigger( 'close' )
 })
 
 test( 'As multiple methods', 6, function() {
@@ -303,7 +304,8 @@ test( 'As multiple methods', 6, function() {
         trigger( 'start' ).
         trigger( 'open' ).
         trigger( 'render' ).
-        trigger( 'set' )
+        trigger( 'set' ).
+        trigger( 'close' )
 })
 
 test( 'As muted methods', 1, function() {
