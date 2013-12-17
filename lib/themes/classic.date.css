@@ -35,13 +35,19 @@
  */
 .picker__select--month,
 .picker__select--year {
-  font-size: .6em;
   border: 1px solid #b7b7b7;
   height: 2.5em;
   padding: .5em .25em;
   margin-left: .25em;
   margin-right: .25em;
-  margin-top: -0.5em;
+  font-size: .6em;
+}
+@media (min-width: 24.5em) {
+  .picker__select--month,
+  .picker__select--year {
+    font-size: .8em;
+    margin-top: -0.5em;
+  }
 }
 .picker__select--month {
   width: 35%;
@@ -59,18 +65,34 @@
 .picker__nav--prev,
 .picker__nav--next {
   position: absolute;
-  top: -0.33em;
-  padding: .5em 1.33em;
+  padding: .5em 1.25em;
   width: 1em;
   height: 1em;
+  top: -0.25em;
+}
+@media (min-width: 24.5em) {
+  .picker__nav--prev,
+  .picker__nav--next {
+    top: -0.33em;
+  }
 }
 .picker__nav--prev {
   left: -1em;
-  padding-right: 1.5em;
+  padding-right: 1.25em;
+}
+@media (min-width: 24.5em) {
+  .picker__nav--prev {
+    padding-right: 1.5em;
+  }
 }
 .picker__nav--next {
   right: -1em;
-  padding-left: 1.5em;
+  padding-left: 1.25em;
+}
+@media (min-width: 24.5em) {
+  .picker__nav--next {
+    padding-left: 1.5em;
+  }
 }
 .picker__nav--prev:before,
 .picker__nav--next:before {

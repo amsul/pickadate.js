@@ -46,15 +46,18 @@
  */
 .picker__select--month,
 .picker__select--year {
-    font-size: .8em;
     border: 1px solid @border-select;
     height: 2.5em;
     padding: .5em .25em; // For firefox
     margin-left: .25em;
     margin-right: .25em;
+    font-size: .6em;
 
-    // Select menus are big.. move ‘em up a bit.
-    margin-top: -.5em;
+    // For `tiny` width screens, increase the size a bit and move it up.
+    @media ( min-width: @breakpoint-width-tiny ) {
+        font-size: .8em;
+        margin-top: -.5em;
+    }
 }
 .picker__select--month {
     width: 35%;
@@ -74,18 +77,33 @@
 .picker__nav--prev,
 .picker__nav--next {
     position: absolute;
-    top: -.33em;
-    padding: .5em 1.33em;
+    padding: .5em 1.25em;
     width: 1em;
     height: 1em;
+    top: -.25em;
+
+    // For `tiny` width screens, move it up a bit.
+    @media ( min-width: @breakpoint-width-tiny ) {
+        top: -.33em;
+    }
 }
 .picker__nav--prev {
     left: -1em;
-    padding-right: 1.5em;
+    padding-right: 1.25em;
+
+    // For `tiny` width screens, increase the padding a bit.
+    @media ( min-width: @breakpoint-width-tiny ) {
+        padding-right: 1.5em;
+    }
 }
 .picker__nav--next {
     right: -1em;
-    padding-left: 1.5em;
+    padding-left: 1.25em;
+
+    // For `tiny` width screens, increase the padding a bit.
+    @media ( min-width: @breakpoint-width-tiny ) {
+        padding-left: 1.5em;
+    }
 }
 .picker__nav--prev:before,
 .picker__nav--next:before {
