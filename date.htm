@@ -299,13 +299,11 @@ $('.datepicker').pickadate({
 
         <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__formats--a" class="fieldset__input " name=date_input type=text placeholder="Try me&hellip;"></div></fieldset>
 
+        <h3 class="heading heading--divide"><span class="heading__text">Pre-fill values using custom formats or translations<a class="heading__anchor" name="formats_prefill" href="#formats_prefill">&sect;</a><a class="heading__anchor" name="formats_translations" href="#formats_translations"></a></span></h3>
 
-        <h3 class="heading heading--divide"><span class="heading__text">Formatting with translations<a class="heading__anchor" name="formats_translations" href="#formats_translations">&sect;</a></span></h3>
-
-        <p>When using <a href="#translations">translations</a>, the <code class="tag-name">input</code> element should be given a <code class="attribute">data-value</code> attribute formatted using the <code>formatSubmit</code> – the element’s <code class="attribute">value</code> can be left blank. This helps to parse the date into the various languages:</p>
+        <p>When using a custom <a href="#formatting-rules">formatting rules</a> for the <code>format</code> option or using <a href="#translations">translations</a>, the <code class="tag-name">input</code> element should be given a <code class="attribute">data-value</code> attribute formatted using the <code>formatSubmit</code> – the element’s <code class="attribute">value</code> can be left blank. This helps to parse the date from custom formats into various languages:</p>
         <pre class="pre--demo"><code data-language="html">&lt;input data-value="2013/04/20"></code></pre>
         <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__formats--b" class="fieldset__input " name=date_demo__formats type=text data-value="2013/04/20" placeholder="Try me&hellip;"></div></fieldset>
-
 
         <h3 class="heading heading--divide"><span class="heading__text">Formatting Rules<a class="heading__anchor" name="formatting-rules" href="#formatting-rules">&sect;</a></span></h3>
         <p>The following rules can be used to format any date:</p>
