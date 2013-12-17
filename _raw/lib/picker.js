@@ -124,7 +124,8 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                                 // * For mousedown events, cancel the default action in order to
                                 //   prevent cases where focus is shifted onto external elements
                                 //   when using things like jQuery mobile or MagnificPopup (ref: #249 & #120).
-                                if ( event.type == 'mousedown' && !$( target ).is( ':input' ) ) {
+                                //   Also, for Firefox, don’t prevent action on the `option` element.
+                                if ( event.type == 'mousedown' && !$( target ).is( ':input' ) && target.nodeName != 'OPTION' ) {
 
                                     event.preventDefault()
 
