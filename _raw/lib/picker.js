@@ -184,8 +184,8 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                             ( typeof SETTINGS.hiddenSuffix == 'string' ? SETTINGS.hiddenSuffix : '_submit' ) +
                         '"' +
 
-                        // If the element has a `data-value`, set the element `value` as well.
-                        ( $ELEMENT.data( 'value' ) ?
+                        // If the element has a value, set the hidden value as well.
+                        ( $ELEMENT.data( 'value' ) || ELEMENT.value ?
                             ' value="' + PickerConstructor._.trigger( P.component.formats.toString, P.component, [ SETTINGS.formatSubmit, P.component.item.select ] ) + '"' :
                             ''
                         ) +

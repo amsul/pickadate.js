@@ -36,7 +36,7 @@ There are currently two pickers: **date** and **time**.
 
 File                    | Contents                 | Size (min & gzip)
 ----------------------- | ------------------------ | ----------------------
-`picker.js`             | __Base *__               | 1.37kb
+`picker.js`             | __Base *__               | 1.38kb
 `picker.date.js`        | Date picker              | 2.14kb
 `picker.time.js`        | Time picker              | 1.50kb
 
@@ -52,10 +52,10 @@ All themes are [generated using LESS](#less-styling) and compiled into the `lib/
 File                    | Contents                     | Size (min & gzip)
 ----------------------- | ---------------------------- | ----------------------
 `default.css`           | __Base default *__           | 0.51kb
-`default.date.css`      | Default date picker          | 0.67kb
+`default.date.css`      | Default date picker          | 0.71kb
 `default.time.css`      | Default time picker          | 0.35kb
 `classic.css`           | __Base classic *__           | 0.37kb
-`classic.date.css`      | Classic date picker          | 0.67kb
+`classic.date.css`      | Classic date picker          | 0.71kb
 `classic.time.css`      | Classic time picker          | 0.35kb
 `rtl.css`               | __RTL language stylings **__ | 0.10kb
 
@@ -73,7 +73,7 @@ The translations are copied into the `lib/translations` folder. There are curren
 <br>
 ## Building with Grunt
 
-[Grunt](http://gruntjs.com/) `~0.4.1` is used to build the project files. To get started, clone the project and then run:
+[Grunt](http://gruntjs.com/) `~0.4.2` is used to build the project files. To get started, clone the project and then run:
 
 - `npm install` to get the required node modules.
 - `grunt --verbose` to confirm you have all the dependencies.

@@ -822,7 +822,7 @@ test( 'Highlight', function() {
 
 
 
-module( 'Time picker with a `value`', {
+module( 'Time picker with a visible value', {
     setup: function() {
         $DOM.append( $INPUT.clone().val( '2:00 p.m.' ) )
         var $input = $DOM.find( 'input' ).pickatime()
@@ -845,23 +845,34 @@ test( '`value` to select, highlight, and view', function() {
 
 
 
-module( 'Time picker with a `data-value`', {
-    setup: function() {
-        $DOM.append( $INPUT.clone().data( 'value', '14:00' ) )
-        var $input = $DOM.find( 'input' ).pickatime({
-            formatSubmit: 'HH:i'
-        })
-        this.picker = $input.pickatime( 'picker' )
-    },
+module( 'Time picker with a hidden value', {
     teardown: function() {
-        this.picker.stop()
         $DOM.empty()
     }
 })
 
+test( '`value` to select, highlight, and view', function() {
+
+    $DOM.append( $INPUT.clone().val( '2:00 p.m.' ) )
+    var $input = $DOM.find( 'input' ).pickatime({
+        formatSubmit: 'HH:i'
+    })
+    var picker = $input.pickatime( 'picker' )
+
+    ok( picker._hidden, 'Has hidden input' )
+    strictEqual( picker._hidden.value, '14:00', 'Hidden input value' )
+    strictEqual( picker.get( 'select' ).pick, 840, 'Selects time' )
+    strictEqual( picker.get( 'highlight' ).pick, 840, 'Highlights time' )
+    strictEqual( picker.get( 'view' ).pick, 840, 'Viewsets time' )
+})
+
 test( '`data-value` to select, highlight, and view', function() {
 
-    var picker = this.picker
+    $DOM.append( $INPUT.clone().data( 'value', '14:00' ) )
+    var $input = $DOM.find( 'input' ).pickatime({
+        formatSubmit: 'HH:i'
+    })
+    var picker = $input.pickatime( 'picker' )
 
     ok( picker._hidden, 'Has hidden input' )
     strictEqual( picker._hidden.value, '14:00', 'Hidden input value' )
