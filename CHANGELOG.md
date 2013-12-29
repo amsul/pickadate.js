@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.3.2
+
+- [#283](https://github.com/amsul/pickadate.js/issues/283): Adjusted font size for narrow screens.
+- [#285](https://github.com/amsul/pickadate.js/issues/285): Fixed `select` menu click on Firefox.
+- [#294](https://github.com/amsul/pickadate.js/issues/294): Fixed issue with `stop` method called within `onClose`.
+- [#303](https://github.com/amsul/pickadate.js/issues/303): Fixed issue with `value` not being parsed when `formatSubmit` is used.
+
+
 ## 3.3.1
 
 - [#260](https://github.com/amsul/pickadate.js/issues/260): Fixed border from preventing picker from opening.
