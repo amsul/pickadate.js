@@ -231,12 +231,14 @@ DatePicker.prototype.navigate = function( type, value, options ) {
         var targetDateObject = new Date( value.year, value.month + ( options && options.nav ? options.nav : 0 ), 1 ),
             year = targetDateObject.getFullYear(),
             month = targetDateObject.getMonth(),
-            date = value.date
+            date = value.date/*,
+            safety = 100*/
 
         // Make sure the date is valid and if the month we’re going to doesn’t have enough
         // days, keep decreasing the date until we reach the month’s last date.
-        while ( Picker._.isDate( targetDateObject ) && new Date( year, month, date ).getMonth() !== month ) {
+        while ( /*safety &&*/ Picker._.isDate( targetDateObject ) && new Date( year, month, date ).getMonth() !== month ) {
             date -= 1
+            // safety -= 1
         }
 
         value = [ year, month, date ]
@@ -322,14 +324,16 @@ DatePicker.prototype.validate = function( type, dateObject, options ) {
 
             // Return only integers for enabled weekdays.
             return Picker._.isInteger( value )
-        }).length
+        }).length/*,
+
+        safety = 100*/
 
 
 
     // Cases to validate for:
     // [1] Not inverted and date disabled.
     // [2] Inverted and some dates enabled.
-    // [3] Out of range.
+    // [3] Not inverted and out of range.
     //
     // Cases to **not** validate for:
     // • Navigating months.
@@ -339,7 +343,7 @@ DatePicker.prototype.validate = function( type, dateObject, options ) {
     if ( !options.nav ) if (
         /* 1 */ ( !isFlippedBase && calendar.disabled( dateObject ) ) ||
         /* 2 */ ( isFlippedBase && calendar.disabled( dateObject ) && ( hasEnabledWeekdays || hasEnabledBeforeTarget || hasEnabledAfterTarget ) ) ||
-        /* 3 */ ( dateObject.pick <= minLimitObject.pick || dateObject.pick >= maxLimitObject.pick )
+        /* 3 */ ( !isFlippedBase && (dateObject.pick <= minLimitObject.pick || dateObject.pick >= maxLimitObject.pick) )
     ) {
 
 
@@ -351,7 +355,9 @@ DatePicker.prototype.validate = function( type, dateObject, options ) {
 
 
         // Keep looping until we reach an enabled date.
-        while ( calendar.disabled( dateObject ) ) {
+        while ( /*safety &&*/ calendar.disabled( dateObject ) ) {
+
+            // safety -= 1
 
 
             // If we’ve looped into the next/prev month, return to the original date and flatten the interval.
