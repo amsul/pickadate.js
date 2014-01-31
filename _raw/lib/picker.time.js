@@ -410,9 +410,10 @@ TimePicker.prototype.parse = function( type, value, options ) {
         return value
     }
 
-    // We need a `.format` to parse the value.
+    // We need a `.format` to parse the value with.
     if ( !( options && options.format ) ) {
-        throw "Need a formatting option to parse this.."
+        options = options || {}
+        options.format = clock.settings.format
     }
 
     // Convert the format into an array and then map through it.

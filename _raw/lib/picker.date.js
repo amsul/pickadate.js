@@ -76,21 +76,11 @@ function DatePicker( picker, settings ) {
         set( 'now' ).
 
         // Setting the `select` also sets the `highlight` and `view`.
-        set( 'select',
-
-            // Use the value provided or default to selecting “today”.
-            valueString || calendar.item.now,
-            {
-                // Use the appropriate format.
-                format: formatString,
-
-                // Set user-provided month data as true when there is a
-                // “mm” or “m” used in the relative format string.
-                data: (function( formatArray ) {
-                    return valueString && ( formatArray.indexOf( 'mm' ) > -1 || formatArray.indexOf( 'm' ) > -1 )
-                })( calendar.formats.toArray( formatString ) )
-            }
-        )
+        // Use the value provided or default to selecting “today”.
+        set( 'select', valueString || calendar.item.now, {
+            format: formatString,
+            fromValue: !!elementValue
+        })
 
 
     // The keycode to movement mapping.
@@ -441,17 +431,21 @@ DatePicker.prototype.disabled = function( dateObject ) {
 DatePicker.prototype.parse = function( type, value, options ) {
 
     var calendar = this,
-        parsingObject = {}
+        parsingObject = {},
+        monthIndex
 
     if ( !value || Picker._.isInteger( value ) || $.isArray( value ) || Picker._.isDate( value ) || $.isPlainObject( value ) && Picker._.isInteger( value.pick ) ) {
         return value
     }
 
-    // We need a `.format` to parse the value.
+    // We need a `.format` to parse the value with.
     if ( !( options && options.format ) ) {
-        // should probably default to the default format.
-        throw "Need a formatting option to parse this.."
+        options = options || {}
+        options.format = calendar.settings.format
     }
+
+    // Calculate the month index to adjust with.
+    monthIndex = typeof value == 'string' && !options.fromValue ? 1 : 0
 
     // Convert the format into an array and then map through it.
     calendar.formats.toArray( options.format ).map( function( label ) {
@@ -475,7 +469,11 @@ DatePicker.prototype.parse = function( type, value, options ) {
     })
 
     // If it’s parsing a user provided month value, compensate for month 0index.
-    return [ parsingObject.yyyy || parsingObject.yy, +( parsingObject.mm || parsingObject.m ) - ( options.data ?  1 : 0 ), parsingObject.dd || parsingObject.d ]
+    return [
+        parsingObject.yyyy || parsingObject.yy,
+        +( parsingObject.mm || parsingObject.m ) - monthIndex,
+        parsingObject.dd || parsingObject.d
+    ]
 } //DatePicker.prototype.parse
 
 
