@@ -42,7 +42,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
     var
         // The state of the picker.
         STATE = {
-            id: Math.abs( ~~( Math.random() * 1e9 ) )
+            id: 'P' + Math.abs( ~~(Math.random() * new Date()) )
         },
 
 
@@ -93,162 +93,26 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                 ELEMENT.autofocus = ELEMENT == document.activeElement
                 ELEMENT.type = 'text'
                 ELEMENT.readOnly = !SETTINGS.editable
+                ELEMENT.id = ELEMENT.id || STATE.id
 
 
                 // Create a new picker component with the settings.
-                P.component = new COMPONENT( P, SETTINGS )
+                P.component = new COMPONENT(P, SETTINGS)
 
 
-                // Create the picker root with a new wrapped holder and bind the events.
-                P.$root = $( PickerConstructor._.node( 'div', createWrappedComponent(), CLASSES.picker ) ).
-                    on({
-
-                        // When something within the root is focused, stop from bubbling
-                        // to the doc and remove the “focused” state from the root.
-                        focusin: function( event ) {
-                            P.$root.removeClass( CLASSES.focused )
-                            event.stopPropagation()
-                        },
-
-                        // When something within the root holder is clicked, stop it
-                        // from bubbling to the doc.
-                        'mousedown click': function( event ) {
-
-                            var target = event.target
-
-                            // Make sure the target isn’t the root holder so it can bubble up.
-                            if ( target != P.$root.children()[ 0 ] ) {
-
-                                event.stopPropagation()
-
-                                // * For mousedown events, cancel the default action in order to
-                                //   prevent cases where focus is shifted onto external elements
-                                //   when using things like jQuery mobile or MagnificPopup (ref: #249 & #120).
-                                //   Also, for Firefox, don’t prevent action on the `option` element.
-                                if ( event.type == 'mousedown' && !$( target ).is( ':input' ) && target.nodeName != 'OPTION' ) {
-
-                                    event.preventDefault()
-
-                                    // Re-focus onto the element so that users can click away
-                                    // from elements focused within the picker.
-                                    ELEMENT.focus()
-                                }
-                            }
-                        }
-                    }).
-
-                    // If there’s a click on an actionable element, carry out the actions.
-                    on( 'click', '[data-pick], [data-nav], [data-clear]', function() {
-
-                        var $target = $( this ),
-                            targetData = $target.data(),
-                            targetDisabled = $target.hasClass( CLASSES.navDisabled ) || $target.hasClass( CLASSES.disabled ),
-
-                            // * For IE, non-focusable elements can be active elements as well
-                            //   (http://stackoverflow.com/a/2684561).
-                            activeElement = document.activeElement
-                            activeElement = activeElement && ( activeElement.type || activeElement.href )
-
-                        // If it’s disabled or nothing inside is actively focused, re-focus the element.
-                        if ( targetDisabled || activeElement && !$.contains( P.$root[0], activeElement ) ) {
-                            ELEMENT.focus()
-                        }
-
-                        // If something is superficially changed, update the `highlight` based on the `nav`.
-                        if ( targetData.nav && !targetDisabled ) {
-                            P.set( 'highlight', P.component.item.highlight, { nav: targetData.nav } )
-                        }
-
-                        // If something is picked, set `select` then close with focus.
-                        else if ( PickerConstructor._.isInteger( targetData.pick ) && !targetDisabled ) {
-                            P.set( 'select', targetData.pick ).close( true )
-                        }
-
-                        // If a “clear” button is pressed, empty the values and close with focus.
-                        else if ( targetData.clear ) {
-                            P.clear().close( true )
-                        }
-                    }) //P.$root
+                // Create the picker root with a holder and then prepare it.
+                P.$root = $( PickerConstructor._.node('div', createWrappedComponent(), CLASSES.picker, 'id="' + ELEMENT.id + '_root"') )
+                prepareElementRoot()
 
 
                 // If there’s a format for the hidden input element, create the element.
                 if ( SETTINGS.formatSubmit ) {
-
-                    P._hidden = $(
-                        '<input ' +
-                        'type=hidden ' +
-
-                        // Create the name by using the original input plus a prefix and suffix.
-                        'name="' + ( typeof SETTINGS.hiddenPrefix == 'string' ? SETTINGS.hiddenPrefix : '' ) +
-                            ELEMENT.name +
-                            ( typeof SETTINGS.hiddenSuffix == 'string' ? SETTINGS.hiddenSuffix : '_submit' ) +
-                        '"' +
-
-                        // If the element has a value, set the hidden value as well.
-                        ( $ELEMENT.data( 'value' ) || ELEMENT.value ?
-                            ' value="' + PickerConstructor._.trigger( P.component.formats.toString, P.component, [ SETTINGS.formatSubmit, P.component.item.select ] ) + '"' :
-                            ''
-                        ) +
-                        '>'
-                    )[ 0 ]
+                    prepareElementHidden()
                 }
 
 
                 // Prepare the input element.
-                $ELEMENT.
-
-                    // Store the picker data by component name.
-                    data( NAME, P ).
-
-                    // Add the “input” class name.
-                    addClass( CLASSES.input ).
-
-                    // If there’s a `data-value`, update the value of the element.
-                    val( $ELEMENT.data( 'value' ) ? PickerConstructor._.trigger( P.component.formats.toString, P.component, [ SETTINGS.format, P.component.item.select ] ) : ELEMENT.value ).
-
-                    // Insert the hidden input after the element.
-                    after( P._hidden ).
-
-                    // On focus/click, open the picker and adjust the root “focused” state.
-                    on( 'focus.P' + STATE.id + ' click.P' + STATE.id, focusToOpen ).
-
-                    // If the value changes, update the hidden input with the correct format.
-                    on( 'change.P' + STATE.id, function() {
-                        if ( P._hidden ) {
-                            P._hidden.value = ELEMENT.value ? PickerConstructor._.trigger( P.component.formats.toString, P.component, [ SETTINGS.formatSubmit, P.component.item.select ] ) : ''
-                        }
-                    })
-
-                // Only bind keydown events if the element isn’t editable.
-                if ( !SETTINGS.editable ) $ELEMENT.
-
-                    // Handle keyboard event based on the picker being opened or not.
-                    on( 'keydown.P' + STATE.id, function( event ) {
-
-                        var keycode = event.keyCode,
-
-                            // Check if one of the delete keys was pressed.
-                            isKeycodeDelete = /^(8|46)$/.test( keycode )
-
-                        // For some reason IE clears the input value on “escape”.
-                        if ( keycode == 27 ) {
-                            P.close()
-                            return false
-                        }
-
-                        // Check if `space` or `delete` was pressed or the picker is closed with a key movement.
-                        if ( keycode == 32 || isKeycodeDelete || !STATE.open && P.component.key[ keycode ] ) {
-
-                            // Prevent it from moving the page and bubbling to doc.
-                            event.preventDefault()
-                            event.stopPropagation()
-
-                            // If `delete` was pressed, clear the values and close the picker.
-                            // Otherwise open the picker.
-                            if ( isKeycodeDelete ) { P.clear().close() }
-                            else { P.open() }
-                        }
-                    })
+                prepareElement()
 
 
                 // Insert the root as specified in the settings.
@@ -322,7 +186,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                 // the events (after a tick for IE - see `P.close`).
                 $ELEMENT.removeClass( CLASSES.input ).removeData( NAME )
                 setTimeout( function() {
-                    $ELEMENT.off( '.P' + STATE.id )
+                    $ELEMENT.off( '.' + STATE.id )
                 }, 0)
 
                 // Restore the element state
@@ -350,9 +214,11 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
 
                 // Add the “active” class.
                 $ELEMENT.addClass( CLASSES.active )
+                aria( ELEMENT, 'expanded', true )
 
                 // Add the “opened” class to the picker root.
                 P.$root.addClass( CLASSES.opened )
+                aria( P.$root[0], 'hidden', false )
 
                 // If we have to give focus, bind the element and doc events.
                 if ( dontGiveFocus !== false ) {
@@ -364,7 +230,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                     $ELEMENT.trigger( 'focus' )
 
                     // Bind the document events.
-                    $document.on( 'click.P' + STATE.id + ' focusin.P' + STATE.id, function( event ) {
+                    $document.on( 'click.' + STATE.id + ' focusin.' + STATE.id, function( event ) {
 
                         var target = event.target
 
@@ -379,7 +245,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                             P.close( target === P.$root.children()[0] )
                         }
 
-                    }).on( 'keydown.P' + STATE.id, function( event ) {
+                    }).on( 'keydown.' + STATE.id, function( event ) {
 
                         var
                             // Get the keycode.
@@ -440,17 +306,20 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                     // ....ah yes! It would’ve been incomplete without a crazy workaround for IE :|
                     // The focus is triggered *after* the close has completed - causing it
                     // to open again. So unbind and rebind the event at the next tick.
-                    $ELEMENT.off( 'focus.P' + STATE.id ).trigger( 'focus' )
+                    $ELEMENT.off( 'focus.' + STATE.id ).trigger( 'focus' )
                     setTimeout( function() {
-                        $ELEMENT.on( 'focus.P' + STATE.id, focusToOpen )
+                        $ELEMENT.on( 'focus.' + STATE.id, focusToOpen )
                     }, 0 )
                 }
 
                 // Remove the “active” class.
                 $ELEMENT.removeClass( CLASSES.active )
+                aria( ELEMENT, 'expanded', false )
 
                 // Remove the “opened” and “focused” class from the picker root.
                 P.$root.removeClass( CLASSES.opened + ' ' + CLASSES.focused )
+                aria( P.$root[0], 'hidden', true )
+                aria( P.$root[0], 'selected', false )
 
                 // If it’s already closed, do nothing more.
                 if ( !STATE.open ) return P
@@ -459,7 +328,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                 STATE.open = false
 
                 // Unbind the document events.
-                $document.off( '.P' + STATE.id )
+                $document.off( '.' + STATE.id )
 
                 // Trigger the queued “close” events.
                 return P.trigger( 'close' )
@@ -637,6 +506,208 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
     } //createWrappedComponent
 
 
+
+    /**
+     * Prepare the input element with all bindings.
+     */
+    function prepareElement() {
+
+        $ELEMENT.
+
+            // Store the picker data by component name.
+            data(NAME, P).
+
+            // Add the “input” class name.
+            addClass(CLASSES.input).
+
+            // If there’s a `data-value`, update the value of the element.
+            val( $ELEMENT.data('value') ?
+                PickerConstructor._.trigger(
+                    P.component.formats.toString,
+                    P.component,
+                    [SETTINGS.format, P.component.item.select]
+                ) :
+                ELEMENT.value
+            ).
+
+            // On focus/click, open the picker and adjust the root “focused” state.
+            on('focus.' + STATE.id + ' click.' + STATE.id, focusToOpen)
+
+
+        // Only bind keydown events if the element isn’t editable.
+        if ( !SETTINGS.editable ) {
+
+            // Handle keyboard event based on the picker being opened or not.
+            $ELEMENT.on('keydown.' + STATE.id, function(event) {
+
+                var keycode = event.keyCode,
+
+                    // Check if one of the delete keys was pressed.
+                    isKeycodeDelete = /^(8|46)$/.test(keycode)
+
+                // For some reason IE clears the input value on “escape”.
+                if ( keycode == 27 ) {
+                    P.close()
+                    return false
+                }
+
+                // Check if `space` or `delete` was pressed or the picker is closed with a key movement.
+                if ( keycode == 32 || isKeycodeDelete || !STATE.open && P.component.key[keycode] ) {
+
+                    // Prevent it from moving the page and bubbling to doc.
+                    event.preventDefault()
+                    event.stopPropagation()
+
+                    // If `delete` was pressed, clear the values and close the picker.
+                    // Otherwise open the picker.
+                    if ( isKeycodeDelete ) { P.clear().close() }
+                    else { P.open() }
+                }
+            })
+        }
+
+
+        // Update the aria attributes.
+        aria(ELEMENT, {
+            haspopup: true,
+            expanded: false,
+            readonly: false,
+            owns: ELEMENT.id + '_root' + (P._hidden ? ' ' + P._hidden.id : '')
+        })
+    }
+
+
+    /**
+     * Prepare the root picker element with all bindings.
+     */
+    function prepareElementRoot() {
+
+        P.$root.
+
+            on({
+
+                // When something within the root is focused, stop from bubbling
+                // to the doc and remove the “focused” state from the root.
+                focusin: function( event ) {
+                    P.$root.removeClass( CLASSES.focused )
+                    aria( P.$root[0], 'selected', false )
+                    event.stopPropagation()
+                },
+
+                // When something within the root holder is clicked, stop it
+                // from bubbling to the doc.
+                'mousedown click': function( event ) {
+
+                    var target = event.target
+
+                    // Make sure the target isn’t the root holder so it can bubble up.
+                    if ( target != P.$root.children()[ 0 ] ) {
+
+                        event.stopPropagation()
+
+                        // * For mousedown events, cancel the default action in order to
+                        //   prevent cases where focus is shifted onto external elements
+                        //   when using things like jQuery mobile or MagnificPopup (ref: #249 & #120).
+                        //   Also, for Firefox, don’t prevent action on the `option` element.
+                        if ( event.type == 'mousedown' && !$( target ).is( ':input' ) && target.nodeName != 'OPTION' ) {
+
+                            event.preventDefault()
+
+                            // Re-focus onto the element so that users can click away
+                            // from elements focused within the picker.
+                            ELEMENT.focus()
+                        }
+                    }
+                }
+            }).
+
+            // If there’s a click on an actionable element, carry out the actions.
+            on( 'click', '[data-pick], [data-nav], [data-clear]', function() {
+
+                var $target = $( this ),
+                    targetData = $target.data(),
+                    targetDisabled = $target.hasClass( CLASSES.navDisabled ) || $target.hasClass( CLASSES.disabled ),
+
+                    // * For IE, non-focusable elements can be active elements as well
+                    //   (http://stackoverflow.com/a/2684561).
+                    activeElement = document.activeElement
+                    activeElement = activeElement && ( activeElement.type || activeElement.href )
+
+                // If it’s disabled or nothing inside is actively focused, re-focus the element.
+                if ( targetDisabled || activeElement && !$.contains( P.$root[0], activeElement ) ) {
+                    ELEMENT.focus()
+                }
+
+                // If something is superficially changed, update the `highlight` based on the `nav`.
+                if ( targetData.nav && !targetDisabled ) {
+                    P.set( 'highlight', P.component.item.highlight, { nav: targetData.nav } )
+                }
+
+                // If something is picked, set `select` then close with focus.
+                else if ( PickerConstructor._.isInteger( targetData.pick ) && !targetDisabled ) {
+                    P.set( 'select', targetData.pick ).close( true )
+                }
+
+                // If a “clear” button is pressed, empty the values and close with focus.
+                else if ( targetData.clear ) {
+                    P.clear().close( true )
+                }
+            }) //P.$root
+
+        aria( P.$root[0], 'hidden', true )
+    }
+
+
+     /**
+      * Prepare the hidden input element along with all bindings.
+      */
+    function prepareElementHidden() {
+
+        var id = [
+            typeof SETTINGS.hiddenPrefix == 'string' ? SETTINGS.hiddenPrefix : '',
+            typeof SETTINGS.hiddenSuffix == 'string' ? SETTINGS.hiddenSuffix : '_submit'
+        ]
+
+        P._hidden = $(
+            '<input ' +
+            'type=hidden ' +
+
+            // Create the name and ID by using the original
+            // input’s with a prefix and suffix.
+            'name="' + id[0] + ELEMENT.name + id[1] + '"' +
+            'id="' + id[0] + ELEMENT.id + id[1] + '"' +
+
+            // If the element has a value, set the hidden value as well.
+            (
+                $ELEMENT.data('value') || ELEMENT.value ?
+                    ' value="' + PickerConstructor._.trigger(
+                        P.component.formats.toString,
+                        P.component,
+                        [SETTINGS.formatSubmit, P.component.item.select]
+                    ) + '"' :
+                    ''
+            ) +
+            '>'
+        )[0]
+
+        $ELEMENT.
+
+            // If the value changes, update the hidden input with the correct format.
+            on('change.' + STATE.id, function() {
+                P._hidden.value = ELEMENT.value ?
+                    PickerConstructor._.trigger(
+                        P.component.formats.toString,
+                        P.component,
+                        [SETTINGS.formatSubmit, P.component.item.select]
+                    ) :
+                    ''
+            }).
+
+            // Insert the hidden input after the element.
+            after(P._hidden)
+    }
+
+
     // Separated for IE
     function focusToOpen( event ) {
 
@@ -644,7 +715,10 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
         event.stopPropagation()
 
         // If it’s a focus event, add the “focused” class to the root.
-        if ( event.type == 'focus' ) P.$root.addClass( CLASSES.focused )
+        if ( event.type == 'focus' ) {
+            P.$root.addClass( CLASSES.focused )
+            aria( P.$root[0], 'selected', true )
+        }
 
         // And then finally open the picker.
         P.open()
@@ -832,6 +906,25 @@ PickerConstructor.extend = function( name, Component ) {
     // Set the defaults.
     $.fn[ name ].defaults = Component.defaults
 } //PickerConstructor.extend
+
+
+
+function aria(element, attribute, value) {
+    if ( $.isPlainObject(attribute) ) {
+        for ( var key in attribute ) {
+            ariaSet(element, key, attribute[key])
+        }
+    }
+    else {
+        ariaSet(element, attribute, value)
+    }
+}
+function ariaSet(element, attribute, value) {
+    element.setAttribute(
+        (attribute == 'role' ? '' : 'aria-') + attribute,
+        value
+    )
+}
 
 
 

@@ -44,6 +44,7 @@ function TimePicker( picker, settings ) {
         elementDataValue = picker.$node.data( 'value' )
 
     clock.settings = settings
+    clock.$node = picker.$node
 
     // The queue of methods that will be used to build item objects.
     clock.queue = {
@@ -665,42 +666,59 @@ TimePicker.prototype.nodes = function( isOpen ) {
         viewsetObject = clock.item.view,
         disabledCollection = clock.item.disable
 
-    return Picker._.node( 'ul', Picker._.group({
-        min: clock.item.min.pick,
-        max: clock.item.max.pick,
-        i: clock.item.interval,
-        node: 'li',
-        item: function( loopedTime ) {
-            loopedTime = clock.create( loopedTime )
-            return [
-                Picker._.trigger( clock.formats.toString, clock, [ Picker._.trigger( settings.formatLabel, clock, [ loopedTime ] ) || settings.format, loopedTime ] ),
-                (function( klasses, timeMinutes ) {
+    return Picker._.node(
+        'ul',
+        Picker._.group({
+            min: clock.item.min.pick,
+            max: clock.item.max.pick,
+            i: clock.item.interval,
+            node: 'li',
+            item: function( loopedTime ) {
+                loopedTime = clock.create( loopedTime )
+                var timeMinutes = loopedTime.pick,
+                    isSelected = selectedObject && selectedObject.pick == timeMinutes
+                return [
+                    Picker._.trigger( clock.formats.toString, clock, [ Picker._.trigger( settings.formatLabel, clock, [ loopedTime ] ) || settings.format, loopedTime ] ),
+                    (function( klasses ) {
 
-                    if ( selectedObject && selectedObject.pick == timeMinutes ) {
-                        klasses.push( settings.klass.selected )
-                    }
+                        if ( isSelected ) {
+                            klasses.push( settings.klass.selected )
+                        }
 
-                    if ( highlightedObject && highlightedObject.pick == timeMinutes ) {
-                        klasses.push( settings.klass.highlighted )
-                    }
+                        if ( highlightedObject && highlightedObject.pick == timeMinutes ) {
+                            klasses.push( settings.klass.highlighted )
+                        }
 
-                    if ( viewsetObject && viewsetObject.pick == timeMinutes ) {
-                        klasses.push( settings.klass.viewset )
-                    }
+                        if ( viewsetObject && viewsetObject.pick == timeMinutes ) {
+                            klasses.push( settings.klass.viewset )
+                        }
 
-                    if ( disabledCollection && clock.disabled( loopedTime ) ) {
-                        klasses.push( settings.klass.disabled )
-                    }
+                        if ( disabledCollection && clock.disabled( loopedTime ) ) {
+                            klasses.push( settings.klass.disabled )
+                        }
 
-                    return klasses.join( ' ' )
-                })( [ settings.klass.listItem ], loopedTime.pick ),
-                'data-pick=' + loopedTime.pick
-            ]
-        }
-    }) +
+                        return klasses.join( ' ' )
+                    })( [ settings.klass.listItem ] ),
+                    'data-pick=' + loopedTime.pick +
+                    ' role=button' +
+                    ' aria-controls="' + clock.$node[0].id + '"' +
+                    (isSelected && clock.$node.val() ? ' aria-checked=true' : '')
+                ]
+            }
+        }) +
 
-    // * For Firefox forms to submit, make sure to set the button’s `type` attribute as “button”.
-    Picker._.node( 'li', Picker._.node( 'button', settings.clear, settings.klass.buttonClear, 'type=button data-clear=1' + ( isOpen ? '' : ' disable' ) ) ), settings.klass.list )
+        // * For Firefox forms to submit, make sure to set the button’s `type` attribute as “button”.
+        Picker._.node(
+            'li',
+            Picker._.node(
+                'button',
+                settings.clear,
+                settings.klass.buttonClear,
+                'type=button data-clear=1' + ( isOpen ? '' : ' disable' )
+            )
+        ),
+        settings.klass.list
+    )
 } //TimePicker.prototype.nodes
 
 
