@@ -65,7 +65,7 @@ __**__ For languages with text flowing from right-to-left, also include the `rtl
 
 ### Translations
 
-The translations are copied into the `lib/translations` folder. There are currently [34 languages](https://github.com/amsul/pickadate.js/blob/3.4.0/lib/translations) included.
+The translations are copied into the `lib/translations` folder. There are currently [35 languages](https://github.com/amsul/pickadate.js/blob/3.4.0/lib/translations) included.
 
 
 

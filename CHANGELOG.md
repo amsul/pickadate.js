@@ -11,6 +11,7 @@
 - [#330](https://github.com/amsul/pickadate.js/issues/330): Fixed month selector navigation from month with more days to one with less.
 - Improved time picker setting a time relative to “now”.
 - Spanish translations typo fixed.
+- Added Galician translations.
 
 
 ## 3.3.2
