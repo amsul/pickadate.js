@@ -4,10 +4,7 @@
  */
 
 /*jshint
-    asi: true
- */
-/*global
-    module: true
+    node: true
  */
 
 
@@ -164,6 +161,9 @@ module.exports = function( grunt ) {
 
         // Lint the files.
         jshint: {
+            options: {
+                jshintrc: true
+            },
             gruntfile: 'Gruntfile.js',
             demos: [ '<%= dirs.src.demos %>/scripts/base.js' ],
             pickers: [
@@ -275,13 +275,13 @@ module.exports = function( grunt ) {
     grunt.registerMultiTask( 'htmlify', 'Recursively build static HTML files', function() {
 
         var task = this,
-            options = task.options(),
+            // options = task.options(),
 
             // Process the base file using the source file content.
             processFile = function( fileSource ) {
 
-                var processedContent = '',
-                    fileNameMatch = fileSource.match( /([\w-]+)(\.htm)$/ )
+                var processedContent = ''/*,
+                    fileNameMatch = fileSource.match( /([\w-]+)(\.htm)$/ )*/
 
                 // Recursively process the base template using the file source content.
                 grunt.verbose.writeln( 'Processing ' + fileSource )

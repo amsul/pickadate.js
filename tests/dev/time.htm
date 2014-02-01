@@ -32,28 +32,20 @@
 
     <section class="holder holder-top holder-clean">
 
-        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-
-        <fieldset>
-            <input type="text">
-        </fieldset>
-
         <form>
             <fieldset>
                 <h3><label for="input_01">Pick a time. Go ahead...</label></h3>
-                <input id="input_from" class="datepicker" type="date" name="date" valuee="2:30 AM" data-valuee="01:30" autofocus>
-                <br><br><br><br><br>
-                <input class="button" type="submit" value="open">
+                <input
+                    id="input_from"
+                    class="datepicker"
+                    type="time"
+                    name="time"
+                    autofocus
+                    data-value="0:00">
+                    <!-- valuee="2:30 AM"
+                     -->
             </fieldset>
         </form>
-
-        <fieldset>
-            <input id="input_to" type="text" class="datepickerr">
-        </fieldset>
-
-        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
     </section>
 
@@ -66,31 +58,11 @@
     <script type="text/javascript">
 
         var $input = $( '.datepicker' ).pickatime({
-            // format: 'h:i a',
-            formatLabel: '<b>h</b>:i <!i>a</!i>',
-            formatSubmit: 'HH:i',
-            hiddenPrefix: 'prefixed__',
-            hiddenSuffix: '',
-            // interval: 40,
-            disable: [
-                // true,
-                0,
-                1,
-                4,
-                [3,30],
-                [8,45],
-                [1,30,'inverted']
-            ],
-            // min: 4,
-            // min: [ 5, 40 ],
-            // max: -2,
-            // max: [ 9, 0 ],
+            formatSubmit: 'H:i'
         }),
         picker = $input.pickatime('picker')
 
-        // picker.set('min',[5,40])
-        // picker.set('max',[22,20])
-        picker.set('min',new Date())
+        // picker.set('min',-3)
 
     </script>
 

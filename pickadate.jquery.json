@@ -1,6 +1,6 @@
 {
   "name": "pickadate",
-  "version": "3.3.2",
+  "version": "3.4.0",
   "title": "pickadate.js",
   "description": "The mobile-friendly, responsive, and lightweight jQuery date & time input picker.",
   "author": {
@@ -38,18 +38,18 @@
     "jquery": ">=1.7"
   },
   "devDependencies": {
-    "grunt": "~0.4.1",
-    "phantomjs": "1.9.0-2",
-    "zlib-browserify": "0.0.1",
+    "grunt": "~0.4.2",
+    "phantomjs": "~1.9.7-1",
+    "zlib-browserify": "0.0.3",
     "grunt-contrib-concat": "~0.3.0",
-    "grunt-contrib-watch": "~0.3.1",
-    "grunt-contrib-jshint": "~0.4.3",
-    "grunt-contrib-qunit": "~0.2.0",
-    "grunt-contrib-copy": "~0.4.1",
-    "grunt-contrib-less": "~0.5.1",
-    "grunt-contrib-clean": "~0.4.1",
-    "grunt-contrib-cssmin": "~0.6.0",
-    "grunt-contrib-uglify": "~0.2.0"
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-contrib-jshint": "~0.8.0",
+    "grunt-contrib-qunit": "~0.4.0",
+    "grunt-contrib-copy": "~0.5.0",
+    "grunt-contrib-less": "~0.9.0",
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-contrib-cssmin": "~0.7.0",
+    "grunt-contrib-uglify": "~0.3.2"
   },
   "scripts": {
     "test": "grunt travis --verbose"

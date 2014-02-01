@@ -3,7 +3,8 @@
     debug: true,
     devel: true,
     browser: true,
-    asi: true
+    asi: true,
+    unused: false
  */
 
 

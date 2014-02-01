@@ -156,7 +156,6 @@
   color: #999999;
   font-weight: 500;
   /* Increase the spacing a tad */
-
 }
 @media (min-height: 33.875em) {
   .picker__weekday {

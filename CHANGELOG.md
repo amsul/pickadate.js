@@ -1,5 +1,15 @@
 # Changelog
 
+## 3.4.0
+
+- ARIA support added.
+- [#128](https://github.com/amsul/pickadate.js/issues/128): Date parser recognizes a string value and uses month index as 1.
+- [#316](https://github.com/amsul/pickadate.js/issues/316): Date and time parser fall back to default format if none is specified.
+- [#326](https://github.com/amsul/pickadate.js/issues/326): Fixed `set('disable', true)` crashing with `max: true` in options.
+- [#329](https://github.com/amsul/pickadate.js/issues/329): Fixed time picker not parsing midnight correcly.
+- Improved time picker setting a time relative to “now”.
+
+
 ## 3.3.2
 
 - [#283](https://github.com/amsul/pickadate.js/issues/283): Adjusted font size for narrow screens.
@@ -16,11 +26,11 @@
 - [#249](https://github.com/amsul/pickadate.js/issues/249) & [#120](https://github.com/amsul/pickadate.js/issues/120): Fixed jQuery Mobile and MagnificPopup click issues.
 - [#247](https://github.com/amsul/pickadate.js/issues/247): Fixed setting min limit on time picker.
 - [#278](https://github.com/amsul/pickadate.js/issues/278) & [#285](https://github.com/amsul/pickadate.js/issues/285): Fixed Firefox and IE bug for finding `activeElement`.
-- [#279](https://github.com/amsul/pickadate.js/issues/279): Added option to `set` things with [muted callbacks](http://amsul.ca/pickadate.js/api.htm#muted-callbacks).
+- [#279](https://github.com/amsul/pickadate.js/issues/279): Added option to `set` things with [muted callbacks](http://amsul.github.io/pickadate.js/pickadate.js/api.htm#muted-callbacks).
 - Fixed French translations capitalization.
 - Fixed time picker scrolling.
-- Added setting a [time using a native JavaScript date objects](http://amsul.ca/api.htm#method-set-select-time).
-- Added option to keep an [editable `input`](http://amsul.ca/date.htm#editable) element.
+- Added setting a [time using a native JavaScript date objects](http://amsul.github.io/pickadate.js/api.htm#method-set-select-time).
+- Added option to keep an [editable `input`](http://amsul.github.io/pickadate.js/date.htm#editable) element.
 
 
 ## 3.3.0

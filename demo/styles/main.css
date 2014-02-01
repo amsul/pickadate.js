@@ -131,17 +131,14 @@ audio:not([controls]) {
 html {
   background: #fff;
   /* 1 */
-
   color: #000;
   /* 2 */
-
   font-family: sans-serif;
   /* 3 */
-
   -ms-text-size-adjust: 100%;
+  /* 4 */
   -webkit-text-size-adjust: 100%;
   /* 4 */
-
 }
 /**
  * Remove default margin.
@@ -296,10 +293,8 @@ fieldset {
 legend {
   border: 0;
   /* 1 */
-
   padding: 0;
   /* 2 */
-
 }
 /**
  * 1. Correct font family not being inherited in all browsers.
@@ -312,13 +307,10 @@ select,
 textarea {
   font-family: inherit;
   /* 1 */
-
   font-size: 100%;
   /* 2 */
-
   margin: 0;
   /* 3 */
-
 }
 /**
  * Address Firefox 4+ setting `line-height` on `input` using `!important` in
@@ -351,10 +343,8 @@ input[type="reset"],
 input[type="submit"] {
   -webkit-appearance: button;
   /* 2 */
-
   cursor: pointer;
   /* 3 */
-
 }
 /**
  * Re-set default cursor for disabled elements.
@@ -371,10 +361,8 @@ input[type="checkbox"],
 input[type="radio"] {
   box-sizing: border-box;
   /* 1 */
-
   padding: 0;
   /* 2 */
-
 }
 /**
  * 1. Address `appearance` set to `searchfield` in Safari 5 and Chrome.
@@ -384,11 +372,9 @@ input[type="radio"] {
 input[type="search"] {
   -webkit-appearance: textfield;
   /* 1 */
-
   -moz-box-sizing: content-box;
   -webkit-box-sizing: content-box;
   /* 2 */
-
   box-sizing: content-box;
 }
 /**
@@ -414,10 +400,8 @@ input::-moz-focus-inner {
 textarea {
   overflow: auto;
   /* 1 */
-
   vertical-align: top;
   /* 2 */
-
 }
 /* ==========================================================================
    Tables
