@@ -8,6 +8,7 @@
 - [#326](https://github.com/amsul/pickadate.js/issues/326): Fixed `set('disable', true)` crashing with `max: true` in options.
 - [#329](https://github.com/amsul/pickadate.js/issues/329): Fixed time picker not parsing midnight correcly.
 - [#325](https://github.com/amsul/pickadate.js/issues/325): Fixed Firefox bug with querying for active element with `$.contains`.
+- [#330](https://github.com/amsul/pickadate.js/issues/330): Fixed month selector navigation from month with more days to one with less.
 - Improved time picker setting a time relative to “now”.
 - Spanish translations typo fixed.
 

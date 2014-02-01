@@ -40,9 +40,9 @@
                     class="datepicker"
                     name="date"
                     type="date"
-                    autofocus>
+                    autofocus
+                    data-value="2014-02-22">
                     <!-- valuee="21 July, 2013"
-                    data-valuee="2013-07-21"
                     required
                     pattern="^[0-9+]*$" -->
                 <br><br><br><br><br>
@@ -62,7 +62,8 @@
     <script type="text/javascript">
 
         var $input = $( '.datepicker' ).pickadate({
-            max: true
+            selectMonths: true,
+            formatSubmit: 'yyyy-mm-dd'
         })
 
         var picker = $input.pickadate('picker')
