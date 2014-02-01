@@ -38,7 +38,7 @@ File                    | Contents                 | Size (min & gzip)
 ----------------------- | ------------------------ | ----------------------
 `picker.js`             | __Base *__               | 1.54kb
 `picker.date.js`        | Date picker              | 2.17kb
-`picker.time.js`        | Time picker              | 1.58kb
+`picker.time.js`        | Time picker              | 1.60kb
 
 __*__ The base script is **required** for any of the pickers to function.
 

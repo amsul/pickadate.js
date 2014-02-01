@@ -40,10 +40,9 @@
                     class="datepicker"
                     type="time"
                     name="time"
-                    autofocus
-                    data-value="0:00">
+                    autofocus>
                     <!-- valuee="2:30 AM"
-                     -->
+                    data-value="0:00" -->
             </fieldset>
         </form>
 
@@ -58,7 +57,8 @@
     <script type="text/javascript">
 
         var $input = $( '.datepicker' ).pickatime({
-            formatSubmit: 'H:i'
+            formatSubmit: 'H:i',
+            min: -3
         }),
         picker = $input.pickatime('picker')
 
