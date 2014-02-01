@@ -500,6 +500,7 @@ test( '`disable` and `enable` using integers', function() {
 
     picker.set( 'enable', 'flip' )
     deepEqual( picker.get( 'disable' ), [4,7], 'Disabled collection `enable` flipped' )
+    strictEqual( picker.get( 'enable' ), -1, 'Inverted `enable`')
 
     $root.find( 'tr' ).each( function( indexRow, tableRow ) {
         $( tableRow ).find( '[data-pick]' ).each( function( indexCell, tableCell ) {
@@ -514,6 +515,7 @@ test( '`disable` and `enable` using integers', function() {
 
     picker.set( 'disable', 'flip' )
     deepEqual( picker.get( 'disable' ), [4,7], 'Disabled collection `disable` flipped' )
+    strictEqual( picker.get( 'enable' ), 1, 'Inverted back `enable`')
 
     $root.find( 'tr' ).each( function( indexRow, tableRow ) {
         $( tableRow ).find( '[data-pick]' ).each( function( indexCell, tableCell ) {
@@ -529,13 +531,13 @@ test( '`disable` and `enable` using integers', function() {
 
 test( '`disable` and `enable` using arrays', function() {
 
-    var disableCollection = [ [2014,0,1],[2014,0,25],[2014,0,17] ],
+    var today = new Date(),
+        nowYear = today.getFullYear(),
+        nowMonth = today.getMonth(),
+        disableCollection = [ [nowYear,nowMonth,1],[nowYear,nowMonth,25],[nowYear,nowMonth,17] ],
         picker = this.picker,
-        $root = picker.$root,
-        viewday
-
-    picker.set('highlight', [2014,0,1])
-    viewday = picker.get( 'view' ).day
+        viewday = picker.get( 'view' ).day,
+        $root = picker.$root
 
     picker.set( 'disable', disableCollection )
     deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled dates added to collection' )
@@ -550,8 +552,8 @@ test( '`disable` and `enable` using arrays', function() {
         }
     })
 
-    picker.set( 'enable', [ [2014,0,17] ] )
-    disableCollection = [ [2014,0,1],[2014,0,25] ]
+    picker.set( 'enable', [ [nowYear,nowMonth,17] ] )
+    disableCollection = [ [nowYear,nowMonth,1],[nowYear,nowMonth,25] ]
     deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled date removed from collection' )
 
     $root.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
@@ -595,9 +597,10 @@ test( '`disable` and `enable` using arrays', function() {
     })
 
 
-    picker.set( 'disable', [4] )
-    picker.set( 'enable', [ [2014,0,1] ] )
-    disableCollection = [ [2014,0,25], 4, [2014,0,1,'inverted'] ]
+    var playday = new Date(nowYear,nowMonth,1).getDay() + 1
+    picker.set( 'disable', [playday] )
+    picker.set( 'enable', [ [nowYear,nowMonth,1] ] )
+    disableCollection = [ [nowYear,nowMonth,25], playday, [nowYear,nowMonth,1,'inverted'] ]
     deepEqual( picker.get('disable'), disableCollection, 'Disabled collection with specified date inverted' )
 })
 
