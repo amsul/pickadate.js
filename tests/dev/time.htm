@@ -57,12 +57,20 @@
     <script type="text/javascript">
 
         var $input = $( '.datepicker' ).pickatime({
-            formatSubmit: 'H:i',
-            min: -3
+            // formatSubmit: 'H:i',
+            // min: -3,
+            disable: [
+                // { from: [1,30], to: [6,0] },
+                { from: new Date(2014,2,2,4,30), to: new Date(2014,2,2,13,30) },
+                // { from: true, to: [18,30] },
+                // { from: [4,30], to: true },
+                // { from: true, to: 3 },
+                // { from: -10, to: true }
+            ]
         }),
         picker = $input.pickatime('picker')
 
-        // picker.set('min',-3)
+        picker.set('enable', [ [5,30] ])
 
     </script>
 

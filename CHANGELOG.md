@@ -12,6 +12,7 @@
 - Improved time picker setting a time relative to “now”.
 - Spanish translations typo fixed.
 - Added Galician translations.
+- Added option to disable [dates]() & [times]() within a range.
 
 
 ## 3.3.2
