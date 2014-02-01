@@ -291,6 +291,7 @@ test( '`min`', function() {
 
     playdate.setMonth( today.getMonth() )
     playdate.setDate( 1 )
+    playdate.setFullYear( today.getFullYear() )
     deepEqual( picker.get( 'view' ).obj, playdate, '`view` unaffected' )
     strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
     deepEqual( picker.get( 'max' ).pick, Infinity, '`max` unaffected' )
@@ -528,14 +529,10 @@ test( '`disable` and `enable` using integers', function() {
 
 test( '`disable` and `enable` using arrays', function() {
 
-    var now = new Date(),
-        nowYear = now.getFullYear(),
-        nowMonth = now.getMonth(),
-        disableCollection = [ [nowYear,nowMonth,1],[nowYear,nowMonth,25],[nowYear,nowMonth,17] ],
+    var disableCollection = [ [2014,0,1],[2014,0,25],[2014,0,17] ],
         picker = this.picker,
         viewday = picker.get( 'view' ).day,
         $root = picker.$root
-
 
     picker.set( 'disable', disableCollection )
     deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled dates added to collection' )
@@ -550,8 +547,8 @@ test( '`disable` and `enable` using arrays', function() {
         }
     })
 
-    disableCollection.pop()
-    picker.set( 'enable', [ [nowYear,nowMonth,17] ] )
+    picker.set( 'enable', [ [2014,0,17] ] )
+    disableCollection = [ [2014,0,1],[2014,0,25] ]
     deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled date removed from collection' )
 
     $root.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
@@ -595,9 +592,9 @@ test( '`disable` and `enable` using arrays', function() {
     })
 
 
-    picker.set( 'disable', [1] )
-    picker.set( 'enable', [ [2013,11,1] ] )
-    disableCollection = [ [2013,11,25], 1, [2013,11,1,'inverted'] ]
+    picker.set( 'disable', [4] )
+    picker.set( 'enable', [ [2014,0,1] ] )
+    disableCollection = [ [2014,0,25], 4, [2014,0,1,'inverted'] ]
     deepEqual( picker.get('disable'), disableCollection, 'Disabled collection with specified date inverted' )
 })
 
@@ -845,7 +842,11 @@ test( 'Highlight', function() {
     $root.find( '.' + $.fn.pickadate.defaults.klass.navNext ).click()
     $root.find( '.' + $.fn.pickadate.defaults.klass.navNext ).click()
     playdate.setMonth( today.getMonth() + 1 )
-    playdate.setDate( today.getDate() )
+
+    playdate = new Date(today.getFullYear(), today.getMonth() + 1, today.getDate())
+    while ( playdate.getMonth() > today.getMonth() + 1 ) {
+        playdate = new Date(playdate.getFullYear(), playdate.getMonth(), playdate.getDate() - 1)
+    }
     deepEqual( picker.get( 'highlight' ).obj, playdate, 'Next month: ' + playdate )
     deepEqual( picker.get( 'select' ).obj, today, 'Select unaffected' )
 
