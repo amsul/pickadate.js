@@ -531,7 +531,7 @@ test( '`disable` and `enable` using arrays', function() {
 
     var disableCollection = [ [2014,0,1],[2014,0,25],[2014,0,17] ],
         picker = this.picker,
-        viewday = picker.get( 'view' ).day,
+        viewday = 3,
         $root = picker.$root
 
     picker.set( 'disable', disableCollection )
