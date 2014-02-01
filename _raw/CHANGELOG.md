@@ -7,6 +7,7 @@
 - [#316]({%= pkg.bugs %}/316): Date and time parser fall back to default format if none is specified.
 - [#326]({%= pkg.bugs %}/326): Fixed `set('disable', true)` crashing with `max: true` in options.
 - [#329]({%= pkg.bugs %}/329): Fixed time picker not parsing midnight correcly.
+- [#325]({%= pkg.bugs %}/325): Fixed Firefox bug with querying for active element with `$.contains`.
 - Improved time picker setting a time relative to “now”.
 - Spanish translations typo fixed.
 

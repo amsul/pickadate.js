@@ -7,6 +7,7 @@
 - [#316](https://github.com/amsul/pickadate.js/issues/316): Date and time parser fall back to default format if none is specified.
 - [#326](https://github.com/amsul/pickadate.js/issues/326): Fixed `set('disable', true)` crashing with `max: true` in options.
 - [#329](https://github.com/amsul/pickadate.js/issues/329): Fixed time picker not parsing midnight correcly.
+- [#325](https://github.com/amsul/pickadate.js/issues/325): Fixed Firefox bug with querying for active element with `$.contains`.
 - Improved time picker setting a time relative to “now”.
 - Spanish translations typo fixed.
 
