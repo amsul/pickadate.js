@@ -531,8 +531,11 @@ test( '`disable` and `enable` using arrays', function() {
 
     var disableCollection = [ [2014,0,1],[2014,0,25],[2014,0,17] ],
         picker = this.picker,
-        viewday = 3,
-        $root = picker.$root
+        $root = picker.$root,
+        viewday
+
+    picker.set('highlight', [2014,0,1])
+    viewday = picker.get( 'view' ).day
 
     picker.set( 'disable', disableCollection )
     deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled dates added to collection' )
