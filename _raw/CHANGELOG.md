@@ -8,6 +8,7 @@
 - [#326]({%= pkg.bugs %}/326): Fixed `set('disable', true)` crashing with `max: true` in options.
 - [#329]({%= pkg.bugs %}/329): Fixed time picker not parsing midnight correcly.
 - Improved time picker setting a time relative to “now”.
+- Spanish translations typo fixed.
 
 
 ## 3.3.2

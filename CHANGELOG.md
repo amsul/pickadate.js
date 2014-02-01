@@ -8,6 +8,7 @@
 - [#326](https://github.com/amsul/pickadate.js/issues/326): Fixed `set('disable', true)` crashing with `max: true` in options.
 - [#329](https://github.com/amsul/pickadate.js/issues/329): Fixed time picker not parsing midnight correcly.
 - Improved time picker setting a time relative to “now”.
+- Spanish translations typo fixed.
 
 
 ## 3.3.2
