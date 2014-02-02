@@ -16,7 +16,7 @@
 (function ( factory ) {
 
     // Register as an anonymous module.
-    if ( typeof define === 'function' && define.amd )
+    if ( typeof define == 'function' && define.amd )
         define( ['picker','jquery'], factory )
 
     // Or using browser globals.
@@ -57,8 +57,8 @@ function TimePicker( picker, settings ) {
         max: 'measure create',
         now: 'now create',
         select: 'parse create validate',
-        highlight: 'create validate',
-        view: 'create validate',
+        highlight: 'parse create validate',
+        view: 'parse create validate',
         disable: 'flipItem',
         enable: 'flipItem'
     }
@@ -424,18 +424,18 @@ TimePicker.prototype.shift = function( timeObject, interval ) {
 
     var clock = this,
         minLimit = clock.item.min.pick,
-        maxLimit = clock.item.max.pick,
-        safety = 1000
+        maxLimit = clock.item.max.pick/*,
+        safety = 1000*/
 
     interval = interval || clock.item.interval
 
     // Keep looping as long as the time is disabled.
-    while ( safety && clock.disabled( timeObject ) ) {
+    while ( /*safety &&*/ clock.disabled( timeObject ) ) {
 
-        safety -= 1
+        /*safety -= 1
         if ( !safety ) {
-            throw 'Fell into an infinite loop..'
-        }
+            throw 'Fell into an infinite loop while shifting to ' + timeObject.hour + ':' + timeObject.mins + '.'
+        }*/
 
         // Increase/decrease the time by the interval and keep looping.
         timeObject = clock.create( timeObject.pick += interval )

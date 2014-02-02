@@ -16,7 +16,7 @@
 (function ( factory ) {
 
     // Register as an anonymous module.
-    if ( typeof define === 'function' && define.amd )
+    if ( typeof define == 'function' && define.amd )
         define( ['picker','jquery'], factory )
 
     // Or using browser globals.
@@ -57,8 +57,8 @@ function DatePicker( picker, settings ) {
         max: 'measure create',
         now: 'now create',
         select: 'parse create validate',
-        highlight: 'navigate create validate',
-        view: 'create validate viewset',
+        highlight: 'parse navigate create validate',
+        view: 'parse create validate viewset',
         disable: 'flipItem',
         enable: 'flipItem'
     }
@@ -281,12 +281,13 @@ DatePicker.prototype.now = function( type, value, options ) {
  */
 DatePicker.prototype.navigate = function( type, value, options ) {
 
-    var targetYear,
+    var targetDateObject,
+        targetYear,
         targetMonth,
         targetDate,
         isTargetArray = $.isArray( value ),
-        isTargetObject = $.isPlainObject( value ),
-        safety = 100
+        isTargetObject = $.isPlainObject( value )/*,
+        safety = 100*/
 
 
     if ( isTargetArray || isTargetObject ) {
@@ -302,17 +303,19 @@ DatePicker.prototype.navigate = function( type, value, options ) {
             targetDate = +value[2]
         }
 
-        // Figure out the expected target month.
-        targetMonth += ( options && options.nav ? options.nav : 0 )
+        // Figure out the expected target year and month.
+        targetDateObject = new Date( targetYear, targetMonth + ( options && options.nav ? options.nav : 0 ), 1 )
+        targetYear = targetDateObject.getFullYear()
+        targetMonth = targetDateObject.getMonth()
 
         // Make sure the date is valid and if the month we’re going to doesn’t have enough
         // days, keep decreasing the date until we reach the month’s last date.
-        while ( safety && new Date( targetYear, targetMonth, targetDate ).getMonth() !== targetMonth ) {
+        while ( /*safety &&*/ new Date( targetYear, targetMonth, targetDate ).getMonth() !== targetMonth ) {
             targetDate -= 1
-            safety -= 1
+            /*safety -= 1
             if ( !safety ) {
-                throw 'Fell into an infinite loop..'
-            }
+                throw 'Fell into an infinite loop while navigating to ' + new Date( targetYear, targetMonth, targetDate ) + '.'
+            }*/
         }
 
         value = [ targetYear, targetMonth, targetDate ]
@@ -398,9 +401,9 @@ DatePicker.prototype.validate = function( type, dateObject, options ) {
 
             // Return only integers for enabled weekdays.
             return _.isInteger( value )
-        }).length,
+        }).length/*,
 
-        safety = 100
+        safety = 100*/
 
 
 
@@ -429,29 +432,31 @@ DatePicker.prototype.validate = function( type, dateObject, options ) {
 
 
         // Keep looping until we reach an enabled date.
-        while ( safety && calendar.disabled( dateObject ) ) {
+        while ( /*safety &&*/ calendar.disabled( dateObject ) ) {
 
-            safety -= 1
+            /*safety -= 1
             if ( !safety ) {
-                throw 'Fell into an infinite loop..'
-            }
+                throw 'Fell into an infinite loop while validating ' + dateObject.obj + '.'
+            }*/
 
 
-            // If we’ve looped into the next/prev month, return to the original date and flatten the interval.
+            // If we’ve looped into the next/prev month with a large interval, return to the original date and flatten the interval.
             if ( Math.abs( interval ) > 1 && ( dateObject.month < originalDateObject.month || dateObject.month > originalDateObject.month ) ) {
                 dateObject = originalDateObject
-                interval = Math.abs( interval ) / interval
+                interval = interval > 0 ? 1 : -1
             }
 
 
-            // If we’ve reached the min/max limit, reverse the direction and flatten the interval.
+            // If we’ve reached the min/max limit, reverse the direction, flatten the interval and set it to the limit.
             if ( dateObject.pick <= minLimitObject.pick ) {
                 reachedMin = true
                 interval = 1
+                dateObject = calendar.create([ minLimitObject.year, minLimitObject.month, minLimitObject.date - 1 ])
             }
             else if ( dateObject.pick >= maxLimitObject.pick ) {
                 reachedMax = true
                 interval = -1
+                dateObject = calendar.create([ maxLimitObject.year, maxLimitObject.month, maxLimitObject.date + 1 ])
             }
 
 
@@ -734,7 +739,7 @@ DatePicker.prototype.addEnabled = function( collection, item ) {
             collection = calendar.removeDisabled( collection, [dateToEnable] )
 
             // If the unit is an array and it falls within a
-            // disabled weekday, invert it and then insert it.
+            // disabled weekday/range, invert it and then insert it.
             if (
                 $.isArray( dateToEnable ) &&
                 collection.filter( function( disabledUnit ) {
@@ -768,11 +773,6 @@ DatePicker.prototype.addDisabled = function( collection, item ) {
         // Add the time unit if it isn’t already within the collection.
         if ( !calendar.filterDisabled( collection, timeUnit ).length ) {
             collection.push( timeUnit )
-        }
-
-        // If the time unit is an array and falls within the range, just remove it.
-        else if ( $.isArray( timeUnit ) && calendar.filterDisabled( collection, timeUnit, 1 ).length ) {
-            collection = calendar.removeDisabled( collection, [timeUnit] )
         }
     })
 
