@@ -150,9 +150,12 @@ DatePicker.prototype.set = function( type, value, options ) {
         calendar.set( 'view', calendarItem.highlight, options )
     }
     else if ( type.match( /^(flip|min|max|disable|enable)$/ ) && calendarItem.select && calendarItem.highlight ) {
-        calendar.
-            set( 'select', calendarItem.select, options ).
-            set( 'highlight', calendarItem.highlight, options )
+        if ( calendar.disabled( calendarItem.select ) ) {
+            calendar.set( 'select', calendarItem.select, options )
+        }
+        if ( calendar.disabled( calendarItem.highlight ) ) {
+            calendar.set( 'highlight', calendarItem.highlight, options )
+        }
     }
 
     return calendar
@@ -286,7 +289,8 @@ DatePicker.prototype.navigate = function( type, value, options ) {
         targetMonth,
         targetDate,
         isTargetArray = $.isArray( value ),
-        isTargetObject = $.isPlainObject( value )/*,
+        isTargetObject = $.isPlainObject( value ),
+        viewsetObject = this.item.view/*,
         safety = 100*/
 
 
@@ -301,6 +305,10 @@ DatePicker.prototype.navigate = function( type, value, options ) {
             targetYear = +value[0]
             targetMonth = +value[1]
             targetDate = +value[2]
+        }
+
+        if ( viewsetObject && viewsetObject.month !== targetMonth ) {
+            targetMonth = viewsetObject.month
         }
 
         // Figure out the expected target year and month.
