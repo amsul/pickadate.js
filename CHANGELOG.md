@@ -2,16 +2,22 @@
 
 ## 3.4.0
 
-- ARIA support added.
+- ARIA support added. :star2:
 - [#128](https://github.com/amsul/pickadate.js/issues/128): Date parser recognizes a string value and uses month index as 1.
 - [#316](https://github.com/amsul/pickadate.js/issues/316): Date and time parser fall back to default format if none is specified.
 - [#326](https://github.com/amsul/pickadate.js/issues/326): Fixed `set('disable', true)` crashing with `max: true` in options.
 - [#329](https://github.com/amsul/pickadate.js/issues/329): Fixed time picker not parsing midnight correcly.
 - [#325](https://github.com/amsul/pickadate.js/issues/325): Fixed Firefox bug with querying for active element with `$.contains`.
 - [#330](https://github.com/amsul/pickadate.js/issues/330): Fixed month selector navigation from month with more days to one with less.
-- [#332](https://github.com/amsul/pickadate.js/issues/332): Fixed issue where right-clicks caused picker to close in Firefox.
 - Improved time picker setting a time relative to “now”.
+- Improved disabling/enabling dates and times.
 - Spanish translations typo fixed.
+- Added Galician translations.
+- Added Slovenian translations.
+- Added option to disable [dates](http://amsul.github.io/pickadate.js/date.htm#disable-dates-use-ranges) & [times](http://amsul.github.io/pickadate.js/time.htm#disable-times-use-ranges) within a range.
+- Added option to set the [`select`](http://amsul.github.io/pickadate.js/api.htm#method-set-select-date), [`highlight`](http://amsul.github.io/pickadate.js/api.htm#method-set-highlight-date), and [`view`](http://amsul.github.io/pickadate.js/api.htm#method-set-view-date) using a string and parsing format.
+- Added some performance improvents.
+- Added more tests and documentation.
 
 
 ## 3.3.2

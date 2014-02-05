@@ -39,10 +39,10 @@
                     <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="date.htm">Date picker</a></li>
                     <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed menu__link--active" href="time.htm">Time picker</a></li>
                     <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="api.htm">API</a></li>
-                    <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="v2-(deprecated)/index.htm">v2.1.8</a></li>
+                    <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="v2-(deprecated)/index.htm">v2 docs</a></li>
                     <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="https://github.com/amsul/pickadate.js">Github</a></li>
                     <li class="menu__item menu__item--responsive page-target__reveal menu__item--trail">
-                        <span class="menu__link">Themes: <input class="theme-toggle__input" type="radio" id="show_theme_default" name="show_theme" value="default" checked hidden><label class="theme-toggle__label" for="show_theme_default">default</label> and <input class="theme-toggle__input" type="radio" id="show_theme_classic" name="show_theme" value="classic" hidden><label class="theme-toggle__label" for="show_theme_classic" class="checked-negative">classic</label></span>
+                        <span class="menu__link">Themes: <input class="theme-toggle__input" type="radio" id="show_theme_default" name="show_theme" value="default" checked hidden><label class="theme-toggle__label theme-toggle__label--first" for="show_theme_default">default</label><input class="theme-toggle__input" type="radio" id="show_theme_classic" name="show_theme" value="classic" hidden><label class="theme-toggle__label theme-toggle__label--last" for="show_theme_classic" class="checked-negative">classic</label></span>
                     </li>
                 </ul>
             </nav>
@@ -230,7 +230,7 @@ klass: {
         <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="time_demo__formats--b" class="fieldset__input " name=time_demo__formats type=text placeholder="Try me&hellip;"></div></fieldset>
 
 
-        <h3 class="heading heading--divide"><span class="heading__text">Formatting Rules<a class="heading__anchor" name="formatting-rules" href="#formatting-rules">&sect;</a></span></h3>
+        <h3 class="heading heading--divide"><span class="heading__text">Formatting Rules<a class="heading__anchor--bigger" name="formatting-rules" href="#formatting-rules">&sect;</a></span></h3>
         <p>The following rules can be used to format any time:</p>
 
         <table class="table">
@@ -297,7 +297,7 @@ klass: {
         <p>By default, typing into the input is disabled by giving it a <code class="attribute">readOnly</code> attribute. Doing so ensures that virtual keyboards don’t pop open on touch devices. It is also a confirmation that formats passed to the server will be consistent.</p>
         <p>However, this behavior can be changed using the <code>editable</code> option:</p>
 
-        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
+        <pre class="pre--demo"><code data-language="javascript">$('.timepicker').pickatime({
     editable: true
 })</code></pre>
 
@@ -307,7 +307,7 @@ klass: {
             <p>An important thing to note here is that this disables keyboard bindings on the input element, such as arrow keys opening the picker. You will have to add your own bindings as you see fit.</p>
         </div>
 
-        <h3 class="heading heading--divide"><span class="heading__text">Using HTML5 attributes<a class="heading__anchor" name="html5-attributes" href="#html5-attributes">&sect;</a></span></h3>
+        <h3 class="heading heading--divide"><span class="heading__text">Using HTML5 attributes<a class="heading__anchor--bigger" name="html5-attributes" href="#html5-attributes">&sect;</a></span></h3>
         <p>Because each <code class="tag-name">input</code> is <a href="#editable"><code class="attribute">readOnly</code> by default</a>, HTML5 attributes, such as <code class="attribute">required</code> and <code class="attribute">pattern</code>, do not get enforced.</p>
         <p>To enable default browser behavior on these attributes, set the <a href="#editable"><code>editable</code> property to <code class="constant">true</code></a>.</p>
 
@@ -323,7 +323,7 @@ klass: {
         <h2 class="heading heading--divide"><span class="heading__text">Intervals<a class="heading__anchor" name="intervals" href="#intervals">&sect;</a></span></h2>
         <p>Choose the minutes interval between each time in the list:</p>
 
-        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
+        <pre class="pre--demo"><code data-language="javascript">$('.timepicker').pickatime({
     interval: 150
 })</code></pre>
 
@@ -341,7 +341,7 @@ klass: {
         <h2 class="heading heading--divide"><span class="heading__text">Time Limits<a class="heading__anchor" name="limits" href="#limits">&sect;</a></span></h2>
         <p>Set the minimum and maximum selectable times on the picker.</p>
 
-        <p><b>1)</b> Using arrays formatted as <code>[HOUR,MINUTE]</code>:</p>
+        <h3 class="heading heading--divide"><span class="heading__text">Using arrays formatted as <code>[HOUR,MINUTE]</code><a class="heading__anchor--bigger" name="limits-use-arrays" href="#limits-use-arrays">&sect;</a></span></h3>
 
         <pre class="pre--demo"><code data-language="javascript">$('.timepicker').pickatime({
     min: [7,30],
@@ -350,7 +350,7 @@ klass: {
 
         <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="time_demo__limits--a" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
 
-        <p><b>2)</b> As times relative to now using integers or a boolean:</p>
+        <h3 class="heading heading--divide"><span class="heading__text">Using integers or a boolean<a class="heading__anchor--bigger" name="limits-relative" href="#limits-relative">&sect;</a></span></h3>
 
         <pre class="pre--demo"><code data-language="javascript">$('.timepicker').pickatime({
     // An integer (positive/negative) sets it as intervals relative from now.
@@ -373,7 +373,18 @@ klass: {
         <h2 class="heading heading--divide"><span class="heading__text">Disable Times<a class="heading__anchor" name="disable-times" href="#disable-times">&sect;</a></span></h2>
         <p>Disable a specific or arbitrary set of times selectable on the picker.</p>
 
-        <p><b>1)</b> Using arrays formatted as <code>[HOUR,MINUTE]</code>:</p>
+        <h3 class="heading heading--divide"><span class="heading__text">Using JavaScript dates<a class="heading__anchor--bigger" name="disable-times-use-dates" href="#disable-times-use-dates">&sect;</a></span></h3>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.timepicker').pickatime({
+    disable: [
+        new Date(2014,3,20,4,30),
+        new Date(2014,3,20,9)
+    ]
+})</code></pre>
+
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="time_demo__disable-times--a" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
+
+        <h3 class="heading heading--divide"><span class="heading__text">Using arrays formatted as <code>[HOUR,MINUTE]</code><a class="heading__anchor--bigger" name="disable-times-use-arrays" href="#disable-times-use-arrays">&sect;</a></span></h3>
 
         <pre class="pre--demo"><code data-language="javascript">$('.timepicker').pickatime({
     disable: [
@@ -384,9 +395,9 @@ klass: {
     ]
 })</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="time_demo__disable-times--a" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="time_demo__disable-times--b" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
 
-        <p><b>2)</b> Using integers representing hours (from 0 to 23):</p>
+        <h3 class="heading heading--divide"><span class="heading__text">Using integers as hours (0 to 23)<a class="heading__anchor--bigger" name="disable-times-use-arrays" href="#disable-times-use-arrays">&sect;</a></span></h3>
 
         <pre class="pre--demo"><code data-language="javascript">$('.timepicker').pickatime({
     disable: [
@@ -394,9 +405,32 @@ klass: {
     ]
 })</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="time_demo__disable-times--b" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="time_demo__disable-times--c" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
 
-        <p><b>3)</b> <i><u>Disabling all</u></i> except a specific or arbitrary set of times by setting <code class="constant">true</code> as the first item in the collection:</p>
+        <h3 class="heading heading--divide"><span class="heading__text">Using object literals as a range of times<a class="heading__anchor--bigger" name="disable-times-use-ranges" href="#disable-times-use-ranges">&sect;</a></span></h3>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.timepicker').pickatime({
+    disable: [
+        { from: [2,0], to: [5,30] }
+    ]
+})</code></pre>
+
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__disable-times--d" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
+
+        <p>The values for <code>from</code> &amp; <code>to</code> can be:</p>
+        <ul>
+            <li>A JavaScript Date object,</li>
+            <li>An array formatted as <code>[YEAR,MONTH,DATE]</code>,</li>
+            <li>And <code class="constant">true</code> to set it as “now”.</li>
+        </ul>
+        <p>The values can also be integers representing time intervals relative to the other:</p>
+        <ul>
+            <li><code>to</code> can only be positive: <pre><code data-language="javascript">{ from: [3,0], to: 10 }</code></pre></li>
+            <li><code>from</code> can only be negative: <pre><code data-language="javascript">{ from: -10, to: true }</code></pre></li>
+        </ul>
+
+        <h3 class="heading heading--divide"><span class="heading__text"><i><u>Disabling all</u></i> with a set of exceptions<a class="heading__anchor--bigger" name="disable-times-all" href="#disable-times-all">&sect;</a></span></h3>
+        <p>Enable only a specific or arbitrary set of times by setting <code class="constant">true</code> as the first item in the collection:</p>
 
         <pre class="pre--demo"><code data-language="javascript">$('.timepicker').pickatime({
     disable: [
@@ -409,9 +443,10 @@ klass: {
     ]
 })</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="time_demo__disable-times--c" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="time_demo__disable-times--e" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
 
-        <p><b>4)</b> <i>Enabling/disabling ranges with exceptions</i> by passing <code class="string">'inverted'</code> as the last parameter in the item within the collection:</p>
+        <h3 class="heading heading--divide"><span class="heading__text">Disabling ranges with exceptions<a class="heading__anchor--bigger" name="disable-times-inverted" href="#disable-times-inverted">&sect;</a></span></h3>
+        <p>Enable times that fall within a range of disabled times by passing <code class="string">'inverted'</code> as the last parameter in the item within the collection:</p>
 
         <pre class="pre--demo"><code data-language="javascript">$('.timepicker').pickatime({
     disable: [
@@ -420,7 +455,7 @@ klass: {
     ]
 })</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="time_demo__disable-times--d" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="time_demo__disable-times--f" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
 
     </div> <!-- .section__block -->
 
@@ -499,8 +534,9 @@ klass: {
 
         <div class="section__block section__block--scoped text-center">
             <h2 class="heading heading--one heading--divide-center"><span class="heading__text peace">&#x270C;</span></h2>
-            <p class="heading heading--three heading--thin">Made by <a href="http://twitter.com/amsul_">Amsul</a>.</p>
-            <p>Code licensed under <a href="http://amsul.ca/MIT">MIT</a>.</p>
+            <p class="heading heading--three heading--thin">Made by <a href="http://twitter.com/amsul_">Amsul</a></p>
+            <p>Code licensed under <a href="http://amsul.ca/MIT">MIT</a></p>
+            <p class="text-tiny"><a href="https://gum.co/pkjs">Share some &hearts;</a></p>
         </div> <!-- .section__block -->
 
     </footer> <!-- .section -->

@@ -10,6 +10,7 @@
  * CODE-BLOCKS................
  * FORM-ELEMENTS..............
  * BUTTONS....................
+ * LISTS......................
  * MENUS......................
  * GROUPS.....................Group sets of content
  * TABLES.....................
@@ -680,6 +681,9 @@ pre > code[data-language]:before {
 pre:hover > code[data-language]:before {
   opacity: 1;
 }
+a code {
+  text-decoration: underline;
+}
 /* ==========================================================================
    $FORM-ELEMENTS
    ========================================================================== */
@@ -834,6 +838,22 @@ input[type=search] {
   font-size: .8em;
 }
 /* ==========================================================================
+   $LISTS
+   ========================================================================== */
+.list--checked > li:before {
+  content: "✔";
+  position: absolute;
+  right: 100%;
+  font-size: 80%;
+  top: .3333333333em;
+  margin-right: 8px;
+  color: #55cc22;
+}
+.list--checked > li {
+  list-style: none;
+  position: relative;
+}
+/* ==========================================================================
    $MENUS
    ========================================================================== */
 .menu__list {
@@ -968,14 +988,25 @@ input[type=search] {
   background: #ffffff;
   border: 1px solid #d9d9d9;
   border-bottom-color: #bfbfbf;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
+  margin-right: -1px;
   -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
+.theme-toggle__label--first {
+  -webkit-border-radius: 4px 0 0 4px;
+  -moz-border-radius: 4px 0 0 4px;
+  border-radius: 4px 0 0 4px;
+}
+.theme-toggle__label--last {
+  -webkit-border-radius: 0 4px 4px 0;
+  -moz-border-radius: 0 4px 4px 0;
+  border-radius: 0 4px 4px 0;
+  margin-right: 0;
+}
 .theme-toggle__input:checked + .theme-toggle__label {
+  position: relative;
+  z-index: 1;
   background: #0089ec;
   border-color: #0089ec;
   color: #ffffff;
@@ -1199,6 +1230,7 @@ input[type=search] {
    $TEXT-HELPERS
    ========================================================================== */
 .text-dimmed,
+.text-dimmed a,
 a.text-dimmed {
   color: #bfbfbf;
 }
@@ -1209,7 +1241,7 @@ a.text-dimmed {
   color: #ee2200;
 }
 .text-tiny {
-  font-size: 60%;
+  font-size: 75%;
 }
 /**
  * Special fonts

@@ -602,6 +602,31 @@ test( '`disable` and `enable` using booleans', function() {
     })
 })
 
+test( '`disable` and `enable` repeatedly', function() {
+
+    var now = new Date(2014,3,20,4,30),
+        nowHours = now.getHours(),
+        nowMinutes = now.getMinutes(),
+        disableCollection = [ [nowHours,nowMinutes], new Date(2014,3,20,14), 1 ],
+        picker = this.picker
+
+    picker.set( 'disable', disableCollection )
+    picker.set( 'disable', disableCollection )
+    deepEqual( picker.get( 'disable' ), disableCollection, 'Collection without duplicates' )
+
+    picker.set( 'enable', [ [nowHours,nowMinutes], [14,0], [1,30] ] )
+    deepEqual( picker.get( 'disable' ), [ 1, [1,30,'inverted'] ], 'Collection enabled various values' )
+
+    picker.set( 'enable', [ [nowHours,nowMinutes], [14,0], [1,30] ] )
+    deepEqual( picker.get( 'disable' ), [ 1, [1,30,'inverted'] ], 'Collection kept in tact' )
+
+    picker.set( 'enable', disableCollection )
+    deepEqual( picker.get( 'disable' ), [], 'Collection cleared of any range overlaps' )
+
+    picker.set( 'enable', disableCollection )
+    deepEqual( picker.get( 'disable' ), [], 'Collection kept clear' )
+})
+
 
 
 

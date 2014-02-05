@@ -125,7 +125,7 @@ event.stopPropagation()</code></pre>
 
     <div class="section__block section__block--scoped">
 
-        <h3 class="heading heading--divide"><span class="heading__text">Close with focus<a class="heading__anchor" name="method-close-focus" href="#method-close-focus">&sect;</a></span></h3>
+        <h3 class="heading heading--divide"><span class="heading__text">Close with focus<a class="heading__anchor--bigger" name="method-close-focus" href="#method-close-focus">&sect;</a></span></h3>
 
         <p>Close the picker while keeping focus on the <code class="tag-name">input</code> element by passing a truth-y first argument.</p>
 
@@ -140,7 +140,7 @@ event.stopPropagation()</code></pre>
 
     <div class="section__block section__block--scoped">
 
-        <h3 class="heading heading--divide"><span class="heading__text">Open without focus<a class="heading__anchor" name="method-open-focus" href="#method-open-focus">&sect;</a></span></h3>
+        <h3 class="heading heading--divide"><span class="heading__text">Open without focus<a class="heading__anchor--bigger" name="method-open-focus" href="#method-open-focus">&sect;</a></span></h3>
 
         <p>Open the picker without focusing onto the <code class="tag-name">input</code> element by passing <code class="constant">false</code> as the first argument. Opening the picker this way, there’s a few things to note:</p>
         <p><b>(1)</b> The only way to close it is with a separate custom binding – in this example, on document click.</p>
@@ -464,7 +464,7 @@ picker.start()</code></pre>
 
         <h2 class="heading heading--divide"><span class="heading__text">Get <code class="string">id</code><a class="heading__anchor" name="method-get-id" href="#method-get-id">&sect;</a></span></h2>
 
-        <p>Returns a unique 9-digit integer that is the ID of the picker.</p>
+        <p>Returns a random unique string that is the ID of the picker and it’s element.</p>
         <pre class="pre--demo"><code data-language="javascript">picker.get('id')</code></pre>
         {%= dateDemoField({
             id: 'demo__api-get--id',
@@ -493,7 +493,7 @@ picker.get('disable')</code></pre>
             placeholder: 'Open your console and try me&hellip;'
         }) %}
 
-        <p>However, when all dates are disabled and a select few are enabled, it behaves differently:</p>
+        <p>However, when <a href="date.htm#disable-dates-all">all dates are disabled and a select few are enabled</a>, it behaves differently:</p>
         <pre class="pre--demo"><code data-language="javascript">// Array passed in options to disable all dates except a few
 var datesToDisable = [ true, 1, 4, 7, [2013,3,8], [2013,3,19], new Date(2013,3,26) ]
 
@@ -607,13 +607,17 @@ picker.set('select', [{%= today.getFullYear() + ',' + today.getMonth() + ',' + t
 picker.set('select', { '{%= playDate %}' })
 
 // Using positive integers as UNIX timestamps.
-picker.set('select', {%= today.getTime() + 468487654 %})</code></pre>
+picker.set('select', {%= today.getTime() + 468487654 %})
+
+// Using a string along with the parsing format (defaults to <a href="date.htm#formats">`format` option</a>).
+picker.set('select', '2014-04-20', { format: 'yyyy-mm-dd' })</code></pre>
 
         {%= dateDemoField({
             id: 'demo__api-set--select-date',
             pre: '<button id=button__api-set--select-date-array class="fieldset__button button button--small">Select using an array</button>' +
                 '<button id=button__api-set--select-date-js class="fieldset__button button button--small">Select using a JS Date</button>' +
-                '<button id=button__api-set--select-date-integer class="fieldset__button button button--small">Select using an integer</button>'
+                '<button id=button__api-set--select-date-integer class="fieldset__button button button--small">Select using an integer</button>' +
+                '<button id=button__api-set--select-date-string class="fieldset__button button button--small">Select using a string and format</button>'
         }) %}
 
         <h3 class="heading heading--divide"><span class="heading__text">Select a time <a href="#item-objects">item object</a><a class="heading__anchor--bigger" name="method-set-select-time" href="#method-set-select-time">&sect;</a></span></h3>
@@ -625,13 +629,17 @@ picker.set('select', [3,0])
 picker.set('select', { '{%= new Date( today.getTime() + 468487654 ) %}' })
 
 // Using positive integers as minutes.
-picker.set('select', 540)</code></pre>
+picker.set('select', 540)
+
+// Using a string along with the parsing format (defaults to <a href="time.htm#formats">`format` option</a>).
+picker.set('select', '04-30', { format: 'hh-i' })</code></pre>
 
         {%= dateDemoField({
             id: 'demo__api-set--select-time',
             pre: '<button id=button__api-set--select-time-array class="fieldset__button button button--small">Select using an array</button>' +
                 '<button id=button__api-set--select-time-js class="fieldset__button button button--small">Select using a JS Date</button>' +
-                '<button id=button__api-set--select-time-integer class="fieldset__button button button--small">Select using an integer</button>'
+                '<button id=button__api-set--select-time-integer class="fieldset__button button button--small">Select using an integer</button>' +
+                '<button id=button__api-set--select-time-string class="fieldset__button button button--small">Select using a string and format</button>'
         }) %}
 
     </div> <!-- .section__block -->
@@ -655,13 +663,17 @@ picker.set('highlight', [{%= today.getFullYear() + ',' + today.getMonth() + ',' 
 picker.set('highlight', { '{%= playDate %}' })
 
 // Using positive integers as UNIX timestamps.
-picker.set('highlight', {%= today.getTime() + 468487654 %})</code></pre>
+picker.set('highlight', {%= today.getTime() + 468487654 %})
+
+// Using a string along with the parsing format (defaults to <a href="date.htm#formats">`format` option</a>).
+picker.set('highlight', '2014-04-20', { format: 'yyyy-mm-dd' })</code></pre>
 
         {%= dateDemoField({
             id: 'demo__api-set--highlight-date',
             pre: '<button id=button__api-set--highlight-date-array class="fieldset__button button button--small">Highlight using an array</button>' +
                 '<button id=button__api-set--highlight-date-js class="fieldset__button button button--small">Highlight using a JS Date</button>' +
-                '<button id=button__api-set--highlight-date-integer class="fieldset__button button button--small">Highlight using an integer</button>'
+                '<button id=button__api-set--highlight-date-integer class="fieldset__button button button--small">Highlight using an integer</button>' +
+                '<button id=button__api-set--highlight-date-string class="fieldset__button button button--small">Highlight using a string and format</button>'
         }) %}
 
         <h3 class="heading heading--divide"><span class="heading__text">Highlight a time <a href="#item-objects">item object</a><a class="heading__anchor--bigger" name="method-set-highlight-time" href="#method-set-highlight-time">&sect;</a></span></h3>
@@ -673,13 +685,17 @@ picker.set('highlight', [15,30])
 picker.set('highlight', { '{%= new Date( today.getTime() + 468487654 ) %}' })
 
 // Using positive integers as minutes.
-picker.set('highlight', 1080)</code></pre>
+picker.set('highlight', 1080)
+
+// Using a string along with the parsing format (defaults to <a href="time.htm#formats">`format` option</a>).
+picker.set('highlight', '04-30', { format: 'hh-i' })</code></pre>
 
         {%= dateDemoField({
             id: 'demo__api-set--highlight-time',
             pre: '<button id=button__api-set--highlight-time-array class="fieldset__button button button--small">Highlight using an array</button>' +
                 '<button id=button__api-set--highlight-time-js class="fieldset__button button button--small">Highlight using a JS Date</button>' +
-                '<button id=button__api-set--highlight-time-integer class="fieldset__button button button--small">Highlight using an integer</button>'
+                '<button id=button__api-set--highlight-time-integer class="fieldset__button button button--small">Highlight using an integer</button>' +
+                '<button id=button__api-set--highlight-time-string class="fieldset__button button button--small">Highlight using a string and format</button>'
         }) %}
 
     </div> <!-- .section__block -->
@@ -705,13 +721,17 @@ picker.set('view', [2000,3,20])
 picker.set('view', { '{%= new Date(1988,7,14) %}' })
 
 // Using positive integers as UNIX timestamps.
-picker.set('view', 1587355200000)</code></pre>
+picker.set('view', 1587355200000)
+
+// Using a string along with the parsing format (defaults to <a href="date.htm#formats">`format` option</a>).
+picker.set('view', '2014-04-20', { format: 'yyyy-mm-dd' })</code></code></pre>
 
         {%= dateDemoField({
             id: 'demo__api-set--view-date',
             pre: '<button id=button__api-set--view-date-array class="fieldset__button button button--small">Viewset using an array</button>' +
                 '<button id=button__api-set--view-date-js class="fieldset__button button button--small">Viewset using a JS Date</button>' +
-                '<button id=button__api-set--view-date-integer class="fieldset__button button button--small">Viewset using an integer</button>'
+                '<button id=button__api-set--view-date-integer class="fieldset__button button button--small">Viewset using an integer</button>' +
+                '<button id=button__api-set--view-date-string class="fieldset__button button button--small">Viewset using a string and format</button>'
         }) %}
 
         <h3 class="heading heading--divide"><span class="heading__text">Viewset a time <a href="#item-objects">item object</a><a class="heading__anchor--bigger" name="method-set-view-time" href="#method-set-view-time">&sect;</a></span></h3>
@@ -723,13 +743,17 @@ picker.set('view', [15,30])
 picker.set('view', { '{%= new Date( today.getTime() + 468487654 ) %}' })
 
 // Using positive integers as minutes.
-picker.set('view', 1080)</code></pre>
+picker.set('view', 1080)
+
+// Using a string along with the parsing format (defaults to <a href="time.htm#formats">`format` option</a>).
+picker.set('view', '04-30', { format: 'hh-i' })</code></pre>
 
         {%= dateDemoField({
             id: 'demo__api-set--view-time',
             pre: '<button id=button__api-set--view-time-array class="fieldset__button button button--small">Viewset using an array</button>' +
-                '<button id=button__api-set--view-time-js class="fieldset__button button button--small">Select using a JS Date</button>' +
-                '<button id=button__api-set--view-time-integer class="fieldset__button button button--small">Viewset using an integer</button>'
+                '<button id=button__api-set--view-time-js class="fieldset__button button button--small">Viewset using a JS Date</button>' +
+                '<button id=button__api-set--view-time-integer class="fieldset__button button button--small">Viewset using an integer</button>' +
+                '<button id=button__api-set--view-time-string class="fieldset__button button button--small">Viewset using a string and format</button>'
         }) %}
 
     </div> <!-- .section__block -->
@@ -869,92 +893,101 @@ picker.set('max', false)</code></pre>
 
     <div class="section__block section__block--scoped">
 
-        <h2 class="heading heading--divide"><a name="method-set-enable"></a><span class="heading__text">Set <code class="string">disable</code> and <code class="string">enable</code><a class="heading__anchor" name="method-set-disable" href="#method-set-disable">&sect;</a></span></h2>
+        <h2 class="heading heading--divide"><a name="method-set-enable"></a><span class="heading__text">Set <code class="string">disable</code> and <code class="string">enable</code><a class="heading__anchor" name="method-set-disable-enable" href="#method-set-disable-enable">&sect;</a></span></h2>
         <p>Setting <code class="string">disable</code> or <code class="string">enable</code> has <a href="#cascading-changes">cascading changes</a> on the <code class="string">select</code>, <code class="string">highlight</code>, and <code class="string">view</code> only when the currently selected <a href="#item-objects">item object</a> becomes disabled.</p>
 
         <div class="section__block section__block--notification">
             <p>An important thing to note here is that “setting” something as enabled or disabled adds the new elements to the collection of items to disable rather than completely replacing them with the new collection.</p>
         </div>
 
-        <h3 class="heading heading--divide"><span class="heading__text">Disable dates <a class="heading__anchor--bigger" name="method-set-disable-dates" href="#method-set-disable-dates">&sect;</a></span></h3>
-
-        <pre class="pre--demo"><code data-language="javascript">// Using arrays formatted as [YEAR,MONTH,DATE].
-picker.set('disable', [ [2013,9,3], [2013,9,9], [2013,9,20] ])
-
-// Using JavaScript Date objects.
-picker.set('disable', [ new Date(2013,9,13), new Date(2013,9,24) ])
-
-// Using integers representing the days of the week (from 1 to 7).
-picker.set('disable', [ 1, 4, 7 ])
-
-// Using `true` to disable all the dates.
-picker.set('disable', true)
-
-// Using `false` to clear the collection.
-picker.set('disable', false)
-
-// Or “flip” to switch the enabled and disabled dates.
-picker.set('disable', 'flip')</code></pre>
-
-        {%= dateDemoField({
-            id: 'demo__api-set--disable-date',
-            pre: '<button id=button__api-set--disable-date-array class="fieldset__button button button--small">Disable using arrays</button>' +
-                '<button id=button__api-set--disable-date-js class="fieldset__button button button--small">Disable using JS Dates</button>' +
-                '<button id=button__api-set--disable-date-integer class="fieldset__button button button--small">Disable using integers</button>' +
-                '<button id=button__api-set--disable-date-true class="fieldset__button button button--small">Disable using `true`</button>' +
-                '<button id=button__api-set--disable-date-false class="fieldset__button button button--small">Disable using `false`</button>' +
-                '<button id=button__api-set--disable-date-flip class="fieldset__button button button--small">Disable using “flip”</button>'
-        }) %}
-
-        <h3 class="heading heading--divide"><span class="heading__text">Enable dates <a class="heading__anchor--bigger" name="method-set-enable-dates" href="#method-set-enable-dates">&sect;</a></span></h3>
-
-        <pre class="pre--demo"><code data-language="javascript">// Using arrays formatted as [YEAR,MONTH,DATE].
-picker.set('enable', [ [2013,9,3], [2013,9,9], [2013,9,20] ])
-
-// Using JavaScript Date objects.
-picker.set('enable', [ new Date(2013,9,13), new Date(2013,9,24) ])
-
-// Using integers representing the days of the week (from 1 to 7).
-picker.set('enable', [ 1, 4, 7 ])
-
-// Using `true` to enable all the dates.
-picker.set('enable', true)
-
-// Using `false` to clear the collection.
-picker.set('enable', false)
-
-// Or “flip” to switch the enabled and disabled dates.
+        <h3 class="heading heading--divide"><span class="heading__text">Disable/enable dates <a class="heading__anchor--bigger" name="method-set-disable-enable-dates" href="#method-set-disable-enable-dates">&sect;</a></span></h3>
+        <p>You can disable sets of dates and then enable the entire set or specific dates within those sets by the following methods:</p>
+        <ul>
+            <li>
+                <p>Using a collection of arrays formatted as <code>[YEAR,MONTH,DATE]</code>:</p>
+                <pre class="pre--demo"><code data-language="javascript">picker.set('disable', [ [2014,9,3], [2014,9,9], [2014,9,20] ])
+picker.set('enable', [ [2014,9,9], [2014,9,20] ])</code></pre>
+                {%= dateDemoField({
+                    id: 'demo__api-set--disable-enable-date-array',
+                    pre: '<button id=button__api-set--disable-enable-date-array class="fieldset__button button button--small">Toggle disable/enable using arrays</button>'
+                }) %}
+            </li>
+            <li>
+                <p>Using JavaScript Date objects:</p>
+                <pre class="pre--demo"><code data-language="javascript">picker.set('disable', [ new Date(2013,9,13), new Date(2013,9,24) ])
+picker.set('enable', [ new Date(2013,9,24) ])</code></pre>
+            </li>
+            <li>
+                <p>Using integers as the days of the week (1 to 7):</p>
+                <pre class="pre--demo"><code data-language="javascript">picker.set('disable', [ 1, 4, 7 ])
+picker.set('enable', [ 4 ])</code></pre>
+            </li>
+            <li>
+                <p>Using a range object with a “from” and “to” property:</p>
+                <pre class="pre--demo"><code data-language="javascript">picker.set('disable', [ { from: [2014,2,14], to: [2014,2,27] } ])
+picker.set('enable', [ { from: [2014,2,14], to: [2014,2,27] } ])</code></pre>
+            </li>
+            <li>
+                <p>Using `true` to disable/enable all the dates:</p>
+                <pre class="pre--demo"><code data-language="javascript">picker.set('disable', true)
+picker.set('enable', true)</code></pre>
+            </li>
+            <li>
+                <p>Using `false` to clear disabled/enabled dates:</p>
+                <pre class="pre--demo"><code data-language="javascript">picker.set('disable', false)
+picker.set('enable', false)</code></pre>
+            </li>
+            <li>
+                <p>Or “flip” to switch the enabled and disabled dates:</p>
+                <pre class="pre--demo"><code data-language="javascript">picker.set('disable', 'flip')
 picker.set('enable', 'flip')</code></pre>
+            </li>
+        </ul>
 
-        {%= dateDemoField({
-            id: 'demo__api-set--enable-date',
-            pre: '<button id=button__api-set--enable-date-array class="fieldset__button button button--small">Enable using arrays</button>' +
-                '<button id=button__api-set--enable-date-js class="fieldset__button button button--small">Enable using JS Dates</button>' +
-                '<button id=button__api-set--enable-date-integer class="fieldset__button button button--small">Enable using integers</button>' +
-                '<button id=button__api-set--enable-date-true class="fieldset__button button button--small">Enable using `true`</button>' +
-                '<button id=button__api-set--enable-date-false class="fieldset__button button button--small">Enable using `false`</button>' +
-                '<button id=button__api-set--enable-date-flip class="fieldset__button button button--small">Enable using “flip”</button>'
-        }) %}
 
-        <h3 class="heading heading--divide"><span class="heading__text">Disable times <a class="heading__anchor--bigger" name="method-set-disable-times" href="#method-set-disable-times">&sect;</a></span></h3>
+        <!-- '<button id=button__api-set--enable-date-js class="fieldset__button button button--small">Enable using JS Dates</button>' +
+        '<button id=button__api-set--enable-date-integer class="fieldset__button button button--small">Enable using integers</button>' +
+        '<button id=button__api-set--enable-date-range class="fieldset__button button button--small">Enable using ranges</button>' +
+        '<button id=button__api-set--enable-date-true class="fieldset__button button button--small">Enable using `true`</button>' +
+        '<button id=button__api-set--enable-date-false class="fieldset__button button button--small">Enable using `false`</button>' +
+        '<button id=button__api-set--enable-date-flip class="fieldset__button button button--small">Enable using “flip”</button>' -->
 
-        <pre class="pre--demo"><code data-language="javascript">// Using arrays formatted as [HOUR,MINUTES].
-picker.set('disable', [ [2,30], [4,30], [9,0] ])
+        <h3 class="heading heading--divide"><span class="heading__text">Disable/enable times <a class="heading__anchor--bigger" name="method-set-disable-enable-times" href="#method-set-disable-enable-times">&sect;</a></span></h3>
+        <p>You can disable sets of times and then enable the entire set or specific times within those sets by the following methods:</p>
+        <ul>
+            <li>
+                <p>Using a collection of arrays formatted as <code>[HOUR,MINUTES]</code>:</p>
+                <pre><code data-language="javascript">picker.set('disable', [ [2,30], [4,30], [9,0] ])
+picker.set('enable', [ [4,30], [9,0] ])</code></pre>
+            </li>
+            <li>
+                <p>Using JavaScript Date objects:</p>
+                <pre><code data-language="javascript">picker.set('disable', [ new Date(2013,9,13,6), new Date(2013,9,13,12,30) ])
+picker.set('enable', [ new Date(2013,9,13,12,30) ])</code></pre>
+            </li>
+            <li>
+                <p>Using integers as hours of the day (from 0 to 23):</p>
+                <pre><code data-language="javascript">picker.set('disable', [ 1, 4, 7 ])
+picker.set('enable', [ 4 ])</code></pre>
+            </li>
+            <li>
+                <p>Using `true` to disable all the times:</p>
+                <pre><code data-language="javascript">picker.set('disable', true)
+picker.set('enable', true)</code></pre>
+            </li>
+            <li>
+                <p>Using `false` to clear the collection:</p>
+                <pre><code data-language="javascript">picker.set('disable', false)
+picker.set('enable', false)</code></pre>
+            </li>
+            <li>
+                <p>Or “flip” to switch the enabled and disabled times</p>
+                <pre><code data-language="javascript">picker.set('disable', 'flip')
+picker.set('enable', 'flip')</code></pre>
+            </li>
+        </ul>
 
-// Using JavaScript Date objects.
-picker.set('disable', [ new Date(2013,9,13,6), new Date(2013,9,13,12,30) ])
-
-// Using integers representing the days of the week (from 1 to 7).
-picker.set('disable', [ 1, 4, 7 ])
-
-// Using `true` to disable all the times.
-picker.set('disable', true)
-
-// Using `false` to clear the collection.
-picker.set('disable', false)
-
-// Or “flip” to switch the enabled and disabled times.
-picker.set('disable', 'flip')</code></pre>
+        <!--
 
         {%= dateDemoField({
             id: 'demo__api-set--disable-time',
@@ -994,11 +1027,11 @@ picker.set('enable', 'flip')</code></pre>
                 '<button id=button__api-set--enable-time-true class="fieldset__button button button--small">Enable using `true`</button>' +
                 '<button id=button__api-set--enable-time-false class="fieldset__button button button--small">Enable using `false`</button>' +
                 '<button id=button__api-set--enable-time-flip class="fieldset__button button button--small">Enable using “flip”</button>'
-        }) %}
+        }) %}-->
 
-        <h3 class="heading heading--divide"><span class="heading__text">Enable/disable within a range <a class="heading__anchor--bigger" name="method-set-enable-disable-in-range" href="#method-set-enable-disable-in-range">&sect;</a></span></h3>
+        <h3 class="heading heading--divide"><span class="heading__text">Enable a date within a disabled range <a class="heading__anchor--bigger" name="method-set-enable-disable-in-range" href="#method-set-enable-disable-in-range">&sect;</a></span></h3>
 
-        <p>When a date or time you want to enable/disable falls within a range of the opposite state, pass <code class="string">'inverted'</code> as the last item in the array:</p>
+        <p>When a date or time you want to enable falls within a disabled range, pass <code class="string">'inverted'</code> as the last item in the array:</p>
 
         <pre class="pre--demo"><code data-language="javascript">// Disable all Mondays, except November 17<sup>th</sup>, 2013.
 picker.set('disable', [ 1, [2013, 10, 17, 'inverted'] ])</code></pre>

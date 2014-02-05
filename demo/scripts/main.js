@@ -190,9 +190,17 @@ $( '#date_demo__disable-dates--c' ).pickadate({
     ]
 })
 
+// Disable a set of dates using object literals
+// with a “from” and “to” date.
+$( '#date_demo__disable-dates--d' ).pickadate({
+    disable: [
+        { from: [2014,2,14], to: [2014,2,27] }
+    ]
+})
+
 // Set the first array item to `true` to disable all the dates.
 // Then selectively enable specific or arbitrary sets of dates.
-$( '#date_demo__disable-dates--d' ).pickadate({
+$( '#date_demo__disable-dates--e' ).pickadate({
     disable: [
         true,
         1, 4, 7,
@@ -205,7 +213,7 @@ $( '#date_demo__disable-dates--d' ).pickadate({
 })
 
 // Pass “inverted” as the last paramter to flip within a range.
-$( '#date_demo__disable-dates--e' ).pickadate({
+$( '#date_demo__disable-dates--f' ).pickadate({
     disable: [
         1,
         [2013,10,17,'inverted']
@@ -353,9 +361,18 @@ $( '#time_demo__limits--b' ).pickatime({
  * Disable times
  */
 
+// Disable a specific set of times using native
+// JavaScript Date objects.
+$( '#time_demo__disable-times--a' ).pickatime({
+    disable: [
+        new Date(2014,3,20,4,30),
+        new Date(2014,3,20,9)
+    ]
+})
+
 // Disable a specific set of times using arrays
 // formatted as [ HOUR, MINUTE ].
-$( '#time_demo__disable-times--a' ).pickatime({
+$( '#time_demo__disable-times--b' ).pickatime({
     disable: [
         [0,30],
         [2,0],
@@ -366,15 +383,23 @@ $( '#time_demo__disable-times--a' ).pickatime({
 
 // Disable an arbitrary set of times using integers
 // from 0 - 23 representing the hours.
-$( '#time_demo__disable-times--b' ).pickatime({
+$( '#time_demo__disable-times--c' ).pickatime({
     disable: [
         3, 5, 7
     ]
 })
 
+// Disable a set of times using object literals
+// with a “from” and “to” time.
+$( '#time_demo__disable-times--c' ).pickatime({
+    disable: [
+        { from: [2,0], to: [5,30] }
+    ]
+})
+
 // Set the first array item to `true` to disable all the times.
 // Then selectively enable specific or arbitrary sets of times.
-$( '#time_demo__disable-times--c' ).pickatime({
+$( '#time_demo__disable-times--e' ).pickatime({
     disable: [
         true,
         3, 5, 7,
@@ -386,7 +411,7 @@ $( '#time_demo__disable-times--c' ).pickatime({
 })
 
 // Pass “inverted” as the last paramter to flip within a range.
-$( '#time_demo__disable-times--d' ).pickatime({
+$( '#time_demo__disable-times--f' ).pickatime({
     interval: 15,
     disable: [
         1,
@@ -741,6 +766,10 @@ $( '#button__api-set--select-date-integer' ).on( 'click', function( event ) {
     picker_set__select_date.set( 'select', TODAY.getTime() + 468487654 )
     event.stopPropagation()
 })
+$( '#button__api-set--select-date-string' ).on( 'click', function( event ) {
+    picker_set__select_date.set( 'select', '2014-04-20', { format: 'yyyy-mm-dd' } )
+    event.stopPropagation()
+})
 
 //select: time
 var $input_set__select_time = $( '#demo__api-set--select-time' ).pickatime(),
@@ -755,6 +784,10 @@ $( '#button__api-set--select-time-js' ).on( 'click', function( event ) {
 })
 $( '#button__api-set--select-time-integer' ).on( 'click', function( event ) {
     picker_set__select_time.set( 'select', 540 )
+    event.stopPropagation()
+})
+$( '#button__api-set--select-time-string' ).on( 'click', function( event ) {
+    picker_set__select_time.set( 'select', '04-30', { format: 'hh-i' } )
     event.stopPropagation()
 })
 
@@ -774,6 +807,10 @@ $( '#button__api-set--highlight-date-integer' ).on( 'click', function( event ) {
     picker_set__highlight_date.set( 'highlight', TODAY.getTime() + 468487654 )
     event.stopPropagation()
 })
+$( '#button__api-set--highlight-date-string' ).on( 'click', function( event ) {
+    picker_set__highlight_date.set( 'highlight', '2014-04-20', { format: 'yyyy-mm-dd' } )
+    event.stopPropagation()
+})
 
 //highlight: time
 var $input_set__highlight_time = $( '#demo__api-set--highlight-time' ).pickatime(),
@@ -788,6 +825,10 @@ $( '#button__api-set--highlight-time-js' ).on( 'click', function( event ) {
 })
 $( '#button__api-set--highlight-time-integer' ).on( 'click', function( event ) {
     picker_set__highlight_time.set( 'highlight', 1080 )
+    event.stopPropagation()
+})
+$( '#button__api-set--highlight-time-string' ).on( 'click', function( event ) {
+    picker_set__highlight_time.set( 'highlight', '04-30', { format: 'hh-i' } )
     event.stopPropagation()
 })
 
@@ -806,6 +847,10 @@ $( '#button__api-set--view-date-integer' ).on( 'click', function( event ) {
     picker_set__view_date.set( 'view', 1587355200000 )
     event.stopPropagation()
 })
+$( '#button__api-set--view-date-string' ).on( 'click', function( event ) {
+    picker_set__view_date.set( 'view', '2014-04-20', { format: 'yyyy-mm-dd' } )
+    event.stopPropagation()
+})
 
 //view: time
 var $input_set__view_time = $( '#demo__api-set--view-time' ).pickatime(),
@@ -820,6 +865,10 @@ $( '#button__api-set--view-time-js' ).on( 'click', function( event ) {
 })
 $( '#button__api-set--view-time-integer' ).on( 'click', function( event ) {
     picker_set__view_time.set( 'view', 1080 )
+    event.stopPropagation()
+})
+$( '#button__api-set--view-time-string' ).on( 'click', function( event ) {
+    picker_set__view_time.set( 'view', '04-30', { format: 'hh-i' } )
     event.stopPropagation()
 })
 
@@ -919,117 +968,125 @@ $( '#button__api-set--max-time-false' ).on( 'click', function( event ) {
     event.stopPropagation()
 })
 
-//disable: date
-var $input_set__disable_date = $( '#demo__api-set--disable-date' ).pickadate(),
-    picker_set__disable_date = $input_set__disable_date.pickadate( 'picker' )
-$( '#button__api-set--disable-date-array' ).on( 'click', function( event ) {
-    picker_set__disable_date.set( 'disable', [ [2013,9,3], [2013,9,9], [2013,9,20] ])
+//disable-enable: date
+var $input_set__disable_enable_date_array = $( '#demo__api-set--disable-enable-date-array' ).pickadate(),
+    picker_set__disable_enable_date_array = $input_set__disable_enable_date_array.pickadate( 'picker' )
+$( '#button__api-set--disable-enable-date-array' ).on( 'click', function( event ) {
+    picker_set__disable_enable_date_array.set( 'disable', [ [2014,9,3], [2014,9,9], [2014,9,20] ])
     event.stopPropagation()
 })
-$( '#button__api-set--disable-date-js' ).on( 'click', function( event ) {
-    picker_set__disable_date.set( 'disable', [ new Date(2013,9,13), new Date(2013,9,24) ])
-    event.stopPropagation()
-})
-$( '#button__api-set--disable-date-integer' ).on( 'click', function( event ) {
-    picker_set__disable_date.set( 'disable', [ 1, 4, 7 ])
-    event.stopPropagation()
-})
-$( '#button__api-set--disable-date-true' ).on( 'click', function( event ) {
-    picker_set__disable_date.set( 'disable', true )
-    event.stopPropagation()
-})
-$( '#button__api-set--disable-date-false' ).on( 'click', function( event ) {
-    picker_set__disable_date.set( 'disable', false )
-    event.stopPropagation()
-})
-$( '#button__api-set--disable-date-flip' ).on( 'click', function( event ) {
-    picker_set__disable_date.set( 'disable', 'flip' )
-    event.stopPropagation()
-})
+// $( '#button__api-set--disable-date-js' ).on( 'click', function( event ) {
+//     picker_set__disable_date.set( 'disable', [ new Date(2013,9,13), new Date(2013,9,24) ])
+//     event.stopPropagation()
+// })
+// $( '#button__api-set--disable-date-integer' ).on( 'click', function( event ) {
+//     picker_set__disable_date.set( 'disable', [ 1, 4, 7 ])
+//     event.stopPropagation()
+// })
+// $( '#button__api-set--disable-date-range' ).on( 'click', function( event ) {
+//     picker_set__disable_date.set( 'disable', [ { from: [2014,2,14], to: [2014,2,27] } ])
+//     event.stopPropagation()
+// })
+// $( '#button__api-set--disable-date-true' ).on( 'click', function( event ) {
+//     picker_set__disable_date.set( 'disable', true )
+//     event.stopPropagation()
+// })
+// $( '#button__api-set--disable-date-false' ).on( 'click', function( event ) {
+//     picker_set__disable_date.set( 'disable', false )
+//     event.stopPropagation()
+// })
+// $( '#button__api-set--disable-date-flip' ).on( 'click', function( event ) {
+//     picker_set__disable_date.set( 'disable', 'flip' )
+//     event.stopPropagation()
+// })
 
-//disable: time
-var $input_set__disable_time = $( '#demo__api-set--disable-time' ).pickatime(),
-    picker_set__disable_time = $input_set__disable_time.pickatime( 'picker' )
-$( '#button__api-set--disable-time-array' ).on( 'click', function( event ) {
-    picker_set__disable_time.set( 'disable', [ [2,30], [4,30], [9,0] ])
-    event.stopPropagation()
-})
-$( '#button__api-set--disable-time-js' ).on( 'click', function( event ) {
-    picker_set__disable_time.set( 'disable', [ new Date(2013,9,13,6), new Date(2013,9,13,12,30) ])
-    event.stopPropagation()
-})
-$( '#button__api-set--disable-time-integer' ).on( 'click', function( event ) {
-    picker_set__disable_time.set( 'disable', [ 1, 4, 7 ])
-    event.stopPropagation()
-})
-$( '#button__api-set--disable-time-true' ).on( 'click', function( event ) {
-    picker_set__disable_time.set( 'disable', true )
-    event.stopPropagation()
-})
-$( '#button__api-set--disable-time-false' ).on( 'click', function( event ) {
-    picker_set__disable_time.set( 'disable', false )
-    event.stopPropagation()
-})
-$( '#button__api-set--disable-time-flip' ).on( 'click', function( event ) {
-    picker_set__disable_time.set( 'disable', 'flip' )
-    event.stopPropagation()
-})
+// //disable: time
+// var $input_set__disable_time = $( '#demo__api-set--disable-time' ).pickatime(),
+//     picker_set__disable_time = $input_set__disable_time.pickatime( 'picker' )
+// $( '#button__api-set--disable-time-array' ).on( 'click', function( event ) {
+//     picker_set__disable_time.set( 'disable', [ [2,30], [4,30], [9,0] ])
+//     event.stopPropagation()
+// })
+// $( '#button__api-set--disable-time-js' ).on( 'click', function( event ) {
+//     picker_set__disable_time.set( 'disable', [ new Date(2013,9,13,6), new Date(2013,9,13,12,30) ])
+//     event.stopPropagation()
+// })
+// $( '#button__api-set--disable-time-integer' ).on( 'click', function( event ) {
+//     picker_set__disable_time.set( 'disable', [ 1, 4, 7 ])
+//     event.stopPropagation()
+// })
+// $( '#button__api-set--disable-time-true' ).on( 'click', function( event ) {
+//     picker_set__disable_time.set( 'disable', true )
+//     event.stopPropagation()
+// })
+// $( '#button__api-set--disable-time-false' ).on( 'click', function( event ) {
+//     picker_set__disable_time.set( 'disable', false )
+//     event.stopPropagation()
+// })
+// $( '#button__api-set--disable-time-flip' ).on( 'click', function( event ) {
+//     picker_set__disable_time.set( 'disable', 'flip' )
+//     event.stopPropagation()
+// })
 
-//enable: date
-var $input_set__enable_date = $( '#demo__api-set--enable-date' ).pickadate(),
-    picker_set__enable_date = $input_set__enable_date.pickadate( 'picker' )
-$( '#button__api-set--enable-date-array' ).on( 'click', function( event ) {
-    picker_set__enable_date.set( 'enable', [ [2013,9,3], [2013,9,9], [2013,9,20] ])
-    event.stopPropagation()
-})
-$( '#button__api-set--enable-time-js' ).on( 'click', function( event ) {
-    picker_set__enable_time.set( 'enable', [ new Date(2013,9,13,6), new Date(2013,9,13,12,30) ])
-    event.stopPropagation()
-})
-$( '#button__api-set--enable-date-js' ).on( 'click', function( event ) {
-    picker_set__enable_date.set( 'enable', [ new Date(2013,9,13), new Date(2013,9,24) ])
-    event.stopPropagation()
-})
-$( '#button__api-set--enable-date-integer' ).on( 'click', function( event ) {
-    picker_set__enable_date.set( 'enable', [ 1, 4, 7 ])
-    event.stopPropagation()
-})
-$( '#button__api-set--enable-date-true' ).on( 'click', function( event ) {
-    picker_set__enable_date.set( 'enable', true )
-    event.stopPropagation()
-})
-$( '#button__api-set--enable-date-false' ).on( 'click', function( event ) {
-    picker_set__enable_date.set( 'enable', false )
-    event.stopPropagation()
-})
-$( '#button__api-set--enable-date-flip' ).on( 'click', function( event ) {
-    picker_set__enable_date.set( 'enable', 'flip' )
-    event.stopPropagation()
-})
+// //enable: date
+// var $input_set__enable_date = $( '#demo__api-set--enable-date' ).pickadate(),
+//     picker_set__enable_date = $input_set__enable_date.pickadate( 'picker' )
+// $( '#button__api-set--enable-date-array' ).on( 'click', function( event ) {
+//     picker_set__enable_date.set( 'enable', [ [2013,9,3], [2013,9,9], [2013,9,20] ])
+//     event.stopPropagation()
+// })
+// $( '#button__api-set--enable-time-js' ).on( 'click', function( event ) {
+//     picker_set__enable_time.set( 'enable', [ new Date(2013,9,13,6), new Date(2013,9,13,12,30) ])
+//     event.stopPropagation()
+// })
+// $( '#button__api-set--enable-date-js' ).on( 'click', function( event ) {
+//     picker_set__enable_date.set( 'enable', [ new Date(2013,9,13), new Date(2013,9,24) ])
+//     event.stopPropagation()
+// })
+// $( '#button__api-set--enable-date-integer' ).on( 'click', function( event ) {
+//     picker_set__enable_date.set( 'enable', [ 1, 4, 7 ])
+//     event.stopPropagation()
+// })
+// $( '#button__api-set--enable-date-range' ).on( 'click', function( event ) {
+//     picker_set__enable_date.set( 'enable', [ { from: [2014,2,14], to: [2014,2,27] } ])
+//     event.stopPropagation()
+// })
+// $( '#button__api-set--enable-date-true' ).on( 'click', function( event ) {
+//     picker_set__enable_date.set( 'enable', true )
+//     event.stopPropagation()
+// })
+// $( '#button__api-set--enable-date-false' ).on( 'click', function( event ) {
+//     picker_set__enable_date.set( 'enable', false )
+//     event.stopPropagation()
+// })
+// $( '#button__api-set--enable-date-flip' ).on( 'click', function( event ) {
+//     picker_set__enable_date.set( 'enable', 'flip' )
+//     event.stopPropagation()
+// })
 
-//enable: time
-var $input_set__enable_time = $( '#demo__api-set--enable-time' ).pickatime(),
-    picker_set__enable_time = $input_set__enable_time.pickatime( 'picker' )
-$( '#button__api-set--enable-time-array' ).on( 'click', function( event ) {
-    picker_set__enable_time.set( 'enable', [ [2,30], [4,30], [9,0] ])
-    event.stopPropagation()
-})
-$( '#button__api-set--enable-time-integer' ).on( 'click', function( event ) {
-    picker_set__enable_time.set( 'enable', [ 1, 4, 7 ])
-    event.stopPropagation()
-})
-$( '#button__api-set--enable-time-true' ).on( 'click', function( event ) {
-    picker_set__enable_time.set( 'enable', true )
-    event.stopPropagation()
-})
-$( '#button__api-set--enable-time-false' ).on( 'click', function( event ) {
-    picker_set__enable_time.set( 'enable', false )
-    event.stopPropagation()
-})
-$( '#button__api-set--enable-time-flip' ).on( 'click', function( event ) {
-    picker_set__enable_time.set( 'enable', 'flip' )
-    event.stopPropagation()
-})
+// //enable: time
+// var $input_set__enable_time = $( '#demo__api-set--enable-time' ).pickatime(),
+//     picker_set__enable_time = $input_set__enable_time.pickatime( 'picker' )
+// $( '#button__api-set--enable-time-array' ).on( 'click', function( event ) {
+//     picker_set__enable_time.set( 'enable', [ [2,30], [4,30], [9,0] ])
+//     event.stopPropagation()
+// })
+// $( '#button__api-set--enable-time-integer' ).on( 'click', function( event ) {
+//     picker_set__enable_time.set( 'enable', [ 1, 4, 7 ])
+//     event.stopPropagation()
+// })
+// $( '#button__api-set--enable-time-true' ).on( 'click', function( event ) {
+//     picker_set__enable_time.set( 'enable', true )
+//     event.stopPropagation()
+// })
+// $( '#button__api-set--enable-time-false' ).on( 'click', function( event ) {
+//     picker_set__enable_time.set( 'enable', false )
+//     event.stopPropagation()
+// })
+// $( '#button__api-set--enable-time-flip' ).on( 'click', function( event ) {
+//     picker_set__enable_time.set( 'enable', 'flip' )
+//     event.stopPropagation()
+// })
 
 //enable/disable: range
 var $input_set__enable_disable_in_range_date = $( '#demo__api-set--enable-disable-in-range-date' ).pickadate({
