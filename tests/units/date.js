@@ -595,13 +595,6 @@ test( '`disable` and `enable` using arrays', function() {
             ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is enabled: ' + tableCell.innerHTML )
         }
     })
-
-
-    var playday = new Date(nowYear,nowMonth,1).getDay() + 1
-    picker.set( 'disable', [playday] )
-    picker.set( 'enable', [ [nowYear,nowMonth,1] ] )
-    disableCollection = [ [nowYear,nowMonth,25], playday, [nowYear,nowMonth,1,'inverted'] ]
-    deepEqual( picker.get('disable'), disableCollection, 'Disabled collection with specified date inverted' )
 })
 
 test( '`disable` and `enable` using JS dates', function() {
@@ -730,6 +723,31 @@ test( '`disable` and `enable` using booleans', function() {
     $root.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
         ok( $( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is disabled: ' + tableCell.innerHTML )
     })
+})
+
+test( '`disable` and `enable` repeatedly', function() {
+
+    var now = new Date(2014,3,20),
+        nowYear = now.getFullYear(),
+        nowMonth = now.getMonth(),
+        disableCollection = [ [nowYear,nowMonth,1], [nowYear,nowMonth,17], new Date(nowYear,nowMonth,25), 1 ],
+        picker = this.picker
+
+    picker.set( 'disable', disableCollection )
+    picker.set( 'disable', disableCollection )
+    deepEqual( picker.get( 'disable' ), disableCollection, 'Collection without duplicates' )
+
+    picker.set( 'enable', [ [nowYear,nowMonth,17], [nowYear,nowMonth,25], now ] )
+    deepEqual( picker.get( 'disable' ), [ [2014,3,1], 1, [2014,3,20,'inverted'] ], 'Collection enabled various values' )
+
+    picker.set( 'enable', [ [nowYear,nowMonth,17], [nowYear,nowMonth,25], now ] )
+    deepEqual( picker.get( 'disable' ), [ [2014,3,1], 1, [2014,3,20,'inverted'] ], 'Collection kept in tact' )
+
+    picker.set( 'enable', disableCollection )
+    deepEqual( picker.get( 'disable' ), [], 'Collection cleared of any range overlaps' )
+
+    picker.set( 'enable', disableCollection )
+    deepEqual( picker.get( 'disable' ), [], 'Collection kept clear' )
 })
 
 

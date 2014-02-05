@@ -62,10 +62,18 @@
     <script type="text/javascript">
 
         var $input = $( '.datepicker' ).pickadate({
+            selectYears: true,
             selectMonths: true,
             formatSubmit: 'yyyy-mm-dd',
+            // min: new Date(2014,3,20),
+            // max: new Date(2013,7,14),
             disable: [
-                { from: [2014,1,4], to: [2014,1,14] },
+                // 3,
+                // [2014,1,11,'inverted'],
+                // [2014,1,4],
+                // [2014,1,18],
+                // [2014,1,25],
+                // { from: [2014,1,4], to: [2015,1,14] },
                 // { from: new Date(2014,1,4), to: new Date(2014,1,14) },
                 // { from: true, to: [2014,1,10] },
                 // { from: [2014,1,2], to: 10 },
@@ -76,7 +84,7 @@
 
         var picker = $input.pickadate('picker')
 
-        picker.set('enable', [ [2014,1,8] ])
+        picker.set('select', [2013,8,14])
 
         $('button').on('click', function() {
             picker.set('disable', true);

@@ -59,8 +59,8 @@ function TimePicker( picker, settings ) {
         select: 'parse create validate',
         highlight: 'parse create validate',
         view: 'parse create validate',
-        disable: 'flipItem',
-        enable: 'flipItem'
+        disable: 'deactivate',
+        enable: 'activate'
     }
 
     // The component's item object.
@@ -591,147 +591,193 @@ TimePicker.prototype.formats = {
 } //TimePicker.prototype.formats
 
 
+
+
 /**
- * Flip an item as enabled or disabled.
+ * Check if two time units are the exact.
  */
-TimePicker.prototype.flipItem = function( type, value/*, options*/ ) {
+TimePicker.prototype.isDateExact = function( one, two ) {
+    var clock = this
+    if ( _.isInteger( one ) && _.isInteger( two ) ) {
+        return one === two
+    }
+    if (
+        ( _.isDate( one ) || $.isArray( one ) ) &&
+        ( _.isDate( two ) || $.isArray( two ) )
+    ) {
+        return clock.create( one ).pick === clock.create( two ).pick
+    }
+    if ( $.isPlainObject( one ) && $.isPlainObject( two ) ) {
+        console.log('got objects', one, two);
+    }
+    return false
+}
+
+
+/**
+ * Check if two time units overlap.
+ */
+TimePicker.prototype.isDateOverlap = function( one, two ) {
+    var clock = this
+    if ( _.isInteger( one ) && ( _.isDate( two ) || $.isArray( two ) ) ) {
+        return one === clock.create( two ).hour
+    }
+    if ( _.isInteger( two ) && ( _.isDate( one ) || $.isArray( one ) ) ) {
+        return two === clock.create( one ).hour
+    }
+}
+
+
+/**
+ * Flip the “enabled” state.
+ */
+TimePicker.prototype.flipEnable = function(val) {
+    var itemObject = this.item
+    itemObject.enable = val || (itemObject.enable == -1 ? 1 : -1)
+}
+
+
+/**
+ * Mark a collection of times as “disabled”.
+ */
+TimePicker.prototype.deactivate = function( type, timesToDisable ) {
 
     var clock = this,
-        collection = clock.item.disable,
-        isFlippedBase = clock.item.enable === -1
+        disabledItems = clock.item.disable.slice(0)
 
-    // Flip the enabled and disabled times.
-    if ( value == 'flip' ) {
-        clock.item.enable = isFlippedBase ? 1 : -1
+
+    // If we’re flipping, that’s all we need to do.
+    if ( timesToDisable == 'flip' ) {
+        clock.flipEnable()
     }
 
-    // Reset the collection and enable the base state.
-    else if ( ( type == 'enable' && value === true ) || ( type == 'disable' && value === false ) ) {
-        clock.item.enable = 1
-        collection = []
+    else if ( timesToDisable === false ) {
+        clock.flipEnable(1)
+        disabledItems = []
     }
 
-    // Reset the collection and disable the base state.
-    else if ( ( type == 'enable' && value === false ) || ( type == 'disable' && value === true ) ) {
-        clock.item.enable = -1
-        collection = []
+    else if ( timesToDisable === true ) {
+        clock.flipEnable(-1)
+        disabledItems = []
     }
 
-    // Make sure a collection of things was passed to add/remove.
-    else if ( $.isArray( value ) ) {
+    // Otherwise go through the times to disable.
+    else {
 
-        // Check if we have to add/remove from collection.
-        if ( isFlippedBase && type == 'enable' || !isFlippedBase && type == 'disable' ) {
-            collection = clock.addDisabled( collection, value )
-        }
-        else if ( !isFlippedBase && type == 'enable' ) {
-            collection = clock.addEnabled( collection, value )
-        }
-        else if ( isFlippedBase && type == 'disable' ) {
-            collection = clock.removeDisabled( collection, value )
-        }
-    }
+        timesToDisable.map(function( unitToDisable ) {
 
-    return collection
-} //TimePicker.prototype.flipItem
+            var matchFound
 
-
-/**
- * Add an enabled (inverted) item to the disabled collection.
- */
-TimePicker.prototype.addEnabled = function( collection, item ) {
-
-    var clock = this
-
-    // Go through each item to enable.
-    item.map( function( timeToEnable ) {
-
-        // Check if the time unit is already within the collection.
-        if ( clock.filterDisabled( collection, timeToEnable, 1 ).length ) {
-
-            // Remove the unit directly from the collection.
-            collection = clock.removeDisabled( collection, [timeToEnable] )
-
-            // If the unit is an array and it falls within a
-            // disabled weekday, invert it and then insert it.
-            if (
-                $.isArray( timeToEnable ) &&
-                collection.filter( function( disabledUnit ) {
-                    var timeEnableObject = clock.create( timeToEnable )
-                    return _.isInteger( disabledUnit ) && timeEnableObject.hour === disabledUnit ||
-                        $.isPlainObject( disabledUnit ) && clock.withinRange( disabledUnit, timeEnableObject )
-                }).length
-            ) {
-                timeToEnable = timeToEnable.slice(0)
-                timeToEnable.push( 'inverted' )
-                collection.push( timeToEnable )
+            // When we have disabled items, check for matches.
+            // If something is matched, immediately break out.
+            for ( var index = 0; index < disabledItems.length; index += 1 ) {
+                if ( clock.isDateExact( unitToDisable, disabledItems[index] ) ) {
+                    matchFound = true
+                    break
+                }
             }
-        }
-    })
 
-    // Return the final collection.
-    return collection
-} //TimePicker.prototype.addEnabled
+            // If nothing was found, add the validated unit to the collection.
+            if ( !matchFound ) {
+                if (
+                    _.isInteger( unitToDisable ) ||
+                    _.isDate( unitToDisable ) ||
+                    $.isArray( unitToDisable ) ||
+                    ( _.isObject( unitToDisable ) && unitToDisable.from && unitToDisable.to )
+                ) {
+                    disabledItems.push( unitToDisable )
+                }
+            }
+        })
+    }
 
-
-/**
- * Add an item to the disabled collection.
- */
-TimePicker.prototype.addDisabled = function( collection, item ) {
-
-    var clock = this
-
-    // Go through each item to disable.
-    item.map( function( timeUnit ) {
-
-        // Add the time unit if it isn’t already within the collection.
-        if ( !clock.filterDisabled( collection, timeUnit ).length ) {
-            collection.push( timeUnit )
-        }
-
-        // If the time unit is an array and falls within the range, just remove it.
-        else if ( $.isArray( timeUnit ) && clock.filterDisabled( collection, timeUnit, 1 ).length ) {
-            collection = clock.removeDisabled( collection, [timeUnit] )
-        }
-    })
-
-    // Return the final collection.
-    return collection
-} //TimePicker.prototype.addDisabled
+    // Return the updated collection.
+    return disabledItems
+} //TimePicker.prototype.deactivate
 
 
 /**
- * Remove an item from the disabled collection.
+ * Mark a collection of times as “enabled”.
  */
-TimePicker.prototype.removeDisabled = function( collection, item ) {
+TimePicker.prototype.activate = function( type, timesToEnable ) {
 
-    var clock = this
+    var clock = this,
+        disabledItems = clock.item.disable,
+        disabledItemsCount = disabledItems.length
 
-    // Go through each item to enable.
-    item.map( function( timeUnit ) {
+    // If we’re flipping, that’s all we need to do.
+    if ( timesToEnable == 'flip' ) {
+        clock.flipEnable()
+    }
 
-        // Filter each item out of the collection.
-        collection = clock.filterDisabled( collection, timeUnit, 1 )
-    })
+    else if ( timesToEnable === true ) {
+        clock.flipEnable(1)
+        disabledItems = []
+    }
 
-    // Return the final colleciton.
-    return collection
-} //TimePicker.prototype.removeDisabled
+    else if ( timesToEnable === false ) {
+        clock.flipEnable(-1)
+        disabledItems = []
+    }
 
+    // Otherwise go through the disabled times.
+    else {
 
-/**
- * Filter through the disabled collection to find a time unit.
- */
-TimePicker.prototype.filterDisabled = function( collection, timeUnit, isRemoving ) {
-    var timeIsArray = $.isArray( timeUnit )
-    return collection.filter( function( disabledTimeUnit ) {
-        var isMatch
-        if ( !timeIsArray && timeUnit === disabledTimeUnit || timeIsArray && $.isArray( disabledTimeUnit ) && '' + timeUnit === '' + disabledTimeUnit ) {
-            isMatch = true
-        }
-        return isRemoving ? !isMatch : isMatch
-    })
-} //TimePicker.prototype.filterDisabled
+        timesToEnable.map(function( unitToEnable ) {
+
+            var matchFound,
+                disabledUnit,
+                index,
+                isRangeMatched
+
+            // Go through the disabled items and try to find a match.
+            for ( index = 0; index < disabledItemsCount; index += 1 ) {
+
+                disabledUnit = disabledItems[index]
+
+                // When an exact match is found, remove it from the collection.
+                if ( clock.isDateExact( disabledUnit, unitToEnable ) ) {
+                    matchFound = disabledItems[index] = null
+                    isRangeMatched = true
+                    break
+                }
+
+                // When an overlapped match is found, add the “inverted” state to it.
+                else if ( clock.isDateOverlap( disabledUnit, unitToEnable ) ) {
+                    matchFound = $.isArray( unitToEnable ) ? unitToEnable :
+                        [ unitToEnable.getFullYear(), unitToEnable.getMonth(), unitToEnable.getDate() ]
+                    matchFound.push( 'inverted' )
+                    break
+                }
+            }
+
+            // If a match was found, make sure there isn’t a duplicate entry.
+            if ( matchFound ) for ( index = 0; index < disabledItemsCount; index += 1 ) {
+                if ( clock.isDateExact( disabledItems[index], unitToEnable ) ) {
+                    matchFound = null
+                    break
+                }
+            }
+
+            // In the event that we’re dealing with an overlap of range times,
+            // make sure there are no “inverted” times because of it.
+            if ( isRangeMatched ) for ( index = 0; index < disabledItemsCount; index += 1 ) {
+                if ( clock.isDateOverlap( disabledItems[index], unitToEnable ) ) {
+                    disabledItems[index] = null
+                    break
+                }
+            }
+
+            // If something is still matched, add it into the collection.
+            if ( matchFound ) {
+                disabledItems.push( matchFound )
+            }
+        })
+    }
+
+    // Return the updated collection.
+    return disabledItems.filter(function( val ) { return val != null })
+} //TimePicker.prototype.activate
 
 
 /**
@@ -867,7 +913,7 @@ TimePicker.defaults = (function( prefix ) {
 
 
 /**
- * Extend the picker to add the date picker.
+ * Extend the picker to add the time picker.
  */
 Picker.extend( 'pickatime', TimePicker )
 
