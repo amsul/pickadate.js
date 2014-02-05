@@ -39,10 +39,10 @@
                     <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="date.htm">Date picker</a></li>
                     <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="time.htm">Time picker</a></li>
                     <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="api.htm">API</a></li>
-                    <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="v2-(deprecated)/index.htm">v2.1.8</a></li>
+                    <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="v2-(deprecated)/index.htm">v2 docs</a></li>
                     <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="https://github.com/amsul/pickadate.js">Github</a></li>
                     <li class="menu__item menu__item--responsive page-target__reveal menu__item--trail">
-                        <span class="menu__link">Themes: <input class="theme-toggle__input" type="radio" id="show_theme_default" name="show_theme" value="default" checked hidden><label class="theme-toggle__label" for="show_theme_default">default</label> and <input class="theme-toggle__input" type="radio" id="show_theme_classic" name="show_theme" value="classic" hidden><label class="theme-toggle__label" for="show_theme_classic" class="checked-negative">classic</label></span>
+                        <span class="menu__link">Themes: <input class="theme-toggle__input" type="radio" id="show_theme_default" name="show_theme" value="default" checked hidden><label class="theme-toggle__label theme-toggle__label--first" for="show_theme_default">default</label><input class="theme-toggle__input" type="radio" id="show_theme_classic" name="show_theme" value="classic" hidden><label class="theme-toggle__label theme-toggle__label--last" for="show_theme_classic" class="checked-negative">classic</label></span>
                     </li>
                 </ul>
             </nav>
@@ -64,45 +64,54 @@
 
 
     
+
+
 <section class="section">
 
     <div class="section__block section__block--scoped">
 
-        <h2 class="heading heading--one heading--divide-center heading--divide-first"><span class="heading__text">The Date Picker<a class="heading__anchor" name="date-picker" href="#date-picker">&sect;</a></span></h2>
+        <h2 class="heading heading--one heading--divide heading--divide-first"><span class="heading__text">Demo<a class="heading__anchor" name="demo" href="#demo">&sect;</a></span></h2>
 
-        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate()</code></pre>
+        <pre class="pre--demo"><code data-language="javascript">// The date picker (<a href="date.htm">read the docs</a>)
+$('.datepicker').pickadate()</code></pre>
         <fieldset class="fieldset fieldset--demo"><div class="fieldset__wrapper"><input class="fieldset__input js__datepicker" type="text" placeholder="Try me&hellip;"></div></fieldset>
 
-        <p class="heading--three heading--thin">Customize it with <a href="date.htm#selectors">dropdown selectors</a>, <a href="date.htm#formats">date formats</a>, and <a href="date.htm"><i>lots more</i></a>.</p>
-
-    </div> <!-- .section__block -->
-
-    <div class="section__block section__block--scoped">
-
-        <h2 class="heading heading--one heading--divide-center"><span class="heading__text">The Time Picker<a class="heading__anchor" name="time-picker" href="#time-picker">&sect;</a></span></h2>
-
-        <pre class="pre--demo"><code data-language="javascript">$('.timepicker').pickatime()</code></pre>
+        <pre class="pre--demo"><code data-language="javascript">// The time picker (<a href="time.htm">read the docs</a>)
+$('.timepicker').pickatime()</code></pre>
         <fieldset class="fieldset fieldset--demo"><div class="fieldset__wrapper"><input class="fieldset__input js__timepicker" type="text" placeholder="Try me&hellip;"></div></fieldset>
 
-        <p class="heading--three heading--thin">Customize it with <a href="time.htm#intervals">time intervals</a>, <a href="time.htm#formats">time formats</a>, and <a href="time.htm"><i>lots more</i></a>.</p>
+        <div class="heading--three">
+            <p>There’s a tonne of options to customize the <a href="date.htm">date</a> and <a href="time.htm">time</a> pickers, such as month/year selectors, time intervals, etc.</p>
+            <p>There’s also a rich <a href="api.htm">API</a> to extend the functionality of the picker. Some examples are <a href="http://codepen.io/collection/vLcih">displayed on Codepen</a>.</p>
+        </div>
+
 
     </div> <!-- .section__block -->
 
     <div class="section__block section__block--scoped">
 
-        <h2 class="heading heading--one heading--divide-center"><span class="heading__text">Features<a class="heading__anchor" name="features" href="#features">&sect;</a></span></h2>
+        <h2 class="heading heading--one heading--divide"><span class="heading__text">Features<a class="heading__anchor" name="features" href="#features">&sect;</a></span></h2>
 
-        <p class="heading--three heading--thin">Some highlights include support for <a href="http://jquery.com/">jQuery</a> 1.7 and up, touch &amp; keyboard friendliness, <a href="http://bem.info/">BEM</a> style class naming, <a href="http://lesscss.org/">LESS</a> based stylesheets, and a <a href="http://gruntjs.com/">Grunt</a> based build system.</p>
-
-        <p>The picker is built to be <b>extended</b>. Check the <a href="api.htm">API</a> to see how you can add in custom functionality. Extensions – such as keyboard typing, “from” and “to” pickers, “clear” and “close” buttons – can be viewed on&nbsp;<a href="http://codepen.io/collection/vLcih">Codepen</a>.</p>
+        <div class="heading--three">
+            <ul class="list list--checked">
+                <li>Supports <a href="http://jquery.com">jQuery</a>  1.7 and up.</li>
+                <li>Is ARIA-enabled to be WCAG 2.0 compliant. <small class="text-dimmed">(added in v3.4)</small></li>
+                <li>Leaves a tiny footprint of 6kb JS and 2kb CSS. <small class="text-dimmed">(minified and gzipped)</small></li>
+                <li>Comes with translations for 36 languages.</li>
+                <li>Has touch &amp; keyboard friendliness.</li>
+                <li>Follows <a href="http://bem.info/">BEM</a> style class naming.</li>
+                <li>Utilizes <a href="http://lesscss.org/">LESS</a> based stylesheets.</li>
+                <li>Includes a <a href="http://gruntjs.com/">Grunt</a> based build system.</li>
+            </ul>
+        </div>
 
     </div> <!-- .section__block -->
 
     <div class="section__block section__block--scoped">
 
-        <h2 class="heading heading--one heading--divide-center"><span class="heading__text">Browser Support<a class="heading__anchor" name="browser-support" href="#browser-support">&sect;</a></span></h2>
+        <h2 class="heading heading--one heading--divide"><span class="heading__text">Browser Support<a class="heading__anchor" name="browser-support" href="#browser-support">&sect;</a></span></h2>
 
-        <p class="heading--three heading--thin">Supports all modern browsers – and IE8+.</p>
+        <p class="heading--three">Supports all modern browsers – and IE8+.</p>
         <p>Specifically, v3 has been tested with <a href="https://www.google.com/chrome/">Chrome</a> <small class="text-dimmed text-tiny">MWA</small>, <a href="http://www.mozilla.org/firefox/">Firefox</a> <small class="text-dimmed text-tiny">MWA</small>, <a href="http://www.opera.com/">Opera</a> <small class="text-dimmed text-tiny">MWA</small>, <a href="http://www.apple.com/ca/safari/">Safari</a> <small class="text-dimmed text-tiny">Mi</small>, <a href="http://windows.microsoft.com/ie/">Internet Explorer</a> <small class="text-dimmed text-tiny">W</small>, <a href="http://www.blackberry.com/">Blackberry</a> 6.0+ and <a href="http://www.android.com/">Android</a> 3.2+ browsers.</p>
 
         <small class="text-dimmed text-tiny">
@@ -115,6 +124,16 @@
 
     </div> <!-- .section__block -->
 
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--one heading--divide"><span class="heading__text">Community<a class="heading__anchor" name="community" href="#community">&sect;</a></span></h2>
+
+        <p class="heading--three"><i><b>pickadate</b>.js</i> is an open source project, shared under an <a href="">MIT license</a>. All <a href="https://github.com/amsul/pickadate.js">code</a> and <a href="https://github.com/amsul/pickadate.js/issues">discussions</a> are hosted on Github.</p>
+        <p>Contributions are very welcome – but <a href="https://github.com/amsul/pickadate.js/blob/gh-pages/CONTRIBUTING.md">please read these pointers</a> before submitting a bug report or feature request.</p>
+        <p>If you find this library useful and would like to see further development, consider <a href="https://gum.co/pkjs">supporting it through Gumroad</a>.</p>
+
+    </div> <!-- .section__block -->
+
 </section> <!-- .section -->
 
 
@@ -124,8 +143,9 @@
 
         <div class="section__block section__block--scoped text-center">
             <h2 class="heading heading--one heading--divide-center"><span class="heading__text peace">&#x270C;</span></h2>
-            <p class="heading heading--three heading--thin">Made by <a href="http://twitter.com/amsul_">Amsul</a>.</p>
-            <p>Code licensed under <a href="http://amsul.ca/MIT">MIT</a>.</p>
+            <p class="heading heading--three heading--thin">Made by <a href="http://twitter.com/amsul_">Amsul</a></p>
+            <p>Code licensed under <a href="http://amsul.ca/MIT">MIT</a></p>
+            <p class="text-tiny"><a href="https://gum.co/pkjs">Share some &hearts;</a></p>
         </div> <!-- .section__block -->
 
     </footer> <!-- .section -->

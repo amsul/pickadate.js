@@ -12,6 +12,7 @@
  * CODE-BLOCKS................
  * FORM-ELEMENTS..............
  * BUTTONS....................
+ * LISTS......................
  * MENUS......................
  * GROUPS.....................Group sets of content
  * TABLES.....................
@@ -302,6 +303,10 @@ pre:hover > code[data-language]:before {
     opacity: 1;
 }
 
+a code {
+    text-decoration: underline;
+}
+
 
 
 
@@ -468,6 +473,30 @@ input[type=search] {
 
 
 /* ==========================================================================
+   $LISTS
+   ========================================================================== */
+.list {}
+.list--checked {}
+
+    .list--checked > li:before {
+        content: "✔";
+        position: absolute;
+        right: 100%;
+        font-size: 80%;
+        top: .3333333333em;
+        margin-right: 8px;
+        color: @green;
+    }
+    .list--checked > li {
+        list-style: none;
+        position: relative;
+    }
+
+
+
+
+
+/* ==========================================================================
    $MENUS
    ========================================================================== */
 
@@ -617,10 +646,19 @@ input[type=search] {
     background: @white;
     border: 1px solid @grey-lighter;
     border-bottom-color: @grey-darker;
-    .border-radius( 4px );
+    margin-right: -1px;
     .box-shadow( 0 1px 2px rgba(0,0,0,.05) );
 }
+.theme-toggle__label--first {
+    .border-radius( 4px 0 0 4px );
+}
+.theme-toggle__label--last {
+    .border-radius( 0 4px 4px 0 );
+    margin-right: 0;
+}
 .theme-toggle__input:checked + .theme-toggle__label {
+    position: relative;
+    z-index: 1;
     background: @blue;
     border-color: @blue;
     color: @white;
@@ -902,6 +940,7 @@ input[type=search] {
    ========================================================================== */
 
 .text-dimmed,
+.text-dimmed a,
 a.text-dimmed {
     color: @grey-darker;
 }
@@ -915,7 +954,7 @@ a.text-dimmed {
 }
 
 .text-tiny {
-    font-size: 60%;
+    font-size: 75%;
 }
 
 

@@ -37,8 +37,8 @@ There are currently two pickers: **date** and **time**.
 File                    | Contents                 | Size (min & gzip)
 ----------------------- | ------------------------ | ----------------------
 `picker.js`             | __Base *__               | 1.54kb
-`picker.date.js`        | Date picker              | 2.29kb
-`picker.time.js`        | Time picker              | 1.68kb
+`picker.date.js`        | Date picker              | 2.38kb
+`picker.time.js`        | Time picker              | 1.73kb
 
 __*__ The base script is **required** for any of the pickers to function.
 
@@ -65,7 +65,7 @@ __**__ For languages with text flowing from right-to-left, also include the `rtl
 
 ### Translations
 
-The translations are copied into the `lib/translations` folder. There are currently [35 languages](https://github.com/amsul/pickadate.js/blob/3.4.0/lib/translations) included.
+The translations are copied into the `lib/translations` folder. There are currently [36 languages](https://github.com/amsul/pickadate.js/blob/3.4.0/lib/translations) included.
 
 
 
@@ -130,6 +130,15 @@ Before opening a new issue, please search the existing [Issues](https://github.c
 ## Contributing
 
 Before contributing any code to the project, please take a look at the [Contributing](https://github.com/amsul/pickadate.js/blob/gh-pages/CONTRIBUTING.md) guide.
+
+
+
+
+
+<br>
+## Support
+
+If you find this library useful and would like to see further development, consider [supporting it through Gumroad](https://gum.co/pkjs).
 
 
 

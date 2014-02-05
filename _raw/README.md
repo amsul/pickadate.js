@@ -146,6 +146,15 @@ Before contributing any code to the project, please take a look at the [Contribu
 
 
 
+<br>
+## Support
+
+If you find this library useful and would like to see further development, consider [supporting it through Gumroad](https://gum.co/pkjs).
+
+
+
+
+
 <br><br>
 
 ---

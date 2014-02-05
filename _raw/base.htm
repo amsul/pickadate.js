@@ -39,10 +39,10 @@
                     <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed{%= page == 'date' ? ' menu__link--active' : '' %}" href="date.htm">Date picker</a></li>
                     <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed{%= page == 'time' ? ' menu__link--active' : '' %}" href="time.htm">Time picker</a></li>
                     <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed{%= page == 'api' ? ' menu__link--active' : '' %}" href="api.htm">API</a></li>
-                    <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed{%= page == 'v2' ? ' menu__link--active' : '' %}" href="v2-(deprecated)/index.htm">v2.1.8</a></li>
+                    <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed{%= page == 'v2' ? ' menu__link--active' : '' %}" href="v2-(deprecated)/index.htm">v2 docs</a></li>
                     <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="{%= meta.gitrepo_url %}">Github</a></li>
                     <li class="menu__item menu__item--responsive page-target__reveal menu__item--trail">
-                        <span class="menu__link">Themes: <input class="theme-toggle__input" type="radio" id="show_theme_default" name="show_theme" value="default" checked hidden><label class="theme-toggle__label" for="show_theme_default">default</label> and <input class="theme-toggle__input" type="radio" id="show_theme_classic" name="show_theme" value="classic" hidden><label class="theme-toggle__label" for="show_theme_classic" class="checked-negative">classic</label></span>
+                        <span class="menu__link">Themes: <input class="theme-toggle__input" type="radio" id="show_theme_default" name="show_theme" value="default" checked hidden><label class="theme-toggle__label theme-toggle__label--first" for="show_theme_default">default</label><input class="theme-toggle__input" type="radio" id="show_theme_classic" name="show_theme" value="classic" hidden><label class="theme-toggle__label theme-toggle__label--last" for="show_theme_classic" class="checked-negative">classic</label></span>
                     </li>
                 </ul>
             </nav>
@@ -60,8 +60,9 @@
 
         <div class="section__block section__block--scoped text-center">
             <h2 class="heading heading--one heading--divide-center"><span class="heading__text peace">&#x270C;</span></h2>
-            <p class="heading heading--three heading--thin">Made by <a href="http://twitter.com/amsul_">Amsul</a>.</p>
-            <p>Code licensed under <a href="{%= pkg.licenses[0].url %}">{%= pkg.licenses[0].type %}</a>.</p>
+            <p class="heading heading--three heading--thin">Made by <a href="http://twitter.com/amsul_">Amsul</a></p>
+            <p>Code licensed under <a href="{%= pkg.licenses[0].url %}">{%= pkg.licenses[0].type %}</a></p>
+            <p class="text-tiny"><a href="https://gum.co/pkjs">Share some &hearts;</a></p>
         </div> <!-- .section__block -->
 
     </footer> <!-- .section -->

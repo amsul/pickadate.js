@@ -39,10 +39,10 @@
                     <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed menu__link--active" href="date.htm">Date picker</a></li>
                     <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="time.htm">Time picker</a></li>
                     <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="api.htm">API</a></li>
-                    <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="v2-(deprecated)/index.htm">v2.1.8</a></li>
+                    <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="v2-(deprecated)/index.htm">v2 docs</a></li>
                     <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="https://github.com/amsul/pickadate.js">Github</a></li>
                     <li class="menu__item menu__item--responsive page-target__reveal menu__item--trail">
-                        <span class="menu__link">Themes: <input class="theme-toggle__input" type="radio" id="show_theme_default" name="show_theme" value="default" checked hidden><label class="theme-toggle__label" for="show_theme_default">default</label> and <input class="theme-toggle__input" type="radio" id="show_theme_classic" name="show_theme" value="classic" hidden><label class="theme-toggle__label" for="show_theme_classic" class="checked-negative">classic</label></span>
+                        <span class="menu__link">Themes: <input class="theme-toggle__input" type="radio" id="show_theme_default" name="show_theme" value="default" checked hidden><label class="theme-toggle__label theme-toggle__label--first" for="show_theme_default">default</label><input class="theme-toggle__input" type="radio" id="show_theme_classic" name="show_theme" value="classic" hidden><label class="theme-toggle__label theme-toggle__label--last" for="show_theme_classic" class="checked-negative">classic</label></span>
                     </li>
                 </ul>
             </nav>
@@ -241,7 +241,7 @@ klass: {
     <div class="section__block section__block--scoped">
 
         <h2 class="heading heading--divide"><span class="heading__text">Translations<a class="heading__anchor" name="translations" href="#translations">&sect;</a></span></h2>
-        <p>The picker can be extended to add support for internationalization. There are translations available for <a href="https://github.com/amsul/pickadate.js/blob/3.4.0/lib/translations">35 languages</a> which you can include in one of two ways:</p>
+        <p>The picker can be extended to add support for internationalization. There are translations available for <a href="https://github.com/amsul/pickadate.js/blob/3.4.0/lib/translations">36 languages</a> which you can include in one of two ways:</p>
 
         <pre class="pre--demo"><code data-language="javascript">// Extend the default picker options for <u>all instances</u>.
 $.extend($.fn.pickadate.defaults, {
@@ -266,7 +266,7 @@ $('.datepicker').pickadate({
             <p>When using translations, <a href="#formats">specify the <code>formatSubmit</code> and <code class="attribute">data-value</code></a> to ensure the date parses correctly regardless of locale.</p>
         </div>
 
-        <h3 class="heading heading--divide"><span class="heading__text">RTL languages<a class="heading__anchor" name="translations_rtl" href="#translations_rtl">&sect;</a></span></h3>
+        <h3 class="heading heading--divide"><span class="heading__text">RTL languages<a class="heading__anchor--bigger" name="translations_rtl" href="#translations_rtl">&sect;</a></span></h3>
         <p>For right-to-left (RTL) languages you’ll need to switch the arrows and text direction by linking along the <code>rtl.css</code> file:</p>
 
         <pre class="pre--demo"><code data-language="html">&lt;!-- Add the stylings after the pickadate theme files --&gt;
@@ -299,13 +299,13 @@ $('.datepicker').pickadate({
 
         <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__formats--a" class="fieldset__input " name=date_input type=text placeholder="Try me&hellip;"></div></fieldset>
 
-        <h3 class="heading heading--divide"><span class="heading__text">Pre-fill values using custom formats or translations<a class="heading__anchor" name="formats_prefill" href="#formats_prefill">&sect;</a><a class="heading__anchor" name="formats_translations" href="#formats_translations"></a></span></h3>
+        <h3 class="heading heading--divide"><span class="heading__text">Pre-fill values using custom formats or translations<a class="heading__anchor--bigger" name="formats_prefill" href="#formats_prefill">&sect;</a><a name="formats_translations" href="#formats_translations"></a></span></h3>
 
         <p>When using a custom <a href="#formatting-rules">formatting rules</a> for the <code>format</code> option or using <a href="#translations">translations</a>, the <code class="tag-name">input</code> element should be given a <code class="attribute">data-value</code> attribute formatted using the <code>formatSubmit</code> – the element’s <code class="attribute">value</code> can be left blank. This helps to parse the date from custom formats into various languages:</p>
         <pre class="pre--demo"><code data-language="html">&lt;input data-value="2013/04/20"></code></pre>
         <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__formats--b" class="fieldset__input " name=date_demo__formats type=text data-value="2013/04/20" placeholder="Try me&hellip;"></div></fieldset>
 
-        <h3 class="heading heading--divide"><span class="heading__text">Formatting Rules<a class="heading__anchor" name="formatting-rules" href="#formatting-rules">&sect;</a></span></h3>
+        <h3 class="heading heading--divide"><span class="heading__text">Formatting Rules<a class="heading__anchor--bigger" name="formatting-rules" href="#formatting-rules">&sect;</a></span></h3>
         <p>The following rules can be used to format any date:</p>
 
         <table class="table">
@@ -401,7 +401,7 @@ $('.datepicker').pickadate({
             <p>An important thing to note here is that this disables keyboard bindings on the input element, such as arrow keys opening the picker. You will have to add your own bindings as you see fit.</p>
         </div>
 
-        <h3 class="heading heading--divide"><span class="heading__text">Using HTML5 attributes<a class="heading__anchor" name="html5-attributes" href="#html5-attributes">&sect;</a></span></h3>
+        <h3 class="heading heading--divide"><span class="heading__text">Using HTML5 attributes<a class="heading__anchor--bigger" name="html5-attributes" href="#html5-attributes">&sect;</a></span></h3>
         <p>Because each <code class="tag-name">input</code> is <a href="#editable"><code class="attribute">readOnly</code> by default</a>, HTML5 attributes, such as <code class="attribute">required</code> and <code class="attribute">pattern</code>, do not get enforced.</p>
         <p>To enable default browser behavior on these attributes, set the <a href="#editable"><code>editable</code> property to <code class="constant">true</code></a>.</p>
 
@@ -463,7 +463,7 @@ $('.datepicker').pickadate({
         <h2 class="heading heading--divide"><span class="heading__text">Date Limits<a class="heading__anchor" name="limits" href="#limits">&sect;</a></span></h2>
         <p>Set the minimum and maximum selectable dates on the picker.</p>
 
-        <p><b>1)</b> Using JavaScript date objects:</p>
+        <h3 class="heading heading--divide"><span class="heading__text">Using JavaScript dates<a class="heading__anchor--bigger" name="limits-use-dates" href="#limits-use-dates">&sect;</a></span></h3>
 
         <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
     min: new Date(2013,3,20),
@@ -472,7 +472,7 @@ $('.datepicker').pickadate({
 
         <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__limits--a" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
 
-        <p><b>2)</b> Using arrays formatted as <code>[YEAR,MONTH,DATE]</code>:</p>
+        <h3 class="heading heading--divide"><span class="heading__text">Using arrays formatted as <code>[YEAR,MONTH,DATE]</code><a class="heading__anchor--bigger" name="limits-use-arrays" href="#limits-use-arrays">&sect;</a></span></h3>
 
         <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
     min: [2013,3,20],
@@ -481,7 +481,7 @@ $('.datepicker').pickadate({
 
         <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__limits--b" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
 
-        <p><b>3)</b> As dates relative to today using integers or a boolean:</p>
+        <h3 class="heading heading--divide"><span class="heading__text">Using integers or a boolean<a class="heading__anchor--bigger" name="limits-relative" href="#limits-relative">&sect;</a></span></h3>
 
         <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
     // An integer (positive/negative) sets it relative to today.
@@ -504,7 +504,7 @@ $('.datepicker').pickadate({
         <h2 class="heading heading--divide"><span class="heading__text">Disable Dates<a class="heading__anchor" name="disable-dates" href="#disable-dates">&sect;</a></span></h2>
         <p>Disable a specific or arbitrary set of dates selectable on the picker.</p>
 
-        <p><b>1)</b> Using JavaScript Date objects:</p>
+        <h3 class="heading heading--divide"><span class="heading__text">Using JavaScript dates<a class="heading__anchor--bigger" name="disable-dates-use-dates" href="#disable-dates-use-dates">&sect;</a></span></h3>
 
         <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
     disable: [
@@ -515,7 +515,7 @@ $('.datepicker').pickadate({
 
         <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__disable-dates--a" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
 
-        <p><b>2)</b> Using arrays formatted as <code>[YEAR,MONTH,DATE]</code>:</p>
+        <h3 class="heading heading--divide"><span class="heading__text">Using arrays formatted as <code>[YEAR,MONTH,DATE]</code><a class="heading__anchor--bigger" name="disable-dates-use-arrays" href="#disable-dates-use-arrays">&sect;</a></span></h3>
 
         <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
     disable: [
@@ -527,7 +527,7 @@ $('.datepicker').pickadate({
 
         <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__disable-dates--b" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
 
-        <p><b>3)</b> Using integers representing days of the week (from 1 to 7):</p>
+        <h3 class="heading heading--divide"><span class="heading__text">Using integers as days of the week (1 to 7)<a class="heading__anchor--bigger" name="disable-dates-use-integers" href="#disable-dates-use-integers">&sect;</a></span></h3>
 
         <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
     disable: [
@@ -537,7 +537,30 @@ $('.datepicker').pickadate({
 
         <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__disable-dates--c" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
 
-        <p><b>4)</b> <i><u>Disabling all</u></i> except a specific or arbitrary set of dates by setting <code class="constant">true</code> as the first item in the collection:</p>
+        <h3 class="heading heading--divide"><span class="heading__text">Using object literals as a range of dates<a class="heading__anchor--bigger" name="disable-dates-use-ranges" href="#disable-dates-use-ranges">&sect;</a></span></h3>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
+    disable: [
+        { from: [2014,2,14], to: [2014,2,27] }
+    ]
+})</code></pre>
+
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__disable-dates--d" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
+
+        <p>The values for <code>from</code> &amp; <code>to</code> can be:</p>
+        <ul>
+            <li>A JavaScript Date object,</li>
+            <li>An array formatted as <code>[YEAR,MONTH,DATE]</code>,</li>
+            <li>And <code class="constant">true</code> to set it as “today”.</li>
+        </ul>
+        <p>The values can also be integers representing dates relative to the other:</p>
+        <ul>
+            <li><code>to</code> can only be positive: <pre><code data-language="javascript">{ from: [2014,3,12], to: 10 }</code></pre></li>
+            <li><code>from</code> can only be negative: <pre><code data-language="javascript">{ from: -10, to: true }</code></pre></li>
+        </ul>
+
+        <h3 class="heading heading--divide"><span class="heading__text"><i><u>Disabling all</u></i> with a set of exceptions<a class="heading__anchor--bigger" name="disable-dates-all" href="#disable-dates-all">&sect;</a></span></h3>
+        <p>Enable only a specific or arbitrary set of dates by setting <code class="constant">true</code> as the first item in the collection:</p>
 
         <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
     disable: [
@@ -551,9 +574,10 @@ $('.datepicker').pickadate({
     ]
 })</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__disable-dates--d" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__disable-dates--e" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
 
-        <p><b>5)</b> <i>Enabling/disabling ranges with exceptions</i> by passing <code class="string">'inverted'</code> as the last parameter in the item within the collection:</p>
+        <h3 class="heading heading--divide"><span class="heading__text">Disabling ranges with exceptions<a class="heading__anchor--bigger" name="disable-dates-inverted" href="#disable-dates-inverted">&sect;</a></span></h3>
+        <p>Enable dates that fall within a range of disabled dates by passing <code class="string">'inverted'</code> as the last parameter in the item within the collection:</p>
 
         <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
     disable: [
@@ -562,7 +586,7 @@ $('.datepicker').pickadate({
     ]
 })</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__disable-dates--e" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__disable-dates--f" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
 
 
     </div> <!-- .section__block -->
@@ -642,8 +666,9 @@ $('.datepicker').pickadate({
 
         <div class="section__block section__block--scoped text-center">
             <h2 class="heading heading--one heading--divide-center"><span class="heading__text peace">&#x270C;</span></h2>
-            <p class="heading heading--three heading--thin">Made by <a href="http://twitter.com/amsul_">Amsul</a>.</p>
-            <p>Code licensed under <a href="http://amsul.ca/MIT">MIT</a>.</p>
+            <p class="heading heading--three heading--thin">Made by <a href="http://twitter.com/amsul_">Amsul</a></p>
+            <p>Code licensed under <a href="http://amsul.ca/MIT">MIT</a></p>
+            <p class="text-tiny"><a href="https://gum.co/pkjs">Share some &hearts;</a></p>
         </div> <!-- .section__block -->
 
     </footer> <!-- .section -->
