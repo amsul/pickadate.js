@@ -4,15 +4,6 @@
  * {%= pkg.homepage %}/time.htm
  */
 
-/*jshint
-   debug: true,
-   devel: true,
-   browser: true,
-   asi: true,
-   unused: true,
-   boss: true
- */
-
 (function ( factory ) {
 
     // Register as an anonymous module.
@@ -75,13 +66,23 @@ function TimePicker( picker, settings ) {
     clock.
         set( 'min', settings.min ).
         set( 'max', settings.max ).
-        set( 'now' ).
+        set( 'now' )
 
-        // Setting the `select` also sets the `highlight` and `view`.
-        // Use the value provided or default to selecting “min”.
-        set( 'select', valueString || clock.item.min, {
-            format: formatString
+    // When there’s a value, set the `select`, which in turn
+    // also sets the `highlight` and `view`.
+    if ( valueString ) {
+        clock.set( 'select', valueString, {
+            format: formatString,
+            fromValue: !!elementValue
         })
+    }
+
+    // If there’s no value, default to highlighting “today”.
+    else {
+        clock.
+            set( 'select', null ).
+            set( 'highlight', clock.item.now )
+    }
 
     // The keycode to movement mapping.
     clock.key = {
@@ -90,7 +91,11 @@ function TimePicker( picker, settings ) {
         39: 1, // Right
         37: -1, // Left
         go: function( timeChange ) {
-            clock.set( 'highlight', clock.item.highlight.pick + timeChange * clock.item.interval, { interval: timeChange * clock.item.interval } )
+            clock.set(
+                'highlight',
+                clock.item.highlight.pick + timeChange * clock.item.interval,
+                { interval: timeChange * clock.item.interval }
+            )
             this.render()
         }
     }
@@ -120,36 +125,46 @@ function TimePicker( picker, settings ) {
  */
 TimePicker.prototype.set = function( type, value, options ) {
 
-    var clock = this
+    var clock = this,
+        clockItem = clock.item
 
-    // Go through the queue of methods, and invoke the function. Update this
-    // as the time unit, and set the final resultant as this item type.
+    // If the value is `null` just set it immediately.
+    if ( value === null ) {
+        clockItem[ type ] = value
+        return clock
+    }
+
+    // Otherwise go through the queue of methods, and invoke the functions.
+    // Update this as the time unit, and set the final value as this item.
     // * In the case of `enable`, keep the queue but set `disable` instead.
     //   And in the case of `flip`, keep the queue but set `enable` instead.
-    clock.item[ ( type == 'enable' ? 'disable' : type == 'flip' ? 'enable' : type ) ] = clock.queue[ type ].split( ' ' ).map( function( method ) {
+    clockItem[ ( type == 'enable' ? 'disable' : type == 'flip' ? 'enable' : type ) ] = clock.queue[ type ].split( ' ' ).map( function( method ) {
         value = clock[ method ]( type, value, options )
         return value
     }).pop()
 
     // Check if we need to cascade through more updates.
     if ( type == 'select' ) {
-        clock.set( 'highlight', clock.item.select, options )
+        clock.set( 'highlight', clockItem.select, options )
     }
     else if ( type == 'highlight' ) {
-        clock.set( 'view', clock.item.highlight, options )
+        clock.set( 'view', clockItem.highlight, options )
     }
     else if ( type == 'interval' ) {
         clock.
-            set( 'min', clock.item.min, options ).
-            set( 'max', clock.item.max, options )
+            set( 'min', clockItem.min, options ).
+            set( 'max', clockItem.max, options )
     }
-    else if ( ( type == 'flip' || type == 'min' || type == 'max' || type == 'disable' || type == 'enable' ) && clock.item.select && clock.item.highlight ) {
+    else if ( type.match( /^(flip|min|max|disable|enable)$/ ) ) {
         if ( type == 'min' ) {
-            clock.set( 'max', clock.item.max, options )
+            clock.set( 'max', clockItem.max, options )
         }
-        clock.
-            set( 'select', clock.item.select, options ).
-            set( 'highlight', clock.item.highlight, options )
+        if ( clockItem.select && clock.disabled( clockItem.select ) ) {
+            clock.set( 'select', clockItem.select, options )
+        }
+        if ( clockItem.highlight && clock.disabled( clockItem.highlight ) ) {
+            clock.set( 'highlight', clockItem.highlight, options )
+        }
     }
 
     return clock
@@ -269,6 +284,22 @@ TimePicker.prototype.createRange = function( from, to ) {
 TimePicker.prototype.withinRange = function( range, timeUnit ) {
     range = this.createRange(range.from, range.to)
     return timeUnit.pick >= range.from.pick && timeUnit.pick <= range.to.pick
+}
+
+
+/**
+ * Check if two time range objects overlap.
+ */
+TimePicker.prototype.overlapRanges = function( one, two ) {
+
+    var clock = this
+
+    // Convert the ranges into comparable times.
+    one = clock.createRange( one.from, one.to )
+    two = clock.createRange( two.from, two.to )
+
+    return clock.withinRange( one, two.from ) || clock.withinRange( one, two.to ) ||
+        clock.withinRange( two, one.from ) || clock.withinRange( two, one.to )
 }
 
 
@@ -407,7 +438,8 @@ TimePicker.prototype.disabled = function( timeToVerify ) {
 
     // If this time matches a disabled time, confirm it’s not inverted.
     isDisabledMatch = isDisabledMatch.length && !isDisabledMatch.filter(function( timeToDisable ) {
-        return $.isArray( timeToDisable ) && timeToDisable[2] == 'inverted'
+        return $.isArray( timeToDisable ) && timeToDisable[2] == 'inverted' ||
+            $.isPlainObject( timeToDisable ) && timeToDisable.inverted
     }).length
 
     // If the clock is "enabled" flag is flipped, flip the condition.
@@ -596,20 +628,31 @@ TimePicker.prototype.formats = {
 /**
  * Check if two time units are the exact.
  */
-TimePicker.prototype.isDateExact = function( one, two ) {
+TimePicker.prototype.isTimeExact = function( one, two ) {
+
     var clock = this
-    if ( _.isInteger( one ) && _.isInteger( two ) ) {
+
+    // When we’re working with minutes, do a direct comparison.
+    if (
+        ( _.isInteger( one ) && _.isInteger( two ) ) ||
+        ( typeof one == 'boolean' && typeof two == 'boolean' )
+     ) {
         return one === two
     }
+
+    // When we’re working with time representations, compare the “pick” value.
     if (
         ( _.isDate( one ) || $.isArray( one ) ) &&
         ( _.isDate( two ) || $.isArray( two ) )
     ) {
         return clock.create( one ).pick === clock.create( two ).pick
     }
+
+    // When we’re working with range objects, compare the “from” and “to”.
     if ( $.isPlainObject( one ) && $.isPlainObject( two ) ) {
-        console.log('got objects', one, two);
+        return clock.isTimeExact( one.from, two.from ) && clock.isTimeExact( one.to, two.to )
     }
+
     return false
 }
 
@@ -617,14 +660,24 @@ TimePicker.prototype.isDateExact = function( one, two ) {
 /**
  * Check if two time units overlap.
  */
-TimePicker.prototype.isDateOverlap = function( one, two ) {
+TimePicker.prototype.isTimeOverlap = function( one, two ) {
+
     var clock = this
+
+    // When we’re working with an integer, compare the hours.
     if ( _.isInteger( one ) && ( _.isDate( two ) || $.isArray( two ) ) ) {
         return one === clock.create( two ).hour
     }
     if ( _.isInteger( two ) && ( _.isDate( one ) || $.isArray( one ) ) ) {
         return two === clock.create( one ).hour
     }
+
+    // When we’re working with range objects, check if the ranges overlap.
+    if ( $.isPlainObject( one ) && $.isPlainObject( two ) ) {
+        return clock.overlapRanges( one, two )
+    }
+
+    return false
 }
 
 
@@ -671,7 +724,7 @@ TimePicker.prototype.deactivate = function( type, timesToDisable ) {
             // When we have disabled items, check for matches.
             // If something is matched, immediately break out.
             for ( var index = 0; index < disabledItems.length; index += 1 ) {
-                if ( clock.isDateExact( unitToDisable, disabledItems[index] ) ) {
+                if ( clock.isTimeExact( unitToDisable, disabledItems[index] ) ) {
                     matchFound = true
                     break
                 }
@@ -683,7 +736,7 @@ TimePicker.prototype.deactivate = function( type, timesToDisable ) {
                     _.isInteger( unitToDisable ) ||
                     _.isDate( unitToDisable ) ||
                     $.isArray( unitToDisable ) ||
-                    ( _.isObject( unitToDisable ) && unitToDisable.from && unitToDisable.to )
+                    ( $.isPlainObject( unitToDisable ) && unitToDisable.from && unitToDisable.to )
                 ) {
                     disabledItems.push( unitToDisable )
                 }
@@ -736,25 +789,33 @@ TimePicker.prototype.activate = function( type, timesToEnable ) {
                 disabledUnit = disabledItems[index]
 
                 // When an exact match is found, remove it from the collection.
-                if ( clock.isDateExact( disabledUnit, unitToEnable ) ) {
+                if ( clock.isTimeExact( disabledUnit, unitToEnable ) ) {
                     matchFound = disabledItems[index] = null
                     isRangeMatched = true
                     break
                 }
 
                 // When an overlapped match is found, add the “inverted” state to it.
-                else if ( clock.isDateOverlap( disabledUnit, unitToEnable ) ) {
-                    matchFound = $.isArray( unitToEnable ) ? unitToEnable :
-                        [ unitToEnable.getFullYear(), unitToEnable.getMonth(), unitToEnable.getDate() ]
-                    matchFound.push( 'inverted' )
+                else if ( clock.isTimeOverlap( disabledUnit, unitToEnable ) ) {
+                    if ( $.isPlainObject( unitToEnable ) ) {
+                        unitToEnable.inverted = true
+                        matchFound = unitToEnable
+                    }
+                    else if ( $.isArray( unitToEnable ) ) {
+                        matchFound = unitToEnable
+                        if ( !matchFound[2] ) matchFound.push( 'inverted' )
+                    }
+                    else if ( _.isDate( unitToEnable ) ) {
+                        matchFound = [ unitToEnable.getFullYear(), unitToEnable.getMonth(), unitToEnable.getDate(), 'inverted' ]
+                    }
                     break
                 }
             }
 
-            // If a match was found, make sure there isn’t a duplicate entry.
+            // If a match was found, remove a previous duplicate entry.
             if ( matchFound ) for ( index = 0; index < disabledItemsCount; index += 1 ) {
-                if ( clock.isDateExact( disabledItems[index], unitToEnable ) ) {
-                    matchFound = null
+                if ( clock.isTimeExact( disabledItems[index], unitToEnable ) ) {
+                    disabledItems[index] = null
                     break
                 }
             }
@@ -762,7 +823,7 @@ TimePicker.prototype.activate = function( type, timesToEnable ) {
             // In the event that we’re dealing with an overlap of range times,
             // make sure there are no “inverted” times because of it.
             if ( isRangeMatched ) for ( index = 0; index < disabledItemsCount; index += 1 ) {
-                if ( clock.isDateOverlap( disabledItems[index], unitToEnable ) ) {
+                if ( clock.isTimeOverlap( disabledItems[index], unitToEnable ) ) {
                     disabledItems[index] = null
                     break
                 }

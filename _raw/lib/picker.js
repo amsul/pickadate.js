@@ -6,16 +6,6 @@
  * Licensed under {%= pkg.licenses[0].type %}
  */
 
-/*jshint
-   debug: true,
-   devel: true,
-   browser: true,
-   asi: true,
-   unused: true,
-   boss: true,
-   eqnull: true
- */
-
 (function ( factory ) {
 
     // Register as an anonymous module.
@@ -238,8 +228,8 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                         // * Don’t worry about clicks or focusins on the root because those don’t bubble up.
                         //   Also, for Firefox, a click on an `option` element bubbles up directly
                         //   to the doc. So make sure the target wasn't the doc.
-                        // * In Firefox stopPropagation() doesn’t prevent right-click events from bubbling, 
-                        //   which causes the picker to unexpectedly close when right-clicking it. So make 
+                        // * In Firefox stopPropagation() doesn’t prevent right-click events from bubbling,
+                        //   which causes the picker to unexpectedly close when right-clicking it. So make
                         //   sure the event wasn’t a right-click.
                         if ( target != ELEMENT && target != document && event.which != 3 ) {
 
@@ -372,7 +362,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                         thingValue = thingObject[ thingItem ]
 
                         // First, if the item exists and there’s a value, set it.
-                        if ( P.component.item[ thingItem ] ) {
+                        if ( thingItem in P.component.item ) {
                             P.component.set( thingItem, thingValue, options )
                         }
 
@@ -412,7 +402,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                 }
 
                 // Check if a component item exists, return that.
-                if ( P.component.item[ thing ] ) {
+                if ( thing in P.component.item ) {
                     if ( typeof format == 'string' ) {
                         return PickerConstructor._.trigger(
                             P.component.formats.toString,
@@ -458,6 +448,23 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
 
                 return P
             }, //on
+
+
+
+            /**
+             * Unbind events on the things.
+             */
+            off: function() {
+                var i, thingName,
+                    names = arguments;
+                for ( i = 0, namesCount = names.length; i < namesCount; i += 1 ) {
+                    thingName = names[i]
+                    if ( thingName in STATE.methods ) {
+                        delete STATE.methods[thingName]
+                    }
+                }
+                return P
+            },
 
 
             /**
