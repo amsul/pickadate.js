@@ -678,23 +678,33 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
             typeof SETTINGS.hiddenSuffix == 'string' ? SETTINGS.hiddenSuffix : '_submit'
         ]
 
-        P._hidden = $(
-            '<input ' +
-            'type=hidden ' +
+        // if the element exists, no need to create it
+        var hiddenCheck = $('input[type=hidden][name='+id[0] + ELEMENT.name + id[1]+'][id='+id[0] + ELEMENT.id + id[1]+']');
 
-            // Create the name and ID by using the original
-            // input’s with a prefix and suffix.
-            'name="' + id[0] + ELEMENT.name + id[1] + '"' +
-            'id="' + id[0] + ELEMENT.id + id[1] + '"' +
+        if ( hiddenCheck.length > 0 )
+            P._hidden = hiddenCheck[0];
 
-            // If the element has a value, set the hidden value as well.
-            (
-                $ELEMENT.data('value') || ELEMENT.value ?
-                    ' value="' + P.get('select', SETTINGS.formatSubmit) + '"' :
-                    ''
-            ) +
-            '>'
-        )[0]
+        else {
+
+            P._hidden = $(
+             '<input ' +
+                 'type=hidden ' +
+
+                 // Create the name and ID by using the original
+                 // input’s with a prefix and suffix.
+                 'name="' + id[0] + ELEMENT.name + id[1] + '"' +
+                 'id="' + id[0] + ELEMENT.id + id[1] + '"' +
+
+                 // If the element has a value, set the hidden value as well.
+                 (
+                     $ELEMENT.data('value') || ELEMENT.value ?
+                         ' value="' + P.get('select', SETTINGS.formatSubmit) + '"' :
+                         ''
+                     ) +
+                 '>'
+            )[0]
+
+        }
 
         $ELEMENT.
 
