@@ -9,15 +9,18 @@
 - [#329]({%= pkg.bugs %}/329): Fixed time picker not parsing midnight correcly.
 - [#325]({%= pkg.bugs %}/325): Fixed Firefox bug with querying for active element with `$.contains`.
 - [#330]({%= pkg.bugs %}/330): Fixed month selector navigation from month with more days to one with less.
+- [#332]({%= pkg.bugs %}/332): Fixed issue where right-clicks caused picker to close in Firefox.
 - Improved time picker setting a time relative to “now”.
 - Improved disabling/enabling dates and times.
 - Spanish translations typo fixed.
+- Added [the `off` method]({%= pkg.homepage %}/api.htm#method-off).
 - Added Galician translations.
 - Added Slovenian translations.
 - Added option to disable [dates]({%= pkg.homepage %}/date.htm#disable-dates-use-ranges) & [times]({%= pkg.homepage %}/time.htm#disable-times-use-ranges) within a range.
 - Added option to set the [`select`]({%= pkg.homepage %}/api.htm#method-set-select-date), [`highlight`]({%= pkg.homepage %}/api.htm#method-set-highlight-date), and [`view`]({%= pkg.homepage %}/api.htm#method-set-view-date) using a string and parsing format.
 - Added some performance improvents.
 - Added more tests and documentation.
+- Fixed `picker.get('select')` when there’s no value.
 
 
 ## 3.3.2

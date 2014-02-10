@@ -76,10 +76,10 @@ test( 'Properties', function() {
 
     var picker = this.picker
 
-    ok( picker.get( 'type' ) === 'password', 'Original type is saved' )
-    ok( picker.get( 'min' ).pick != null, 'Has “min”' )
-    ok( picker.get( 'max' ).pick != null, 'Has “max”' )
-    ok( isInteger( picker.get( 'select' ).pick ), 'Has “select”' )
+    strictEqual( picker.get( 'type' ), 'password', 'Original type is saved' )
+    notStrictEqual( picker.get( 'min' ).pick, null, 'Has “min”' )
+    notStrictEqual( picker.get( 'max' ).pick, null, 'Has “max”' )
+    strictEqual( picker.get( 'select' ), null, 'Has no “select”' )
     ok( isInteger( picker.get( 'highlight' ).pick ), 'Has “highlight”' )
     ok( isInteger( picker.get( 'view' ).pick ), 'Has “view”' )
     ok( isInteger( picker.get( 'now' ).pick ), 'Has “now”' )
@@ -333,6 +333,19 @@ test( 'Open/close alternate focus', function() {
 
     picker.close( true )
     ok( !picker.get( 'open' ) && picker.$node[0].className === klasses.input && picker.$root[0].className === klasses.picker && document.activeElement === picker.$node[0], 'Closed with focus' )
+})
+
+test( 'Switch off', function() {
+
+    var truthy = true,
+        picker = this.picker
+
+    picker.on('open', function() {
+        truthy = false
+    })
+    picker.off('open')
+
+    strictEqual( truthy, true, 'Method turned off' )
 })
 
 

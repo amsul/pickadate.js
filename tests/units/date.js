@@ -46,8 +46,8 @@ test( 'Properties', function() {
     strictEqual( picker.get( 'min' ).pick, -Infinity, 'Default “min” is -Infinity' )
     strictEqual( picker.get( 'max' ).pick, Infinity, 'Default “max’ is +Infinity' )
     strictEqual( picker.get( 'now' ).pick, today.getTime(), 'Default “now” is ' + picker.get( 'now', 'yyyy/mm/dd' ) )
-    deepEqual( picker.get( 'select' ), picker.get( 'now' ), 'Default “select” is “now”' )
-    deepEqual( picker.get( 'highlight' ), picker.get( 'select' ), 'Default “highlight” is “select”' )
+    deepEqual( picker.get( 'select' ), null, 'Default “select” is `null`' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'now' ), 'Default “highlight” is “now”' )
     strictEqual( picker.get( 'view' ).pick, today.setDate( 1 ), 'Default “view” is ' + picker.get( 'view', 'yyyy/mm/dd' ) )
 })
 
@@ -201,7 +201,7 @@ test( '`highlight`', function() {
     deepEqual( picker.get( 'highlight' ).obj, playdate, '`highlight` using a number: ' + playdate )
     strictEqual( picker.get( 'view', 'yyyy/mm/dd' ), picker.get( 'highlight', 'yyyy/mm/01' ), '`view` updated: ' + picker.get( 'view', 'yyyy/mm/dd' ) )
     deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
-    deepEqual( picker.get( 'select' ), picker.get( 'now' ), '`select` unaffected' )
+    deepEqual( picker.get( 'select' ), null, '`select` unaffected' )
     strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
     deepEqual( picker.get( 'min' ).pick, -Infinity, '`min` unaffected' )
     deepEqual( picker.get( 'max' ).pick, Infinity, '`max` unaffected' )
@@ -212,7 +212,7 @@ test( '`highlight`', function() {
     deepEqual( picker.get( 'highlight' ).obj, playdate, '`highlight` using an array: ' + playdate )
     strictEqual( picker.get( 'view', 'yyyy/mm/dd' ), picker.get( 'highlight', 'yyyy/mm/01' ), '`view` updated: ' + picker.get( 'view', 'yyyy/mm/dd' ) )
     deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
-    deepEqual( picker.get( 'select' ), picker.get( 'now' ), '`select` unaffected' )
+    deepEqual( picker.get( 'select' ), null, '`select` unaffected' )
     strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
     deepEqual( picker.get( 'min' ).pick, -Infinity, '`min` unaffected' )
     deepEqual( picker.get( 'max' ).pick, Infinity, '`max` unaffected' )
@@ -223,7 +223,7 @@ test( '`highlight`', function() {
     deepEqual( picker.get( 'highlight' ).obj, playdate, '`highlight` using a JS date object: ' + playdate )
     strictEqual( picker.get( 'view', 'yyyy/mm/dd' ), picker.get( 'highlight', 'yyyy/mm/01' ), '`view` updated: ' + picker.get( 'view', 'yyyy/mm/dd' ) )
     deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
-    deepEqual( picker.get( 'select' ), picker.get( 'now' ), '`select` unaffected' )
+    deepEqual( picker.get( 'select' ), null, '`select` unaffected' )
     strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
     deepEqual( picker.get( 'min' ).pick, -Infinity, '`min` unaffected' )
     deepEqual( picker.get( 'max' ).pick, Infinity, '`max` unaffected' )
@@ -243,7 +243,7 @@ test( '`view`', function() {
     deepEqual( picker.get( 'view' ).obj, playdate, '`view` using a number: ' + playdate )
     deepEqual( picker.get( 'highlight' ).obj, today, '`highlight` unaffected' )
     deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
-    deepEqual( picker.get( 'select' ), picker.get( 'now' ), '`select` unaffected' )
+    deepEqual( picker.get( 'select' ), null, '`select` unaffected' )
     strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
     deepEqual( picker.get( 'min' ).pick, -Infinity, '`min` unaffected' )
     deepEqual( picker.get( 'max' ).pick, Infinity, '`max` unaffected' )
@@ -255,7 +255,7 @@ test( '`view`', function() {
     deepEqual( picker.get( 'view' ).obj, playdate, '`view` using a number: ' + playdate )
     deepEqual( picker.get( 'highlight' ).obj, today, '`highlight` unaffected' )
     deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
-    deepEqual( picker.get( 'select' ), picker.get( 'now' ), '`select` unaffected' )
+    deepEqual( picker.get( 'select' ), null, '`select` unaffected' )
     strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
     deepEqual( picker.get( 'min' ).pick, -Infinity, '`min` unaffected' )
     deepEqual( picker.get( 'max' ).pick, Infinity, '`max` unaffected' )
@@ -268,7 +268,7 @@ test( '`view`', function() {
     deepEqual( picker.get( 'view' ).obj, playdate, '`view` using a JS date object: ' + playdate )
     deepEqual( picker.get( 'highlight' ).obj, today, '`highlight` unaffected' )
     deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
-    deepEqual( picker.get( 'select' ), picker.get( 'now' ), '`select` unaffected' )
+    deepEqual( picker.get( 'select' ), null, '`select` unaffected' )
     strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
     deepEqual( picker.get( 'min' ).pick, -Infinity, '`min` unaffected' )
     deepEqual( picker.get( 'max' ).pick, Infinity, '`max` unaffected' )
@@ -286,11 +286,11 @@ test( '`min`', function() {
     picker.set( 'min', -40 )
     deepEqual( picker.get( 'min' ).obj, playdate, '`min` using a negative number: ' + playdate )
     deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
-    deepEqual( picker.get( 'select' ), picker.get( 'now' ), '`select` unaffected' )
-    deepEqual( picker.get( 'highlight' ), picker.get( 'select' ), '`highlight` unaffected' )
+    deepEqual( picker.get( 'select' ), null, '`select` unaffected' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'now' ), '`highlight` unaffected' )
 
-    playdate.setMonth( today.getMonth() )
     playdate.setDate( 1 )
+    playdate.setMonth( today.getMonth() )
     playdate.setFullYear( today.getFullYear() )
     deepEqual( picker.get( 'view' ).obj, playdate, '`view` unaffected' )
     strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
@@ -301,8 +301,8 @@ test( '`min`', function() {
     playdate.setDate( today.getDate() + 40 )
     deepEqual( picker.get( 'min' ).obj, playdate, '`min` using a positive number: ' + playdate )
     deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
-    deepEqual( picker.get( 'select' ), picker.get( 'min' ), '`select` updated' )
-    deepEqual( picker.get( 'highlight' ), picker.get( 'select' ), '`highlight` updated' )
+    deepEqual( picker.get( 'select' ), null, '`select` unaffected' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'min' ), '`highlight` updated' )
 
     playdate.setDate( 1 )
     deepEqual( picker.get( 'view' ).obj, playdate, '`view` updated' )
@@ -314,8 +314,8 @@ test( '`min`', function() {
     picker.set( 'min', [playdate.getFullYear(),playdate.getMonth(),playdate.getDate()] )
     deepEqual( picker.get( 'min' ).obj, playdate, '`min` using an array: ' + playdate )
     deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
-    deepEqual( picker.get( 'select' ), picker.get( 'min' ), '`select` updated' )
-    deepEqual( picker.get( 'highlight' ), picker.get( 'select' ), '`highlight` updated' )
+    deepEqual( picker.get( 'select' ), null, '`select` unaffected' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'min' ), '`highlight` updated' )
     strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
 
     playdate.setDate( 1 )
@@ -327,8 +327,8 @@ test( '`min`', function() {
     picker.set( 'min', playdate )
     deepEqual( picker.get( 'min' ).obj, playdate, '`min` using a JS date object: ' + playdate )
     deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
-    deepEqual( picker.get( 'select' ), picker.get( 'min' ), '`select` updated' )
-    deepEqual( picker.get( 'highlight' ), picker.get( 'select' ), '`highlight` updated' )
+    deepEqual( picker.get( 'select' ), null, '`select` unaffected' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'min' ), '`highlight` updated' )
     strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
 
     playdate.setDate( 1 )
@@ -348,8 +348,8 @@ test( '`min` using booleans', function() {
     picker.set( 'min', true )
     deepEqual( picker.get( 'min' ).obj, today, '`min` using `true`: ' + today )
     deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
-    deepEqual( picker.get( 'select' ).obj, today, '`select` unaffected' )
-    deepEqual( picker.get( 'highlight' ), picker.get( 'select' ), '`highlight` unaffected' )
+    deepEqual( picker.get( 'select' ), null, '`select` unaffected' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'now' ), '`highlight` unaffected' )
     deepEqual( picker.get( 'view' ).obj, playdate, '`view` unaffected' )
     strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
     deepEqual( picker.get( 'max' ).pick, Infinity, '`max` unaffected' )
@@ -358,8 +358,8 @@ test( '`min` using booleans', function() {
     picker.set( 'min', false )
     deepEqual( picker.get( 'min' ).obj, -Infinity, '`min` using `false`: ' + -Infinity )
     deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
-    deepEqual( picker.get( 'select' ).obj, today, '`select` unaffected' )
-    deepEqual( picker.get( 'highlight' ), picker.get( 'select' ), '`highlight` unaffected' )
+    deepEqual( picker.get( 'select' ), null, '`select` unaffected' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'now' ), '`highlight` unaffected' )
     deepEqual( picker.get( 'view' ).obj, playdate, '`view` unaffected' )
     strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
     deepEqual( picker.get( 'max' ).pick, Infinity, '`max` unaffected' )
@@ -377,8 +377,8 @@ test( '`max`', function() {
     picker.set( 'max', 40 )
     deepEqual( picker.get( 'max' ).obj, playdate, '`max` using a positive number: ' + playdate )
     deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
-    deepEqual( picker.get( 'select' ), picker.get( 'now' ), '`select` unaffected' )
-    deepEqual( picker.get( 'highlight' ), picker.get( 'select' ), '`highlight` unaffected' )
+    deepEqual( picker.get( 'select' ), null, '`select` unaffected' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'now' ), '`highlight` unaffected' )
 
     playdate.setYear( today.getFullYear() )
     playdate.setMonth( today.getMonth() )
@@ -392,8 +392,8 @@ test( '`max`', function() {
     playdate.setDate( today.getDate() - 40 )
     deepEqual( picker.get( 'max' ).obj, playdate, '`max` using a negative number: ' + playdate )
     deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
-    deepEqual( picker.get( 'select' ), picker.get( 'max' ), '`select` updated' )
-    deepEqual( picker.get( 'highlight' ), picker.get( 'select' ), '`highlight` updated' )
+    deepEqual( picker.get( 'select' ), null, '`select` unaffected' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'max' ), '`highlight` updated' )
 
     playdate.setDate( 1 )
     deepEqual( picker.get( 'view' ).obj, playdate, '`view` unaffected' )
@@ -405,8 +405,8 @@ test( '`max`', function() {
     picker.set( 'max', [playdate.getFullYear(),playdate.getMonth(),playdate.getDate()] )
     deepEqual( picker.get( 'max' ).obj, playdate, '`max` using an array: ' + playdate )
     deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
-    deepEqual( picker.get( 'select' ), picker.get( 'max' ), '`select` updated' )
-    deepEqual( picker.get( 'highlight' ), picker.get( 'select' ), '`highlight` updated' )
+    deepEqual( picker.get( 'select' ), null, '`select` unaffected' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'max' ), '`highlight` updated' )
     strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
 
     playdate.setDate( 1 )
@@ -418,8 +418,8 @@ test( '`max`', function() {
     picker.set( 'max', playdate )
     deepEqual( picker.get( 'max' ).obj, playdate, '`max` using a JS date object: ' + playdate )
     deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
-    deepEqual( picker.get( 'select' ), picker.get( 'max' ), '`select` updated' )
-    deepEqual( picker.get( 'highlight' ), picker.get( 'select' ), '`highlight` updated' )
+    deepEqual( picker.get( 'select' ), null, '`select` unaffected' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'max' ), '`highlight` updated' )
     strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
 
     playdate.setDate( 1 )
@@ -439,8 +439,8 @@ test( '`max` using booleans', function() {
     picker.set( 'max', true )
     deepEqual( picker.get( 'max' ).obj, today, '`max` using `true`: ' + today )
     deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
-    deepEqual( picker.get( 'select' ).obj, today, '`select` unaffected' )
-    deepEqual( picker.get( 'highlight' ), picker.get( 'select' ), '`highlight` unaffected' )
+    deepEqual( picker.get( 'select' ), null, '`select` unaffected' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'now' ), '`highlight` unaffected' )
     deepEqual( picker.get( 'view' ).obj, playdate, '`view` unaffected' )
     strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
     deepEqual( picker.get( 'min' ).pick, -Infinity, '`min` unaffected' )
@@ -449,8 +449,8 @@ test( '`max` using booleans', function() {
     picker.set( 'max', false )
     deepEqual( picker.get( 'max' ).obj, Infinity, '`max` using `false`: ' + Infinity )
     deepEqual( picker.get( 'now' ).obj, today, '`now` unaffected' )
-    deepEqual( picker.get( 'select' ).obj, today, '`select` unaffected' )
-    deepEqual( picker.get( 'highlight' ), picker.get( 'select' ), '`highlight` unaffected' )
+    deepEqual( picker.get( 'select' ), null, '`select` unaffected' )
+    deepEqual( picker.get( 'highlight' ), picker.get( 'now' ), '`highlight` unaffected' )
     deepEqual( picker.get( 'view' ).obj, playdate, '`view` unaffected' )
     strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
     deepEqual( picker.get( 'min' ).pick, -Infinity, '`min` unaffected' )
@@ -468,7 +468,7 @@ test( '`disable` and `enable` using integers', function() {
     picker.set( 'disable', disableCollection )
 
     if ( disableCollection.indexOf( today.getDay() + 1 ) > -1 ) {
-        notDeepEqual( picker.get( 'select' ), picker.get( 'now' ), 'Shifted disabled `select`: ' + picker.get( 'select' ).obj )
+        notDeepEqual( picker.get( 'highlight' ), picker.get( 'now' ), 'Shifted disabled `highlight`: ' + picker.get( 'highlight' ).obj )
     }
 
     deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled dates added to collection' )
@@ -725,28 +725,277 @@ test( '`disable` and `enable` using booleans', function() {
     })
 })
 
+test( '`disable` and `enable` using ranges', function() {
+
+    var picker = this.picker,
+        $root = picker.$root,
+        disableCollection, viewday
+
+    picker.set( 'view', [2014,2,1] )
+    viewday = picker.get( 'view' ).day + 1
+
+    disableCollection = [ { from: [2014,2,4], to: [2014,2,14] } ]
+    picker.set( 'disable', disableCollection )
+    deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled range' )
+
+    $root.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
+        var index = indexCell - viewday
+        if ( index >= 2 && index <= 12 ) {
+            ok( $( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is disabled: ' + tableCell.innerHTML )
+        }
+        else {
+            ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is enabled: ' + tableCell.innerHTML )
+        }
+    })
+
+    picker.set( 'enable', disableCollection )
+    deepEqual( picker.get( 'disable' ), [], 'Cleared disabled range' )
+
+    $root.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
+        ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is enabled: ' + tableCell.innerHTML )
+    })
+
+
+    disableCollection = [ { from: new Date(2014,2,7), to: new Date(2014,2,17) } ]
+    picker.set( 'disable', disableCollection )
+    deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled range updated' )
+
+    $root.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
+        var index = indexCell - viewday
+        if ( index >= 5 && index <= 15 ) {
+            ok( $( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is disabled: ' + tableCell.innerHTML )
+        }
+        else {
+            ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is enabled: ' + tableCell.innerHTML )
+        }
+    })
+
+    picker.set( 'enable', disableCollection )
+    deepEqual( picker.get( 'disable' ), [], 'Cleared disabled range' )
+
+    $root.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
+        ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is enabled: ' + tableCell.innerHTML )
+    })
+})
+
+test( '`disable` and `enable` using relative ranges', function() {
+
+    var picker = this.picker,
+        $root = picker.$root,
+        viewday = picker.get( 'now' ).day - 1,
+        today = picker.get( 'now' ).obj,
+        yearToday = today.getFullYear(),
+        monthToday = today.getMonth(),
+        dateToday = today.getDate(),
+        backDay = [ yearToday, monthToday, dateToday - 10 ],
+        forwardDay = new Date( yearToday, monthToday, dateToday + 10 ),
+        disableCollection
+
+    disableCollection = [ { from: true, to: forwardDay } ]
+    picker.set( 'disable', disableCollection )
+    deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled range relative to today with date object' )
+
+    $root.find( 'td .' + $.fn.pickadate.defaults.klass.infocus ).each( function( indexCell, tableCell ) {
+        var index = indexCell - viewday
+        if ( index >= dateToday && index <= dateToday + 10 ) {
+            ok( $( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is disabled: ' + tableCell.innerHTML )
+        }
+        else {
+            ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is enabled: ' + tableCell.innerHTML )
+        }
+    })
+
+    picker.set( 'enable', disableCollection )
+    deepEqual( picker.get( 'disable' ), [], 'Cleared disabled range' )
+
+    $root.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
+        ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is enabled: ' + tableCell.innerHTML )
+    })
+
+    disableCollection = [ { from: backDay, to: true } ]
+    picker.set( 'disable', disableCollection )
+    deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled range relative to today with array' )
+
+    $root.find( 'td .' + $.fn.pickadate.defaults.klass.infocus ).each( function( indexCell, tableCell ) {
+        var index = indexCell - viewday
+        if ( index <= dateToday && index >= dateToday - 10 ) {
+            ok( $( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is disabled: ' + tableCell.innerHTML )
+        }
+        else {
+            ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is enabled: ' + tableCell.innerHTML )
+        }
+    })
+
+    picker.set( 'enable', disableCollection )
+    deepEqual( picker.get( 'disable' ), [], 'Cleared disabled range' )
+
+    $root.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
+        ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is enabled: ' + tableCell.innerHTML )
+    })
+
+    disableCollection = [ { from: true, to: 10 } ]
+    picker.set( 'disable', disableCollection )
+    deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled range relative to today with positive integer' )
+
+    $root.find( 'td .' + $.fn.pickadate.defaults.klass.infocus ).each( function( indexCell, tableCell ) {
+        var index = indexCell - viewday
+        if ( index >= dateToday && index <= dateToday + 10 ) {
+            ok( $( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is disabled: ' + tableCell.innerHTML )
+        }
+        else {
+            ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is enabled: ' + tableCell.innerHTML )
+        }
+    })
+
+    picker.set( 'enable', disableCollection )
+    deepEqual( picker.get( 'disable' ), [], 'Cleared disabled range' )
+
+    $root.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
+        ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is enabled: ' + tableCell.innerHTML )
+    })
+
+    disableCollection = [ { from: -10, to: true } ]
+    picker.set( 'disable', disableCollection )
+    deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled range relative to today with negative integer' )
+
+    $root.find( 'td .' + $.fn.pickadate.defaults.klass.infocus ).each( function( indexCell, tableCell ) {
+        var index = indexCell - viewday
+        if ( index <= dateToday && index >= dateToday - 10 ) {
+            ok( $( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is disabled: ' + tableCell.innerHTML )
+        }
+        else {
+            ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is enabled: ' + tableCell.innerHTML )
+        }
+    })
+})
+
+test( '`disable` and `enable` using overlapping ranges', function() {
+
+    var picker = this.picker,
+        $root = picker.$root,
+        viewday, disableCollection
+
+    picker.set( 'view', [2014,2,1] )
+
+    viewday = picker.get( 'now' ).day - 1
+
+    picker.set( 'disable', [
+        { from: [2014,2,4], to: [2014,2,28] }
+    ])
+    picker.set( 'enable', [
+        { from: [2014,2,14], to: [2014,2,18] }
+    ])
+
+    disableCollection = [
+        { from: [2014,2,4], to: [2014,2,28] },
+        { from: [2014,2,14], to: [2014,2,18], inverted: true }
+    ]
+    deepEqual( picker.get( 'disable' ), disableCollection, 'Inverted range within disabled range' )
+
+    $root.find( 'td .' + $.fn.pickadate.defaults.klass.infocus ).each( function( indexCell, tableCell ) {
+        var index = indexCell - viewday
+        if ( index >= 4 && index < 14 || index > 18 && index <= 28 ) {
+            ok( $( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is disabled: ' + tableCell.innerHTML )
+        }
+        else {
+            ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is enabled: ' + tableCell.innerHTML )
+        }
+    })
+
+    picker.set( 'disable', false )
+    picker.set( 'disable', [
+        { from: [2014,2,4], to: [2014,2,28] }
+    ])
+    picker.set( 'enable', [
+        { from: [2014,2,1], to: [2014,2,14] }
+    ])
+
+    disableCollection = [
+        { from: [2014,2,4], to: [2014,2,28] },
+        { from: [2014,2,1], to: [2014,2,14], inverted: true }
+    ]
+    deepEqual( picker.get( 'disable' ), disableCollection, 'Inverted range before and within disabled range' )
+
+    $root.find( 'td .' + $.fn.pickadate.defaults.klass.infocus ).each( function( indexCell, tableCell ) {
+        var index = indexCell - viewday
+        if ( index > 14 && index <= 28 ) {
+            ok( $( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is disabled: ' + tableCell.innerHTML )
+        }
+        else {
+            ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is enabled: ' + tableCell.innerHTML )
+        }
+    })
+
+    picker.set( 'disable', false )
+    picker.set( 'disable', [
+        { from: [2014,2,4], to: [2014,2,20] }
+    ])
+    picker.set( 'enable', [
+        { from: [2014,2,16], to: [2014,2,24] }
+    ])
+
+    disableCollection = [
+        { from: [2014,2,4], to: [2014,2,20] },
+        { from: [2014,2,16], to: [2014,2,24], inverted: true }
+    ]
+    deepEqual( picker.get( 'disable' ), disableCollection, 'Inverted range after and within disabled range' )
+
+    $root.find( 'td .' + $.fn.pickadate.defaults.klass.infocus ).each( function( indexCell, tableCell ) {
+        var index = indexCell - viewday
+        if ( index >= 4 && index < 16 ) {
+            ok( $( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is disabled: ' + tableCell.innerHTML )
+        }
+        else {
+            ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is enabled: ' + tableCell.innerHTML )
+        }
+    })
+})
+
 test( '`disable` and `enable` repeatedly', function() {
 
-    var now = new Date(2014,3,20),
+    var now = new Date(2014,3,6),
         nowYear = now.getFullYear(),
         nowMonth = now.getMonth(),
-        disableCollection = [ [nowYear,nowMonth,1], [nowYear,nowMonth,17], new Date(nowYear,nowMonth,25), 1 ],
-        picker = this.picker
+        nowDate = now.getDate(),
+        picker = this.picker,
+        disabledCollection = [
+            [nowYear,nowMonth,1],
+            [nowYear,nowMonth,17],
+            new Date(nowYear,nowMonth,25),
+            1,
+            { from: [nowYear,nowMonth,4], to: [nowYear,nowMonth,10] },
+            { from: [nowYear,nowMonth,8], to: [nowYear,nowMonth,12] }
+        ],
+        collectionToEnable
 
-    picker.set( 'disable', disableCollection )
-    picker.set( 'disable', disableCollection )
-    deepEqual( picker.get( 'disable' ), disableCollection, 'Collection without duplicates' )
+    picker.set( 'disable', disabledCollection )
+    picker.set( 'disable', disabledCollection )
+    deepEqual( picker.get( 'disable' ), disabledCollection, 'Collection without duplicates' )
 
-    picker.set( 'enable', [ [nowYear,nowMonth,17], [nowYear,nowMonth,25], now ] )
-    deepEqual( picker.get( 'disable' ), [ [2014,3,1], 1, [2014,3,20,'inverted'] ], 'Collection enabled various values' )
+    collectionToEnable = [
+        [nowYear,nowMonth,17],
+        [nowYear,nowMonth,25],
+        now,
+        { from: [nowYear,nowMonth,8], to: [nowYear,nowMonth,12] }
+    ]
+    picker.set( 'enable', collectionToEnable )
+    disabledCollection = [
+        [nowYear,nowMonth,1],
+        1,
+        { from: [nowYear,nowMonth,4], to: [nowYear,nowMonth,10] },
+        [nowYear,nowMonth,nowDate,'inverted'],
+        { from: [nowYear,nowMonth,8], to: [nowYear,nowMonth,12], inverted: true }
+    ]
+    deepEqual( picker.get( 'disable' ), disabledCollection, 'Collection enabled various values' )
 
-    picker.set( 'enable', [ [nowYear,nowMonth,17], [nowYear,nowMonth,25], now ] )
-    deepEqual( picker.get( 'disable' ), [ [2014,3,1], 1, [2014,3,20,'inverted'] ], 'Collection kept in tact' )
+    picker.set( 'enable', collectionToEnable )
+    deepEqual( picker.get( 'disable' ), disabledCollection, 'Collection without duplicates' )
 
-    picker.set( 'enable', disableCollection )
-    deepEqual( picker.get( 'disable' ), [], 'Collection cleared of any range overlaps' )
+    collectionToEnable = disabledCollection
+    picker.set( 'enable', collectionToEnable )
+    deepEqual( picker.get( 'disable' ), [], 'Collection cleared - including inverted range overlaps' )
 
-    picker.set( 'enable', disableCollection )
+    picker.set( 'enable', collectionToEnable )
     deepEqual( picker.get( 'disable' ), [], 'Collection kept clear' )
 })
 
@@ -858,7 +1107,7 @@ test( 'Highlight', function() {
     $root.find( '.' + $.fn.pickadate.defaults.klass.navPrev ).click()
     playdate.setMonth( playdate.getMonth() - 1 )
     deepEqual( picker.get( 'highlight' ).obj, playdate, 'Previous month: ' + playdate )
-    deepEqual( picker.get( 'select' ).obj, today, 'Select unaffected' )
+    deepEqual( picker.get( 'select' ), null, 'Select unaffected' )
 
     playdate.setDate( 1 )
     deepEqual( picker.get( 'view' ).obj, playdate, 'View updated' )
@@ -872,7 +1121,7 @@ test( 'Highlight', function() {
         playdate = new Date(playdate.getFullYear(), playdate.getMonth(), playdate.getDate() - 1)
     }
     deepEqual( picker.get( 'highlight' ).obj, playdate, 'Next month: ' + playdate )
-    deepEqual( picker.get( 'select' ).obj, today, 'Select unaffected' )
+    deepEqual( picker.get( 'select' ), null, 'Select unaffected' )
 
     playdate.setDate( 1 )
     deepEqual( picker.get( 'view' ).obj, playdate, 'View updated' )

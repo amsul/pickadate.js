@@ -9,15 +9,18 @@
 - [#329](https://github.com/amsul/pickadate.js/issues/329): Fixed time picker not parsing midnight correcly.
 - [#325](https://github.com/amsul/pickadate.js/issues/325): Fixed Firefox bug with querying for active element with `$.contains`.
 - [#330](https://github.com/amsul/pickadate.js/issues/330): Fixed month selector navigation from month with more days to one with less.
+- [#332](https://github.com/amsul/pickadate.js/issues/332): Fixed issue where right-clicks caused picker to close in Firefox.
 - Improved time picker setting a time relative to “now”.
 - Improved disabling/enabling dates and times.
 - Spanish translations typo fixed.
+- Added [the `off` method](http://amsul.github.io/pickadate.js/api.htm#method-off).
 - Added Galician translations.
 - Added Slovenian translations.
 - Added option to disable [dates](http://amsul.github.io/pickadate.js/date.htm#disable-dates-use-ranges) & [times](http://amsul.github.io/pickadate.js/time.htm#disable-times-use-ranges) within a range.
 - Added option to set the [`select`](http://amsul.github.io/pickadate.js/api.htm#method-set-select-date), [`highlight`](http://amsul.github.io/pickadate.js/api.htm#method-set-highlight-date), and [`view`](http://amsul.github.io/pickadate.js/api.htm#method-set-view-date) using a string and parsing format.
 - Added some performance improvents.
 - Added more tests and documentation.
+- Fixed `picker.get('select')` when there’s no value.
 
 
 ## 3.3.2

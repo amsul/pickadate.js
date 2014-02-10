@@ -245,7 +245,7 @@ klass: {
     <div class="section__block section__block--scoped">
 
         <h2 class="heading heading--divide"><span class="heading__text">Editable input<a class="heading__anchor" name="editable" href="#editable">&sect;</a></span></h2>
-        <p>By default, typing into the input is disabled by giving it a <code class="attribute">readOnly</code> attribute. Doing so ensures that virtual keyboards don’t pop open on touch devices. It is also a confirmation that formats passed to the server will be consistent.</p>
+        <p>By default, typing into the input is disabled by giving it a <code class="attribute">readOnly</code> attribute. Doing so ensures that virtual keyboards don’t pop open on touch devices. It is also a confirmation that values passed to the server will be of a consistent format.</p>
         <p>However, this behavior can be changed using the <code>editable</code> option:</p>
 
         <pre class="pre--demo"><code data-language="javascript">$('.timepicker').pickatime({
@@ -292,6 +292,15 @@ klass: {
         <h2 class="heading heading--divide"><span class="heading__text">Time Limits<a class="heading__anchor" name="limits" href="#limits">&sect;</a></span></h2>
         <p>Set the minimum and maximum selectable times on the picker.</p>
 
+        <h3 class="heading heading--divide"><span class="heading__text">Using JavaScript dates<a class="heading__anchor--bigger" name="limits-use-dates" href="#limits-use-dates">&sect;</a></span></h3>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
+    min: new Date(2013,3,20,7),
+    max: new Date(2013,7,14,18,30)
+})</code></pre>
+
+        {%= dateDemoField({ id: 'time_demo__limits--a' }) %}
+
         <h3 class="heading heading--divide"><span class="heading__text">Using arrays formatted as <code>[HOUR,MINUTE]</code><a class="heading__anchor--bigger" name="limits-use-arrays" href="#limits-use-arrays">&sect;</a></span></h3>
 
         <pre class="pre--demo"><code data-language="javascript">$('.timepicker').pickatime({
@@ -299,7 +308,7 @@ klass: {
     max: [14,0]
 })</code></pre>
 
-        {%= timeDemoField({ id: 'time_demo__limits--a' }) %}
+        {%= timeDemoField({ id: 'time_demo__limits--b' }) %}
 
         <h3 class="heading heading--divide"><span class="heading__text">Using integers or a boolean<a class="heading__anchor--bigger" name="limits-relative" href="#limits-relative">&sect;</a></span></h3>
 
@@ -310,7 +319,7 @@ klass: {
     max: true
 })</code></pre>
 
-        {%= timeDemoField({ id: 'time_demo__limits--b' }) %}
+        {%= timeDemoField({ id: 'time_demo__limits--c' }) %}
 
     </div> <!-- .section__block -->
 
@@ -358,7 +367,7 @@ klass: {
 
         {%= timeDemoField({ id: 'time_demo__disable-times--c' }) %}
 
-        <h3 class="heading heading--divide"><span class="heading__text">Using object literals as a range of times<a class="heading__anchor--bigger" name="disable-times-use-ranges" href="#disable-times-use-ranges">&sect;</a></span></h3>
+        <h3 class="heading heading--divide"><span class="heading__text">Using objects as a range of times<a class="heading__anchor--bigger" name="disable-times-use-ranges" href="#disable-times-use-ranges">&sect;</a></span></h3>
 
         <pre class="pre--demo"><code data-language="javascript">$('.timepicker').pickatime({
     disable: [
@@ -397,12 +406,15 @@ klass: {
         {%= timeDemoField({ id: 'time_demo__disable-times--e' }) %}
 
         <h3 class="heading heading--divide"><span class="heading__text">Disabling ranges with exceptions<a class="heading__anchor--bigger" name="disable-times-inverted" href="#disable-times-inverted">&sect;</a></span></h3>
-        <p>Enable times that fall within a range of disabled times by passing <code class="string">'inverted'</code> as the last parameter in the item within the collection:</p>
+        <p>Enable times that fall within a range of disabled times by adding the <code class="string">inverted</code> parameter to the item within the collection:</p>
 
         <pre class="pre--demo"><code data-language="javascript">$('.timepicker').pickatime({
     disable: [
         1,
-        [1, 30, 'inverted']
+        [1, 30, 'inverted'],
+        { from: [4, 30], to: [10, 30] },
+        [6, 30, 'inverted'],
+        { from: [8, 0], to: [9, 0], inverted: true }
     ]
 })</code></pre>
 
@@ -462,15 +474,16 @@ klass: {
     onStop: function() {
         console.log('See ya.')
     },
-    onSet: function(event) {
-        console.log('Just set stuff:', event)
+    onSet: function(context) {
+        console.log('Just set stuff:', context)
     }
 })</code></pre>
 
         {%= timeDemoField({ id: 'time_demo__events' }).replace( 'Try me', 'Open your console and try me' ) %}
 
+        <p>The <code class="function">onSet</code> event is the only callback that is passed a <code>context</code> argument that provides details as to which properties are being “set”.</p>
         <p>Within scope of all six of these events, <code class="keyword">this</code> refers to <a href="api.htm">the picker</a>.</p>
-        <p>The <code class="function">onSet</code> event is the only callback that is passed an <code>event</code> argument that provides a bit of context as to which properties are being “set”.</p>
+        <p>To learn more on how to use the picker object, read the <a href="api.htm">API</a> documentation.</p>
 
     </div> <!-- .section__block -->
 

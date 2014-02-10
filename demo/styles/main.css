@@ -1234,6 +1234,14 @@ input[type=search] {
 a.text-dimmed {
   color: #bfbfbf;
 }
+.text-dimmed a,
+a.text-dimmed {
+  text-decoration: underline;
+}
+.text-dimmed a:hover,
+a.text-dimmed:hover {
+  color: #999999;
+}
 .text-center {
   text-align: center;
 }

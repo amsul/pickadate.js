@@ -215,8 +215,11 @@ $( '#date_demo__disable-dates--e' ).pickadate({
 // Pass “inverted” as the last paramter to flip within a range.
 $( '#date_demo__disable-dates--f' ).pickadate({
     disable: [
-        1,
-        [2013,10,17,'inverted']
+        5,
+        [2013, 10, 21,'inverted'],
+        { from: [2014, 3, 15], to: [2014, 3, 25] },
+        [2014, 3, 20, 'inverted'],
+        { from: [2014, 3, 17], to: [2014, 3, 18], inverted: true }
     ]
 })
 
@@ -343,14 +346,20 @@ $( '#time_demo__interval' ).pickatime({
  * Limits
  */
 
-// Limits as specific times using arrays.
+// Limits as specific times using JavaScript dates.
 $( '#time_demo__limits--a' ).pickatime({
+    min: new Date(2013,3,20,7),
+    max: new Date(2013,7,14,18,30)
+})
+
+// Limits as specific times using arrays.
+$( '#time_demo__limits--b' ).pickatime({
     min: [7,30],
     max: [14,0]
 })
 
 // Limits as times relative to now.
-$( '#time_demo__limits--b' ).pickatime({
+$( '#time_demo__limits--c' ).pickatime({
     min: -5,
     max: true
 })
@@ -412,10 +421,12 @@ $( '#time_demo__disable-times--e' ).pickatime({
 
 // Pass “inverted” as the last paramter to flip within a range.
 $( '#time_demo__disable-times--f' ).pickatime({
-    interval: 15,
     disable: [
         1,
-        [1,30,'inverted']
+        [1, 30, 'inverted'],
+        { from: [4, 30], to: [10, 30] },
+        [6, 30, 'inverted'],
+        { from: [8, 0], to: [9, 0], inverted: true }
     ]
 })
 
@@ -594,10 +605,8 @@ $( '#button__api-get--select' ).on( 'click', function( event ) {
     console.log( picker_get__select.get( 'select' ) )
     event.stopPropagation()
 })
-var $input_get__select_format = $( '#demo__api-get--select-format' ).pickadate(),
-    picker_get__select_format = $input_get__select_format.pickadate( 'picker' )
 $( '#button__api-get--select-format' ).on( 'click', function( event ) {
-    console.log( picker_get__select_format.get( 'select', 'yyyy/mm/dd' ) )
+    console.log( picker_get__select.get( 'select', 'yyyy/mm/dd' ) )
     event.stopPropagation()
 })
 
@@ -608,10 +617,8 @@ $( '#button__api-get--highlight' ).on( 'click', function( event ) {
     console.log( picker_get__highlight.get( 'highlight' ) )
     event.stopPropagation()
 })
-var $input_get__highlight_format = $( '#demo__api-get--highlight-format' ).pickadate(),
-    picker_get__highlight_format = $input_get__highlight_format.pickadate( 'picker' )
 $( '#button__api-get--highlight-format' ).on( 'click', function( event ) {
-    console.log( picker_get__highlight_format.get( 'highlight', 'yyyy/mm/dd' ) )
+    console.log( picker_get__highlight.get( 'highlight', 'yyyy/mm/dd' ) )
     event.stopPropagation()
 })
 
@@ -622,10 +629,8 @@ $( '#button__api-get--view' ).on( 'click', function( event ) {
     console.log( picker_get__view.get( 'view' ) )
     event.stopPropagation()
 })
-var $input_get__view_format = $( '#demo__api-get--view-format' ).pickadate(),
-    picker_get__view_format = $input_get__view_format.pickadate( 'picker' )
 $( '#button__api-get--view-format' ).on( 'click', function( event ) {
-    console.log( picker_get__view_format.get( 'view', 'yyyy/mm/dd' ) )
+    console.log( picker_get__view.get( 'view', 'yyyy/mm/dd' ) )
     event.stopPropagation()
 })
 
@@ -638,12 +643,8 @@ $( '#button__api-get--min' ).on( 'click', function( event ) {
     console.log( picker_get__min.get( 'min' ) )
     event.stopPropagation()
 })
-var $input_get__min_format = $( '#demo__api-get--min-format' ).pickadate({
-        min: [TODAY.getFullYear(),TODAY.getMonth(),TODAY.getDate()]
-    }),
-    picker_get__min_format = $input_get__min_format.pickadate( 'picker' )
 $( '#button__api-get--min-format' ).on( 'click', function( event ) {
-    console.log( picker_get__min_format.get( 'min', 'yyyy/mm/dd' ) )
+    console.log( picker_get__min.get( 'min', 'yyyy/mm/dd' ) )
     event.stopPropagation()
 })
 
@@ -656,12 +657,8 @@ $( '#button__api-get--max' ).on( 'click', function( event ) {
     console.log( picker_get__max.get( 'max' ) )
     event.stopPropagation()
 })
-var $input_get__max_format = $( '#demo__api-get--max-format' ).pickadate({
-        max: [TODAY.getFullYear()+2,TODAY.getMonth(),TODAY.getDate()]
-    }),
-    picker_get__max_format = $input_get__max_format.pickadate( 'picker' )
 $( '#button__api-get--max-format' ).on( 'click', function( event ) {
-    console.log( picker_get__max_format.get( 'max', 'yyyy/mm/dd' ) )
+    console.log( picker_get__max.get( 'max', 'yyyy/mm/dd' ) )
     event.stopPropagation()
 })
 
@@ -969,133 +966,139 @@ $( '#button__api-set--max-time-false' ).on( 'click', function( event ) {
 })
 
 //disable-enable: date
-var $input_set__disable_enable_date_array = $( '#demo__api-set--disable-enable-date-array' ).pickadate(),
-    picker_set__disable_enable_date_array = $input_set__disable_enable_date_array.pickadate( 'picker' )
-$( '#button__api-set--disable-enable-date-array' ).on( 'click', function( event ) {
-    picker_set__disable_enable_date_array.set( 'disable', [ [2014,9,3], [2014,9,9], [2014,9,20] ])
+var $input_set__disable_enable_date_specific = $( '#demo__api-set--disable-enable-date-specific' ).pickadate(),
+    picker_set__disable_enable_date_specific = $input_set__disable_enable_date_specific.pickadate( 'picker' )
+$( '#button__api-set--disable-date-specific' ).on( 'click', function( event ) {
+    picker_set__disable_enable_date_specific.set( 'disable', [
+        [2014,9,3], [2014,9,9], [2014,9,20],
+        new Date(2013,9,13), new Date(2013,9,24)
+    ])
     event.stopPropagation()
 })
-// $( '#button__api-set--disable-date-js' ).on( 'click', function( event ) {
-//     picker_set__disable_date.set( 'disable', [ new Date(2013,9,13), new Date(2013,9,24) ])
-//     event.stopPropagation()
-// })
-// $( '#button__api-set--disable-date-integer' ).on( 'click', function( event ) {
-//     picker_set__disable_date.set( 'disable', [ 1, 4, 7 ])
-//     event.stopPropagation()
-// })
-// $( '#button__api-set--disable-date-range' ).on( 'click', function( event ) {
-//     picker_set__disable_date.set( 'disable', [ { from: [2014,2,14], to: [2014,2,27] } ])
-//     event.stopPropagation()
-// })
-// $( '#button__api-set--disable-date-true' ).on( 'click', function( event ) {
-//     picker_set__disable_date.set( 'disable', true )
-//     event.stopPropagation()
-// })
-// $( '#button__api-set--disable-date-false' ).on( 'click', function( event ) {
-//     picker_set__disable_date.set( 'disable', false )
-//     event.stopPropagation()
-// })
-// $( '#button__api-set--disable-date-flip' ).on( 'click', function( event ) {
-//     picker_set__disable_date.set( 'disable', 'flip' )
-//     event.stopPropagation()
-// })
+$( '#button__api-set--enable-date-specific' ).on( 'click', function( event ) {
+    picker_set__disable_enable_date_specific.set( 'enable', [
+        [2014,9,9],
+        [2014,9,13],
+        new Date(2013,9,20)
+    ])
+    event.stopPropagation()
+})
+var $input_set__disable_enable_date_ranges = $( '#demo__api-set--disable-enable-date-ranges' ).pickadate(),
+    picker_set__disable_enable_date_ranges = $input_set__disable_enable_date_ranges.pickadate( 'picker' )
+$( '#button__api-set--disable-date-ranges' ).on( 'click', function( event ) {
+    picker_set__disable_enable_date_ranges.set( 'disable', [
+        1, 4, 7,
+        { from: [2014,2,14], to: [2014,2,27] }
+    ])
+    event.stopPropagation()
+})
+$( '#button__api-set--enable-date-ranges' ).on( 'click', function( event ) {
+    picker_set__disable_enable_date_ranges.set( 'enable', [
+        4,
+        { from: [2014,2,24], to: [2014,2,27] }
+    ])
+    event.stopPropagation()
+})
+var $input_set__disable_enable_date_flip = $( '#demo__api-set--disable-enable-date-flip' ).pickadate({
+    disable: [
+        [2014,9,9],
+        [2014,9,13],
+        new Date(2013,9,20),
+        1, 4, 7,
+        { from: [2014,2,14], to: [2014,2,27] }
+    ]
+}),
+    picker_set__disable_enable_date_flip = $input_set__disable_enable_date_flip.pickadate( 'picker' )
+$( '#button__api-set--disable-date-flip' ).on( 'click', function( event ) {
+    picker_set__disable_enable_date_flip.set( 'disable', 'flip' )
+    event.stopPropagation()
+})
+var $input_set__disable_enable_date_all = $( '#demo__api-set--disable-enable-date-all' ).pickadate(),
+    picker_set__disable_enable_date_all = $input_set__disable_enable_date_all.pickadate( 'picker' )
+$( '#button__api-set--disable-date-all' ).on( 'click', function( event ) {
+    picker_set__disable_enable_date_all.set( 'disable', true )
+    event.stopPropagation()
+})
+$( '#button__api-set--enable-date-all' ).on( 'click', function( event ) {
+    picker_set__disable_enable_date_all.set( 'enable', true )
+    event.stopPropagation()
+})
 
-// //disable: time
-// var $input_set__disable_time = $( '#demo__api-set--disable-time' ).pickatime(),
-//     picker_set__disable_time = $input_set__disable_time.pickatime( 'picker' )
-// $( '#button__api-set--disable-time-array' ).on( 'click', function( event ) {
-//     picker_set__disable_time.set( 'disable', [ [2,30], [4,30], [9,0] ])
-//     event.stopPropagation()
-// })
-// $( '#button__api-set--disable-time-js' ).on( 'click', function( event ) {
-//     picker_set__disable_time.set( 'disable', [ new Date(2013,9,13,6), new Date(2013,9,13,12,30) ])
-//     event.stopPropagation()
-// })
-// $( '#button__api-set--disable-time-integer' ).on( 'click', function( event ) {
-//     picker_set__disable_time.set( 'disable', [ 1, 4, 7 ])
-//     event.stopPropagation()
-// })
-// $( '#button__api-set--disable-time-true' ).on( 'click', function( event ) {
-//     picker_set__disable_time.set( 'disable', true )
-//     event.stopPropagation()
-// })
-// $( '#button__api-set--disable-time-false' ).on( 'click', function( event ) {
-//     picker_set__disable_time.set( 'disable', false )
-//     event.stopPropagation()
-// })
-// $( '#button__api-set--disable-time-flip' ).on( 'click', function( event ) {
-//     picker_set__disable_time.set( 'disable', 'flip' )
-//     event.stopPropagation()
-// })
-
-// //enable: date
-// var $input_set__enable_date = $( '#demo__api-set--enable-date' ).pickadate(),
-//     picker_set__enable_date = $input_set__enable_date.pickadate( 'picker' )
-// $( '#button__api-set--enable-date-array' ).on( 'click', function( event ) {
-//     picker_set__enable_date.set( 'enable', [ [2013,9,3], [2013,9,9], [2013,9,20] ])
-//     event.stopPropagation()
-// })
-// $( '#button__api-set--enable-time-js' ).on( 'click', function( event ) {
-//     picker_set__enable_time.set( 'enable', [ new Date(2013,9,13,6), new Date(2013,9,13,12,30) ])
-//     event.stopPropagation()
-// })
-// $( '#button__api-set--enable-date-js' ).on( 'click', function( event ) {
-//     picker_set__enable_date.set( 'enable', [ new Date(2013,9,13), new Date(2013,9,24) ])
-//     event.stopPropagation()
-// })
-// $( '#button__api-set--enable-date-integer' ).on( 'click', function( event ) {
-//     picker_set__enable_date.set( 'enable', [ 1, 4, 7 ])
-//     event.stopPropagation()
-// })
-// $( '#button__api-set--enable-date-range' ).on( 'click', function( event ) {
-//     picker_set__enable_date.set( 'enable', [ { from: [2014,2,14], to: [2014,2,27] } ])
-//     event.stopPropagation()
-// })
-// $( '#button__api-set--enable-date-true' ).on( 'click', function( event ) {
-//     picker_set__enable_date.set( 'enable', true )
-//     event.stopPropagation()
-// })
-// $( '#button__api-set--enable-date-false' ).on( 'click', function( event ) {
-//     picker_set__enable_date.set( 'enable', false )
-//     event.stopPropagation()
-// })
-// $( '#button__api-set--enable-date-flip' ).on( 'click', function( event ) {
-//     picker_set__enable_date.set( 'enable', 'flip' )
-//     event.stopPropagation()
-// })
-
-// //enable: time
-// var $input_set__enable_time = $( '#demo__api-set--enable-time' ).pickatime(),
-//     picker_set__enable_time = $input_set__enable_time.pickatime( 'picker' )
-// $( '#button__api-set--enable-time-array' ).on( 'click', function( event ) {
-//     picker_set__enable_time.set( 'enable', [ [2,30], [4,30], [9,0] ])
-//     event.stopPropagation()
-// })
-// $( '#button__api-set--enable-time-integer' ).on( 'click', function( event ) {
-//     picker_set__enable_time.set( 'enable', [ 1, 4, 7 ])
-//     event.stopPropagation()
-// })
-// $( '#button__api-set--enable-time-true' ).on( 'click', function( event ) {
-//     picker_set__enable_time.set( 'enable', true )
-//     event.stopPropagation()
-// })
-// $( '#button__api-set--enable-time-false' ).on( 'click', function( event ) {
-//     picker_set__enable_time.set( 'enable', false )
-//     event.stopPropagation()
-// })
-// $( '#button__api-set--enable-time-flip' ).on( 'click', function( event ) {
-//     picker_set__enable_time.set( 'enable', 'flip' )
-//     event.stopPropagation()
-// })
+//disable-enable: time
+var $input_set__disable_enable_time_specific = $( '#demo__api-set--disable-enable-time-specific' ).pickatime(),
+    picker_set__disable_enable_time_specific = $input_set__disable_enable_time_specific.pickatime( 'picker' )
+$( '#button__api-set--disable-time-specific' ).on( 'click', function( event ) {
+    picker_set__disable_enable_time_specific.set( 'disable', [
+        [2,30], [4,30], [9,0],
+        new Date(2013,9,13,6), new Date(2013,9,13,12,30)
+    ])
+    event.stopPropagation()
+})
+$( '#button__api-set--enable-time-specific' ).on( 'click', function( event ) {
+    picker_set__disable_enable_time_specific.set( 'enable', [
+        [4,30], [6,0],
+        new Date(2013,9,13,9)
+    ])
+    event.stopPropagation()
+})
+var $input_set__disable_enable_time_ranges = $( '#demo__api-set--disable-enable-time-ranges' ).pickatime(),
+    picker_set__disable_enable_time_ranges = $input_set__disable_enable_time_ranges.pickatime( 'picker' )
+$( '#button__api-set--disable-time-ranges' ).on( 'click', function( event ) {
+    picker_set__disable_enable_time_ranges.set( 'disable', [
+        1, 4, 7,
+        { from: [10,30], to: [18,0] }
+    ])
+    event.stopPropagation()
+})
+$( '#button__api-set--enable-time-ranges' ).on( 'click', function( event ) {
+    picker_set__disable_enable_time_ranges.set( 'enable', [
+        4,
+        { from: [14,0], to: [16,30] }
+    ])
+    event.stopPropagation()
+})
+var $input_set__disable_enable_time_flip = $( '#demo__api-set--disable-enable-time-flip' ).pickatime({
+    disable: [
+        [4,30],
+        [6,0],
+        new Date(2013,9,20,3),
+        1, 8, 14,
+        { from: [15,30], to: [20,0] }
+    ]
+}),
+    picker_set__disable_enable_time_flip = $input_set__disable_enable_time_flip.pickatime( 'picker' )
+$( '#button__api-set--disable-time-flip' ).on( 'click', function( event ) {
+    picker_set__disable_enable_time_flip.set( 'disable', 'flip' )
+    event.stopPropagation()
+})
+var $input_set__disable_enable_time_all = $( '#demo__api-set--disable-enable-time-all' ).pickatime(),
+    picker_set__disable_enable_time_all = $input_set__disable_enable_time_all.pickatime( 'picker' )
+$( '#button__api-set--disable-time-all' ).on( 'click', function( event ) {
+    picker_set__disable_enable_time_all.set( 'disable', true )
+    event.stopPropagation()
+})
+$( '#button__api-set--enable-time-all' ).on( 'click', function( event ) {
+    picker_set__disable_enable_time_all.set( 'enable', true )
+    event.stopPropagation()
+})
 
 //enable/disable: range
 var $input_set__enable_disable_in_range_date = $( '#demo__api-set--enable-disable-in-range-date' ).pickadate({
-        disable: [ 1, [2013, 10, 17, 'inverted'] ]
+        disable: [
+            1, [2013, 10, 17, 'inverted'],
+            { from: [2014, 2, 2], to: [2014, 2, 28] },
+            [2014, 2, 10, 'inverted'],
+            { from: [2014, 2, 14], to: [2014, 2, 23], inverted: true }
+        ]
     }),
     picker_set__enable_disable_in_range_date = $input_set__enable_disable_in_range_date.pickadate( 'picker' )
 var $input_set__enable_disable_in_range_time = $( '#demo__api-set--enable-disable-in-range-time' ).pickatime({
-        disable: [ 1, [1, 30, 'inverted'] ],
-        interval: 15
+        disable: [
+            1, [1, 30, 'inverted'],
+            { from: [3,0], to: [18,0] },
+            [4, 30, 'inverted'],
+            { from: [7,30], to: [11,30], inverted: true }
+        ]
     }),
     picker_set__enable_disable_in_range_time = $input_set__enable_disable_in_range_time.pickatime( 'picker' )
 
@@ -1191,6 +1194,17 @@ if ( picker_callback_bindings ) {
         }
         event.stopPropagation()
     })
+}
+
+
+// callback: off
+var $input_method_off = $( '#demo__api-method-off' ).pickadate(),
+    picker_method_off = $input_method_off.pickadate( 'picker' )
+if ( picker_method_off ) {
+    picker_method_off.on( 'open', function() {
+        console.log('Even when I’m opened, I’m not logged..')
+    })
+    picker_method_off.off( 'open' )
 }
 
 
