@@ -636,10 +636,7 @@ test( '`disable` and `enable` using booleans', function() {
 
     picker.set('disable', false)
     deepEqual( picker.get('disable'), [], 'Disabled collection reset' )
-
-    $root.find( '[data-pick]' ).each( function( indexCell, tableCell ) {
-        ok( !$( tableCell ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is enabled: ' + tableCell.innerHTML )
-    })
+    strictEqual( $root.find( '.' + $.fn.pickatime.defaults.klass.disabled ).length, 0, 'No times disabled' )
 
 
     picker.set( 'disable', disableCollection )
@@ -648,10 +645,7 @@ test( '`disable` and `enable` using booleans', function() {
     picker.set('disable', true)
     deepEqual( picker.get('disable'), [], 'Disabled collection reset' )
     deepEqual( picker.get('enable'), -1, 'Disabled collection `enable` flipped' )
-
-    $root.find( '[data-pick]' ).each( function( indexCell, tableCell ) {
-        ok( $( tableCell ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is disabled: ' + tableCell.innerHTML )
-    })
+    strictEqual( $root.find( '.' + $.fn.pickatime.defaults.klass.disabled ).length, 48, 'All times disabled' )
 
 
     picker.set( 'enable', 'flip' )
@@ -663,10 +657,7 @@ test( '`disable` and `enable` using booleans', function() {
 
     picker.set('enable', true)
     deepEqual( picker.get('disable'), [], 'Disabled collection reset' )
-
-    $root.find( '[data-pick]' ).each( function( indexCell, tableCell ) {
-        ok( !$( tableCell ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is enabled: ' + tableCell.innerHTML )
-    })
+    strictEqual( $root.find( '.' + $.fn.pickatime.defaults.klass.disabled ).length, 0, 'No times disabled' )
 
 
     picker.set( 'disable', disableCollection )
@@ -676,10 +667,7 @@ test( '`disable` and `enable` using booleans', function() {
     picker.set('enable', false)
     deepEqual( picker.get('disable'), [], 'Disabled collection reset' )
     deepEqual( picker.get('enable'), -1, 'Disabled collection `enable` flipped' )
-
-    $root.find( '[data-pick]' ).each( function( indexCell, tableCell ) {
-        ok( $( tableCell ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is disabled: ' + tableCell.innerHTML )
-    })
+    strictEqual( $root.find( '.' + $.fn.pickatime.defaults.klass.disabled ).length, 48, 'All times disabled' )
 })
 
 test( '`disable` and `enable` using ranges', function() {
@@ -703,10 +691,7 @@ test( '`disable` and `enable` using ranges', function() {
 
     picker.set( 'enable', disableCollection )
     deepEqual( picker.get( 'disable' ), [], 'Cleared disabled range' )
-
-    $root.find( '[data-pick]' ).each( function( indexCell, tableCell ) {
-        ok( !$( tableCell ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is enabled: ' + tableCell.innerHTML )
-    })
+    strictEqual( $root.find( '.' + $.fn.pickatime.defaults.klass.disabled ).length, 0, 'No times disabled' )
 
 
     disableCollection = [ { from: new Date(2014,2,7,5,30), to: new Date(2014,2,7,19) } ]
@@ -724,10 +709,7 @@ test( '`disable` and `enable` using ranges', function() {
 
     picker.set( 'enable', disableCollection )
     deepEqual( picker.get( 'disable' ), [], 'Cleared disabled range' )
-
-    $root.find( '[data-pick]' ).each( function( indexCell, tableCell ) {
-        ok( !$( tableCell ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is enabled: ' + tableCell.innerHTML )
-    })
+    strictEqual( $root.find( '.' + $.fn.pickatime.defaults.klass.disabled ).length, 0, 'No times disabled' )
 })
 
 test( '`disable` and `enable` using relative ranges', function() {
@@ -758,10 +740,7 @@ test( '`disable` and `enable` using relative ranges', function() {
 
     picker.set( 'enable', disableCollection )
     deepEqual( picker.get( 'disable' ), [], 'Cleared disabled range' )
-
-    $root.find( '[data-pick]' ).each( function( indexCell, tableCell ) {
-        ok( !$( tableCell ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is enabled: ' + tableCell.innerHTML )
-    })
+    strictEqual( $root.find( '.' + $.fn.pickatime.defaults.klass.disabled ).length, 0, 'No times disabled' )
 
     disableCollection = [ { from: backTime, to: true } ]
     picker.set( 'disable', disableCollection )
@@ -778,10 +757,7 @@ test( '`disable` and `enable` using relative ranges', function() {
 
     picker.set( 'enable', disableCollection )
     deepEqual( picker.get( 'disable' ), [], 'Cleared disabled range' )
-
-    $root.find( '[data-pick]' ).each( function( indexCell, tableCell ) {
-        ok( !$( tableCell ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is enabled: ' + tableCell.innerHTML )
-    })
+    strictEqual( $root.find( '.' + $.fn.pickatime.defaults.klass.disabled ).length, 0, 'No times disabled' )
 
     disableCollection = [ { from: true, to: 10 } ]
     picker.set( 'disable', disableCollection )
@@ -798,10 +774,7 @@ test( '`disable` and `enable` using relative ranges', function() {
 
     picker.set( 'enable', disableCollection )
     deepEqual( picker.get( 'disable' ), [], 'Cleared disabled range' )
-
-    $root.find( '[data-pick]' ).each( function( indexCell, tableCell ) {
-        ok( !$( tableCell ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is enabled: ' + tableCell.innerHTML )
-    })
+    strictEqual( $root.find( '.' + $.fn.pickatime.defaults.klass.disabled ).length, 0, 'No times disabled' )
 
     disableCollection = [ { from: -10, to: true } ]
     picker.set( 'disable', disableCollection )
