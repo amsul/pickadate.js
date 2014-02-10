@@ -1038,43 +1038,14 @@ DatePicker.prototype.nodes = function( isOpen ) {
         // Create the year label.
         createYearLabel = function() {
 
-            var focusedYear = viewsetObject.year,
+            var focusedYear = viewsetObject.year
 
-            // If years selector is set to a literal "true", set it to 5. Otherwise
-            // divide in half to get half before and half after focused year.
-            numberYears = settings.selectYears === true ? 5 : ~~( settings.selectYears / 2 )
+            // is the selectYears is given as an array of [start_year, end_year] force these instead of calculating the min / max
+            if ( $.isArray ( settings.selectYears ) ) {
 
-            // If there are years to select, add a dropdown menu.
-            if ( numberYears ) {
-
-                var
-                    minYear = minLimitObject.year,
-                    maxYear = maxLimitObject.year,
-                    lowestYear = focusedYear - numberYears,
-                    highestYear = focusedYear + numberYears
-
-                // If the min year is greater than the lowest year, increase the highest year
-                // by the difference and set the lowest year to the min year.
-                if ( minYear > lowestYear ) {
-                    highestYear += minYear - lowestYear
-                    lowestYear = minYear
-                }
-
-                // If the max year is less than the highest year, decrease the lowest year
-                // by the lower of the two: available and needed years. Then set the
-                // highest year to the max year.
-                if ( maxYear < highestYear ) {
-
-                    var availableYears = lowestYear - minYear,
-                        neededYears = highestYear - maxYear
-
-                    lowestYear -= availableYears > neededYears ? neededYears : availableYears
-                    highestYear = maxYear
-                }
-
-                return _.node( 'select', _.group({
-                    min: lowestYear,
-                    max: highestYear,
+                return Picker._.node( 'select', Picker._.group({
+                    min: settings.selectYears[0],
+                    max: settings.selectYears[ settings.selectYears.length-1 ],
                     i: 1,
                     node: 'option',
                     item: function( loopedYear ) {
@@ -1088,10 +1059,63 @@ DatePicker.prototype.nodes = function( isOpen ) {
                         ]
                     }
                 }), settings.klass.selectYear, isOpen ? '' : 'disabled' )
-            }
 
-            // Otherwise just return the year focused
-            return _.node( 'div', focusedYear, settings.klass.year )
+            } else {
+
+                // If years selector is set to a literal "true", set it to 5. Otherwise
+                // divide in half to get half before and half after focused year.
+                var numberYears = settings.selectYears === true ? 5 : ~~( settings.selectYears / 2 )
+
+                // If there are years to select, add a dropdown menu.
+                if ( numberYears ) {
+
+                    var
+                        minYear = minLimitObject.year,
+                        maxYear = maxLimitObject.year,
+                        lowestYear = focusedYear - numberYears,
+                        highestYear = focusedYear + numberYears
+
+                    // If the min year is greater than the lowest year, increase the highest year
+                    // by the difference and set the lowest year to the min year.
+                    if ( minYear > lowestYear ) {
+                        highestYear += minYear - lowestYear
+                        lowestYear = minYear
+                    }
+
+                    // If the max year is less than the highest year, decrease the lowest year
+                    // by the lower of the two: available and needed years. Then set the
+                    // highest year to the max year.
+                    if ( maxYear < highestYear ) {
+
+                        var availableYears = lowestYear - minYear,
+                            neededYears = highestYear - maxYear
+
+                        lowestYear -= availableYears > neededYears ? neededYears : availableYears
+                        highestYear = maxYear
+                    }
+
+                    return _.node( 'select', _.group({
+                        min: lowestYear,
+                        max: highestYear,
+                        i: 1,
+                        node: 'option',
+                        item: function( loopedYear ) {
+                            return [
+
+                                // The looped year and no classes.
+                                loopedYear, 0,
+
+                                // Set the value and selected index.
+                                'value=' + loopedYear + ( focusedYear == loopedYear ? ' selected' : '' )
+                            ]
+                        }
+                    }), settings.klass.selectYear, isOpen ? '' : 'disabled' )
+                }
+
+                // Otherwise just return the year focused
+                return _.node( 'div', focusedYear, settings.klass.year )
+
+            }
         } //createYearLabel
 
 
