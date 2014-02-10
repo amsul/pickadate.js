@@ -16,6 +16,7 @@
 - Added [the `off` method](http://amsul.github.io/pickadate.js/api.htm#method-off).
 - Added Galician translations.
 - Added Slovenian translations.
+- Added Icelandic translations.
 - Added option to disable [dates](http://amsul.github.io/pickadate.js/date.htm#disable-dates-use-ranges) & [times](http://amsul.github.io/pickadate.js/time.htm#disable-times-use-ranges) within a range.
 - Added option to set the [`select`](http://amsul.github.io/pickadate.js/api.htm#method-set-select-date), [`highlight`](http://amsul.github.io/pickadate.js/api.htm#method-set-highlight-date), and [`view`](http://amsul.github.io/pickadate.js/api.htm#method-set-view-date) using a string and parsing format.
 - Added some performance improvents.

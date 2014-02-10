@@ -16,6 +16,7 @@
 - Added [the `off` method]({%= pkg.homepage %}/api.htm#method-off).
 - Added Galician translations.
 - Added Slovenian translations.
+- Added Icelandic translations.
 - Added option to disable [dates]({%= pkg.homepage %}/date.htm#disable-dates-use-ranges) & [times]({%= pkg.homepage %}/time.htm#disable-times-use-ranges) within a range.
 - Added option to set the [`select`]({%= pkg.homepage %}/api.htm#method-set-select-date), [`highlight`]({%= pkg.homepage %}/api.htm#method-set-highlight-date), and [`view`]({%= pkg.homepage %}/api.htm#method-set-view-date) using a string and parsing format.
 - Added some performance improvents.
