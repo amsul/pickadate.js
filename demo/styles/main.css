@@ -468,6 +468,11 @@ body {
     font-size: 20px;
   }
 }
+@media (min-width: 46.25em) {
+  .body--fixed-head {
+    padding-top: 73px;
+  }
+}
 h1,
 h2,
 h3,
@@ -1095,6 +1100,15 @@ input[type=search] {
 .section--header {
   background: url(../images/bg.png) #fafbfb 50% 0;
   border-bottom: 2px solid #e9ebeb;
+}
+@media (min-width: 46.25em) {
+  .body--fixed-head .section--header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10000;
+  }
 }
 .section--footer {
   margin-bottom: 8em;
