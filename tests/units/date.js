@@ -782,12 +782,12 @@ test( '`disable` and `enable` using relative ranges', function() {
 
     var picker = this.picker,
         $root = picker.$root,
-        viewday = picker.get( 'now' ).day - 1,
+        // viewday = picker.get( 'now' ).day - 1,
         today = picker.get( 'now' ).obj,
         yearToday = today.getFullYear(),
         monthToday = today.getMonth(),
         dateToday = today.getDate(),
-        backDay = [ yearToday, monthToday, dateToday - 10 ],
+        // backDay = [ yearToday, monthToday, dateToday - 10 ],
         forwardDay = new Date( yearToday, monthToday, dateToday + 10 ),
         disableCollection
 
