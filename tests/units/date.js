@@ -813,68 +813,68 @@ test( '`disable` and `enable` using relative ranges', function() {
     //     }
     // })
 
-    picker.set( 'enable', disableCollection )
-    deepEqual( picker.get( 'disable' ), [], 'Cleared disabled range' )
+    // picker.set( 'enable', disableCollection )
+    // deepEqual( picker.get( 'disable' ), [], 'Cleared disabled range' )
 
-    $root.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
-        ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is enabled: ' + tableCell.innerHTML )
-    })
+    // $root.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
+    //     ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is enabled: ' + tableCell.innerHTML )
+    // })
 
-    disableCollection = [ { from: backDay, to: true } ]
-    picker.set( 'disable', disableCollection )
-    deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled range relative to today with array' )
+    // disableCollection = [ { from: backDay, to: true } ]
+    // picker.set( 'disable', disableCollection )
+    // deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled range relative to today with array' )
 
-    $root.find( 'td .' + $.fn.pickadate.defaults.klass.infocus ).each( function( indexCell, tableCell ) {
-        var index = indexCell - viewday
-        if ( index <= dateToday && index >= dateToday - 10 ) {
-            ok( $( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is disabled: ' + tableCell.innerHTML )
-        }
-        else {
-            ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is enabled: ' + tableCell.innerHTML )
-        }
-    })
+    // $root.find( 'td .' + $.fn.pickadate.defaults.klass.infocus ).each( function( indexCell, tableCell ) {
+    //     var index = indexCell - viewday
+    //     if ( index <= dateToday && index >= dateToday - 10 ) {
+    //         ok( $( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is disabled: ' + tableCell.innerHTML )
+    //     }
+    //     else {
+    //         ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is enabled: ' + tableCell.innerHTML )
+    //     }
+    // })
 
-    picker.set( 'enable', disableCollection )
-    deepEqual( picker.get( 'disable' ), [], 'Cleared disabled range' )
+    // picker.set( 'enable', disableCollection )
+    // deepEqual( picker.get( 'disable' ), [], 'Cleared disabled range' )
 
-    $root.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
-        ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is enabled: ' + tableCell.innerHTML )
-    })
+    // $root.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
+    //     ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is enabled: ' + tableCell.innerHTML )
+    // })
 
-    disableCollection = [ { from: true, to: 10 } ]
-    picker.set( 'disable', disableCollection )
-    deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled range relative to today with positive integer' )
+    // disableCollection = [ { from: true, to: 10 } ]
+    // picker.set( 'disable', disableCollection )
+    // deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled range relative to today with positive integer' )
 
-    $root.find( 'td .' + $.fn.pickadate.defaults.klass.infocus ).each( function( indexCell, tableCell ) {
-        var index = indexCell - viewday
-        if ( index >= dateToday && index <= dateToday + 10 ) {
-            ok( $( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is disabled: ' + tableCell.innerHTML )
-        }
-        else {
-            ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is enabled: ' + tableCell.innerHTML )
-        }
-    })
+    // $root.find( 'td .' + $.fn.pickadate.defaults.klass.infocus ).each( function( indexCell, tableCell ) {
+    //     var index = indexCell - viewday
+    //     if ( index >= dateToday && index <= dateToday + 10 ) {
+    //         ok( $( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is disabled: ' + tableCell.innerHTML )
+    //     }
+    //     else {
+    //         ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is enabled: ' + tableCell.innerHTML )
+    //     }
+    // })
 
-    picker.set( 'enable', disableCollection )
-    deepEqual( picker.get( 'disable' ), [], 'Cleared disabled range' )
+    // picker.set( 'enable', disableCollection )
+    // deepEqual( picker.get( 'disable' ), [], 'Cleared disabled range' )
 
-    $root.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
-        ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is enabled: ' + tableCell.innerHTML )
-    })
+    // $root.find( 'td [data-pick]' ).each( function( indexCell, tableCell ) {
+    //     ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is enabled: ' + tableCell.innerHTML )
+    // })
 
-    disableCollection = [ { from: -10, to: true } ]
-    picker.set( 'disable', disableCollection )
-    deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled range relative to today with negative integer' )
+    // disableCollection = [ { from: -10, to: true } ]
+    // picker.set( 'disable', disableCollection )
+    // deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled range relative to today with negative integer' )
 
-    $root.find( 'td .' + $.fn.pickadate.defaults.klass.infocus ).each( function( indexCell, tableCell ) {
-        var index = indexCell - viewday
-        if ( index <= dateToday && index >= dateToday - 10 ) {
-            ok( $( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is disabled: ' + tableCell.innerHTML )
-        }
-        else {
-            ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is enabled: ' + tableCell.innerHTML )
-        }
-    })
+    // $root.find( 'td .' + $.fn.pickadate.defaults.klass.infocus ).each( function( indexCell, tableCell ) {
+    //     var index = indexCell - viewday
+    //     if ( index <= dateToday && index >= dateToday - 10 ) {
+    //         ok( $( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is disabled: ' + tableCell.innerHTML )
+    //     }
+    //     else {
+    //         ok( !$( tableCell ).hasClass( $.fn.pickadate.defaults.klass.disabled ), 'Date is enabled: ' + tableCell.innerHTML )
+    //     }
+    // })
 })
 
 test( '`disable` and `enable` using overlapping ranges', function() {
