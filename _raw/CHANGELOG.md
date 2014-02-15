@@ -10,6 +10,7 @@
 - [#325]({%= pkg.bugs %}/325): Fixed Firefox bug with querying for active element with `$.contains`.
 - [#330]({%= pkg.bugs %}/330): Fixed month selector navigation from month with more days to one with less.
 - [#332]({%= pkg.bugs %}/332): Fixed issue where right-clicks caused picker to close in Firefox.
+- [#338]({%= pkg.bugs %}/338): Fixed IE issue with month & year selector not working correctly.
 - Improved time picker setting a time relative to “now”.
 - Improved disabling/enabling dates and times.
 - Spanish translations typo fixed.

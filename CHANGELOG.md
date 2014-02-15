@@ -10,6 +10,7 @@
 - [#325](https://github.com/amsul/pickadate.js/issues/325): Fixed Firefox bug with querying for active element with `$.contains`.
 - [#330](https://github.com/amsul/pickadate.js/issues/330): Fixed month selector navigation from month with more days to one with less.
 - [#332](https://github.com/amsul/pickadate.js/issues/332): Fixed issue where right-clicks caused picker to close in Firefox.
+- [#338](https://github.com/amsul/pickadate.js/issues/338): Fixed IE issue with month & year selector not working correctly.
 - Improved time picker setting a time relative to “now”.
 - Improved disabling/enabling dates and times.
 - Spanish translations typo fixed.
