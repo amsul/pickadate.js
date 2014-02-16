@@ -102,13 +102,6 @@ body {
     }
 }
 
-.body--fixed-head {
-
-    @media ( min-width: @breakpoint-medium ) {
-        padding-top: 73px;
-    }
-}
-
 
 h1, h2, h3, h4, h5, h6,
 .heading {
@@ -775,16 +768,6 @@ input[type=search] {
 .section--header {
     background: url(../images/bg.png) #fafbfb 50% 0;
     border-bottom: 2px solid #e9ebeb;
-
-    .body--fixed-head & {
-        @media ( min-width: @breakpoint-medium ) {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 10000;
-        }
-    }
 }
 .section--footer {
     margin-bottom: 8em;
