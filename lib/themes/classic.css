@@ -75,6 +75,7 @@
   -webkit-transition: all 0.15s ease-out, max-height 0 0.15s, border-width 0 0.15s;
   -moz-transition: all 0.15s ease-out, max-height 0 0.15s, border-width 0 0.15s;
   transition: all 0.15s ease-out, max-height 0 0.15s, border-width 0 0.15s;
+  overflow-y: hidden;
 }
 /**
  * The frame and wrap work together to ensure that

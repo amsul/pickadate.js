@@ -51,6 +51,9 @@
     // Everything should be smoothly animated – the height & border should wait till the rest is done.
     @transition: all @speed-animate-in ease-out, max-height 0 @speed-animate-in, border-width 0 @speed-animate-in;
     .transition( @transition );
+
+    // Avoid quick jumping due to scrollbar showing for a short time (#357)
+    overflow-y: hidden;
 }
 
 
