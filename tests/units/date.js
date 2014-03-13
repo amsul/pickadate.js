@@ -1229,6 +1229,29 @@ test( '`value` to select, highlight, and view', function() {
 })
 
 
+module( 'Date picker with a simple format', {
+    setup: function() {
+        $DOM.append( $INPUT.clone().val( '1988-08-14' ) )
+        var $input = $DOM.find( 'input' ).pickadate({
+            format: 'yyyy-mm-dd'
+        })
+        this.picker = $input.pickadate( 'picker' )
+    },
+    teardown: function() {
+        this.picker.stop()
+        $DOM.empty()
+    }
+})
+
+test( '`value` to select, highlight, and view', function() {
+    var picker = this.picker
+    ok( !picker._hidden, 'No hidden input' )
+    deepEqual( picker.get( 'select' ).obj, new Date(1988,7,14), 'Selects date' )
+    deepEqual( picker.get( 'highlight' ).obj, new Date(1988,7,14), 'Highlights date' )
+    deepEqual( picker.get( 'view' ).obj, new Date(1988,7,1), 'Viewsets date' )
+})
+
+
 
 
 module( 'Date picker with a hidden value', {

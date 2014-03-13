@@ -565,8 +565,7 @@ DatePicker.prototype.disabled = function( dateToVerify ) {
 DatePicker.prototype.parse = function( type, value, options ) {
 
     var calendar = this,
-        parsingObject = {},
-        monthIndex
+        parsingObject = {}
 
     if ( !value || _.isInteger( value ) || $.isArray( value ) || _.isDate( value ) || $.isPlainObject( value ) && _.isInteger( value.pick ) ) {
         return value
@@ -577,9 +576,6 @@ DatePicker.prototype.parse = function( type, value, options ) {
         options = options || {}
         options.format = calendar.settings.format
     }
-
-    // Calculate the month index to adjust with.
-    monthIndex = typeof value == 'string' && !options.fromValue ? 1 : 0
 
     // Convert the format into an array and then map through it.
     calendar.formats.toArray( options.format ).map( function( label ) {
@@ -602,10 +598,10 @@ DatePicker.prototype.parse = function( type, value, options ) {
         value = value.substr( formatLength )
     })
 
-    // If it’s parsing a user provided month value, compensate for month 0index.
+    // Compensate for month 0index.
     return [
         parsingObject.yyyy || parsingObject.yy,
-        +( parsingObject.mm || parsingObject.m ) - monthIndex,
+        +( parsingObject.mm || parsingObject.m ) - 1,
         parsingObject.dd || parsingObject.d
     ]
 } //DatePicker.prototype.parse
@@ -624,7 +620,7 @@ DatePicker.prototype.formats = (function() {
 
         // If there's no month index, add it to the date object
         if ( !dateObject.mm && !dateObject.m ) {
-            dateObject.m = collection.indexOf( word )
+            dateObject.m = collection.indexOf( word ) + 1
         }
 
         // Return the length of the word.
