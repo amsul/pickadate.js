@@ -598,6 +598,9 @@ DatePicker.prototype.parse = function( type, value, options ) {
         value = value.substr( formatLength )
     })
 
+    // Make sure years with two digits are in the 2000s
+    if (parsingObject.yy < 68) { parsingObject.yyyy = +(parsingObject.yy) + 2000 }
+
     // Compensate for month 0index.
     return [
         parsingObject.yyyy || parsingObject.yy,
