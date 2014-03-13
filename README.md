@@ -73,7 +73,7 @@ The translations are copied into the `lib/translations` folder. There are curren
 <br>
 ## Building with Grunt
 
-[Grunt](http://gruntjs.com/) `~0.4.2` is used to build the project files. To get started, clone the project and then run:
+[Grunt](http://gruntjs.com/) `~0.4.4` is used to build the project files. To get started, clone the project and then run:
 
 - `npm install` to get the required node modules.
 - `grunt --verbose` to confirm you have all the dependencies.
