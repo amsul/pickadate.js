@@ -37,7 +37,7 @@ There are currently two pickers: **date** and **time**.
 File                    | Contents                 | Size (min & gzip)
 ----------------------- | ------------------------ | ----------------------
 `picker.js`             | __Base *__               | 1.58kb
-`picker.date.js`        | Date picker              | 2.44kb
+`picker.date.js`        | Date picker              | 2.45kb
 `picker.time.js`        | Time picker              | 1.81kb
 
 __*__ The base script is **required** for any of the pickers to function.
@@ -73,7 +73,7 @@ The translations are copied into the `lib/translations` folder. There are curren
 <br>
 ## Building with Grunt
 
-[Grunt](http://gruntjs.com/) `~0.4.2` is used to build the project files. To get started, clone the project and then run:
+[Grunt](http://gruntjs.com/) `~0.4.4` is used to build the project files. To get started, clone the project and then run:
 
 - `npm install` to get the required node modules.
 - `grunt --verbose` to confirm you have all the dependencies.
