@@ -189,7 +189,7 @@ module.exports = function( grunt ) {
                     '<%= dirs.docs.src %>/*.htm',
                     '<%= dirs.docs.src %>/styles/*.less'
                 ],
-                tasks: [ 'demo' ]
+                tasks: [ 'docs' ]
             },
             lib: {
                 files: [
@@ -222,7 +222,8 @@ module.exports = function( grunt ) {
     grunt.registerTask( 'default', [ 'less', 'jshint', 'qunit', 'uglify', 'cssmin', 'htmlify', 'copy:pkg' ] )
     grunt.registerTask( 'quick', [ 'less', 'uglify', 'cssmin', 'htmlify', 'copy:pkg' ] )
     grunt.registerTask( 'picker', [ 'less:themes', 'jshint:lib', 'qunit:lib', 'uglify:lib', 'cssmin:lib' ] )
-    grunt.registerTask( 'docs', [ 'copy:docs', 'less:docs', 'jshint:docs', 'htmlify:docs' ] )
+    grunt.registerTask( 'demo', [ 'less:demo', 'jshint:demo' ] )
+    grunt.registerTask( 'docs', [ 'copy:pkg', 'htmlify:docs' ] )
     grunt.registerTask( 'travis', [ 'jshint:lib', 'qunit:lib' ] )
 
 

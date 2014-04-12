@@ -40,11 +40,9 @@
                     class="datepicker"
                     name="date"
                     type="date"
-                    autofocus>
-                    <!-- valuee="21 July, 2013"
-                    data-value="2014-02-22"
-                    required
-                    pattern="^[0-9+]*$" -->
+                    autofocus
+                    value="14-08-08"
+                    data-value="2014-08-08">
                 <br><br><br><br><br>
                 <button type="button">Disable all dates</button>
                 <input class="button" type="submit" value="open">
@@ -62,6 +60,7 @@
     <script type="text/javascript">
 
         var $input = $( '.datepicker' ).pickadate({
+            format: 'yy-mm-dd',
             formatSubmit: 'yyyy-mm-dd',
             hiddenName: true,
         })
