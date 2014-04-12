@@ -494,15 +494,19 @@ var $button_open_close = $( '#button__api-open-close' ),
         }
     }),
     picker_open_close = $input_open_close.pickadate( 'picker' )
-$button_open_close.on( 'click', function( event ) {
-    if ( picker_open_close.get( 'open' ) ) {
-        picker_open_close.close()
-    }
-    else {
-        picker_open_close.open()
-    }
-    event.stopPropagation()
-})
+$button_open_close.
+    on( 'click', function( event ) {
+        if ( picker_open_close.get( 'open' ) ) {
+            picker_open_close.close()
+        }
+        else {
+            picker_open_close.open()
+        }
+        event.stopPropagation()
+    }).
+    on( 'mousedown', function(event) {
+        event.preventDefault()
+    })
 
 var $input_close_focus = $( '#demo__api-close-focus' ).pickadate(),
     picker_close_focus = $input_close_focus.pickadate( 'picker' )

@@ -115,7 +115,11 @@ $input.pickadate(<a href="#api-objects">objectName</a>)</code></pre>
 picker.close()
 
 // If a “click” is involved, prevent the event bubbling.
-event.stopPropagation()</code></pre>
+event.stopPropagation()
+
+// If we want to maintain focus on the input,
+// prevent the default action on “mousedown”.
+event.preventDefault()</code></pre>
 
         {%= dateDemoField({
             id: 'demo__api-open-close',

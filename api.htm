@@ -164,7 +164,11 @@ $input.pickadate(<a href="#api-objects">objectName</a>)</code></pre>
 picker.close()
 
 // If a “click” is involved, prevent the event bubbling.
-event.stopPropagation()</code></pre>
+event.stopPropagation()
+
+// If we want to maintain focus on the input,
+// prevent the default action on “mousedown”.
+event.preventDefault()</code></pre>
 
         <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-open-close class="fieldset__button button button--small">Open</button><input id="demo__api-open-close" class="fieldset__input " type=text value="" placeholder="Try me&hellip;"></div></fieldset>
 
