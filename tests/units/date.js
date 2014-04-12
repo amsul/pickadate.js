@@ -185,6 +185,19 @@ module( 'Date picker `set`', {
     }
 })
 
+test( '`clear`', function() {
+
+    var picker = this.picker
+
+    strictEqual( picker.get('select'), null, 'Starts off without a selection' )
+
+    picker.set('select', new Date())
+    notStrictEqual( picker.get('select'), null, 'A selection has been added' )
+
+    picker.clear()
+    strictEqual( picker.get('select'), null, 'Clears out selection' )
+})
+
 test( '`select`', function() {
 
     var picker = this.picker,

@@ -61,12 +61,16 @@
 
     <script type="text/javascript">
 
-        var $input = $( '.datepicker' ).pickadate({
-            min: [2014,3,12], //Saturday
-            disable: [1,7],
-        })
+        var $input = $( '.datepicker' ).pickadate()
 
         var picker = $input.pickadate('picker')
+
+        console.log(picker.get('select'));
+
+        picker.set('select', new Date())
+        picker.clear()
+
+        console.log(picker.get('select'));
 
         // $('button').on('click', function() {
         //     picker.set('disable', true);
