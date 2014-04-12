@@ -1,12 +1,12 @@
 
 {%
-    fileSize_js_core = meta.fileSize( grunt.file.read( dirs.min.pickers + '/picker.js') ).gzip
-    fileSize_js_date = meta.fileSize( grunt.file.read( dirs.min.pickers + '/picker.date.js') ).gzip
-    fileSize_js_time = meta.fileSize( grunt.file.read( dirs.min.pickers + '/picker.time.js') ).gzip
+    fileSize_js_core = meta.fileSize( grunt.file.read( dirs.lib.min + '/picker.js') ).gzip
+    fileSize_js_date = meta.fileSize( grunt.file.read( dirs.lib.min + '/picker.date.js') ).gzip
+    fileSize_js_time = meta.fileSize( grunt.file.read( dirs.lib.min + '/picker.time.js') ).gzip
 
-    fileSize_css_core = meta.fileSize( grunt.file.read( dirs.min.themes + '/default.css') ).gzip
-    fileSize_css_date = meta.fileSize( grunt.file.read( dirs.min.themes + '/default.date.css') ).gzip
-    fileSize_css_time = meta.fileSize( grunt.file.read( dirs.min.themes + '/default.time.css') ).gzip
+    fileSize_css_core = meta.fileSize( grunt.file.read( dirs.themes.min + '/default.css') ).gzip
+    fileSize_css_date = meta.fileSize( grunt.file.read( dirs.themes.min + '/default.date.css') ).gzip
+    fileSize_css_time = meta.fileSize( grunt.file.read( dirs.themes.min + '/default.time.css') ).gzip
 
     fileSize_js = fileSize_js_core + fileSize_js_date + fileSize_js_time
     fileSize_js = (fileSize_js/1024).toFixed(0)
@@ -14,7 +14,7 @@
     fileSize_css = fileSize_css_core + fileSize_css_date + fileSize_css_time
     fileSize_css = (fileSize_css/1024).toFixed(0)
 
-    languagesCount = grunt.file.expand(dirs.min.translations + '/*.js').length
+    languagesCount = grunt.file.expand(dirs.translations.min + '/*.js').length
 %}
 
 <section class="section">

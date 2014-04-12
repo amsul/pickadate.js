@@ -35,7 +35,7 @@ A few other things to keep in mind:
 - Discuss any significant features before endeavoring into developing them. I’d hate to have anyone spend effort on something only for me to not merge it into the main project.
 - Include the relevant test coverage if any JavaScript files are involved.
 - Compile the project using `grunt --verbose` to make sure everything passes with a green flag.
-- Use the Semantic Versioning guide, as mentioned in the [readme file](/blob/v3.0.0/README.md), in the case that a version bump is due.
+- Use the Semantic Versioning guide, as mentioned in the [readme file](https://github.com/amsul/pickadate.js/#readme), in the case that a version bump is due.
 
 
 #### All pull requests should be submitted to the `dev` branch.

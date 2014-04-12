@@ -324,9 +324,9 @@ test( '`min` using JS dates', function() {
 
     // Using JavaScript date objects
     var dateObject = new Date()
-    dateObject.setHours(4,20)
+    dateObject.setHours(4,30)
     picker.set( 'min', dateObject )
-    strictEqual( picker.get( 'min' ).pick, 260, '`min` using a JS date: ' + picker.get( 'min', 'HH:i' ) )
+    strictEqual( picker.get( 'min' ).pick, 270, '`min` using a JS date: ' + picker.get( 'min', 'HH:i' ) )
     deepEqual( picker.get( 'select' ), null, '`select` unaffected' )
     if ( picker.get( 'min' ).pick > picker.get( 'now' ).pick ) {
         deepEqual( picker.get( 'highlight' ), picker.get( 'min' ), '`highlight` updated' )
@@ -336,7 +336,7 @@ test( '`min` using JS dates', function() {
         deepEqual( picker.get( 'highlight' ), picker.get( 'now' ), '`highlight` unaffected' )
         deepEqual( picker.get( 'view' ), picker.get( 'highlight' ), '`view` updated' )
     }
-    deepEqual( picker.get( 'max' ).pick, 1400, '`max` updated' )
+    deepEqual( picker.get( 'max' ).pick, 1410, '`max` updated' )
 })
 
 test( '`max` using integers', function() {

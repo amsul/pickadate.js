@@ -11,11 +11,11 @@
 
 <title>{%= pkg.title %}{%= page != 'index' ? ' / ' + page : '' %}</title>
 
-<link rel="shortcut icon" href="{%= dirs.dest.demos %}/images/favicon.ico">
-<link rel="stylesheet" href="{%= dirs.dest.demos %}/styles/main.css">
-<link rel="stylesheet" href="{%= dirs.dest.themes %}/default.css" id="theme_base">
-<link rel="stylesheet" href="{%= dirs.dest.themes %}/default.date.css" id="theme_date">
-<link rel="stylesheet" href="{%= dirs.dest.themes %}/default.time.css" id="theme_time">
+<link rel="shortcut icon" href="{%= dirs.demo.images %}/favicon.ico">
+<link rel="stylesheet" href="{%= dirs.demo.styles.dest %}/main.css">
+<link rel="stylesheet" href="{%= dirs.themes.dest %}/default.css" id="theme_base">
+<link rel="stylesheet" href="{%= dirs.themes.dest %}/default.date.css" id="theme_date">
+<link rel="stylesheet" href="{%= dirs.themes.dest %}/default.time.css" id="theme_time">
 
 <!--[if lt IE 9]>
     <script>document.createElement('section')</script>
@@ -48,7 +48,7 @@
             </nav>
         </div> <!-- .section__block -->
 
-        {%= page == 'index' ? grunt.file.read( dirs.src.raw + '/hero.htm' ) : '' %}
+        {%= page == 'index' ? grunt.file.read( dirs.docs.src + '/hero.htm' ) : '' %}
 
     </header> <!-- .section -->
 
@@ -73,11 +73,12 @@
 
     <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script>window.jQuery||document.write('<script src="tests/jquery.2.0.0.js"><\/script>')</script>
-    <script src="{%= dirs.dest.pickers %}/picker.js"></script>
-    <script src="{%= dirs.dest.pickers %}/picker.date.js"></script>
-    <script src="{%= dirs.dest.pickers %}/picker.time.js"></script>
-    <script src="{%= dirs.dest.pickers %}/legacy.js"></script>
-    <script src="{%= dirs.dest.demos %}/scripts/main.js"></script>
+    <script src="{%= dirs.lib.src %}/picker.js"></script>
+    <script src="{%= dirs.lib.src %}/picker.date.js"></script>
+    <script src="{%= dirs.lib.src %}/picker.time.js"></script>
+    <script src="{%= dirs.lib.src %}/legacy.js"></script>
+    <script src="{%= dirs.demo.scripts %}/demo.js"></script>
+    <script src="{%= dirs.demo.scripts %}/rainbow.js"></script>
     <script type="text/javascript">
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-36321179-2']);

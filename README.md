@@ -28,7 +28,7 @@ The v3 API is significantly different from v2 (all for the greater good!). So if
 <br>
 ## Library files
 
-The `lib` folder includes all the compiled files and a `compressed` folder with the minified counter-parts. These files are all generated from the `_raw/lib` folder using [Grunt](#building-with-grunt).
+The `` folder includes all the compiled files and a `compressed` folder with the minified counter-parts. These files are all generated from the `_raw/lib` folder using [Grunt](#building-with-grunt).
 
 ### Pickers
 
@@ -36,7 +36,7 @@ There are currently two pickers: **date** and **time**.
 
 File                    | Contents                 | Size (min & gzip)
 ----------------------- | ------------------------ | ----------------------
-`picker.js`             | __Base *__               | 1.58kb
+`picker.js`             | __Base *__               | 1.52kb
 `picker.date.js`        | Date picker              | 2.45kb
 `picker.time.js`        | Time picker              | 1.81kb
 
@@ -65,7 +65,7 @@ __**__ For languages with text flowing from right-to-left, also include the `rtl
 
 ### Translations
 
-The translations are copied into the `lib/translations` folder. There are currently [37 languages](https://github.com/amsul/pickadate.js/blob/3.4.0/lib/translations) included.
+The translations are copied into the `` folder. There are currently [37 languages](https://github.com/amsul/pickadate.js/blob/3.4.0/lib/translations) included.
 
 
 
@@ -88,7 +88,7 @@ Read the Gruntfile to see the build tasks and relative directories of the source
 <a name="less-styling"></a>
 ## Styling with LESS
 
-The picker themes are built using [LESS](http://lesscss.org/) with Grunt. To customize the CSS output, read the `_variables.less` file in the `_raw/lib/themes` folder. You can specify:
+The picker themes are built using [LESS](http://lesscss.org/) with Grunt. To customize the CSS output, read the `_variables.less` file in the `lib/themes-source` folder. You can specify:
 
 - colors for the theme,
 - sizes for the picker,

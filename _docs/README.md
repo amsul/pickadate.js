@@ -3,16 +3,16 @@
 {%= pkg.description %}
 
 {%
-    fileSize_js_core = meta.fileSize( grunt.file.read( dirs.min.pickers + '/picker.js') )
-    fileSize_js_date = meta.fileSize( grunt.file.read( dirs.min.pickers + '/picker.date.js') )
-    fileSize_js_time = meta.fileSize( grunt.file.read( dirs.min.pickers + '/picker.time.js') )
-    fileSize_css_default = meta.fileSize( grunt.file.read( dirs.min.themes + '/default.css') )
-    fileSize_css_classic = meta.fileSize( grunt.file.read( dirs.min.themes + '/classic.css') )
-    fileSize_css_default_date = meta.fileSize( grunt.file.read( dirs.min.themes + '/default.date.css') )
-    fileSize_css_default_time = meta.fileSize( grunt.file.read( dirs.min.themes + '/default.time.css') )
-    fileSize_css_classic_date = meta.fileSize( grunt.file.read( dirs.min.themes + '/classic.date.css') )
-    fileSize_css_classic_time = meta.fileSize( grunt.file.read( dirs.min.themes + '/classic.time.css') )
-    fileSize_css_rtl = meta.fileSize( grunt.file.read( dirs.min.themes + '/rtl.css') )
+    fileSize_js_core = meta.fileSize( grunt.file.read( dirs.lib.min + '/picker.js') )
+    fileSize_js_date = meta.fileSize( grunt.file.read( dirs.lib.min + '/picker.date.js') )
+    fileSize_js_time = meta.fileSize( grunt.file.read( dirs.lib.min + '/picker.time.js') )
+    fileSize_css_default = meta.fileSize( grunt.file.read( dirs.themes.min + '/default.css') )
+    fileSize_css_classic = meta.fileSize( grunt.file.read( dirs.themes.min + '/classic.css') )
+    fileSize_css_default_date = meta.fileSize( grunt.file.read( dirs.themes.min + '/default.date.css') )
+    fileSize_css_default_time = meta.fileSize( grunt.file.read( dirs.themes.min + '/default.time.css') )
+    fileSize_css_classic_date = meta.fileSize( grunt.file.read( dirs.themes.min + '/classic.date.css') )
+    fileSize_css_classic_time = meta.fileSize( grunt.file.read( dirs.themes.min + '/classic.time.css') )
+    fileSize_css_rtl = meta.fileSize( grunt.file.read( dirs.themes.min + '/rtl.css') )
 %}
 
 #### To get started, check out the:
@@ -39,7 +39,7 @@ The v3 API is significantly different from v2 (all for the greater good!). So if
 <br>
 ## Library files
 
-The `{%= dirs.dest.pickers %}` folder includes all the compiled files and a `compressed` folder with the minified counter-parts. These files are all generated from the `_raw/lib` folder using [Grunt](#building-with-grunt).
+The `{%= dirs.lib.dest %}` folder includes all the compiled files and a `compressed` folder with the minified counter-parts. These files are all generated from the `_raw/lib` folder using [Grunt](#building-with-grunt).
 
 ### Pickers
 
@@ -58,7 +58,7 @@ _To support old browsers, namely IE8, **also include** the `legacy.js` file._
 
 ### Themes
 
-All themes are [generated using LESS](#less-styling) and compiled into the `{%= dirs.dest.themes %}` folder.
+All themes are [generated using LESS](#less-styling) and compiled into the `{%= dirs.themes.dest %}` folder.
 
 File                    | Contents                     | Size (min & gzip)
 ----------------------- | ---------------------------- | ----------------------
@@ -76,7 +76,7 @@ __**__ For languages with text flowing from right-to-left, also include the `rtl
 
 ### Translations
 
-The translations are copied into the `{%= dirs.dest.translations %}` folder. There are currently [{%= grunt.file.expand(dirs.min.translations + '/*.js').length %} languages]({%= pkg.repository.url.replace(/.git$/,'') %}/blob/{%= pkg.version.split('-')[0] %}/lib/translations) included.
+The translations are copied into the `{%= dirs.translations.dest %}` folder. There are currently [{%= grunt.file.expand(dirs.translations.min + '/*.js').length %} languages]({%= pkg.repository.url.replace(/.git$/,'') %}/blob/{%= pkg.version.split('-')[0] %}/lib/translations) included.
 
 
 
@@ -99,7 +99,7 @@ Read the Gruntfile to see the build tasks and relative directories of the source
 <a name="less-styling"></a>
 ## Styling with LESS
 
-The picker themes are built using [LESS](http://lesscss.org/) with Grunt. To customize the CSS output, read the `_variables.less` file in the `{%= dirs.src.themes %}` folder. You can specify:
+The picker themes are built using [LESS](http://lesscss.org/) with Grunt. To customize the CSS output, read the `_variables.less` file in the `{%= dirs.themes.src %}` folder. You can specify:
 
 - colors for the theme,
 - sizes for the picker,

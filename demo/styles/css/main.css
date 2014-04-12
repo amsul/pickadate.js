@@ -1093,7 +1093,7 @@ input[type=search] {
   padding: 0 20px;
 }
 .section--header {
-  background: url(../images/bg.png) #fafbfb 50% 0;
+  background: url(/demo/images/bg.png) #fafbfb 50% 0;
   border-bottom: 2px solid #e9ebeb;
 }
 .section--footer {
