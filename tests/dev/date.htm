@@ -61,16 +61,15 @@
 
     <script type="text/javascript">
 
-        var $input = $( '.datepicker' ).pickadate()
+        var $input = $( '.datepicker' ).pickadate({
+            formatSubmit: 'yyyy-mm-dd',
+            hiddenName: true,
+        })
 
         var picker = $input.pickadate('picker')
 
-        console.log(picker.get('select'));
-
-        picker.set('select', new Date())
-        picker.clear()
-
-        console.log(picker.get('select'));
+        console.log(picker.$node[0])
+        console.log(picker._hidden)
 
         // $('button').on('click', function() {
         //     picker.set('disable', true);

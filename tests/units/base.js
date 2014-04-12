@@ -151,6 +151,27 @@ test( 'No hidden prefix & suffix', function() {
     strictEqual( picker.$node[0].name, picker._hidden.name, 'Correct hidden element `name`' )
 })
 
+module( 'Formatting setup', {
+    setup: function() {
+        $DOM.append( $INPUT.clone().attr( 'name', 'picker' ) )
+        var $input = $DOM.find( 'input' ).pickadate({
+            formatSubmit: 'yyyy/mm/dd',
+            hiddenName: true
+        })
+        this.picker = $input.pickadate( 'picker' )
+    },
+    teardown: function() {
+        this.picker.stop()
+        $DOM.empty()
+    }
+})
+
+test( 'Hidden name replaces visible name', function() {
+    var picker = this.picker
+    strictEqual( picker.$node[0].name, '', 'Visible element has no `name`')
+    strictEqual(picker._hidden.name, 'picker', 'Correct hidden element `name`' )
+})
+
 
 
 
