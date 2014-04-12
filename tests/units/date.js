@@ -121,7 +121,7 @@ module( 'Date picker setup', {
 
 test( 'Editable', function() {
 
-    $DOM.append( $INPUT.clone()).append( $INPUT.clone() )
+    $DOM.append( $INPUT.clone() ).append( $INPUT.clone() )
 
     var $input1 = $DOM.find( 'input' ).eq(0).pickadate()
     var $input2 = $DOM.find( 'input' ).eq(1).pickadate({
@@ -130,6 +130,44 @@ test( 'Editable', function() {
 
     strictEqual( $input1[0].readOnly, true, 'Editable: false' )
     strictEqual( $input2[0].readOnly, false, 'Editable: true' )
+})
+
+test( 'Disable today with `min` as `true`', function() {
+
+    $DOM.append( $INPUT.clone() )
+
+    var today = new Date()
+    var $input = $DOM.find( 'input' ).pickadate({
+        min: true,
+        disable: [ today ]
+    })
+    var picker = $input.pickadate('picker')
+    var highlighted = picker.get('highlight')
+
+    deepEqual(
+        [today.getFullYear(), today.getMonth(), today.getDate() + 1],
+        [highlighted.year, highlighted.month, highlighted.date],
+        'Able to disable today'
+    )
+})
+
+test( 'Disable today with `max` as `true`', function() {
+
+    $DOM.append( $INPUT.clone() )
+
+    var today = new Date()
+    var $input = $DOM.find( 'input' ).pickadate({
+        max: true,
+        disable: [ today ]
+    })
+    var picker = $input.pickadate('picker')
+    var highlighted = picker.get('highlight')
+
+    deepEqual(
+        [today.getFullYear(), today.getMonth(), today.getDate() - 1],
+        [highlighted.year, highlighted.month, highlighted.date],
+        'Able to disable today'
+    )
 })
 
 
@@ -867,8 +905,8 @@ test( '`disable` and `enable` using overlapping ranges', function() {
     $dates = $root.find('.' + $.fn.pickadate.defaults.klass.disabled)
     for ( index = 0, datesCount = $dates.length; index < datesCount; index += 1 ) {
         disabledDate = +$dates[index].innerHTML
-        ok( disabledDate >= 4 && disabledDate < 14 ||
-            disabledDate > 18 && disabledDate <= 28,
+        ok( disabledDate >= 4 && disabledDate < 14 ||
+            disabledDate > 18 && disabledDate <= 28,
             'Date is disabled: ' + disabledDate
         );
     }
@@ -912,7 +950,7 @@ test( '`disable` and `enable` using overlapping ranges', function() {
     $dates = $root.find('.' + $.fn.pickadate.defaults.klass.disabled)
     for ( index = 0, datesCount = $dates.length; index < datesCount; index += 1 ) {
         disabledDate = +$dates[index].innerHTML
-        ok( disabledDate >= 4 && disabledDate < 16,
+        ok( disabledDate >= 4 && disabledDate < 16,
             'Date is disabled: ' + disabledDate
         );
     }
