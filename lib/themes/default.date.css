@@ -36,16 +36,14 @@
 .picker__select--month,
 .picker__select--year {
   border: 1px solid #b7b7b7;
-  height: 2.5em;
-  padding: .5em .25em;
+  height: 2em;
+  padding: .5em;
   margin-left: .25em;
   margin-right: .25em;
-  font-size: .6em;
 }
 @media (min-width: 24.5em) {
   .picker__select--month,
   .picker__select--year {
-    font-size: .8em;
     margin-top: -0.5em;
   }
 }

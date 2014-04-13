@@ -353,16 +353,30 @@ test( 'As muted methods', 1, function() {
     picker.set({ select: new Date() }, { muted: true })
 })
 
-test( 'Open/close alternate focus', function() {
+test( 'Open with alternate focus', function() {
 
     var picker = this.picker,
         klasses = Picker.klasses()
 
+    stop()
     picker.open( false )
-    ok( !picker.get( 'open' ) && picker.$node[0].className === klasses.input + ' ' + klasses.active && picker.$root[0].className === klasses.picker + ' ' + klasses.opened && document.activeElement !== picker.$node[0], 'Opened without focus' )
+    setTimeout( function() {
+        ok( !picker.get( 'open' ) && picker.$node[0].className === klasses.input + ' ' + klasses.active && picker.$root[0].className === klasses.picker + ' ' + klasses.opened && document.activeElement !== picker.$node[0], 'Opened without focus' )
+        start()
+    }, 0 )
+})
 
+test( 'Close with alternate focus', function() {
+
+    var picker = this.picker,
+        klasses = Picker.klasses()
+
+    stop()
     picker.close( true )
-    ok( !picker.get( 'open' ) && picker.$node[0].className === klasses.input && picker.$root[0].className === klasses.picker && document.activeElement === picker.$node[0], 'Closed with focus' )
+    setTimeout( function() {
+        ok( !picker.get( 'open' ) && picker.$node[0].className === klasses.input && picker.$root[0].className === klasses.picker && document.activeElement === picker.$node[0], 'Closed with focus' )
+        start()
+    }, 0 )
 })
 
 test( 'Switch off', function() {
