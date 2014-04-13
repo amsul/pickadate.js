@@ -187,7 +187,7 @@ module.exports = function( grunt ) {
             docs: {
                 files: [
                     '<%= dirs.docs.src %>/*.htm',
-                    '<%= dirs.docs.src %>/styles/*.less'
+                    '<%= dirs.docs.src %>/*.md'
                 ],
                 tasks: [ 'docs' ]
             },

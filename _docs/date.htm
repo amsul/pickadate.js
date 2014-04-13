@@ -57,6 +57,7 @@ format: 'd mmmm, yyyy',
 formatSubmit: undefined,
 hiddenPrefix: undefined,
 hiddenSuffix: '_submit',
+hiddenName: undefined,
 
 // <a href="#editable">Editable input</a>
 editable: undefined,
@@ -279,11 +280,21 @@ $('.datepicker').pickadate({
 
         {%= dateDemoField({ id: 'date_demo__formats--a' }).replace( 'type=text', 'name=date_input type=text' ) %}
 
-        <h3 class="heading heading--divide"><span class="heading__text">Pre-fill values using custom formats or translations<a class="heading__anchor--bigger" name="formats_prefill" href="#formats_prefill">&sect;</a><a name="formats_translations" href="#formats_translations"></a></span></h3>
+        <h3 class="heading heading--divide"><span class="heading__text">Send the hidden <code class="attribute">value</code> only<a class="heading__anchor" name="formats_use_hidden_only" href="#formats_use_hidden_only">&sect;</a></span></h3>
+        <p>A majority of the time, the value that needs to be sent to the server is just the hidden value – and not the visible one. To make this happen, use the <code>hiddenName</code> option.</p>
+        <p>This essentially nullifies the <code>hiddenPrefix</code> and <code>hiddenSuffix</code>, strips the <code class="attribute">name</code> attribute from the source <code class="tag-name">input</code>, and then sets it as the <code class="attribute">name</code> of the hidden <code class="tag-name">input</code>:</p>
 
+        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
+    formatSubmit: 'yyyy/mm/dd',
+    hiddenName: true
+})</code></pre>
+
+        {%= dateDemoField({ id: 'date_demo__formats--b' }).replace( 'type=text', 'name=date_input type=text' ) %}
+
+        <h3 class="heading heading--divide"><span class="heading__text">Pre-fill values using custom formats or translations<a class="heading__anchor--bigger" name="formats_prefill" href="#formats_prefill">&sect;</a><a name="formats_translations" href="#formats_translations"></a></span></h3>
         <p>When using a custom <a href="#formatting-rules">formatting rule</a> for the <code>format</code> option or when using <a href="#translations">translations</a>, the <code class="tag-name">input</code> element should be given a <code class="attribute">data-value</code> attribute formatted using the <code>formatSubmit</code> – the element’s <code class="attribute">value</code> can be left blank. This helps to parse the date from custom formats into various languages:</p>
         <pre class="pre--demo"><code data-language="html">&lt;input data-value="2013/04/20"></code></pre>
-        {%= dateDemoField({ id: 'date_demo__formats--b' }).replace( 'type=text', 'name=date_demo__formats type=text data-value="2013/04/20"') %}
+        {%= dateDemoField({ id: 'date_demo__formats--c' }).replace( 'type=text', 'name=date_demo__formats type=text data-value="2013/04/20"') %}
 
         <h3 class="heading heading--divide"><span class="heading__text">Formatting Rules<a class="heading__anchor--bigger" name="formatting-rules" href="#formatting-rules">&sect;</a></span></h3>
         <p>The following rules can be used to format any date:</p>

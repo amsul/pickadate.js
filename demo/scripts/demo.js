@@ -96,6 +96,28 @@ $( '#date_demo__formats--a' ).pickadate({
             this.$node.
                 closest( '.js__fieldset' ).
                 after( '<div class="section__block section__block--notification-green">' +
+                    '<p>Values to submit: ' +
+                        '<code>' + this.get() + '</code>' +
+                        ' and ' +
+                        '<code>' + this.get( 'select', 'yyyy/mm/dd' ) + '</code>' +
+                    '</p>' +
+                    '<p>Using the names: ' +
+                        '<code>' + this.$node[0].name + '</code>' +
+                        ' and ' +
+                        '<code>' + this._hidden.name + '</code>' +
+                    '</p></div>'
+                )
+        }
+    }
+})
+$( '#date_demo__formats--b' ).pickadate({
+    formatSubmit: 'yyyy/mm/dd',
+    hiddenName: true,
+    onSet: function( event ) {
+        if ( event.select ) {
+            this.$node.
+                closest( '.js__fieldset' ).
+                after( '<div class="section__block section__block--notification-green">' +
                     '<p>Value to submit: <code>' +
                         this.get( 'select', 'yyyy/mm/dd' ) +
                     '</code></p>' +
@@ -107,7 +129,7 @@ $( '#date_demo__formats--a' ).pickadate({
     }
 })
 
-$( '#date_demo__formats--b' ).pickadate({
+$( '#date_demo__formats--c' ).pickadate({
     monthsFull: [ 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre' ],
     monthsShort: [ 'Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec' ],
     weekdaysShort: [ 'Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam' ],
