@@ -26,8 +26,8 @@ var $DOM = $( '#qunit-fixture' ),
 module( 'Base setup', {
     setup: function() {
         $DOM.append( $INPUT.clone() )
-        var $input = $DOM.find( 'input' ).pickadate()
-        this.picker = $input.pickadate( 'picker' )
+        this.$input = $DOM.find( 'input' ).pickadate()
+        this.picker = this.$input.pickadate( 'picker' )
     },
     teardown: function() {
         this.picker.stop()
@@ -72,7 +72,7 @@ test( 'Picker states', function() {
     ok( picker.get( 'start' ) === true, 'Started with trigger' )
 })
 
-test( 'Properties', function() {
+test( 'Picker properties', function() {
 
     var picker = this.picker
 
@@ -84,6 +84,15 @@ test( 'Properties', function() {
     ok( isInteger( picker.get( 'view' ).pick ), 'Has “view”' )
     ok( isInteger( picker.get( 'now' ).pick ), 'Has “now”' )
     deepEqual( picker.get( 'disable' ), [], 'Default “disable” collection is empty' )
+})
+
+test( 'Picker alternate API', function() {
+
+    var $input = this.$input
+    var picker = this.picker
+
+    strictEqual( $input.pickadate( 'get', 'start' ), picker.get( 'start' ), 'Methods are passed forward' )
+    strictEqual( $input.pickadate( 'component' ), picker.component, 'Objects are passed forward' )
 })
 
 
