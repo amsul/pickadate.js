@@ -41,8 +41,8 @@
                     name="date"
                     type="date"
                     autofocus
-                    value="14-08-08"
-                    data-value="2014-08-08">
+                    valuee="14-08-08"
+                    data-valuee="2014-08-08">
                 <br><br><br><br><br>
                 <button type="button">Disable all dates</button>
                 <input class="button" type="submit" value="open">
@@ -60,14 +60,14 @@
     <script type="text/javascript">
 
         var $input = $( '.datepicker' ).pickadate({
-            format: 'yy-mm-dd',
-            formatSubmit: 'yyyy-mm-dd',
-            hiddenName: true,
+            // format: 'yy-mm-dd',
+            // formatSubmit: 'yyyy-mm-dd',
+            // hiddenName: true,
+            selectYears: true,
+            selectMonths: true
         })
 
         var picker = $input.pickadate('picker')
-
-        console.log($input.pickadate('get', 'select'))
 
         // $('button').on('click', function() {
         //     picker.set('disable', true);
