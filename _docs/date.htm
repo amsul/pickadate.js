@@ -46,6 +46,12 @@ showWeekdaysFull: undefined,
 today: 'Today',
 clear: 'Clear',
 
+// <a href="#accessibility-labels">Accessibility labels</a>
+labelMonthNext: 'Next month',
+labelMonthPrev: 'Previous month',
+labelMonthSelect: 'Select a month',
+labelYearSelect: 'Select a year',
+
 // <a href="#formats">Formats</a>
 format: 'd mmmm, yyyy',
 formatSubmit: undefined,
@@ -181,6 +187,29 @@ klass: {
 })</code></pre>
 
         {%= dateDemoField({ id: 'date_demo__buttons' }) %}
+
+    </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+    <div class="section__block section__block--scoped">
+
+        <h2 class="heading heading--divide"><span class="heading__text">Accessibility labels<a class="heading__anchor" name="accessibility-labels" href="#accessibility-labels">&sect;</a></span></h2>
+        <p>Change the <code>title</code> attributes to several elements within the picker:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
+    labelMonthNext: 'Go to the next month',
+    labelMonthPrev: 'Go to the previous month',
+    labelMonthSelect: 'Pick a month from the dropdown',
+    labelYearSelect: 'Pick a year from the dropdown',
+    selectMonths: true,
+    selectYears: true
+})</code></pre>
+
+        {%= dateDemoField({ id: 'date_demo__accessibility-labels' }) %}
 
     </div> <!-- .section__block -->
 
