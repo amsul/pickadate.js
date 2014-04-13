@@ -376,6 +376,10 @@ $('.datepicker').pickadate({
 
         {%= dateDemoField({ id: 'date_demo__selectors--a' }) %}
 
+        <div class="section__block section__block--notification">
+            <p>When <code>selectYears</code> is truthy, the year selector appears <i>before</i> the month. <a href="{% meta.git_repo %}/issues/384">Read here</a> for more details on why.</p>
+        </div>
+
         <p>You can also specify the number of years to show in the dropdown using an even integer - half before and half after the year in focus:</p>
 
         <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({

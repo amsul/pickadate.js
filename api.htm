@@ -559,7 +559,7 @@ picker.set({
 picker.set('select', [2013,3,20])
 
 // Using JavaScript Date objects.
-picker.set('select', { 'Tue Apr 30 2013 00:00:00 GMT-0400 (EDT)' })
+picker.set('select', new Date(2013, 3, 30))
 
 // Using positive integers as UNIX timestamps.
 picker.set('select', 1366898887654)
@@ -575,7 +575,7 @@ picker.set('select', '2014-04-20', { format: 'yyyy-mm-dd' })</code></pre>
 picker.set('select', [3,0])
 
 // Using JavaScript Date objects.
-picker.set('select', { 'Thu Apr 25 2013 10:08:07 GMT-0400 (EDT)' })
+picker.set('select', new Date(2013, 3, 20, 10, 30))
 
 // Using positive integers as minutes.
 picker.set('select', 540)
@@ -603,7 +603,7 @@ picker.set('select', '04-30', { format: 'hh-i' })</code></pre>
 picker.set('highlight', [2013,3,20])
 
 // Using JavaScript Date objects.
-picker.set('highlight', { 'Tue Apr 30 2013 00:00:00 GMT-0400 (EDT)' })
+picker.set('highlight', new Date(2013, 3, 30))
 
 // Using positive integers as UNIX timestamps.
 picker.set('highlight', 1366898887654)
@@ -619,7 +619,7 @@ picker.set('highlight', '2014-04-20', { format: 'yyyy-mm-dd' })</code></pre>
 picker.set('highlight', [15,30])
 
 // Using JavaScript Date objects.
-picker.set('highlight', { 'Thu Apr 25 2013 10:08:07 GMT-0400 (EDT)' })
+picker.set('highlight', new Date(2013, 3, 20, 10, 30))
 
 // Using positive integers as minutes.
 picker.set('highlight', 1080)
@@ -649,7 +649,7 @@ picker.set('highlight', '04-30', { format: 'hh-i' })</code></pre>
 picker.set('view', [2000,3,20])
 
 // Using JavaScript Date objects.
-picker.set('view', { 'Sun Aug 14 1988 00:00:00 GMT-0400 (EDT)' })
+picker.set('view', new Date(1988,7,14))
 
 // Using positive integers as UNIX timestamps.
 picker.set('view', 1587355200000)
@@ -665,7 +665,7 @@ picker.set('view', '2014-04-20', { format: 'yyyy-mm-dd' })</code></code></pre>
 picker.set('view', [15,30])
 
 // Using JavaScript Date objects.
-picker.set('view', { 'Thu Apr 25 2013 10:08:07 GMT-0400 (EDT)' })
+picker.set('view', new Date(2013, 3, 20, 10, 30))
 
 // Using positive integers as minutes.
 picker.set('view', 1080)
@@ -693,7 +693,7 @@ picker.set('view', '04-30', { format: 'hh-i' })</code></pre>
 picker.set('min', [2013,3,20])
 
 // Using JavaScript Date objects.
-picker.set('min', { 'Wed Aug 14 2013 00:00:00 GMT-0400 (EDT)' })
+picker.set('min', new Date(2013,7,14))
 
 // Using integers as days relative to today.
 picker.set('min', -4)
@@ -712,7 +712,7 @@ picker.set('min', false)</code></pre>
 picker.set('min', [15,30])
 
 // Using JavaScript Date objects.
-picker.set('min', { 'Thu Apr 25 2013 10:08:07 GMT-0400 (EDT)' })
+picker.set('min', new Date(2013, 3, 20, 10, 30))
 
 // Using integers as intervals relative from now.
 picker.set('min', -4)
@@ -723,7 +723,7 @@ picker.set('min', true)
 // Using `false` to remove.
 picker.set('min', false)</code></pre>
 
-        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-set--min-time-array class="fieldset__button button button--small">Limit using an array</button><button id=button__api-set--min-time-js class="fieldset__button button button--small">Select using a JS Date</button><button id=button__api-set--min-time-integer class="fieldset__button button button--small">Limit using an integer</button><button id=button__api-set--min-time-true class="fieldset__button button button--small">Limit using `true`</button><button id=button__api-set--min-time-false class="fieldset__button button button--small">Limit using `false`</button><input id="demo__api-set--min-time" class="fieldset__input " type=text value="" placeholder="Try me&hellip;"></div></fieldset>
+        <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-set--min-time-array class="fieldset__button button button--small">Limit using an array</button><button id=button__api-set--min-time-js class="fieldset__button button button--small">Limit using a JS Date</button><button id=button__api-set--min-time-integer class="fieldset__button button button--small">Limit using an integer</button><button id=button__api-set--min-time-true class="fieldset__button button button--small">Limit using `true`</button><button id=button__api-set--min-time-false class="fieldset__button button button--small">Limit using `false`</button><input id="demo__api-set--min-time" class="fieldset__input " type=text value="" placeholder="Try me&hellip;"></div></fieldset>
 
     </div> <!-- .section__block -->
 
@@ -743,7 +743,7 @@ picker.set('min', false)</code></pre>
 picker.set('max', [2013,3,20])
 
 // Using JavaScript Date objects.
-picker.set('max', { 'Wed Aug 14 2013 00:00:00 GMT-0400 (EDT)' })
+picker.set('max', new Date(2013,7,14))
 
 // Using integers as days relative to today.
 picker.set('max', 4)
@@ -762,7 +762,7 @@ picker.set('max', false)</code></pre>
 picker.set('max', [15,30])
 
 // Using JavaScript Date objects.
-picker.set('max', { 'Thu Apr 25 2013 10:08:07 GMT-0400 (EDT)' })
+picker.set('max', new Date(2013, 3, 20, 10, 30))
 
 // Using integers as intervals relative from now.
 picker.set('max', 4)
