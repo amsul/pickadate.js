@@ -47,15 +47,13 @@
 .picker__select--month,
 .picker__select--year {
     border: 1px solid @border-select;
-    height: 2.5em;
-    padding: .5em .25em; // For firefox
+    height: 2em;
+    padding: .5em; // For firefox
     margin-left: .25em;
     margin-right: .25em;
-    font-size: .6em;
 
-    // For `tiny` width screens, increase the size a bit and move it up.
+    // For `tiny` width screens, move it up a bit.
     @media ( min-width: @breakpoint-width-tiny ) {
-        font-size: .8em;
         margin-top: -.5em;
     }
 }

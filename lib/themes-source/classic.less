@@ -49,8 +49,18 @@
     .transform( translateY( -1em ) perspective( 600px ) rotateX( 10deg ) );
 
     // Everything should be smoothly animated – the height & border should wait till the rest is done.
-    @transition: all @speed-animate-in ease-out, max-height 0 @speed-animate-in, border-width 0 @speed-animate-in;
-    .transition( @transition );
+    -webkit-transition: -webkit-transform @speed-animate-in ease-out,
+                        opacity @speed-animate-in ease-out,
+                        max-height 0s @speed-animate-in,
+                        border-width 0s @speed-animate-in;
+       -moz-transition: -moz-transform @speed-animate-in ease-out,
+                        opacity @speed-animate-in ease-out,
+                        max-height 0s @speed-animate-in,
+                        border-width 0s @speed-animate-in;
+            transition: transform @speed-animate-in ease-out,
+                        opacity @speed-animate-in ease-out,
+                        max-height 0s @speed-animate-in,
+                        border-width 0s @speed-animate-in;
 }
 
 
@@ -87,8 +97,18 @@
         .transform( translateY( 0 ) perspective( 600px ) rotateX( 0 ) );
 
         // Everything should be smoothly animated – except the height & border.
-        @transition: all @speed-animate-in ease-out, max-height 0, border-width 0;
-        .transition( @transition );
+        -webkit-transition: -webkit-transform @speed-animate-in ease-out,
+                            opacity @speed-animate-in ease-out,
+                            max-height 0s,
+                            border-width 0s;
+           -moz-transition: -moz-transform @speed-animate-in ease-out,
+                            opacity @speed-animate-in ease-out,
+                            max-height 0s,
+                            border-width 0s;
+                transition: transform @speed-animate-in ease-out,
+                            opacity @speed-animate-in ease-out,
+                            max-height 0s,
+                            border-width 0s;
 
         // Add a light shadow.
         .box-shadow( @classic-box-shadow );

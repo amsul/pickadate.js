@@ -39,7 +39,7 @@ The v3 API is significantly different from v2 (all for the greater good!). So if
 <br>
 ## Library files
 
-The `{%= dirs.lib.dest %}` folder includes all the compiled files and a `compressed` folder with the minified counter-parts. These files are all generated from the `_raw/lib` folder using [Grunt](#building-with-grunt).
+The `{%= dirs.lib.src %}` folder includes the library files with a `compressed` folder containing the minified counter-parts. These files are minified using [Grunt](#building-with-grunt).
 
 ### Pickers
 
@@ -58,7 +58,7 @@ _To support old browsers, namely IE8, **also include** the `legacy.js` file._
 
 ### Themes
 
-All themes are [generated using LESS](#less-styling) and compiled into the `{%= dirs.themes.dest %}` folder.
+All themes are [generated using LESS](#less-styling) and compiled from the `{%= dirs.themes.src %}` folder into the `{%= dirs.themes.dest %}` folder.
 
 File                    | Contents                     | Size (min & gzip)
 ----------------------- | ---------------------------- | ----------------------
@@ -76,7 +76,7 @@ __**__ For languages with text flowing from right-to-left, also include the `rtl
 
 ### Translations
 
-The translations are copied into the `{%= dirs.translations.dest %}` folder. There are currently [{%= grunt.file.expand(dirs.translations.min + '/*.js').length %} languages]({%= pkg.repository.url.replace(/.git$/,'') %}/blob/{%= pkg.version.split('-')[0] %}/lib/translations) included.
+The translations live in the `{%= dirs.translations.src %}` folder. There are currently [{%= grunt.file.expand(dirs.translations.src + '/*.js').length %} language translations]({%= meta.gitrepo_url %}/blob/{%= pkg.version %}/lib/translations) included.
 
 
 

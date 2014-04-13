@@ -14,7 +14,7 @@
    Globals
    ========================================================================== */
 
-var TODAY = new Date(2013,3,20)
+var TODAY = new Date(2013,3,20,10,30)
 
 
 
@@ -70,6 +70,20 @@ $( '#date_demo__buttons' ).pickadate({
 
 
 /**
+ * Buttons
+ */
+$( '#date_demo__accessibility-labels' ).pickadate({
+    labelMonthNext: 'Go to the next month',
+    labelMonthPrev: 'Go to the previous month',
+    labelMonthSelect: 'Pick a month from the dropdown',
+    labelYearSelect: 'Pick a year from the dropdown',
+    selectMonths: true,
+    selectYears: true
+})
+
+
+
+/**
  * Formats
  */
 $( '#date_demo__formats--a' ).pickadate({
@@ -77,6 +91,28 @@ $( '#date_demo__formats--a' ).pickadate({
     formatSubmit: 'yyyy/mm/dd',
     hiddenPrefix: 'prefix__',
     hiddenSuffix: '__suffix',
+    onSet: function( event ) {
+        if ( event.select ) {
+            this.$node.
+                closest( '.js__fieldset' ).
+                after( '<div class="section__block section__block--notification-green">' +
+                    '<p>Values to submit: ' +
+                        '<code>' + this.get() + '</code>' +
+                        ' and ' +
+                        '<code>' + this.get( 'select', 'yyyy/mm/dd' ) + '</code>' +
+                    '</p>' +
+                    '<p>Using the names: ' +
+                        '<code>' + this.$node[0].name + '</code>' +
+                        ' and ' +
+                        '<code>' + this._hidden.name + '</code>' +
+                    '</p></div>'
+                )
+        }
+    }
+})
+$( '#date_demo__formats--b' ).pickadate({
+    formatSubmit: 'yyyy/mm/dd',
+    hiddenName: true,
     onSet: function( event ) {
         if ( event.select ) {
             this.$node.
@@ -93,7 +129,7 @@ $( '#date_demo__formats--a' ).pickadate({
     }
 })
 
-$( '#date_demo__formats--b' ).pickadate({
+$( '#date_demo__formats--c' ).pickadate({
     monthsFull: [ 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre' ],
     monthsShort: [ 'Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec' ],
     weekdaysShort: [ 'Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam' ],
@@ -764,7 +800,7 @@ $( '#button__api-set--select-date-js' ).on( 'click', function( event ) {
     event.stopPropagation()
 })
 $( '#button__api-set--select-date-integer' ).on( 'click', function( event ) {
-    picker_set__select_date.set( 'select', TODAY.getTime() + 468487654 )
+    picker_set__select_date.set( 'select', TODAY.getTime() )
     event.stopPropagation()
 })
 $( '#button__api-set--select-date-string' ).on( 'click', function( event ) {
@@ -780,7 +816,7 @@ $( '#button__api-set--select-time-array' ).on( 'click', function( event ) {
     event.stopPropagation()
 })
 $( '#button__api-set--select-time-js' ).on( 'click', function( event ) {
-    picker_set__select_time.set( 'select', new Date( TODAY.getTime() + 468487654 ) )
+    picker_set__select_time.set( 'select', TODAY )
     event.stopPropagation()
 })
 $( '#button__api-set--select-time-integer' ).on( 'click', function( event ) {
@@ -805,7 +841,7 @@ $( '#button__api-set--highlight-date-js' ).on( 'click', function( event ) {
     event.stopPropagation()
 })
 $( '#button__api-set--highlight-date-integer' ).on( 'click', function( event ) {
-    picker_set__highlight_date.set( 'highlight', TODAY.getTime() + 468487654 )
+    picker_set__highlight_date.set( 'highlight', TODAY )
     event.stopPropagation()
 })
 $( '#button__api-set--highlight-date-string' ).on( 'click', function( event ) {
@@ -821,7 +857,7 @@ $( '#button__api-set--highlight-time-array' ).on( 'click', function( event ) {
     event.stopPropagation()
 })
 $( '#button__api-set--highlight-time-js' ).on( 'click', function( event ) {
-    picker_set__highlight_time.set( 'highlight', new Date( TODAY.getTime() + 468487654 ) )
+    picker_set__highlight_time.set( 'highlight', TODAY )
     event.stopPropagation()
 })
 $( '#button__api-set--highlight-time-integer' ).on( 'click', function( event ) {
@@ -861,7 +897,7 @@ $( '#button__api-set--view-time-array' ).on( 'click', function( event ) {
     event.stopPropagation()
 })
 $( '#button__api-set--view-time-js' ).on( 'click', function( event ) {
-    picker_set__view_time.set( 'view', new Date( TODAY.getTime() + 468487654 ) )
+    picker_set__view_time.set( 'view', TODAY )
     event.stopPropagation()
 })
 $( '#button__api-set--view-time-integer' ).on( 'click', function( event ) {
@@ -905,7 +941,7 @@ $( '#button__api-set--min-time-array' ).on( 'click', function( event ) {
     event.stopPropagation()
 })
 $( '#button__api-set--min-time-js' ).on( 'click', function( event ) {
-    picker_set__min_time.set( 'min', new Date( TODAY.getTime() + 468487654 ) )
+    picker_set__min_time.set( 'min', TODAY )
     event.stopPropagation()
 })
 $( '#button__api-set--min-time-integer' ).on( 'click', function( event ) {
@@ -953,7 +989,7 @@ $( '#button__api-set--max-time-array' ).on( 'click', function( event ) {
     event.stopPropagation()
 })
 $( '#button__api-set--max-time-js' ).on( 'click', function( event ) {
-    picker_set__max_time.set( 'max', new Date( TODAY.getTime() + 468487654 ) )
+    picker_set__max_time.set( 'max', TODAY )
     event.stopPropagation()
 })
 $( '#button__api-set--max-time-integer' ).on( 'click', function( event ) {

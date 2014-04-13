@@ -1,5 +1,21 @@
 # Changelog
 
+## 3.5.0
+
+- [#162]({%= pkg.bugs %}/162): Fixed page scrolling issue when modal view is open in the default theme.
+- [#350]({%= pkg.bugs %}/350): Fixed Hungarian translations typo.
+- [#351]({%= pkg.bugs %}/351) & [#388]({%= pkg.bugs %}/388) & [#393]({%= pkg.bugs %}/393): Fixed issue with script freezing when `min` is `true` and “today” is disabled.
+- [#358]({%= pkg.bugs %}/358): Fixed parsing months as 1-indexed when value is a string.
+- [#360]({%= pkg.bugs %}/360): Improved Grunt script to build a cleaner project.
+- [#361]({%= pkg.bugs %}/361): Fixed alternate API syntax not returning the correct value.
+- [#367]({%= pkg.bugs %}/367): [Added a note]({%= pkg.homepage %}/date.htm#formatting-rules) on how to appropriately use the `yy` format.
+- [#369]({%= pkg.bugs %}/369): Added Nepali translations.
+- [#377]({%= pkg.bugs %}/377): Added the [`hiddenName` option]({%= pkg.homepage %}/date.htm#formats_use_hidden_only) to use the visible `input`’s name as the hidden `input`’s name.
+- [#381]({%= pkg.bugs %}/381): Added missing semi-colon to `legacy.js`.
+- [#384]({%= pkg.bugs %}/384): Year selector appears *before* the month selector.
+- [#387]({%= pkg.bugs %}/387): Fixed issue where the `clear` method did not reset the `select` value to `null`.
+- [#395]({%= pkg.bugs %}/395): [Added a note]({%= pkg.homepage %}/api.htm#method-open-close) on how to use a separate button to open/close the picker.
+
 ## 3.4.0
 
 - ARIA support added. :star2:

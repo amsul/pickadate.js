@@ -1063,6 +1063,7 @@ test( 'Clear', function() {
     picker.set( 'select', [2,0] )
     strictEqual( picker.get( 'value' ), picker.get( 'select', $.fn.pickatime.defaults.format ), 'Value updated' )
 
+    picker.open()
     picker.$root.find( '.' + $.fn.pickatime.defaults.klass.buttonClear ).click()
     strictEqual( picker.get( 'value' ), '', 'Value cleared' )
 })

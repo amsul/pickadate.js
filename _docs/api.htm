@@ -584,7 +584,7 @@ picker.set({
 picker.set('select', [{%= today.getFullYear() + ',' + today.getMonth() + ',' + today.getDate() %}])
 
 // Using JavaScript Date objects.
-picker.set('select', { '{%= playDate %}' })
+picker.set('select', new Date({%= playDate.getFullYear() %}, {%= playDate.getMonth() %}, {%= playDate.getDate() %}))
 
 // Using positive integers as UNIX timestamps.
 picker.set('select', {%= today.getTime() + 468487654 %})
@@ -606,7 +606,7 @@ picker.set('select', '2014-04-20', { format: 'yyyy-mm-dd' })</code></pre>
 picker.set('select', [3,0])
 
 // Using JavaScript Date objects.
-picker.set('select', { '{%= new Date( today.getTime() + 468487654 ) %}' })
+picker.set('select', new Date({%= today.getFullYear() %}, {%= today.getMonth() %}, {%= today.getDate() %}, 10, 30))
 
 // Using positive integers as minutes.
 picker.set('select', 540)
@@ -640,7 +640,7 @@ picker.set('select', '04-30', { format: 'hh-i' })</code></pre>
 picker.set('highlight', [{%= today.getFullYear() + ',' + today.getMonth() + ',' + today.getDate() %}])
 
 // Using JavaScript Date objects.
-picker.set('highlight', { '{%= playDate %}' })
+picker.set('highlight', new Date({%= playDate.getFullYear() %}, {%= playDate.getMonth() %}, {%= playDate.getDate() %}))
 
 // Using positive integers as UNIX timestamps.
 picker.set('highlight', {%= today.getTime() + 468487654 %})
@@ -662,7 +662,7 @@ picker.set('highlight', '2014-04-20', { format: 'yyyy-mm-dd' })</code></pre>
 picker.set('highlight', [15,30])
 
 // Using JavaScript Date objects.
-picker.set('highlight', { '{%= new Date( today.getTime() + 468487654 ) %}' })
+picker.set('highlight', new Date({%= today.getFullYear() %}, {%= today.getMonth() %}, {%= today.getDate() %}, 10, 30))
 
 // Using positive integers as minutes.
 picker.set('highlight', 1080)
@@ -698,7 +698,7 @@ picker.set('highlight', '04-30', { format: 'hh-i' })</code></pre>
 picker.set('view', [2000,3,20])
 
 // Using JavaScript Date objects.
-picker.set('view', { '{%= new Date(1988,7,14) %}' })
+picker.set('view', new Date(1988,7,14))
 
 // Using positive integers as UNIX timestamps.
 picker.set('view', 1587355200000)
@@ -720,7 +720,7 @@ picker.set('view', '2014-04-20', { format: 'yyyy-mm-dd' })</code></code></pre>
 picker.set('view', [15,30])
 
 // Using JavaScript Date objects.
-picker.set('view', { '{%= new Date( today.getTime() + 468487654 ) %}' })
+picker.set('view', new Date({%= today.getFullYear() %}, {%= today.getMonth() %}, {%= today.getDate() %}, 10, 30))
 
 // Using positive integers as minutes.
 picker.set('view', 1080)
@@ -754,7 +754,7 @@ picker.set('view', '04-30', { format: 'hh-i' })</code></pre>
 picker.set('min', [2013,3,20])
 
 // Using JavaScript Date objects.
-picker.set('min', { '{%= new Date(2013,7,14) %}' })
+picker.set('min', new Date(2013,7,14))
 
 // Using integers as days relative to today.
 picker.set('min', -4)
@@ -780,7 +780,7 @@ picker.set('min', false)</code></pre>
 picker.set('min', [15,30])
 
 // Using JavaScript Date objects.
-picker.set('min', { '{%= new Date( today.getTime() + 468487654 ) %}' })
+picker.set('min', new Date({%= today.getFullYear() %}, {%= today.getMonth() %}, {%= today.getDate() %}, 10, 30))
 
 // Using integers as intervals relative from now.
 picker.set('min', -4)
@@ -794,7 +794,7 @@ picker.set('min', false)</code></pre>
         {%= dateDemoField({
             id: 'demo__api-set--min-time',
             pre: '<button id=button__api-set--min-time-array class="fieldset__button button button--small">Limit using an array</button>' +
-                '<button id=button__api-set--min-time-js class="fieldset__button button button--small">Select using a JS Date</button>' +
+                '<button id=button__api-set--min-time-js class="fieldset__button button button--small">Limit using a JS Date</button>' +
                 '<button id=button__api-set--min-time-integer class="fieldset__button button button--small">Limit using an integer</button>' +
                 '<button id=button__api-set--min-time-true class="fieldset__button button button--small">Limit using `true`</button>' +
                 '<button id=button__api-set--min-time-false class="fieldset__button button button--small">Limit using `false`</button>'
@@ -818,7 +818,7 @@ picker.set('min', false)</code></pre>
 picker.set('max', [2013,3,20])
 
 // Using JavaScript Date objects.
-picker.set('max', { '{%= new Date(2013,7,14) %}' })
+picker.set('max', new Date(2013,7,14))
 
 // Using integers as days relative to today.
 picker.set('max', 4)
@@ -844,7 +844,7 @@ picker.set('max', false)</code></pre>
 picker.set('max', [15,30])
 
 // Using JavaScript Date objects.
-picker.set('max', { '{%= new Date( today.getTime() + 468487654 ) %}' })
+picker.set('max', new Date({%= today.getFullYear() %}, {%= today.getMonth() %}, {%= today.getDate() %}, 10, 30))
 
 // Using integers as intervals relative from now.
 picker.set('max', 4)

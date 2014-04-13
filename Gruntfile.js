@@ -187,15 +187,15 @@ module.exports = function( grunt ) {
             docs: {
                 files: [
                     '<%= dirs.docs.src %>/*.htm',
-                    '<%= dirs.docs.src %>/styles/*.less'
+                    '<%= dirs.docs.src %>/*.md'
                 ],
                 tasks: [ 'docs' ]
             },
-            lib: {
+            themes: {
                 files: [
                     '<%= dirs.themes.src %>/*.less'
                 ],
-                tasks: [ 'picker' ]
+                tasks: [ 'themes' ]
             }
         },
 
@@ -221,7 +221,7 @@ module.exports = function( grunt ) {
     // * `htmlify` and `copy:pkg` should come after `uglify` because some package files measure `.min` file sizes.
     grunt.registerTask( 'default', [ 'less', 'jshint', 'qunit', 'uglify', 'cssmin', 'htmlify', 'copy:pkg' ] )
     grunt.registerTask( 'quick', [ 'less', 'uglify', 'cssmin', 'htmlify', 'copy:pkg' ] )
-    grunt.registerTask( 'picker', [ 'less:themes', 'jshint:lib', 'qunit:lib', 'uglify:lib', 'cssmin:lib' ] )
+    grunt.registerTask( 'themes', [ 'less:themes' ] )
     grunt.registerTask( 'demo', [ 'less:demo', 'jshint:demo' ] )
     grunt.registerTask( 'docs', [ 'copy:pkg', 'htmlify:docs' ] )
     grunt.registerTask( 'travis', [ 'jshint:lib', 'qunit:lib' ] )
