@@ -1,6 +1,6 @@
 {
   "name": "pickadate",
-  "version": "3.4.0",
+  "version": "3.5.0",
   "title": "pickadate.js",
   "description": "The mobile-friendly, responsive, and lightweight jQuery date & time input picker.",
   "author": {
@@ -41,13 +41,11 @@
     "grunt": "~0.4.2",
     "phantomjs": "~1.9.7-1",
     "zlib-browserify": "0.0.3",
-    "grunt-contrib-concat": "~0.3.0",
     "grunt-contrib-watch": "~0.5.3",
     "grunt-contrib-jshint": "~0.8.0",
     "grunt-contrib-qunit": "~0.4.0",
     "grunt-contrib-copy": "~0.5.0",
     "grunt-contrib-less": "~0.9.0",
-    "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-cssmin": "~0.7.0",
     "grunt-contrib-uglify": "~0.3.2"
   },

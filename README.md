@@ -1,4 +1,4 @@
-# pickadate v3.4.0 [![pickadate build status](https://travis-ci.org/amsul/pickadate.js.png?branch=gh-pages)](https://travis-ci.org/amsul/pickadate.js)
+# pickadate v3.5.0 [![pickadate build status](https://travis-ci.org/amsul/pickadate.js.png?branch=gh-pages)](https://travis-ci.org/amsul/pickadate.js)
 
 The mobile-friendly, responsive, and lightweight jQuery date & time input picker.
 
@@ -11,7 +11,7 @@ The mobile-friendly, responsive, and lightweight jQuery date & time input picker
 
 #### To get it:
 
-[Download v3.4.0](https://github.com/amsul/pickadate.js/archive/3.4.0.zip) or `git clone git://github.com/amsul/pickadate.js.git` or `bower install pickadate`
+[Download v3.5.0](https://github.com/amsul/pickadate.js/archive/3.5.0.zip) or `git clone git://github.com/amsul/pickadate.js.git` or `bower install pickadate`
 
 
 
@@ -28,7 +28,7 @@ The v3 API is significantly different from v2 (all for the greater good!). So if
 <br>
 ## Library files
 
-The `lib` folder includes all the compiled files and a `compressed` folder with the minified counter-parts. These files are all generated from the `_raw/lib` folder using [Grunt](#building-with-grunt).
+The `lib` folder includes the library files with a `compressed` folder containing the minified counter-parts. These files are minified using [Grunt](#building-with-grunt).
 
 ### Pickers
 
@@ -36,9 +36,9 @@ There are currently two pickers: **date** and **time**.
 
 File                    | Contents                 | Size (min & gzip)
 ----------------------- | ------------------------ | ----------------------
-`picker.js`             | __Base *__               | 1.58kb
-`picker.date.js`        | Date picker              | 2.45kb
-`picker.time.js`        | Time picker              | 1.81kb
+`picker.js`             | __Base *__               | 1.71kb
+`picker.date.js`        | Date picker              | 2.58kb
+`picker.time.js`        | Time picker              | 1.83kb
 
 __*__ The base script is **required** for any of the pickers to function.
 
@@ -47,15 +47,15 @@ _To support old browsers, namely IE8, **also include** the `legacy.js` file._
 
 ### Themes
 
-All themes are [generated using LESS](#less-styling) and compiled into the `lib/themes` folder.
+All themes are [generated using LESS](#less-styling) and compiled from the `lib/themes-source` folder into the `lib/themes` folder.
 
 File                    | Contents                     | Size (min & gzip)
 ----------------------- | ---------------------------- | ----------------------
 `default.css`           | __Base default *__           | 0.47kb
-`default.date.css`      | Default date picker          | 0.71kb
+`default.date.css`      | Default date picker          | 0.70kb
 `default.time.css`      | Default time picker          | 0.35kb
-`classic.css`           | __Base classic *__           | 0.37kb
-`classic.date.css`      | Classic date picker          | 0.71kb
+`classic.css`           | __Base classic *__           | 0.39kb
+`classic.date.css`      | Classic date picker          | 0.70kb
 `classic.time.css`      | Classic time picker          | 0.35kb
 `rtl.css`               | __RTL language stylings **__ | 0.10kb
 
@@ -65,7 +65,7 @@ __**__ For languages with text flowing from right-to-left, also include the `rtl
 
 ### Translations
 
-The translations are copied into the `lib/translations` folder. There are currently [37 languages](https://github.com/amsul/pickadate.js/blob/3.4.0/lib/translations) included.
+The translations live in the `lib/translations` folder. There are currently [38 language translations](https://github.com/amsul/pickadate.js/blob/3.5.0/lib/translations) included.
 
 
 
@@ -88,7 +88,7 @@ Read the Gruntfile to see the build tasks and relative directories of the source
 <a name="less-styling"></a>
 ## Styling with LESS
 
-The picker themes are built using [LESS](http://lesscss.org/) with Grunt. To customize the CSS output, read the `_variables.less` file in the `_raw/lib/themes` folder. You can specify:
+The picker themes are built using [LESS](http://lesscss.org/) with Grunt. To customize the CSS output, read the `_variables.less` file in the `lib/themes-source` folder. You can specify:
 
 - colors for the theme,
 - sizes for the picker,
@@ -103,7 +103,7 @@ After making any changes, run `grunt less:themes` to compile it into CSS.
 <br>
 ## Versioning
 
-To maintain some consistency in the sort of changes to expect with version bumps, [Semantic Versioning guidelines](http://semver.org/) will now be followed as closely as possible:
+To maintain some consistency in the sort of changes to expect with version bumps, [Semantic Versioning guidelines](http://semver.org/) is followed as closely as possible:
 
 `<major>.<minor>.<patch>`
 

@@ -1,0 +1,94 @@
+<!doctype html>
+
+<meta charset="utf-8">
+
+<meta name="author" content="Amsul - http://amsul.ca">
+
+<meta name="viewport" content="width=device-width">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+<title>{%= pkg.title %}{%= page != 'index' ? ' / ' + page : '' %}</title>
+
+<link rel="shortcut icon" href="{%= dirs.demo.images %}/favicon.ico">
+<link rel="stylesheet" href="{%= dirs.demo.styles.dest %}/main.css">
+<link rel="stylesheet" href="{%= dirs.themes.dest %}/default.css" id="theme_base">
+<link rel="stylesheet" href="{%= dirs.themes.dest %}/default.date.css" id="theme_date">
+<link rel="stylesheet" href="{%= dirs.themes.dest %}/default.time.css" id="theme_time">
+
+<!--[if lt IE 9]>
+    <script>document.createElement('section')</script>
+<![endif]-->
+
+
+<body>
+
+
+    <header class="section section--header section--splash">
+
+        <div class="section__block section__block--scoped">
+            <nav class="menu menu--header page-target" id="menu">
+                <ul class="menu__list menu__list--header">
+                    <li class="menu__item menu__item--touch menu__item--logo"><a class="menu__link menu__link--dimmed" href="index.htm"><span class="logocon"><span class="logocon__p">p</span><span class="logocon__u"></span></span></a></li>
+                    <li class="menu__item menu__item--touch menu__item--toggle">
+                        <a class="menu__link menu__link--dimmed page-target__display" href="#menu"><span class="page-target__toggle"></span></a>
+                        <a class="menu__link menu__link--dimmed page-target__display--flip" href="#"><span class="page-target__toggle"></span></a>
+                    </li>
+                    <li class="menu__item menu__item--clear"></li>
+                    <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed{%= page == 'date' ? ' menu__link--active' : '' %}" href="date.htm">Date picker</a></li>
+                    <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed{%= page == 'time' ? ' menu__link--active' : '' %}" href="time.htm">Time picker</a></li>
+                    <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed{%= page == 'api' ? ' menu__link--active' : '' %}" href="api.htm">API</a></li>
+                    <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed{%= page == 'v2' ? ' menu__link--active' : '' %}" href="v2-(deprecated)/index.htm">v2 docs</a></li>
+                    <li class="menu__item menu__item--responsive page-target__reveal"><a class="menu__link menu__link--dimmed" href="{%= meta.gitrepo_url %}">Github</a></li>
+                    <li class="menu__item menu__item--responsive page-target__reveal menu__item--trail">
+                        <span class="menu__link">Themes: <input class="theme-toggle__input" type="radio" id="show_theme_default" name="show_theme" value="default" checked hidden><label class="theme-toggle__label theme-toggle__label--first" for="show_theme_default">default</label><input class="theme-toggle__input" type="radio" id="show_theme_classic" name="show_theme" value="classic" hidden><label class="theme-toggle__label theme-toggle__label--last" for="show_theme_classic" class="checked-negative">classic</label></span>
+                    </li>
+                </ul>
+            </nav>
+        </div> <!-- .section__block -->
+
+        {%= page == 'index' ? grunt.file.read( dirs.docs.src + '/hero.htm' ) : '' %}
+
+    </header> <!-- .section -->
+
+
+    {%= content %}
+
+
+    <footer class="section section--footer">
+
+        <div class="section__block section__block--scoped text-center">
+            <h2 class="heading heading--one heading--divide-center"><span class="heading__text peace">&#x270C;</span></h2>
+            <p class="heading heading--three heading--thin">Made by <a href="http://twitter.com/amsul_">Amsul</a></p>
+            <p>Code licensed under <a href="{%= pkg.licenses[0].url %}">{%= pkg.licenses[0].type %}</a></p>
+            <div class="text-tiny text-dimmed">
+                <p>Pattern from <a href="http://subtlepatterns.com/">Subtle Patterns</a>&nbsp;&nbsp;•&nbsp;&nbsp;Syntax highlighting with <a href="http://craig.is/making/rainbows">Rainbow.js</a></p>
+                <p><a href="http://selz.co/1g80kCZ">Share some &hearts;</a></p>
+            </div>
+        </div> <!-- .section__block -->
+
+    </footer> <!-- .section -->
+
+
+    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script>window.jQuery||document.write('<script src="tests/jquery.2.0.0.js"><\/script>')</script>
+    <script src="{%= dirs.lib.src %}/picker.js"></script>
+    <script src="{%= dirs.lib.src %}/picker.date.js"></script>
+    <script src="{%= dirs.lib.src %}/picker.time.js"></script>
+    <script src="{%= dirs.lib.src %}/legacy.js"></script>
+    <script src="{%= dirs.demo.scripts %}/demo.js"></script>
+    <script src="{%= dirs.demo.scripts %}/rainbow.js"></script>
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-36321179-2']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+
+</body>

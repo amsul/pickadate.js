@@ -1,5 +1,21 @@
 # Changelog
 
+## 3.5.0
+
+- [#162](https://github.com/amsul/pickadate.js/issues/162): Fixed page scrolling issue when modal view is open in the default theme.
+- [#350](https://github.com/amsul/pickadate.js/issues/350): Fixed Hungarian translations typo.
+- [#351](https://github.com/amsul/pickadate.js/issues/351) & [#388](https://github.com/amsul/pickadate.js/issues/388) & [#393](https://github.com/amsul/pickadate.js/issues/393): Fixed issue with script freezing when `min` is `true` and “today” is disabled.
+- [#358](https://github.com/amsul/pickadate.js/issues/358): Fixed parsing months as 1-indexed when value is a string.
+- [#360](https://github.com/amsul/pickadate.js/issues/360): Improved Grunt script to build a cleaner project.
+- [#361](https://github.com/amsul/pickadate.js/issues/361): Fixed alternate API syntax not returning the correct value.
+- [#367](https://github.com/amsul/pickadate.js/issues/367): [Added a note](http://amsul.github.io/pickadate.js/date.htm#formatting-rules) on how to appropriately use the `yy` format.
+- [#369](https://github.com/amsul/pickadate.js/issues/369): Added Nepali translations.
+- [#377](https://github.com/amsul/pickadate.js/issues/377): Added the [`hiddenName` option](http://amsul.github.io/pickadate.js/date.htm#formats_use_hidden_only) to use the visible `input`’s name as the hidden `input`’s name.
+- [#381](https://github.com/amsul/pickadate.js/issues/381): Added missing semi-colon to `legacy.js`.
+- [#384](https://github.com/amsul/pickadate.js/issues/384): Year selector appears *before* the month selector.
+- [#387](https://github.com/amsul/pickadate.js/issues/387): Fixed issue where the `clear` method did not reset the `select` value to `null`.
+- [#395](https://github.com/amsul/pickadate.js/issues/395): [Added a note](http://amsul.github.io/pickadate.js/api.htm#method-open-close) on how to use a separate button to open/close the picker.
+
 ## 3.4.0
 
 - ARIA support added. :star2:
