@@ -1,4 +1,4 @@
-# pickadate v3.5.0 [![pickadate build status](https://travis-ci.org/amsul/pickadate.js.png?branch=gh-pages)](https://travis-ci.org/amsul/pickadate.js)
+# pickadate v3.5.0 [![pickadate build status](https://travis-ci.org/amsul/pickadate.js.svg?branch=gh-pages)](https://travis-ci.org/amsul/pickadate.js) [![pickadate dev dependencies status](https://david-dm.org/amsul/pickadate.js/dev-status.svg)](https://david-dm.org/amsul/pickadate.js#info=devDependencies)
 
 The mobile-friendly, responsive, and lightweight jQuery date & time input picker.
 
@@ -73,7 +73,7 @@ The translations live in the `lib/translations` folder. There are currently [38 
 <br>
 ## Building with Grunt
 
-[Grunt](http://gruntjs.com/) `~0.4.2` is used to build the project files. To get started, clone the project and then run:
+[Grunt](http://gruntjs.com/) `~0.4.5` is used to build the project files. To get started, clone the project and then run:
 
 - `npm install` to get the required node modules.
 - `grunt --verbose` to confirm you have all the dependencies.
@@ -103,7 +103,7 @@ After making any changes, run `grunt less:themes` to compile it into CSS.
 <br>
 ## Versioning
 
-To maintain some consistency in the sort of changes to expect with version bumps, [Semantic Versioning guidelines](http://semver.org/) is followed as closely as possible:
+To maintain some consistency in the sort of changes to expect with version bumps, [Semantic Versioning guidelines](http://semver.org/) will now be followed as closely as possible:
 
 `<major>.<minor>.<patch>`
 

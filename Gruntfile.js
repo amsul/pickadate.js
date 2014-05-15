@@ -177,23 +177,29 @@ module.exports = function( grunt ) {
         watch: {
             quick: {
                 files: [
-                    '<%= dirs.docs.src %>/*.htm',
-                    '<%= dirs.docs.src %>/*.md',
-                    '<%= dirs.demo.src %>/styles/*.less',
-                    '<%= dirs.themes.src %>/*.less'
+                    '<%= dirs.docs.src %>/**/*.htm',
+                    '<%= dirs.docs.src %>/**/*.md',
+                    '<%= dirs.demo.src %>/styles/**/*.less',
+                    '<%= dirs.themes.src %>/**/*.less'
                 ],
                 tasks: [ 'quick' ]
             },
+            demo: {
+                files: [
+                    '<%= dirs.demo.styles.src %>/**/*.less'
+                ],
+                tasks: [ 'demo' ]
+            },
             docs: {
                 files: [
-                    '<%= dirs.docs.src %>/*.htm',
-                    '<%= dirs.docs.src %>/*.md'
+                    '<%= dirs.docs.src %>/**/*.htm',
+                    '<%= dirs.docs.src %>/**/*.md'
                 ],
                 tasks: [ 'docs' ]
             },
             themes: {
                 files: [
-                    '<%= dirs.themes.src %>/*.less'
+                    '<%= dirs.themes.src %>/**/*.less'
                 ],
                 tasks: [ 'themes' ]
             }

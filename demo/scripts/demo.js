@@ -340,12 +340,16 @@ $( '#time_demo__formats--a' ).pickatime({
             this.$node.
                 closest( '.js__fieldset' ).
                 after( '<div class="section__block section__block--notification-green">' +
-                    '<p>Value to submit: <code>' +
-                        this.get( 'select', 'HH:i' ) +
-                    '</code></p>' +
-                    '<p>Using the name: <code>' +
-                        this._hidden.name +
-                    '</code></p></div>'
+                    '<p>Values to submit: ' +
+                        '<code>' + this.get() + '</code>' +
+                        ' and ' +
+                        '<code>' + this.get( 'select', 'HH:i' ) + '</code>' +
+                    '</p>' +
+                    '<p>Using the names: ' +
+                        '<code>' + this.$node[0].name + '</code>' +
+                        ' and ' +
+                        '<code>' + this._hidden.name + '</code>' +
+                    '</p></div>'
                 )
         }
     }
@@ -355,6 +359,24 @@ $( '#time_demo__formats--b' ).pickatime({
         var hours = ( time.pick - this.get('now').pick ) / 60,
             label = hours < 0 ? ' !hours to now' : hours > 0 ? ' !hours from now' : 'now'
         return 'h:i a <sm!all>' + ( hours ? Math.abs( hours ) : '' ) + label + '</sm!all>'
+    }
+})
+$( '#time_demo__formats--c' ).pickatime({
+    formatSubmit: 'HH:i',
+    hiddenName: true,
+    onSet: function( event ) {
+        if ( event.select ) {
+            this.$node.
+                closest( '.js__fieldset' ).
+                after( '<div class="section__block section__block--notification-green">' +
+                    '<p>Value to submit: <code>' +
+                        this.get( 'select', 'HH:i' ) +
+                    '</code></p>' +
+                    '<p>Using the name: <code>' +
+                        this._hidden.name +
+                    '</code></p></div>'
+                )
+        }
     }
 })
 
