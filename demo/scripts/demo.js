@@ -97,14 +97,14 @@ $( '#date_demo__formats--a' ).pickadate({
                 closest( '.js__fieldset' ).
                 after( '<div class="section__block section__block--notification-green">' +
                     '<p>Values to submit: ' +
-                        '<code>' + this.get() + '</code>' +
+                        '<code>' + this.get() + '</code>' +
                         ' and ' +
-                        '<code>' + this.get( 'select', 'yyyy/mm/dd' ) + '</code>' +
+                        '<code>' + this.get( 'select', 'yyyy/mm/dd' ) + '</code>' +
                     '</p>' +
                     '<p>Using the names: ' +
-                        '<code>' + this.$node[0].name + '</code>' +
+                        '<code>' + this.$node[0].name + '</code>' +
                         ' and ' +
-                        '<code>' + this._hidden.name + '</code>' +
+                        '<code>' + this._hidden.name + '</code>' +
                     '</p></div>'
                 )
         }
@@ -341,14 +341,14 @@ $( '#time_demo__formats--a' ).pickatime({
                 closest( '.js__fieldset' ).
                 after( '<div class="section__block section__block--notification-green">' +
                     '<p>Values to submit: ' +
-                        '<code>' + this.get() + '</code>' +
+                        '<code>' + this.get() + '</code>' +
                         ' and ' +
-                        '<code>' + this.get( 'select', 'HH:i' ) + '</code>' +
+                        '<code>' + this.get( 'select', 'HH:i' ) + '</code>' +
                     '</p>' +
                     '<p>Using the names: ' +
-                        '<code>' + this.$node[0].name + '</code>' +
+                        '<code>' + this.$node[0].name + '</code>' +
                         ' and ' +
-                        '<code>' + this._hidden.name + '</code>' +
+                        '<code>' + this._hidden.name + '</code>' +
                     '</p></div>'
                 )
         }
@@ -1311,22 +1311,15 @@ $( '#button__api-object--holder' ).on( 'click', function( event ) {
 /*
  * Initialize all the others
  */
-$( '.js__datepicker' ).pickadate()
+$( '.js__datepicker' ).pickadate({
+
+    // Work-around for some mobile browsers clipping off the picker.
+    onOpen: function() { $('pre').css('overflow', 'hidden') },
+    onClose: function() { $('pre').css('overflow', '') }
+})
 $( '.js__timepicker' ).pickatime()
 
 
-
-
-
-
-
-
-/* ==========================================================================
-   Themes demos
-   ========================================================================== */
-
-$( '#theme__default_date, #theme__classic_date' ).pickadate()
-$( '#theme__default_time, #theme__classic_time' ).pickatime()
 
 
 

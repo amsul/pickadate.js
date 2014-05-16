@@ -634,7 +634,7 @@ pre {
   white-space: pre;
   padding: 1em;
   text-align: left;
-  overflow-x: auto;
+  overflow: auto;
   -webkit-overflow-scrolling: touch;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
