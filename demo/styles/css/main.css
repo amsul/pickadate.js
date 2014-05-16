@@ -634,7 +634,7 @@ pre {
   white-space: pre;
   padding: 1em;
   text-align: left;
-  overflow-x: auto;
+  overflow: auto;
   -webkit-overflow-scrolling: touch;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
@@ -1093,7 +1093,7 @@ input[type=search] {
   padding: 0 20px;
 }
 .section--header {
-  background: url(/demo/images/bg.png) #fafbfb 50% 0;
+  background: url(../../images/bg.png) #fafbfb 50% 0;
   border-bottom: 2px solid #e9ebeb;
 }
 .section--footer {

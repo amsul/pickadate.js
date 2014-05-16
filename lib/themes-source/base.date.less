@@ -78,6 +78,7 @@
     padding: .5em 1.25em;
     width: 1em;
     height: 1em;
+    box-sizing: content-box;
     top: -.25em;
 
     // For `tiny` width screens, move it up a bit.
@@ -193,7 +194,6 @@
 
 // Today.
 .picker__day--today {
-    color: @blue;
     position: relative;
 }
 .picker__day--today:before {
@@ -205,17 +205,6 @@
     height: 0;
     border-top: .5em solid @blue-tag;
     border-left: .5em solid transparent;
-}
-
-// Selected day.
-.picker__day--selected,
-.picker__day--selected:hover {
-    .picker-item-selected;
-}
-
-// Highlighted day.
-.picker__day--highlighted {
-    background: @blue-hover;
 }
 
 // Disabled day.
@@ -235,9 +224,18 @@
 }
 
 // Highlighted and hovered/focused dates.
+.picker__day--highlighted,
 .picker__day--highlighted:hover,
 .picker--focused .picker__day--highlighted {
     .picker-item-highlighted;
+    .picker-item-hovered;
+}
+
+// Selected and hovered/focused dates.
+.picker__day--selected,
+.picker__day--selected:hover,
+.picker--focused .picker__day--selected {
+    .picker-item-selected;
 }
 
 // Disabled dates.

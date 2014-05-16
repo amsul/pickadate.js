@@ -180,6 +180,16 @@ klass: {
 
         {%= timeDemoField({ id: 'time_demo__formats--b' }).replace( 'type=text', 'name=time_demo__formats type=text' ) %}
 
+        <h3 class="heading heading--divide"><span class="heading__text">Send the hidden <code class="attribute">value</code> only<a class="heading__anchor" name="formats_use_hidden_only" href="#formats_use_hidden_only">&sect;</a></span></h3>
+        <p>A majority of the time, the value that needs to be sent to the server is just the hidden value – and not the visible one. To make this happen, use the <code>hiddenName</code> option.</p>
+        <p>This essentially nullifies the <code>hiddenPrefix</code> and <code>hiddenSuffix</code>, strips the <code class="attribute">name</code> attribute from the source <code class="tag-name">input</code>, and then sets it as the <code class="attribute">name</code> of the hidden <code class="tag-name">input</code>:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">$('.timepicker').pickatime({
+    formatSubmit: 'HH:i',
+    hiddenName: true
+})</code></pre>
+
+        {%= timeDemoField({ id: 'time_demo__formats--c' }).replace( 'type=text', 'name=time_input type=text' ) %}
 
         <h3 class="heading heading--divide"><span class="heading__text">Formatting Rules<a class="heading__anchor--bigger" name="formatting-rules" href="#formatting-rules">&sect;</a></span></h3>
         <p>The following rules can be used to format any time:</p>
@@ -380,7 +390,7 @@ klass: {
         <p>The values for <code>from</code> &amp; <code>to</code> can be:</p>
         <ul>
             <li>A JavaScript Date object,</li>
-            <li>An array formatted as <code>[YEAR,MONTH,DATE]</code>,</li>
+            <li>An array formatted as <code>[HOUR,MINUTE]</code>,</li>
             <li>And <code class="constant">true</code> to set it as “now”.</li>
         </ul>
         <p>The values can also be integers representing time intervals relative to the other:</p>

@@ -1,4 +1,4 @@
-# pickadate v3.5.0 [![pickadate build status](https://travis-ci.org/amsul/pickadate.js.png?branch=gh-pages)](https://travis-ci.org/amsul/pickadate.js)
+# pickadate v3.5.1 [![pickadate build status](https://travis-ci.org/amsul/pickadate.js.svg?branch=gh-pages)](https://travis-ci.org/amsul/pickadate.js) [![pickadate dev dependencies status](https://david-dm.org/amsul/pickadate.js/dev-status.svg)](https://david-dm.org/amsul/pickadate.js#info=devDependencies)
 
 The mobile-friendly, responsive, and lightweight jQuery date & time input picker.
 
@@ -11,7 +11,7 @@ The mobile-friendly, responsive, and lightweight jQuery date & time input picker
 
 #### To get it:
 
-[Download v3.5.0](https://github.com/amsul/pickadate.js/archive/3.5.0.zip) or `git clone git://github.com/amsul/pickadate.js.git` or `bower install pickadate`
+[Download v3.5.1](https://github.com/amsul/pickadate.js/archive/3.5.1.zip) or `git clone git://github.com/amsul/pickadate.js.git` or `bower install pickadate`
 
 
 
@@ -36,8 +36,8 @@ There are currently two pickers: **date** and **time**.
 
 File                    | Contents                 | Size (min & gzip)
 ----------------------- | ------------------------ | ----------------------
-`picker.js`             | __Base *__               | 1.71kb
-`picker.date.js`        | Date picker              | 2.58kb
+`picker.js`             | __Base *__               | 1.74kb
+`picker.date.js`        | Date picker              | 2.59kb
 `picker.time.js`        | Time picker              | 1.83kb
 
 __*__ The base script is **required** for any of the pickers to function.
@@ -65,7 +65,7 @@ __**__ For languages with text flowing from right-to-left, also include the `rtl
 
 ### Translations
 
-The translations live in the `lib/translations` folder. There are currently [38 language translations](https://github.com/amsul/pickadate.js/blob/3.5.0/lib/translations) included.
+The translations live in the `lib/translations` folder. There are currently [39 language translations](https://github.com/amsul/pickadate.js/blob/3.5.1/lib/translations) included.
 
 
 
@@ -73,7 +73,7 @@ The translations live in the `lib/translations` folder. There are currently [38 
 <br>
 ## Building with Grunt
 
-[Grunt](http://gruntjs.com/) `~0.4.2` is used to build the project files. To get started, clone the project and then run:
+[Grunt](http://gruntjs.com/) `~0.4.5` is used to build the project files. To get started, clone the project and then run:
 
 - `npm install` to get the required node modules.
 - `grunt --verbose` to confirm you have all the dependencies.
@@ -103,7 +103,7 @@ After making any changes, run `grunt less:themes` to compile it into CSS.
 <br>
 ## Versioning
 
-To maintain some consistency in the sort of changes to expect with version bumps, [Semantic Versioning guidelines](http://semver.org/) is followed as closely as possible:
+To maintain some consistency in the sort of changes to expect with version bumps, [Semantic Versioning guidelines](http://semver.org/) will now be followed as closely as possible:
 
 `<major>.<minor>.<patch>`
 

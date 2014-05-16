@@ -10,7 +10,7 @@
 
 <title>Pickadate.js</title>
 
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="../../demo/styles/css/main.css">
 <link rel="stylesheet" href="../../lib/themes/default.css">
 <link rel="stylesheet" href="../../lib/themes/default.date.css">
 
@@ -30,7 +30,7 @@
 
 <body>
 
-    <section class="holder holder-top holder-clean">
+    <section class="section">
 
         <form>
             <fieldset>
@@ -62,14 +62,12 @@
     <script type="text/javascript">
 
         var $input = $( '.datepicker' ).pickadate({
-            // format: 'yy-mm-dd',
-            // formatSubmit: 'yyyy-mm-dd',
-            // hiddenName: true,
-            selectYears: true,
-            selectMonths: true
+            firstDay: 1
         })
 
         var picker = $input.pickadate('picker')
+
+        console.log( picker.get('select', 'yyyy-mm-dd') )
 
         // $('button').on('click', function() {
         //     picker.set('disable', true);
