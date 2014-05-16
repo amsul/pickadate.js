@@ -67,17 +67,7 @@
 
         var picker = $input.pickadate('picker')
 
-        picker.set('disable', [
-            7,
-            [2014, 4, 29],
-            [2014, 5, 9],
-            [2014, 8, 8]
-        ])
-
-        picker.set('enable', [
-            [2014, 4, 18],
-            [2014, 4, 25]
-        ])
+        console.log( picker.get('select', 'yyyy-mm-dd') )
 
         // $('button').on('click', function() {
         //     picker.set('disable', true);
