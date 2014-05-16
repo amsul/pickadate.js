@@ -40,22 +40,21 @@
     z-index: 10;
 }
 
-/* Selected time */
-.picker__list-item--selected,
-.picker__list-item--selected:hover {
-    .picker-item-selected;
-    z-index: 10;
-}
-
-/* Highlighted time */
-.picker__list-item--highlighted {
-    background: @blue-hover;
-}
-
 /* Highlighted and hovered/focused time */
+.picker__list-item--highlighted,
 .picker__list-item--highlighted:hover,
 .picker--focused .picker__list-item--highlighted {
     .picker-item-highlighted;
+    .picker-item-hovered;
+    z-index: 10;
+}
+
+/* Selected and hovered/focused time */
+.picker__list-item--selected,
+.picker__list-item--selected:hover,
+.picker--focused .picker__list-item--selected {
+    .picker-item-selected;
+    z-index: 10;
 }
 
 /* Disabled time */
