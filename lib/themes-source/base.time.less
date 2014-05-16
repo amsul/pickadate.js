@@ -41,12 +41,13 @@
 }
 
 /* Highlighted and hovered/focused time */
-.picker__list-item--highlighted,
+.picker__list-item--highlighted {
+    .picker-item-highlighted;
+    z-index: 10;
+}
 .picker__list-item--highlighted:hover,
 .picker--focused .picker__list-item--highlighted {
-    .picker-item-highlighted;
     .picker-item-hovered;
-    z-index: 10;
 }
 
 /* Selected and hovered/focused time */

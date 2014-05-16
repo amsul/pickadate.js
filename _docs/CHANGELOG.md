@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.5.1
+## 3.5.2
 - [#398]({%= pkg.bugs %}/398): Fixed Nepali translations.
 - [#403]({%= pkg.bugs %}/403): Fixed month nav pointer styling with Bootstrap (`border-box` issue).
 - [#405]({%= pkg.bugs %}/405): Fixed scrollbar width checker.
