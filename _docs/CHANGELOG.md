@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.5.1
+- [#398]({%= pkg.bugs %}/398): Fixed Nepali translations.
+- [#403]({%= pkg.bugs %}/403): Fixed month nav pointer styling with Bootstrap (`border-box` issue).
+- [#405]({%= pkg.bugs %}/405): Fixed scrollbar width checker.
+- [#421]({%= pkg.bugs %}/421): Fixed `picker.get('select', 'yyyy-mm-dd')` when `select` is `null`.
+- [#423]({%= pkg.bugs %}/423): Added Vietnamese translations.
+- [#427]({%= pkg.bugs %}/427): Fixed enabling date when `firstDay` is set.
+- [#428]({%= pkg.bugs %}/428): Fixed `$` conflict in Arabic translations.
+- [#430]({%= pkg.bugs %}/430): Improved differentiation between “selected” and “highlighted” dates/times.
+
+
 ## 3.5.0
 
 - [#162]({%= pkg.bugs %}/162): Fixed page scrolling issue when modal view is open in the default theme.
