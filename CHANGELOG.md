@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.5.1
+- [#398](https://github.com/amsul/pickadate.js/issues/398): Fixed Nepali translations.
+- [#403](https://github.com/amsul/pickadate.js/issues/403): Fixed month nav pointer styling with Bootstrap (`border-box` issue).
+- [#405](https://github.com/amsul/pickadate.js/issues/405): Fixed scrollbar width checker.
+- [#421](https://github.com/amsul/pickadate.js/issues/421): Fixed `picker.get('select', 'yyyy-mm-dd')` when `select` is `null`.
+- [#423](https://github.com/amsul/pickadate.js/issues/423): Added Vietnamese translations.
+- [#427](https://github.com/amsul/pickadate.js/issues/427): Fixed enabling date when `firstDay` is set.
+- [#428](https://github.com/amsul/pickadate.js/issues/428): Fixed `$` conflict in Arabic translations.
+- [#430](https://github.com/amsul/pickadate.js/issues/430): Improved differentiation between “selected” and “highlighted” dates/times.
+
+
 ## 3.5.0
 
 - [#162](https://github.com/amsul/pickadate.js/issues/162): Fixed page scrolling issue when modal view is open in the default theme.
