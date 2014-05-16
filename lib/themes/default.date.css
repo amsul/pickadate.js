@@ -66,6 +66,7 @@
   padding: .5em 1.25em;
   width: 1em;
   height: 1em;
+  box-sizing: content-box;
   top: -0.25em;
 }
 @media (min-width: 24.5em) {
