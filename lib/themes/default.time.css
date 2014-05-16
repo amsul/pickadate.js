@@ -34,14 +34,15 @@
   z-index: 10;
 }
 /* Highlighted and hovered/focused time */
-.picker__list-item--highlighted,
+.picker__list-item--highlighted {
+  border-color: #0089ec;
+  z-index: 10;
+}
 .picker__list-item--highlighted:hover,
 .picker--focused .picker__list-item--highlighted {
-  border-color: #0089ec;
   cursor: pointer;
   color: #000000;
   background: #b1dcfb;
-  z-index: 10;
 }
 /* Selected and hovered/focused time */
 .picker__list-item--selected,

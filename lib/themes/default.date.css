@@ -194,10 +194,11 @@
   color: #000000;
   background: #b1dcfb;
 }
-.picker__day--highlighted,
+.picker__day--highlighted {
+  border-color: #0089ec;
+}
 .picker__day--highlighted:hover,
 .picker--focused .picker__day--highlighted {
-  border-color: #0089ec;
   cursor: pointer;
   color: #000000;
   background: #b1dcfb;

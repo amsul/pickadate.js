@@ -1,4 +1,4 @@
-# pickadate v3.5.1 [![pickadate build status](https://travis-ci.org/amsul/pickadate.js.svg?branch=gh-pages)](https://travis-ci.org/amsul/pickadate.js) [![pickadate dev dependencies status](https://david-dm.org/amsul/pickadate.js/dev-status.svg)](https://david-dm.org/amsul/pickadate.js#info=devDependencies)
+# pickadate v3.5.2 [![pickadate build status](https://travis-ci.org/amsul/pickadate.js.svg?branch=gh-pages)](https://travis-ci.org/amsul/pickadate.js) [![pickadate dev dependencies status](https://david-dm.org/amsul/pickadate.js/dev-status.svg)](https://david-dm.org/amsul/pickadate.js#info=devDependencies)
 
 The mobile-friendly, responsive, and lightweight jQuery date & time input picker.
 
@@ -11,7 +11,7 @@ The mobile-friendly, responsive, and lightweight jQuery date & time input picker
 
 #### To get it:
 
-[Download v3.5.1](https://github.com/amsul/pickadate.js/archive/3.5.1.zip) or `git clone git://github.com/amsul/pickadate.js.git` or `bower install pickadate`
+[Download v3.5.2](https://github.com/amsul/pickadate.js/archive/3.5.2.zip) or `git clone git://github.com/amsul/pickadate.js.git` or `bower install pickadate`
 
 
 
@@ -65,7 +65,7 @@ __**__ For languages with text flowing from right-to-left, also include the `rtl
 
 ### Translations
 
-The translations live in the `lib/translations` folder. There are currently [39 language translations](https://github.com/amsul/pickadate.js/blob/3.5.1/lib/translations) included.
+The translations live in the `lib/translations` folder. There are currently [39 language translations](https://github.com/amsul/pickadate.js/blob/3.5.2/lib/translations) included.
 
 
 

@@ -224,10 +224,11 @@
 }
 
 // Highlighted and hovered/focused dates.
-.picker__day--highlighted,
+.picker__day--highlighted {
+    .picker-item-highlighted;
+}
 .picker__day--highlighted:hover,
 .picker--focused .picker__day--highlighted {
-    .picker-item-highlighted;
     .picker-item-hovered;
 }
 
