@@ -227,17 +227,19 @@
   text-align: center;
 }
 .picker__button--today,
+.picker__button--close,
 .picker__button--clear {
   border: 1px solid #ffffff;
   background: #ffffff;
   font-size: .8em;
   padding: .66em 0;
   font-weight: bold;
-  width: 50%;
+  width: 33.3%;
   display: inline-block;
   vertical-align: bottom;
 }
 .picker__button--today:hover,
+.picker__button--close:hover,
 .picker__button--clear:hover {
   cursor: pointer;
   color: #000000;
@@ -245,12 +247,14 @@
   border-bottom-color: #b1dcfb;
 }
 .picker__button--today:focus,
+.picker__button--close:focus,
 .picker__button--clear:focus {
   background: #b1dcfb;
   border-color: #0089ec;
   outline: none;
 }
 .picker__button--today:before,
+.picker__button--close:before,
 .picker__button--clear:before {
   position: relative;
   display: inline-block;
@@ -264,6 +268,7 @@
   border-top: 0.66em solid #0059bc;
   border-left: .66em solid transparent;
 }
+.picker__button--close:before,
 .picker__button--clear:before {
   content: "\D7";
   margin-right: .35em;
