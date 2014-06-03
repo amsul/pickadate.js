@@ -221,13 +221,15 @@
   background: #bbbbbb;
 }
 /**
- * The footer containing the "today" and "clear" buttons.
+ * The footer containing the "today", "clear", "save" and "close" buttons.
  */
-.picker__footer {
+.c24s .picker__footer {
   text-align: center;
 }
-.picker__button--today,
-.picker__button--clear {
+.c24s .picker__button--today,
+.c24s .picker__button--close,
+.c24s .picker__button--save,
+.c24s .picker__button--clear {
   border: 1px solid #ffffff;
   background: #ffffff;
   font-size: .8em;
@@ -237,26 +239,32 @@
   display: inline-block;
   vertical-align: bottom;
 }
-.picker__button--today:hover,
-.picker__button--clear:hover {
+.c24s .picker__button--today:hover,
+.c24s .picker__button--close:hover,
+.c24s .picker__button--save:hover,
+.c24s .picker__button--clear:hover {
   cursor: pointer;
   color: #000000;
   background: #b1dcfb;
   border-bottom-color: #b1dcfb;
 }
-.picker__button--today:focus,
-.picker__button--clear:focus {
+.c24s .picker__button--today:focus,
+.c24s .picker__button--close:focus,
+.c24s .picker__button--save:focus,
+.c24s .picker__button--clear:focus {
   background: #b1dcfb;
   border-color: #0089ec;
   outline: none;
 }
-.picker__button--today:before,
-.picker__button--clear:before {
+.c24s .picker__button--today:before,
+.c24s .picker__button--close:before,
+.c24s .picker__button--save:before,
+.c24s .picker__button--clear:before {
   position: relative;
   display: inline-block;
   height: 0;
 }
-.picker__button--today:before {
+.c24s .picker__button--today:before {
   content: " ";
   margin-right: .45em;
   top: -0.05em;
@@ -264,11 +272,20 @@
   border-top: 0.66em solid #0059bc;
   border-left: .66em solid transparent;
 }
-.picker__button--clear:before {
+.c24s .picker__button--close:before,
+.c24s .picker__button--clear:before {
   content: "\D7";
   margin-right: .35em;
   top: -0.1em;
   color: #ee2200;
+  vertical-align: top;
+  font-size: 1.1em;
+}
+.c24s .picker__button--save:before {
+  content: "\2713";
+  margin-right: .35em;
+  top: -0.1em;
+  color: #7AB51D;
   vertical-align: top;
   font-size: 1.1em;
 }
