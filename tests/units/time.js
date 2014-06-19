@@ -55,6 +55,8 @@ test( 'Properties', function() {
 
 test( 'Formats', function() {
 
+    var minutesInDay = 24*60
+
     var picker = this.picker,
         interval = $.fn.pickatime.defaults.interval,
         today = new Date(),
@@ -83,10 +85,10 @@ test( 'Formats', function() {
                 return leadZero( minutes%60 )
             },
             a: function() {
-                return ~~( minutes/60 ) % 24 > 12 ? 'p.m.' : 'a.m.'
+                return minutesInDay / 2 > minutes % minutesInDay ? 'a.m.' : 'p.m.'
             },
             A: function() {
-                return ~~( minutes/60 ) % 24 > 12 ? 'PM' : 'AM'
+                return minutesInDay / 2 > minutes % minutesInDay ? 'AM' : 'PM'
             }
         }
 
