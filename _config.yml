@@ -1,0 +1,18 @@
+name: pickadate
+version: 4.0.0
+title: 'pickadate.js'
+description: 'The mobile-friendly, responsive, and lightweight jQuery date & time input picker.'
+author:
+  name: Amsul
+  email: reach@amsul.ca
+  url: 'http://amsul.ca'
+homepage: 'http://amsul.github.io/pickadate.js'
+docs: 'http://amsul.github.io/pickadate.js'
+demo: 'http://amsul.github.io/pickadate.js'
+repo: 'https://github.com/amsul/pickadate.js'
+bugs: 'https://github.com/amsul/pickadate.js/issues'
+baseurl: /pickadate.js
+permalink: pretty
+markdown: redcarpet
+pygments: true
+exclude: ['Gruntfile.js', '*.sublime-project', '*.sublime-workspace', 'node_modules']

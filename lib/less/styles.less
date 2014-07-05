@@ -1,0 +1,123 @@
+.picker {
+    border: 1px solid #ccc;
+    background: #fff;
+    border-radius: 4px;
+    padding: 10px;
+    min-width: 256px;
+    max-width: 420px;
+}
+    .picker__holder {
+        display: none;
+    }
+    .picker--opened .picker__holder {
+        display: block;
+    }
+
+.picker__input {
+    display: block;
+    width: 420px;
+    margin: 0;
+    border: 1px solid #ccc;
+    padding: 8px 10px;
+}
+
+.picker__button {}
+.picker__button--prev:after {
+    content: "<";
+}
+.picker__button--next:after {
+    content: ">";
+}
+.picker__button--scope {
+    width: 140px;
+}
+.picker__button--disabled {
+    color: #ccc;
+    opacity: .75;
+}
+
+.picker__box {}
+.picker__box:focus {
+    background: #f8f8f8;
+    outline: none;
+}
+.picker__box--body {
+    position: relative;
+    height: 280px;
+    overflow: hidden;
+}
+
+.picker__container {
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 10px;
+    max-height: 100%;
+    transition: opacity .125s .125s ease-out;
+    -webkit-transform-origin: 50% 50%;
+}
+.picker__container[hidden] {
+    z-index: 5;
+    display: block;
+    opacity: 0;
+    max-height: 0;
+    transition: -webkit-transform .125s ease-out,
+        opacity .125s ease-out,
+        max-height 0 .125s;
+    -webkit-transform: scale(1.125);
+}
+
+.picker__grid {
+    width: 100%;
+    height: 100%;
+    border-spacing: 0;
+    table-layout: fixed;
+}
+    .picker__grid-title {
+        font-size: 13px;
+        color: #999;
+        padding-bottom: .5em;
+    }
+    .picker__grid-cell {
+        text-align: center;
+        border: 1px solid transparent;
+        padding: .5em .25em;
+        line-height: 1;
+    }
+    .picker__grid-cell:hover:not(.picker__grid-cell--disabled):not(.picker__grid-cell--selected) {
+        background: #b1dcfb;
+        cursor: default;
+    }
+    .picker__grid-cell--highlighted {
+        border-color: #0089ec;
+        background: #b1dcfb;
+    }
+    .picker__grid-cell--selected {
+        font-weight: bold;
+        color: #fff;
+        border-color: #0089ec;
+        background: #0089ec;
+    }
+    .picker__grid-cell--now {
+        position: relative;
+    }
+        .picker__grid-cell--now:before {
+            content: " ";
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 0;
+            height: 0;
+            border-top: 0.5em solid #0059bc;
+            border-left: .5em solid transparent;
+        }
+    .picker__grid-cell--disabled {
+        color: #ccc;
+        opacity: .75;
+    }
+    .picker__grid-cell--outfocus {
+        opacity: .25;
+    }
