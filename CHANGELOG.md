@@ -6,6 +6,7 @@
 - [#462](https://github.com/amsul/pickadate.js/issues/462): Fixed time offset issues by using UTC based times.
 - [#476](https://github.com/amsul/pickadate.js/issues/476): Fixed the `main` files in `bower.json`.
 - [#451](https://github.com/amsul/pickadate.js/issues/451): Added French accessibility labels.
+- [#442](https://github.com/amsul/pickadate.js/issues/442): Fixed flickering on webkit browsers.
 
 
 ## 3.5.2

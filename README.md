@@ -51,7 +51,7 @@ All themes are [generated using LESS](#less-styling) and compiled from the `lib/
 
 File                    | Contents                     | Size (min & gzip)
 ----------------------- | ---------------------------- | ----------------------
-`default.css`           | __Base default *__           | 0.47kb
+`default.css`           | __Base default *__           | 0.49kb
 `default.date.css`      | Default date picker          | 0.70kb
 `default.time.css`      | Default time picker          | 0.35kb
 `classic.css`           | __Base classic *__           | 0.39kb

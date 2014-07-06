@@ -6,6 +6,7 @@
 - [#462]({%= pkg.bugs %}/462): Fixed time offset issues by using UTC based times.
 - [#476]({%= pkg.bugs %}/476): Fixed the `main` files in `bower.json`.
 - [#451]({%= pkg.bugs %}/451): Added French accessibility labels.
+- [#442]({%= pkg.bugs %}/442): Fixed flickering on webkit browsers.
 
 
 ## 3.5.2
