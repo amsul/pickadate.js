@@ -7,6 +7,7 @@
 - [#476](https://github.com/amsul/pickadate.js/issues/476): Fixed the `main` files in `bower.json`.
 - [#451](https://github.com/amsul/pickadate.js/issues/451): Added French accessibility labels.
 - [#442](https://github.com/amsul/pickadate.js/issues/442): Fixed flickering on webkit browsers.
+- [#438](https://github.com/amsul/pickadate.js/issues/438): Fixed adding an ID to the hidden element to remain unique.
 
 
 ## 3.5.2
