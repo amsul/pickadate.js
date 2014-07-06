@@ -1224,14 +1224,31 @@ picker.off('open')</code></pre>
         <p>Trigger an <a href="#events-callbacks">event’s callbacks</a> that have been queued up:</p>
 
         <pre class="pre--demo"><code data-language="javascript">picker.on('open', function() {
-    console.log('Didn’t open.. yet here I am!')
+    console.log('This logs without opening!')
 })
 picker.trigger('open')</code></pre>
 
         {%= dateDemoField({
-            id: 'demo__api-method-trigger',
+            id: 'demo__api-method-trigger--a',
             placeholder: 'Open your console and try me&hellip;',
-            pre: '<button id=button__api-method-trigger class="fieldset__button button button--small">Trigger open callback</button>'
+            pre: '<button id=button__api-method-trigger--a class="fieldset__button button button--small">Trigger open callback</button>'
+        }) %}
+
+        <div class="section__block section__block--notification">
+            <p>Note: this doesn’t actually invoke the method; it only triggers the callback. Similar to jQuery’s <code class="method">triggerHandler</code> method.</p>
+        </div>
+
+        <p>Optionally, you can also pass some data to the method being triggered:</p>
+
+        <pre class="pre--demo"><code data-language="javascript">picker.on('open', function(data) {
+    console.log('This logs without opening with this data:', data)
+})
+picker.trigger('open', { some: 'value' })</code></pre>
+
+        {%= dateDemoField({
+            id: 'demo__api-method-trigger--b',
+            placeholder: 'Open your console and try me&hellip;',
+            pre: '<button id=button__api-method-trigger--b class="fieldset__button button button--small">Trigger open callback with data</button>'
         }) %}
 
     </div> <!-- .section__block -->
