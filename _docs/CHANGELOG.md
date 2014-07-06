@@ -9,6 +9,7 @@
 - [#442]({%= pkg.bugs %}/442): Fixed flickering on webkit browsers.
 - [#438]({%= pkg.bugs %}/438): Fixed adding an ID to the hidden element to remain unique.
 - [#437]({%= pkg.bugs %}/437): Added Common JS to UMD.
+- [#406]({%= pkg.bugs %}/406): Allow `clear` method to be `muted`.
 
 
 ## 3.5.2
