@@ -11,6 +11,7 @@
 - [#437]({%= pkg.bugs %}/437): Added Common JS to UMD.
 - [#406]({%= pkg.bugs %}/406): Allow `clear` method to be `muted`.
 - [#420]({%= pkg.bugs %}/420): [Updated docs]({%= pkg.homepage %}/api.htm#method-trigger) the `trigger` method’s ability to pass data to event callbacks.
+- [#456]({%= pkg.bugs %}/456): Fixed “today” button to be disabled when the date is disabled.
 
 
 ## 3.5.2
