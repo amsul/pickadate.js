@@ -11,7 +11,7 @@
 {% today = new Date(2013,3,20); today.setHours(0,0,0,0) %}
 {% nowTime = 980 %}
 {% todayTime = today.getTime() + ( nowTime * 60000 ) %}
-{% playDate = new Date( today.getFullYear(), today.getMonth(), today.getDate() + 10 ) %}
+{% playDate = new Date( today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate() + 10 ) %}
 
 
 <section class="section">
@@ -272,19 +272,19 @@ picker.start()</code></pre>
         <p>Here’s a <b>date picker item object</b> for <u>{%= grunt.template.date( today.getTime(), 'd mmmm, yyyy' ) %}</u>:</p>
         <pre><code data-language="javascript">{
     // The full year.
-    year: {%= today.getFullYear() %},
+    year: {%= today.getUTCFullYear() %},
 
     // The month with zero-as-index.
-    month: {%= today.getMonth() %},
+    month: {%= today.getUTCMonth() %},
 
     // The date of the month.
-    date: {%= today.getDate() %},
+    date: {%= today.getUTCDate() %},
 
     // The day of the week with zero-as-index.
-    day: {%= today.getDay() %},
+    day: {%= today.getUTCDay() %},
 
     // The underlying JavaScript Date object.
-    obj: { '{%= today %}' },
+    obj: { '{%= today.toUTCString() %}' },
 
     // The “pick” value used for comparisons.
     pick: {%= today.getTime() %}
@@ -581,10 +581,10 @@ picker.set({
         <h3 class="heading heading--divide"><span class="heading__text">Select a date <a href="#item-objects">item object</a><a class="heading__anchor--bigger" name="method-set-select-date" href="#method-set-select-date">&sect;</a></span></h3>
 
         <pre class="pre--demo"><code data-language="javascript">// Using arrays formatted as [YEAR,MONTH,DATE].
-picker.set('select', [{%= today.getFullYear() + ',' + today.getMonth() + ',' + today.getDate() %}])
+picker.set('select', [{%= today.getUTCFullYear() + ',' + today.getUTCMonth() + ',' + today.getUTCDate() %}])
 
 // Using JavaScript Date objects.
-picker.set('select', new Date({%= playDate.getFullYear() %}, {%= playDate.getMonth() %}, {%= playDate.getDate() %}))
+picker.set('select', new Date({%= playDate.getUTCFullYear() %}, {%= playDate.getUTCMonth() %}, {%= playDate.getUTCDate() %}))
 
 // Using positive integers as UNIX timestamps.
 picker.set('select', {%= today.getTime() + 468487654 %})
@@ -606,7 +606,7 @@ picker.set('select', '2014-04-20', { format: 'yyyy-mm-dd' })</code></pre>
 picker.set('select', [3,0])
 
 // Using JavaScript Date objects.
-picker.set('select', new Date({%= today.getFullYear() %}, {%= today.getMonth() %}, {%= today.getDate() %}, 10, 30))
+picker.set('select', new Date({%= today.getUTCFullYear() %}, {%= today.getUTCMonth() %}, {%= today.getUTCDate() %}, 10, 30))
 
 // Using positive integers as minutes.
 picker.set('select', 540)
@@ -637,10 +637,10 @@ picker.set('select', '04-30', { format: 'hh-i' })</code></pre>
         <h3 class="heading heading--divide"><span class="heading__text">Highlight a date <a href="#item-objects">item object</a><a class="heading__anchor--bigger" name="method-set-highlight-date" href="#method-set-highlight-date">&sect;</a></span></h3>
 
         <pre class="pre--demo"><code data-language="javascript">// Using arrays formatted as [YEAR,MONTH,DATE].
-picker.set('highlight', [{%= today.getFullYear() + ',' + today.getMonth() + ',' + today.getDate() %}])
+picker.set('highlight', [{%= today.getUTCFullYear() + ',' + today.getUTCMonth() + ',' + today.getUTCDate() %}])
 
 // Using JavaScript Date objects.
-picker.set('highlight', new Date({%= playDate.getFullYear() %}, {%= playDate.getMonth() %}, {%= playDate.getDate() %}))
+picker.set('highlight', new Date({%= playDate.getUTCFullYear() %}, {%= playDate.getUTCMonth() %}, {%= playDate.getUTCDate() %}))
 
 // Using positive integers as UNIX timestamps.
 picker.set('highlight', {%= today.getTime() + 468487654 %})
@@ -662,7 +662,7 @@ picker.set('highlight', '2014-04-20', { format: 'yyyy-mm-dd' })</code></pre>
 picker.set('highlight', [15,30])
 
 // Using JavaScript Date objects.
-picker.set('highlight', new Date({%= today.getFullYear() %}, {%= today.getMonth() %}, {%= today.getDate() %}, 10, 30))
+picker.set('highlight', new Date({%= today.getUTCFullYear() %}, {%= today.getUTCMonth() %}, {%= today.getUTCDate() %}, 10, 30))
 
 // Using positive integers as minutes.
 picker.set('highlight', 1080)
@@ -720,7 +720,7 @@ picker.set('view', '2014-04-20', { format: 'yyyy-mm-dd' })</code></code></pre>
 picker.set('view', [15,30])
 
 // Using JavaScript Date objects.
-picker.set('view', new Date({%= today.getFullYear() %}, {%= today.getMonth() %}, {%= today.getDate() %}, 10, 30))
+picker.set('view', new Date({%= today.getUTCFullYear() %}, {%= today.getUTCMonth() %}, {%= today.getUTCDate() %}, 10, 30))
 
 // Using positive integers as minutes.
 picker.set('view', 1080)
@@ -780,7 +780,7 @@ picker.set('min', false)</code></pre>
 picker.set('min', [15,30])
 
 // Using JavaScript Date objects.
-picker.set('min', new Date({%= today.getFullYear() %}, {%= today.getMonth() %}, {%= today.getDate() %}, 10, 30))
+picker.set('min', new Date({%= today.getUTCFullYear() %}, {%= today.getUTCMonth() %}, {%= today.getUTCDate() %}, 10, 30))
 
 // Using integers as intervals relative from now.
 picker.set('min', -4)
@@ -844,7 +844,7 @@ picker.set('max', false)</code></pre>
 picker.set('max', [15,30])
 
 // Using JavaScript Date objects.
-picker.set('max', new Date({%= today.getFullYear() %}, {%= today.getMonth() %}, {%= today.getDate() %}, 10, 30))
+picker.set('max', new Date({%= today.getUTCFullYear() %}, {%= today.getUTCMonth() %}, {%= today.getUTCDate() %}, 10, 30))
 
 // Using integers as intervals relative from now.
 picker.set('max', 4)
@@ -1233,6 +1233,10 @@ picker.trigger('open')</code></pre>
             placeholder: 'Open your console and try me&hellip;',
             pre: '<button id=button__api-method-trigger class="fieldset__button button button--small">Trigger open callback</button>'
         }) %}
+
+        <div class="section__block section__block--notification">
+            <p>Note: this doesn’t actually invoke the method; it only triggers the callback. Similar to jQuery’s <code class="method">triggerHandler</code> method.</p>
+        </div>
 
     </div> <!-- .section__block -->
 

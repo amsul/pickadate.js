@@ -1,5 +1,11 @@
 # Changelog
 
+
+## 3.5.3
+
+- [#462]({%= pkg.bugs %}/462): Fixed time offset issues by using UTC based times.
+
+
 ## 3.5.2
 - [#398]({%= pkg.bugs %}/398): Fixed Nepali translations.
 - [#403]({%= pkg.bugs %}/403): Fixed month nav pointer styling with Bootstrap (`border-box` issue).
