@@ -241,7 +241,8 @@
 
 // Disabled dates.
 .picker__day--disabled,
-.picker__day--disabled:hover {
+.picker__day--disabled:hover,
+.picker--focused .picker__day--disabled {
     .picker-item-disabled;
 }
 
@@ -305,6 +306,15 @@
     color: @clear-red;
     vertical-align: top;
     font-size: 1.1em;
+}
+
+// Today when “disabled”.
+.picker__button--today[disabled],
+.picker__button--today[disabled]:hover {
+    .picker-item-disabled;
+}
+.picker__button--today[disabled]:before {
+    border-top-color: @disabled-tag;
 }
 
 
