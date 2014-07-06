@@ -10,6 +10,7 @@
 - [#438]({%= pkg.bugs %}/438): Fixed adding an ID to the hidden element to remain unique.
 - [#437]({%= pkg.bugs %}/437): Added Common JS to UMD.
 - [#406]({%= pkg.bugs %}/406): Allow `clear` method to be `muted`.
+- [#420]({%= pkg.bugs %}/420): [Updated docs]({%= pkg.homepage %}/api.htm#method-trigger) the `trigger` method’s ability to pass data to event callbacks.
 
 
 ## 3.5.2

@@ -10,6 +10,7 @@
 - [#438](https://github.com/amsul/pickadate.js/issues/438): Fixed adding an ID to the hidden element to remain unique.
 - [#437](https://github.com/amsul/pickadate.js/issues/437): Added Common JS to UMD.
 - [#406](https://github.com/amsul/pickadate.js/issues/406): Allow `clear` method to be `muted`.
+- [#420](https://github.com/amsul/pickadate.js/issues/420): [Updated docs](http://amsul.github.io/pickadate.js/api.htm#method-trigger) the `trigger` method’s ability to pass data to event callbacks.
 
 
 ## 3.5.2

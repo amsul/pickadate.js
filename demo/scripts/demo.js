@@ -1271,14 +1271,25 @@ if ( picker_method_off ) {
 
 
 // trigger events
-var $input_method_trigger = $( '#demo__api-method-trigger' ).pickadate(),
-    picker_method_trigger = $input_method_trigger.pickadate( 'picker' )
-if ( picker_method_trigger ) {
-    picker_method_trigger.on( 'open', function() {
-        console.log( 'Didn’t open.. yet here I am!' )
+var $input_method_trigger__a = $( '#demo__api-method-trigger--a' ).pickadate(),
+    picker_method_trigger__a = $input_method_trigger__a.pickadate( 'picker' )
+if ( picker_method_trigger__a ) {
+    picker_method_trigger__a.on( 'open', function() {
+        console.log( 'This logs without opening!' )
     })
-    $( '#button__api-method-trigger' ).on( 'click', function( event ) {
-        picker_method_trigger.trigger( 'open' )
+    $( '#button__api-method-trigger--a' ).on( 'click', function( event ) {
+        picker_method_trigger__a.trigger( 'open' )
+        event.stopPropagation()
+    })
+}
+var $input_method_trigger__b = $( '#demo__api-method-trigger--b' ).pickadate(),
+    picker_method_trigger__b = $input_method_trigger__b.pickadate( 'picker' )
+if ( picker_method_trigger__b ) {
+    picker_method_trigger__b.on( 'open', function(data) {
+        console.log( 'This logs without opening with this data:', data )
+    })
+    $( '#button__api-method-trigger--b' ).on( 'click', function( event ) {
+        picker_method_trigger__b.trigger( 'open', { some: 'value' } )
         event.stopPropagation()
     })
 }
