@@ -4,6 +4,7 @@
 ## 3.5.3
 
 - [#462](https://github.com/amsul/pickadate.js/issues/462): Fixed time offset issues by using UTC based times.
+- [#476](https://github.com/amsul/pickadate.js/issues/476): Fixed the `main` files in `bower.json`.
 
 
 ## 3.5.2

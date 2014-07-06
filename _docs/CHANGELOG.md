@@ -4,6 +4,7 @@
 ## 3.5.3
 
 - [#462]({%= pkg.bugs %}/462): Fixed time offset issues by using UTC based times.
+- [#476]({%= pkg.bugs %}/476): Fixed the `main` files in `bower.json`.
 
 
 ## 3.5.2
