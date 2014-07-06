@@ -8,6 +8,7 @@
 - [#451]({%= pkg.bugs %}/451): Added French accessibility labels.
 - [#442]({%= pkg.bugs %}/442): Fixed flickering on webkit browsers.
 - [#438]({%= pkg.bugs %}/438): Fixed adding an ID to the hidden element to remain unique.
+- [#437]({%= pkg.bugs %}/437): Added Common JS to UMD.
 
 
 ## 3.5.2
