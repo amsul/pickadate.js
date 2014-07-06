@@ -29,7 +29,11 @@
     "tests",
     "v2-(deprecated)"
   ],
-  "main": "lib/picker.js",
+  "main": [
+    "lib/picker.js"
+    "lib/picker.date.js",
+    "lib/picker.time.js"
+  ],
   "homepage": "http://amsul.github.io/pickadate.js",
   "docs": "http://amsul.github.io/pickadate.js",
   "demo": "http://amsul.github.io/pickadate.js",
