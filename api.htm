@@ -314,10 +314,10 @@ picker.start()</code></pre>
     day: 6,
 
     // The underlying JavaScript Date object.
-    obj: { 'Sat Apr 20 2013 00:00:00 GMT+0200 (CEST)' },
+    obj: { 'Sat, 20 Apr 2013 04:00:00 GMT' },
 
     // The “pick” value used for comparisons.
-    pick: 1366408800000
+    pick: 1366430400000
 }</code></pre>
 
         <p>Here’s a <b>time picker item object</b> for <u>4:20 PM</u>:</p>
@@ -562,7 +562,7 @@ picker.set('select', [2013,3,20])
 picker.set('select', new Date(2013, 3, 30))
 
 // Using positive integers as UNIX timestamps.
-picker.set('select', 1366877287654)
+picker.set('select', 1366898887654)
 
 // Using a string along with the parsing format (defaults to <a href="date.htm#formats">`format` option</a>).
 picker.set('select', '2014-04-20', { format: 'yyyy-mm-dd' })</code></pre>
@@ -606,7 +606,7 @@ picker.set('highlight', [2013,3,20])
 picker.set('highlight', new Date(2013, 3, 30))
 
 // Using positive integers as UNIX timestamps.
-picker.set('highlight', 1366877287654)
+picker.set('highlight', 1366898887654)
 
 // Using a string along with the parsing format (defaults to <a href="date.htm#formats">`format` option</a>).
 picker.set('highlight', '2014-04-20', { format: 'yyyy-mm-dd' })</code></pre>
@@ -1094,6 +1094,10 @@ picker.off('open')</code></pre>
 picker.trigger('open')</code></pre>
 
         <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><button id=button__api-method-trigger class="fieldset__button button button--small">Trigger open callback</button><input id="demo__api-method-trigger" class="fieldset__input " type=text value="" placeholder="Open your console and try me&hellip;"></div></fieldset>
+
+        <div class="section__block section__block--notification">
+            <p>Note: this doesn’t actually invoke the method; it only triggers the callback. Similar to jQuery’s <code class="method">triggerHandler</code> method.</p>
+        </div>
 
     </div> <!-- .section__block -->
 
