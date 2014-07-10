@@ -55,7 +55,7 @@ File                    | Contents                     | Size (min & gzip)
 `default.date.css`      | Default date picker          | 0.70kb
 `default.time.css`      | Default time picker          | 0.35kb
 `classic.css`           | __Base classic *__           | 0.39kb
-`classic.date.css`      | Classic date picker          | 0.72kb
+`classic.date.css`      | Classic date picker          | 0.74kb
 `classic.time.css`      | Classic time picker          | 0.35kb
 `rtl.css`               | __RTL language stylings **__ | 0.10kb
 
