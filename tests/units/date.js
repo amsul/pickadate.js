@@ -198,6 +198,20 @@ test( '`clear`', function() {
     strictEqual( picker.get('select'), null, 'Clears out selection' )
 })
 
+test('Does not set today to previous day', function() {
+
+    var picker = this.picker,
+        currentDate = new Date('Wed Jul 23 2014 00:00:00 GMT+0100 (BST)');
+
+    console.log(currentDate);
+
+    picker.open();
+    picker.set('select', currentDate);
+
+    strictEqual(picker.get('value'), '23 July, 2014', 'Picker should be set to expected date');
+});
+
+
 test( '`select`', function() {
 
     var picker = this.picker,
