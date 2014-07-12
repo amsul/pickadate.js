@@ -420,9 +420,13 @@ test( '`min` using strings', function() {
 
     var picker = this.picker
 
-    console.log( picker.get('min') )
+    var min = picker.get('min')
+    strictEqual( min.pick, -Infinity, 'No `min` date' )
+
     picker.set( 'min', '8 January, 2013' )
-    console.log( picker.get('min') )
+
+    min = picker.get('min')
+    deepEqual( [min.year, min.month, min.date], [2013, 0, 8], '`min` updated' )
 })
 
 test( '`max`', function() {
@@ -518,7 +522,15 @@ test( '`max` using booleans', function() {
 
 test( '`max` using strings', function() {
 
-    console.log('todo');
+    var picker = this.picker
+
+    var max = picker.get('max')
+    strictEqual( max.pick, Infinity, 'No `max` date' )
+
+    picker.set( 'max', '8 January, 2013' )
+
+    max = picker.get('max')
+    deepEqual( [max.year, max.month, max.date], [2013, 0, 8], '`max` updated' )
 })
 
 test( '`disable` and `enable` using integers', function() {
