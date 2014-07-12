@@ -416,6 +416,15 @@ test( '`min` using booleans', function() {
     deepEqual( picker.get( 'max' ).pick, Infinity, '`max` unaffected' )
 })
 
+test( '`min` using strings', function() {
+
+    var picker = this.picker
+
+    console.log( picker.get('min') )
+    picker.set( 'min', '8 January, 2013' )
+    console.log( picker.get('min') )
+})
+
 test( '`max`', function() {
 
     var picker = this.picker,
@@ -505,6 +514,11 @@ test( '`max` using booleans', function() {
     deepEqual( picker.get( 'view' ).obj, playdate, '`view` unaffected' )
     strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
     deepEqual( picker.get( 'min' ).pick, -Infinity, '`min` unaffected' )
+})
+
+test( '`max` using strings', function() {
+
+    console.log('todo');
 })
 
 test( '`disable` and `enable` using integers', function() {
