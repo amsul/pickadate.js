@@ -254,16 +254,16 @@
 
 
 /**
- * The footer containing the "today" and "clear" buttons.
+ * The footer containing the "today", "clear", and "close" buttons.
  */
 .picker__footer {
     text-align: center;
 }
 
-// Today and clear buttons.
+// Today, clear, and close buttons.
 .picker__button--today,
 .picker__button--clear,
-.picker__button--close{
+.picker__button--close {
     border: 1px solid @white;
     background: @white;
     font-size: .8em;
@@ -275,50 +275,49 @@
 }
 .picker__button--today:hover,
 .picker__button--clear:hover,
-.picker__button--close:hover{
+.picker__button--close:hover {
     .picker-item-hovered;
     border-bottom-color: @blue-hover;
 }
 .picker__button--today:focus,
 .picker__button--clear:focus,
-.picker__button--close:focus{
+.picker__button--close:focus {
     background: @blue-hover;
     border-color: @blue;
     outline: none;
 }
 
-// Today and clear “indicators”.
+// Today, clear, and close “indicators”.
 .picker__button--today:before,
 .picker__button--clear:before,
-.picker__button--close:before{
+.picker__button--close:before {
     position: relative;
     display: inline-block;
     height: 0;
 }
-.picker__button--today:before {
+.picker__button--today:before,
+.picker__button--clear:before {
     content: " ";
     margin-right: .45em;
+}
+.picker__button--today:before {
     top: -.05em;
     width: 0;
     border-top: .66em solid @blue-tag;
     border-left: .66em solid transparent;
 }
 .picker__button--clear:before {
+    top: -.25em;
+    width: .66em;
+    border-top: 3px solid @clear-red;
+}
+.picker__button--close:before {
     content: "\D7"; // ×
-    margin-right: .35em;
     top: -.1em;
-    color: @clear-red;
     vertical-align: top;
     font-size: 1.1em;
-}
-
-.picker__button--close:before {
-  content: "\D7"; // ×
-  margin-right: .35em;
-  top: -.1em;
-  color: @black;
-  vertical-align: top;
-  font-size: 1.1em;
+    margin-right: .35em;
+    color: @border-grey;
 }
 
 // Today when “disabled”.
