@@ -1144,7 +1144,7 @@ $( '#button__api-set--enable-time-all' ).on( 'click', function( event ) {
     event.stopPropagation()
 })
 
-//enable/disable: range
+//enable-disable: range
 var $input_set__enable_disable_in_range_date = $( '#demo__api-set--enable-disable-in-range-date' ).pickadate({
         disable: [
             1, [2013, 10, 17, 'inverted'],

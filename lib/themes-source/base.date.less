@@ -262,23 +262,26 @@
 
 // Today and clear buttons.
 .picker__button--today,
-.picker__button--clear {
+.picker__button--clear,
+.picker__button--close{
     border: 1px solid @white;
     background: @white;
     font-size: .8em;
     padding: .66em 0;
     font-weight: bold;
-    width: 50%;
+    width: 33%;
     display: inline-block;
     vertical-align: bottom;
 }
 .picker__button--today:hover,
-.picker__button--clear:hover {
+.picker__button--clear:hover,
+.picker__button--close:hover{
     .picker-item-hovered;
     border-bottom-color: @blue-hover;
 }
 .picker__button--today:focus,
-.picker__button--clear:focus {
+.picker__button--clear:focus,
+.picker__button--close:focus{
     background: @blue-hover;
     border-color: @blue;
     outline: none;
@@ -286,7 +289,8 @@
 
 // Today and clear “indicators”.
 .picker__button--today:before,
-.picker__button--clear:before {
+.picker__button--clear:before,
+.picker__button--close:before{
     position: relative;
     display: inline-block;
     height: 0;
@@ -306,6 +310,15 @@
     color: @clear-red;
     vertical-align: top;
     font-size: 1.1em;
+}
+
+.picker__button--close:before {
+  content: "\D7"; // ×
+  margin-right: .35em;
+  top: -.1em;
+  color: @black;
+  vertical-align: top;
+  font-size: 1.1em;
 }
 
 // Today when “disabled”.
