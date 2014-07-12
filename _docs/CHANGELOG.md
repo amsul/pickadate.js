@@ -6,6 +6,7 @@
 - [#437]({%= pkg.bugs %}/437): Added Common JS to UMD.
 - [#478]({%= pkg.bugs %}/478): Added “close” button.
 - [#406]({%= pkg.bugs %}/406): Allow `clear` method to be `muted`.
+- [#439]({%= pkg.bugs %}/439): Added ability to set min/max date & time using formatted strings.
 - [#462]({%= pkg.bugs %}/462): Fixed time offset issues by using UTC based times.
 - [#476]({%= pkg.bugs %}/476): Fixed the `main` files in `bower.json`.
 - [#451]({%= pkg.bugs %}/451): Added French accessibility labels.

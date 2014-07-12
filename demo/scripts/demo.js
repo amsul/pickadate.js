@@ -942,6 +942,10 @@ $( '#button__api-set--min-date-js' ).on( 'click', function( event ) {
     picker_set__min_date.set( 'min', new Date(2013,7,14) )
     event.stopPropagation()
 })
+$( '#button__api-set--min-date-string' ).on( 'click', function( event ) {
+    picker_set__min_date.set( 'min', '8 January, 2014' )
+    event.stopPropagation()
+})
 $( '#button__api-set--min-date-integer' ).on( 'click', function( event ) {
     picker_set__min_date.set( 'min', -4 )
     event.stopPropagation()
@@ -964,6 +968,10 @@ $( '#button__api-set--min-time-array' ).on( 'click', function( event ) {
 })
 $( '#button__api-set--min-time-js' ).on( 'click', function( event ) {
     picker_set__min_time.set( 'min', TODAY )
+    event.stopPropagation()
+})
+$( '#button__api-set--min-time-string' ).on( 'click', function( event ) {
+    picker_set__min_time.set( 'min', '4:30 PM' )
     event.stopPropagation()
 })
 $( '#button__api-set--min-time-integer' ).on( 'click', function( event ) {
@@ -990,6 +998,10 @@ $( '#button__api-set--max-date-js' ).on( 'click', function( event ) {
     picker_set__max_date.set( 'max', new Date(2013,7,14) )
     event.stopPropagation()
 })
+$( '#button__api-set--max-date-string' ).on( 'click', function( event ) {
+    picker_set__max_date.set( 'max', '20 April, 2016' )
+    event.stopPropagation()
+})
 $( '#button__api-set--max-date-integer' ).on( 'click', function( event ) {
     picker_set__max_date.set( 'max', 4 )
     event.stopPropagation()
@@ -1012,6 +1024,10 @@ $( '#button__api-set--max-time-array' ).on( 'click', function( event ) {
 })
 $( '#button__api-set--max-time-js' ).on( 'click', function( event ) {
     picker_set__max_time.set( 'max', TODAY )
+    event.stopPropagation()
+})
+$( '#button__api-set--max-time-string' ).on( 'click', function( event ) {
+    picker_set__max_time.set( 'max', '11:30 AM' )
     event.stopPropagation()
 })
 $( '#button__api-set--max-time-integer' ).on( 'click', function( event ) {

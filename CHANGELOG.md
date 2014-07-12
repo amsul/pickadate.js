@@ -6,6 +6,7 @@
 - [#437](https://github.com/amsul/pickadate.js/issues/437): Added Common JS to UMD.
 - [#478](https://github.com/amsul/pickadate.js/issues/478): Added “close” button.
 - [#406](https://github.com/amsul/pickadate.js/issues/406): Allow `clear` method to be `muted`.
+- [#439](https://github.com/amsul/pickadate.js/issues/439): Added ability to set min/max date & time using formatted strings.
 - [#462](https://github.com/amsul/pickadate.js/issues/462): Fixed time offset issues by using UTC based times.
 - [#476](https://github.com/amsul/pickadate.js/issues/476): Fixed the `main` files in `bower.json`.
 - [#451](https://github.com/amsul/pickadate.js/issues/451): Added French accessibility labels.
