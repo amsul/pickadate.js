@@ -1144,6 +1144,26 @@ $( '#button__api-set--enable-time-all' ).on( 'click', function( event ) {
     event.stopPropagation()
 })
 
+//enable-disable: range
+var $input_set__enable_disable_in_range_date = $( '#demo__api-set--enable-disable-in-range-date' ).pickadate({
+        disable: [
+            1, [2013, 10, 17, 'inverted'],
+            { from: [2014, 2, 2], to: [2014, 2, 28] },
+            [2014, 2, 10, 'inverted'],
+            { from: [2014, 2, 14], to: [2014, 2, 23], inverted: true }
+        ]
+    }),
+    picker_set__enable_disable_in_range_date = $input_set__enable_disable_in_range_date.pickadate( 'picker' )
+var $input_set__enable_disable_in_range_time = $( '#demo__api-set--enable-disable-in-range-time' ).pickatime({
+        disable: [
+            1, [1, 30, 'inverted'],
+            { from: [3,0], to: [18,0] },
+            [4, 30, 'inverted'],
+            { from: [7,30], to: [11,30], inverted: true }
+        ]
+    }),
+    picker_set__enable_disable_in_range_time = $input_set__enable_disable_in_range_time.pickatime( 'picker' )
+
 //interval: time
 var $input_set__interval_time = $( '#demo__api-set--interval' ).pickatime(),
     picker_set__interval_time = $input_set__interval_time.pickatime( 'picker' )
