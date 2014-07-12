@@ -5,8 +5,8 @@
 
 *.sublime-workspace
 
-node_modules/*
-
 *.log
+
+node_modules/
 
 .idea/
