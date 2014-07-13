@@ -13,6 +13,7 @@
 - [#442](https://github.com/amsul/pickadate.js/issues/442): Fixed flickering on webkit browsers.
 - [#438](https://github.com/amsul/pickadate.js/issues/438): Fixed adding an ID to the hidden element to remain unique.
 - [#456](https://github.com/amsul/pickadate.js/issues/456): Fixed “today” button to be disabled when the date is disabled.
+- [#419](https://github.com/amsul/pickadate.js/issues/419): Fixed time picker not scrolling to correct position with the “classic” theme.
 - [#420](https://github.com/amsul/pickadate.js/issues/420): [Updated docs](http://amsul.github.io/pickadate.js/api.htm#method-trigger) the `trigger` method’s ability to pass data to event callbacks.
 
 
