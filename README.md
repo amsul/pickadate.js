@@ -3,6 +3,11 @@
 The mobile-friendly, responsive, and lightweight jQuery date & time input picker.
 
 
+### Status
+
+Version 4 is a complete re-write of the library. It is currently in active development and the status can be seen here: [#446](https://github.com/amsul/pickadate.js/issues/446).
+
+
 <br><br>
 
 ---
