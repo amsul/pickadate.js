@@ -14,6 +14,7 @@
 - [#438]({%= pkg.bugs %}/438): Fixed adding an ID to the hidden element to remain unique.
 - [#456]({%= pkg.bugs %}/456): Fixed “today” button to be disabled when the date is disabled.
 - [#419]({%= pkg.bugs %}/419): Fixed time picker not scrolling to correct position with the “classic” theme.
+- Fixed bug where it was possible to unbind internal bindings.
 - [#420]({%= pkg.bugs %}/420): [Updated docs]({%= pkg.homepage %}/api.htm#method-trigger) the `trigger` method’s ability to pass data to event callbacks.
 
 
