@@ -1,5 +1,7 @@
 *.DS_Store
 *.sublime-project
 *.sublime-workspace
-node_modules/*
 *.log
+node_modules/*
+.idea/
+_site/
