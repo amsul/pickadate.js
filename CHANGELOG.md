@@ -1,6 +1,24 @@
 # Changelog
 
-## 3.5.1
+
+## 3.5.3
+
+- [#437](https://github.com/amsul/pickadate.js/issues/437): Added Common JS to UMD.
+- [#478](https://github.com/amsul/pickadate.js/issues/478): Added “close” button.
+- [#406](https://github.com/amsul/pickadate.js/issues/406): Allow `clear` method to be `muted`.
+- [#439](https://github.com/amsul/pickadate.js/issues/439): Added ability to set min/max date & time using formatted strings.
+- [#462](https://github.com/amsul/pickadate.js/issues/462): Fixed time offset issues by using UTC based times.
+- [#476](https://github.com/amsul/pickadate.js/issues/476): Fixed the `main` files in `bower.json`.
+- [#451](https://github.com/amsul/pickadate.js/issues/451): Added French accessibility labels.
+- [#442](https://github.com/amsul/pickadate.js/issues/442): Fixed flickering on webkit browsers.
+- [#438](https://github.com/amsul/pickadate.js/issues/438): Fixed adding an ID to the hidden element to remain unique.
+- [#456](https://github.com/amsul/pickadate.js/issues/456): Fixed “today” button to be disabled when the date is disabled.
+- [#419](https://github.com/amsul/pickadate.js/issues/419): Fixed time picker not scrolling to correct position with the “classic” theme.
+- Fixed bug where it was possible to unbind internal bindings.
+- [#420](https://github.com/amsul/pickadate.js/issues/420): [Updated docs](http://amsul.github.io/pickadate.js/api.htm#method-trigger) the `trigger` method’s ability to pass data to event callbacks.
+
+
+## 3.5.2
 - [#398](https://github.com/amsul/pickadate.js/issues/398): Fixed Nepali translations.
 - [#403](https://github.com/amsul/pickadate.js/issues/403): Fixed month nav pointer styling with Bootstrap (`border-box` issue).
 - [#405](https://github.com/amsul/pickadate.js/issues/405): Fixed scrollbar width checker.

@@ -55,6 +55,8 @@ test( 'Properties', function() {
 
 test( 'Formats', function() {
 
+    var minutesInDay = 24*60
+
     var picker = this.picker,
         interval = $.fn.pickatime.defaults.interval,
         today = new Date(),
@@ -83,10 +85,10 @@ test( 'Formats', function() {
                 return leadZero( minutes%60 )
             },
             a: function() {
-                return ~~( minutes/60 ) % 24 > 12 ? 'p.m.' : 'a.m.'
+                return minutesInDay / 2 > minutes % minutesInDay ? 'a.m.' : 'p.m.'
             },
             A: function() {
-                return ~~( minutes/60 ) % 24 > 12 ? 'PM' : 'AM'
+                return minutesInDay / 2 > minutes % minutesInDay ? 'AM' : 'PM'
             }
         }
 
@@ -352,6 +354,19 @@ test( '`min` using JS dates', function() {
     deepEqual( picker.get( 'max' ).pick, 1410, '`max` updated' )
 })
 
+test( '`min` using strings', function() {
+
+    var picker = this.picker
+
+    var min = picker.get('min')
+    strictEqual( min.pick, 0, 'No `min` time' )
+
+    picker.set( 'min', '3:30 PM' )
+
+    min = picker.get('min')
+    deepEqual( [min.hour, min.mins], [15, 30], '`min` updated' )
+})
+
 test( '`max` using integers', function() {
 
     var picker = this.picker,
@@ -446,6 +461,19 @@ test( '`max` using JS dates', function() {
         deepEqual( picker.get( 'view' ), picker.get( 'highlight' ), '`view` unaffected' )
     }
     deepEqual( picker.get( 'min' ).pick, 0, '`min` unaffected' )
+})
+
+test( '`max` using strings', function() {
+
+    var picker = this.picker
+
+    var max = picker.get('max')
+    strictEqual( max.pick, 1410, 'No `max` time' )
+
+    picker.set( 'max', '3:30 PM' )
+
+    max = picker.get('max')
+    deepEqual( [max.hour, max.mins], [15, 30], '`max` updated' )
 })
 
 test( '`disable` and `enable` using integers', function() {

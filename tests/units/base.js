@@ -353,6 +353,21 @@ test( 'As muted methods', 1, function() {
     picker.set({ select: new Date() }, { muted: true })
 })
 
+test( 'Clear as muted', function() {
+
+    var picker = this.picker
+    var called = false
+
+    // Bind the callback.
+    picker.on('set', function() {
+        called = true
+    })
+
+    picker.clear({ muted: true })
+
+    ok( !called, 'Callback not called' )
+})
+
 test( 'Open with alternate focus', function() {
 
     var picker = this.picker,

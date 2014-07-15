@@ -942,6 +942,10 @@ $( '#button__api-set--min-date-js' ).on( 'click', function( event ) {
     picker_set__min_date.set( 'min', new Date(2013,7,14) )
     event.stopPropagation()
 })
+$( '#button__api-set--min-date-string' ).on( 'click', function( event ) {
+    picker_set__min_date.set( 'min', '8 January, 2014' )
+    event.stopPropagation()
+})
 $( '#button__api-set--min-date-integer' ).on( 'click', function( event ) {
     picker_set__min_date.set( 'min', -4 )
     event.stopPropagation()
@@ -964,6 +968,10 @@ $( '#button__api-set--min-time-array' ).on( 'click', function( event ) {
 })
 $( '#button__api-set--min-time-js' ).on( 'click', function( event ) {
     picker_set__min_time.set( 'min', TODAY )
+    event.stopPropagation()
+})
+$( '#button__api-set--min-time-string' ).on( 'click', function( event ) {
+    picker_set__min_time.set( 'min', '4:30 PM' )
     event.stopPropagation()
 })
 $( '#button__api-set--min-time-integer' ).on( 'click', function( event ) {
@@ -990,6 +998,10 @@ $( '#button__api-set--max-date-js' ).on( 'click', function( event ) {
     picker_set__max_date.set( 'max', new Date(2013,7,14) )
     event.stopPropagation()
 })
+$( '#button__api-set--max-date-string' ).on( 'click', function( event ) {
+    picker_set__max_date.set( 'max', '20 April, 2016' )
+    event.stopPropagation()
+})
 $( '#button__api-set--max-date-integer' ).on( 'click', function( event ) {
     picker_set__max_date.set( 'max', 4 )
     event.stopPropagation()
@@ -1012,6 +1024,10 @@ $( '#button__api-set--max-time-array' ).on( 'click', function( event ) {
 })
 $( '#button__api-set--max-time-js' ).on( 'click', function( event ) {
     picker_set__max_time.set( 'max', TODAY )
+    event.stopPropagation()
+})
+$( '#button__api-set--max-time-string' ).on( 'click', function( event ) {
+    picker_set__max_time.set( 'max', '11:30 AM' )
     event.stopPropagation()
 })
 $( '#button__api-set--max-time-integer' ).on( 'click', function( event ) {
@@ -1144,7 +1160,7 @@ $( '#button__api-set--enable-time-all' ).on( 'click', function( event ) {
     event.stopPropagation()
 })
 
-//enable/disable: range
+//enable-disable: range
 var $input_set__enable_disable_in_range_date = $( '#demo__api-set--enable-disable-in-range-date' ).pickadate({
         disable: [
             1, [2013, 10, 17, 'inverted'],
@@ -1271,14 +1287,25 @@ if ( picker_method_off ) {
 
 
 // trigger events
-var $input_method_trigger = $( '#demo__api-method-trigger' ).pickadate(),
-    picker_method_trigger = $input_method_trigger.pickadate( 'picker' )
-if ( picker_method_trigger ) {
-    picker_method_trigger.on( 'open', function() {
-        console.log( 'Didn’t open.. yet here I am!' )
+var $input_method_trigger__a = $( '#demo__api-method-trigger--a' ).pickadate(),
+    picker_method_trigger__a = $input_method_trigger__a.pickadate( 'picker' )
+if ( picker_method_trigger__a ) {
+    picker_method_trigger__a.on( 'open', function() {
+        console.log( 'This logs without opening!' )
     })
-    $( '#button__api-method-trigger' ).on( 'click', function( event ) {
-        picker_method_trigger.trigger( 'open' )
+    $( '#button__api-method-trigger--a' ).on( 'click', function( event ) {
+        picker_method_trigger__a.trigger( 'open' )
+        event.stopPropagation()
+    })
+}
+var $input_method_trigger__b = $( '#demo__api-method-trigger--b' ).pickadate(),
+    picker_method_trigger__b = $input_method_trigger__b.pickadate( 'picker' )
+if ( picker_method_trigger__b ) {
+    picker_method_trigger__b.on( 'open', function(data) {
+        console.log( 'This logs without opening with this data:', data )
+    })
+    $( '#button__api-method-trigger--b' ).on( 'click', function( event ) {
+        picker_method_trigger__b.trigger( 'open', { some: 'value' } )
         event.stopPropagation()
     })
 }

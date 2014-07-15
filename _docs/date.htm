@@ -297,6 +297,7 @@ $('.datepicker').pickadate({
         {%= dateDemoField({ id: 'date_demo__formats--c' }).replace( 'type=text', 'name=date_demo__formats type=text data-value="2013/04/20"') %}
 
         <h3 class="heading heading--divide"><span class="heading__text">Formatting Rules<a class="heading__anchor--bigger" name="formatting-rules" href="#formatting-rules">&sect;</a></span></h3>
+        <p>To use a formatting rule, make sure to keep a delimiter between each rule. This ensures each rule’s value can be parsed correctly. Example:<br><b>Bad</b>: <code>yyyymmdd</code>; <b>Good</b>: <code>yyyy-mm-dd</code>.</p>
         <p>The following rules can be used to format any date:</p>
 
         <table class="table">
@@ -417,7 +418,7 @@ $('.datepicker').pickadate({
         {%= dateDemoField({ id: 'date_demo__selectors--a' }) %}
 
         <div class="section__block section__block--notification">
-            <p>When <code>selectYears</code> is truthy, the year selector appears <i>before</i> the month. <a href="{% meta.git_repo %}/issues/384">Read here</a> for more details on why.</p>
+            <p>When <code>selectYears</code> is truthy, the year selector appears <i>before</i> the month. <a href="{%= meta.gitrepo_url %}/issues/384">Read here</a> for more details on why.</p>
         </div>
 
         <p>You can also specify the number of years to show in the dropdown using an even integer - half before and half after the year in focus:</p>

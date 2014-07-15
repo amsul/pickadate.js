@@ -198,6 +198,7 @@ test( '`clear`', function() {
     strictEqual( picker.get('select'), null, 'Clears out selection' )
 })
 
+
 test( '`select`', function() {
 
     var picker = this.picker,
@@ -416,6 +417,19 @@ test( '`min` using booleans', function() {
     deepEqual( picker.get( 'max' ).pick, Infinity, '`max` unaffected' )
 })
 
+test( '`min` using strings', function() {
+
+    var picker = this.picker
+
+    var min = picker.get('min')
+    strictEqual( min.pick, -Infinity, 'No `min` date' )
+
+    picker.set( 'min', '8 January, 2013' )
+
+    min = picker.get('min')
+    deepEqual( [min.year, min.month, min.date], [2013, 0, 8], '`min` updated' )
+})
+
 test( '`max`', function() {
 
     var picker = this.picker,
@@ -505,6 +519,19 @@ test( '`max` using booleans', function() {
     deepEqual( picker.get( 'view' ).obj, playdate, '`view` unaffected' )
     strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
     deepEqual( picker.get( 'min' ).pick, -Infinity, '`min` unaffected' )
+})
+
+test( '`max` using strings', function() {
+
+    var picker = this.picker
+
+    var max = picker.get('max')
+    strictEqual( max.pick, Infinity, 'No `max` date' )
+
+    picker.set( 'max', '8 January, 2013' )
+
+    max = picker.get('max')
+    deepEqual( [max.year, max.month, max.date], [2013, 0, 8], '`max` updated' )
 })
 
 test( '`disable` and `enable` using integers', function() {
@@ -1341,5 +1368,38 @@ test( '`data-value` to select, highlight, and view', function() {
     deepEqual( picker.get( 'view' ).obj, new Date(1988,7,1), 'Viewsets date' )
 })
 
+module( 'Closing date picker with value already populated', {
+    setup: function() {
+        $DOM.append($INPUT.clone().val('14 August, 1988'));
+        var $input = $DOM.find('input').pickadate();
+        this.picker = $input.pickadate('picker');
+    },
+    teardown: function() {
+        this.picker.stop();
+        $DOM.empty();
+    }
+});
 
+test('Close Button should keep the currently selected date', function() {
+    var picker = this.picker,
+        currentDate = new Date();
+
+    picker.open();
+    picker.set('select', currentDate );
+    picker.$root.find('.' + $.fn.pickadate.defaults.klass.buttonClose).click();
+
+    var actualDate = new Date(picker.get('value')).toLocaleDateString();
+    strictEqual(actualDate, currentDate.toLocaleDateString(), 'Value should be still the current date');
+});
+
+test('Close Button should close the modal', function() {
+    var picker = this.picker,
+        currentDate = new Date('08 May 2012');
+
+    picker.open();
+    picker.set('select', currentDate);
+    picker.$root.find('.' + $.fn.pickadate.defaults.klass.buttonClose).click();
+
+    strictEqual(picker.get('open'), false, 'Picker should be closed');
+});
 

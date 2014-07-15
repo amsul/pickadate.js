@@ -71,8 +71,8 @@
         <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="" class="fieldset__input js__datepicker" type=text placeholder="Try me&hellip;"></div></fieldset>
 
         <div class="section__block section__block--notification">
-            <p>Along with v3, the v2 options and API have effectively been deprecated. Read up on the <a href="https://github.com/amsul/pickadate.js/blob/3.5.2/CHANGELOG.md">full changelog here</a>.</p>
-            <p>One of the most critical changes is that the “month” used to create dates, just as in JavaScript’s native Date object, now has <a href="https://github.com/amsul/pickadate.js/blob/3.5.2/CHANGELOG.md#zero-as-index">zero-as-index</a>.</p>
+            <p>Along with v3, the v2 options and API have effectively been deprecated. Read up on the <a href="https://github.com/amsul/pickadate.js/blob/3.5.3/CHANGELOG.md">full changelog here</a>.</p>
+            <p>One of the most critical changes is that the “month” used to create dates, just as in JavaScript’s native Date object, now has <a href="https://github.com/amsul/pickadate.js/blob/3.5.3/CHANGELOG.md#zero-as-index">zero-as-index</a>.</p>
         </div>
 
     </div> <!-- .section__block -->
@@ -271,7 +271,7 @@ klass: {
     <div class="section__block section__block--scoped">
 
         <h2 class="heading heading--divide"><span class="heading__text">Translations<a class="heading__anchor" name="translations" href="#translations">&sect;</a></span></h2>
-        <p>The picker can be extended to add support for internationalization. Translations for <a href="https://github.com/amsul/pickadate.js/blob/3.5.2/lib/translations">39 languages</a> are available out of the box, which you can include in one of two ways:</p>
+        <p>The picker can be extended to add support for internationalization. Translations for <a href="https://github.com/amsul/pickadate.js/blob/3.5.3/lib/translations">39 languages</a> are available out of the box, which you can include in one of two ways:</p>
 
         <pre class="pre--demo"><code data-language="javascript">// Extend the default picker options for <u>all instances</u>.
 $.extend($.fn.pickadate.defaults, {
@@ -346,6 +346,7 @@ $('.datepicker').pickadate({
         <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__formats--c" class="fieldset__input " name=date_demo__formats type=text data-value="2013/04/20" placeholder="Try me&hellip;"></div></fieldset>
 
         <h3 class="heading heading--divide"><span class="heading__text">Formatting Rules<a class="heading__anchor--bigger" name="formatting-rules" href="#formatting-rules">&sect;</a></span></h3>
+        <p>To use a formatting rule, make sure to keep a delimiter between each rule. This ensures each rule’s value can be parsed correctly. Example:<br><b>Bad</b>: <code>yyyymmdd</code>; <b>Good</b>: <code>yyyy-mm-dd</code>.</p>
         <p>The following rules can be used to format any date:</p>
 
         <table class="table">
@@ -466,7 +467,7 @@ $('.datepicker').pickadate({
         <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__selectors--a" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>
 
         <div class="section__block section__block--notification">
-            <p>When <code>selectYears</code> is truthy, the year selector appears <i>before</i> the month. <a href="/issues/384">Read here</a> for more details on why.</p>
+            <p>When <code>selectYears</code> is truthy, the year selector appears <i>before</i> the month. <a href="https://github.com/amsul/pickadate.js/issues/384">Read here</a> for more details on why.</p>
         </div>
 
         <p>You can also specify the number of years to show in the dropdown using an even integer - half before and half after the year in focus:</p>

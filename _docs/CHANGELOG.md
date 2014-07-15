@@ -1,5 +1,23 @@
 # Changelog
 
+
+## 3.5.3
+
+- [#437]({%= pkg.bugs %}/437): Added Common JS to UMD.
+- [#478]({%= pkg.bugs %}/478): Added “close” button.
+- [#406]({%= pkg.bugs %}/406): Allow `clear` method to be `muted`.
+- [#439]({%= pkg.bugs %}/439): Added ability to set min/max date & time using formatted strings.
+- [#462]({%= pkg.bugs %}/462): Fixed time offset issues by using UTC based times.
+- [#476]({%= pkg.bugs %}/476): Fixed the `main` files in `bower.json`.
+- [#451]({%= pkg.bugs %}/451): Added French accessibility labels.
+- [#442]({%= pkg.bugs %}/442): Fixed flickering on webkit browsers.
+- [#438]({%= pkg.bugs %}/438): Fixed adding an ID to the hidden element to remain unique.
+- [#456]({%= pkg.bugs %}/456): Fixed “today” button to be disabled when the date is disabled.
+- [#419]({%= pkg.bugs %}/419): Fixed time picker not scrolling to correct position with the “classic” theme.
+- Fixed bug where it was possible to unbind internal bindings.
+- [#420]({%= pkg.bugs %}/420): [Updated docs]({%= pkg.homepage %}/api.htm#method-trigger) the `trigger` method’s ability to pass data to event callbacks.
+
+
 ## 3.5.2
 - [#398]({%= pkg.bugs %}/398): Fixed Nepali translations.
 - [#403]({%= pkg.bugs %}/403): Fixed month nav pointer styling with Bootstrap (`border-box` issue).

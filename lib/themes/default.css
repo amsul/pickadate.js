@@ -62,6 +62,7 @@
   -webkit-transition: background 0.15s ease-out, top 0s 0.15s;
   -moz-transition: background 0.15s ease-out, top 0s 0.15s;
   transition: background 0.15s ease-out, top 0s 0.15s;
+  -webkit-backface-visibility: hidden;
 }
 /**
  * The frame that bounds the box contents of the picker.
