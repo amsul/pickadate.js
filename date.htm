@@ -94,6 +94,7 @@ showWeekdaysFull: undefined,
 // <a href="#buttons">Buttons</a>
 today: 'Today',
 clear: 'Clear',
+close: 'Close',
 
 // <a href="#accessibility-labels">Accessibility labels</a>
 labelMonthNext: 'Next month',
@@ -190,8 +191,9 @@ klass: {
     // The picker footer
     footer: 'picker__footer',
 
-    // Today &amp; clear buttons
+    // Today, clear, &amp; close buttons
     buttonClear: 'picker__button--clear',
+    buttonClose: 'picker__button--close',
     buttonToday: 'picker__button--today'
 }</code></pre>
 
@@ -233,7 +235,8 @@ klass: {
 
         <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
     today: '',
-    clear: 'Clear selection'
+    clear: 'Clear selection',
+    close: 'Cancel'
 })</code></pre>
 
         <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="date_demo__buttons" class="fieldset__input " type=text placeholder="Try me&hellip;"></div></fieldset>

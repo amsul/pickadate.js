@@ -64,7 +64,8 @@ $( '#date_demo__translations_rtl' ).pickadate({
 $( '#date_demo__buttons' ).pickadate({
     // Any false-y value will hide the button.
     today: '',
-    clear: 'Clear selection'
+    clear: 'Clear selection',
+    close: 'Cancel'
 })
 
 
