@@ -1366,39 +1366,3 @@ test( '`data-value` to select, highlight, and view', function() {
     deepEqual( picker.get( 'highlight' ).obj, new Date(1988,7,14), 'Highlights date' )
     deepEqual( picker.get( 'view' ).obj, new Date(1988,7,1), 'Viewsets date' )
 })
-
-module( 'Closing date picker with value already populated', {
-    setup: function() {
-        $DOM.append($INPUT.clone().val('14 August, 1988'));
-        var $input = $DOM.find('input').pickadate();
-        this.picker = $input.pickadate('picker');
-    },
-    teardown: function() {
-        this.picker.stop();
-        $DOM.empty();
-    }
-});
-
-test('Close Button should keep the currently selected date', function() {
-    var picker = this.picker,
-        currentDate = new Date();
-
-    picker.open();
-    picker.set('select', currentDate );
-    picker.$root.find('.' + $.fn.pickadate.defaults.klass.buttonClose).click();
-
-    var actualDate = new Date(picker.get('value')).toLocaleDateString();
-    strictEqual(actualDate, currentDate.toLocaleDateString(), 'Value should be still the current date');
-});
-
-test('Close Button should close the modal', function() {
-    var picker = this.picker,
-        currentDate = new Date('08 May 2012');
-
-    picker.open();
-    picker.set('select', currentDate);
-    picker.$root.find('.' + $.fn.pickadate.defaults.klass.buttonClose).click();
-
-    strictEqual(picker.get('open'), false, 'Picker should be closed');
-});
-

@@ -61,12 +61,13 @@
 
     <script type="text/javascript">
 
-        var $input = $( '.datepicker' ).pickadate({
+        var $input = $( '.datepicker' ).pickadate(/*{
             firstDay: 1
-        })
+        }*/)
 
         var picker = $input.pickadate('picker')
-        // picker.set('disable', 'flip')
+        picker.set('select', '14 October, 2014')
+        picker.open()
 
         // $('button').on('click', function() {
         //     picker.set('disable', true);
