@@ -433,6 +433,12 @@ test( 'Open and close', function() {
 
     $( 'body' ).click()
     ok( picker.get( 'open' ) === false, 'Closed with click out' )
+
+    picker.$node.click()
+    strictEqual( picker.get( 'open' ), true, 'Opened with click in' )
+
+    picker.$root.find( '.' + $.fn.pickadate.defaults.klass.buttonClose ).click();
+    strictEqual( picker.get( 'open' ), false, 'Closed by clicking “close”' )
 })
 
 
