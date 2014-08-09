@@ -1,8 +1,8 @@
 describe('shadow.Picker', function() {
 
     it('is an instance of the shadow data field', function() {
-        expect(shadow.DataElement.is('classOf', shadow.Picker)).toBe(true)
-        expect(shadow.Picker.is('instanceOf', shadow.DataElement)).toBe(true)
+        expect(shadow.DataElement.isClassOf(shadow.Picker)).toBe(true)
+        expect(shadow.Picker.isInstanceOf(shadow.DataElement)).toBe(true)
     })
 
 
@@ -15,7 +15,7 @@ describe('shadow.Picker', function() {
             })
             var classes = picker.classNames
 
-            expect(picker.attrs.opened).toBe(false)
+            expect(picker.attrs.opened).toBe(null)
             expect(picker.$el.hasClass(classes.opened)).toBe(false)
 
             picker.$el.trigger('click')
@@ -63,7 +63,7 @@ describe('shadow.Picker', function() {
             var picker = shadow.Picker.create({
                 $el: $('<div />')
             })
-            expect(picker.attrs.opened).toBe(false)
+            expect(picker.attrs.opened).toBe(null)
             picker.open()
             expect(picker.attrs.opened).toBe(true)
         })
@@ -92,7 +92,7 @@ describe('shadow.Picker', function() {
             var picker = shadow.Picker.create({
                 $el: $('<div />')
             })
-            expect(picker.attrs.opened).toBe(false)
+            expect(picker.attrs.opened).toBe(null)
             picker.toggle()
             expect(picker.attrs.opened).toBe(true)
             picker.toggle()

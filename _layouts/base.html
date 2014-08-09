@@ -20,6 +20,8 @@
         <title>pickadate.js</title>
     {% endif %}
 
+    <link rel="stylesheet" href="{{site.baseurl}}/lib/css/styles.css">
+
 </head>
 <body>
 
@@ -29,7 +31,17 @@
 
     <footer>footer</footer>
 
-    <script type="text/javascript">
+    <script src="{{site.baseurl}}/tests/jquery/jquery.1.7.0.js"></script>
+    <script src="{{site.baseurl}}/lib/shadow.js"></script>
+    <script src="{{site.baseurl}}/lib/ui-picker.js"></script>
+    <script src="{{site.baseurl}}/lib/ui-pickadate.js"></script>
+    <script>
+        $('[data-ui="pickadate"]').each(function() {
+            var pickadate = $(this).data('shadow.ui');
+            window[pickadate.id] = pickadate
+        });
+    </script>
+    <script>
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-36321179-2']);
         _gaq.push(['_trackPageview']);

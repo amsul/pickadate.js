@@ -8,21 +8,21 @@
 'use strict';
 
 module.exports = function(grunt) {
-    loadNpmTasks(grunt)
-    loadConfigs(grunt, 'node_configs')
-    grunt.loadTasks('node_tasks')
+    initTasks(grunt, 'node_tasks')
+    initConfigs(grunt, 'node_configs')
 }
 
-function loadNpmTasks(grunt) {
+function initTasks(grunt, folderPath) {
     var pkg = grunt.file.readJSON('package.json')
     var tasks = pkg.devDependencies
     delete tasks.grunt
     for ( var task in tasks ) {
         grunt.loadNpmTasks(task)
     }
+    grunt.loadTasks(folderPath)
 }
 
-function loadConfigs(grunt, folderPath) {
+function initConfigs(grunt, folderPath) {
     var config = {}
     grunt.file.expand(folderPath + '/**/*.js').forEach(function(filePath) {
         var fileName = filePath.split('/').pop().split('.')[0]

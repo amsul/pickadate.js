@@ -4,5 +4,6 @@
   "browser": true,
   "asi": true,
   "unused": "vars",
-  "eqnull": true
+  "eqnull": true,
+  "newcap": false
 }
