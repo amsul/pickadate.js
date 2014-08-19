@@ -1,0 +1,17 @@
+{{#if fileLink}}
+    <a {{bind-attr href=fileLink}}>{{yield}}</a>
+{{else}}
+    {{#if itemName}}
+        {{#link-to categoryType categoryName (query-params tab=itemType item=itemName)}}
+            {{yield}}
+        {{/link-to}}
+    {{else}}{{#if itemType}}
+        {{#link-to categoryType categoryName (query-params tab=itemType)}}
+            {{yield}}
+        {{/link-to}}
+    {{else}}
+        {{#link-to categoryType categoryName}}
+            {{yield}}
+        {{/link-to}}
+    {{/if}}{{/if}}
+{{/if}}

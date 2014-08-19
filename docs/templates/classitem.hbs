@@ -1,0 +1,76 @@
+<h3 class="heading  heading--three  heading--flat">
+    {{#link-to "class" className (query-params tab=itemName item=queryName)
+        class="container__link-hook"}}&sect;{{/link-to}}
+    <code>{{name}}</code>
+    {{#if isMethod}}
+        {{~#if data.params}} <code><small>({{list-params data=data.params}})</small>{{/if}}</code>
+        {{~#if isStatic}} &nbsp;<span class="capsule">Static</span>{{/if}}
+        {{~#if data.access}} &nbsp;<span class="capsule capsule--access">{{data.access}}</span>{{/if}}
+    {{else}}
+        {{~#if types}} &nbsp;<code class="is-size-four  is-thin  is-dimmed">{{types}}</code>
+        {{~else}} &nbsp;<span class="is-size-four  is-thin  is-dimmed">No type specified</span>{{/if}}
+        {{~#if data.access}} &nbsp;<span class="capsule capsule--access">{{data.access}}</span>{{/if}}
+        {{~#if isRequired}} &nbsp;<span class="capsule capsule--required">Required</span>{{/if}}
+        {{~#if isWriteOnce}} &nbsp;<span class="capsule capsule--access-two">Write-once</span>{{/if}}
+        {{~#if isReadOnly}} &nbsp;<span class="capsule capsule--access-three">Read-only</span>{{/if}}
+    {{/if}}
+</h3>
+<div class="meta">
+    {{#if isExtended}}
+        <div class="meta__info">
+            Defined by {{#link-to "class" extendedFrom (query-params tab=itemName item=queryName)}}<code>{{extendedFrom}}</code>{{/link-to}}
+            and extended in {{#cross-link fileLink=definedLink}}<code>{{definedAt}}</code>{{/cross-link}}
+        </div>
+    {{else}}{{#if isInherited}}
+        <div class="meta__info">Inherited from {{#link-to "class" inheritedFrom (query-params tab=itemName item=queryName)}}<code>{{inheritedFrom}}</code>{{/link-to}}</div>
+    {{else}}
+        <div class="meta__info">Defined in {{#cross-link fileLink=definedLink}}<code>{{definedAt}}</code>{{/cross-link}}</div>
+    {{/if}}{{/if}}
+    {{#if data.since}}
+        <div class="meta__info">Added in v{{data.since}}</div>
+    {{/if}}
+</div>
+{{#if data.deprecated}}
+    {{#if data.deprecationMessage}}
+        {{#block-note type="warning" title="Deprecated"}}
+            {{md content=data.deprecationMessage}}
+        {{/block-note}}
+    {{else}}
+        {{block-note type="warning" title="Deprecated"}}
+    {{/if}}
+{{/if}}
+{{md content=description}}
+{{#if todo}}
+    <h4>To-dos:</h4>
+    <ol>
+        {{#each task in todo}}
+            <li>{{md content=task}}</li>
+        {{/each}}
+    </ol>
+{{/if}}
+{{#if data.params}}
+    <h4>Parameters:</h4>
+    <ol class="list--plain">
+        {{#each param in data.params}}
+            <li>
+                {{render "classitem-param" param}}
+            </li>
+        {{/each}}
+    </ol>
+{{/if}}
+{{#if data.default}}
+    <h4>Default: <code class="is-thin">{{data.default}}</code></h4>
+{{/if}}
+{{#if data.return}}
+    <h4>Returns:</h4>
+    <ol class="list--plain">
+        <li>
+            <p class="heading--flat"><code>{{data.return.type}}</code></p>
+            {{md content=data.return.description}}
+        </li>
+    </ol>
+{{/if}}
+{{#if data.example}}
+    <h4>Example:</h4>
+    {{#each data.example}}{{md content=.}}{{/each}}
+{{/if}}

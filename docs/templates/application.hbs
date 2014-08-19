@@ -1,0 +1,10 @@
+<header class="container  container--padded">
+    <h1 class="heading  heading--three">
+        {{#link-to "index" class="is-color-inherited"}}
+            {{#if project.title}}{{project.title}}{{else}}{{project.name}}{{/if}}
+            <small class="heading__subtext">v{{project.version}}</small>
+        {{/link-to}}
+    </h1>
+</header>
+{{outlet}}
+{{partial "sidebar"}}

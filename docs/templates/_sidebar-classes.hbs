@@ -1,0 +1,8 @@
+<div class="container__box">
+    <h3 class="heading  heading--flat">Classes</h3>
+    <ul class="list--unindent  list--plain">
+        {{#each class in classes}}
+            <li>{{#link-to "class" class.name}}<code>{{class.name}}</code>{{/link-to}}</li>
+        {{/each}}
+    </ul>
+</div>

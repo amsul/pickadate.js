@@ -1,0 +1,16 @@
+<p class="heading--flat">
+    {{~#if name}}<code>{{name}}</code> &nbsp;{{/if}}
+    {{~#if type}}<code class="is-size-six  is-dimmed">{{type}}</code> &nbsp;{{/if}}
+    {{~#if optional}}<span class="capsule capsule--optional">Optional</span>{{/if}}
+</p>
+{{md content=description}}
+{{#if props}}
+    <ul>
+        {{#each prop in param.props}}
+            <li>{{render "classitem-param" prop}}</li>
+        {{/each}}
+    </ul>
+{{/if}}
+{{#if optdefault}}
+    <p>Defaults to <code>{{optdefault}}</code>.</p>
+{{/if}}

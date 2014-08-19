@@ -1,0 +1,86 @@
+<main>
+
+    <div class="container  container--padded">
+        <div class="container__box">
+            <h2 class="heading  heading--two  heading--flat">
+                <code>{{name}}</code>
+                <span class="is-thin">class</span>
+                {{~#if isStatic}} &nbsp;<span class="capsule  capsule--static">Static</span>{{/if}}
+            </h2>
+            <div class="meta">
+                <div class="meta__info">Defined in {{#cross-link fileLink=definedLink}}<code>{{definedAt}}</code>{{/cross-link}}</div>
+                {{#if isExtended}}
+                    <div class="meta__info">Extends {{#link-to "class" extendedFrom}}<code>{{extendedFrom}}</code>{{/link-to}}</div>
+                {{else}}{{#if isInherited}}
+                    <div class="meta__info">Extends {{#link-to "class" inheritedFrom}}<code>{{inheritedFrom}}</code>{{/link-to}}</div>
+                {{/if}}{{/if}}
+                {{#if data.module}}
+                    <div class="meta__info">Module {{#link-to "module" data.module}}<code>{{data.module}}</code>{{/link-to}}</div>
+                {{/if}}
+                {{#if data.since}}
+                    <div class="meta__info">Added in v{{data.since}}</div>
+                {{/if}}
+            </div>
+            {{md content=description}}
+        </div>
+    </div>
+
+    <hr>
+
+    {{#toggle-tabs tabs=tabsObject.data class="tabs"}}
+        <div class="container">
+            <ul class="list--plain  list--inline-spaced">
+                {{#each tabObject in tabsObject.data~}}
+                    <li>
+                        {{#toggle-tabs-button isActive=tabObject.isActive}}
+                            {{#link-to "class" name (query-params tab=tabObject.name item="")
+                                class="tabs__button is-size-three"}}
+                                {{tabObject.title}}
+                            {{/link-to}}
+                        {{/toggle-tabs-button}}
+                    </li>
+                {{~/each}}
+            </ul>
+            <div class="is-size-five  is-dimmed  is-centered  is-block">
+                Show: &nbsp;&nbsp;
+                {{~input type="checkbox" id="showInherited" checked=showInherited}}
+                <label for="showInherited">Inherited</label> &nbsp;&nbsp;
+                {{~input type="checkbox" id="showProtected" checked=showProtected}}
+                <label for="showProtected">Proctected</label> &nbsp;&nbsp;
+                {{~input type="checkbox" id="showPrivate" checked=showPrivate}}
+                <label for="showPrivate">Private</label> &nbsp;&nbsp;
+                {{~input type="checkbox" id="showDeprecated" checked=showDeprecated}}
+                <label for="showDeprecated">Deprecated</label>
+            </div>
+        </div>
+        {{#toggle-tabs-body isActive=indexTabObject.isActive class="tabs__body"}}
+            <div class="container  container--section">
+                {{#each docitem in indexedDocitems}}
+                    <h3>{{docitem.data.title}}</h3>
+                    <ul>
+                        {{#each unit in docitem.units}}
+                            <li {{bind-attr hidden=unit.isHidden}}>
+                                {{#link-to "class" name (query-params tab=unit.itemName item=unit.queryName)}}
+                                    <code>{{unit.name}}</code>
+                                {{/link-to}}
+                            </li>
+                        {{/each}}
+                    </ul>
+                {{/each}}
+            </div>
+        {{/toggle-tabs-body}}
+        {{#each docitem in indexedDocitems}}
+            {{#toggle-tabs-body isActive=docitem.data.isActive class="tabs__body"}}
+                <div class="container  container--section  container--padded">
+                    {{#each unit in docitem.units}}
+                        <a {{bind-attr data-query-name=unit.queryName}}></a>
+                        <div class="container__box  container__box--bordered" {{bind-attr hidden=unit.isHidden}}>
+                            {{render "classitem" unit}}
+                        </div>
+                    {{/each}}
+                </div>
+            {{/toggle-tabs-body}}
+        {{/each}}
+    {{/toggle-tabs}}
+
+</main>

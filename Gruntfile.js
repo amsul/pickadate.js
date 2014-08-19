@@ -8,12 +8,12 @@
 'use strict';
 
 module.exports = function(grunt) {
-    initTasks(grunt, 'node_tasks')
-    initConfigs(grunt, 'node_configs')
+    var pkg = grunt.file.readJSON('package.json')
+    initTasks(grunt, pkg, 'node_tasks')
+    initConfigs(grunt, pkg, 'node_configs')
 }
 
-function initTasks(grunt, folderPath) {
-    var pkg = grunt.file.readJSON('package.json')
+function initTasks(grunt, pkg, folderPath) {
     var tasks = pkg.devDependencies
     delete tasks.grunt
     for ( var task in tasks ) {
@@ -22,12 +22,13 @@ function initTasks(grunt, folderPath) {
     grunt.loadTasks(folderPath)
 }
 
-function initConfigs(grunt, folderPath) {
+function initConfigs(grunt, pkg, folderPath) {
     var config = {}
     grunt.file.expand(folderPath + '/**/*.js').forEach(function(filePath) {
         var fileName = filePath.split('/').pop().split('.')[0]
         var fileData = require('./' + filePath)
         config[fileName] = fileData
     })
+    config.pkg = pkg
     grunt.initConfig(config)
 }
