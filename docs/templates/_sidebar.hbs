@@ -1,8 +1,11 @@
-<aside class="container  container--padded  container--section">
+<aside class="container  container--padded  container--section  container--sidebar">
     {{#if modules}}
-        {{partial "sidebar-modules"}}
+        {{render "listing" modules}}
     {{/if}}
     {{#if classes}}
-        {{partial "sidebar-classes"}}
+        {{render "listing" classes}}
+    {{/if}}
+    {{#if files}}
+        {{render "listing" files}}
     {{/if}}
 </aside>

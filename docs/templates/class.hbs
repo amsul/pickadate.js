@@ -5,20 +5,20 @@
             <h2 class="heading  heading--two  heading--flat">
                 <code>{{name}}</code>
                 <span class="is-thin">class</span>
-                {{~#if isStatic}} &nbsp;<span class="capsule  capsule--static">Static</span>{{/if}}
+                {{~#if static}} &nbsp;<span class="capsule  capsule--static">Static</span>{{/if}}
             </h2>
             <div class="meta">
-                <div class="meta__info">Defined in {{#cross-link fileLink=definedLink}}<code>{{definedAt}}</code>{{/cross-link}}</div>
+                <div class="meta__info">Defined in {{#cross-link file=file line=line}}<code>{{file}}:{{line}}</code>{{/cross-link}}</div>
                 {{#if isExtended}}
-                    <div class="meta__info">Extends {{#link-to "class" extendedFrom}}<code>{{extendedFrom}}</code>{{/link-to}}</div>
+                    <div class="meta__info">Extends {{#link-to "class" extends}}<code>{{extends}}</code>{{/link-to}}</div>
                 {{else}}{{#if isInherited}}
-                    <div class="meta__info">Extends {{#link-to "class" inheritedFrom}}<code>{{inheritedFrom}}</code>{{/link-to}}</div>
+                    <div class="meta__info">Extends {{#link-to "class" inherits}}<code>{{inherits}}</code>{{/link-to}}</div>
                 {{/if}}{{/if}}
-                {{#if data.module}}
-                    <div class="meta__info">Module {{#link-to "module" data.module}}<code>{{data.module}}</code>{{/link-to}}</div>
+                {{#if module}}
+                    <div class="meta__info">Module {{#link-to "module" module}}<code>{{module}}</code>{{/link-to}}</div>
                 {{/if}}
-                {{#if data.since}}
-                    <div class="meta__info">Added in v{{data.since}}</div>
+                {{#if since}}
+                    <div class="meta__info">Added in v{{since}}</div>
                 {{/if}}
             </div>
             {{md content=description}}
@@ -43,25 +43,36 @@
             </ul>
             <div class="is-size-five  is-dimmed  is-centered  is-block">
                 Show: &nbsp;&nbsp;
-                {{~input type="checkbox" id="showInherited" checked=showInherited}}
-                <label for="showInherited">Inherited</label> &nbsp;&nbsp;
-                {{~input type="checkbox" id="showProtected" checked=showProtected}}
-                <label for="showProtected">Proctected</label> &nbsp;&nbsp;
-                {{~input type="checkbox" id="showPrivate" checked=showPrivate}}
-                <label for="showPrivate">Private</label> &nbsp;&nbsp;
-                {{~input type="checkbox" id="showDeprecated" checked=showDeprecated}}
-                <label for="showDeprecated">Deprecated</label>
+                <label for="showInherited" class="is-unit">
+                    {{~input type="checkbox" id="showInherited" checked=showInherited~}}
+                    &nbsp;Inherited
+                </label>
+                &nbsp;&nbsp;
+                <label for="showProtected" class="is-unit">
+                    {{~input type="checkbox" id="showProtected" checked=showProtected~}}
+                    &nbsp;Proctected
+                </label>
+                &nbsp;&nbsp;
+                <label for="showPrivate" class="is-unit">
+                    {{~input type="checkbox" id="showPrivate" checked=showPrivate~}}
+                    &nbsp;Private
+                </label>
+                &nbsp;&nbsp;
+                <label for="showDeprecated" class="is-unit">
+                    {{~input type="checkbox" id="showDeprecated" checked=showDeprecated~}}
+                    &nbsp;Deprecated
+                </label>
             </div>
         </div>
         {{#toggle-tabs-body isActive=indexTabObject.isActive class="tabs__body"}}
             <div class="container  container--section">
-                {{#each docitem in indexedDocitems}}
-                    <h3>{{docitem.data.title}}</h3>
+                {{#each indexedItem in indexedItems}}
+                    <h3>{{indexedItem.data.title}}</h3>
                     <ul>
-                        {{#each unit in docitem.units}}
-                            <li {{bind-attr hidden=unit.isHidden}}>
-                                {{#link-to "class" name (query-params tab=unit.itemName item=unit.queryName)}}
-                                    <code>{{unit.name}}</code>
+                        {{#each classitem in indexedItem.classitems}}
+                            <li {{bind-attr hidden=classitem.isHidden}}>
+                                {{#link-to "class" name (query-params tab=classitem.itemtype item=classitem.queryName)}}
+                                    <code>{{classitem.name}}</code>
                                 {{/link-to}}
                             </li>
                         {{/each}}
@@ -69,13 +80,13 @@
                 {{/each}}
             </div>
         {{/toggle-tabs-body}}
-        {{#each docitem in indexedDocitems}}
-            {{#toggle-tabs-body isActive=docitem.data.isActive class="tabs__body"}}
+        {{#each indexedItem in indexedItems}}
+            {{#toggle-tabs-body isActive=indexedItem.data.isActive class="tabs__body"}}
                 <div class="container  container--section  container--padded">
-                    {{#each unit in docitem.units}}
-                        <a {{bind-attr data-query-name=unit.queryName}}></a>
-                        <div class="container__box  container__box--bordered" {{bind-attr hidden=unit.isHidden}}>
-                            {{render "classitem" unit}}
+                    {{#each classitem in indexedItem.classitems}}
+                        <a {{bind-attr data-query-name=classitem.queryName}}></a>
+                        <div class="container__box  container__box--bordered" {{bind-attr hidden=classitem.isHidden}}>
+                            {{render "classitem" classitem}}
                         </div>
                     {{/each}}
                 </div>

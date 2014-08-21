@@ -13,7 +13,7 @@ module.exports = {
         author: '<%= pkg.author %>',
         options: {
             paths: 'lib/',
-            outdir: 'lib/docs/',
+            outdir: 'docs/scripts-docs/',
             parseOnly: true
         }
     }

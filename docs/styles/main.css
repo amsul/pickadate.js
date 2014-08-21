@@ -84,7 +84,7 @@ img {
 
 hr {
     border: 0;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #e5e5e5;
 }
 
 a {
@@ -112,6 +112,7 @@ a:focus {
 .container--section {
     margin-bottom: 4rem;
 }
+.container--sidebar {}
     .container__box {
         margin-bottom: 2.75rem;
     }
@@ -135,6 +136,31 @@ a:focus {
         color: #0089ec;
         text-decoration: none;
     }
+
+@media (min-width: 70rem/*tablet*/) {
+    .container {
+        padding-right: 4rem;
+        padding-left: 4rem;
+        margin: 0 0 0 20rem;
+        max-width: 80rem;
+    }
+    .container--section {
+        margin-bottom: 8rem;
+    }
+    .container--sidebar {
+        position: fixed;
+        z-index: 10;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        margin: 0;
+        padding: 2rem;
+        width: 20rem;
+        overflow: auto;
+        background: white;
+        border-right: 1px solid #e5e5e5;
+    }
+}
 
 
 /**
@@ -307,6 +333,9 @@ a:focus {
 }
 .is-color-inherited {
     color: inherit;
+}
+.is-unit {
+    white-space: nowrap;
 }
 h1,
 .is-size-one {

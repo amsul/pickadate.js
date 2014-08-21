@@ -4,4 +4,4 @@
 *.log
 node_modules/*
 .idea/
-_site/
+docs/

@@ -1,15 +1,15 @@
 <h3 class="heading  heading--three  heading--flat">
-    {{#link-to "class" className (query-params tab=itemName item=queryName)
+    {{#link-to "class" class (query-params tab=itemtype item=queryName)
         class="container__link-hook"}}&sect;{{/link-to}}
     <code>{{name}}</code>
     {{#if isMethod}}
-        {{~#if data.params}} <code><small>({{list-params data=data.params}})</small>{{/if}}</code>
+        {{~#if params}} <code><small>({{list-params data=params}})</small>{{/if}}</code>
         {{~#if isStatic}} &nbsp;<span class="capsule">Static</span>{{/if}}
-        {{~#if data.access}} &nbsp;<span class="capsule capsule--access">{{data.access}}</span>{{/if}}
+        {{~#if access}} &nbsp;<span class="capsule capsule--access">{{access}}</span>{{/if}}
     {{else}}
         {{~#if types}} &nbsp;<code class="is-size-four  is-thin  is-dimmed">{{types}}</code>
         {{~else}} &nbsp;<span class="is-size-four  is-thin  is-dimmed">No type specified</span>{{/if}}
-        {{~#if data.access}} &nbsp;<span class="capsule capsule--access">{{data.access}}</span>{{/if}}
+        {{~#if access}} &nbsp;<span class="capsule capsule--access">{{access}}</span>{{/if}}
         {{~#if isRequired}} &nbsp;<span class="capsule capsule--required">Required</span>{{/if}}
         {{~#if isWriteOnce}} &nbsp;<span class="capsule capsule--access-two">Write-once</span>{{/if}}
         {{~#if isReadOnly}} &nbsp;<span class="capsule capsule--access-three">Read-only</span>{{/if}}
@@ -18,22 +18,22 @@
 <div class="meta">
     {{#if isExtended}}
         <div class="meta__info">
-            Defined by {{#link-to "class" extendedFrom (query-params tab=itemName item=queryName)}}<code>{{extendedFrom}}</code>{{/link-to}}
-            and extended in {{#cross-link fileLink=definedLink}}<code>{{definedAt}}</code>{{/cross-link}}
+            Defined by {{#link-to "class" extends (query-params tab=itemtype item=queryName)}}<code>{{extends}}</code>{{/link-to}}
+            and extended in {{#cross-link file=file line=line}}<code>{{file}}:{{line}}</code>{{/cross-link}}
         </div>
     {{else}}{{#if isInherited}}
-        <div class="meta__info">Inherited from {{#link-to "class" inheritedFrom (query-params tab=itemName item=queryName)}}<code>{{inheritedFrom}}</code>{{/link-to}}</div>
+        <div class="meta__info">Inherited from {{#link-to "class" inherits (query-params tab=itemtype item=queryName)}}<code>{{inherits}}</code>{{/link-to}}</div>
     {{else}}
-        <div class="meta__info">Defined in {{#cross-link fileLink=definedLink}}<code>{{definedAt}}</code>{{/cross-link}}</div>
+        <div class="meta__info">Defined in {{#cross-link file=file line=line}}<code>{{file}}:{{line}}</code>{{/cross-link}}</div>
     {{/if}}{{/if}}
-    {{#if data.since}}
-        <div class="meta__info">Added in v{{data.since}}</div>
+    {{#if since}}
+        <div class="meta__info">Added in v{{since}}</div>
     {{/if}}
 </div>
-{{#if data.deprecated}}
-    {{#if data.deprecationMessage}}
+{{#if deprecated}}
+    {{#if deprecationMessage}}
         {{#block-note type="warning" title="Deprecated"}}
-            {{md content=data.deprecationMessage}}
+            {{md content=deprecationMessage}}
         {{/block-note}}
     {{else}}
         {{block-note type="warning" title="Deprecated"}}
@@ -48,29 +48,29 @@
         {{/each}}
     </ol>
 {{/if}}
-{{#if data.params}}
+{{#if params}}
     <h4>Parameters:</h4>
     <ol class="list--plain">
-        {{#each param in data.params}}
+        {{#each param in params}}
             <li>
                 {{render "classitem-param" param}}
             </li>
         {{/each}}
     </ol>
 {{/if}}
-{{#if data.default}}
-    <h4>Default: <code class="is-thin">{{data.default}}</code></h4>
+{{#if default}}
+    <h4>Default: <code class="is-thin">{{default}}</code></h4>
 {{/if}}
-{{#if data.return}}
+{{#if return}}
     <h4>Returns:</h4>
     <ol class="list--plain">
         <li>
-            <p class="heading--flat"><code>{{data.return.type}}</code></p>
-            {{md content=data.return.description}}
+            <p class="heading--flat"><code>{{return.type}}</code></p>
+            {{md content=return.description}}
         </li>
     </ol>
 {{/if}}
-{{#if data.example}}
+{{#if example}}
     <h4>Example:</h4>
-    {{#each data.example}}{{md content=.}}{{/each}}
+    {{#each example}}{{md content=.}}{{/each}}
 {{/if}}

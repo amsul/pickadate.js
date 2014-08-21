@@ -21,11 +21,10 @@ define(function(require) {
         // Rendering views.
         'classitem',
         'classitem-param',
+        'listing',
 
         // Partial views.
         '_sidebar',
-        '_sidebar-modules',
-        '_sidebar-classes',
     ]
     /*jshint indent: 4*/
 
@@ -44,7 +43,7 @@ define(function(require) {
             Em.TEMPLATES[fileName] = Em.Handlebars.compile(fileContent)
         }
 
-        require(['routes', 'controllers', 'objects', 'components', 'views'], function() {
+        require(['router', 'routes', 'controllers', 'objects', 'components', 'views'], function() {
             var args = [].slice.call(arguments, 0)
             require(['app'], function(App) {
                 args.forEach(function(arg) {

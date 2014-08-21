@@ -4,63 +4,56 @@ define(function(require) {
 
     var Em = require('ember')
 
-    var config = require('config')
+    var computed = require('computed-helpers')
 
-    var DocItemObject = Em.Object.extend({
+    var DeclarationObject = Em.ObjectProxy.extend({})
 
-        data: null,
+    var CategoryObject = DeclarationObject.extend({
+        classes: computed.objectKeys('content.classes'),
+        fors: computed.objectKeys('content.fors'),
+        namespaces: computed.objectKeys('content.namespaces'),
+    })
+
+    var FileObject = CategoryObject.extend({
+        modules: computed.objectKeys('content.modules'),
+    })
+
+    var ModuleObject = CategoryObject.extend({
+        submodules: computed.objectKeys('content.submodules'),
+    })
+
+    var ClassObject = CategoryObject.extend({
+        queryName: Em.computed.alias('name')
+    })
+
+    var ClassitemObject = DeclarationObject.extend({
 
         isHidden: false,
-        isInherited: false,
-        isExtended: false,
-        inheritedFrom: null,
-        extendedFrom: null,
-
-        isModule: Em.computed.equal('data.tag', 'module'),
-        isMethod: Em.computed.equal('data.itemtype', 'method'),
-        isPrivate: Em.computed.equal('data.access', 'private'),
-        isProtected: Em.computed.equal('data.access', 'protected'),
-        isStatic: Em.computed.equal('data.static', 1),
-        isRequired: Em.computed.equal('data.required', 1),
-        isWriteOnce: Em.computed.equal('data.writeonce', ''),
-        isDeprecated: Em.computed.bool('data.deprecated'),
+        isInherited: Em.computed.bool('inherits'),
+        isExtended: Em.computed.bool('extends'),
+        isPrivate: Em.computed.equal('access', 'private'),
+        isProtected: Em.computed.equal('access', 'protected'),
+        isDeprecated: Em.computed.bool('deprecated'),
+        isRequired: Em.computed.equal('required', 1),
+        isWriteOnce: Em.computed.equal('writeonce', ''),
+        isMethod: Em.computed.equal('itemtype', 'method'),
         isReadOnly: function() {
-            return 'readonly' in this.get('data')
-        }.property('data.readonly'),
-
-        name: Em.computed.alias('data.name'),
-        description: Em.computed.alias('data.description'),
-        className: Em.computed.alias('data.class'),
-        itemName: Em.computed.alias('data.itemtype'),
+            return 'readonly' in this.get('content')
+        }.property('readonly'),
 
         types: function() {
-            var types = this.get('data.type')
+            var types = this.get('type')
             return types ? types.replace(/^\{|\}$/g, '').split('|') : ''
-        }.property('data.type'),
+        }.property('type'),
 
         queryName: function() {
+            var params = this.get('params')
             var queryName = this.get('name')
-            var params = this.get('data.params')
             if ( params && params.length ) {
-                queryName += '(' + params.mapProperty('name').join('-') + ')'
+                queryName += '(%@)'.fmt(params.mapProperty('name').join('-'))
             }
             return queryName
-        }.property('name', 'data.params'),
-
-        definedAt: function() {
-            return '%@:%@'.fmt(this.get('data.file'), this.get('data.line'))
-        }.property('data.file', 'data.line'),
-
-        definedLink: function() {
-            var file = this.get('data.file')
-            if ( !file ) {
-                return
-            }
-            var line = this.get('data.line')
-            var root = Em.get(config, 'project.repo') + '/blob'
-            var version = Em.get(config, 'project.version')
-            return root + '/' + version + '/' + file + (line ? '#L' + line : '')
-        }.property('data.file', 'data.line')
+        }.property('params')
 
     })
 
@@ -85,8 +78,12 @@ define(function(require) {
     })
 
     return {
-        DocItemObject: DocItemObject,
         TabsObject: TabsObject,
         TabObject: TabObject,
+        DeclarationObject: DeclarationObject,
+        FileObject: FileObject,
+        ModuleObject: ModuleObject,
+        ClassObject: ClassObject,
+        ClassitemObject: ClassitemObject,
     }
 })
