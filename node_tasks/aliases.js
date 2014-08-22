@@ -3,7 +3,7 @@
 'use strict';
 
 module.exports = function(grunt) {
-    grunt.registerTask('default', ['less', 'autoprefixer', 'uglify'])
+    grunt.registerTask('default', ['less', 'autoprefixer', 'umd_wrapper', 'uglify', 'yuidoc', 'watch'])
     grunt.registerTask('test', ['jshint', 'jasmine'])
     grunt.registerTask('release', function(version) {
         if ( !version ) {

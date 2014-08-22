@@ -5,6 +5,6 @@
 module.exports = {
     lib: {
         files: ['lib/**/*.js'],
-        tasks: ['yuidoc:lib']
+        tasks: ['umd_wrapper', 'uglify', 'yuidoc']
     }
 }

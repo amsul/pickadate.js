@@ -12,7 +12,7 @@ module.exports = {
         repo: '<%= pkg.repository.url.replace(/\\.git$/, "") %>',
         author: '<%= pkg.author %>',
         options: {
-            paths: 'lib/',
+            paths: 'lib/js/',
             outdir: 'docs/scripts-docs/',
             parseOnly: true
         }

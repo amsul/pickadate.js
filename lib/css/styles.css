@@ -12,18 +12,6 @@
 .picker--opened .picker__holder {
   display: block;
 }
-.picker--frozen {
-  position: relative;
-}
-.picker--frozen:after {
-  content: "";
-  position: absolute;
-  z-index: 10;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-}
 .picker__input {
   display: block;
   width: 420px;

@@ -143,6 +143,9 @@ define(function(require) {
                     section
             }
             var itemName = this.get('itemName')
+            if ( !itemName ) {
+                return
+            }
             var itemShortName = itemName.replace(/\(.+\)$/, '')
             var classitem = this.get('classitems').findBy('name', itemShortName)
             if ( !classitem ) {
