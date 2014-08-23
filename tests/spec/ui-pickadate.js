@@ -177,14 +177,12 @@ describe('shadow.Pickadate', function() {
                 $el: $('<div />')
             })
             var $selector = pickadate.$host.find('[data-select]')
-            var selection = new Date($selector.data('select'))
+            var selection = shadow.Date.create($selector.data('select'))
             expect(pickadate.attrs.select).toBe(null)
             $selector.first().trigger('mousedown')
             $(document).trigger('mouseup')
             expect(pickadate.attrs.select).not.toBe(null)
-            expect(pickadate.attrs.select.value).toEqual([
-                selection.getFullYear(), selection.getMonth(), selection.getDate()
-            ])
+            expect(pickadate.attrs.select.value).toEqual(selection.value)
         })
 
         it('binds clicks to highlight a value', function() {
@@ -379,7 +377,7 @@ describe('shadow.Pickadate', function() {
                 }
             })
             var date = pickadate.nextEnabledDate([2014, 4, 1])
-            expect(date).toEqual(new Date(2014, 4, 4))
+            expect(date.value).toEqual(shadow.Date.create([2014, 4, 4]).value)
         })
 
         it('checks if a dates is above the max and returns the next enabled one', function() {
@@ -390,7 +388,7 @@ describe('shadow.Pickadate', function() {
                 }
             })
             var date = pickadate.nextEnabledDate([2014, 5, 1])
-            expect(date).toEqual(new Date(2014, 4, 24))
+            expect(date.value).toEqual(shadow.Date.create([2014, 4, 24]).value)
         })
 
         it('checks if a date exists in a month and returns the next existing one', function() {
@@ -398,7 +396,7 @@ describe('shadow.Pickadate', function() {
                 $el: $('<div />')
             })
             var date = pickadate.nextEnabledDate([2014, 1, 31])
-            expect(date).toEqual(new Date(2014, 1, 28))
+            expect(date.value).toEqual(shadow.Date.create([2014, 1, 28]).value)
         })
     })
 
@@ -1351,17 +1349,15 @@ describe('shadow.Pickadate', function() {
             var gridBodyMonths = pickadate.createGridBodyMonths()
             var months = gridBodyMonths.querySelectorAll('td')
             var month = months[2]
-            var highlight = +month.dataset.highlight
-            var date = new Date(highlight)
-            expect(date.getDate()).toBe(31)
+            var shadowDate = shadow.Date.create(+month.dataset.highlight)
+            expect(shadowDate.date).toBe(31)
 
             pickadate.attrs.highlight = [2013, 1, 31]
             gridBodyMonths = pickadate.createGridBodyMonths()
             months = gridBodyMonths.querySelectorAll('td')
             month = months[1]
-            highlight = +month.dataset.highlight
-            date = new Date(highlight)
-            expect(date.getDate()).toBe(28)
+            shadowDate = shadow.Date.create(+month.dataset.highlight)
+            expect(shadowDate.date).toBe(28)
         })
     })
 
@@ -1484,11 +1480,11 @@ describe('shadow.Pickadate', function() {
                 })
                 pickadate.attrs.highlight = [2014, 4, 10]
 
-                var dateTime = new Date(2014, 4, 4).getTime()
+                var dateTime = shadow.Date.create([2014, 4, 4]).time
                 var $date = pickadate.$el.find('[data-select=' + dateTime + ']')
                 expect($date.length).toBe(1)
 
-                dateTime = new Date(2014, 4, 3).getTime()
+                dateTime = shadow.Date.create([2014, 4, 3]).time
                 $date = pickadate.$el.find('[data-select=' + dateTime + ']')
                 expect($date.length).toBe(0)
             })
@@ -1503,11 +1499,11 @@ describe('shadow.Pickadate', function() {
                 attrs.highlight = [2014, 4, 10]
                 attrs.min = [2014, 4, 4]
 
-                var dateTime = new Date(2014, 4, 4).getTime()
+                var dateTime = shadow.Date.create([2014, 4, 4]).time
                 var $date = pickadate.$el.find('[data-select=' + dateTime + ']')
                 expect($date.length).toBe(1)
 
-                dateTime = new Date(2014, 4, 3).getTime()
+                dateTime = shadow.Date.create([2014, 4, 3]).time
                 $date = pickadate.$el.find('[data-select=' + dateTime + ']')
                 expect($date.length).toBe(0)
             })
@@ -1540,11 +1536,11 @@ describe('shadow.Pickadate', function() {
                 })
                 pickadate.attrs.highlight = [2014, 4, 10]
 
-                var dateTime = new Date(2014, 4, 24).getTime()
+                var dateTime = shadow.Date.create([2014, 4, 24]).time
                 var $date = pickadate.$el.find('[data-select=' + dateTime + ']')
                 expect($date.length).toBe(1)
 
-                dateTime = new Date(2014, 4, 25).getTime()
+                dateTime = shadow.Date.create([2014, 4, 25]).time
                 $date = pickadate.$el.find('[data-select=' + dateTime + ']')
                 expect($date.length).toBe(0)
             })
@@ -1559,11 +1555,11 @@ describe('shadow.Pickadate', function() {
                 attrs.highlight = [2014, 4, 10]
                 attrs.max = [2014, 4, 24]
 
-                var dateTime = new Date(2014, 4, 24).getTime()
+                var dateTime = shadow.Date.create([2014, 4, 24]).time
                 var $date = pickadate.$el.find('[data-select=' + dateTime + ']')
                 expect($date.length).toBe(1)
 
-                dateTime = new Date(2014, 4, 25).getTime()
+                dateTime = shadow.Date.create([2014, 4, 25]).time
                 $date = pickadate.$el.find('[data-select=' + dateTime + ']')
                 expect($date.length).toBe(0)
             })
