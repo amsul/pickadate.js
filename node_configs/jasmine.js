@@ -4,7 +4,7 @@
 
 module.exports = {
     src: [
-        'lib/shadow.js',
+        'lib/js/vendor/shadow.js',
         'lib/ui-picker.js',
         'lib/ui-pickadate.js'
     ],
