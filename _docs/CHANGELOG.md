@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.5.4
+
+- [#180]({%= pkg.bugs %}/180) Fixed date picker to use UTC dates.
+- [#503]({%= pkg.bugs %}/503) Fixed time picker to use local times.
+- Fixed color for “clear” button on time picker.
+- Translations fixes for [Italian]({%= pkg.bugs %}/507), [Slovak]({%= pkg.bugs %}/505), [French]({%= pkg.bugs %}/499), [Russian]({%= pkg.bugs %}/484), [Spanish]({%= pkg.bugs %}/482)
+
 
 ## 3.5.3
 
