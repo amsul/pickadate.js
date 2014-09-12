@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.5.4
+
+- [#180](https://github.com/amsul/pickadate.js/issues/180) Fixed date picker to use UTC dates.
+- [#503](https://github.com/amsul/pickadate.js/issues/503) Fixed time picker to use local times.
+- Fixed color for “clear” button on time picker.
+- Translations fixes for [Italian](https://github.com/amsul/pickadate.js/issues/507), [Slovak](https://github.com/amsul/pickadate.js/issues/505), [French](https://github.com/amsul/pickadate.js/issues/499), [Russian](https://github.com/amsul/pickadate.js/issues/484), [Spanish](https://github.com/amsul/pickadate.js/issues/482)
+
 
 ## 3.5.3
 
