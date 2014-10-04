@@ -36,7 +36,7 @@ There are currently two pickers: **date** and **time**.
 
 File                    | Contents                 | Size (min & gzip)
 ----------------------- | ------------------------ | ----------------------
-`picker.js`             | __Base *__               | 1.76kb
+`picker.js`             | __Base *__               | 1.79kb
 `picker.date.js`        | Date picker              | 2.67kb
 `picker.time.js`        | Time picker              | 1.92kb
 
@@ -65,7 +65,7 @@ __**__ For languages with text flowing from right-to-left, also include the `rtl
 
 ### Translations
 
-The translations live in the `lib/translations` folder. There are currently [39 language translations](https://github.com/amsul/pickadate.js/blob/3.5.4/lib/translations) included.
+The translations live in the `lib/translations` folder. There are currently [40 language translations](https://github.com/amsul/pickadate.js/blob/3.5.4/lib/translations) included.
 
 
 
