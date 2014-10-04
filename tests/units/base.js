@@ -389,7 +389,10 @@ test( 'Close with alternate focus', function() {
     stop()
     picker.close( true )
     setTimeout( function() {
-        ok( !picker.get( 'open' ) && picker.$node[0].className === klasses.input && picker.$root[0].className === klasses.picker && document.activeElement === picker.$node[0], 'Closed with focus' )
+        var isClosed = !picker.get( 'open' )
+        var hasCorrectClassNames = picker.$root[0].className === klasses.picker
+        var hasCorrectActiveElement = document.activeElement === picker.$root[0]
+        ok( isClosed && hasCorrectClassNames && hasCorrectActiveElement, 'Closed with focus' )
         start()
     }, 0 )
 })
@@ -433,6 +436,11 @@ test( 'Open and close', function() {
 
     $( 'body' ).click()
     ok( picker.get( 'open' ) === false, 'Closed with click out' )
+})
+
+test( 'Open and close', function() {
+
+    var picker = this.picker
 
     picker.$node.click()
     strictEqual( picker.get( 'open' ), true, 'Opened with click in' )
