@@ -1213,7 +1213,7 @@ module( 'Date picker keyboard events', {
 test( 'Select', function() {
 
     var picker = this.picker,
-        $input = picker.$node,
+        $input = picker.$root,
         playdate = new Date()
 
     playdate.setUTCHours(0,0,0,0)
@@ -1240,7 +1240,7 @@ test( 'Select', function() {
 test( 'Highlight', function() {
 
     var picker = this.picker,
-        $input = picker.$node,
+        $input = picker.$root,
         playdate = new Date()
 
     // Open the picker

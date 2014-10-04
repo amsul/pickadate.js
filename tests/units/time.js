@@ -1114,7 +1114,7 @@ module( 'Time picker keyboard events', {
 test( 'Select', function() {
 
     var picker = this.picker,
-        $input = picker.$node
+        $input = picker.$root
 
     for ( var i = 0; i < 48; i += 1 ) {
 
@@ -1135,7 +1135,7 @@ test( 'Select', function() {
 test( 'Highlight', function() {
 
     var picker = this.picker,
-        $input = picker.$node
+        $input = picker.$root
 
     // Open the picker
     picker.open()
