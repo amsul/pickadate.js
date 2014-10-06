@@ -26,6 +26,7 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks( 'grunt-contrib-less' )
     grunt.loadNpmTasks( 'grunt-contrib-cssmin' )
     grunt.loadNpmTasks( 'grunt-contrib-uglify' )
+    grunt.loadNpmTasks( 'grunt-autoprefixer' )
 
 
     // Setup the initial configurations.
@@ -167,6 +168,20 @@ module.exports = function( grunt ) {
         },
 
 
+        // Prefix the styles.
+        autoprefixer: {
+            options: {
+                browsers: [ '> 5%', 'last 2 versions', 'ie 8', 'ie 9' ]
+            },
+            themes: {
+                src: '<%= dirs.themes.dest %>/**/*.css'
+            },
+            demo: {
+                src: '<%= dirs.demo.styles.dest %>/**/*.css'
+            }
+        },
+
+
         // Unit test the files.
         qunit: {
             lib: [ '<%= dirs.tests %>/units/all.htm' ]
@@ -179,7 +194,7 @@ module.exports = function( grunt ) {
                 files: [
                     '<%= dirs.docs.src %>/**/*.htm',
                     '<%= dirs.docs.src %>/**/*.md',
-                    '<%= dirs.demo.src %>/styles/**/*.less',
+                    '<%= dirs.demo.styles.src %>/**/*.less',
                     '<%= dirs.themes.src %>/**/*.less'
                 ],
                 tasks: [ 'quick' ]
@@ -202,6 +217,14 @@ module.exports = function( grunt ) {
                     '<%= dirs.themes.src %>/**/*.less'
                 ],
                 tasks: [ 'themes' ]
+            },
+            autoprefix: {
+                files: [
+                    '<%= dirs.demo.styles.src %>/**/*.less',
+                    '<%= dirs.themes.dest %>/**/*.css',
+                    '<%= dirs.themes.min %>/**/*.css'
+                ],
+                tasks: [ 'autoprefixer' ]
             }
         },
 
@@ -225,10 +248,10 @@ module.exports = function( grunt ) {
 
     // Register the tasks.
     // * `htmlify` and `copy:pkg` should come after `uglify` because some package files measure `.min` file sizes.
-    grunt.registerTask( 'default', [ 'less', 'jshint', 'qunit', 'uglify', 'cssmin', 'htmlify', 'copy:pkg' ] )
-    grunt.registerTask( 'quick', [ 'less', 'uglify', 'cssmin', 'htmlify', 'copy:pkg' ] )
-    grunt.registerTask( 'themes', [ 'less:themes' ] )
-    grunt.registerTask( 'demo', [ 'less:demo', 'jshint:demo' ] )
+    grunt.registerTask( 'default', [ 'less', 'cssmin', 'autoprefixer', 'jshint', 'qunit', 'uglify', 'htmlify', 'copy:pkg' ] )
+    grunt.registerTask( 'quick', [ 'less', 'cssmin', 'autoprefixer', 'uglify', 'htmlify', 'copy:pkg' ] )
+    grunt.registerTask( 'themes', [ 'less:themes', 'autoprefixer:themes' ] )
+    grunt.registerTask( 'demo', [ 'less:demo', 'autoprefixer:demo', 'jshint:demo' ] )
     grunt.registerTask( 'docs', [ 'copy:pkg', 'htmlify:docs' ] )
     grunt.registerTask( 'travis', [ 'jshint:lib', 'qunit:lib' ] )
 
