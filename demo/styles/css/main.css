@@ -197,7 +197,6 @@ dfn {
  * Address differences between Firefox and other browsers.
  */
 hr {
-  -moz-box-sizing: content-box;
   box-sizing: content-box;
   height: 0;
 }
@@ -373,8 +372,6 @@ input[type="radio"] {
 input[type="search"] {
   -webkit-appearance: textfield;
   /* 1 */
-  -moz-box-sizing: content-box;
-  -webkit-box-sizing: content-box;
   /* 2 */
   box-sizing: content-box;
 }
@@ -438,7 +435,6 @@ a {
   cursor: pointer;
   color: #0089ec;
   -webkit-transition: all linear 0.15s;
-  -moz-transition: all linear 0.15s;
   transition: all linear 0.15s;
 }
 a:focus {
@@ -626,8 +622,6 @@ code {
   font-size: .9em;
   padding: 0 .125em;
   word-break: break-word;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
   border-radius: 3px;
 }
 pre {
@@ -636,8 +630,6 @@ pre {
   text-align: left;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
   border-radius: 4px;
   padding-top: 30px;
   position: relative;
@@ -656,8 +648,6 @@ pre:before {
   color: #989a99;
   border-right: 1px solid #ededed;
   border-bottom: 1px solid #ededed;
-  -webkit-border-radius: 0 0 4px 0;
-  -moz-border-radius: 0 0 4px 0;
   border-radius: 0 0 4px 0;
 }
 pre > code {
@@ -675,7 +665,6 @@ pre > code[data-language]:before {
   font-size: 10px;
   opacity: .5;
   -webkit-transition: all 0.1s;
-  -moz-transition: all 0.1s;
   transition: all 0.1s;
 }
 pre:hover > code[data-language]:before {
@@ -712,11 +701,7 @@ textarea {
   font-weight: 200;
   width: 100%;
   -webkit-appearance: none;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
   box-shadow: none;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 textarea {
@@ -754,8 +739,6 @@ select {
 input[type=search] {
   padding-left: 0;
   padding-right: 0;
-  -webkit-border-radius: 14px;
-  -moz-border-radius: 14px;
   border-radius: 14px;
 }
 /**
@@ -763,8 +746,6 @@ input[type=search] {
  */
 .pre--demo {
   margin-bottom: 0;
-  -webkit-border-radius: 4px 4px 0 0;
-  -moz-border-radius: 4px 4px 0 0;
   border-radius: 4px 4px 0 0;
 }
 .fieldset--demo {
@@ -773,8 +754,6 @@ input[type=search] {
   background: #f8faf9;
   border: 1px solid #ededed;
   border-top: 0;
-  -webkit-border-radius: 0 0 4px 4px;
-  -moz-border-radius: 0 0 4px 4px;
   border-radius: 0 0 4px 4px;
   padding-top: 30px;
   position: relative;
@@ -793,8 +772,6 @@ input[type=search] {
   color: #989a99;
   border-right: 1px solid #ededed;
   border-bottom: 1px solid #ededed;
-  -webkit-border-radius: 0 0 4px 0;
-  -moz-border-radius: 0 0 4px 0;
   border-radius: 0 0 4px 0;
 }
 .fieldset__wrapper {
@@ -990,18 +967,12 @@ input[type=search] {
   border: 1px solid #d9d9d9;
   border-bottom-color: #bfbfbf;
   margin-right: -1px;
-  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 .theme-toggle__label--first {
-  -webkit-border-radius: 4px 0 0 4px;
-  -moz-border-radius: 4px 0 0 4px;
   border-radius: 4px 0 0 4px;
 }
 .theme-toggle__label--last {
-  -webkit-border-radius: 0 4px 4px 0;
-  -moz-border-radius: 0 4px 4px 0;
   border-radius: 0 4px 4px 0;
   margin-right: 0;
 }
@@ -1065,23 +1036,15 @@ input[type=search] {
   border-bottom-width: 1px;
 }
 .table thead:first-child tr:first-child th:first-child {
-  -webkit-border-radius: 4px 0 0 0;
-  -moz-border-radius: 4px 0 0 0;
   border-radius: 4px 0 0 0;
 }
 .table thead:first-child tr:first-child th:last-child {
-  -webkit-border-radius: 0 4px 0 0;
-  -moz-border-radius: 0 4px 0 0;
   border-radius: 0 4px 0 0;
 }
 .table tbody:last-child tr:last-child td:first-child {
-  -webkit-border-radius: 0 0 0 4px;
-  -moz-border-radius: 0 0 0 4px;
   border-radius: 0 0 0 4px;
 }
 .table tbody:last-child tr:last-child td:last-child {
-  -webkit-border-radius: 0 0 4px 0;
-  -moz-border-radius: 0 0 4px 0;
   border-radius: 0 0 4px 0;
 }
 /* ========================================================================
@@ -1162,7 +1125,6 @@ input[type=search] {
     max-height: 0;
     overflow: hidden;
     -webkit-transition: all linear 0.15s;
-    -moz-transition: all linear 0.15s;
     transition: all linear 0.15s;
   }
 }
@@ -1194,8 +1156,6 @@ input[type=search] {
 }
 .comment a {
   padding: 2px 0;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
   border-radius: 3px;
 }
 .comment a:hover {
@@ -1303,7 +1263,6 @@ a.text-dimmed:hover {
 .menu__link--dimmed .logocon__p,
 .menu__link--dimmed .logocon__u {
   -webkit-transition: all linear 0.15s;
-  -moz-transition: all linear 0.15s;
   transition: all linear 0.15s;
 }
 .menu__link--dimmed .logocon__p {
