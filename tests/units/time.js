@@ -392,10 +392,6 @@ test( '`max` using integers', function() {
     }
 
 
-    var previousHighlight = picker.get( 'highlight' )
-    var previousView = picker.get( 'view' )
-
-
     // Using negative numbers
     picker.set( 'max', -3 )
 
@@ -406,9 +402,9 @@ test( '`max` using integers', function() {
 
     deepEqual( picker.get( 'select' ), null, '`select` unaffected' )
     strictEqual( picker.get( 'min' ).pick, 0, '`min` unaffected' )
-    if ( picker.get( 'max' ).pick < picker.get( 'now' ).pick ) {
-        deepEqual( picker.get( 'highlight' ), picker.get( 'min' ), '`highlight` updated' )
-        deepEqual( picker.get( 'view' ), picker.get( 'min' ), '`view` updated' )
+    if ( picker.get( 'highlight' ).pick === maxPickTime ) {
+        deepEqual( picker.get( 'highlight' ), picker.get( 'max' ), '`highlight` updated' )
+        deepEqual( picker.get( 'view' ), picker.get( 'max' ), '`view` updated' )
     }
     else {
         deepEqual( picker.get( 'highlight' ), picker.get( 'now' ), '`highlight` unaffected' )
