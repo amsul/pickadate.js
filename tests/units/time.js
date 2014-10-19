@@ -394,10 +394,6 @@ test( '`max` using integers', function() {
     }
 
 
-    var previousHighlight = picker.get( 'highlight' )
-    var previousView = picker.get( 'view' )
-
-
     // Using negative numbers
     picker.set( 'max', -3 )
 
