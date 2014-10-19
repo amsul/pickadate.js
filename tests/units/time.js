@@ -47,7 +47,7 @@ test( 'Properties', function() {
 
     strictEqual( picker.get( 'min' ).pick, 0, 'Default “min” is midnight' )
     strictEqual( picker.get( 'max' ).pick, 1410, 'Default “max” is 23:30' )
-    strictEqual( picker.get( 'now' ).pick, interval + nowMinutes - ( nowMinutes % interval ), 'Default “now” is: ' + picker.get( 'now', 'HH:i' ) )
+    strictEqual( picker.get( 'now' ).pick, (interval + nowMinutes - ( nowMinutes % interval )) % 1440, 'Default “now” is: ' + picker.get( 'now', 'HH:i' ) )
     deepEqual( picker.get( 'select' ), null, 'Default “select” is `null`' )
     deepEqual( picker.get( 'highlight' ), picker.get( 'now' ), 'Default “highlight” is “now”' )
     deepEqual( picker.get( 'view' ), picker.get( 'highlight' ), 'Default “view” is “highlight”' )
@@ -263,7 +263,7 @@ test( '`min` using integers', function() {
 
     // Using negative numbers
     picker.set( 'min', -3 )
-    strictEqual( picker.get( 'min' ).pick, picker.get( 'now' ).pick + ( interval * -3 ), '`min` using a negative number: ' + picker.get( 'min', 'HH:i' ) )
+    strictEqual( (picker.get( 'min' ).pick + ( interval * 3 )) % 1440, picker.get( 'now' ).pick , '`min` using a negative number: ' + picker.get( 'min', 'HH:i' ) )
 
     deepEqual( picker.get( 'select' ), null, '`select` unaffected' )
     if ( picker.get( 'min' ).pick > picker.get( 'now' ).pick ) {
@@ -277,19 +277,24 @@ test( '`min` using integers', function() {
     strictEqual( picker.get( 'max' ).pick, 1410, '`max` unaffected' )
 
 
+    var previousHighlight = picker.get( 'highlight' )
+    var previousView = picker.get( 'view' )
+
+
     // Using positive numbers
     picker.set( 'min', 3 )
-    strictEqual( picker.get( 'min' ).pick, picker.get( 'now' ).pick + ( interval * 3 ), '`min` using a positive number: ' + picker.get( 'min', 'HH:i' ) )
+    strictEqual( picker.get( 'min' ).pick, (picker.get( 'now' ).pick + ( interval * 3 )) % 1440, '`min` using a positive number: ' + picker.get( 'min', 'HH:i' ) )
 
     deepEqual( picker.get( 'select' ), null, '`select` unaffected' )
-    deepEqual( picker.get( 'highlight' ), picker.get( 'min' ), '`highlight` updated' )
-    deepEqual( picker.get( 'view' ), picker.get( 'min' ), '`view` updated' )
+    strictEqual( picker.get( 'max' ).pick, 1410, '`max` unaffected' )
 
-    if ( picker.get( 'min' ).pick > 1410 ) {
-        strictEqual( picker.get( 'max' ).pick, 1410 + 1440, '`max` updated' )
+    if ( picker.get( 'highlight' ).pick + (interval * 3) <= 1410 ) {
+        deepEqual( picker.get( 'highlight' ).pick, picker.get( 'min' ).pick, '`highlight` updated' )
+        deepEqual( picker.get( 'view' ).pick, picker.get( 'min' ).pick, '`view` updated' )
     }
     else {
-        strictEqual( picker.get( 'max' ).pick, 1410, '`max` unaffected' )
+        deepEqual( picker.get( 'highlight' ).pick, previousHighlight.pick, '`highlight` unaffected' )
+        deepEqual( picker.get( 'view' ).pick, previousView.pick, '`view` unaffected' )
     }
 })
 
@@ -374,12 +379,23 @@ test( '`max` using integers', function() {
 
     // Using positive numbers
     picker.set( 'max', 3 )
-    strictEqual( picker.get( 'max' ).pick, picker.get( 'now' ).pick + ( interval * 3 ), '`max` using a positive number: ' + picker.get( 'max', 'HH:i' ) )
+    strictEqual( picker.get( 'max' ).pick, (picker.get( 'now' ).pick + ( interval * 3 )) % 1440, '`max` using a positive number: ' + picker.get( 'max', 'HH:i' ) )
 
     strictEqual( picker.get( 'min' ).pick, 0, '`min` unaffected' )
     deepEqual( picker.get( 'select' ), null, '`select` unaffected' )
-    deepEqual( picker.get( 'highlight' ), picker.get( 'now' ), '`highlight` unaffected' )
-    deepEqual( picker.get( 'view' ), picker.get( 'highlight' ), '`view` unaffected' )
+
+    if ( picker.get( 'max' ).pick < picker.get( 'now' ).pick ) {
+        deepEqual( picker.get( 'highlight' ), picker.get( 'min' ), '`highlight` updated' )
+        deepEqual( picker.get( 'view' ), picker.get( 'min' ), '`view` updated' )
+    }
+    else {
+        deepEqual( picker.get( 'highlight' ), picker.get( 'now' ), '`highlight` unaffected' )
+        deepEqual( picker.get( 'view' ), picker.get( 'now' ), '`view` unaffected' )
+    }
+
+
+    var previousHighlight = picker.get( 'highlight' )
+    var previousView = picker.get( 'view' )
 
 
     // Using negative numbers
@@ -393,8 +409,8 @@ test( '`max` using integers', function() {
     deepEqual( picker.get( 'select' ), null, '`select` unaffected' )
     strictEqual( picker.get( 'min' ).pick, 0, '`min` unaffected' )
     if ( picker.get( 'max' ).pick < picker.get( 'now' ).pick ) {
-        deepEqual( picker.get( 'highlight' ), picker.get( 'max' ), '`highlight` updated' )
-        deepEqual( picker.get( 'view' ), picker.get( 'max' ), '`view` updated' )
+        deepEqual( picker.get( 'highlight' ), picker.get( 'min' ), '`highlight` updated' )
+        deepEqual( picker.get( 'view' ), picker.get( 'min' ), '`view` updated' )
     }
     else {
         deepEqual( picker.get( 'highlight' ), picker.get( 'now' ), '`highlight` unaffected' )
