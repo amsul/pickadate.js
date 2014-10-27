@@ -1228,6 +1228,32 @@ describe('shadow.Pickadate', function() {
         })
     })
 
+    describe('.createGridHeadDates() with showWeekNumbers', function() {
+
+        var pickadate = shadow.Pickadate.create({
+            $el: $('<div />'),
+            attrs: {
+                view: [2003, 2, 1]
+            },
+            showWeekNumbers: true
+        })
+
+        var gridHeadDates = pickadate.createGridHeadDates()
+
+        it('creates a grid head for holding the days of the week', function() {
+            expect(gridHeadDates.nodeName).toBe('THEAD')
+            expect(gridHeadDates.textContent).toBe(
+                ['Wk', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].join('')
+            )
+        })
+
+        it('updates the grid head text when the first day is set', function() {
+            pickadate.attrs.firstDay = 1
+            expect(gridHeadDates.textContent).toBe(
+                ['Wk', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].join('')
+            )
+        })
+    })
 
     describe('.createGridBodyYears()', function() {
 
