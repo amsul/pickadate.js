@@ -142,6 +142,10 @@ Before opening a new issue, please search the existing [Issues]({%= pkg.bugs %})
 
 Before contributing any code to the project, please take a look at the [Contributing]({%= meta.gitrepo_url %}/blob/gh-pages/CONTRIBUTING.md) guide.
 
+If there’s anything you’d like to discuss, we like to hang out on Gitter.
+
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/amsul/pickadate.js?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 
 
 
