@@ -477,6 +477,13 @@ describe('shadow.Pickadate', function() {
     })
 
 
+    describe('.isDisabled()', function() {
+
+        it('returns if a date is disabled')
+
+    })
+
+
     describe('.createHeader()', function() {
 
         it('creates a header container element with 3 navigation buttons', function() {
