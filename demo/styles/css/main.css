@@ -434,7 +434,6 @@ a {
   text-decoration: underline;
   cursor: pointer;
   color: #0089ec;
-  -webkit-transition: all linear 0.15s;
   transition: all linear 0.15s;
 }
 a:focus {
@@ -664,7 +663,6 @@ pre > code[data-language]:before {
   left: 42px;
   font-size: 10px;
   opacity: .5;
-  -webkit-transition: all 0.1s;
   transition: all 0.1s;
 }
 pre:hover > code[data-language]:before {
@@ -1124,7 +1122,6 @@ input[type=search] {
   .page-target__reveal {
     max-height: 0;
     overflow: hidden;
-    -webkit-transition: all linear 0.15s;
     transition: all linear 0.15s;
   }
 }
@@ -1262,7 +1259,6 @@ a.text-dimmed:hover {
 }
 .menu__link--dimmed .logocon__p,
 .menu__link--dimmed .logocon__u {
-  -webkit-transition: all linear 0.15s;
   transition: all linear 0.15s;
 }
 .menu__link--dimmed .logocon__p {
