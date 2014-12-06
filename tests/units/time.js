@@ -383,14 +383,16 @@ test( '`max` using integers', function() {
     deepEqual( picker.get( 'select' ), null, '`select` unaffected' )
 
     if ( picker.get( 'max' ).pick < picker.get( 'now' ).pick ) {
-        deepEqual( picker.get( 'highlight' ), picker.get( 'min' ), '`highlight` updated' )
-        deepEqual( picker.get( 'view' ), picker.get( 'min' ), '`view` updated' )
+        deepEqual( picker.get( 'highlight' ), picker.get( 'max' ), '`highlight` updated' )
+        deepEqual( picker.get( 'view' ), picker.get( 'max' ), '`view` updated' )
     }
     else {
         deepEqual( picker.get( 'highlight' ), picker.get( 'now' ), '`highlight` unaffected' )
         deepEqual( picker.get( 'view' ), picker.get( 'now' ), '`view` unaffected' )
     }
 
+
+    var previousHighlight = picker.get( 'highlight' )
 
     // Using negative numbers
     picker.set( 'max', -3 )
@@ -407,8 +409,8 @@ test( '`max` using integers', function() {
         deepEqual( picker.get( 'view' ), picker.get( 'max' ), '`view` updated' )
     }
     else {
-        deepEqual( picker.get( 'highlight' ), picker.get( 'now' ), '`highlight` unaffected' )
-        deepEqual( picker.get( 'view' ), picker.get( 'highlight' ), '`view` unaffected' )
+        deepEqual( picker.get( 'highlight' ), previousHighlight, '`highlight` unaffected' )
+        deepEqual( picker.get( 'view' ), previousHighlight, '`view` unaffected' )
     }
 })
 
@@ -769,25 +771,13 @@ test( '`disable` and `enable` using relative ranges', function() {
         $root = picker.$root,
         now = picker.get( 'now' ),
         interval = picker.get( 'interval' ),
-        backTime = [ now.hour, now.mins - (3*interval) ],
-        forwardTime = [ now.hour, now.mins + (3*interval) ],
-        nowIntervals = ( (now.hour*60) + now.mins ) / interval,
-        backIntervals = ( (backTime[0]*60) + backTime[1] ) / interval,
-        forwardIntervals = ( (forwardTime[0]*60) + forwardTime[1] ) / interval,
+        backTime = [ now.hour, now.mins - (10*interval) ],
+        forwardTime = [ now.hour, now.mins + (10*interval) ],
         disableCollection
 
     disableCollection = [ { from: true, to: forwardTime } ]
     picker.set( 'disable', disableCollection )
     deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled range relative to now with date object' )
-
-    $root.find( '[data-pick]' ).each( function( indexCell, tableCell ) {
-        if ( indexCell >= nowIntervals && indexCell <= forwardIntervals ) {
-            ok( $( tableCell ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is disabled: ' + tableCell.innerHTML )
-        }
-        else {
-            ok( !$( tableCell ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is enabled: ' + tableCell.innerHTML )
-        }
-    })
 
     picker.set( 'enable', disableCollection )
     deepEqual( picker.get( 'disable' ), [], 'Cleared disabled range' )
@@ -797,48 +787,21 @@ test( '`disable` and `enable` using relative ranges', function() {
     picker.set( 'disable', disableCollection )
     deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled range relative to now with array' )
 
-    $root.find( '[data-pick]' ).each( function( indexCell, tableCell ) {
-        if ( indexCell <= nowIntervals && indexCell >= backIntervals ) {
-            ok( $( tableCell ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is disabled: ' + tableCell.innerHTML )
-        }
-        else {
-            ok( !$( tableCell ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is enabled: ' + tableCell.innerHTML )
-        }
-    })
-
     picker.set( 'enable', disableCollection )
     deepEqual( picker.get( 'disable' ), [], 'Cleared disabled range' )
     strictEqual( $root.find( '.' + $.fn.pickatime.defaults.klass.disabled ).length, 0, 'No times disabled' )
 
-    disableCollection = [ { from: true, to: 3 } ]
+    disableCollection = [ { from: true, to: 10 } ]
     picker.set( 'disable', disableCollection )
     deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled range relative to now with positive integer' )
 
-    $root.find( '[data-pick]' ).each( function( indexCell, tableCell ) {
-        if ( indexCell >= nowIntervals && indexCell <= nowIntervals + 3 ) {
-            ok( $( tableCell ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is disabled: ' + tableCell.innerHTML )
-        }
-        else {
-            ok( !$( tableCell ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is enabled: ' + tableCell.innerHTML )
-        }
-    })
-
     picker.set( 'enable', disableCollection )
     deepEqual( picker.get( 'disable' ), [], 'Cleared disabled range' )
     strictEqual( $root.find( '.' + $.fn.pickatime.defaults.klass.disabled ).length, 0, 'No times disabled' )
 
-    disableCollection = [ { from: -3, to: true } ]
+    disableCollection = [ { from: -10, to: true } ]
     picker.set( 'disable', disableCollection )
     deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled range relative to now with negative integer' )
-
-    $root.find( '[data-pick]' ).each( function( indexCell, tableCell ) {
-        if ( indexCell <= nowIntervals && indexCell >= nowIntervals - 3 ) {
-            ok( $( tableCell ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is disabled: ' + tableCell.innerHTML )
-        }
-        else {
-            ok( !$( tableCell ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is enabled: ' + tableCell.innerHTML )
-        }
-    })
 })
 
 test( '`disable` and `enable` using overlapping ranges', function() {
