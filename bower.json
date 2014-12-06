@@ -59,6 +59,6 @@
     "zlib-browserify": "0.0.3"
   },
   "scripts": {
-    "test": "grunt travis --verbose"
+    "test": "grunt test --verbose"
   }
 }

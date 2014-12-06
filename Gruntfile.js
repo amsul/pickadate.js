@@ -82,7 +82,7 @@ module.exports = function( grunt ) {
 
         // Copy over files to destination directions.
         copy: {
-            pkg: {
+            docs: {
                 options: {
                     processContent: function( content ) {
                         return grunt.template.process( content, { delimiters: 'curly' } )
@@ -190,42 +190,20 @@ module.exports = function( grunt ) {
 
         // Watch the project files.
         watch: {
-            quick: {
+            develop: {
+                files: [
+                    '<%= dirs.themes.src %>/**/*.less'
+                ],
+                tasks: [ 'develop-once' ]
+            },
+            document: {
                 files: [
                     '<%= dirs.docs.src %>/**/*.htm',
                     '<%= dirs.docs.src %>/**/*.md',
                     '<%= dirs.demo.styles.src %>/**/*.less',
-                    '<%= dirs.themes.src %>/**/*.less'
                 ],
-                tasks: [ 'quick' ]
+                tasks: [ 'document-once' ]
             },
-            demo: {
-                files: [
-                    '<%= dirs.demo.styles.src %>/**/*.less'
-                ],
-                tasks: [ 'demo' ]
-            },
-            docs: {
-                files: [
-                    '<%= dirs.docs.src %>/**/*.htm',
-                    '<%= dirs.docs.src %>/**/*.md'
-                ],
-                tasks: [ 'docs' ]
-            },
-            themes: {
-                files: [
-                    '<%= dirs.themes.src %>/**/*.less'
-                ],
-                tasks: [ 'themes' ]
-            },
-            autoprefix: {
-                files: [
-                    '<%= dirs.demo.styles.src %>/**/*.less',
-                    '<%= dirs.themes.dest %>/**/*.css',
-                    '<%= dirs.themes.min %>/**/*.css'
-                ],
-                tasks: [ 'autoprefixer' ]
-            }
         },
 
 
@@ -247,13 +225,18 @@ module.exports = function( grunt ) {
 
 
     // Register the tasks.
-    // * `htmlify` and `copy:pkg` should come after `uglify` because some package files measure `.min` file sizes.
-    grunt.registerTask( 'default', [ 'less', 'cssmin', 'autoprefixer', 'jshint', 'qunit', 'uglify', 'htmlify', 'copy:pkg' ] )
-    grunt.registerTask( 'quick', [ 'less', 'cssmin', 'autoprefixer', 'uglify', 'htmlify', 'copy:pkg' ] )
-    grunt.registerTask( 'themes', [ 'less:themes', 'autoprefixer:themes' ] )
-    grunt.registerTask( 'demo', [ 'less:demo', 'autoprefixer:demo', 'jshint:demo' ] )
-    grunt.registerTask( 'docs', [ 'copy:pkg', 'htmlify:docs' ] )
-    grunt.registerTask( 'travis', [ 'jshint:lib', 'qunit:lib' ] )
+    grunt.registerTask( 'default', [ 'develop' ] )
+
+    grunt.registerTask( 'develop', [ 'develop-once', 'watch:develop' ] )
+    grunt.registerTask( 'develop-once', [ 'less:themes', 'autoprefixer:themes' ] )
+
+    // * `copy` should be done after `uglify` and `cssmin` because some file sizes are measured.
+    grunt.registerTask( 'package', [ 'uglify', 'cssmin', 'copy', 'htmlify' ] )
+
+    grunt.registerTask( 'document', [ 'document-once', 'watch:document' ] )
+    grunt.registerTask( 'document-once', [ 'less:demo', 'autoprefixer:demo', 'package' ] )
+
+    grunt.registerTask( 'test', [ 'jshint', 'qunit' ] )
 
 
 
