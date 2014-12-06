@@ -17,15 +17,6 @@ The mobile-friendly, responsive, and lightweight jQuery date & time input picker
 
 
 <br>
-## Upgrading from v2 to v3
-
-The v3 API is significantly different from v2 (all for the greater good!). So if you’re upgrading to v3, make sure to read the [changelog](https://github.com/amsul/pickadate.js/blob/gh-pages/CHANGELOG.md).
-
-
-
-
-
-<br>
 ## Library files
 
 The `lib` folder includes the library files with a `compressed` folder containing the minified counter-parts. These files are minified using [Grunt](#building-with-grunt).
@@ -36,9 +27,9 @@ There are currently two pickers: **date** and **time**.
 
 File                    | Contents                 | Size (min & gzip)
 ----------------------- | ------------------------ | ----------------------
-`picker.js`             | __Base *__               | 1.74kb
-`picker.date.js`        | Date picker              | 2.59kb
-`picker.time.js`        | Time picker              | 1.83kb
+`picker.js`             | __Base *__               | 1.80kb
+`picker.date.js`        | Date picker              | 2.65kb
+`picker.time.js`        | Time picker              | 1.90kb
 
 __*__ The base script is **required** for any of the pickers to function.
 
@@ -52,10 +43,10 @@ All themes are [generated using LESS](#less-styling) and compiled from the `lib/
 File                    | Contents                     | Size (min & gzip)
 ----------------------- | ---------------------------- | ----------------------
 `default.css`           | __Base default *__           | 0.47kb
-`default.date.css`      | Default date picker          | 0.70kb
+`default.date.css`      | Default date picker          | 0.75kb
 `default.time.css`      | Default time picker          | 0.35kb
-`classic.css`           | __Base classic *__           | 0.39kb
-`classic.date.css`      | Classic date picker          | 0.74kb
+`classic.css`           | __Base classic *__           | 0.34kb
+`classic.date.css`      | Classic date picker          | 0.75kb
 `classic.time.css`      | Classic time picker          | 0.35kb
 `rtl.css`               | __RTL language stylings **__ | 0.10kb
 
@@ -65,7 +56,7 @@ __**__ For languages with text flowing from right-to-left, also include the `rtl
 
 ### Translations
 
-The translations live in the `lib/translations` folder. There are currently [39 language translations](https://github.com/amsul/pickadate.js/blob/3.5.2/lib/translations) included.
+The translations live in the `lib/translations` folder. There are currently [40 language translations](https://github.com/amsul/pickadate.js/blob/3.5.2/lib/translations) included.
 
 
 
@@ -76,10 +67,15 @@ The translations live in the `lib/translations` folder. There are currently [39 
 [Grunt](http://gruntjs.com/) `~0.4.5` is used to build the project files. To get started, clone the project and then run:
 
 - `npm install` to get the required node modules.
-- `grunt --verbose` to confirm you have all the dependencies.
+- `grunt test --verbose` to confirm you have all the dependencies.
 
 
-Read the Gruntfile to see the build tasks and relative directories of the source files.
+Type out `grunt` to see a list of all the tasks available. The generally used tasks are:
+
+- `grunt develop` compiles the LESS files and watches for any source changes.
+- `grunt document` compiles the documentation/demo site and watches for any source changes.
+- `grunt package` minifies the compiled source files.
+- `grunt test` tests the package
 
 
 

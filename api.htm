@@ -307,16 +307,16 @@ picker.start()</code></pre>
     month: 3,
 
     // The date of the month.
-    date: 19,
+    date: 20,
 
     // The day of the week with zero-as-index.
-    day: 5,
+    day: 6,
 
     // The underlying JavaScript Date object.
     obj: { 'Sat Apr 20 2013 00:00:00 GMT-0400 (EDT)' },
 
     // The “pick” value used for comparisons.
-    pick: 1366412400000
+    pick: 1366430400000
 }</code></pre>
 
         <p>Here’s a <b>time picker item object</b> for <u>4:20 PM</u>:</p>
@@ -555,13 +555,13 @@ picker.set({
         <h3 class="heading heading--divide"><span class="heading__text">Select a date <a href="#item-objects">item object</a><a class="heading__anchor--bigger" name="method-set-select-date" href="#method-set-select-date">&sect;</a></span></h3>
 
         <pre class="pre--demo"><code data-language="javascript">// Using arrays formatted as [YEAR,MONTH,DATE].
-picker.set('select', [2013,3,19])
+picker.set('select', [2013,3,20])
 
 // Using JavaScript Date objects.
-picker.set('select', new Date(2013, 3, 28))
+picker.set('select', new Date(2013, 3, 30))
 
 // Using positive integers as UNIX timestamps.
-picker.set('select', 1366880887654)
+picker.set('select', 1366898887654)
 
 // Using a string along with the parsing format (defaults to <a href="date.htm#formats">`format` option</a>).
 picker.set('select', '2014-04-20', { format: 'yyyy-mm-dd' })</code></pre>
@@ -574,7 +574,7 @@ picker.set('select', '2014-04-20', { format: 'yyyy-mm-dd' })</code></pre>
 picker.set('select', [3,0])
 
 // Using JavaScript Date objects.
-picker.set('select', new Date(2013, 3, 19, 10, 30))
+picker.set('select', new Date(2013, 3, 20, 10, 30))
 
 // Using positive integers as minutes.
 picker.set('select', 540)
@@ -599,13 +599,13 @@ picker.set('select', '04-30', { format: 'hh-i' })</code></pre>
         <h3 class="heading heading--divide"><span class="heading__text">Highlight a date <a href="#item-objects">item object</a><a class="heading__anchor--bigger" name="method-set-highlight-date" href="#method-set-highlight-date">&sect;</a></span></h3>
 
         <pre class="pre--demo"><code data-language="javascript">// Using arrays formatted as [YEAR,MONTH,DATE].
-picker.set('highlight', [2013,3,19])
+picker.set('highlight', [2013,3,20])
 
 // Using JavaScript Date objects.
-picker.set('highlight', new Date(2013, 3, 28))
+picker.set('highlight', new Date(2013, 3, 30))
 
 // Using positive integers as UNIX timestamps.
-picker.set('highlight', 1366880887654)
+picker.set('highlight', 1366898887654)
 
 // Using a string along with the parsing format (defaults to <a href="date.htm#formats">`format` option</a>).
 picker.set('highlight', '2014-04-20', { format: 'yyyy-mm-dd' })</code></pre>
@@ -618,7 +618,7 @@ picker.set('highlight', '2014-04-20', { format: 'yyyy-mm-dd' })</code></pre>
 picker.set('highlight', [15,30])
 
 // Using JavaScript Date objects.
-picker.set('highlight', new Date(2013, 3, 19, 10, 30))
+picker.set('highlight', new Date(2013, 3, 20, 10, 30))
 
 // Using positive integers as minutes.
 picker.set('highlight', 1080)
@@ -664,7 +664,7 @@ picker.set('view', '2014-04-20', { format: 'yyyy-mm-dd' })</code></code></pre>
 picker.set('view', [15,30])
 
 // Using JavaScript Date objects.
-picker.set('view', new Date(2013, 3, 19, 10, 30))
+picker.set('view', new Date(2013, 3, 20, 10, 30))
 
 // Using positive integers as minutes.
 picker.set('view', 1080)
@@ -714,7 +714,7 @@ picker.set('min', false)</code></pre>
 picker.set('min', [15,30])
 
 // Using JavaScript Date objects.
-picker.set('min', new Date(2013, 3, 19, 10, 30))
+picker.set('min', new Date(2013, 3, 20, 10, 30))
 
 // Using formatted strings.
 picker.set('min', '4:30 PM'))
@@ -770,7 +770,7 @@ picker.set('max', false)</code></pre>
 picker.set('max', [15,30])
 
 // Using JavaScript Date objects.
-picker.set('max', new Date(2013, 3, 19, 10, 30))
+picker.set('max', new Date(2013, 3, 20, 10, 30))
 
 // Using formatted strings.
 picker.set('max', '11:30 AM'))

@@ -28,15 +28,6 @@
 
 
 <br>
-## Upgrading from v2 to v3
-
-The v3 API is significantly different from v2 (all for the greater good!). So if you’re upgrading to v3, make sure to read the [changelog]({%= meta.gitrepo_url %}/blob/gh-pages/CHANGELOG.md).
-
-
-
-
-
-<br>
 ## Library files
 
 The `{%= dirs.lib.src %}` folder includes the library files with a `compressed` folder containing the minified counter-parts. These files are minified using [Grunt](#building-with-grunt).
@@ -87,10 +78,15 @@ The translations live in the `{%= dirs.translations.src %}` folder. There are cu
 [Grunt](http://gruntjs.com/) `~{%= grunt.version %}` is used to build the project files. To get started, clone the project and then run:
 
 - `npm install` to get the required node modules.
-- `grunt --verbose` to confirm you have all the dependencies.
+- `grunt test --verbose` to confirm you have all the dependencies.
 
 
-Read the Gruntfile to see the build tasks and relative directories of the source files.
+Type out `grunt` to see a list of all the tasks available. The generally used tasks are:
+
+- `grunt develop` compiles the LESS files and watches for any source changes.
+- `grunt document` compiles the documentation/demo site and watches for any source changes.
+- `grunt package` minifies the compiled source files.
+- `grunt test` tests the package
 
 
 
