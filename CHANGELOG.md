@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.5.1
+## 3.5.2
 - [#398](https://github.com/amsul/pickadate.js/issues/398): Fixed Nepali translations.
 - [#403](https://github.com/amsul/pickadate.js/issues/403): Fixed month nav pointer styling with Bootstrap (`border-box` issue).
 - [#405](https://github.com/amsul/pickadate.js/issues/405): Fixed scrollbar width checker.
