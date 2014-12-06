@@ -769,8 +769,8 @@ test( '`disable` and `enable` using relative ranges', function() {
         $root = picker.$root,
         now = picker.get( 'now' ),
         interval = picker.get( 'interval' ),
-        backTime = [ now.hour, now.mins - (10*interval) ],
-        forwardTime = [ now.hour, now.mins + (10*interval) ],
+        backTime = [ now.hour, now.mins - (3*interval) ],
+        forwardTime = [ now.hour, now.mins + (3*interval) ],
         nowIntervals = ( (now.hour*60) + now.mins ) / interval,
         backIntervals = ( (backTime[0]*60) + backTime[1] ) / interval,
         forwardIntervals = ( (forwardTime[0]*60) + forwardTime[1] ) / interval,
@@ -810,12 +810,12 @@ test( '`disable` and `enable` using relative ranges', function() {
     deepEqual( picker.get( 'disable' ), [], 'Cleared disabled range' )
     strictEqual( $root.find( '.' + $.fn.pickatime.defaults.klass.disabled ).length, 0, 'No times disabled' )
 
-    disableCollection = [ { from: true, to: 10 } ]
+    disableCollection = [ { from: true, to: 3 } ]
     picker.set( 'disable', disableCollection )
     deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled range relative to now with positive integer' )
 
     $root.find( '[data-pick]' ).each( function( indexCell, tableCell ) {
-        if ( indexCell >= nowIntervals && indexCell <= nowIntervals + 10 ) {
+        if ( indexCell >= nowIntervals && indexCell <= nowIntervals + 3 ) {
             ok( $( tableCell ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is disabled: ' + tableCell.innerHTML )
         }
         else {
@@ -827,12 +827,12 @@ test( '`disable` and `enable` using relative ranges', function() {
     deepEqual( picker.get( 'disable' ), [], 'Cleared disabled range' )
     strictEqual( $root.find( '.' + $.fn.pickatime.defaults.klass.disabled ).length, 0, 'No times disabled' )
 
-    disableCollection = [ { from: -10, to: true } ]
+    disableCollection = [ { from: -3, to: true } ]
     picker.set( 'disable', disableCollection )
     deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled range relative to now with negative integer' )
 
     $root.find( '[data-pick]' ).each( function( indexCell, tableCell ) {
-        if ( indexCell <= nowIntervals && indexCell >= nowIntervals - 10 ) {
+        if ( indexCell <= nowIntervals && indexCell >= nowIntervals - 3 ) {
             ok( $( tableCell ).hasClass( $.fn.pickatime.defaults.klass.disabled ), 'Time is disabled: ' + tableCell.innerHTML )
         }
         else {
