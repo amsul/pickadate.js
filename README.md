@@ -1,4 +1,4 @@
-# pickadate v3.5.2 [![pickadate build status](https://travis-ci.org/amsul/pickadate.js.svg?branch=gh-pages)](https://travis-ci.org/amsul/pickadate.js) [![pickadate dev dependencies status](https://david-dm.org/amsul/pickadate.js/dev-status.svg)](https://david-dm.org/amsul/pickadate.js#info=devDependencies)
+# pickadate v3.5.5 [![pickadate build status](https://travis-ci.org/amsul/pickadate.js.svg?branch=master)](https://travis-ci.org/amsul/pickadate.js) [![pickadate dev dependencies status](https://david-dm.org/amsul/pickadate.js/dev-status.svg)](https://david-dm.org/amsul/pickadate.js#info=devDependencies)
 
 The mobile-friendly, responsive, and lightweight jQuery date & time input picker.
 
@@ -11,7 +11,7 @@ The mobile-friendly, responsive, and lightweight jQuery date & time input picker
 
 #### To get it:
 
-[Download v3.5.2](https://github.com/amsul/pickadate.js/archive/3.5.2.zip) or `git clone git://github.com/amsul/pickadate.js.git` or `bower install pickadate`
+[Download v3.5.5](https://github.com/amsul/pickadate.js/archive/3.5.5.zip) or `git clone git://github.com/amsul/pickadate.js.git` or `bower install pickadate`
 
 
 
@@ -23,15 +23,11 @@ The `lib` folder includes the library files with a `compressed` folder containin
 
 ### Pickers
 
-There are currently two pickers: **date** and **time**.
+There are three picker files:
 
-File                    | Contents                 | Size (min & gzip)
------------------------ | ------------------------ | ----------------------
-`picker.js`             | __Base *__               | 1.80kb
-`picker.date.js`        | Date picker              | 2.65kb
-`picker.time.js`        | Time picker              | 1.90kb
-
-__*__ The base script is **required** for any of the pickers to function.
+* `picker.js` The core file (required before any other picker)
+* `picker.date.js` The date picker
+* `picker.time.js` The time picker
 
 _To support old browsers, namely IE8, **also include** the `legacy.js` file._
 
@@ -40,23 +36,22 @@ _To support old browsers, namely IE8, **also include** the `legacy.js` file._
 
 All themes are [generated using LESS](#less-styling) and compiled from the `lib/themes-source` folder into the `lib/themes` folder.
 
-File                    | Contents                     | Size (min & gzip)
------------------------ | ---------------------------- | ----------------------
-`default.css`           | __Base default *__           | 0.47kb
-`default.date.css`      | Default date picker          | 0.75kb
-`default.time.css`      | Default time picker          | 0.35kb
-`classic.css`           | __Base classic *__           | 0.34kb
-`classic.date.css`      | Classic date picker          | 0.75kb
-`classic.time.css`      | Classic time picker          | 0.35kb
-`rtl.css`               | __RTL language stylings **__ | 0.10kb
+There are two themes:
 
-__*__ One and only one base stylesheet is **required**. [Choose a theme](http://amsul.github.io/pickadate.js#menu) then include the respective pickers as well.
+* `default.css` The default modal-style theme
+* `classic.css` The classic dropdown-style theme
+
+Based on the theme, pick the relevant picker styles:
+
+* `default.date.css` and `default.time.css` when using the default theme
+* `classic.date.css` and `classic.time.css` when using the classic theme
 
 __**__ For languages with text flowing from right-to-left, also include the `rtl.css` stylesheet.
 
+
 ### Translations
 
-The translations live in the `lib/translations` folder. There are currently [40 language translations](https://github.com/amsul/pickadate.js/blob/3.5.2/lib/translations) included.
+The translations live in the `lib/translations` folder. There are currently [40 language translations](https://github.com/amsul/pickadate.js/blob/3.5.5/lib/translations) included.
 
 
 
@@ -73,9 +68,10 @@ The translations live in the `lib/translations` folder. There are currently [40 
 Type out `grunt --help` to see a list of all the tasks available. The generally used tasks are:
 
 - `grunt develop` compiles the LESS files and watches for any source changes.
-- `grunt document` compiles the documentation/demo site and watches for any source changes.
+- `grunt document` compiles the demo site and watches for any source changes.
 - `grunt package` minifies the compiled source files.
-- `grunt test` tests the package
+- `grunt test` tests the entire package.
+- `grunt build` compiles, minifies, and tests the package.
 
 
 
@@ -92,14 +88,14 @@ The picker themes are built using [LESS](http://lesscss.org/) with Grunt. To cus
 - and a whole bunch of other stuff.
 
 
-After making any changes, run `grunt less:themes` to compile it into CSS.
+Make sure to run the `grunt develop` task before making any changes to compile it into CSS.
 
 
 
 <br>
 ## Versioning
 
-To maintain some consistency in the sort of changes to expect with version bumps, [Semantic Versioning guidelines](http://semver.org/) will now be followed as closely as possible:
+To maintain consistency in the sort of changes to expect with version bumps, [Semantic Versioning guidelines](http://semver.org/) is followed as closely as possible:
 
 `<major>.<minor>.<patch>`
 
@@ -108,6 +104,8 @@ Constructed as such:
 - `major`: breaks backward compatibility (resets the `minor` and `patch`)
 - `minor`: new additions with backward compatibility (resets the `patch`)
 - `patch`: bug fixes and misc changes
+
+If a version bump is due, make sure to update the version with a project-wide search and replace.
 
 
 
@@ -129,7 +127,7 @@ Before contributing any code to the project, please take a look at the [Contribu
 
 If there’s anything you’d like to discuss, we like to hang out on Gitter.
 
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/amsul/pickadate.js?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/amsul/pickadate.js)
 
 
 

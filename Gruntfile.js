@@ -80,26 +80,6 @@ module.exports = function( grunt ) {
         },
 
 
-        // Copy over files to destination directions.
-        copy: {
-            docs: {
-                options: {
-                    processContent: function( content ) {
-                        return grunt.template.process( content, { delimiters: 'curly' } )
-                    }
-                },
-                files: [
-                    { '<%= pkg.name %>.jquery.json': 'package.json' },
-                    { 'bower.json': 'package.json' },
-                    { 'README.md': '<%= dirs.docs.src %>/README.md' },
-                    { 'LICENSE.md': '<%= dirs.docs.src %>/LICENSE.md' },
-                    { 'CHANGELOG.md': '<%= dirs.docs.src %>/CHANGELOG.md' },
-                    { 'CONTRIBUTING.md': '<%= dirs.docs.src %>/CONTRIBUTING.md' }
-                ]
-            }
-        },
-
-
         // Compile LESS into CSS.
         less: {
             options: {
@@ -199,7 +179,6 @@ module.exports = function( grunt ) {
             document: {
                 files: [
                     '<%= dirs.docs.src %>/**/*.htm',
-                    '<%= dirs.docs.src %>/**/*.md',
                     '<%= dirs.demo.styles.src %>/**/*.less',
                 ],
                 tasks: [ 'document-once' ]
@@ -230,13 +209,14 @@ module.exports = function( grunt ) {
     grunt.registerTask( 'develop', [ 'develop-once', 'watch:develop' ] )
     grunt.registerTask( 'develop-once', [ 'less:themes', 'autoprefixer:themes' ] )
 
-    // * `copy` should be done after `uglify` and `cssmin` because some file sizes are measured.
-    grunt.registerTask( 'package', [ 'uglify', 'cssmin', 'copy', 'htmlify' ] )
-
     grunt.registerTask( 'document', [ 'document-once', 'watch:document' ] )
     grunt.registerTask( 'document-once', [ 'less:demo', 'autoprefixer:demo', 'package' ] )
 
+    grunt.registerTask( 'package', [ 'uglify', 'cssmin', 'htmlify' ] )
+
     grunt.registerTask( 'test', [ 'jshint', 'qunit' ] )
+
+    grunt.registerTask( 'build', [ 'develop-once', 'document-once', 'package', 'test' ] )
 
 
 
