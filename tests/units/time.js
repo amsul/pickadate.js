@@ -285,8 +285,7 @@ test( '`min` using integers', function() {
 
     deepEqual( picker.get( 'select' ), null, '`select` unaffected' )
     strictEqual( picker.get( 'max' ).pick, 1410, '`max` unaffected' )
-
-    if ( picker.get( 'highlight' ).pick + (interval * 3) <= 1410 ) {
+    if ( picker.get( 'highlight' ).pick !== previousHighlight.pick ) {
         deepEqual( picker.get( 'highlight' ).pick, picker.get( 'min' ).pick, '`highlight` updated' )
         deepEqual( picker.get( 'view' ).pick, picker.get( 'min' ).pick, '`view` updated' )
     }
