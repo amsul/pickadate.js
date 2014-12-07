@@ -26,7 +26,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/amsul/pickadate.js.git"
+    "url": "https://github.com/amsul/pickadate.js.git"
   },
   "scripts": {
     "test": "grunt test --verbose"
