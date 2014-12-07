@@ -1,5 +1,32 @@
 # Changelog
 
+## 3.5.5
+
+- [#180](https://github.com/amsul/pickadate.js/issues/180) Fixed date picker to use UTC dates.
+- [#503](https://github.com/amsul/pickadate.js/issues/503) Fixed time picker to use local times.
+- Fixed color for “clear” button on time picker.
+- Translations fixes for [Italian](https://github.com/amsul/pickadate.js/issues/507), [Slovak](https://github.com/amsul/pickadate.js/issues/505), [French](https://github.com/amsul/pickadate.js/issues/499), [Russian](https://github.com/amsul/pickadate.js/issues/484), [Spanish](https://github.com/amsul/pickadate.js/issues/482), [Hindi](https://github.com/amsul/pickadate.js/commit/4b7b7194395657b2360c335839f5b4e21f43987a), [Brazilian Portuguese](https://github.com/amsul/pickadate.js/commit/67d0f6d26aba689c31c9ad402a109b478ffdac92)
+- [#437](https://github.com/amsul/pickadate.js/issues/437): Added Common JS to UMD.
+- [#478](https://github.com/amsul/pickadate.js/issues/478): Added “close” button.
+- [#406](https://github.com/amsul/pickadate.js/issues/406): Allow `clear` method to be `muted`.
+- [#510](https://github.com/amsul/pickadate.js/issues/510): Added `valueSubmit` to get value of hidden input element.
+- [#439](https://github.com/amsul/pickadate.js/issues/439): Added ability to set min/max date & time using formatted strings.
+- [#451](https://github.com/amsul/pickadate.js/issues/451): Added French accessibility labels.
+- [#462](https://github.com/amsul/pickadate.js/issues/462): Fixed time offset issues by using UTC based times.
+- [#476](https://github.com/amsul/pickadate.js/issues/476): Fixed the `main` files in `bower.json`.
+- [#442](https://github.com/amsul/pickadate.js/issues/442): Fixed flickering on webkit browsers.
+- [#438](https://github.com/amsul/pickadate.js/issues/438): Fixed adding an ID to the hidden element to remain unique.
+- [#456](https://github.com/amsul/pickadate.js/issues/456): Fixed “today” button to be disabled when the date is disabled.
+- [#419](https://github.com/amsul/pickadate.js/issues/419): Fixed time picker not scrolling to correct position with the “classic” theme.
+- [#531](https://github.com/amsul/pickadate.js/issues/531): Fixed mutation of date object passed to `normalize`.
+- [#441](https://github.com/amsul/pickadate.js/issues/441): Fixed IE8 `getComputedStyle` error.
+- [#465](https://github.com/amsul/pickadate.js/issues/465): Fixed IE8 error on changing input `type`.
+- [#519](https://github.com/amsul/pickadate.js/issues/519): Fixed IE8 error of picker in `iframe`.
+- [#523](https://github.com/amsul/pickadate.js/issues/523): Fixed iOS8 bug of picker not opening in view.
+- Fixed bug where it was possible to unbind internal bindings.
+- [#420](https://github.com/amsul/pickadate.js/issues/420): [Updated docs](http://amsul.github.io/pickadate.js/api.htm#method-trigger) the `trigger` method’s ability to pass data to event callbacks.
+
+
 ## 3.5.2
 - [#398](https://github.com/amsul/pickadate.js/issues/398): Fixed Nepali translations.
 - [#403](https://github.com/amsul/pickadate.js/issues/403): Fixed month nav pointer styling with Bootstrap (`border-box` issue).
