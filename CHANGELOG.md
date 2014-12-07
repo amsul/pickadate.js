@@ -25,6 +25,9 @@
 - [#523](https://github.com/amsul/pickadate.js/issues/523): Fixed iOS8 bug of picker not opening in view.
 - Fixed bug where it was possible to unbind internal bindings.
 - [#420](https://github.com/amsul/pickadate.js/issues/420): [Updated docs](http://amsul.github.io/pickadate.js/api.htm#method-trigger) the `trigger` method’s ability to pass data to event callbacks.
+- [#562](https://github.com/amsul/pickadate.js/issues/562): Fixed hidden `input` to move into `container` when option is used.
+- [#581](https://github.com/amsul/pickadate.js/issues/581): Added ARIA label for dates and times.
+- [#575](https://github.com/amsul/pickadate.js/issues/575): Removed the Sizzle dependency.
 
 
 ## 3.5.2
