@@ -70,8 +70,8 @@
         <fieldset class="fieldset fieldset--demo js__fieldset"><div class="fieldset__wrapper"><input id="" class="fieldset__input js__datepicker" type=text placeholder="Try me&hellip;"></div></fieldset>
 
         <div class="section__block section__block--notification">
-            <p>Along with v3, the v2 options and API have effectively been deprecated. Read up on the <a href="https://github.com/amsul/pickadate.js/blob/3.5.2/CHANGELOG.md">full changelog here</a>.</p>
-            <p>One of the most critical changes is that the “month” used to create dates, just as in JavaScript’s native Date object, now has <a href="https://github.com/amsul/pickadate.js/blob/3.5.2/CHANGELOG.md#zero-as-index">zero-as-index</a>.</p>
+            <p><b>NOTE:</b> months in a JavaScript <code>Date</code> object are zero-indexed. Meaning, <code>new Date(2014, 3, 20)</code> is 20 April, 2014.</p>
+            <p>To stay consistent with this, whenever an integer is used in reference to a month, pickadate treats it as zero-indexed. Dates as strings are still parsed as expected.</p>
         </div>
 
     </div> <!-- .section__block -->
