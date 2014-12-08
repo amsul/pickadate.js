@@ -1,0 +1,23 @@
+<meta charset="utf-8">
+
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+<meta name="author" content="Amsul - http://amsul.ca">
+<meta name="viewport" content="width=device-width">
+<meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
+
+<title>{% if page.title %}{{ page.title }} – {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
+
+<link rel="shortcut icon" href="{{ '/images/favicon.ico' | prepend: site.baseurl }}">
+<link rel="stylesheet" href="{{ '/css/main.css' | prepend: site.baseurl }}">
+<link rel="stylesheet" href="{{ '/vendor/pickadate/lib/themes/default.css' | prepend: site.baseurl }}" id="theme_base">
+<link rel="stylesheet" href="{{ '/vendor/pickadate/lib/themes/default.date.css' | prepend: site.baseurl }}" id="theme_date">
+<link rel="stylesheet" href="{{ '/vendor/pickadate/lib/themes/default.time.css' | prepend: site.baseurl }}" id="theme_time">
+<link rel="canonical" href="{{ page.url | replace: 'index.html','' | prepend: site.baseurl | prepend: site.url }}">
+<link rel="alternate" href="{{ '/feed.xml' | prepend: site.baseurl | prepend: site.url }}" type="application/atom+xml" title="{{ site.title }}">
+
+<!--[if lt IE 9]>
+  <script>document.createElement('section')</script>
+<![endif]-->

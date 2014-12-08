@@ -1,0 +1,27 @@
+<fieldset class="fieldset fieldset--demo js__fieldset">
+  <div class="fieldset__wrapper">
+
+    {% if include.button %}
+      <button id="button__{{ include.id | remove_first: 'demo__' }}" class="fieldset__button button button--small">{{ include.button }}</button>
+    {% endif %}
+
+    <input
+      id="{{ include.id }}"
+      name="{{ include.name }}"
+      class="fieldset__input {{ include.class }}"
+      type="{% if include.type %}{{ include.type }}{% else %}text{% endif %}"
+      {% if include.placeholder == "open-console" %}
+        placeholder="Open your console and try me&hellip;"
+      {% else %}
+        placeholder="Try me&hellip;"
+      {% endif %}
+      {% if include.value %}
+        value="{{ include.value }}"
+      {% endif %}
+      {% if include.data-value %}
+        data-value="{{ include.data-value }}"
+      {% endif %}
+      >
+
+  </div>
+</fieldset>
