@@ -1,20 +1,16 @@
 
 /*!
- * Date picker for pickadate.js v3.5.4
+ * Date picker for pickadate.js v3.5.0
  * http://amsul.github.io/pickadate.js/date.htm
  */
 
 (function ( factory ) {
 
-    // AMD.
+    // Register as an anonymous module.
     if ( typeof define == 'function' && define.amd )
         define( ['picker','jquery'], factory )
 
-    // Node.js/browserify.
-    else if ( typeof exports == 'object' )
-        module.exports = factory( require('./picker.js'), require('jquery') )
-
-    // Browser globals.
+    // Or using browser globals.
     else factory( Picker, jQuery )
 
 }(function( Picker, $ ) {
@@ -35,20 +31,12 @@ var DAYS_IN_WEEK = 7,
 function DatePicker( picker, settings ) {
 
     var calendar = this,
-        element = picker.$node[ 0 ],
-        elementValue = element.value,
+        elementValue = picker.$node[ 0 ].value,
         elementDataValue = picker.$node.data( 'value' ),
         valueString = elementDataValue || elementValue,
         formatString = elementDataValue ? settings.formatSubmit : settings.format,
         isRTL = function() {
-
-            return element.currentStyle ?
-
-                // For IE.
-                element.currentStyle.direction == 'rtl' :
-
-                // For normal browsers.
-                getComputedStyle( picker.$root[0] ).direction == 'rtl'
+            return getComputedStyle( picker.$root[0] ).direction === 'rtl'
         }
 
     calendar.settings = settings
@@ -102,10 +90,10 @@ function DatePicker( picker, settings ) {
         37: function() { return isRTL() ? 1 : -1 }, // Left
         go: function( timeChange ) {
             var highlightedObject = calendar.item.highlight,
-                targetDate = new Date( Date.UTC(highlightedObject.year, highlightedObject.month, highlightedObject.date + timeChange) )
+                targetDate = new Date( highlightedObject.year, highlightedObject.month, highlightedObject.date + timeChange )
             calendar.set(
                 'highlight',
-                targetDate,
+                [ targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate() ],
                 { interval: timeChange }
             )
             this.render()
@@ -130,17 +118,13 @@ function DatePicker( picker, settings ) {
                     picker.$root.find( '.' + settings.klass.selectYear ).trigger( 'focus' )
                 }
             })
-        }, 1 ).
+        }).
         on( 'open', function() {
-            var includeToday = ''
-            if ( calendar.disabled( calendar.get('now') ) ) {
-                includeToday = ':not(.' + settings.klass.buttonToday + ')'
-            }
-            picker.$root.find( 'button' + includeToday + ', select' ).attr( 'disabled', false )
-        }, 1 ).
+            picker.$root.find( 'button, select' ).attr( 'disabled', false )
+        }).
         on( 'close', function() {
             picker.$root.find( 'button, select' ).attr( 'disabled', true )
-        }, 1 )
+        })
 
 } //DatePicker
 
@@ -222,18 +206,13 @@ DatePicker.prototype.create = function( type, value, options ) {
     // If it’s an array, convert it into a date and make sure
     // that it’s a valid date – otherwise default to today.
     else if ( $.isArray( value ) ) {
-        value = new Date(Date.UTC(value[ 0 ], value[ 1 ], value[ 2 ] ))
+        value = new Date( value[ 0 ], value[ 1 ], value[ 2 ] )
         value = _.isDate( value ) ? value : calendar.create().obj
     }
 
-    // If it’s a number, make a normalized date.
-    else if ( _.isInteger( value ) ) {
+    // If it’s a number or date object, make a normalized date.
+    else if ( _.isInteger( value ) || _.isDate( value ) ) {
         value = calendar.normalize( new Date( value ), options )
-    }
-
-    // If it’s a date object, make a normalized date.
-    else if ( _.isDate( value ) ) {
-        value = calendar.normalize( value, options )
     }
 
     // If it’s a literal true or any other case, set it to now.
@@ -243,10 +222,10 @@ DatePicker.prototype.create = function( type, value, options ) {
 
     // Return the compiled object.
     return {
-        year: isInfiniteValue || value.getUTCFullYear(),
-        month: isInfiniteValue || value.getUTCMonth(),
-        date: isInfiniteValue || value.getUTCDate(),
-        day: isInfiniteValue || value.getUTCDay(),
+        year: isInfiniteValue || value.getFullYear(),
+        month: isInfiniteValue || value.getMonth(),
+        date: isInfiniteValue || value.getDate(),
+        day: isInfiniteValue || value.getDay(),
         obj: isInfiniteValue || value,
         pick: isInfiniteValue || value.getTime()
     }
@@ -321,7 +300,7 @@ DatePicker.prototype.overlapRanges = function( one, two ) {
 DatePicker.prototype.now = function( type, value, options ) {
     value = new Date()
     if ( options && options.rel ) {
-        value.setUTCDate( value.getUTCDate() + options.rel )
+        value.setDate( value.getDate() + options.rel )
     }
     return this.normalize( value, options )
 }
@@ -363,13 +342,13 @@ DatePicker.prototype.navigate = function( type, value, options ) {
         }
 
         // Figure out the expected target year and month.
-        targetDateObject = new Date( Date.UTC( targetYear, targetMonth + ( options && options.nav ? options.nav : 0 ), 1 ) )
-        targetYear = targetDateObject.getUTCFullYear()
-        targetMonth = targetDateObject.getUTCMonth()
+        targetDateObject = new Date( targetYear, targetMonth + ( options && options.nav ? options.nav : 0 ), 1 )
+        targetYear = targetDateObject.getFullYear()
+        targetMonth = targetDateObject.getMonth()
 
         // If the month we’re going to doesn’t have enough days,
         // keep decreasing the date until we reach the month’s last date.
-        while ( /*safety &&*/ new Date( Date.UTC( targetYear, targetMonth, targetDate ) ).getUTCMonth() !== targetMonth ) {
+        while ( /*safety &&*/ new Date( targetYear, targetMonth, targetDate ).getMonth() !== targetMonth ) {
             targetDate -= 1
             /*safety -= 1
             if ( !safety ) {
@@ -388,7 +367,7 @@ DatePicker.prototype.navigate = function( type, value, options ) {
  * Normalize a date by setting the hours to midnight.
  */
 DatePicker.prototype.normalize = function( value/*, options*/ ) {
-    value.setUTCHours( 0, 0, 0, 0 )
+    value.setHours( 0, 0, 0, 0 )
     return value
 }
 
@@ -400,14 +379,9 @@ DatePicker.prototype.measure = function( type, value/*, options*/ ) {
 
     var calendar = this
 
-    // If it’s anything false-y, remove the limits.
+    // If it's anything false-y, remove the limits.
     if ( !value ) {
         value = type == 'min' ? -Infinity : Infinity
-    }
-
-    // If it’s a string, parse it.
-    else if ( typeof value == 'string' ) {
-        value = calendar.parse( type, value )
     }
 
     // If it's an integer, get a date relative to today.
@@ -933,7 +907,7 @@ DatePicker.prototype.activate = function( type, datesToEnable ) {
                         if ( !matchFound[3] ) matchFound.push( 'inverted' )
                     }
                     else if ( _.isDate( unitToEnable ) ) {
-                        matchFound = [ unitToEnable.getUTCFullYear(), unitToEnable.getUTCMonth(), unitToEnable.getUTCDate(), 'inverted' ]
+                        matchFound = [ unitToEnable.getFullYear(), unitToEnable.getMonth(), unitToEnable.getDate(), 'inverted' ]
                     }
                     break
                 }
@@ -1256,14 +1230,10 @@ DatePicker.prototype.nodes = function( isOpen ) {
         'div',
         _.node( 'button', settings.today, settings.klass.buttonToday,
             'type=button data-pick=' + nowObject.pick +
-            ( isOpen && !calendar.disabled(nowObject) ? '' : ' disabled' ) + ' ' +
+            ( isOpen ? '' : ' disabled' ) + ' ' +
             _.ariaAttr({ controls: calendar.$node[0].id }) ) +
         _.node( 'button', settings.clear, settings.klass.buttonClear,
             'type=button data-clear=1' +
-            ( isOpen ? '' : ' disabled' ) + ' ' +
-            _.ariaAttr({ controls: calendar.$node[0].id }) ) +
-        _.node('button', settings.close, settings.klass.buttonClose,
-            'type=button data-close=true ' +
             ( isOpen ? '' : ' disabled' ) + ' ' +
             _.ariaAttr({ controls: calendar.$node[0].id }) ),
         settings.klass.footer
@@ -1297,7 +1267,6 @@ DatePicker.defaults = (function( prefix ) {
         // Today and clear
         today: 'Today',
         clear: 'Clear',
-        close: 'Close',
 
         // The format to show on the `input` element
         format: 'd mmmm, yyyy',
@@ -1332,8 +1301,7 @@ DatePicker.defaults = (function( prefix ) {
             footer: prefix + 'footer',
 
             buttonClear: prefix + 'button--clear',
-            buttonToday: prefix + 'button--today',
-            buttonClose: prefix + 'button--close'
+            buttonToday: prefix + 'button--today'
         }
     }
 })( Picker.klasses().picker + '__' )

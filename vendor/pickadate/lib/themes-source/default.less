@@ -37,9 +37,6 @@
     // Fade out the background, then immediately shift the holder out of view.
     @transition: background @speed-animate-in ease-out, top 0s @speed-animate-in;
     .transition( @transition );
-
-    // Avoid flickering of the page on webkit browsers
-    -webkit-backface-visibility: hidden;
 }
 
 

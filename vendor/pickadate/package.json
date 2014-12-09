@@ -1,6 +1,6 @@
 {
   "name": "pickadate",
-  "version": "3.5.4",
+  "version": "3.5.2",
   "title": "pickadate.js",
   "description": "The mobile-friendly, responsive, and lightweight jQuery date & time input picker.",
   "author": {
@@ -29,11 +29,7 @@
     "tests",
     "v2-(deprecated)"
   ],
-  "main": [
-    "lib/picker.js",
-    "lib/picker.date.js",
-    "lib/picker.time.js"
-  ],
+  "main": "lib/picker.js",
   "homepage": "http://amsul.github.io/pickadate.js",
   "docs": "http://amsul.github.io/pickadate.js",
   "demo": "http://amsul.github.io/pickadate.js",

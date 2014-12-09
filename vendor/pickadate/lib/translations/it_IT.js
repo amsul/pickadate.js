@@ -5,9 +5,8 @@ jQuery.extend( jQuery.fn.pickadate.defaults, {
     monthsShort: [ 'gen', 'feb', 'mar', 'apr', 'mag', 'giu', 'lug', 'ago', 'set', 'ott', 'nov', 'dic' ],
     weekdaysFull: [ 'domenica', 'lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato' ],
     weekdaysShort: [ 'dom', 'lun', 'mar', 'mer', 'gio', 'ven', 'sab' ],
-    today: 'Oggi',
-    clear: 'Cancellare',
-    close: 'Chiudi',
+    today: 'oggi',
+    clear: 'cancellare',
     firstDay: 1,
     format: 'dddd d mmmm yyyy',
     formatSubmit: 'yyyy/mm/dd'

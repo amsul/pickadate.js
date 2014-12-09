@@ -1,20 +1,16 @@
 
 /*!
- * Time picker for pickadate.js v3.5.4
+ * Time picker for pickadate.js v3.5.0
  * http://amsul.github.io/pickadate.js/time.htm
  */
 
 (function ( factory ) {
 
-    // AMD.
+    // Register as an anonymous module.
     if ( typeof define == 'function' && define.amd )
         define( ['picker','jquery'], factory )
 
-    // Node.js/browserify.
-    else if ( typeof exports == 'object' )
-        module.exports = factory( require('./picker.js'), require('jquery') )
-
-    // Browser globals.
+    // Or using browser globals.
     else factory( Picker, jQuery )
 
 }(function( Picker, $ ) {
@@ -110,32 +106,17 @@ function TimePicker( picker, settings ) {
     picker.
         on( 'render', function() {
             var $pickerHolder = picker.$root.children(),
-                $viewset = $pickerHolder.find( '.' + settings.klass.viewset ),
-                vendors = function( prop ) {
-                    return ['webkit', 'moz', 'ms', 'o', ''].map(function( vendor ) {
-                        return ( vendor ? '-' + vendor + '-' : '' ) + prop
-                    })
-                },
-                animations = function( $el, state ) {
-                    vendors( 'transform' ).map(function( prop ) {
-                        $el.css( prop, state )
-                    })
-                    vendors( 'transition' ).map(function( prop ) {
-                        $el.css( prop, state )
-                    })
-                }
+                $viewset = $pickerHolder.find( '.' + settings.klass.viewset )
             if ( $viewset.length ) {
-                animations( $pickerHolder, 'none' )
                 $pickerHolder[ 0 ].scrollTop = ~~$viewset.position().top - ( $viewset[ 0 ].clientHeight * 2 )
-                animations( $pickerHolder, '' )
             }
-        }, 1 ).
+        }).
         on( 'open', function() {
             picker.$root.find( 'button' ).attr( 'disabled', false )
-        }, 1 ).
+        }).
         on( 'close', function() {
             picker.$root.find( 'button' ).attr( 'disabled', true )
-        }, 1 )
+        })
 
 } //TimePicker
 
@@ -386,11 +367,6 @@ TimePicker.prototype.measure = function( type, value, options ) {
     // If it’s anything false-y, set it to the default.
     if ( !value ) {
         value = type == 'min' ? [ 0, 0 ] : [ HOURS_IN_DAY - 1, MINUTES_IN_HOUR - 1 ]
-    }
-
-    // If it’s a string, parse it.
-    if ( typeof value == 'string' ) {
-        value = clock.parse( type, value )
     }
 
     // If it’s a literal true, or an integer, make it relative to now.

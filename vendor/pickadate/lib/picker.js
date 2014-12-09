@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v3.5.4, 2014/09/11
+ * pickadate.js v3.5.0, 2014/04/13
  * By Amsul, http://amsul.ca
  * Hosted on http://amsul.github.io/pickadate.js
  * Licensed under MIT
@@ -7,15 +7,11 @@
 
 (function ( factory ) {
 
-    // AMD.
-    if ( typeof define == 'function' && define.amd )
+    // Register as an anonymous module.
+    if ( typeof define === 'function' && define.amd )
         define( 'picker', ['jquery'], factory )
 
-    // Node.js/browserify.
-    else if ( typeof exports == 'object' )
-        module.exports = factory( require('jquery') )
-
-    // Browser globals.
+    // Or using browser globals.
     else this.Picker = factory( jQuery )
 
 }(function( $ ) {
@@ -89,11 +85,9 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                 // Confirm focus state, convert into text input to remove UA stylings,
                 // and set as readonly to prevent keyboard popup.
                 ELEMENT.autofocus = ELEMENT == document.activeElement
+                ELEMENT.type = 'text'
                 ELEMENT.readOnly = !SETTINGS.editable
                 ELEMENT.id = ELEMENT.id || STATE.id
-                if ( ELEMENT.type != 'text' ) {
-                    ELEMENT.type = 'text'
-                }
 
 
                 // Create a new picker component with the settings.
@@ -208,7 +202,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
             }, //stop
 
 
-            /**
+            /*
              * Open up the picker
              */
             open: function( dontGiveFocus ) {
@@ -372,8 +366,8 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
             /**
              * Clear the values
              */
-            clear: function( options ) {
-                return P.set( 'clear', null, options )
+            clear: function() {
+                return P.set( 'clear' )
             }, //clear
 
 
@@ -463,7 +457,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
             /**
              * Bind events on the things.
              */
-            on: function( thing, method, internal ) {
+            on: function( thing, method ) {
 
                 var thingName, thingMethod,
                     thingIsObject = $.isPlainObject( thing ),
@@ -481,11 +475,6 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
 
                         // Grab the method of the thing.
                         thingMethod = thingObject[ thingName ]
-
-                        // If it was an internal binding, prefix it.
-                        if ( internal ) {
-                            thingName = '_' + thingName
-                        }
 
                         // Make sure the thing methods collection exists.
                         STATE.methods[ thingName ] = STATE.methods[ thingName ] || []
@@ -520,16 +509,12 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
              * Fire off method events.
              */
             trigger: function( name, data ) {
-                var _trigger = function( name ) {
-                    var methodList = STATE.methods[ name ]
-                    if ( methodList ) {
-                        methodList.map( function( method ) {
-                            PickerConstructor._.trigger( method, P, [ data ] )
-                        })
-                    }
+                var methodList = STATE.methods[ name ]
+                if ( methodList ) {
+                    methodList.map( function( method ) {
+                        PickerConstructor._.trigger( method, P, [ data ] )
+                    })
                 }
-                _trigger( '_' + name )
-                _trigger( name )
                 return P
             } //trigger
         } //PickerInstance.prototype
@@ -684,7 +669,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
             }).
 
             // If there’s a click on an actionable element, carry out the actions.
-            on( 'click', '[data-pick], [data-nav], [data-clear], [data-close]', function() {
+            on( 'click', '[data-pick], [data-nav], [data-clear]', function() {
 
                 var $target = $( this ),
                     targetData = $target.data(),
@@ -701,12 +686,12 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                 }
 
                 // If something is superficially changed, update the `highlight` based on the `nav`.
-                if ( !targetDisabled && targetData.nav ) {
+                if ( targetData.nav && !targetDisabled ) {
                     P.set( 'highlight', P.component.item.highlight, { nav: targetData.nav } )
                 }
 
                 // If something is picked, set `select` then close with focus.
-                else if ( !targetDisabled && 'pick' in targetData ) {
+                else if ( PickerConstructor._.isInteger( targetData.pick ) && !targetDisabled ) {
                     P.set( 'select', targetData.pick ).close( true )
                 }
 
@@ -714,11 +699,6 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                 else if ( targetData.clear ) {
                     P.clear().close( true )
                 }
-
-                else if ( targetData.close ) {
-                    P.close( true )
-                }
-
             }) //P.$root
 
         aria( P.$root[0], 'hidden', true )
@@ -730,9 +710,11 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
       */
     function prepareElementHidden() {
 
-        var name
+        var id,
+            name
 
         if ( SETTINGS.hiddenName === true ) {
+            id = ELEMENT.name + '_hidden'
             name = ELEMENT.name
             ELEMENT.name = ''
         }
@@ -741,15 +723,17 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                 typeof SETTINGS.hiddenPrefix == 'string' ? SETTINGS.hiddenPrefix : '',
                 typeof SETTINGS.hiddenSuffix == 'string' ? SETTINGS.hiddenSuffix : '_submit'
             ]
-            name = name[0] + ELEMENT.name + name[1]
+            name = id = name[0] + ELEMENT.name + name[1]
         }
 
         P._hidden = $(
             '<input ' +
             'type=hidden ' +
 
-            // Create the name using the original input’s with a prefix and suffix.
+            // Create the name and ID by using the original
+            // input’s with a prefix and suffix.
             'name="' + name + '"' +
+            'id="' + id + '"' +
 
             // If the element has a value, set the hidden value as well.
             (
@@ -978,7 +962,7 @@ PickerConstructor._ = {
      * Tell if something is a date object.
      */
     isDate: function( value ) {
-        return {}.toString.call( value ).indexOf( 'Date' ) > -1 && this.isInteger( value.getUTCDate() )
+        return {}.toString.call( value ).indexOf( 'Date' ) > -1 && this.isInteger( value.getDate() )
     },
 
 

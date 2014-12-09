@@ -98,7 +98,6 @@
 .picker--time .picker__button--clear:hover:before,
 .picker--time .picker__button--clear:focus:before {
   color: #ffffff;
-  border-color: #ffffff;
 }
 
 /* ==========================================================================
