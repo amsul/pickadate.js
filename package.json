@@ -56,7 +56,10 @@
     "grunt-contrib-uglify": "^0.4.0",
     "grunt-contrib-watch": "^0.6.1",
     "phantomjs": "^1.9.7-5",
-    "zlib-browserify": "0.0.3"
+    "zlib-browserify": "0.0.3",
+    "grunt-mustache-render": "~1.7.0",
+    "grunt-contrib-clean": "~0.6.0",
+    "grunt-replace": "~0.8.0"
   },
   "scripts": {
     "test": "grunt travis --verbose"

@@ -27,6 +27,9 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks( 'grunt-contrib-cssmin' )
     grunt.loadNpmTasks( 'grunt-contrib-uglify' )
     grunt.loadNpmTasks( 'grunt-autoprefixer' )
+    grunt.loadNpmTasks( 'grunt-mustache-render' )
+    grunt.loadNpmTasks( 'grunt-contrib-clean' )
+    grunt.loadNpmTasks( 'grunt-replace' )
 
 
     // Setup the initial configurations.
@@ -51,7 +54,8 @@ module.exports = function( grunt ) {
             },
             translations: {
                 src: 'lib/translations',
-                min: 'lib/compressed/translations'
+                min: 'lib/compressed/translations',
+                i18n: '_i18n'
             },
             docs: {
                 src: '_docs',
@@ -64,7 +68,7 @@ module.exports = function( grunt ) {
                     src: 'demo/styles/less',
                     dest: 'demo/styles/css'
                 }
-            },
+            }
         },
 
 
@@ -242,6 +246,73 @@ module.exports = function( grunt ) {
                     gzip: content ? require( 'zlib-browserify' ).gzipSync( content ).length : 0
                 }
             }
+        },
+
+        mustache_render: {
+            translations: {
+                files : [
+                    {
+                        expand:     true,
+                        src:        '<%= dirs.translations.i18n %>/*.json',
+                        template:   '<%= dirs.translations.i18n %>/i18n.mustache',
+                        dest:       '<%= dirs.translations.i18n %>'
+                    }
+                ]
+            }
+        },
+
+        copy: {
+            translations: {
+                files: [
+                    {
+                        expand:     true,
+                        flatten:    true,
+                        src:        ['<%= dirs.translations.i18n %>/<%= dirs.translations.i18n %>/**'],
+                        dest:       '<%= dirs.translations.src %>/',
+                        filter:     'isFile',
+                        rename:     function ( dest, src ) {
+                            return dest + src.replace('.json','.js');
+                        }}
+                ]
+            }
+        },
+
+        clean: {
+            translations_start: {
+                src: [
+                    '<%= dirs.translations.src %>'
+                ]
+            },
+            translations_end: {
+                src: [
+                    '<%= dirs.translations.i18n %>/<%= dirs.translations.i18n %>'
+                ]
+            }
+        },
+
+        replace: {
+            translations: {
+                options: {
+                    patterns: [
+                        {
+                            match:          /,]/g,
+                            replacement:    ']'
+                        },
+                        {
+                            match:          /^\s*[\r\n]/gm,
+                            replacement:    ''
+                        }
+                    ]
+                },
+                files: [
+                    {
+                        expand:     true,
+                        flatten:    true,
+                        src:        ['<%= dirs.translations.src %>/*.js'],
+                        dest:       '<%= dirs.translations.src %>'
+                    }
+                ]
+            }
         }
     }) //grunt.initConfig
 
@@ -255,7 +326,8 @@ module.exports = function( grunt ) {
     grunt.registerTask( 'docs', [ 'copy:pkg', 'htmlify:docs' ] )
     grunt.registerTask( 'travis', [ 'jshint:lib', 'qunit:lib' ] )
 
-
+    // Register the task to build languages from JSON.
+    grunt.registerTask( 'translations', [ 'clean:translations_start','mustache_render', 'copy', 'clean:translations_end', 'replace' ] )
 
     // Create and register the task to build out the static HTML files.
     grunt.registerMultiTask( 'htmlify', 'Recursively build static HTML files', function() {

@@ -1,0 +1,31 @@
+// {{language}}
+{{#pickadate}}
+if ( typeof jQuery.fn.pickadate !== 'undefined' ) {
+    jQuery.extend( jQuery.fn.pickadate.defaults, {
+        {{#pickadate.clear.length}}today: '{{{pickadate.today}}}',{{/pickadate.clear.length}}
+        {{#pickadate.clear.length}}clear: '{{{pickadate.clear}}}',{{/pickadate.clear.length}}
+        {{#pickadate.close.length}}close: '{{{pickadate.close}}}',{{/pickadate.close.length}}
+        {{#pickadate.firstDay.length}}firstDay: {{{pickadate.firstDay}}},{{/pickadate.firstDay.length}}
+        {{#pickadate.format.length}}format: '{{pickadate.format}}',{{/pickadate.format.length}}
+        {{#pickadate.formatSubmit.length}}formatSubmit: '{{{pickadate.formatSubmit}}}',{{/pickadate.formatSubmit.length}}
+        {{#pickadate.labelMonthNext.length}}labelMonthNext: '{{{pickadate.labelMonthNext}}}',{{/pickadate.labelMonthNext.length}}
+        {{#pickadate.labelMonthPrev.length}}labelMonthPrev: '{{{pickadate.labelMonthPrev}}}',{{/pickadate.labelMonthPrev.length}}
+        {{#pickadate.labelMonthSelect.length}}labelMonthSelect: '{{{pickadate.labelMonthSelect}}}',{{/pickadate.labelMonthSelect.length}}
+        {{#pickadate.labelYearSelect.length}}labelYearSelect: '{{{pickadate.labelYearSelect}}}',{{/pickadate.labelYearSelect.length}}
+        monthsFull: [{{#pickadate.monthsFull}}{{#.}}'{{.}}',{{/.}}{{/pickadate.monthsFull}}],
+        monthsShort: [{{#pickadate.monthsShort}}{{#.}}'{{.}}',{{/.}}{{/pickadate.monthsShort}}],
+        weekdaysFull: [{{#pickadate.weekdaysFull}}{{#.}}'{{.}}',{{/.}}{{/pickadate.weekdaysFull}}],
+        weekdaysShort: [{{#pickadate.weekdaysShort}}{{#.}}'{{.}}',{{/.}}{{/pickadate.weekdaysShort}}]
+    });
+}
+{{/pickadate}}
+
+{{#pickatime}}
+if ( typeof jQuery.fn.pickatime !== 'undefined' ) {
+    jQuery.extend( jQuery.fn.pickatime.defaults, {
+        {{#pickatime.format.length}}format: 'HH:i',{{/pickatime.format.length}}
+        {{#pickatime.formatSubmit.length}}formatSubmit: 'HH:i',{{/pickatime.formatSubmit.length}}
+        {{#pickatime.clear.length}}clear: '{{pickatime.clear}}'{{/pickatime.clear.length}}
+    });
+}
+{{/pickatime}}
