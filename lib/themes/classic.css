@@ -67,8 +67,8 @@
   opacity: 0;
   -webkit-transform: translateY(-1em) perspective(600px) rotateX(10deg);
           transform: translateY(-1em) perspective(600px) rotateX(10deg);
-  transition: -webkit-transform 0.15s ease-out, opacity 0.15s ease-out, max-height 0s 0.15s, border-width 0s 0.15s;
-  transition: transform 0.15s ease-out, opacity 0.15s ease-out, max-height 0s 0.15s, border-width 0s 0.15s;
+  -webkit-transition: -webkit-transform 0.15s ease-out, opacity 0.15s ease-out, max-height 0s 0.15s, border-width 0s 0.15s;
+          transition: transform 0.15s ease-out, opacity 0.15s ease-out, max-height 0s 0.15s, border-width 0s 0.15s;
 }
 /**
  * The frame and wrap work together to ensure that
@@ -93,7 +93,7 @@
   border-bottom-width: 1px;
   -webkit-transform: translateY(0) perspective(600px) rotateX(0);
           transform: translateY(0) perspective(600px) rotateX(0);
-  transition: -webkit-transform 0.15s ease-out, opacity 0.15s ease-out, max-height 0s, border-width 0s;
-  transition: transform 0.15s ease-out, opacity 0.15s ease-out, max-height 0s, border-width 0s;
+  -webkit-transition: -webkit-transform 0.15s ease-out, opacity 0.15s ease-out, max-height 0s, border-width 0s;
+          transition: transform 0.15s ease-out, opacity 0.15s ease-out, max-height 0s, border-width 0s;
   box-shadow: 0 6px 18px 1px rgba(0, 0, 0, 0.12);
 }
