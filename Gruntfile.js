@@ -14,10 +14,6 @@ module.exports = function( grunt ) {
     var packageJSON = grunt.file.readJSON( 'package.json' )
 
 
-    // Add the “curly” template delimiters.
-    grunt.template.addDelimiters( 'curly', '{%', '%}' )
-
-
     // Load the NPM tasks.
     grunt.loadNpmTasks( 'grunt-contrib-watch' )
     grunt.loadNpmTasks( 'grunt-contrib-jshint' )
@@ -53,30 +49,6 @@ module.exports = function( grunt ) {
                 src: 'lib/translations',
                 min: 'lib/compressed/translations'
             },
-            docs: {
-                src: '_docs',
-                dest: '.'
-            },
-            demo: {
-                images: 'demo/images',
-                scripts: 'demo/scripts',
-                styles: {
-                    src: 'demo/styles/less',
-                    dest: 'demo/styles/css'
-                }
-            },
-        },
-
-
-        // Generate static HTML templates.
-        htmlify: {
-            docs: {
-                expand: true,
-                cwd: '<%= dirs.docs.src %>',
-                src: [ '/!(base|hero)*.htm' ],
-                dest: '',
-                base: '/base.htm'
-            }
         },
 
 
@@ -84,11 +56,6 @@ module.exports = function( grunt ) {
         less: {
             options: {
                 style: 'expanded'
-            },
-            demo: {
-                files: {
-                    '<%= dirs.demo.styles.dest %>/main.css': '<%= dirs.demo.styles.src %>/base.less'
-                }
             },
             themes: {
                 files: {
@@ -110,7 +77,6 @@ module.exports = function( grunt ) {
                 jshintrc: true
             },
             gruntfile: 'Gruntfile.js',
-            demo: [ '<%= dirs.demo.scripts %>/demo.js' ],
             lib: [
                 '<%= dirs.tests %>/units/*.js',
                 '<%= dirs.lib.src %>/**/*.js',
@@ -156,9 +122,6 @@ module.exports = function( grunt ) {
             themes: {
                 src: '<%= dirs.themes.dest %>/**/*.css'
             },
-            demo: {
-                src: '<%= dirs.demo.styles.dest %>/**/*.css'
-            }
         },
 
 
@@ -176,30 +139,8 @@ module.exports = function( grunt ) {
                 ],
                 tasks: [ 'develop-once' ]
             },
-            document: {
-                files: [
-                    '<%= dirs.docs.src %>/**/*.htm',
-                    '<%= dirs.demo.styles.src %>/**/*.less',
-                ],
-                tasks: [ 'document-once' ]
-            },
-        },
-
-
-        // Any extra data needed in rendering static files.
-        meta: {
-
-            // The sanitized github repo url.
-            gitrepo_url: packageJSON.repository.url.replace( /.git$/, '' ),
-
-            // Get the min & gzip size of a text file.
-            fileSize: function( content ) {
-                return {
-                    min: content.length || 0,
-                    gzip: content ? require( 'zlib-browserify' ).gzipSync( content ).length : 0
-                }
-            }
         }
+
     }) //grunt.initConfig
 
 
@@ -209,52 +150,11 @@ module.exports = function( grunt ) {
     grunt.registerTask( 'develop', [ 'develop-once', 'watch:develop' ] )
     grunt.registerTask( 'develop-once', [ 'less:themes', 'autoprefixer:themes' ] )
 
-    grunt.registerTask( 'document', [ 'document-once', 'watch:document' ] )
-    grunt.registerTask( 'document-once', [ 'less:demo', 'autoprefixer:demo', 'package' ] )
-
-    grunt.registerTask( 'package', [ 'uglify', 'cssmin', 'htmlify' ] )
+    grunt.registerTask( 'package', [ 'uglify', 'cssmin' ] )
 
     grunt.registerTask( 'test', [ 'jshint', 'qunit' ] )
 
     grunt.registerTask( 'build', [ 'develop-once', 'document-once', 'package', 'test' ] )
-
-
-
-    // Create and register the task to build out the static HTML files.
-    grunt.registerMultiTask( 'htmlify', 'Recursively build static HTML files', function() {
-
-        var task = this,
-            // options = task.options(),
-
-            // Process the base file using the source file content.
-            processFile = function( fileSource ) {
-
-                var processedContent = ''/*,
-                    fileNameMatch = fileSource.match( /([\w-]+)(\.htm)$/ )*/
-
-                // Recursively process the base template using the file source content.
-                grunt.verbose.writeln( 'Processing ' + fileSource )
-                processedContent = grunt.template.process( grunt.file.read( task.data.cwd + task.data.base ), {
-                    delimiters: 'curly',
-                    data: {
-                        pkg: packageJSON,
-                        page: fileSource.match( /[\w-]+(?=\.htm$)/ )[ 0 ],
-                        content: grunt.file.read( fileSource ),
-                        meta: grunt.config.data.meta,
-                        dirs: grunt.config.data.dirs
-                    }
-                })
-
-                // Write the destination file by cleaning the file name.
-                grunt.log.writeln( 'Writing ' + fileSource.cyan )
-                grunt.file.write( task.data.dest + fileSource.match( /[\w-]+\.htm$/ )[ 0 ], processedContent )
-            }
-
-
-        // Map through the task directory and process the HTML files.
-        grunt.log.writeln( 'Expanding ' + task.data.cwd.cyan )
-        grunt.file.expand( task.data.cwd + task.data.src ).map( processFile )
-    })
 
 } //module.exports
 
