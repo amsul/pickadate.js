@@ -1366,3 +1366,19 @@ test( '`data-value` to select, highlight, and view', function() {
     deepEqual( picker.get( 'highlight' ).obj, new Date(1988,7,14), 'Highlights date' )
     deepEqual( picker.get( 'view' ).obj, new Date(1988,7,1), 'Viewsets date' )
 })
+
+test( 'the pre-filled `value` selected is no longer "active"', function() {
+
+    var $input = $( '<input type="text" value="14 August, 2014">' ).pickadate({
+        formatSubmit: 'yyyy/mm/dd',
+        min: [2015, 7, 14]
+    })
+    var picker = $input.pickadate( 'picker' )
+
+    strictEqual( picker.get( 'value' ), '14 August, 2014', 'Sets the default value' )
+    strictEqual( picker.get( 'valueSubmit' ), '2014/08/14', 'Sets the default value to submit' )
+
+    var select = picker.get('select')
+    deepEqual( [select.year, select.month, select.date], [2014, 7, 14], 'Sets the default select' )
+
+})
