@@ -18,7 +18,6 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks( 'grunt-contrib-watch' )
     grunt.loadNpmTasks( 'grunt-contrib-jshint' )
     grunt.loadNpmTasks( 'grunt-contrib-qunit' )
-    grunt.loadNpmTasks( 'grunt-contrib-copy' )
     grunt.loadNpmTasks( 'grunt-contrib-less' )
     grunt.loadNpmTasks( 'grunt-contrib-cssmin' )
     grunt.loadNpmTasks( 'grunt-contrib-uglify' )
@@ -154,7 +153,7 @@ module.exports = function( grunt ) {
 
     grunt.registerTask( 'test', [ 'jshint', 'qunit' ] )
 
-    grunt.registerTask( 'build', [ 'develop-once', 'document-once', 'package', 'test' ] )
+    grunt.registerTask( 'build', [ 'develop-once', 'package', 'test' ] )
 
 } //module.exports
 
