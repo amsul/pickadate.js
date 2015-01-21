@@ -154,7 +154,7 @@ module.exports = function( grunt ) {
 
     grunt.registerTask( 'test', [ 'jshint', 'qunit' ] )
 
-    grunt.registerTask( 'build', [ 'develop-once', 'document-once', 'package', 'test' ] )
+    grunt.registerTask( 'build', [ 'develop-once', 'package', 'test' ] )
 
 } //module.exports
 
