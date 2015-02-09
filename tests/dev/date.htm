@@ -34,6 +34,8 @@
         <form>
             <fieldset>
                 <h3><label for="input_01">Pick a date. Go ahead...</label></h3>
+
+                <input type="text">
                 <input
                     id="input_01"
                     class="datepicker"
@@ -42,9 +44,11 @@
                     autofocuss
                     value="14 August, 2014"
                     data-valuee="2014-08-08">
+                <input type="text">
+
                 <br><br><br><br><br>
-                <button type="button">Disable all dates</button>
-                <input class="button" type="submit" value="open">
+                <!-- <button type="button">Disable all dates</button>
+                <input class="button" type="submit" value="open"> -->
             </fieldset>
         </form>
 
@@ -53,6 +57,8 @@
         <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
         <div id="container"></div>
+
+        <input type="text">
 
     </section>
 
@@ -67,7 +73,8 @@
         var $input = $( '.datepicker' ).pickadate({
             formatSubmit: 'yyyy/mm/dd',
             // min: [2015, 7, 14],
-            container: '#container'
+            container: '#container',
+            // editable: true
         })
 
         var picker = $input.pickadate('picker')

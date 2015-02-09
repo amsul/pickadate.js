@@ -59,7 +59,7 @@ test( 'Picker states', function() {
     picker.$root.find( 'button' )[0].focus()
     ok( picker.get( 'open' ) === true, 'Remains open with focus within' )
 
-    picker.$root.click()
+    picker.$root.find( 'div' )[3].click()
     ok( picker.get( 'open' ) === true, 'Remains open with click within' )
 
     picker.close()
@@ -389,7 +389,7 @@ test( 'Close with alternate focus', function() {
     picker.close( true )
     setTimeout( function() {
         var isClosed = !picker.get( 'open' )
-        var hasCorrectActiveElement = document.activeElement === picker.$node[0]
+        var hasCorrectActiveElement = document.activeElement === picker.$holder[0]
         ok( isClosed && hasCorrectActiveElement, 'Closed with focus' )
         start()
     }, 0 )
