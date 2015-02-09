@@ -1194,6 +1194,77 @@ test( 'Clear', function() {
     strictEqual( picker.get( 'value' ), '', 'Value cleared' )
 })
 
+test( 'Closes upon selection', function() {
+
+    var picker = this.picker
+
+    picker.open()
+
+    ok( picker.get('open'), 'Opened to start off' )
+
+    picker.$holder.find('[data-pick]').click()
+
+    ok( !picker.get('open'), 'Closed after selection' )
+
+})
+
+test( 'Closes upon clearing', function() {
+
+    var picker = this.picker
+
+    picker.open()
+
+    ok( picker.get('open'), 'Opened to start off' )
+
+    picker.$holder.find('[data-clear]').click()
+
+    ok( !picker.get('open'), 'Closed after clearing' )
+
+})
+
+module( 'Date picker mouse events', {
+    setup: function() {
+        $DOM.append( $INPUT.clone() )
+        var $input = $DOM.find( 'input' ).pickadate({
+            closeOnSelect: false,
+            closeOnClear: false
+        })
+        this.picker = $input.pickadate( 'picker' )
+    },
+    teardown: function() {
+        this.picker.stop()
+        $DOM.empty()
+    }
+})
+
+test( 'Remains open upon selection with option', function() {
+
+    var picker = this.picker
+
+    picker.open()
+
+    ok( picker.get('open'), 'Opened to start off' )
+
+    picker.$holder.find('[data-pick]').click()
+
+    ok( picker.get('open'), 'Remains open after selection' )
+
+})
+
+test( 'Closes upon clearing', function() {
+
+    var picker = this.picker
+
+    picker.open()
+
+    ok( picker.get('open'), 'Opened to start off' )
+
+    picker.$holder.find('[data-clear]').click()
+
+    ok( picker.get('open'), 'Remains open after clearing' )
+
+})
+
 
 
 
@@ -1282,6 +1353,80 @@ test( 'Highlight', function() {
     }
 })
 
+test( 'Closes upon selection', function() {
+
+    var picker = this.picker
+
+    picker.open()
+
+    ok( picker.get('open'), 'Opened to start off' )
+
+    picker.$holder.find('[data-pick]').focus()
+    picker.$holder.trigger({ type: 'keydown', keyCode: 13 })
+
+    ok( !picker.get('open'), 'Closed after selection' )
+
+})
+
+test( 'Closes upon clearing', function() {
+
+    var picker = this.picker
+
+    picker.open()
+
+    ok( picker.get('open'), 'Opened to start off' )
+
+    picker.$holder.find('[data-clear]').focus()
+    picker.$holder.trigger({ type: 'keydown', keyCode: 13 })
+
+    ok( !picker.get('open'), 'Closed after clearing' )
+
+})
+
+module( 'Date picker keyboard events', {
+    setup: function() {
+        $DOM.append( $INPUT.clone() )
+        var $input = $DOM.find( 'input' ).pickadate({
+            closeOnSelect: false,
+            closeOnClear: false
+        })
+        this.picker = $input.pickadate( 'picker' )
+    },
+    teardown: function() {
+        this.picker.stop()
+        $DOM.empty()
+    }
+})
+
+test( 'Remains open upon selection with option', function() {
+
+    var picker = this.picker
+
+    picker.open()
+
+    ok( picker.get('open'), 'Opened to start off' )
+
+    picker.$holder.find('[data-pick]').focus()
+    picker.$holder.trigger({ type: 'keydown', keyCode: 13 })
+
+    ok( picker.get('open'), 'Remains open after selection' )
+
+})
+
+test( 'Closes upon clearing', function() {
+
+    var picker = this.picker
+
+    picker.open()
+
+    ok( picker.get('open'), 'Opened to start off' )
+
+    picker.$holder.find('[data-clear]').focus()
+    picker.$holder.trigger({ type: 'keydown', keyCode: 13 })
+
+    ok( picker.get('open'), 'Remains open after clearing' )
+
+})
 
 
 
