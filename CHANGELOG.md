@@ -28,6 +28,7 @@
 - [#562](https://github.com/amsul/pickadate.js/issues/562): Fixed hidden `input` to move into `container` when option is used.
 - [#581](https://github.com/amsul/pickadate.js/issues/581): Added ARIA label for dates and times.
 - [#575](https://github.com/amsul/pickadate.js/issues/575): Removed the Sizzle dependency.
+- Added `closeOnSelect` and `closeOnClear` boolean options.
 
 
 ## 3.5.2
