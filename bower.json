@@ -7,11 +7,7 @@
     "lib/picker.time.js",
     "lib/themes/classic.css",
     "lib/themes/classic.date.css",
-    "lib/themes/classic.time.css",
-    "lib/themes/default.css",
-    "lib/themes/default.date.css",
-    "lib/themes/default.time.css",
-    "lib/themes/rtl.css"
+    "lib/themes/classic.time.css"
   ],
   "license": "MIT",
   "ignore": [
