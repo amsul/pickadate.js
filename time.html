@@ -46,11 +46,15 @@ interval: 30,
 min: undefined,
 max: undefined,
 
-// <a href="#disable-times">Disable times</a>
-disable: undefined,
-
-// <a href="#container">Root container</a>
+// <a href="#container">Root picker container</a>
 container: undefined,
+
+// <a href="#container-hidden">Hidden input container</a>
+containerHidden: undefined,
+
+// <a href="#close-on-action">Close on a user action</a>
+closeOnSelect: true,
+closeOnClear: true,
 
 // <a href="#events">Events</a>
 onStart: undefined,
@@ -450,10 +454,10 @@ $('.timepicker').pickatime({
     <h2 class="heading heading--divide"><span class="heading__text">container<a class="heading__anchor" name="container" href="#container">&sect;</a></span></h2>
     <p>By default, the picker’s root element is inserted right after the <code class="keyword">input</code> element. Specify where to insert the root element by passing any valid CSS selector to this option:</p>
 
-    <div id="root-outlet" style="position:relative"></div>
+    <div id="root-picker-outlet" style="position:relative"></div>
 
     <pre class="pre--demo"><code data-language="javascript">$('.timepicker').pickatime({
-  container: '#root-outlet'
+  container: '#root-picker-outlet'
 })</code></pre>
 
     {% include demo.html id="time_demo__container" %}
@@ -461,6 +465,49 @@ $('.timepicker').pickatime({
     <div class="section__block section__block--notification">
       <p>This is especially important when the <code class="keyword">input</code> falls within a <code class="keyword">label</code> element because click events bubble up to the <code class="keyword">label</code> element and re-open the picker.</p>
     </div>
+
+    <div class="section__block section__block--notification-red">
+      <p>When using this option, be careful not to set the container to something generic like the document’s <code class="keyword">body</code>. This will break the document’s keyboard flow, for example when tabbing through a form. Instead, maintain the flow by keeping the container close to the <code class="keyword">input</code> element.</p>
+    </div>
+
+  </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+  <div class="section__block section__block--scoped">
+
+    <h2 class="heading heading--divide"><span class="heading__text">container for the hidden <code class="keyword">input</code><a class="heading__anchor" name="container-hidden" href="#container-hidden">&sect;</a></span></h2>
+    <p>By default, the picker’s hidden <code class="keyword">input</code> is inserted right after the main <code class="keyword">input</code> element. Specify where to insert the hidden element by passing any valid CSS selector to this option:</p>
+
+    <div id="hidden-input-outlet" style="position:relative"></div>
+
+    <pre class="pre--demo"><code data-language="javascript">$('.datepicker').pickadate({
+  containerHidden: '#hidden-input-outlet'
+})</code></pre>
+
+    {% include demo.html id="date_demo__container-hidden" %}
+
+  </div> <!-- .section__block -->
+
+</section> <!-- .section -->
+
+
+<section class="section">
+
+  <div class="section__block section__block--scoped">
+
+    <h2 class="heading heading--divide"><span class="heading__text">Close on a user action <a class="heading__anchor" name="close-on-action" href="#close-on-action">&sect;</a></span></h2>
+    <p>When a time is selected or the “clear” button is pressed, the picker closes. To change this behavior, use the following options:</p>
+
+    <pre class="pre--demo"><code data-language="javascript">$('.timepicker').pickatime({
+  closeOnSelect: false,
+  closeOnClear: false
+})</code></pre>
+
+    {% include demo.html id="time_demo__close-on-action" %}
 
   </div> <!-- .section__block -->
 

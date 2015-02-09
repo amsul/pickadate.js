@@ -1072,6 +1072,7 @@ input[type=search] {
 }
 /* Notification blocks */
 .section__block--notification,
+.section__block--notification-red,
 .section__block--notification-green {
   background: #ffffdd;
   border: 1px solid #eeeec5;
@@ -1079,6 +1080,11 @@ input[type=search] {
   margin-top: 1em;
   margin-bottom: 1em;
   color: #444422;
+}
+.section__block--notification-red {
+  background: #ffe4e5;
+  border-color: #eac2c2;
+  color: #453434;
 }
 .section__block--notification-green {
   background: #ecffdd;

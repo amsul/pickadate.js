@@ -14,6 +14,6 @@
   },
   "dependencies": {
     "jquery": "~1.11.1",
-    "pickadate": "3.5.2"
+    "pickadate": "3.5.5"
   }
 }

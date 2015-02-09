@@ -267,7 +267,21 @@ $( '#date_demo__disable-dates--f' ).pickadate({
  * Outlet container
  */
 $( '#date_demo__container' ).pickadate({
-    container: '#root-outlet'
+    container: '#root-picker-outlet'
+})
+$( '#date_demo__container-hidden' ).pickadate({
+    containerHidden: '#hidden-input-outlet',
+    formatSubmit: 'yyyy-mm-dd'
+})
+
+
+
+/**
+ * Close on action
+ */
+$( '#date_demo__close-on-action' ).pickadate({
+    closeOnSelect: false,
+    closeOnClear: false
 })
 
 
@@ -496,7 +510,21 @@ $( '#time_demo__disable-times--f' ).pickatime({
  * Outlet container
  */
 $( '#time_demo__container' ).pickatime({
-    container: '#root-outlet'
+    container: '#root-picker-outlet'
+})
+$( '#time_demo__container-hidden' ).pickatime({
+    containerHidden: '#hidden-input-outlet',
+    formatSubmit: 'hh-i'
+})
+
+
+
+/**
+ * Close on action
+ */
+$( '#time_demo__close-on-action' ).pickatime({
+    closeOnSelect: false,
+    closeOnClear: false
 })
 
 

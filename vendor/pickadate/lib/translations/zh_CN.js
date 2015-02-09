@@ -11,3 +11,7 @@ jQuery.extend( jQuery.fn.pickadate.defaults, {
     format: 'yyyy 年 mm 月 dd 日',
     formatSubmit: 'yyyy/mm/dd'
 });
+
+jQuery.extend( jQuery.fn.pickatime.defaults, {
+    clear: '删'
+});

@@ -7,7 +7,12 @@ jQuery.extend( jQuery.fn.pickadate.defaults, {
     weekdaysShort: [ 'So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa' ],
     today: 'Heute',
     clear: 'Löschen',
+    close: 'Schließen',
     firstDay: 1,
     format: 'dddd, dd. mmmm yyyy',
     formatSubmit: 'yyyy/mm/dd'
+});
+
+jQuery.extend( jQuery.fn.pickatime.defaults, {
+    clear: 'Löschen'
 });

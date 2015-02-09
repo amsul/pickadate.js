@@ -6,7 +6,12 @@ jQuery.extend( jQuery.fn.pickadate.defaults, {
     weekdaysFull: [ 'domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado' ],
     weekdaysShort: [ 'dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab' ],
     today: 'hoje',
-    clear: 'excluir',
+    clear: 'limpar',
+    close: 'fechar',
     format: 'dddd, d !de mmmm !de yyyy',
     formatSubmit: 'yyyy/mm/dd'
+});
+
+jQuery.extend( jQuery.fn.pickatime.defaults, {
+    clear: 'limpar'
 });

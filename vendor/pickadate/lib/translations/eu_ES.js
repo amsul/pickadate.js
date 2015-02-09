@@ -11,3 +11,7 @@ jQuery.extend( jQuery.fn.pickadate.defaults, {
     format: 'dddd, yyyy(e)ko mmmmren da',
     formatSubmit: 'yyyy/mm/dd'
 });
+
+jQuery.extend( jQuery.fn.pickatime.defaults, {
+    clear: 'garbitu'
+});

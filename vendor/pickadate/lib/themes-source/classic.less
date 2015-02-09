@@ -32,10 +32,10 @@
     border-bottom-width: 0;
 
     // Round the bottom corners.
-    .border-radius( 0 0 @picker-border-radius @picker-border-radius );
+    border-radius: 0 0 @picker-border-radius @picker-border-radius;
 
     // Let’s not go 100% + 2px.
-    .box-sizing( border-box );
+    box-sizing: border-box;
 
     // Specify the min & max widths.
     min-width: @classic-min-width;
@@ -46,21 +46,13 @@
     .opacity( 0 );
 
     // Tilt the picker.
-    .transform( translateY( -1em ) perspective( 600px ) rotateX( 10deg ) );
+    transform: translateY( -1em ) perspective( 600px ) rotateX( 10deg );
 
     // Everything should be smoothly animated – the height & border should wait till the rest is done.
-    -webkit-transition: -webkit-transform @speed-animate-in ease-out,
-                        opacity @speed-animate-in ease-out,
-                        max-height 0s @speed-animate-in,
-                        border-width 0s @speed-animate-in;
-       -moz-transition: -moz-transform @speed-animate-in ease-out,
-                        opacity @speed-animate-in ease-out,
-                        max-height 0s @speed-animate-in,
-                        border-width 0s @speed-animate-in;
-            transition: transform @speed-animate-in ease-out,
-                        opacity @speed-animate-in ease-out,
-                        max-height 0s @speed-animate-in,
-                        border-width 0s @speed-animate-in;
+    transition: transform @speed-animate-in ease-out,
+                opacity @speed-animate-in ease-out,
+                max-height 0s @speed-animate-in,
+                border-width 0s @speed-animate-in;
 }
 
 
@@ -94,24 +86,16 @@
         border-bottom-width: 1px;
 
         // Straighten the picker.
-        .transform( translateY( 0 ) perspective( 600px ) rotateX( 0 ) );
+        transform: translateY( 0 ) perspective( 600px ) rotateX( 0 );
 
         // Everything should be smoothly animated – except the height & border.
-        -webkit-transition: -webkit-transform @speed-animate-in ease-out,
-                            opacity @speed-animate-in ease-out,
-                            max-height 0s,
-                            border-width 0s;
-           -moz-transition: -moz-transform @speed-animate-in ease-out,
-                            opacity @speed-animate-in ease-out,
-                            max-height 0s,
-                            border-width 0s;
-                transition: transform @speed-animate-in ease-out,
-                            opacity @speed-animate-in ease-out,
-                            max-height 0s,
-                            border-width 0s;
+        transition: transform @speed-animate-in ease-out,
+                    opacity @speed-animate-in ease-out,
+                    max-height 0s,
+                    border-width 0s;
 
         // Add a light shadow.
-        .box-shadow( @classic-box-shadow );
+        box-shadow: @classic-box-shadow;
     }
 }
 

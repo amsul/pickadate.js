@@ -7,7 +7,12 @@ jQuery.extend( jQuery.fn.pickadate.defaults, {
     weekdaysShort: [ 'zo', 'ma', 'di', 'wo', 'do', 'vr', 'za' ],
     today: 'vandaag',
     clear: 'verwijderen',
+    close: 'sluiten',
     firstDay: 1,
     format: 'dddd d mmmm yyyy',
     formatSubmit: 'yyyy/mm/dd'
+});
+
+jQuery.extend( jQuery.fn.pickatime.defaults, {
+    clear: 'verwijderen'
 });
