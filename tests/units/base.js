@@ -59,7 +59,7 @@ test( 'Picker states', function() {
     picker.$root.find( 'button' )[0].focus()
     ok( picker.get( 'open' ) === true, 'Remains open with focus within' )
 
-    picker.$root.find( 'div' )[3].click()
+    picker.$root.find( 'div' ).eq(3).click()
     ok( picker.get( 'open' ) === true, 'Remains open with click within' )
 
     picker.close()
