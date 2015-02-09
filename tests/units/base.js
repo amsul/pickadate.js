@@ -383,16 +383,14 @@ test( 'Open with alternate focus', function() {
 
 test( 'Close with alternate focus', function() {
 
-    var picker = this.picker,
-        klasses = Picker.klasses()
+    var picker = this.picker
 
     stop()
     picker.close( true )
     setTimeout( function() {
         var isClosed = !picker.get( 'open' )
-        var hasCorrectClassNames = picker.$root[0].className === klasses.picker
-        var hasCorrectActiveElement = document.activeElement === picker.$root[0]
-        ok( isClosed && hasCorrectClassNames && hasCorrectActiveElement, 'Closed with focus' )
+        var hasCorrectActiveElement = document.activeElement === picker.$node[0]
+        ok( isClosed && hasCorrectActiveElement, 'Closed with focus' )
         start()
     }, 0 )
 })
