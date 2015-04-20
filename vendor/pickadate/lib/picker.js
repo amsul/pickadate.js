@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v3.5.5, 2015/02/08
+ * pickadate.js v3.5.6, 2015/04/20
  * By Amsul, http://amsul.ca
  * Hosted on http://amsul.github.io/pickadate.js
  * Licensed under MIT
@@ -23,7 +23,7 @@
 var $window = $( window )
 var $document = $( document )
 var $html = $( document.documentElement )
-var supportsTransitions = document.body.style.transition != null
+var supportsTransitions = document.documentElement.style.transition != null
 
 
 /**
@@ -171,7 +171,8 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
 
                 // Insert a new component holder in the root or box.
                 if ( entireComponent ) {
-                    P.$holder = createWrappedComponent()
+                    P.$holder = $( createWrappedComponent() )
+                    prepareElementHolder()
                     P.$root.html( P.$holder )
                 }
                 else P.$root.find( '.' + CLASSES.box ).html( P.component.nodes( STATE.open ) )

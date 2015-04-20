@@ -149,11 +149,9 @@ module.exports = function( grunt ) {
     grunt.registerTask( 'develop', [ 'develop-once', 'watch:develop' ] )
     grunt.registerTask( 'develop-once', [ 'less:themes', 'autoprefixer:themes' ] )
 
-    grunt.registerTask( 'package', [ 'uglify', 'cssmin' ] )
+    grunt.registerTask( 'package', [ 'develop-once', 'uglify', 'cssmin' ] )
 
     grunt.registerTask( 'test', [ 'jshint', 'qunit' ] )
-
-    grunt.registerTask( 'build', [ 'develop-once', 'package', 'test' ] )
 
 } //module.exports
 
