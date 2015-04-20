@@ -371,7 +371,7 @@ picker.get('view', 'yyyy/mm/dd')</code></pre>
     <h2 class="heading heading--divide"><span class="heading__text">Get <code class="string">min</code><a class="heading__anchor" name="method-get-min" href="#method-get-min">&sect;</a></span></h2>
 
     <p>Returns the <a href="#item-objects">item object</a> or formatted string of the date that determines the <b>lower limit</b>.</p>
-    <p>Defaults to a <code class="keyword">-Infinity</code> <a href="#item-objects">item object</a> when it is not explicitly set in the <a href="date.htm#limits">options</a> or through the picker’s <a href="#method-set-min">API</a>.</p>
+    <p>Defaults to a <code class="keyword">-Infinity</code> <a href="#item-objects">item object</a> when it is not explicitly set in the <a href="{{ "/date" | prepend: site.baseurl }}#limits">options</a> or through the picker’s <a href="#method-set-min">API</a>.</p>
     <pre class="pre--demo"><code data-language="javascript">picker.get('min')
 picker.get('min', 'yyyy/mm/dd')</code></pre>
 
@@ -395,7 +395,7 @@ picker.get('min', 'yyyy/mm/dd')</code></pre>
     <h2 class="heading heading--divide"><span class="heading__text">Get <code class="string">max</code><a class="heading__anchor" name="method-get-max" href="#method-get-max">&sect;</a></span></h2>
 
     <p>Returns the <a href="#item-objects">item object</a> or formatted string of the date that determines the <b>upper limit</b>.</p>
-    <p>Defaults to an <code class="keyword">Infinity</code> <a href="#item-objects">item object</a> when it is not explicitly set in the <a href="date.htm#limits">options</a> or through the picker’s <a href="#method-set-max">API</a>.</p>
+    <p>Defaults to an <code class="keyword">Infinity</code> <a href="#item-objects">item object</a> when it is not explicitly set in the <a href="{{ "/date" | prepend: site.baseurl }}#limits">options</a> or through the picker’s <a href="#method-set-max">API</a>.</p>
     <pre class="pre--demo"><code data-language="javascript">picker.get('max')
 picker.get('max', 'yyyy/mm/dd')</code></pre>
 
@@ -504,7 +504,7 @@ picker.get('disable')</code></pre>
       </div>
     </fieldset>
 
-    <p>However, when <a href="date.htm#disable-dates-all">all dates are disabled and a select few are enabled</a>, it behaves differently:</p>
+    <p>However, when <a href="{{ "/date" | prepend: site.baseurl }}#disable-dates-all">all dates are disabled and a select few are enabled</a>, it behaves differently:</p>
     <pre class="pre--demo"><code data-language="javascript">// Array passed in options to disable all dates except a few
 var datesToDisable = [ true, 1, 4, 7, [2015,3,8], [2015,3,19], new Date(2015,3,26) ]
 
@@ -634,7 +634,7 @@ picker.set('select', new Date(2015, 3, 30))
 // Using positive integers as UNIX timestamps.
 picker.set('select', 1429970887654)
 
-// Using a string along with the parsing format (defaults to <a href="date.htm#formats">`format` option</a>).
+// Using a string along with the parsing format (defaults to <a href="{{ "/date" | prepend: site.baseurl }}#formats">`format` option</a>).
 picker.set('select', '2016-04-20', { format: 'yyyy-mm-dd' })</code></pre>
 
     <fieldset class="fieldset fieldset--demo js__fieldset">
@@ -663,7 +663,7 @@ picker.set('select', new Date(2015, 3, 20, 10, 30))
 // Using positive integers as minutes.
 picker.set('select', 540)
 
-// Using a string along with the parsing format (defaults to <a href="time.htm#formats">`format` option</a>).
+// Using a string along with the parsing format (defaults to <a href="{{ "/time" | prepend: site.baseurl }}#formats">`format` option</a>).
 picker.set('select', '04-30', { format: 'hh-i' })</code></pre>
 
     <fieldset class="fieldset fieldset--demo js__fieldset">
@@ -704,7 +704,7 @@ picker.set('highlight', new Date(2015, 3, 30))
 // Using positive integers as UNIX timestamps.
 picker.set('highlight', 1429970887654)
 
-// Using a string along with the parsing format (defaults to <a href="date.htm#formats">`format` option</a>).
+// Using a string along with the parsing format (defaults to <a href="{{ "/date" | prepend: site.baseurl }}#formats">`format` option</a>).
 picker.set('highlight', '2016-04-20', { format: 'yyyy-mm-dd' })</code></pre>
 
     <fieldset class="fieldset fieldset--demo js__fieldset">
@@ -733,7 +733,7 @@ picker.set('highlight', new Date(2015, 3, 20, 10, 30))
 // Using positive integers as minutes.
 picker.set('highlight', 1080)
 
-// Using a string along with the parsing format (defaults to <a href="time.htm#formats">`format` option</a>).
+// Using a string along with the parsing format (defaults to <a href="{{ "/time" | prepend: site.baseurl }}#formats">`format` option</a>).
 picker.set('highlight', '04-30', { format: 'hh-i' })</code></pre>
 
     <fieldset class="fieldset fieldset--demo js__fieldset">
@@ -776,7 +776,7 @@ picker.set('view', new Date(1988,7,14))
 // Using positive integers as UNIX timestamps.
 picker.set('view', 1587355200000)
 
-// Using a string along with the parsing format (defaults to <a href="date.htm#formats">`format` option</a>).
+// Using a string along with the parsing format (defaults to <a href="{{ "/date" | prepend: site.baseurl }}#formats">`format` option</a>).
 picker.set('view', '2016-04-20', { format: 'yyyy-mm-dd' })</code></code></pre>
 
     <fieldset class="fieldset fieldset--demo js__fieldset">
@@ -805,7 +805,7 @@ picker.set('view', new Date(2015, 3, 20, 10, 30))
 // Using positive integers as minutes.
 picker.set('view', 1080)
 
-// Using a string along with the parsing format (defaults to <a href="time.htm#formats">`format` option</a>).
+// Using a string along with the parsing format (defaults to <a href="{{ "/time" | prepend: site.baseurl }}#formats">`format` option</a>).
 picker.set('view', '04-30', { format: 'hh-i' })</code></pre>
 
     <fieldset class="fieldset fieldset--demo js__fieldset">
