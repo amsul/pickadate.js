@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.5.6
+
+- [#667](https://github.com/amsul/pickadate.js/issues/667) Fixed issue where script was executed before `body` was loaded.
+- [#648](https://github.com/amsul/pickadate.js/issues/648) Fixed re-binding events to `P.$holder` after a re-render.
+- [#652](https://github.com/amsul/pickadate.js/issues/652) Added Persian translations.
+- [#669](https://github.com/amsul/pickadate.js/issues/669) Fix in Chinese translations.
+- [#683](https://github.com/amsul/pickadate.js/issues/683) Fix in Japanese translations.
+
+
 ## 3.5.5
 
 - [#180](https://github.com/amsul/pickadate.js/issues/180) Fixed date picker to use UTC dates.
