@@ -1,17 +1,30 @@
-# pickadate v3.5.5 [![pickadate build status](https://travis-ci.org/amsul/pickadate.js.svg?branch=master)](https://travis-ci.org/amsul/pickadate.js) [![pickadate dev dependencies status](https://david-dm.org/amsul/pickadate.js/dev-status.svg)](https://david-dm.org/amsul/pickadate.js#info=devDependencies)
+# pickadate
 
 The mobile-friendly, responsive, and lightweight jQuery date & time input picker.
 
+[![Build status: master](https://travis-ci.org/amsul/pickadate.js.svg?branch=master)](https://travis-ci.org/amsul/pickadate.js) <sup>[`master`](https://github.com/amsul/pickadate.js/tree/master)</sup>
+<sup>&nbsp;&nbsp;&nbsp;</sup>
+[![Build status: dev](https://travis-ci.org/amsul/pickadate.js.svg?branch=dev)](https://travis-ci.org/amsul/pickadate.js) <sup>[`dev`](https://github.com/amsul/pickadate.js/tree/dev)</sup>
+<sup>&nbsp;&nbsp;&nbsp;</sup>
+[![pickadate dev dependencies status](https://david-dm.org/amsul/pickadate.js/dev-status.svg)](https://david-dm.org/amsul/pickadate.js#info=devDependencies)
 
 
 #### To get started, check out the:
 
-[Homepage](http://amsul.github.io/pickadate.js) - [Date picker](http://amsul.github.io/pickadate.js/date.htm) - [Time picker](http://amsul.github.io/pickadate.js/time.htm) - [API](http://amsul.github.io/pickadate.js/api.htm)
+[Homepage](http://amsul.ca/pickadate.js) - [Date picker](http://amsul.ca/pickadate.js/date) - [Time picker](http://amsul.ca/pickadate.js/time) - [API](http://amsul.ca/pickadate.js/api)
 
 
 #### To get it:
 
-[Download v3.5.5](https://github.com/amsul/pickadate.js/archive/3.5.5.zip) or `git clone git://github.com/amsul/pickadate.js.git` or `bower install pickadate`
+[Download the latest stable build](https://github.com/amsul/pickadate.js/archive/master.zip)
+
+*or*
+
+`git clone git://github.com/amsul/pickadate.js.git`
+
+*or*
+
+`bower install pickadate`
 
 
 
@@ -51,7 +64,7 @@ __**__ For languages with text flowing from right-to-left, also include the `rtl
 
 ### Translations
 
-The translations live in the `lib/translations` folder. There are currently [40 language translations](https://github.com/amsul/pickadate.js/blob/3.5.5/lib/translations) included.
+The translations live in the `lib/translations` folder. There are currently [43 language translations](https://github.com/amsul/pickadate.js/tree/master/lib/translations) included.
 
 
 
