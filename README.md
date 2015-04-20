@@ -68,9 +68,8 @@ The translations live in the `lib/translations` folder. There are currently [40 
 Type out `grunt --help` to see a list of all the tasks available. The generally used tasks are:
 
 - `grunt develop` compiles the LESS files and watches for any source changes.
-- `grunt package` minifies the compiled source files.
+- `grunt package` compiles and then minifies the source files.
 - `grunt test` tests the entire package.
-- `grunt build` compiles, minifies, and tests the package.
 
 
 
