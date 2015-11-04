@@ -1206,5 +1206,34 @@ test( '`data-value` to select, highlight, and view', function() {
     strictEqual( picker.get( 'view' ).pick, 840, 'Viewsets time' )
 })
 
+module( 'I18N', {
+    teardown: function() {
+        $DOM.empty()
+        Picker.resetTimeLocale()
+    }
+})
 
+function ensureClearButtonLabelIsEqualTo(expectedLabel, $input ) {
+    var $inputPicker = $input.pickatime();
+    var picker = $inputPicker.pickatime( 'picker' )
+    strictEqual( picker.$root.find( '.' + $.fn.pickatime.defaults.klass.buttonClear).text(), expectedLabel )
+    picker.stop();
+}
 
+test( 'we can change current locale and it updates subsequent time picker calls', function() {
+
+    $DOM.append( $INPUT.clone() )
+    var $input = $DOM.find( 'input' )
+
+    ensureClearButtonLabelIsEqualTo( 'Clear', $input )
+
+    // Now, changing the locale
+    Picker.useTimeLocale("fr_FR")
+
+    ensureClearButtonLabelIsEqualTo( 'Effacer', $input )
+
+    // Falling back to the default EN locale
+    Picker.useTimeLocale("en_US")
+
+    ensureClearButtonLabelIsEqualTo( 'Clear', $input )
+})

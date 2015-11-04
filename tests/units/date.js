@@ -1527,3 +1527,35 @@ test( 'the pre-filled `value` selected is no longer "active"', function() {
     deepEqual( [select.year, select.month, select.date], [2014, 7, 14], 'Sets the default select' )
 
 })
+
+module( 'I18N', {
+    teardown: function() {
+        $DOM.empty()
+        Picker.resetDateLocale()
+    }
+})
+
+function ensureTodayButtonLabelIsEqualTo(expectedLabel, $input ) {
+    var $inputPicker = $input.pickadate();
+    var picker = $inputPicker.pickadate( 'picker' )
+    strictEqual( picker.$root.find( '.' + $.fn.pickadate.defaults.klass.buttonToday).text(), expectedLabel )
+    picker.stop();
+}
+
+test( 'we can change current locale and it updates subsequent date picker calls', function() {
+
+    $DOM.append( $INPUT.clone() )
+    var $input = $DOM.find( 'input' )
+
+    ensureTodayButtonLabelIsEqualTo( 'Today', $input )
+
+    // Now, changing the locale
+    Picker.useDateLocale("fr_FR")
+
+    ensureTodayButtonLabelIsEqualTo( 'Aujourd\'hui', $input )
+
+    // Falling back to the default EN locale
+    Picker.useDateLocale("en_US")
+
+    ensureTodayButtonLabelIsEqualTo( 'Today', $input )
+})
