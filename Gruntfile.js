@@ -21,6 +21,7 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks( 'grunt-contrib-less' )
     grunt.loadNpmTasks( 'grunt-contrib-cssmin' )
     grunt.loadNpmTasks( 'grunt-contrib-uglify' )
+    grunt.loadNpmTasks( 'grunt-contrib-concat' )
     grunt.loadNpmTasks( 'grunt-autoprefixer' )
 
 
@@ -129,6 +130,12 @@ module.exports = function( grunt ) {
             lib: [ '<%= dirs.tests %>/units/all.htm' ]
         },
 
+        concat: {
+            dist: {
+                src: [ '<%= dirs.translations.src %>/*.js' ],
+                dest: '<%= dirs.translations.src %>/all-translations.js'
+            }
+        },
 
         // Watch the project files.
         watch: {
@@ -149,7 +156,7 @@ module.exports = function( grunt ) {
     grunt.registerTask( 'develop', [ 'develop-once', 'watch:develop' ] )
     grunt.registerTask( 'develop-once', [ 'less:themes', 'autoprefixer:themes' ] )
 
-    grunt.registerTask( 'package', [ 'develop-once', 'uglify', 'cssmin' ] )
+    grunt.registerTask( 'package', [ 'develop-once', 'concat', 'uglify', 'cssmin' ] )
 
     grunt.registerTask( 'test', [ 'jshint', 'qunit' ] )
 
