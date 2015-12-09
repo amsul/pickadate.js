@@ -26,7 +26,7 @@
   margin-right: .25em;
 }
 .picker__year {
-  color: #999999;
+  color: #999;
   font-size: .8em;
   font-style: italic;
 }
@@ -98,7 +98,7 @@
   content: " ";
   border-top: .5em solid transparent;
   border-bottom: .5em solid transparent;
-  border-right: 0.75em solid #000000;
+  border-right: 0.75em solid #000;
   width: 0;
   height: 0;
   display: block;
@@ -106,12 +106,12 @@
 }
 .picker__nav--next:before {
   border-right: 0;
-  border-left: 0.75em solid #000000;
+  border-left: 0.75em solid #000;
 }
 .picker__nav--prev:hover,
 .picker__nav--next:hover {
   cursor: pointer;
-  color: #000000;
+  color: #000;
   background: #b1dcfb;
 }
 .picker__nav--disabled,
@@ -152,7 +152,7 @@
   width: 14.285714286%;
   font-size: .75em;
   padding-bottom: .25em;
-  color: #999999;
+  color: #999;
   font-weight: 500;
   /* Increase the spacing a tad */
 }
@@ -183,15 +183,15 @@
   border-left: .5em solid transparent;
 }
 .picker__day--disabled:before {
-  border-top-color: #aaaaaa;
+  border-top-color: #aaa;
 }
 .picker__day--outfocus {
-  color: #dddddd;
+  color: #ddd;
 }
 .picker__day--infocus:hover,
 .picker__day--outfocus:hover {
   cursor: pointer;
-  color: #000000;
+  color: #000;
   background: #b1dcfb;
 }
 .picker__day--highlighted {
@@ -200,26 +200,26 @@
 .picker__day--highlighted:hover,
 .picker--focused .picker__day--highlighted {
   cursor: pointer;
-  color: #000000;
+  color: #000;
   background: #b1dcfb;
 }
 .picker__day--selected,
 .picker__day--selected:hover,
 .picker--focused .picker__day--selected {
   background: #0089ec;
-  color: #ffffff;
+  color: #fff;
 }
 .picker__day--disabled,
 .picker__day--disabled:hover,
 .picker--focused .picker__day--disabled {
   background: #f5f5f5;
   border-color: #f5f5f5;
-  color: #dddddd;
+  color: #ddd;
   cursor: default;
 }
 .picker__day--highlighted.picker__day--disabled,
 .picker__day--highlighted.picker__day--disabled:hover {
-  background: #bbbbbb;
+  background: #bbb;
 }
 /**
  * The footer containing the "today", "clear", and "close" buttons.
@@ -230,8 +230,8 @@
 .picker__button--today,
 .picker__button--clear,
 .picker__button--close {
-  border: 1px solid #ffffff;
-  background: #ffffff;
+  border: 1px solid #fff;
+  background: #fff;
   font-size: .8em;
   padding: .66em 0;
   font-weight: bold;
@@ -243,7 +243,7 @@
 .picker__button--clear:hover,
 .picker__button--close:hover {
   cursor: pointer;
-  color: #000000;
+  color: #000;
   background: #b1dcfb;
   border-bottom-color: #b1dcfb;
 }
@@ -275,7 +275,7 @@
 .picker__button--clear:before {
   top: -0.25em;
   width: .66em;
-  border-top: 3px solid #ee2200;
+  border-top: 3px solid #e20;
 }
 .picker__button--close:before {
   content: "\D7";
@@ -283,17 +283,17 @@
   vertical-align: top;
   font-size: 1.1em;
   margin-right: .35em;
-  color: #777777;
+  color: #777;
 }
 .picker__button--today[disabled],
 .picker__button--today[disabled]:hover {
   background: #f5f5f5;
   border-color: #f5f5f5;
-  color: #dddddd;
+  color: #ddd;
   cursor: default;
 }
 .picker__button--today[disabled]:before {
-  border-top-color: #aaaaaa;
+  border-top-color: #aaa;
 }
 
 /* ==========================================================================
