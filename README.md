@@ -27,7 +27,10 @@ The mobile-friendly, responsive, and lightweight jQuery date & time input picker
 `bower install pickadate`
 
 
-### NOTE: Looking for Project Maintainers
+
+
+<br>
+## NOTE: Looking for Project Maintainers
 
 I am looking for project maintainers to keep pickadate up to date and bug-free. As it stands, there are quite a few issues are that ready to be resolved and merged, but I would like help from someone in championing it forward.
 
