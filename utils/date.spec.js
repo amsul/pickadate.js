@@ -219,4 +219,111 @@ describe('/dateUtil', () => {
   })
 
 
+
+
+
+  //////////////
+  // CHECKERS //
+  //////////////
+
+
+
+  describe('#isSameDate', () => {
+
+    it('returns "true" if two dates fall on the same date', () => {
+
+      dateUtil.isSameDate(new Date(), new Date()).should.eql(true)
+      dateUtil.isSameDate(new Date(2015, 6, 28), new Date(2015, 6, 28)).should.eql(true)
+      dateUtil.isSameDate(new Date(2015, 6, 28), new Date(2015, 6, 28).getTime()).should.eql(true)
+      dateUtil.isSameDate(new Date().getTime(), new Date().getTime()).should.eql(true)
+
+    })
+
+
+    it('returns "false" if two dates do not fall on the same date', () => {
+
+      dateUtil.isSameDate(new Date(), new Date(2015, 6, 28)).should.eql(false)
+      dateUtil.isSameDate(new Date(2015, 6, 27), new Date(2015, 6, 28)).should.eql(false)
+      dateUtil.isSameDate(new Date(), new Date(2015, 6, 28).getTime()).should.eql(false)
+      dateUtil.isSameDate(new Date().getTime(), new Date(2015, 6, 28).getTime()).should.eql(false)
+
+    })
+
+
+    it('returns "false" if invalid dates are passed', () => {
+
+      dateUtil.isSameDate({}, new Date(2015, 6, 28)).should.eql(false)
+      dateUtil.isSameDate(new Date(2015, 6, 28), {}).should.eql(false)
+
+    })
+
+  })
+
+
+
+  describe('#isSameMonth', () => {
+
+    it('returns "true" if two dates fall on the same month', () => {
+
+      dateUtil.isSameMonth(new Date(2015, 6, 11), new Date(2015, 6, 28)).should.eql(true)
+      dateUtil.isSameMonth(new Date(2015, 6, 28), new Date(2015, 6, 11).getTime()).should.eql(true)
+      dateUtil.isSameMonth(new Date().getTime(), new Date().getTime()).should.eql(true)
+
+    })
+
+
+    it('returns "false" if two dates do not fall on the same month', () => {
+
+      dateUtil.isSameMonth(new Date(), new Date(2015, 6, 28)).should.eql(false)
+      dateUtil.isSameMonth(new Date(2015, 5, 28), new Date(2015, 6, 28)).should.eql(false)
+      dateUtil.isSameMonth(new Date(2013, 6, 28), new Date(2015, 6, 28)).should.eql(false)
+      dateUtil.isSameMonth(new Date(), new Date(2015, 6, 28).getTime()).should.eql(false)
+      dateUtil.isSameMonth(new Date().getTime(), new Date(2015, 6, 28).getTime()).should.eql(false)
+
+    })
+
+
+    it('returns "false" if invalid dates are passed', () => {
+
+      dateUtil.isSameMonth({}, new Date(2015, 6, 28)).should.eql(false)
+      dateUtil.isSameMonth(new Date(2015, 6, 28), {}).should.eql(false)
+
+    })
+
+  })
+
+
+
+  describe('#isSameYear', () => {
+
+    it('returns "true" if two dates fall on the same year', () => {
+
+      dateUtil.isSameYear(new Date(2015, 10, 11), new Date(2015, 6, 28)).should.eql(true)
+      dateUtil.isSameYear(new Date(2015, 6, 28), new Date(2015, 2, 11).getTime()).should.eql(true)
+      dateUtil.isSameYear(new Date().getTime(), new Date().getTime()).should.eql(true)
+
+    })
+
+
+    it('returns "false" if two dates do not fall on the same year', () => {
+
+      dateUtil.isSameYear(new Date(), new Date(2015, 6, 28)).should.eql(false)
+      dateUtil.isSameYear(new Date(2016, 6, 28), new Date(2015, 3, 28)).should.eql(false)
+      dateUtil.isSameYear(new Date(2013, 6, 28), new Date(2015, 6, 28)).should.eql(false)
+      dateUtil.isSameYear(new Date(), new Date(2015, 6, 28).getTime()).should.eql(false)
+      dateUtil.isSameYear(new Date().getTime(), new Date(2015, 6, 28).getTime()).should.eql(false)
+
+    })
+
+
+    it('returns "false" if invalid dates are passed', () => {
+
+      dateUtil.isSameYear({}, new Date(2015, 6, 28)).should.eql(false)
+      dateUtil.isSameYear(new Date(2015, 6, 28), {}).should.eql(false)
+
+    })
+
+  })
+
+
 })
