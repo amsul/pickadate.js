@@ -1,0 +1,6 @@
+instrumentation:
+  excludes:
+    - index.js
+    - tests.js
+    - webpack.config.js
+  include-all-sources: true

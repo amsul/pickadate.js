@@ -1,0 +1,16 @@
+#global
+*.DS_Store
+*.log
+*.map
+*.sublime-project
+*.sublime-workspace
+
+#babel
+.babel
+
+#node
+node_modules
+
+#testing
+coverage
+temp

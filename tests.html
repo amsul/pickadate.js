@@ -1,0 +1,22 @@
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <title>pickadate.js • tests</title>
+    <link rel='stylesheet' href='node_modules/mocha/mocha.css' />
+  </head>
+  <body>
+    <div id='mocha'>
+      <h1><a href='tests.html'>/</a></h1>
+    </div>
+    <script src='node_modules/mocha/mocha.js'></script>
+    <script>
+      window.mocha.setup('bdd')
+    </script>
+    <script src='tests.js'></script>
+    <script>
+      window.mocha.checkLeaks()
+      window.mocha.allowUncaught()
+      window.mocha.run()
+    </script>
+  </body>
+</html>

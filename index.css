@@ -1,0 +1,214 @@
+:root {
+  --blue           : #0089ec;
+  --blue_highlight : #b1dcfb;
+}
+
+
+
+
+
+/**
+ * ROOT
+ */
+
+.pickadate,
+.pickadate * {
+  box-sizing: border-box;
+}
+
+
+
+.pickadate {
+  font-size : 16px;
+  max-width : 30em;
+}
+
+
+
+
+
+/**
+ * SECTIONS
+ */
+
+.pickadate-section {
+  display     : flex;
+  align-items : center;
+}
+
+
+
+.pickadate-section_header {
+  justify-content : space-between;
+}
+
+
+
+.pickadate-section_body {}
+
+
+
+.pickadate-section_footer {
+  justify-content : space-around;
+}
+
+
+
+
+
+/**
+ * GRID
+ */
+
+.pickadate-grid {
+  display        : flex;
+  flex-direction : column;
+  align-items    : stretch;
+  width          : 100%;
+  margin         : 0.5em 0;
+  padding        : 0.5em 0;
+  border         : 1px solid transparent;
+  background     : none;
+  font           : inherit;
+  color          : inherit;
+  line-height    : inherit;
+  user-select    : none;
+  height         : 15em;
+
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+
+
+.pickadate-grid:focus {
+  outline      : none;
+  border-color : var(--blue);
+}
+
+  .pickadate-gridRow {
+    flex    : 1;
+    display : flex;
+  }
+
+    .pickadate-gridCell {
+      flex            : 1;
+      position        : relative;
+      display         : flex;
+      justify-content : center;
+      align-self      : stretch;
+      align-items     : center;
+    }
+
+
+
+  .pickadate-gridRow_heading {
+    flex          : none;
+    font-weight   : 500;
+    margin-bottom : 0.5em;
+    font-size     : 0.75em;
+    color         : #bbb;
+  }
+
+
+
+  .pickadate-gridRow_body {}
+
+    .pickadate-gridCell_today {}
+
+      .pickadate-gridCell_today:after {
+        content       : '';
+        position      : absolute;
+        z-index       : 10;
+        top           : 3px;
+        right         : 3px;
+        background    : black;
+        width         : 6px;
+        height        : 6px;
+        border-radius : 3px;
+      }
+
+
+
+    .pickadate-gridCell_selected {
+      background : var(--blue);
+      color      : white;
+    }
+
+      .pickadate-gridCell_selected.pickadate-gridCell_today:after {
+        background: white;
+      }
+
+
+
+    .pickadate-gridRow_body .pickadate-gridCell:not(.pickadate-gridCell_selected):hover {
+      background: var(--blue_highlight);
+    }
+
+
+
+
+
+/**
+ * BUTTONS
+ */
+
+.pickadate-button {
+  font          : inherit;
+  font-size     : 0.85em;
+  padding       : 0.5em 1em;
+  background    : #f2f2f2;
+  border        : 1px solid #ddd;
+  border-radius : 3px;
+}
+
+
+
+.pickadate-button_scope {
+  flex   : 1;
+  margin : 0 2em;
+}
+
+
+
+.pickadate-button_previous,
+.pickadate-button_next {
+  display    : flex;
+  align-self : stretch;
+}
+
+  .pickadate-button_previous:after,
+  .pickadate-button_next:after {
+    content       : '';
+    border-top    : .5em solid transparent;
+    border-bottom : .5em solid transparent;
+    border-right  : 0.75em solid;
+    width         : 0;
+    height        : 0;
+    display       : block;
+  }
+
+
+
+  .pickadate-button_next:after {
+    border-right : 0;
+    border-left  : 0.75em solid;
+  }
+
+
+
+.pickadate-button_previous {
+  padding-right : 1.25em;
+}
+
+
+
+.pickadate-button_next {
+  padding-left : 1.25em;
+}
+
+
+
+.pickadate-button:focus {
+  outline      : none;
+  border-color : var(--blue);
+}
