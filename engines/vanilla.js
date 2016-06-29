@@ -131,7 +131,7 @@ function createButtonScopeLabelElement(state) {
 function createButtonPreviousElement(picker) {
 
   let onClick = () => picker.setState({
-    view: calendarUtil.getStartDateOfPreviousScope(
+    view: calendarUtil.getDateOfPreviousScope(
       picker.state.view, picker.state.scope
     )
   })
@@ -151,7 +151,7 @@ function createButtonPreviousElement(picker) {
 function createButtonNextElement(picker) {
 
   let onClick = () => picker.setState({
-    view: calendarUtil.getStartDateOfNextScope(
+    view: calendarUtil.getDateOfNextScope(
       picker.state.view, picker.state.scope
     )
   })
@@ -244,23 +244,23 @@ function createGridElement(picker) {
 
 function createGridCellElements(state) {
 
-  let rowsCellsDates = calendarUtil.getCollectionOfRowsCellsDates(state)
+  let datesForRows = calendarUtil.getDatesForRows(state)
 
-  let nodes = rowsCellsDates.map(rowCellsDates => (
+  let nodes = datesForRows.map(datesForRow => (
     createNode(
       [classes.gridRow, classes.gridRow_body],
-      rowCellsDates.map(rowCellDate => (
-        createGridCellElement(state, rowCellDate)
+      datesForRow.map(dateForCell => (
+        createGridCellElement(state, dateForCell)
       ))
     )
   ))
 
   if (state.scope === SCOPE.DAYS) {
-    let headerRowCells = calendarUtil.getCollectionOfHeaderRowCells(state)
+    let weekdays = calendarUtil.getWeekdays(state)
     nodes.unshift(createNode(
       [classes.gridRow, classes.gridRow_heading],
-      headerRowCells.map(headerRowCell => (
-        createNode(classes.gridCell, headerRowCell)
+      weekdays.map(weekday => (
+        createNode(classes.gridCell, weekday)
       ))
     ))
   }
