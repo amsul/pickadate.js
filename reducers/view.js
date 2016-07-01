@@ -23,7 +23,7 @@ function initialize(state = new Date()) {
  * @return {Date}
  */
 function showNext(state, { scope }) {
-  return calendarUtil.getDateOfNextScope(state, scope)
+  return calendarUtil.getStartDateOfMonthInNextScope(state, scope)
 }
 
 
@@ -35,7 +35,7 @@ function showNext(state, { scope }) {
  * @return {Date}
  */
 function showPrevious(state, { scope }) {
-  return calendarUtil.getDateOfPreviousScope(state, scope)
+  return calendarUtil.getStartDateOfMonthInPreviousScope(state, scope)
 }
 
 
