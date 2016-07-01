@@ -4,6 +4,8 @@ engines:
     channel: 'eslint-2'
     exclude_paths:
       - '**/*.spec.js'
+      - 'index.browser.js'
+      - 'webpack.config.js'
 ratings:
   paths:
     - '**.js'
