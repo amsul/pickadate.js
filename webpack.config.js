@@ -1,3 +1,9 @@
+var BellOnBundlerErrorPlugin = require('bell-on-bundler-error-plugin')
+var WebpackNotifierPlugin    = require('webpack-notifier')
+var webpack                  = require('webpack')
+
+
+
 module.exports = {
 
   entry: {
@@ -42,5 +48,11 @@ module.exports = {
       },
     ],
   },
+
+  plugins: [
+    new BellOnBundlerErrorPlugin(),
+    new WebpackNotifierPlugin(),
+    new webpack.NoErrorsPlugin(),
+  ],
 
 }
