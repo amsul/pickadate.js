@@ -14,10 +14,7 @@ describe('/pickerUtil', () => {
 
   describe('#create', () => {
 
-    it('creates a picker with an initial state', () => {
-
-      // Create a clock to prevent time from ticking
-      let clock = lolex.install(new Date(2014, 3, 20).getTime())
+    it('creates a picker', () => {
 
       // Create the picker
       let picker = pickerUtil.create()
@@ -29,6 +26,35 @@ describe('/pickerUtil', () => {
         'removeStateListener',
         'state',
       )
+
+      // Ensure the methods are functions
+      picker.addStateListener.should.be.an.instanceOf(Function)
+      picker.dispatch.should.be.an.instanceOf(Function)
+      picker.removeStateListener.should.be.an.instanceOf(Function)
+
+      // Ensure the state is a getter
+      let stateDescriptor = Object.getOwnPropertyDescriptor(picker, 'state')
+      stateDescriptor.should.have.keys(
+        'configurable',
+        'enumerable',
+        'get',
+        'set',
+      )
+      stateDescriptor.configurable.should.eql(true)
+      stateDescriptor.enumerable.should.eql(true)
+      stateDescriptor.get.should.be.an.instanceOf(Function)
+      true.should.eql(undefined === stateDescriptor.set)
+
+    })
+
+
+    it('creates a picker with an initial state', () => {
+
+      // Create a clock to prevent time from ticking
+      let clock = lolex.install(new Date(2014, 3, 20).getTime())
+
+      // Create the picker
+      let picker = pickerUtil.create()
 
       // Ensure it has the expected state
       picker.state.should.eql({
