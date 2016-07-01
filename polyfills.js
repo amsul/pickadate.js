@@ -1,4 +1,6 @@
-let raf= require('raf')
+require('console-polyfill')
+
+let raf = require('raf')
 
 
 
