@@ -225,6 +225,7 @@ function getClosestDateForMonth(year, month, date) {
     date -= 1
   }
 
+  /* istanbul ignore next: fallback in case a date is not found */
   return new Date(year, month, 1)
 
 }

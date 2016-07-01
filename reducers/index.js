@@ -30,6 +30,7 @@ const KEY_TYPE_REDUCERS = STATE.KEYS.reduce(
  */
 function reduce(state, { type, payload }) {
 
+  /* istanbul ignore if */
   if (process.env.DEBUG) {
     console.group('Action dispatched: %o', type)
     logUtil.payload(payload)
@@ -68,6 +69,7 @@ function reduce(state, { type, payload }) {
 
   })
 
+  /* istanbul ignore if */
   if (process.env.DEBUG) {
     logUtil.diff(state, nextState)
     console.groupEnd()

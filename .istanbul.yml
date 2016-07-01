@@ -1,4 +1,5 @@
 instrumentation:
   excludes:
-    - /^(index|tests|webpack\.config)\.js/
+    - /^(index|tests|webpack\.config)\.js$/
+    - 'utils/log.js'
   include-all-sources: true

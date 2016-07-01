@@ -17,10 +17,10 @@ function create(value) {
     return new Date(value)
   }
 
-  if (typeof value === 'string') {
-    // TODO: Parse string into a date
-    debugger
-  }
+  // if (typeof value === 'string') {
+  //   // TODO: Parse string into a date
+  //   debugger
+  // }
 
   return value
 
