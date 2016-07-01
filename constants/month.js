@@ -41,7 +41,18 @@ const FULL = {
 
 
   [LANGUAGE.FRENCH]: [
-    'TODO',
+    'Janvier',
+    'Février',
+    'Mars',
+    'Avril',
+    'Mai',
+    'Juin',
+    'Juillet',
+    'Août',
+    'Septembre',
+    'Octobre',
+    'Novembre',
+    'Décembre',
   ],
 
 }
@@ -88,7 +99,18 @@ const SHORT = {
 
 
   [LANGUAGE.FRENCH]: [
-    'TODO',
+    'Jan',
+    'Fev',
+    'Mar',
+    'Avr',
+    'Mai',
+    'Juin',
+    'Juil',
+    'Aou',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
   ],
 
 

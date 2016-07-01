@@ -36,7 +36,13 @@ const FULL = {
 
 
   [LANGUAGE.FRENCH]: [
-    'TODO'
+    'Dimanche',
+    'Lundi',
+    'Mardi',
+    'Mercredi',
+    'Jeudi',
+    'Vendredi',
+    'Samedi',
   ],
 
 }
@@ -78,7 +84,13 @@ const SHORT = {
 
 
   [LANGUAGE.FRENCH]: [
-    'TODO',
+    'Dim',
+    'Lun',
+    'Mar',
+    'Mer',
+    'Jeu',
+    'Ven',
+    'Sam',
   ],
 
 

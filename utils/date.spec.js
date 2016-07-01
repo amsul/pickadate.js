@@ -1,4 +1,7 @@
-let dateUtil = require('utils/date')
+const LANGUAGE = require('constants/language')
+
+let language   = require('language')
+let dateUtil   = require('utils/date')
 
 
 
@@ -70,7 +73,35 @@ describe('/dateUtil', () => {
     })
 
 
-    it('gets a list of the full month names for the correct language')
+    it('gets a list of the full month names for the correct language', () => {
+
+      // Grab the original language
+      let originalLanguage = language.current
+
+      // Set the language to French
+      language.current = LANGUAGE.FRENCH
+
+      let fullMonthNames = [
+        'Janvier',
+        'Février',
+        'Mars',
+        'Avril',
+        'Mai',
+        'Juin',
+        'Juillet',
+        'Août',
+        'Septembre',
+        'Octobre',
+        'Novembre',
+        'Décembre',
+      ]
+
+      fullMonthNames.should.eql(dateUtil.getFullMonthNames())
+
+      // Reset the original language
+      language.current = originalLanguage
+
+    })
 
   })
 
@@ -100,7 +131,35 @@ describe('/dateUtil', () => {
     })
 
 
-    it('gets a list of the short month names for the correct language')
+    it('gets a list of the short month names for the correct language', () => {
+
+      // Grab the original language
+      let originalLanguage = language.current
+
+      // Set the language to French
+      language.current = LANGUAGE.FRENCH
+
+      let shortMonthNames = [
+        'Jan',
+        'Fev',
+        'Mar',
+        'Avr',
+        'Mai',
+        'Juin',
+        'Juil',
+        'Aou',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
+      ]
+
+      shortMonthNames.should.eql(dateUtil.getShortMonthNames())
+
+      // Reset the original language
+      language.current = originalLanguage
+
+    })
 
   })
 
@@ -114,7 +173,22 @@ describe('/dateUtil', () => {
     })
 
 
-    it('gets the full name of a specific month for the correct language')
+    it('gets the full name of a specific month for the correct language', () => {
+
+      // Grab the original language
+      let originalLanguage = language.current
+
+      // Set the language to French
+      language.current = LANGUAGE.FRENCH
+
+      let fullMonthName = 'Juin'
+
+      fullMonthName.should.eql(dateUtil.getFullMonthName(5))
+
+      // Reset the original language
+      language.current = originalLanguage
+
+    })
 
   })
 
@@ -123,12 +197,27 @@ describe('/dateUtil', () => {
   describe('#getShortMonthName', () => {
 
     it('gets the short name of a specific month', () => {
-      let shortMonthName = 'Jun'
-      shortMonthName.should.eql(dateUtil.getShortMonthName(5))
+      let shortMonthName = 'Aug'
+      shortMonthName.should.eql(dateUtil.getShortMonthName(7))
     })
 
 
-    it('gets the short name of a specific month for the correct language')
+    it('gets the short name of a specific month for the correct language', () => {
+
+      // Grab the original language
+      let originalLanguage = language.current
+
+      // Set the language to French
+      language.current = LANGUAGE.FRENCH
+
+      let fullMonthName = 'Aou'
+
+      fullMonthName.should.eql(dateUtil.getShortMonthName(7))
+
+      // Reset the original language
+      language.current = originalLanguage
+
+    })
 
   })
 
@@ -161,7 +250,30 @@ describe('/dateUtil', () => {
     })
 
 
-    it('gets a list of the full day names for the correct language')
+    it('gets a list of the full day names for the correct language', () => {
+
+      // Grab the original language
+      let originalLanguage = language.current
+
+      // Set the language to French
+      language.current = LANGUAGE.FRENCH
+
+      let fullDayNames = [
+        'Dimanche',
+        'Lundi',
+        'Mardi',
+        'Mercredi',
+        'Jeudi',
+        'Vendredi',
+        'Samedi',
+      ]
+
+      fullDayNames.should.eql(dateUtil.getFullDayNames())
+
+      // Reset the original language
+      language.current = originalLanguage
+
+    })
 
   })
 
@@ -186,7 +298,30 @@ describe('/dateUtil', () => {
     })
 
 
-    it('gets a list of the short day names for the correct language')
+    it('gets a list of the short day names for the correct language', () => {
+
+      // Grab the original language
+      let originalLanguage = language.current
+
+      // Set the language to French
+      language.current = LANGUAGE.FRENCH
+
+      let shortDayNames = [
+        'Dim',
+        'Lun',
+        'Mar',
+        'Mer',
+        'Jeu',
+        'Ven',
+        'Sam',
+      ]
+
+      shortDayNames.should.eql(dateUtil.getShortDayNames())
+
+      // Reset the original language
+      language.current = originalLanguage
+
+    })
 
   })
 
@@ -200,7 +335,22 @@ describe('/dateUtil', () => {
     })
 
 
-    it('gets the full name of a specific day for the correct language')
+    it('gets the full name of a specific day for the correct language', () => {
+
+      // Grab the original language
+      let originalLanguage = language.current
+
+      // Set the language to French
+      language.current = LANGUAGE.FRENCH
+
+      let fullDayName = 'Vendredi'
+
+      fullDayName.should.eql(dateUtil.getFullDayName(5))
+
+      // Reset the original language
+      language.current = originalLanguage
+
+    })
 
   })
 
@@ -214,7 +364,22 @@ describe('/dateUtil', () => {
     })
 
 
-    it('gets the short name of a specific day for the correct language')
+    it('gets the short name of a specific day for the correct language', () => {
+
+      // Grab the original language
+      let originalLanguage = language.current
+
+      // Set the language to French
+      language.current = LANGUAGE.FRENCH
+
+      let shortDayName = 'Ven'
+
+      shortDayName.should.eql(dateUtil.getShortDayName(5))
+
+      // Reset the original language
+      language.current = originalLanguage
+
+    })
 
   })
 
