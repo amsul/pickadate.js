@@ -375,6 +375,32 @@ function getStartDateOfMonth(dateObject) {
 
 
 
+/**
+ * Gets the start date of a month in the next scope.
+ * @param  {Date} dateObject
+ * @param  {SCOPE} scope
+ * @return {Date}
+ */
+function getStartDateOfMonthInNextScope(dateObject, scope) {
+  dateObject = getDateOfNextScope(dateObject, scope)
+  return getStartDateOfMonth(dateObject)
+}
+
+
+
+/**
+ * Gets the start date of a month in the previous scope.
+ * @param  {Date} dateObject
+ * @param  {SCOPE} scope
+ * @return {Date}
+ */
+function getStartDateOfMonthInPreviousScope(dateObject, scope) {
+  dateObject = getDateOfPreviousScope(dateObject, scope)
+  return getStartDateOfMonth(dateObject)
+}
+
+
+
 
 
 ////////////
@@ -464,6 +490,8 @@ module.exports = {
 
   // Start dates
   getStartDateOfMonth,
+  getStartDateOfMonthInNextScope,
+  getStartDateOfMonthInPreviousScope,
 
   // Labels
   getLabel,

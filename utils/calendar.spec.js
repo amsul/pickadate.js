@@ -624,6 +624,94 @@ describe('/calendarUtil', () => {
 
 
 
+  describe('#getStartDateOfMonthInNextScope', () => {
+
+    it('gets the start date of a month in the next scope, with the scope as DAYS', () => {
+
+      let scope = SCOPE.DAYS
+
+      calendarUtil.getStartDateOfMonthInNextScope(new Date(2014, 3, 20), scope)
+        .should.eql(new Date(2014, 4, 1))
+
+      calendarUtil.getStartDateOfMonthInNextScope(new Date(2014, 3, 20).getTime(), scope)
+        .should.eql(new Date(2014, 4, 1))
+
+    })
+
+
+    it('gets the start date of a month in the next scope, with the scope as MONTHS', () => {
+
+      let scope = SCOPE.MONTHS
+
+      calendarUtil.getStartDateOfMonthInNextScope(new Date(2014, 3, 20), scope)
+        .should.eql(new Date(2015, 3, 1))
+
+      calendarUtil.getStartDateOfMonthInNextScope(new Date(2014, 3, 20).getTime(), scope)
+        .should.eql(new Date(2015, 3, 1))
+
+    })
+
+
+    it('gets the start date of a month in the next scope, with the scope as YEARS', () => {
+
+      let scope = SCOPE.YEARS
+
+      calendarUtil.getStartDateOfMonthInNextScope(new Date(2014, 3, 20), scope)
+        .should.eql(new Date(2024, 3, 1))
+
+      calendarUtil.getStartDateOfMonthInNextScope(new Date(2014, 3, 20).getTime(), scope)
+        .should.eql(new Date(2024, 3, 1))
+
+    })
+
+  })
+
+
+
+  describe('#getStartDateOfMonthInPreviousScope', () => {
+
+    it('gets the start date of a month in the next scope, with the scope as DAYS', () => {
+
+      let scope = SCOPE.DAYS
+
+      calendarUtil.getStartDateOfMonthInPreviousScope(new Date(2014, 3, 20), scope)
+        .should.eql(new Date(2014, 2, 1))
+
+      calendarUtil.getStartDateOfMonthInPreviousScope(new Date(2014, 3, 20).getTime(), scope)
+        .should.eql(new Date(2014, 2, 1))
+
+    })
+
+
+    it('gets the start date of a month in the next scope, with the scope as MONTHS', () => {
+
+      let scope = SCOPE.MONTHS
+
+      calendarUtil.getStartDateOfMonthInPreviousScope(new Date(2014, 3, 20), scope)
+        .should.eql(new Date(2013, 3, 1))
+
+      calendarUtil.getStartDateOfMonthInPreviousScope(new Date(2014, 3, 20).getTime(), scope)
+        .should.eql(new Date(2013, 3, 1))
+
+    })
+
+
+    it('gets the start date of a month in the next scope, with the scope as YEARS', () => {
+
+      let scope = SCOPE.YEARS
+
+      calendarUtil.getStartDateOfMonthInPreviousScope(new Date(2014, 3, 20), scope)
+        .should.eql(new Date(2004, 3, 1))
+
+      calendarUtil.getStartDateOfMonthInPreviousScope(new Date(2014, 3, 20).getTime(), scope)
+        .should.eql(new Date(2004, 3, 1))
+
+    })
+
+  })
+
+
+
 
 
   ////////////
