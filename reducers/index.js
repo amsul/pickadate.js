@@ -12,7 +12,12 @@ let logUtil = require('utils/log')
  */
 const KEY_TYPE_REDUCERS = STATE.KEYS.reduce(
   (KEY_TYPE_REDUCERS, key) => {
-    KEY_TYPE_REDUCERS[key] = require(`reducers/${key}`)
+    try {
+      KEY_TYPE_REDUCERS[key] = require(`reducers/${key}`)
+    }
+    catch (err) {
+      throw new Error(`Unable to find reducers for the state key "${key}"`)
+    }
     return KEY_TYPE_REDUCERS
   },
   {}
