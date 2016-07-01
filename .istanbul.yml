@@ -1,6 +1,7 @@
 instrumentation:
   excludes:
     - 'index.browser.js'
+    - 'polyfills.js'
     - 'tests.browser.js'
     - 'utils/log.js'
     - 'webpack.config.js'
