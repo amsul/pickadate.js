@@ -12,10 +12,10 @@ const ACTION = require('constants/action')
  * Returns an action that closes the picker.
  * @return {Object}
  */
-let close = () => ({
-  type    : ACTION.TYPE.SET_OPEN,
-  payload : { isOpened: false },
-})
+// let close = () => ({
+//   type    : ACTION.TYPE.SET_OPEN,
+//   payload : { isOpened: false },
+// })
 
 
 
@@ -23,10 +23,10 @@ let close = () => ({
  * Returns an action that opens the picker.
  * @return {Object}
  */
-let open = () => ({
-  type    : ACTION.TYPE.SET_OPEN,
-  payload : { isOpened: true },
-})
+// let open = () => ({
+//   type    : ACTION.TYPE.SET_OPEN,
+//   payload : { isOpened: true },
+// })
 
 
 
@@ -130,8 +130,8 @@ let cycleScope = () => ({
 
 module.exports = {
   clear,
-  close,
-  open,
+  // close,
+  // open,
   select,
   cycleScope,
   showNextView,
