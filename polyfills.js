@@ -1,7 +1,3 @@
 require('console-polyfill')
-
-let raf = require('raf')
-
-
-
-raf.polyfill()
+require('element-dataset')()
+require('raf').polyfill()
