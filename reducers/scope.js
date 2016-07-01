@@ -16,11 +16,11 @@ function initialize(state = STATE.INITIAL.scope) {
 
 
 /**
- * Toggles the scope to the next one in the queue.
+ * Cycles through the scopes.
  * @param  {SCOPE} state
  * @return {SCOPE}
  */
-function toggleScope(state) {
+function cycleScope(state) {
   return (
     state === SCOPE.DAYS ? SCOPE.MONTHS :
     state === SCOPE.MONTHS ? SCOPE.YEARS :
@@ -42,7 +42,7 @@ function showDeeperScope(state) {
 
 
 module.exports = {
-  [ACTION.TYPE.INITIALIZE]   : initialize,
-  [ACTION.TYPE.SELECT]       : showDeeperScope,
-  [ACTION.TYPE.TOGGLE_SCOPE] : toggleScope,
+  [ACTION.TYPE.CYCLE_SCOPE] : cycleScope,
+  [ACTION.TYPE.INITIALIZE]  : initialize,
+  [ACTION.TYPE.SELECT]      : showDeeperScope,
 }

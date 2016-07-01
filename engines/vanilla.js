@@ -88,7 +88,7 @@ function createRootElement(picker) {
 
 function createButtonScopeElement(picker) {
 
-  let onClick = () => picker.dispatch(actions.toggleScope())
+  let onClick = () => picker.dispatch(actions.cycleScope())
 
   let node = createButtonNode(
     [classes.button, classes.button_scope],

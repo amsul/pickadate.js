@@ -111,11 +111,11 @@ let showView = (view) => ({
 
 
 /**
- * Returns an action that toggles the scope of the picker.
+ * Returns an action that cycles to the next the scope of the picker.
  * @return {Object}
  */
-let toggleScope = () => ({
-  type: ACTION.TYPE.TOGGLE_SCOPE,
+let cycleScope = () => ({
+  type: ACTION.TYPE.CYCLE_SCOPE,
 })
 
 
@@ -133,7 +133,7 @@ module.exports = {
   close,
   open,
   select,
-  toggleScope,
+  cycleScope,
   showNextView,
   showPreviousView,
   showView,
