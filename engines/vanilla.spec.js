@@ -449,6 +449,35 @@ describe('/vanillaEngine', () => {
         let gridElementHTML = gridElement.innerHTML
 
         // Trigger a state change
+        picker.dispatch(actions.select(new Date(2013, 3, 20)))
+
+        // Grab the frame callback and trigger it
+        let frameCallback = getFrameStub.lastCall.args[1]
+        frameCallback()
+
+        // Ensure the children have rerendered
+        gridElementHTML.should.not.eql(gridElement.innerHTML)
+
+        // Clean up the stub
+        getFrameStub.restore()
+
+      })
+
+
+      it('binds a state listener that rerenders the "grid" element if the scope changes', () => {
+
+        // Stub out getFrame
+        let getFrameStub = sinon.stub(animationUtil, 'getFrame')
+
+        // Create the parent node and render the picker into it
+        let parentNode = document.createElement('div')
+        let picker     = vanillaEngine.render(parentNode)
+
+        // Grab the grid element and it's children
+        let gridElement     = parentNode.getElementsByClassName(classes.button_scope)[0]
+        let gridElementHTML = gridElement.innerHTML
+
+        // Trigger a state change
         picker.dispatch(actions.cycleScope())
 
         // Grab the frame callback and trigger it

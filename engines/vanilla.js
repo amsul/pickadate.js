@@ -210,7 +210,11 @@ function createGridElement(picker) {
   )
 
   picker.addStateListener(nextState => {
-    if (stateUtil.isChangingAny(picker.state, nextState, 'view', 'selected')) {
+    if (
+      stateUtil.isChangingAny(
+        picker.state, nextState, 'view', 'selected', 'scope'
+      )
+    ) {
       node.innerHTML = ''
       appendChildren(node, createGridCellElements(nextState))
     }
