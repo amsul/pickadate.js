@@ -40,14 +40,17 @@ function create(initialChangedState) {
   let animationFrame = null
 
   /**
-   * Triggers the state listeners.
+   * Triggers the state listeners and then sets the state as the next one.
    * @private
    * @param  {Object} nextState
    */
   let triggerStateListeners = (nextState) => {
     animationFrame = animationUtil.getFrame(
       animationFrame,
-      () => stateListeners.forEach(listener => listener(nextState))
+      () => {
+        stateListeners.forEach(listener => listener(nextState))
+        state = nextState
+      }
     )
   }
 
@@ -79,7 +82,6 @@ function create(initialChangedState) {
   let dispatch = (action) => {
     let nextState = getNextState(state, action)
     triggerStateListeners(nextState)
-    state = nextState
   }
 
   // Return the picker api.
