@@ -39,8 +39,8 @@ function reduce(state, { type, payload }) {
   // Start off with the state not being changed
   let hasChanged = false
 
-  // Create an empty next state
-  let nextState  = {}
+  // Create the next state using the current state
+  let nextState = { ...state }
 
   // Go through all the state keys
   STATE.KEYS.forEach(key => {
@@ -48,9 +48,8 @@ function reduce(state, { type, payload }) {
     // Grab the reducer for the state key and action type
     let reducer = KEY_TYPE_REDUCERS[key][type]
 
-    // If there's no reducer, update the next state with the current state
+    // If there's no reducer, do nothing
     if (!reducer) {
-      nextState[key] = state[key]
       return
     }
 
