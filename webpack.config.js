@@ -7,8 +7,8 @@ var webpack                  = require('webpack')
 module.exports = {
 
   entry: {
-    'index' : './index',
-    'tests' : './tests',
+    'index.browser' : './index.browser',
+    'tests.browser' : './tests.browser',
   },
 
   output: {

@@ -1,5 +1,7 @@
 instrumentation:
   excludes:
-    - /^(index|tests|webpack\.config)\.js$/
+    - 'index.browser.js'
+    - 'tests.browser.js'
     - 'utils/log.js'
+    - 'webpack.config.js'
   include-all-sources: true
