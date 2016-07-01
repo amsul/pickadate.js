@@ -17,14 +17,21 @@ let dateUtil = require('utils/date')
  * @param  {...String} stateKeys A list of the property keys to compare
  * @return {Boolean}
  */
-function isChanging(state, nextState, ...stateKeys) {
-  return stateKeys.every(stateKey => state[stateKey] !== nextState[stateKeys])
-}
+// function isChanging(state, nextState, ...stateKeys) {
+//   return stateKeys.every(stateKey => state[stateKey] !== nextState[stateKey])
+// }
 
 
 
+/**
+ * Checks if any of the values of certain state properties are changing.
+ * @param  {Object}    state
+ * @param  {Object}    nextState
+ * @param  {...String} stateKeys A list of the property keys to compare
+ * @return {Boolean}
+ */
 function isChangingAny(state, nextState, ...stateKeys) {
-  return stateKeys.some(stateKey => state[stateKey] !== nextState[stateKeys])
+  return stateKeys.some(stateKey => state[stateKey] !== nextState[stateKey])
 }
 
 
@@ -36,9 +43,9 @@ function isChangingAny(state, nextState, ...stateKeys) {
  * @param  {...String} stateKeys A list of the property keys to compare
  * @return {Boolean}
  */
-function isNotChanging(state, nextState, ...stateKeys) {
-  return !isChanging(state, nextState, ...stateKeys)
-}
+// function isNotChanging(state, nextState, ...stateKeys) {
+//   return !isChanging(state, nextState, ...stateKeys)
+// }
 
 
 
@@ -103,9 +110,9 @@ function isToday(state, dateObject) {
 module.exports = {
 
   // Change checkers
-  isChanging,
+  // isChanging,
   isChangingAny,
-  isNotChanging,
+  // isNotChanging,
 
   // State checkers
   isSelected,

@@ -97,7 +97,7 @@ function createButtonScopeElement(picker) {
   )
 
   picker.addStateListener(nextState => {
-    if (stateUtil.isChanging(picker.state, nextState, 'view', 'scope')) {
+    if (stateUtil.isChangingAny(picker.state, nextState, 'view', 'scope')) {
       node.innerHTML = ''
       appendChildren(node, createButtonScopeLabelElement(nextState))
     }
@@ -210,7 +210,7 @@ function createGridElement(picker) {
   )
 
   picker.addStateListener(nextState => {
-    if (stateUtil.isChanging(picker.state, nextState, 'view', 'selected')) {
+    if (stateUtil.isChangingAny(picker.state, nextState, 'view', 'selected')) {
       node.innerHTML = ''
       appendChildren(node, createGridCellElements(nextState))
     }
