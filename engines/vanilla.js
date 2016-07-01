@@ -285,7 +285,7 @@ function createGridCellElement(state, dateObject) {
 
 
 
-function createNodeWithOptions(tagName, options = {}) {
+function createNodeWithOptions(tagName, options) {
 
   let { attributes, children, className } = options
 
@@ -368,7 +368,8 @@ function addAttributes(element, attributes) {
     }
 
     Object.keys(attributeValue).forEach(datasetName => {
-      element.dataset[datasetName] = attributeValue[datasetName]
+      let fullDatasetName = `data-${caseDash(datasetName)}`
+      element.setAttribute(fullDatasetName, attributeValue[datasetName])
     })
 
   })
@@ -453,6 +454,24 @@ function getValueFromMouseEvent(event) {
 
   return value
 
+}
+
+
+
+
+
+////////////////////
+// STRING HELPERS //
+////////////////////
+
+
+
+function caseDash(string) {
+  return (
+    string.split(/(?=[A-Z])/g)
+      .map(chunk => chunk.toLowerCase())
+      .join('-')
+  )
 }
 
 
