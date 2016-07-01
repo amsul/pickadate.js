@@ -1,8 +1,8 @@
 const SCOPE      = require('constants/scope')
 
+let actions      = require('actions')
 let classes      = require('classes')
 let calendarUtil = require('utils/calendar')
-let dateUtil     = require('utils/date')
 let pickerUtil   = require('utils/picker')
 let stateUtil    = require('utils/state')
 
@@ -88,19 +88,7 @@ function createRootElement(picker) {
 
 function createButtonScopeElement(picker) {
 
-  let onClick = () => {
-
-    let { scope } = picker.state
-
-    scope = (
-      scope === SCOPE.DAYS ? SCOPE.MONTHS :
-      scope === SCOPE.MONTHS ? SCOPE.YEARS :
-      SCOPE.DAYS
-    )
-
-    picker.setState({ scope })
-
-  }
+  let onClick = () => picker.dispatch(actions.toggleScope())
 
   let node = createButtonNode(
     [classes.button, classes.button_scope],
@@ -130,11 +118,9 @@ function createButtonScopeLabelElement(state) {
 
 function createButtonPreviousElement(picker) {
 
-  let onClick = () => picker.setState({
-    view: calendarUtil.getDateOfPreviousScope(
-      picker.state.view, picker.state.scope
-    )
-  })
+  let onClick = () => picker.dispatch(
+    actions.showPreviousView(picker.state.scope)
+  )
 
   let node = createButtonNode(
     [classes.button, classes.button_previous],
@@ -150,11 +136,9 @@ function createButtonPreviousElement(picker) {
 
 function createButtonNextElement(picker) {
 
-  let onClick = () => picker.setState({
-    view: calendarUtil.getDateOfNextScope(
-      picker.state.view, picker.state.scope
-    )
-  })
+  let onClick = () => picker.dispatch(
+    actions.showNextView(picker.state.scope)
+  )
 
   let node = createButtonNode(
     [classes.button, classes.button_next],
@@ -170,7 +154,9 @@ function createButtonNextElement(picker) {
 
 function createButtonTodayElement(picker) {
 
-  let onClick = () => picker.setState({ view: picker.state.today })
+  let onClick = () => picker.dispatch(
+    actions.showView(picker.state.today)
+  )
 
   let node = createButtonNode(
     [classes.button, classes.button_today],
@@ -186,7 +172,7 @@ function createButtonTodayElement(picker) {
 
 function createButtonClearElement(picker) {
 
-  let onClick = () => picker.setState({ selected: null })
+  let onClick = () => picker.dispatch(actions.select(null))
 
   let node = createButtonNode(
     [classes.button, classes.button_clear],
@@ -212,15 +198,9 @@ function createGridElement(picker) {
 
   let onClick = (event) => {
     let value = getValueFromMouseEvent(event)
-    if (
-      value == null
-      ||
-      picker.state.scope === SCOPE.DAYS &&
-      dateUtil.isSameDate(picker.state.selected, value)
-    ) {
-      return
+    if (value) {
+      picker.dispatch(actions.select(value))
     }
-    picker.setState({ selected: value })
   }
 
   let node = createButtonNode(

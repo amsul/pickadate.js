@@ -1,12 +1,15 @@
 require('index.css')
 
+let actions       = require('actions')
 let vanillaEngine = require('engines/vanilla')
 
 
 
 function render(id) {
   let parentNode = document.body.querySelector(`#${id}`)
-  return vanillaEngine.render(parentNode)
+  return vanillaEngine.render(parentNode, {
+    // scope: 'SCOPE_MONTHS'
+  })
 }
 
 
@@ -19,6 +22,15 @@ console.log(picker)
 // picker2.setState({
 //   selected: new Date(2016, Math.random() * 11, Math.random() * 28),
 // })
+
+
+// let i = 100
+// while (i) {
+//   i--
+//   picker.dispatch(actions.select(
+//     new Date(2016, Math.random() * 11, Math.random() * 28)
+//   ))
+// }
 
 
 // setTimeout(() => {

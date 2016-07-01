@@ -1,4 +1,4 @@
-let differ = require('deep-diff')
+let deepDiff = require('deep-diff')
 
 
 
@@ -155,17 +155,16 @@ function styleDiffItemLabel(diff) {
 
 
 
-////////////////////
-// LOG MIDDLEWARE //
-////////////////////
+//////////
+// DIFF //
+//////////
 
 
 
-function middleware(state, nextState) {
+function diff(state, nextState) {
 
-  let diffs = differ(state, nextState)
+  let diffs = deepDiff(state, nextState)
 
-  console.group('State updated')
   console.log(`%c${renderStateLabel('P')}`, styleState('P'), state)
   console.log(`%c${renderStateLabel('N')}`, styleState('N'), nextState)
   if (diffs) {
@@ -183,7 +182,6 @@ function middleware(state, nextState) {
   else {
     console.log('—— No diff ——')
   }
-  console.groupEnd()
 
   return nextState
 
@@ -191,4 +189,53 @@ function middleware(state, nextState) {
 
 
 
-module.exports = middleware
+
+
+////////////////////////////
+// PAYLOAD RENDER & STYLE //
+////////////////////////////
+
+
+
+function renderPayloadLabel() {
+  return 'PAYLOAD:'
+}
+
+
+
+function stylePayloadLabel() {
+  return `color: ${'#EAAA0C'}; font-weight: bold`
+}
+
+
+
+
+
+/////////////
+// PAYLOAD //
+/////////////
+
+
+
+function payload(payload) {
+  console.log(
+    `%c${renderPayloadLabel()}`,
+    stylePayloadLabel(),
+    payload,
+  )
+}
+
+
+
+
+
+/////////////
+// EXPORTS //
+/////////////
+
+
+
+module.exports = {
+  diff,
+  payload,
+}

@@ -1,34 +1,8 @@
-const SCOPE        = require('constants/scope')
+const ACTION      = require('constants/action')
+const STATE       = require('constants/state')
 
-let coreMiddleware = require('middlewares/core')
-let logMiddleware  = require('middlewares/log')
-let animationUtil  = require('utils/animation')
-let stateUtil      = require('utils/state')
-
-
-
-///////////////////
-// INITIAL STATE //
-///////////////////
-
-
-
-/**
- * The initial state of a picker.
- *
- * TODO: Add type validation and required state properties.
- *
- * @private
- * @type {Object}
- */
-const INITIAL_STATE = {
-  scope    : SCOPE.DAYS,
-  selected : null,
-  today    : null,
-  view     : null,
-}
-
-
+let reducers      = require('reducers')
+let animationUtil = require('utils/animation')
 
 
 
@@ -38,20 +12,12 @@ const INITIAL_STATE = {
 
 
 
-function create(startingState) {
-
-  /**
-   * The collection of middlewares to pipe state updates through.
-   * @private
-   * @type {Function[]}
-   */
-  let middlewares = [
-    coreMiddleware.today,
-    coreMiddleware.selected,
-    coreMiddleware.view,
-    coreMiddleware.scope,
-    logMiddleware,
-  ]
+/**
+ * Creates a picker.
+ * @param  {Object} initialChangedState
+ * @return {picker}
+ */
+function create(initialChangedState) {
 
   /**
    * The collection of state listeners.
@@ -61,20 +27,13 @@ function create(startingState) {
   let stateListeners = []
 
   /**
-   * The starting state merged with the initial state.
+   * The state of the picker.
    * @type {Object}
    */
-  let state = stateUtil.update(middlewares, INITIAL_STATE, startingState)
+  let state = getInitialState(initialChangedState)
 
   /**
-   * All changed state since the last time the listeners were triggered.
-   * @private
-   * @type {Object}
-   */
-  let changedState = null
-
-  /**
-   * The animation frame for updating the state.
+   * The animation frame for notifying the state listeners.
    * @private
    * @type {Number}
    */
@@ -86,7 +45,10 @@ function create(startingState) {
    * @param  {Object} nextState
    */
   let triggerStateListeners = (nextState) => {
-    stateListeners.forEach(listener => listener(nextState))
+    animationFrame = animationUtil.getFrame(
+      animationFrame,
+      () => stateListeners.forEach(listener => listener(nextState))
+    )
   }
 
   /**
@@ -109,47 +71,54 @@ function create(startingState) {
   }
 
   /**
-   * Waits for the next animation frame and then sets
-   * the state and triggers the listeners.
-   * @param  {Object} nextChangedState
+   * Dispatches an action that updates the state.
+   * @param  {Object} action
+   *         {ACTION.TYPE} action.type
+   *         {Object} [action.payload]
    */
-  let setState = (nextChangedState) => {
-
-    // Update the changed state with the next changed state.
-    changedState = {
-      ...changedState,
-      ...nextChangedState,
-    }
-
-    // Get the next animation frame
-    animationFrame = animationUtil.getFrame(animationFrame, () => {
-
-      // Get the next state using the changed state.
-      let nextState = stateUtil.update(middlewares, state, changedState)
-
-      // Trigger the listeners with the next state.
-      triggerStateListeners(nextState)
-
-      // Update the state.
-      state = nextState
-
-      // Reset the changed state.
-      changedState = null
-
-    })
-
+  let dispatch = (action) => {
+    let nextState = getNextState(state, action)
+    triggerStateListeners(nextState)
+    state = nextState
   }
 
   // Return the picker api.
   return {
     addStateListener,
+    dispatch,
     removeStateListener,
-    setState,
     get state() {
       return state
     },
   }
 
+}
+
+
+
+/**
+ * Gets the next state by passing a state through reducers
+ * with a certain action.
+ * @private
+ * @param  {Object} state
+ * @param  {Object} action
+ * @return {Object}
+ */
+function getNextState(state, action) {
+  return reducers.reduce(state, action)
+}
+
+
+
+/**
+ * Gets the initial state with certain changes applied.
+ * @private
+ * @param  {Object} initialChangedState
+ * @return {Object}
+ */
+function getInitialState(initialChangedState) {
+  let state = { ...STATE.INITIAL, ...initialChangedState }
+  return getNextState(state, { type: ACTION.TYPE.INITIALIZE })
 }
 
 

@@ -4,43 +4,9 @@ let dateUtil = require('utils/date')
 
 
 
-////////////
-// UPDATE //
-////////////
-
-
-
-/**
- * Updates the state with certain changes by passing it through
- * a series of middleware that compute the final state.
- * @param  {Function[]} middlewares
- * @param  {Object} state
- * @param  {Object} changedState
- * @return {Object}
- */
-function update(middlewares, state, changedState) {
-
-  let nextState = {
-    ...state,
-    ...changedState,
-  }
-
-  middlewares.forEach(middleware => {
-    // TODO: Add return value validation.
-    nextState = middleware(state, nextState)
-  })
-
-  return nextState
-
-}
-
-
-
-
-
-//////////////
-// CHECKERS //
-//////////////
+/////////////////////
+// CHANGE CHECKERS //
+/////////////////////
 
 
 
@@ -73,6 +39,14 @@ function isChangingAny(state, nextState, ...stateKeys) {
 function isNotChanging(state, nextState, ...stateKeys) {
   return !isChanging(state, nextState, ...stateKeys)
 }
+
+
+
+
+
+////////////////////
+// STATE CHECKERS //
+////////////////////
 
 
 
@@ -128,13 +102,12 @@ function isToday(state, dateObject) {
 
 module.exports = {
 
-  // Update
-  update,
-
-  // Checkers
+  // Change checkers
   isChanging,
   isChangingAny,
   isNotChanging,
+
+  // State checkers
   isSelected,
   isToday,
 
