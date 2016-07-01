@@ -1,6 +1,9 @@
 require('should')
 
 // Require all tests
+requireAll(require.context('actions', true, /\.spec\.js$/))
+requireAll(require.context('engines', true, /\.spec\.js$/))
+requireAll(require.context('reducers', true, /\.spec\.js$/))
 requireAll(require.context('utils', true, /\.spec\.js$/))
 
 
