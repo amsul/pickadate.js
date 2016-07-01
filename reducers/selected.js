@@ -6,7 +6,7 @@ let dateUtil = require('utils/date')
 
 
 /**
- * Initializes the selected date, defaulting to `null`
+ * Initializes the selected date, defaulting to `null`.
  * @param  {Object} state
  * @return {Date|null}
  */
