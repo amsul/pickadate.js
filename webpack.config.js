@@ -53,6 +53,7 @@ module.exports = {
     new BellOnBundlerErrorPlugin(),
     new WebpackNotifierPlugin(),
     new webpack.NoErrorsPlugin(),
+    new webpack.EnvironmentPlugin(['DEBUG']),
   ],
 
 }

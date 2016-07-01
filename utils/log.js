@@ -183,8 +183,6 @@ function diff(state, nextState) {
     console.log('—— No diff ——')
   }
 
-  return nextState
-
 }
 
 

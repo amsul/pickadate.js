@@ -30,8 +30,10 @@ const KEY_TYPE_REDUCERS = STATE.KEYS.reduce(
  */
 function reduce(state, { type, payload }) {
 
-  console.group('Action dispatched: %o', type)
-  logUtil.payload(payload)
+  if (process.env.DEBUG) {
+    console.group('Action dispatched: %o', type)
+    logUtil.payload(payload)
+  }
 
   // Start off with the state not being changed
   let hasChanged = false
@@ -66,8 +68,10 @@ function reduce(state, { type, payload }) {
 
   })
 
-  logUtil.diff(state, nextState)
-  console.groupEnd()
+  if (process.env.DEBUG) {
+    logUtil.diff(state, nextState)
+    console.groupEnd()
+  }
 
   // If the state hasn't changed, return the original state
   return hasChanged ? nextState : state
