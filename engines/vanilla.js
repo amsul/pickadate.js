@@ -26,7 +26,7 @@ function render(parentNode, startingState) {
   let picker = pickerUtil.create(startingState)
 
   // Create the root element using the current state.
-  let rootElement = createRootElement(picker, picker.state)
+  let rootElement = createRootElement(picker)
 
   // Append the root element to the parent node.
   parentNode.appendChild(rootElement)
