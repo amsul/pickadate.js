@@ -5,11 +5,38 @@ let vanillaEngine = require('engines/vanilla')
 
 
 
+window.actions = actions
+
+
+
 function render(id) {
+
   let parentNode = document.body.querySelector(`#${id}`)
-  return vanillaEngine.render(parentNode, {
-    // scope: 'SCOPE_MONTHS'
+
+  let picker = vanillaEngine.render(parentNode, {
+    // scope: 'SCOPE_MONTHS',
+    value: 'whuddup',
+    // template: 'yyyy [yyyy yeaaah] [dd]'
   })
+
+  let valueNode = document.createElement('div')
+  valueNode.style.margin     = '2em'
+  valueNode.style.padding    = '0.5em 1em'
+  valueNode.style.borderLeft = '5px solid'
+  parentNode.appendChild(valueNode)
+
+  valueNode.textContent = getTextContent(picker.state)
+
+  picker.addStateListener(nextState => {
+    valueNode.textContent = getTextContent(nextState)
+  })
+
+  return picker
+
+}
+
+function getTextContent({ value }) {
+  return `The value is: "${value}"`
 }
 
 
