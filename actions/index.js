@@ -61,7 +61,7 @@ let format = (template) => ({
 /**
  * Returns an action that selects a value for the picker.
  * @param  {Object} value
- * @param  {Object} template TODO: Default to initial state's template
+ * @param  {Object} template
  * @return {Object}
  */
 let select = (value, template) => ({
