@@ -10,9 +10,11 @@ const SCOPE = require('constants/scope')
  * @type {Object}
  */
 const INITIAL = {
+  template : 'd mmmm, yyyy',
   scope    : SCOPE.DAYS,
   selected : null,
   today    : null,
+  value    : '',
   view     : null,
 }
 

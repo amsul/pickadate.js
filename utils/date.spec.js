@@ -44,6 +44,53 @@ describe('/dateUtil', () => {
 
 
   ////////////
+  // FORMAT //
+  ////////////
+
+
+
+  describe('#format', () => {
+
+    it('formats a date object with a given template', () => {
+
+      let dateObject = new Date(2014, 3, 2)
+
+      dateUtil.format(dateObject, 'yyyy-mm-dd').should.eql('2014-04-02')
+      dateUtil.format(dateObject, 'yyyy-m-d').should.eql('2014-4-2')
+      dateUtil.format(dateObject, 'dddd, d mmm, yyyy').should.eql('Wednesday, 2 Apr, 2014')
+      dateUtil.format(dateObject, 'ddd, dd mmmm, yyyy').should.eql('Wed, 02 April, 2014')
+
+    })
+
+
+    it('formats a date object with a given template that has escaped characters', () => {
+
+      let dateObject = new Date(2014, 3, 2)
+
+      dateUtil.format(dateObject, 'escaped chars [yyyy] mmmm dd')
+        .should.eql('escaped chars yyyy April 02')
+
+      dateUtil.format(dateObject, 'escaped chars yyyy mmmm [dd]')
+        .should.eql('escaped chars 2014 April dd')
+
+      dateUtil.format(dateObject, '[mmm so yummay! @ ]yyyy mm dd')
+        .should.eql('mmm so yummay! @ 2014 04 02')
+
+      dateUtil.format(dateObject, '[mmm] so yummay! @ yyyy mm dd')
+        .should.eql('mmm so yummay! @ 2014 04 02')
+
+      dateUtil.format(dateObject, '[yep mmm yummay]! @ yyyy mm dd')
+        .should.eql('yep mmm yummay! @ 2014 04 02')
+
+    })
+
+  })
+
+
+
+
+
+  ////////////
   // MONTHS //
   ////////////
 

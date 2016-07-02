@@ -371,7 +371,7 @@ describe('/vanillaEngine', () => {
         // Ensure the dispatch stub was called as expected
         dispatchStub.callCount.should.eql(1)
         dispatchStub.lastCall.args.should.eql([
-          actions.select(+gridCellElement.dataset.value)
+          actions.select(+gridCellElement.dataset.value, picker.state.template)
         ])
 
       })
@@ -449,7 +449,7 @@ describe('/vanillaEngine', () => {
         let gridElementHTML = gridElement.innerHTML
 
         // Trigger a state change
-        picker.dispatch(actions.select(new Date(2013, 3, 20)))
+        picker.dispatch(actions.select(new Date(2013, 3, 20), picker.state.template))
 
         // Grab the frame callback and trigger it
         let frameCallback = getFrameStub.lastCall.args[1]

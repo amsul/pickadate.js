@@ -199,7 +199,7 @@ function createGridElement(picker) {
   let onClick = (event) => {
     let value = getValueFromMouseEvent(event)
     if (value) {
-      picker.dispatch(actions.select(value))
+      picker.dispatch(actions.select(value, picker.state.template))
     }
   }
 

@@ -17,4 +17,26 @@ describe('/jsUtil', () => {
   })
 
 
+
+  describe('#padZero', () => {
+
+    it('pads a number with leading zeros to get a certain digits count', () => {
+
+      jsUtil.padZero(5, 2).should.eql('05')
+      jsUtil.padZero(5, 4).should.eql('0005')
+      jsUtil.padZero(237, 4).should.eql('0237')
+      jsUtil.padZero(1237, 4).should.eql('1237')
+      jsUtil.padZero(51237, 4).should.eql('51237')
+
+      jsUtil.padZero('5', 2).should.eql('05')
+      jsUtil.padZero('5', 4).should.eql('0005')
+      jsUtil.padZero('237', 4).should.eql('0237')
+      jsUtil.padZero('1237', 4).should.eql('1237')
+      jsUtil.padZero('51237', 4).should.eql('51237')
+
+    })
+
+  })
+
+
 })

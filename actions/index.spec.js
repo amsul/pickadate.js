@@ -8,6 +8,28 @@ let actions  = require('actions')
 describe('/actions', () => {
 
 
+  //////////////
+  // TEMPLATE //
+  //////////////
+
+
+
+  describe('#format', () => {
+
+    it('returns an actions that sets the template to use to format a value', () => {
+      let template = 'yyyy-mm-dd'
+      actions.format(template).should.eql({
+        type    : ACTION.TYPE.FORMAT,
+        payload : { template },
+      })
+    })
+
+  })
+
+
+
+
+
   ////////////
   // SELECT //
   ////////////
@@ -17,10 +39,11 @@ describe('/actions', () => {
   describe('#select', () => {
 
     it('returns an action that selects a value for the picker', () => {
-      let value = new Date(2014, 3, 20)
-      actions.select(value).should.eql({
+      let template = 'yyyy-mm-dd'
+      let value    = new Date(2014, 3, 20)
+      actions.select(value, template).should.eql({
         type    : ACTION.TYPE.SELECT,
-        payload : { value },
+        payload : { template, value },
       })
     })
 
@@ -33,7 +56,7 @@ describe('/actions', () => {
     it('returns an action that clears the value of the picker', () => {
       actions.clear().should.eql({
         type    : ACTION.TYPE.SELECT,
-        payload : { value: null },
+        payload : { template: undefined, value: null },
       })
     })
 

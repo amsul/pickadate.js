@@ -1,8 +1,7 @@
-let lolex    = require('lolex')
-
 const ACTION = require('constants/action')
 const SCOPE  = require('constants/scope')
 
+let actions  = require('actions')
 let reducers = require('reducers')
 
 
@@ -38,11 +37,10 @@ describe('/reducers', () => {
 
     it('reduces multiple state keys by an action', () => {
 
-      let clock = lolex.install()
-
-      let state  = {}
-      let value  = new Date(2014, 3, 20)
-      let action = { type: ACTION.TYPE.SELECT, payload: { value } }
+      let state    = {}
+      let value    = new Date(2014, 3, 20)
+      let template = 'yyyy-mm-dd'
+      let action   = actions.select(value, template)
 
       let nextState = reducers.reduce(state, action)
 
@@ -50,10 +48,9 @@ describe('/reducers', () => {
         ...state,
         scope    : SCOPE.DAYS,
         selected : value,
+        value    : '2014-04-20',
         view     : new Date(2014, 3, 1),
       })
-
-      clock.uninstall()
 
     })
 

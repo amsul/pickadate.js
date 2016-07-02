@@ -2,6 +2,26 @@ const ACTION = require('constants/action')
 
 
 
+//////////////
+// TEMPLATE //
+//////////////
+
+
+
+/**
+ * Returns an action that sets the template to use to format a value.
+ * @param  {String} template
+ * @return {Object}
+ */
+let format = (template) => ({
+  type    : ACTION.TYPE.FORMAT,
+  payload : { template },
+})
+
+
+
+
+
 //////////
 // OPEN //
 //////////
@@ -41,11 +61,12 @@ const ACTION = require('constants/action')
 /**
  * Returns an action that selects a value for the picker.
  * @param  {Object} value
+ * @param  {Object} template TODO: Default to initial state's template
  * @return {Object}
  */
-let select = (value) => ({
+let select = (value, template) => ({
   type    : ACTION.TYPE.SELECT,
-  payload : { value },
+  payload : { template, value },
 })
 
 
@@ -131,6 +152,7 @@ let cycleScope = () => ({
 module.exports = {
   clear,
   // close,
+  format,
   // open,
   select,
   cycleScope,
