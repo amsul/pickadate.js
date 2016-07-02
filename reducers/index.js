@@ -16,6 +16,7 @@ const KEY_TYPE_REDUCERS = STATE.KEYS.reduce(
       KEY_TYPE_REDUCERS[key] = require(`reducers/${key}`)
     }
     catch (err) {
+      /* istanbul ignore next: used as a debugging aid */
       throw new Error(`Unable to find reducers for the state key "${key}"`)
     }
     return KEY_TYPE_REDUCERS

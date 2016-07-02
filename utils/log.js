@@ -101,7 +101,11 @@ function renderUpdatePath(path) {
 
 
 function renderUpdateValue(value) {
-  return Array.isArray(value) ? `[${value}]` : value
+  return (
+    Array.isArray(value) ? `[${value}]` :
+    typeof value === 'string' ? `"${value}"` :
+    value
+  )
 }
 
 
