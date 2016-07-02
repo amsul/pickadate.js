@@ -2,8 +2,8 @@ const SCOPE      = require('constants/scope')
 
 let actions      = require('actions')
 let classes      = require('classes')
+let pickerObject = require('objects/picker')
 let calendarUtil = require('utils/calendar')
-let pickerUtil   = require('utils/picker')
 let stateUtil    = require('utils/state')
 
 
@@ -23,7 +23,7 @@ let stateUtil    = require('utils/state')
 function render(parentNode, startingState) {
 
   // Create the picker object using the starting state.
-  let picker = pickerUtil.create(startingState)
+  let picker = pickerObject.create(startingState)
 
   // Create the root element using the current state.
   let rootElement = createRootElement(picker)

@@ -4,12 +4,12 @@ let sinon         = require('sinon')
 const ACTION      = require('constants/action')
 const STATE       = require('constants/state')
 
+let pickerObject  = require('objects/picker')
 let animationUtil = require('utils/animation')
-let pickerUtil    = require('utils/picker')
 
 
 
-describe('/pickerUtil', () => {
+describe('/pickerObject', () => {
 
 
   describe('#create', () => {
@@ -17,7 +17,7 @@ describe('/pickerUtil', () => {
     it('creates a picker', () => {
 
       // Create the picker
-      let picker = pickerUtil.create()
+      let picker = pickerObject.create()
 
       // Ensure it returned the expected api
       picker.should.have.keys(
@@ -54,7 +54,7 @@ describe('/pickerUtil', () => {
       let clock = lolex.install(new Date(2014, 3, 20).getTime())
 
       // Create the picker
-      let picker = pickerUtil.create()
+      let picker = pickerObject.create()
 
       // Ensure it has the expected state
       picker.state.should.eql({
@@ -80,7 +80,7 @@ describe('/pickerUtil', () => {
       }
 
       // Create the picker
-      let picker = pickerUtil.create(initialChangedState)
+      let picker = pickerObject.create(initialChangedState)
 
       // Ensure it has the expected state
       picker.state.should.eql({
@@ -103,7 +103,7 @@ describe('/pickerUtil', () => {
         let getFrameStub = sinon.stub(animationUtil, 'getFrame')
 
         // Create the picker
-        let picker = pickerUtil.create()
+        let picker = pickerObject.create()
 
         // Create the listener spy
         let listenerSpy = sinon.spy()
@@ -144,7 +144,7 @@ describe('/pickerUtil', () => {
         let getFrameStub = sinon.stub(animationUtil, 'getFrame')
 
         // Create the picker
-        let picker = pickerUtil.create()
+        let picker = pickerObject.create()
 
         // Grab the initial state
         let initialState = picker.state
@@ -179,7 +179,7 @@ describe('/pickerUtil', () => {
         let getFrameStub = sinon.stub(animationUtil, 'getFrame')
 
         // Create the picker
-        let picker = pickerUtil.create()
+        let picker = pickerObject.create()
 
         // Create a few spies
         let listenerSpy1 = sinon.spy()
@@ -225,7 +225,7 @@ describe('/pickerUtil', () => {
         let getFrameStub = sinon.stub(animationUtil, 'getFrame')
 
         // Create the picker
-        let picker = pickerUtil.create()
+        let picker = pickerObject.create()
 
         // Create a few spies
         let listenerSpy1 = sinon.spy()
@@ -266,7 +266,7 @@ describe('/pickerUtil', () => {
         let getFrameStub = sinon.stub(animationUtil, 'getFrame')
 
         // Create the picker
-        let picker = pickerUtil.create()
+        let picker = pickerObject.create()
 
         // Create a spy
         let listenerSpy = sinon.spy()
