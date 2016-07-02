@@ -8,6 +8,22 @@ The composable date & time picker.
 
 <br /><br />
 
+## Dependencies
+
+To avoid running into circular depedencies, the modules are organized so they can only `require` higher or same level modules:
+
+- `constants/`
+- `language.js`
+- `classes.js`
+- `utils/`
+- `actions/` & `reducers/`
+- `objects/`
+- `engines/`
+
+
+
+<br /><br />
+
 ---
 
 © 2016 [Amsul](http://twitter.com/amsul_)
