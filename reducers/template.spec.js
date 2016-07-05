@@ -16,8 +16,8 @@ describe('/templateReducer', () => {
 
 
     it('initializes a custom template', () => {
-      let template = 'yyyy-mm-dd'
-      templateReducer[ACTION.TYPE.INITIALIZE](template).should.eql(template)
+      let state = 'yyyy-mm-dd'
+      templateReducer[ACTION.TYPE.INITIALIZE](state).should.eql(state)
     })
 
   })

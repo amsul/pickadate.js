@@ -12,16 +12,16 @@ let jsUtil   = require('utils/js')
 
 
 
+/**
+ * Creates a date object using a certain value.
+ * @param  {Date|Number} value
+ * @return {Date}
+ */
 function create(value) {
 
   if (Number.isInteger(value)) {
     return new Date(value)
   }
-
-  // if (typeof value === 'string') {
-  //   // TODO: Parse string into a date
-  //   debugger
-  // }
 
   return value
 
@@ -31,9 +31,9 @@ function create(value) {
 
 
 
-////////////
-// FORMAT //
-////////////
+////////////////////
+// FORMAT & PARSE //
+////////////////////
 
 
 
@@ -42,34 +42,35 @@ function create(value) {
  * @private
  * @type {Object(Function)}
  */
-const TEMPLATE = {
-  d(dateObject) {
-    return `${dateObject.getDate()}`
-  },
-  dd(dateObject) {
-    return `${jsUtil.padZero(TEMPLATE.d(dateObject), 2)}`
-  },
-  ddd(dateObject) {
-    return getShortDayName(dateObject.getDay())
-  },
-  dddd(dateObject) {
-    return getFullDayName(dateObject.getDay())
-  },
-  m(dateObject) {
-    return `${dateObject.getMonth() + 1}`
-  },
-  mm(dateObject) {
-    return `${jsUtil.padZero(TEMPLATE.m(dateObject), 2)}`
-  },
-  mmm(dateObject) {
-    return getShortMonthName(dateObject.getMonth())
-  },
-  mmmm(dateObject) {
-    return getFullMonthName(dateObject.getMonth())
-  },
-  yyyy(dateObject) {
-    return `${dateObject.getFullYear()}`
-  },
+const HOOK_FORMATTER = {
+  d    : dateObject => `${dateObject.getDate()}`,
+  dd   : dateObject => `${jsUtil.padZero(HOOK_FORMATTER.d(dateObject), 2)}`,
+  ddd  : dateObject => getShortDayName(dateObject.getDay()),
+  dddd : dateObject => getFullDayName(dateObject.getDay()),
+  m    : dateObject => `${dateObject.getMonth() + 1}`,
+  mm   : dateObject => `${jsUtil.padZero(HOOK_FORMATTER.m(dateObject), 2)}`,
+  mmm  : dateObject => getShortMonthName(dateObject.getMonth()),
+  mmmm : dateObject => getFullMonthName(dateObject.getMonth()),
+  yyyy : dateObject => `${dateObject.getFullYear()}`,
+}
+
+
+
+/**
+ * A mapping of template hooks to parsers.
+ * @private
+ * @type {Object(Function)}
+ */
+const HOOK_PARSER = {
+  d    : getStartingDigits,
+  dd   : getStartingDigits,
+  ddd  : getStartingWord,
+  dddd : getStartingWord,
+  m    : getStartingDigits,
+  mm   : getStartingDigits,
+  mmm  : getStartingWord,
+  mmmm : getStartingWord,
+  yyyy : getStartingDigits,
 }
 
 
@@ -79,7 +80,7 @@ const TEMPLATE = {
  * @private
  * @type {String[]}
  */
-const TEMPLATE_HOOKS = Object.keys(TEMPLATE)
+const HOOKS = Object.keys(HOOK_FORMATTER)
 
 
 
@@ -88,18 +89,115 @@ const TEMPLATE_HOOKS = Object.keys(TEMPLATE)
  * @private
  * @type {RegExp}
  */
-const TEMPLATE_REGEXP = new RegExp([
+const HOOKS_REGEXP = new RegExp([
 
   // Match any characters escaped with square brackets
   '(\\[.*?\\])',
 
   // Match any template hooks
-  `(?:\\b(${TEMPLATE_HOOKS.join('|')})\\b)`,
+  `(?:\\b(${HOOKS.join('|')})\\b)`,
 
   // Match all other characters
   '(.)',
 
 ].join('|'), 'g')
+
+
+
+/**
+ * Gets the starting word from a string.
+ * @private
+ * @param  {String} string
+ * @return {String}
+ */
+function getStartingWord(string) {
+  return string.replace(/(^\w*)(.*)/, '$1')
+}
+
+
+
+/**
+ * Gets the starting digits from a string.
+ * @private
+ * @param  {String} string
+ * @return {String}
+ */
+function getStartingDigits(string) {
+  return string.replace(/(^\d*)(.*)/, '$1')
+}
+
+
+
+/**
+ * Matches the hooks of a template.
+ * @private
+ * @param  {String} template
+ * @return {Object[]}
+ */
+function matchHooks(template) {
+  return (
+    template
+
+      // Split the template using the regular expression
+      .split(HOOKS_REGEXP)
+
+      // Map the chunks to keep a reference of their match group index
+      .map((chunk, index) => ({ chunk, index: index % 4 }))
+
+      // Filter out false-y chunks
+      .filter(match => !!match.chunk)
+
+  )
+}
+
+
+
+/**
+ * Gets the date units (date, month, & year) from a hook value map.
+ * @private
+ * @param  {Object<String>} hookValue
+ * @return {Object}
+ */
+function getDateUnitsFromHookValue(hookValue) {
+
+  // Grab the year and date from the hook values
+  let year  = hookValue.yyyy
+  let date  = hookValue.dd || hookValue.d
+
+  // Grab the index of the month name or the hook value
+  let month = (
+    hookValue.mmmm ? getIndexOfFullMonthName(hookValue.mmmm) :
+    hookValue.mmm ? getIndexOfShortMonthName(hookValue.mmm) :
+    (hookValue.mm || hookValue.m) - 1
+  )
+
+  return { date, month, year }
+
+}
+
+
+
+/**
+ * Checks if a parsed date unit is a valid date unit.
+ * @private
+ * @param  {String|null}  dateUnit
+ * @return {Boolean}
+ */
+function isValidParsedDateUnit(dateUnit) {
+  return dateUnit != null && /^\d+$/.test(dateUnit)
+}
+
+
+
+/**
+ * Checks if all parsed date units are valid date units.
+ * @private
+ * @param  {...(String|null)} dateUnits
+ * @return {Boolean}
+ */
+function areValidParsedDateUnits(...dateUnits) {
+  return dateUnits.every(isValidParsedDateUnit)
+}
 
 
 
@@ -114,29 +212,96 @@ function format(dateObject, template) {
   dateObject = create(dateObject)
 
   return (
-    template
 
-      // Split the template using the regular expression
-      .split(TEMPLATE_REGEXP)
-
-      // Map the chunks to keep a reference of their match index
-      .map((chunk, index) => ({ chunk, index: index % 4 }))
-
-      // Filter out false-y chunks
-      .filter(match => !!match.chunk)
+    // Match hooks within the template
+    matchHooks(template)
 
       // Map through the matches while formatting template hooks
       // and removing the hooks of escaped characters
       .map(match => (
-        match.index === 2
-          ? TEMPLATE[match.chunk](dateObject)
-          : match.chunk.replace(/^\[(.*)]$/, '$1')
+        match.index === 2 ? HOOK_FORMATTER[match.chunk](dateObject) :
+        match.index === 1 ? match.chunk.replace(/^\[(.*)]$/, '$1') :
+        match.chunk
       ))
 
       // Join the chunks together into a string
       .join('')
 
   )
+
+}
+
+
+
+/**
+ * Parses a date string with a given template.
+ * @param  {String} dateString
+ * @param  {String} template
+ * @return {Date|null}
+ */
+function parse(dateString, template) {
+
+  // Keep a reference to the original date string
+  let originalDateString = dateString
+
+  // Create a mapping of hook to the parsing value
+  let hookValue = {}
+
+  // Match hooks within the template and iterate over it
+  matchHooks(template).some(match => {
+
+    // Grab the string to strip off of the date string
+    let stringToStrip = match.chunk
+
+    // If the match is a template hook, parse it to get
+    // the actual string to strip
+    if (match.index === 2) {
+      stringToStrip = HOOK_PARSER[stringToStrip](dateString)
+      hookValue[match.chunk] = stringToStrip
+    }
+
+    // Otherwise if the characters were escaped,
+    // remove the hooks of escaped characters
+    else if (match.index === 1) {
+      stringToStrip = stringToStrip.replace(/^\[(.*)]$/, '$1')
+    }
+
+    // Grab the length of the string to strip
+    let lengthToStrip = stringToStrip.length
+
+    // If there is no length to strip,
+    // or the string to strip does not match the starting
+    // of the date string, log an error and stop parsing
+    if (
+      !lengthToStrip
+      ||
+      stringToStrip !== dateString.substring(0, lengthToStrip)
+    ) {
+      console.error(
+        'Unable to parse the date %o. Expected to match %o at position %o',
+        originalDateString,
+        match.chunk,
+        originalDateString.length - dateString.length
+      )
+      return true
+    }
+
+    // Otherwise, strip the string from the date string
+    // and continue iterating over the matches
+    dateString = dateString.slice(lengthToStrip)
+
+  })
+
+  // Get the date units from the hook value
+  let { date, month, year } = getDateUnitsFromHookValue(hookValue)
+
+  // If date units are not found, return `null`
+  if (!areValidParsedDateUnits(date, month, year)) {
+    return null
+  }
+
+  // Otherwise, create a date the date
+  return new Date(year, month, date)
 
 }
 
@@ -188,6 +353,30 @@ function getFullMonthName(month) {
  */
 function getShortMonthName(month) {
   return getLanguageValue(MONTH.SHORT, month)
+}
+
+
+
+/**
+ * Gets the index of a month by it's full name.
+ * @private
+ * @param  {String} fullMonthName
+ * @return {Number}
+ */
+function getIndexOfFullMonthName(fullMonthName) {
+  return MONTH.FULL[language.current].indexOf(fullMonthName)
+}
+
+
+
+/**
+ * Gets the index of a month by it's short name.
+ * @private
+ * @param  {String} shortMonthName
+ * @return {Number}
+ */
+function getIndexOfShortMonthName(shortMonthName) {
+  return MONTH.SHORT[language.current].indexOf(shortMonthName)
 }
 
 
@@ -362,8 +551,9 @@ module.exports = {
   // Create
   create,
 
-  // Format
+  // Format & parse
   format,
+  parse,
 
   // Months getters
   getFullMonthName,

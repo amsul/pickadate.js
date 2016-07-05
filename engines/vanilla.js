@@ -449,7 +449,7 @@ function getValueFromMouseEvent(event) {
     return
   }
 
-  value = (+value)
+  value = parseInt(value, 10)
 
   if (!Number.isFinite(value)) {
     console.error('Unable to get value from mouse event %o', event)

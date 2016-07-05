@@ -16,8 +16,8 @@ describe('/valueReducer', () => {
 
 
     it('initializes a custom value', () => {
-      let value = '20 April, 2014'
-      valueReducer[ACTION.TYPE.INITIALIZE](value).should.eql(value)
+      let state = '20 April, 2014'
+      valueReducer[ACTION.TYPE.INITIALIZE](state).should.eql(state)
     })
 
   })

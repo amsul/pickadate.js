@@ -1,3 +1,5 @@
+let sinon      = require('sinon')
+
 const LANGUAGE = require('constants/language')
 
 let language   = require('language')
@@ -43,9 +45,9 @@ describe('/dateUtil', () => {
 
 
 
-  ////////////
-  // FORMAT //
-  ////////////
+  ////////////////////
+  // FORMAT & PARSE //
+  ////////////////////
 
 
 
@@ -81,6 +83,95 @@ describe('/dateUtil', () => {
 
       dateUtil.format(dateObject, '[yep mmm yummay]! @ yyyy mm dd')
         .should.eql('yep mmm yummay! @ 2014 04 02')
+
+    })
+
+  })
+
+
+
+  describe('#parse', () => {
+
+    it('parses a date string with a given template', () => {
+
+      dateUtil.parse('2014-04-20', 'yyyy-mm-dd')
+        .should.eql(new Date(2014, 3, 20))
+
+      dateUtil.parse('2014-4-20', 'yyyy-m-d')
+        .should.eql(new Date(2014, 3, 20))
+
+      dateUtil.parse('20 April, 2014', 'd mmmm, yyyy')
+        .should.eql(new Date(2014, 3, 20))
+
+      dateUtil.parse('20 Apr, 2014', 'dd mmm, yyyy')
+        .should.eql(new Date(2014, 3, 20))
+
+    })
+
+
+    it('parses a date string with a given template that has escaped characters', () => {
+
+      dateUtil.parse('yyyy 2014-04-20', '[yyyy] yyyy-mm-dd')
+        .should.eql(new Date(2014, 3, 20))
+
+      dateUtil.parse('escape the d! 2014-4-20', 'escape the [d]! yyyy-m-d')
+        .should.eql(new Date(2014, 3, 20))
+
+      dateUtil.parse('20 April, 2014 escape mm in the middle', 'd mmmm, yyyy [escape mm in the middle]')
+        .should.eql(new Date(2014, 3, 20))
+
+      dateUtil.parse('escape 20 Apr all the things! m ddd, 2014', '[escape] dd mmm [all] [the things!] [m ddd], yyyy')
+        .should.eql(new Date(2014, 3, 20))
+
+    })
+
+
+    it('returns `null` if a valid year, month, and date are not found', () => {
+
+      let errorStub = sinon.stub(console, 'error')
+
+      true.should.eql(null == dateUtil.parse('lol-04-20', 'yyyy-mm-dd'))
+      errorStub.callCount.should.eql(1)
+      errorStub.lastCall.args.length.should.eql(4)
+      errorStub.lastCall.args[0].should.match(/Unable to parse.+ Expected to match/)
+      errorStub.lastCall.args[1].should.eql('lol-04-20')
+      errorStub.lastCall.args[2].should.eql('yyyy')
+      errorStub.lastCall.args[3].should.eql(0)
+
+      true.should.eql(null == dateUtil.parse('2014-wut-20', 'yyyy-m-d'))
+      errorStub.callCount.should.eql(2)
+      errorStub.lastCall.args.length.should.eql(4)
+      errorStub.lastCall.args[0].should.match(/Unable to parse.+ Expected to match/)
+      errorStub.lastCall.args[1].should.eql('2014-wut-20')
+      errorStub.lastCall.args[2].should.eql('m')
+      errorStub.lastCall.args[3].should.eql(5)
+
+      true.should.eql(null == dateUtil.parse('? April, 2014', 'd mmmm, yyyy'))
+      errorStub.callCount.should.eql(3)
+      errorStub.lastCall.args.length.should.eql(4)
+      errorStub.lastCall.args[0].should.match(/Unable to parse.+ Expected to match/)
+      errorStub.lastCall.args[1].should.eql('? April, 2014')
+      errorStub.lastCall.args[2].should.eql('d')
+      errorStub.lastCall.args[3].should.eql(0)
+
+      true.should.eql(null == dateUtil.parse('20 Apr, ✌️', 'dd mmm, yyyy'))
+      errorStub.callCount.should.eql(4)
+      errorStub.lastCall.args.length.should.eql(4)
+      errorStub.lastCall.args[0].should.match(/Unable to parse.+ Expected to match/)
+      errorStub.lastCall.args[1].should.eql('20 Apr, ✌️')
+      errorStub.lastCall.args[2].should.eql('yyyy')
+      errorStub.lastCall.args[3].should.eql(8)
+
+      true.should.eql(null == dateUtil.parse('20 4, ✌️', 'd m, yyyy'))
+      errorStub.callCount.should.eql(5)
+      errorStub.lastCall.args.length.should.eql(4)
+      errorStub.lastCall.args[0].should.match(/Unable to parse.+ Expected to match/)
+      errorStub.lastCall.args[1].should.eql('20 4, ✌️')
+      errorStub.lastCall.args[2].should.eql('yyyy')
+      errorStub.lastCall.args[3].should.eql(6)
+
+      errorStub.restore()
+
 
     })
 

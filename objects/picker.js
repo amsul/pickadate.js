@@ -120,7 +120,11 @@ function getNextState(state, action) {
  */
 function getInitialState(initialChangedState) {
   let state = { ...STATE.INITIAL, ...initialChangedState }
-  return getNextState(state, { type: ACTION.TYPE.INITIALIZE })
+  let { template, value } = state
+  return getNextState(state, {
+    payload : { template, value },
+    type    : ACTION.TYPE.INITIALIZE,
+  })
 }
 
 

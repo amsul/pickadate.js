@@ -13,9 +13,16 @@ describe('/viewReducer', () => {
   describe('#[ACTION.TYPE.INITIALIZE]', () => {
 
     it('initializes the view’s date, defaulting to today', () => {
+
       let clock = lolex.install(new Date(2014, 3, 20).getTime())
-      viewReducer[ACTION.TYPE.INITIALIZE]().should.eql(new Date(2014, 3, 1))
+
+      let state   = undefined
+      let payload = {}
+
+      viewReducer[ACTION.TYPE.INITIALIZE](state, payload).should.eql(new Date(2014, 3, 1))
+
       clock.uninstall()
+
     })
 
 
@@ -23,8 +30,26 @@ describe('/viewReducer', () => {
 
       let clock = lolex.install(new Date(2014, 3, 20).getTime())
 
-      let view = viewReducer[ACTION.TYPE.INITIALIZE](new Date(2016, 8, 8))
+      let state   = new Date(2016, 8, 8)
+      let payload = {}
+
+      let view = viewReducer[ACTION.TYPE.INITIALIZE](state, payload)
       view.should.eql(new Date(2016, 8, 1))
+
+      clock.uninstall()
+
+    })
+
+
+    it('initializes the view’s date with a specific payload value and template', () => {
+
+      let clock = lolex.install(new Date(2014, 3, 20).getTime())
+
+      let state   = undefined
+      let payload = { template: 'yyyy-mm-dd', value: '2014-04-20' }
+
+      let view = viewReducer[ACTION.TYPE.INITIALIZE](state, payload)
+      view.should.eql(new Date(2014, 3, 1))
 
       clock.uninstall()
 

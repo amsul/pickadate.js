@@ -8,9 +8,14 @@ let dateUtil = require('utils/date')
 /**
  * Initializes the selected date, defaulting to `null`.
  * @param  {Object} state
+ * @param  {String} [payload.template]
+ * @param  {String} [payload.value]
  * @return {Date|null}
  */
-function initialize(state) {
+function initialize(state, { template, value }) {
+  if (value) {
+    return dateUtil.parse(value, template)
+  }
   return state ? dateUtil.create(state) : STATE.INITIAL.selected
 }
 
