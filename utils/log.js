@@ -11,11 +11,11 @@ let deepDiff = require('deep-diff')
 const STATE_DICTIONARY = {
   N: {
     color : '#4CAF50',
-    label : 'NEXT',
+    label : 'next state',
   },
   P: {
     color : '#9E9E9E',
-    label : 'PREVIOUS',
+    label : 'previous state',
   },
 }
 
@@ -24,19 +24,19 @@ const STATE_DICTIONARY = {
 const DIFF_DICTIONARY = {
   A: {
     color  : '#2196F3',
-    label  : 'ARRAY',
+    label  : 'array',
     render : ({ path, index, item }) => (
       renderDiffUpdates({ ...item, path: [...path, index]})
     )
   },
   D: {
     color  : '#F44336',
-    label  : 'DELETED',
+    label  : 'deleted',
     render : ({ path }) => `${renderUpdatePath(path)}`,
   },
   E: {
     color  : '#2196F3',
-    label  : 'CHANGED',
+    label  : 'changed',
     render : ({ path, lhs, rhs }) => `${
       renderUpdatePath(path)
     } ${
@@ -47,7 +47,7 @@ const DIFF_DICTIONARY = {
   },
   N: {
     color  : '#4CAF50',
-    label  : 'ADDED',
+    label  : 'added',
     render : ({ path, rhs }) => `${
       renderUpdatePath(path)
     } ${
@@ -184,7 +184,7 @@ function diff(state, nextState) {
     ))
   }
   else {
-    console.log('—— No diff ——')
+    console.log('—— no diff ——')
   }
 
 }
@@ -200,7 +200,7 @@ function diff(state, nextState) {
 
 
 function renderPayloadLabel() {
-  return 'PAYLOAD:'
+  return 'payload:'
 }
 
 
