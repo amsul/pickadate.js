@@ -15,7 +15,7 @@ function render(id) {
 
   let picker = vanillaEngine.render(parentNode, {
     // scope: 'SCOPE_MONTHS',
-    value: 'whuddup',
+    value: '4 April, 2014',
     // template: 'yyyy [yyyy yeaaah] [dd]'
   })
 
