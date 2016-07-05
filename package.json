@@ -56,7 +56,6 @@
     "mocha-lcov-reporter": "1.2.0",
     "raf": "3.2.0",
     "raw-loader": "0.5.1",
-    "sass-loader": "3.2.0",
     "should": "9.0.2",
     "sinon": "git://github.com/cjohansen/Sinon.JS.git#b672042043517b9f84e14ed0fb8265126168778a",
     "style-loader": "0.13.1",
