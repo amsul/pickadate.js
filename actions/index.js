@@ -52,6 +52,24 @@ let format = (template) => ({
 
 
 
+/////////////
+// CONFIRM //
+/////////////
+
+
+
+/**
+ * Returns an action that confirms the selected value.
+ * @return {Object}
+ */
+let confirm = () => ({
+  type : ACTION.TYPE.CONFIRM_SELECTED,
+})
+
+
+
+
+
 ////////////
 // SELECT //
 ////////////
@@ -152,6 +170,7 @@ let cycleScope = () => ({
 module.exports = {
   clear,
   // close,
+  confirm,
   format,
   // open,
   select,

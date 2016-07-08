@@ -1,0 +1,7 @@
+- [ ] Parsing values
+- [ ] Doc generator
+- [ ] Range of selected values
+- [ ] Multiple selected values
+- [ ] A11y bindings
+- [ ] Keyboard navigation
+- [ ] Design

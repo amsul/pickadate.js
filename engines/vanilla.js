@@ -1,10 +1,20 @@
-const SCOPE      = require('constants/scope')
+let fs               = require('fs')
 
-let actions      = require('actions')
-let classes      = require('classes')
-let pickerObject = require('objects/picker')
-let calendarUtil = require('utils/calendar')
-let stateUtil    = require('utils/state')
+const SCOPE          = require('constants/scope')
+
+let actions          = require('actions')
+let classes          = require('classes')
+let pickerObject     = require('objects/picker')
+let calendarUtil     = require('utils/calendar')
+let dateUtil         = require('utils/date')
+let stateUtil        = require('utils/state')
+
+let checkmarkIcon    = fs.readFileSync('icons/checkmark.svg')
+let chevronDownIcon  = fs.readFileSync('icons/chevronDown.svg')
+let chevronLeftIcon  = fs.readFileSync('icons/chevronLeft.svg')
+let chevronRightIcon = fs.readFileSync('icons/chevronRight.svg')
+let crossIcon        = fs.readFileSync('icons/cross.svg')
+let bullsEyeIcon     = fs.readFileSync('icons/bullsEye.svg')
 
 
 
@@ -17,13 +27,19 @@ let stateUtil    = require('utils/state')
 /**
  * Renders a picker into a node with a starting state.
  * @param  {HTMLElement} parentNode
- * @param  {Object} startingState
+ * @param  {HTMLInputElement} [inputNode]
+ * @param  {Object} [initialChangedState]
  * @return {picker}
  */
-function render(parentNode, startingState) {
+function render(parentNode, inputNode, initialChangedState) {
+
+  if (!(inputNode instanceof HTMLInputElement)) {
+    initialChangedState = inputNode
+    inputNode           = undefined
+  }
 
   // Create the picker object using the starting state.
-  let picker = pickerObject.create(startingState)
+  let picker = pickerObject.create(initialChangedState)
 
   // Create the root element using the current state.
   let rootElement = createRootElement(picker)
@@ -31,8 +47,29 @@ function render(parentNode, startingState) {
   // Append the root element to the parent node.
   parentNode.appendChild(rootElement)
 
+  // Add the value state listener to the input
+  addValueStateListenerToInput(inputNode, picker)
+
   // Return the picker object.
   return picker
+
+}
+
+
+
+function addValueStateListenerToInput(inputNode, picker) {
+
+  if (!inputNode) {
+    return
+  }
+
+  inputNode.value = picker.state.value
+
+  picker.addStateListener(nextState => {
+    if (picker.state.selected !== nextState.selected) {
+      inputNode.value = nextState.value
+    }
+  })
 
 }
 
@@ -56,17 +93,16 @@ function createRootElement(picker) {
     classes.root,
     [
       createSectionNode(classes.section_header, [
-        createButtonPreviousElement(picker),
         createButtonScopeElement(picker),
-        createButtonNextElement(picker),
+        createButtonNavigationElement(picker),
       ]),
       createSectionNode(
         classes.section_body,
         createGridElement(picker)
       ),
       createSectionNode(classes.section_footer, [
-        createButtonTodayElement(picker),
         createButtonClearElement(picker),
+        createButtonConfirmElement(picker),
       ]),
     ],
     { onTouchMove }
@@ -92,14 +128,14 @@ function createButtonScopeElement(picker) {
 
   let node = createButtonNode(
     [classes.button, classes.button_scope],
-    createButtonScopeLabelElement(picker.state),
+    createButtonScopeItemElements(picker.state),
     onClick
   )
 
   picker.addStateListener(nextState => {
-    if (stateUtil.isChangingAny(picker.state, nextState, 'view', 'scope')) {
+    if (picker.state.selected !== nextState.selected) {
       node.innerHTML = ''
-      appendChildren(node, createButtonScopeLabelElement(nextState))
+      appendChildren(node, createButtonScopeItemElements(nextState))
     }
   })
 
@@ -109,24 +145,143 @@ function createButtonScopeElement(picker) {
 
 
 
-function createButtonScopeLabelElement(state) {
-  let { scope, view } = state
-  return calendarUtil.getRangeLabel(view, scope)
+function createButtonScopeItemElements(state) {
+
+  if (!state.selected) {
+    return [
+      createButtonScopeChevronElement(state),
+      createButtonScopeEmptyElement(state),
+    ]
+  }
+
+  return [
+    createButtonScopeChevronElement(state),
+    createButtonScopeDateElement(state),
+    createNode(
+      [classes.scopeItem, classes.scopeItem_compound],
+      [
+        createButtonScopeMonthAndYearElement(state),
+        createButtonScopeWeekdayElement(state),
+      ]
+    )
+  ]
+
 }
 
 
 
-function createButtonPreviousElement(picker) {
+function createButtonScopeChevronElement(state) {
+
+  let node = createNode([
+    classes.scopeItem,
+    classes.scopeItem_chevron,
+  ])
+
+  node.innerHTML = chevronDownIcon
+
+  return node
+
+}
+
+
+
+function createButtonScopeEmptyElement(state) {
+
+  let node = createNode(
+    [
+      classes.scopeItem,
+      classes.scopeItem_empty,
+    ],
+    'Choose a date'
+  )
+
+  return node
+
+}
+
+
+
+function createButtonScopeDateElement(state) {
+
+  let node = createNode(
+    [
+      classes.scopeItem,
+      classes.scopeItem_date,
+    ],
+    createNode(
+      [classes.scopeItemLabel, classes.scopeItemLabel_date],
+      dateUtil.format(state.selected, 'd')
+    )
+  )
+
+  return node
+
+}
+
+
+
+function createButtonScopeMonthAndYearElement(state) {
+
+  let node = createNode(
+    [
+      classes.scopeItemLabel,
+      classes.scopeItemLabel_monthAndYear,
+    ],
+    dateUtil.format(state.selected, 'mmmm yyyy')
+  )
+
+  return node
+
+}
+
+
+
+function createButtonScopeWeekdayElement(state) {
+
+  let node = createNode(
+    [
+      classes.scopeItemLabel,
+      classes.scopeItemLabel_weekday,
+    ],
+    dateUtil.format(state.selected, 'dddd')
+  )
+
+  return node
+
+}
+
+
+
+function createButtonNavigationElement(picker) {
+
+  let node = createNode(
+    classes.navigation,
+    [
+      createButtonNavigationPreviousElement(picker),
+      createButtonNavigationTodayElement(picker),
+      createButtonNavigationNextElement(picker),
+    ]
+  )
+
+  return node
+
+}
+
+
+
+function createButtonNavigationPreviousElement(picker) {
 
   let onClick = () => picker.dispatch(
     actions.showPreviousView(picker.state.scope)
   )
 
   let node = createButtonNode(
-    [classes.button, classes.button_previous],
+    [classes.button, classes.button_navigation, classes.button_previous],
     '',
     onClick
   )
+
+  node.innerHTML = chevronLeftIcon
 
   return node
 
@@ -134,35 +289,39 @@ function createButtonPreviousElement(picker) {
 
 
 
-function createButtonNextElement(picker) {
-
-  let onClick = () => picker.dispatch(
-    actions.showNextView(picker.state.scope)
-  )
-
-  let node = createButtonNode(
-    [classes.button, classes.button_next],
-    '',
-    onClick
-  )
-
-  return node
-
-}
-
-
-
-function createButtonTodayElement(picker) {
+function createButtonNavigationTodayElement(picker) {
 
   let onClick = () => picker.dispatch(
     actions.showView(picker.state.today)
   )
 
   let node = createButtonNode(
-    [classes.button, classes.button_today],
-    'today',
+    [classes.button, classes.button_navigation, classes.button_today],
+    '',
     onClick
   )
+
+  node.innerHTML = bullsEyeIcon
+
+  return node
+
+}
+
+
+
+function createButtonNavigationNextElement(picker) {
+
+  let onClick = () => picker.dispatch(
+    actions.showNextView(picker.state.scope)
+  )
+
+  let node = createButtonNode(
+    [classes.button, classes.button_navigation, classes.button_next],
+    '',
+    onClick
+  )
+
+  node.innerHTML = chevronRightIcon
 
   return node
 
@@ -176,9 +335,29 @@ function createButtonClearElement(picker) {
 
   let node = createButtonNode(
     [classes.button, classes.button_clear],
-    'clear',
+    '',
     onClick
   )
+
+  node.innerHTML = crossIcon
+
+  return node
+
+}
+
+
+
+function createButtonConfirmElement(picker) {
+
+  let onClick = () => picker.dispatch(actions.confirm())
+
+  let node = createButtonNode(
+    [classes.button, classes.button_confirm],
+    '',
+    onClick
+  )
+
+  node.innerHTML = checkmarkIcon
 
   return node
 
@@ -257,12 +436,16 @@ function createGridCellElements(state) {
 
 function createGridCellElement(state, dateObject) {
 
-  let { scope } = state
+  let { scope, view } = state
 
   let className = {
-    [classes.gridCell]          : true,
-    [classes.gridCell_selected] : stateUtil.isSelected(state, dateObject),
-    [classes.gridCell_today]    : stateUtil.isToday(state, dateObject),
+    [classes.gridCell]           : true,
+    [classes.gridCell_selected]  : stateUtil.isSelected(state, dateObject),
+    [classes.gridCell_today]     : stateUtil.isToday(state, dateObject),
+    [classes.gridCell_outOfView] : (
+      scope === SCOPE.DAYS &&
+      !dateUtil.isSameMonth(view, dateObject)
+    ),
   }
 
   let attributes = {
@@ -271,7 +454,15 @@ function createGridCellElement(state, dateObject) {
 
   let node = createNode(
     className,
-    calendarUtil.getLabel(dateObject, scope),
+    createNode(
+      {
+        [classes.gridCellLabel]        : true,
+        [classes.gridCellLabel_days]   : scope === SCOPE.DAYS,
+        [classes.gridCellLabel_months] : scope === SCOPE.MONTHS,
+        [classes.gridCellLabel_years]  : scope === SCOPE.YEARS,
+      },
+      calendarUtil.getLabel(dateObject, scope)
+    ),
     attributes
   )
 
@@ -441,9 +632,33 @@ function appendChildren(element, children) {
 
 
 
+function getEventPath(event) {
+
+  /* istanbul ignore if: used as a progressive enhancement */
+  if (event.path) {
+    return event.path
+  }
+
+  let path   = []
+  let target = event.target
+
+  while (target.parentNode) {
+    path.push(target)
+    target = target.parentNode
+  }
+
+  path.push(document, window)
+
+  return path
+
+}
+
+
+
 function getValueFromMouseEvent(event) {
 
-  let { value } = event.target.dataset
+  let eventPath = getEventPath(event)
+  let value     = getValueFromMouseEventPath(eventPath, event.currentTarget)
 
   if (value == null) {
     return
@@ -457,6 +672,28 @@ function getValueFromMouseEvent(event) {
   }
 
   return value
+
+}
+
+
+
+function getValueFromMouseEventPath(path, rootNode) {
+
+  for (let i = 0; i < path.length; i += 1) {
+
+    let node = path[i]
+
+    if (node === rootNode) {
+      return
+    }
+
+    let { value } = node.dataset
+
+    if (value != null) {
+      return value
+    }
+
+  }
 
 }
 

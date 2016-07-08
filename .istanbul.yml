@@ -1,5 +1,6 @@
 instrumentation:
   excludes:
+    - 'file.js'
     - 'index.browser.js'
     - 'polyfills.js'
     - 'tests.browser.js'

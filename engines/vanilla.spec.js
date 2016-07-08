@@ -6,6 +6,7 @@ let actions       = require('actions')
 let classes       = require('classes')
 let vanillaEngine = require('engines/vanilla')
 let animationUtil = require('utils/animation')
+let dateUtil      = require('utils/date')
 
 
 
@@ -47,6 +48,65 @@ describe('/vanillaEngine', () => {
 
 
 
+    describe('(#addValueStateListenerToInput)', () => {
+
+      it('binds a state listener that updates the value of the input node if the selected value changes', () => {
+
+        // Stub out getFrame
+        let getFrameStub = sinon.stub(animationUtil, 'getFrame')
+
+        // Create the parent and input node and render the picker
+        let parentNode = document.createElement('div')
+        let inputNode  = document.createElement('input')
+        let picker     = vanillaEngine.render(parentNode, inputNode)
+
+        let selectedDate = new Date(2013, 3, 20)
+
+        // Trigger a value change
+        picker.dispatch(actions.select(selectedDate, picker.state.template))
+
+        // Grab the frame callback and trigger it
+        let frameCallback = getFrameStub.lastCall.args[1]
+        frameCallback()
+
+        // Ensure the input node now has the correct value
+        inputNode.value.should.eql(dateUtil.format(selectedDate, picker.state.template))
+
+        // Clean up the stub
+        getFrameStub.restore()
+
+      })
+
+
+      it('binds a state listener that does nothing to the value of the input node if the selected value does not change', () => {
+
+        // Stub out getFrame
+        let getFrameStub = sinon.stub(animationUtil, 'getFrame')
+
+        // Create the parent and input node and render the picker
+        let parentNode = document.createElement('div')
+        let inputNode  = document.createElement('input')
+        let picker     = vanillaEngine.render(parentNode, inputNode)
+
+        // Trigger a state change
+        picker.dispatch({ type: 'ACTION_TYPE_TEST' })
+
+        // Grab the frame callback and trigger it
+        let frameCallback = getFrameStub.lastCall.args[1]
+        frameCallback()
+
+        // Ensure the input node still has no value
+        inputNode.value.should.eql('')
+
+        // Clean up the stub
+        getFrameStub.restore()
+
+      })
+
+    })
+
+
+
 
 
     //////////////////
@@ -59,7 +119,7 @@ describe('/vanillaEngine', () => {
 
       it('binds a touch move handler on the "root" element to prevent scrolling', () => {
 
-        // Create the parent node and render the picker into it
+        // Create the parent node and render the picker
         let parentNode = document.createElement('div')
         vanillaEngine.render(parentNode)
 
@@ -94,7 +154,7 @@ describe('/vanillaEngine', () => {
 
       it('binds a click handler on the "scope" button that dispatches an action to cycle the scope', () => {
 
-        // Create the parent node and render the picker into it
+        // Create the parent node and render the picker
         let parentNode = document.createElement('div')
         let picker     = vanillaEngine.render(parentNode)
 
@@ -119,12 +179,12 @@ describe('/vanillaEngine', () => {
       })
 
 
-      it('binds a state listener that rerenders the "scope" button if the view changes', () => {
+      it('binds a state listener that rerenders the "scope" button if the selected value changes', () => {
 
         // Stub out getFrame
         let getFrameStub = sinon.stub(animationUtil, 'getFrame')
 
-        // Create the parent node and render the picker into it
+        // Create the parent node and render the picker
         let parentNode = document.createElement('div')
         let picker     = vanillaEngine.render(parentNode)
 
@@ -133,7 +193,7 @@ describe('/vanillaEngine', () => {
         let scopeButtonHTML = scopeButton.innerHTML
 
         // Trigger a state change
-        picker.dispatch(actions.showView(new Date(2014, 3, 20)))
+        picker.dispatch(actions.select(new Date(2014, 3, 20), picker.state.template))
 
         // Grab the frame callback and trigger it
         let frameCallback = getFrameStub.lastCall.args[1]
@@ -148,41 +208,12 @@ describe('/vanillaEngine', () => {
       })
 
 
-      it('binds a state listener that rerenders the "scope" button if the scope changes', () => {
+      it('binds a state listener that does nothing to the "scope" button if the selected value doesn’t change', () => {
 
         // Stub out getFrame
         let getFrameStub = sinon.stub(animationUtil, 'getFrame')
 
-        // Create the parent node and render the picker into it
-        let parentNode = document.createElement('div')
-        let picker     = vanillaEngine.render(parentNode)
-
-        // Grab the scope button and it's children
-        let scopeButton     = parentNode.getElementsByClassName(classes.button_scope)[0]
-        let scopeButtonHTML = scopeButton.innerHTML
-
-        // Trigger a state change
-        picker.dispatch(actions.cycleScope())
-
-        // Grab the frame callback and trigger it
-        let frameCallback = getFrameStub.lastCall.args[1]
-        frameCallback()
-
-        // Ensure the children have rerendered
-        scopeButtonHTML.should.not.eql(scopeButton.innerHTML)
-
-        // Clean up the stub
-        getFrameStub.restore()
-
-      })
-
-
-      it('binds a state listener that does nothing to the "scope" button if the view and scope don’t change', () => {
-
-        // Stub out getFrame
-        let getFrameStub = sinon.stub(animationUtil, 'getFrame')
-
-        // Create the parent node and render the picker into it
+        // Create the parent node and render the picker
         let parentNode = document.createElement('div')
         let picker     = vanillaEngine.render(parentNode)
 
@@ -209,11 +240,62 @@ describe('/vanillaEngine', () => {
 
 
 
-    describe('(#createButtonPreviousElement)', () => {
+    describe('(#createButtonScopeItemElements)', () => {
+
+      it('renders the "compound" scope element when there is a selected value', () => {
+
+        // Create the parent node and render the picker
+        // with a selected value
+        let parentNode = document.createElement('div')
+        vanillaEngine.render(parentNode, {
+          selected: new Date(2014, 3, 20)
+        })
+
+        // Grab the "compound" scope item
+        let scopeItemCompoundNodes = parentNode.getElementsByClassName(classes.scopeItem_compound)
+
+        // Ensure one was found
+        scopeItemCompoundNodes.length.should.eql(1)
+
+        // Grab the "empty" scope item
+        let scopeItemEmptyNodes = parentNode.getElementsByClassName(classes.scopeItem_empty)
+
+        // Ensure none was found
+        scopeItemEmptyNodes.length.should.eql(0)
+
+      })
+
+
+      it('renders the "empty" scope element when there is no selected value', () => {
+
+        // Create the parent node and render the picker
+        // without a selected value
+        let parentNode = document.createElement('div')
+        vanillaEngine.render(parentNode)
+
+        // Grab the "compound" scope item
+        let scopeItemCompoundNodes = parentNode.getElementsByClassName(classes.scopeItem_compound)
+
+        // Ensure none was found
+        scopeItemCompoundNodes.length.should.eql(0)
+
+        // Grab the "empty" scope item
+        let scopeItemEmptyNodes = parentNode.getElementsByClassName(classes.scopeItem_empty)
+
+        // Ensure one was found
+        scopeItemEmptyNodes.length.should.eql(1)
+
+      })
+
+    })
+
+
+
+    describe('(#createButtonNavigationPreviousElement)', () => {
 
       it('binds a click handler on the "previous" button that dispatches an action to show the previous view', () => {
 
-        // Create the parent node and render the picker into it
+        // Create the parent node and render the picker
         let parentNode = document.createElement('div')
         let picker     = vanillaEngine.render(parentNode)
 
@@ -241,11 +323,11 @@ describe('/vanillaEngine', () => {
 
 
 
-    describe('(#createButtonNextElement)', () => {
+    describe('(#createButtonNavigationNextElement)', () => {
 
       it('binds a click handler on the "next" button that dispatches an action to show the next view', () => {
 
-        // Create the parent node and render the picker into it
+        // Create the parent node and render the picker
         let parentNode = document.createElement('div')
         let picker     = vanillaEngine.render(parentNode)
 
@@ -273,11 +355,11 @@ describe('/vanillaEngine', () => {
 
 
 
-    describe('(#createButtonTodayElement)', () => {
+    describe('(#createButtonNavigationTodayElement)', () => {
 
       it('binds a click handler on the "today" button that dispatches an action to show the view today', () => {
 
-        // Create the parent node and render the picker into it
+        // Create the parent node and render the picker
         let parentNode = document.createElement('div')
         let picker     = vanillaEngine.render(parentNode)
 
@@ -309,7 +391,7 @@ describe('/vanillaEngine', () => {
 
       it('binds a click handler on the "clear" button that dispatches an action to clear the selected value', () => {
 
-        // Create the parent node and render the picker into it
+        // Create the parent node and render the picker
         let parentNode = document.createElement('div')
         let picker     = vanillaEngine.render(parentNode)
 
@@ -337,6 +419,38 @@ describe('/vanillaEngine', () => {
 
 
 
+    describe('(#createButtonConfirmElement)', () => {
+
+      it('binds a click handler on the "confirm" button that dispatches an action to confirm the selected value', () => {
+
+        // Create the parent node and render the picker
+        let parentNode = document.createElement('div')
+        let picker     = vanillaEngine.render(parentNode)
+
+        // Create the click event
+        let event = new Event('click')
+
+        // Grab the clear button
+        let elements = parentNode.getElementsByClassName(classes.button_confirm)
+        elements.length.should.eql(1)
+        let clearButton = elements[0]
+
+        // Stub out the dispatch method on the picker
+        let dispatchStub = sinon.stub(picker, 'dispatch')
+
+        // Dispatch the click event on the clear button
+        clearButton.dispatchEvent(event)
+
+        // Ensure the dispatch stub was called as expected
+        dispatchStub.callCount.should.eql(1)
+        dispatchStub.lastCall.args.should.eql([actions.confirm()])
+
+      })
+
+    })
+
+
+
 
 
     ///////////////////
@@ -349,7 +463,7 @@ describe('/vanillaEngine', () => {
 
       it('binds a click handler on the "grid" that dispatches an action to select a value', () => {
 
-        // Create the parent node and render the picker into it
+        // Create the parent node and render the picker
         let parentNode = document.createElement('div')
         let picker     = vanillaEngine.render(parentNode)
 
@@ -379,7 +493,7 @@ describe('/vanillaEngine', () => {
 
       it('binds a click handler on the "grid" that does nothing if a value is not found on the click target', () => {
 
-        // Create the parent node and render the picker into it
+        // Create the parent node and render the picker
         let parentNode = document.createElement('div')
         let picker     = vanillaEngine.render(parentNode)
 
@@ -411,12 +525,12 @@ describe('/vanillaEngine', () => {
         // Stub out getFrame
         let getFrameStub = sinon.stub(animationUtil, 'getFrame')
 
-        // Create the parent node and render the picker into it
+        // Create the parent node and render the picker
         let parentNode = document.createElement('div')
         let picker     = vanillaEngine.render(parentNode)
 
         // Grab the grid element and it's children
-        let gridElement     = parentNode.getElementsByClassName(classes.button_scope)[0]
+        let gridElement     = parentNode.getElementsByClassName(classes.grid)[0]
         let gridElementHTML = gridElement.innerHTML
 
         // Trigger a state change
@@ -440,12 +554,12 @@ describe('/vanillaEngine', () => {
         // Stub out getFrame
         let getFrameStub = sinon.stub(animationUtil, 'getFrame')
 
-        // Create the parent node and render the picker into it
+        // Create the parent node and render the picker
         let parentNode = document.createElement('div')
         let picker     = vanillaEngine.render(parentNode)
 
         // Grab the grid element and it's children
-        let gridElement     = parentNode.getElementsByClassName(classes.button_scope)[0]
+        let gridElement     = parentNode.getElementsByClassName(classes.grid)[0]
         let gridElementHTML = gridElement.innerHTML
 
         // Trigger a state change
@@ -469,12 +583,12 @@ describe('/vanillaEngine', () => {
         // Stub out getFrame
         let getFrameStub = sinon.stub(animationUtil, 'getFrame')
 
-        // Create the parent node and render the picker into it
+        // Create the parent node and render the picker
         let parentNode = document.createElement('div')
         let picker     = vanillaEngine.render(parentNode)
 
         // Grab the grid element and it's children
-        let gridElement     = parentNode.getElementsByClassName(classes.button_scope)[0]
+        let gridElement     = parentNode.getElementsByClassName(classes.grid)[0]
         let gridElementHTML = gridElement.innerHTML
 
         // Trigger a state change
@@ -498,12 +612,12 @@ describe('/vanillaEngine', () => {
         // Stub out getFrame
         let getFrameStub = sinon.stub(animationUtil, 'getFrame')
 
-        // Create the parent node and render the picker into it
+        // Create the parent node and render the picker
         let parentNode = document.createElement('div')
         let picker     = vanillaEngine.render(parentNode)
 
         // Grab the grid element and it's children
-        let gridElement     = parentNode.getElementsByClassName(classes.button_scope)[0]
+        let gridElement     = parentNode.getElementsByClassName(classes.grid)[0]
         let gridElementHTML = gridElement.innerHTML
 
         // Trigger a state change

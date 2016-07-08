@@ -3,6 +3,7 @@
  * @type {Object(String)}
  */
 const TYPE = {
+  CONFIRM_SELECTED   : 'ACTION_TYPE_CONFIRM_SELECTED',
   CYCLE_SCOPE        : 'ACTION_TYPE_CYCLE_SCOPE',
   FORMAT             : 'ACTION_TYPE_FORMAT',
   INITIALIZE         : 'ACTION_TYPE_INITIALIZE',

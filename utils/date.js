@@ -39,6 +39,7 @@ function create(value) {
 
 /**
  * A mapping of template hooks to formatters.
+ * FIXME: Use moment.js formats: http://momentjs.com/docs/#/parsing/string-format/
  * @private
  * @type {Object(Function)}
  */

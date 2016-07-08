@@ -19,6 +19,9 @@ module.exports = {
   devtool: 'inline-source-map',
 
   resolve: {
+    alias: {
+      fs: 'file.js'
+    },
     extensions: ['', '.js'],
     modulesDirectories: ['', 'node_modules'],
   },
@@ -35,16 +38,12 @@ module.exports = {
         exclude : /^\.\/(node_modules\/)/,
       },
       {
-        test   : /\.html$/,
+        test   : /\.(html|svg)$/,
         loader : 'raw',
       },
       {
         test   : /\.css$/,
         loader : 'style!css!autoprefixer?{browsers:["iOS >= 6", "last 2 Chrome versions"]}',
-      },
-      {
-        test   : /\.(jpg|png|woff|eot|ttf|svg)$/,
-        loader : 'url-loader?limit=10000',
       },
     ],
   },

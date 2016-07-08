@@ -66,13 +66,13 @@ const SHORT = {
 
 
   [LANGUAGE.ENGLISH]: [
-    'Sun',
-    'Mon',
-    'Tue',
-    'Wed',
-    'Thu',
-    'Fri',
-    'Sat',
+    'Su',
+    'Mo',
+    'Tu',
+    'We',
+    'Th',
+    'Fr',
+    'Sa',
   ],
 
 

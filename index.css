@@ -1,6 +1,18 @@
 :root {
-  --blue           : #0089ec;
-  --blue_highlight : #b1dcfb;
+
+  --blue        : #0089ec;
+
+  --black       : #333;
+  --black_light : #666;
+
+  --grey        : #b2b2b2;
+  --grey_dark   : #999;
+  --grey_light  : #ccc;
+
+  --silver      : #e5e5e5;
+
+  --red         : #e20;
+
 }
 
 
@@ -19,8 +31,12 @@
 
 
 .pickadate {
-  font-size : 16px;
-  max-width : 30em;
+  font-family : -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Arial, sans-serif;
+  font-size   : 16px;
+  color       : var(--black);
+  max-width   : 28em;
+  padding     : 2em;
+  border      : 1px solid var(--grey_light);
 }
 
 
@@ -40,6 +56,7 @@
 
 .pickadate-section_header {
   justify-content : space-between;
+  align-items     : stretch;
 }
 
 
@@ -49,7 +66,19 @@
 
 
 .pickadate-section_footer {
-  justify-content : space-around;
+  justify-content : center;
+}
+
+
+
+
+
+/**
+ * NAVIGATION
+ */
+
+.pickadate-navigation {
+  display: flex;
 }
 
 
@@ -65,15 +94,15 @@
   flex-direction : column;
   align-items    : stretch;
   width          : 100%;
-  margin         : 0.5em 0;
-  padding        : 0.5em 0;
-  border         : 1px solid transparent;
+  padding        : 0;
+  border         : 0;
+  /*border         : 1px solid transparent;*/
   background     : none;
   font           : inherit;
   color          : inherit;
   line-height    : inherit;
   user-select    : none;
-  height         : 15em;
+  height         : 20em;
 
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
@@ -81,68 +110,103 @@
 
 
 .pickadate-grid:focus {
-  outline      : none;
-  border-color : var(--blue);
+  /*outline      : none;*/
+  /*border-color : var(--blue);*/
 }
 
   .pickadate-gridRow {
-    flex    : 1;
     display : flex;
   }
 
     .pickadate-gridCell {
       flex            : 1;
-      position        : relative;
       display         : flex;
       justify-content : center;
-      align-self      : stretch;
       align-items     : center;
     }
 
 
 
   .pickadate-gridRow_heading {
-    flex          : none;
-    font-weight   : 500;
-    margin-bottom : 0.5em;
-    font-size     : 0.75em;
-    color         : #bbb;
+    font-size : 0.875em;
+    color     : var(--grey_dark);
+    margin    : 1em 0 0.5em;
   }
 
 
 
-  .pickadate-gridRow_body {}
+  .pickadate-gridRow_body {
+    font-size   : 1.125em;
+    font-weight : 500;
+    flex        : 1;
+  }
+
+    .pickadate-gridCell_outOfView {
+      opacity: 0.3;
+    }
+
+      .pickadate-gridCellLabel {
+        position        : relative;
+        display         : flex;
+        margin          : 0 auto;
+        justify-content : center;
+        align-items     : center;
+        border-radius   : 50%;
+      }
+
+      .pickadate-gridCellLabel_days {
+        width  : 2.5em;
+        height : 2.5em;
+      }
+
+      .pickadate-gridCellLabel_months,
+      .pickadate-gridCellLabel_years {
+        width  : 4em;
+        height : 4em;
+      }
+
+
 
     .pickadate-gridCell_today {}
 
-      .pickadate-gridCell_today:after {
-        content       : '';
-        position      : absolute;
-        z-index       : 10;
-        top           : 3px;
-        right         : 3px;
-        background    : black;
-        width         : 6px;
-        height        : 6px;
-        border-radius : 3px;
+      .pickadate-gridCell_today .pickadate-gridCellLabel {}
+
+        .pickadate-gridCell_today .pickadate-gridCellLabel:after {
+          content       : '';
+          position      : absolute;
+          z-index       : 1;
+          bottom        : 0.5em;
+          right         : 50%;
+          transform     : translateX(50%);
+          background    : currentColor;
+          width         : 4px;
+          height        : 4px;
+          border-radius : 50%;
+        }
+
+
+    .pickadate-gridCell_selected {}
+
+      .pickadate-gridCell_selected .pickadate-gridCellLabel {
+        background : var(--blue);
+        color      : white;
       }
 
+        .pickadate-gridCell_selected.pickadate-gridCell_today .pickadate-gridCellLabel:after {
+          background: white;
+        }
 
 
-    .pickadate-gridCell_selected {
-      background : var(--blue);
-      color      : white;
-    }
 
-      .pickadate-gridCell_selected.pickadate-gridCell_today:after {
-        background: white;
+    .pickadate-gridCell:hover {}
+
+      .pickadate-gridCell:hover .pickadate-gridCellLabel {
+        background: var(--silver);
       }
 
-
-
-    .pickadate-gridRow_body .pickadate-gridCell:not(.pickadate-gridCell_selected):hover {
-      background: var(--blue_highlight);
-    }
+      .pickadate-gridCell_selected:hover .pickadate-gridCellLabel {
+        background: var(--blue);
+      }
 
 
 
@@ -153,62 +217,119 @@
  */
 
 .pickadate-button {
-  font          : inherit;
-  font-size     : 0.85em;
-  padding       : 0.5em 1em;
-  background    : #f2f2f2;
-  border        : 1px solid #ddd;
-  border-radius : 3px;
+  font       : inherit;
+  color      : inherit;
+  background : none;
+  border     : 0;
+  padding    : 0;
 }
 
 
 
 .pickadate-button_scope {
-  flex   : 1;
-  margin : 0 2em;
+  display     : flex;
+  align-items : center;
+  height      : 3.375em;
 }
 
 
 
-.pickadate-button_previous,
-.pickadate-button_next {
-  display    : flex;
-  align-self : stretch;
+.pickadate-button_navigation {
+  padding: 0.5em 0.75em;
 }
 
-  .pickadate-button_previous:after,
-  .pickadate-button_next:after {
-    content       : '';
-    border-top    : .5em solid transparent;
-    border-bottom : .5em solid transparent;
-    border-right  : 0.75em solid;
-    width         : 0;
-    height        : 0;
-    display       : block;
+  .pickadate-button_navigation svg {
+    width  : auto;
+    height : 2em;
+    fill   : currentColor;
   }
 
 
 
-  .pickadate-button_next:after {
-    border-right : 0;
-    border-left  : 0.75em solid;
+.pickadate-button_clear,
+.pickadate-button_confirm {
+  padding: 1em;
+}
+
+  .pickadate-button_clear svg,
+  .pickadate-button_confirm svg {
+    width  : auto;
+    height : 1.5em;
+    fill   : currentColor;
   }
 
 
 
-.pickadate-button_previous {
-  padding-right : 1.25em;
+.pickadate-button_navigation:hover,
+.pickadate-button_navigation:focus,
+.pickadate-button_confirm:hover,
+.pickadate-button_confirm:focus {
+  color: var(--blue);
 }
 
 
 
-.pickadate-button_next {
-  padding-left : 1.25em;
+.pickadate-button_clear:hover,
+.pickadate-button_clear:focus {
+  color: var(--red);
 }
 
 
 
-.pickadate-button:focus {
-  outline      : none;
-  border-color : var(--blue);
+
+
+/**
+ * SCOPE
+ */
+
+.pickadate-scopeItem {
+  margin-right: 0.325em;
 }
+
+  .pickadate-scopeItemLabel {
+    color: var(--black_light);
+  }
+
+
+
+  .pickadate-scopeItemLabel_date {
+    line-height : 0;
+    font-size   : 3.5em;
+    font-weight : 100;
+  }
+
+
+
+.pickadate-scopeItem_chevron {}
+
+  .pickadate-scopeItem_chevron svg {
+    width  : 1em;
+    height : auto;
+    fill   : var(--grey_light);
+  }
+
+
+
+.pickadate-scopeItem_empty {
+  font-size : 1.125em;
+  color     : var(--grey_dark);
+}
+
+
+
+.pickadate-scopeItem_compound {
+  text-align: left;
+}
+
+  .pickadate-scopeItemLabel_monthAndYear {
+    font-size   : 1.25em;
+    font-weight : 500;
+  }
+
+
+
+  .pickadate-scopeItemLabel_weekday {
+    font-size  : 0.875em;
+    color      : var(--grey);
+    margin-top : 0.125em;
+  }

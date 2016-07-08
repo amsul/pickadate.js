@@ -60,7 +60,7 @@ describe('/dateUtil', () => {
       dateUtil.format(dateObject, 'yyyy-mm-dd').should.eql('2014-04-02')
       dateUtil.format(dateObject, 'yyyy-m-d').should.eql('2014-4-2')
       dateUtil.format(dateObject, 'dddd, d mmm, yyyy').should.eql('Wednesday, 2 Apr, 2014')
-      dateUtil.format(dateObject, 'ddd, dd mmmm, yyyy').should.eql('Wed, 02 April, 2014')
+      dateUtil.format(dateObject, 'ddd, dd mmmm, yyyy').should.eql('We, 02 April, 2014')
 
     })
 
@@ -422,13 +422,13 @@ describe('/dateUtil', () => {
     it('gets a list of the short day names', () => {
 
       let shortDayNames = [
-        'Sun',
-        'Mon',
-        'Tue',
-        'Wed',
-        'Thu',
-        'Fri',
-        'Sat',
+        'Su',
+        'Mo',
+        'Tu',
+        'We',
+        'Th',
+        'Fr',
+        'Sa',
       ]
 
       shortDayNames.should.eql(dateUtil.getShortDayNames())
@@ -497,7 +497,7 @@ describe('/dateUtil', () => {
   describe('#getShortDayName', () => {
 
     it('gets the short name of a specific day', () => {
-      let shortDayName = 'Fri'
+      let shortDayName = 'Fr'
       shortDayName.should.eql(dateUtil.getShortDayName(5))
     })
 
