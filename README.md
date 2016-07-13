@@ -144,7 +144,7 @@ Before opening a new issue, please search the existing [Issues](https://github.c
 <br>
 ## Contributing
 
-Before contributing any code to the project, please take a look at the [Contributing](https://github.com/amsul/pickadate.js/blob/gh-pages/CONTRIBUTING.md) guide.
+Before contributing any code to the project, please take a look at the [Contributing](https://github.com/amsul/pickadate.js/blob/master/CONTRIBUTING.md) guide.
 
 If there’s anything you’d like to discuss, we like to hang out on Gitter.
 
