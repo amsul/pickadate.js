@@ -29,6 +29,34 @@ function create(value) {
 
 
 
+/**
+ * Creates a date clamped in a month.
+ * @param  {Number} year
+ * @param  {Number} month
+ * @param  {Number} date
+ * @return {Date}
+ */
+function createInMonth(year, month, date) {
+
+  // Create a date object from the original values
+  let dateObject = new Date(year, month, date)
+
+  // Normalize the month to be clamped within 0 and 11
+  month = (month + 12) % 12
+
+  // Until the target date's month isn't the normalized
+  // month, keep reducing the date by 1
+  while (dateObject.getMonth() !== month) {
+    date -= 1
+    dateObject = new Date(year, month, date)
+  }
+
+  return dateObject
+
+}
+
+
+
 
 
 ////////////////////
@@ -551,6 +579,7 @@ module.exports = {
 
   // Create
   create,
+  createInMonth,
 
   // Format & parse
   format,

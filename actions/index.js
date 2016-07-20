@@ -1,4 +1,6 @@
-const ACTION = require('constants/action')
+const ACTION     = require('constants/action')
+
+let calendarUtil = require('utils/calendar')
 
 
 
@@ -10,13 +12,14 @@ const ACTION = require('constants/action')
 
 /**
  * Returns an action that sets the template to use to format a value.
+ * ??
  * @param  {String} template
  * @return {Object}
  */
-let format = (template) => ({
-  type    : ACTION.TYPE.FORMAT,
-  payload : { template },
-})
+// let format = (template) => ({
+//   type    : ACTION.TYPE.FORMAT,
+//   payload : { template },
+// })
 
 
 
@@ -29,7 +32,7 @@ let format = (template) => ({
 
 
 /**
- * Returns an action that closes the picker.
+ * Returns an action that marks the picker as closed.
  * @return {Object}
  */
 // let close = () => ({
@@ -40,7 +43,7 @@ let format = (template) => ({
 
 
 /**
- * Returns an action that opens the picker.
+ * Returns an action that marks the picker as opened.
  * @return {Object}
  */
 // let open = () => ({
@@ -63,7 +66,7 @@ let format = (template) => ({
  * @return {Object}
  */
 let confirm = () => ({
-  type : ACTION.TYPE.CONFIRM_SELECTED,
+  type : ACTION.TYPE.CONFIRM,
 })
 
 
@@ -77,67 +80,80 @@ let confirm = () => ({
 
 
 /**
- * Returns an action that selects a value for the picker.
- * @param  {Object} value
- * @param  {Object} template
+ * Returns an action that selects a value.
+ *
+ * TODO: Require a `scope` and `template` when there is a value
+ *
+ * @param  {Date|Number|null} value
+ * @param  {Object} state
  * @return {Object}
  */
-let select = (value, template) => ({
+let select = (value, { scope, selected, template }) => ({
   type    : ACTION.TYPE.SELECT,
-  payload : { template, value },
+  payload : { scope, selected, template, value },
 })
 
 
 
 /**
- * Returns an action that clears the value of the picker.
+ * Returns an action that clears the value.
  * @return {Object}
  */
-let clear = () => select(null)
+let clear = () => select(null, {})
 
 
 
 
 
 //////////
-// VIEW //
+// SHOW //
 //////////
 
 
 
-/**
- * Returns an action that shows the previous view of a certain scope.
- * @param  {SCOPE} scope
- * @return {Object}
- */
-let showPreviousView = (scope) => ({
-  type    : ACTION.TYPE.SHOW_PREVIOUS_VIEW,
-  payload : { scope },
+let show = (value, { scope, selected, template }) => ({
+  type    : ACTION.TYPE.SHOW,
+  payload : { scope, selected, template, value },
 })
 
 
 
 /**
- * Returns an action that shows the next view of a certain scope.
- * @param  {SCOPE} scope
+ * Returns an action that selects a scoped value from the previous view.
+ * @param  {Object} state
  * @return {Object}
  */
-let showNextView = (scope) => ({
-  type    : ACTION.TYPE.SHOW_NEXT_VIEW,
-  payload : { scope },
-})
+let showPrevious = ({ scope, selected, template, view }) => (
+  show(
+    calendarUtil.getDateOfPreviousScope(selected || view, scope),
+    { scope, selected, template }
+  )
+)
 
 
 
 /**
- * Returns an action that shows the view of a certain date.
- * @param  {Date} view
+ * Returns an action that selects a scoped value from the next view.
+ * @param  {Object} state
  * @return {Object}
  */
-let showView = (view) => ({
-  type    : ACTION.TYPE.SHOW_VIEW,
-  payload : { view },
-})
+let showNext = ({ scope, selected, template, view }) => (
+  show(
+    calendarUtil.getDateOfNextScope(selected || view, scope),
+    { scope, selected, template }
+  )
+)
+
+
+
+/**
+ * Returns an action that selects "today".
+ * @param  {Object} state
+ * @return {Object}
+ */
+let showToday = ({ scope, selected, template, today }) => (
+  show(today, { scope, selected, template })
+)
 
 
 
@@ -150,7 +166,7 @@ let showView = (view) => ({
 
 
 /**
- * Returns an action that cycles to the next the scope of the picker.
+ * Returns an action that cycles through the scopes.
  * @return {Object}
  */
 let cycleScope = () => ({
@@ -168,14 +184,28 @@ let cycleScope = () => ({
 
 
 module.exports = {
-  clear,
+
+  // Template
+  // format,
+
+  // Open
   // close,
-  confirm,
-  format,
   // open,
+
+  // Confirm
+  confirm,
+
+  // Select
+  clear,
   select,
+
+  // Show
+  show,
+  showNext,
+  showPrevious,
+  showToday,
+
+  // Scope
   cycleScope,
-  showNextView,
-  showPreviousView,
-  showView,
+
 }

@@ -24,15 +24,15 @@ describe('/templateReducer', () => {
 
 
 
-  describe('#[ACTION.TYPE.FORMAT]', () => {
+  // describe('#[ACTION.TYPE.FORMAT]', () => {
 
-    it('sets the template to use for formatting the selected value', () => {
-      let state    = STATE.INITIAL.template
-      let template = 'yyyy-mm-dd'
-      templateReducer[ACTION.TYPE.FORMAT](state, { template }).should.eql(template)
-    })
+  //   it('sets the template to use for formatting the selected value', () => {
+  //     let state    = STATE.INITIAL.template
+  //     let template = 'yyyy-mm-dd'
+  //     templateReducer[ACTION.TYPE.FORMAT](state, { template }).should.eql(template)
+  //   })
 
-  })
+  // })
 
 
 })

@@ -31,12 +31,20 @@ function cycleScope(state) {
 
 
 /**
- * Shows the next deeper scope, stopping at the deepest: DAYS.
+ * Selects the next deeper scope if there is a value being selected.
  * @param  {SCOPE} state
  * @return {SCOPE}
  */
-function showDeeperScope(state) {
+function selectScope(state, { value }) {
+
+  // If the value is being cleared, do not change the scope
+  if (!value) {
+    return state
+  }
+
+  // Otherwise move on to the next deeper scope
   return state === SCOPE.YEARS ? SCOPE.MONTHS : SCOPE.DAYS
+
 }
 
 
@@ -44,5 +52,5 @@ function showDeeperScope(state) {
 module.exports = {
   [ACTION.TYPE.CYCLE_SCOPE] : cycleScope,
   [ACTION.TYPE.INITIALIZE]  : initialize,
-  [ACTION.TYPE.SELECT]      : showDeeperScope,
+  [ACTION.TYPE.SELECT]      : selectScope,
 }

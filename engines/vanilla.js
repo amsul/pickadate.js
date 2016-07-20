@@ -66,7 +66,7 @@ function addValueStateListenerToInput(inputNode, picker) {
   inputNode.value = picker.state.value
 
   picker.addStateListener(nextState => {
-    if (picker.state.selected !== nextState.selected) {
+    if (picker.state.value !== nextState.value) {
       inputNode.value = nextState.value
     }
   })
@@ -133,7 +133,11 @@ function createButtonScopeElement(picker) {
   )
 
   picker.addStateListener(nextState => {
-    if (picker.state.selected !== nextState.selected) {
+    if (
+      stateUtil.isChangingAny(
+        picker.state, nextState, 'scope', 'selected', 'view'
+      )
+    ) {
       node.innerHTML = ''
       appendChildren(node, createButtonScopeItemElements(nextState))
     }
@@ -192,7 +196,7 @@ function createButtonScopeEmptyElement(state) {
       classes.scopeItem,
       classes.scopeItem_empty,
     ],
-    'Choose a date'
+    dateUtil.format(state.view, 'mmmm yyyy')
   )
 
   return node
@@ -272,7 +276,7 @@ function createButtonNavigationElement(picker) {
 function createButtonNavigationPreviousElement(picker) {
 
   let onClick = () => picker.dispatch(
-    actions.showPreviousView(picker.state.scope)
+    actions.showPrevious(picker.state)
   )
 
   let node = createButtonNode(
@@ -292,7 +296,7 @@ function createButtonNavigationPreviousElement(picker) {
 function createButtonNavigationTodayElement(picker) {
 
   let onClick = () => picker.dispatch(
-    actions.showView(picker.state.today)
+    actions.showToday(picker.state)
   )
 
   let node = createButtonNode(
@@ -312,7 +316,7 @@ function createButtonNavigationTodayElement(picker) {
 function createButtonNavigationNextElement(picker) {
 
   let onClick = () => picker.dispatch(
-    actions.showNextView(picker.state.scope)
+    actions.showNext(picker.state)
   )
 
   let node = createButtonNode(
@@ -331,7 +335,7 @@ function createButtonNavigationNextElement(picker) {
 
 function createButtonClearElement(picker) {
 
-  let onClick = () => picker.dispatch(actions.select(null))
+  let onClick = () => picker.dispatch(actions.clear())
 
   let node = createButtonNode(
     [classes.button, classes.button_clear],
@@ -377,9 +381,10 @@ function createGridElement(picker) {
 
   let onClick = (event) => {
     let value = getValueFromMouseEvent(event)
-    if (value) {
-      picker.dispatch(actions.select(value, picker.state.template))
+    if (!value) {
+      return
     }
+    picker.dispatch(actions.select(value, picker.state))
   }
 
   let node = createButtonNode(
@@ -391,7 +396,7 @@ function createGridElement(picker) {
   picker.addStateListener(nextState => {
     if (
       stateUtil.isChangingAny(
-        picker.state, nextState, 'view', 'selected', 'scope'
+        picker.state, nextState, 'scope', 'selected', 'view'
       )
     ) {
       node.innerHTML = ''

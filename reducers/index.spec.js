@@ -1,5 +1,6 @@
 const ACTION = require('constants/action')
 const SCOPE  = require('constants/scope')
+const STATE  = require('constants/state')
 
 let actions  = require('actions')
 let reducers = require('reducers')
@@ -37,10 +38,13 @@ describe('/reducers', () => {
 
     it('reduces multiple state keys by an action', () => {
 
-      let state    = {}
-      let value    = new Date(2014, 3, 20)
-      let template = 'yyyy-mm-dd'
-      let action   = actions.select(value, template)
+      let state = {
+        ...STATE.INITIAL,
+        template: 'yyyy-mm-dd'
+      }
+
+      let value  = new Date(2014, 3, 20)
+      let action = actions.select(value, state)
 
       let nextState = reducers.reduce(state, action)
 
@@ -58,7 +62,7 @@ describe('/reducers', () => {
     it('does nothing if the state hasn’t changed', () => {
 
       let state  = {}
-      let action = { type: ACTION.TYPE.INTIALIZE }
+      let action = { type: 'ACTION_TYPE_TEST' }
 
       let nextState = reducers.reduce(state, action)
 

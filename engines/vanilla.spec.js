@@ -1,7 +1,5 @@
 let sinon         = require('sinon')
 
-const SCOPE       = require('constants/scope')
-
 let actions       = require('actions')
 let classes       = require('classes')
 let vanillaEngine = require('engines/vanilla')
@@ -63,7 +61,7 @@ describe('/vanillaEngine', () => {
         let selectedDate = new Date(2013, 3, 20)
 
         // Trigger a value change
-        picker.dispatch(actions.select(selectedDate, picker.state.template))
+        picker.dispatch(actions.select(selectedDate, picker.state))
 
         // Grab the frame callback and trigger it
         let frameCallback = getFrameStub.lastCall.args[1]
@@ -193,7 +191,7 @@ describe('/vanillaEngine', () => {
         let scopeButtonHTML = scopeButton.innerHTML
 
         // Trigger a state change
-        picker.dispatch(actions.select(new Date(2014, 3, 20), picker.state.template))
+        picker.dispatch(actions.select(new Date(2014, 3, 20), picker.state))
 
         // Grab the frame callback and trigger it
         let frameCallback = getFrameStub.lastCall.args[1]
@@ -315,7 +313,7 @@ describe('/vanillaEngine', () => {
 
         // Ensure the dispatch stub was called as expected
         dispatchStub.callCount.should.eql(1)
-        dispatchStub.lastCall.args.should.eql([actions.showPreviousView(SCOPE.DAYS)])
+        dispatchStub.lastCall.args.should.eql([actions.showPrevious(picker.state)])
 
       })
 
@@ -347,7 +345,7 @@ describe('/vanillaEngine', () => {
 
         // Ensure the dispatch stub was called as expected
         dispatchStub.callCount.should.eql(1)
-        dispatchStub.lastCall.args.should.eql([actions.showNextView(SCOPE.DAYS)])
+        dispatchStub.lastCall.args.should.eql([actions.showNext(picker.state)])
 
       })
 
@@ -379,7 +377,7 @@ describe('/vanillaEngine', () => {
 
         // Ensure the dispatch stub was called as expected
         dispatchStub.callCount.should.eql(1)
-        dispatchStub.lastCall.args.should.eql([actions.showView(picker.state.today)])
+        dispatchStub.lastCall.args.should.eql([actions.showToday(picker.state)])
 
       })
 
@@ -411,7 +409,7 @@ describe('/vanillaEngine', () => {
 
         // Ensure the dispatch stub was called as expected
         dispatchStub.callCount.should.eql(1)
-        dispatchStub.lastCall.args.should.eql([actions.select(null)])
+        dispatchStub.lastCall.args.should.eql([actions.clear()])
 
       })
 
@@ -485,7 +483,7 @@ describe('/vanillaEngine', () => {
         // Ensure the dispatch stub was called as expected
         dispatchStub.callCount.should.eql(1)
         dispatchStub.lastCall.args.should.eql([
-          actions.select(+gridCellElement.dataset.value, picker.state.template)
+          actions.select(+gridCellElement.dataset.value, picker.state)
         ])
 
       })
@@ -534,7 +532,7 @@ describe('/vanillaEngine', () => {
         let gridElementHTML = gridElement.innerHTML
 
         // Trigger a state change
-        picker.dispatch(actions.showView(new Date(2014, 3, 20)))
+        picker.dispatch(actions.show(new Date(2014, 3, 20), picker.state))
 
         // Grab the frame callback and trigger it
         let frameCallback = getFrameStub.lastCall.args[1]
@@ -563,7 +561,7 @@ describe('/vanillaEngine', () => {
         let gridElementHTML = gridElement.innerHTML
 
         // Trigger a state change
-        picker.dispatch(actions.select(new Date(2013, 3, 20), picker.state.template))
+        picker.dispatch(actions.select(new Date(2013, 3, 20), picker.state))
 
         // Grab the frame callback and trigger it
         let frameCallback = getFrameStub.lastCall.args[1]

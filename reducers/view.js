@@ -22,45 +22,9 @@ function initialize(state = new Date(), { template, value }) {
 
 
 /**
- * Shows the next view for a certain scope.
- * @param  {Object} state
- * @param  {SCOPE} payload.scope
- * @return {Date}
- */
-function showNext(state, { scope }) {
-  return calendarUtil.getStartDateOfMonthInNextScope(state, scope)
-}
-
-
-
-/**
- * Shows the previous view for a certain scope.
- * @param  {Object} state
- * @param  {SCOPE} payload.scope
- * @return {Date}
- */
-function showPrevious(state, { scope }) {
-  return calendarUtil.getStartDateOfMonthInPreviousScope(state, scope)
-}
-
-
-
-/**
- * Shows a specific view.
- * @param  {Object} state
- * @param  {Date} payload.view
- * @return {Date}
- */
-function show(state, { view }) {
-  return calendarUtil.getStartDateOfMonth(view)
-}
-
-
-
-/**
  * Updates a view when the selection changes.
  * @param  {Object} state
- * @param  {Date} payload.view
+ * @param  {Date} payload.value
  * @return {Date}
  */
 function update(state, { value }) {
@@ -73,9 +37,7 @@ function update(state, { value }) {
 
 
 module.exports = {
-  [ACTION.TYPE.INITIALIZE]         : initialize,
-  [ACTION.TYPE.SELECT]             : update,
-  [ACTION.TYPE.SHOW_NEXT_VIEW]     : showNext,
-  [ACTION.TYPE.SHOW_PREVIOUS_VIEW] : showPrevious,
-  [ACTION.TYPE.SHOW_VIEW]          : show,
+  [ACTION.TYPE.INITIALIZE] : initialize,
+  [ACTION.TYPE.SELECT]     : update,
+  [ACTION.TYPE.SHOW]       : update,
 }

@@ -1,7 +1,8 @@
-const ACTION = require('constants/action')
-const STATE  = require('constants/state')
+const ACTION  = require('constants/action')
+const SCOPE   = require('constants/scope')
 
-let dateUtil = require('utils/date')
+let dateUtil  = require('utils/date')
+let valueUtil = require('utils/value')
 
 
 
@@ -16,7 +17,7 @@ function initialize(state, { template, value }) {
   if (value) {
     return dateUtil.parse(value, template)
   }
-  return state ? dateUtil.create(state) : STATE.INITIAL.selected
+  return state ? dateUtil.create(state) : null
 }
 
 
@@ -24,20 +25,23 @@ function initialize(state, { template, value }) {
 /**
  * Sets the selected date.
  * @param  {Object} state
+ * @param  {SCOPE} payload.scope
  * @param  {Date|null} payload.value
  * @return {Date|null}
  */
-function set(state, { value }) {
+function set(state, { scope, value }) {
 
+  // If there's no value, return the default value
   if (!value) {
-    return STATE.INITIAL.selected
+    return null
   }
 
-  if (dateUtil.isSameDate(state, value)) {
-    return state
-  }
-
-  return dateUtil.create(value)
+  // Otherwise create the date to set
+  return valueUtil.createDateToSet(state, {
+    scope,
+    selected: state,
+    value,
+  })
 
 }
 
@@ -46,4 +50,5 @@ function set(state, { value }) {
 module.exports = {
   [ACTION.TYPE.INITIALIZE] : initialize,
   [ACTION.TYPE.SELECT]     : set,
+  [ACTION.TYPE.SHOW]       : set,
 }

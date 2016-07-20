@@ -1,9 +1,9 @@
 let lolex         = require('lolex')
 let sinon         = require('sinon')
 
-const ACTION      = require('constants/action')
 const STATE       = require('constants/state')
 
+let actions       = require('actions')
 let pickerObject  = require('objects/picker')
 let animationUtil = require('utils/animation')
 
@@ -150,8 +150,8 @@ describe('/pickerObject', () => {
         let initialState = picker.state
 
         // Dispatch an action
-        let view = new Date(2013, 3, 1)
-        picker.dispatch({ type: ACTION.TYPE.SHOW_VIEW, payload: { view } })
+        let value = new Date(2013, 3, 20)
+        picker.dispatch(actions.select(value, picker.state))
 
         // Grab the frame callback and trigger it
         let frameCallback = getFrameStub.lastCall.args[1]
@@ -160,7 +160,9 @@ describe('/pickerObject', () => {
         // Ensure the state was updated as expected
         picker.state.should.eql({
           ...initialState,
-          view,
+          selected : new Date(2013, 3, 20),
+          value    : '20 April, 2013',
+          view     : new Date(2013, 3, 1),
         })
 
         // Clean up the stub

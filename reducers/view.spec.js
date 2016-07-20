@@ -1,7 +1,6 @@
 let lolex       = require('lolex')
 
 const ACTION    = require('constants/action')
-const SCOPE     = require('constants/scope')
 
 let viewReducer = require('reducers/view')
 
@@ -59,129 +58,9 @@ describe('/viewReducer', () => {
 
 
 
-  describe('#[ACTION.TYPE.SHOW_NEXT_VIEW]', () => {
-
-    it('shows the next view with the scope as DAYS', () => {
-
-      let clock = lolex.install(new Date(2014, 3, 20).getTime())
-
-      let state   = new Date(2016, 8, 8)
-      let payload = { scope: SCOPE.DAYS }
-
-      let view = viewReducer[ACTION.TYPE.SHOW_NEXT_VIEW](state, payload)
-      view.should.eql(new Date(2016, 9, 1))
-
-      clock.uninstall()
-
-    })
-
-
-    it('shows the next view with the scope as MONTHS', () => {
-
-      let clock = lolex.install(new Date(2014, 3, 20).getTime())
-
-      let state   = new Date(2016, 8, 8)
-      let payload = { scope: SCOPE.MONTHS }
-
-      let view = viewReducer[ACTION.TYPE.SHOW_NEXT_VIEW](state, payload)
-      view.should.eql(new Date(2017, 8, 1))
-
-      clock.uninstall()
-
-    })
-
-
-    it('shows the next view with the scope as YEARS', () => {
-
-      let clock = lolex.install(new Date(2014, 3, 20).getTime())
-
-      let state   = new Date(2016, 8, 8)
-      let payload = { scope: SCOPE.YEARS }
-
-      let view = viewReducer[ACTION.TYPE.SHOW_NEXT_VIEW](state, payload)
-      view.should.eql(new Date(2026, 8, 1))
-
-      clock.uninstall()
-
-    })
-
-  })
-
-
-
-  describe('#[ACTION.TYPE.SHOW_PREVIOUS_VIEW]', () => {
-
-    it('shows the next view with the scope as DAYS', () => {
-
-      let clock = lolex.install(new Date(2014, 3, 20).getTime())
-
-      let state   = new Date(2016, 8, 8)
-      let payload = { scope: SCOPE.DAYS }
-
-      let view = viewReducer[ACTION.TYPE.SHOW_PREVIOUS_VIEW](state, payload)
-      view.should.eql(new Date(2016, 7, 1))
-
-      clock.uninstall()
-
-    })
-
-
-    it('shows the next view with the scope as MONTHS', () => {
-
-      let clock = lolex.install(new Date(2014, 3, 20).getTime())
-
-      let state   = new Date(2016, 8, 8)
-      let payload = { scope: SCOPE.MONTHS }
-
-      let view = viewReducer[ACTION.TYPE.SHOW_PREVIOUS_VIEW](state, payload)
-      view.should.eql(new Date(2015, 8, 1))
-
-      clock.uninstall()
-
-    })
-
-
-    it('shows the next view with the scope as YEARS', () => {
-
-      let clock = lolex.install(new Date(2014, 3, 20).getTime())
-
-      let state   = new Date(2016, 8, 8)
-      let payload = { scope: SCOPE.YEARS }
-
-      let view = viewReducer[ACTION.TYPE.SHOW_PREVIOUS_VIEW](state, payload)
-      view.should.eql(new Date(2006, 8, 1))
-
-      clock.uninstall()
-
-    })
-
-  })
-
-
-
-  describe('#[ACTION.TYPE.SHOW_VIEW]', () => {
-
-    it('shows a specific view', () => {
-
-      let clock = lolex.install(new Date(2014, 3, 20).getTime())
-
-      let state   = new Date(2016, 8, 8)
-      let payload = { view: new Date(2011, 6, 11) }
-
-      let view = viewReducer[ACTION.TYPE.SHOW_VIEW](state, payload)
-      view.should.eql(new Date(2011, 6, 1))
-
-      clock.uninstall()
-
-    })
-
-  })
-
-
-
   describe('#[ACTION.TYPE.SELECT]', () => {
 
-    it('updates a view when a value is selected', () => {
+    it('updates the view when a value is selected', () => {
 
       let clock = lolex.install(new Date(2014, 3, 20).getTime())
 
@@ -215,6 +94,16 @@ describe('/viewReducer', () => {
       let view = viewReducer[ACTION.TYPE.SELECT](state, payload)
       view.should.be.exactly(state)
 
+    })
+
+  })
+
+
+
+  describe('#[ACTION.TYPE.SHOW]', () => {
+
+    it('handles all the same scenarios as [ACTION.TYPE.SELECT]', () => {
+      viewReducer[ACTION.TYPE.SHOW].should.be.exactly(viewReducer[ACTION.TYPE.SELECT])
     })
 
   })

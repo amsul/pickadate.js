@@ -14,13 +14,33 @@ describe('/actions', () => {
 
 
 
-  describe('#format', () => {
+  // describe('#format', () => {
 
-    it('returns an actions that sets the template to use to format a value', () => {
-      let template = 'yyyy-mm-dd'
-      actions.format(template).should.eql({
-        type    : ACTION.TYPE.FORMAT,
-        payload : { template },
+  //   it('returns an actions that sets the template to use to format a value', () => {
+  //     let template = 'yyyy-mm-dd'
+  //     actions.format(template).should.eql({
+  //       type    : ACTION.TYPE.FORMAT,
+  //       payload : { template },
+  //     })
+  //   })
+
+  // })
+
+
+
+
+
+  /////////////
+  // CONFIRM //
+  /////////////
+
+
+
+  describe('#confirm', () => {
+
+    it('returns an action that confirms the selected value', () => {
+      actions.confirm().should.eql({
+        type : ACTION.TYPE.CONFIRM,
       })
     })
 
@@ -38,13 +58,18 @@ describe('/actions', () => {
 
   describe('#select', () => {
 
-    it('returns an action that selects a value for the picker', () => {
+    it('returns an action that selects a value', () => {
+
+      let scope    = SCOPE.DAYS
+      let selected = null
       let template = 'yyyy-mm-dd'
       let value    = new Date(2014, 3, 20)
-      actions.select(value, template).should.eql({
+
+      actions.select(value, { scope, selected, template }).should.eql({
         type    : ACTION.TYPE.SELECT,
-        payload : { template, value },
+        payload : { scope, selected, template, value },
       })
+
     })
 
   })
@@ -53,10 +78,15 @@ describe('/actions', () => {
 
   describe('#clear', () => {
 
-    it('returns an action that clears the value of the picker', () => {
+    it('returns an action that clears the value', () => {
       actions.clear().should.eql({
         type    : ACTION.TYPE.SELECT,
-        payload : { template: undefined, value: null },
+        payload : {
+          scope    : undefined,
+          selected : undefined,
+          template : undefined,
+          value    : null,
+        },
       })
     })
 
@@ -67,47 +97,120 @@ describe('/actions', () => {
 
 
   //////////
-  // VIEW //
+  // SHOW //
   //////////
 
 
 
-  describe('#showPreviousView', () => {
+  describe('#show', () => {
 
-    it('returns an action that shows the previous view of a certain scope', () => {
-      let scope = SCOPE.MONTHS
-      actions.showPreviousView(scope).should.eql({
-        type    : ACTION.TYPE.SHOW_PREVIOUS_VIEW,
-        payload : { scope },
+    it('returns an action that shows a scoped value', () => {
+
+      let scope    = SCOPE.MONTHS
+      let selected = null
+      let template = 'yyyy-mm-dd'
+      let value    = new Date(2012, 3, 20)
+
+      actions.show(value, { scope, selected, template }).should.eql({
+        type    : ACTION.TYPE.SHOW,
+        payload : { scope, selected, template, value },
       })
+
     })
 
   })
 
 
 
-  describe('#showNextView', () => {
+  describe('#showPrevious', () => {
 
-    it('returns an action that shows the next view of a certain scope', () => {
-      let scope = SCOPE.MONTHS
-      actions.showNextView(scope).should.eql({
-        type    : ACTION.TYPE.SHOW_NEXT_VIEW,
-        payload : { scope },
+    it('returns an action that shows a scoped value from the previous view', () => {
+
+      let scope    = SCOPE.MONTHS
+      let selected = null
+      let template = 'yyyy-mm-dd'
+      let view     = new Date(2013, 3, 1)
+      let value    = new Date(2012, 3, 1)
+
+      actions.showPrevious({ scope, selected, template, view }).should.eql({
+        type    : ACTION.TYPE.SHOW,
+        payload : { scope, selected, template, value },
       })
+
+    })
+
+
+    it('returns an action that selects a scoped value from the previous view', () => {
+
+      let scope    = SCOPE.MONTHS
+      let selected = new Date(2013, 3, 20)
+      let template = 'yyyy-mm-dd'
+      let view     = new Date(2013, 3, 1)
+      let value    = new Date(2012, 3, 20)
+
+      actions.showPrevious({ scope, selected, template, view }).should.eql({
+        type    : ACTION.TYPE.SHOW,
+        payload : { scope, selected, template, value },
+      })
+
     })
 
   })
 
 
 
-  describe('#showView', () => {
+  describe('#showNext', () => {
 
-    it('returns an action that shows the view of a certain date', () => {
-      let view = new Date(2014, 3, 20)
-      actions.showView(view).should.eql({
-        type    : ACTION.TYPE.SHOW_VIEW,
-        payload : { view },
+    it('returns an action that shows a scoped value from the next view', () => {
+
+      let scope    = SCOPE.MONTHS
+      let selected = null
+      let template = 'yyyy-mm-dd'
+      let view     = new Date(2013, 3, 1)
+      let value    = new Date(2014, 3, 1)
+
+      actions.showNext({ scope, selected, template, view }).should.eql({
+        type    : ACTION.TYPE.SHOW,
+        payload : { scope, selected, template, value },
       })
+
+    })
+
+
+    it('returns an action that selects a scoped value from the next view', () => {
+
+      let scope    = SCOPE.MONTHS
+      let selected = new Date(2013, 3, 20)
+      let template = 'yyyy-mm-dd'
+      let view     = new Date(2013, 3, 1)
+      let value    = new Date(2014, 3, 20)
+
+      actions.showNext({ scope, selected, template, view }).should.eql({
+        type    : ACTION.TYPE.SHOW,
+        payload : { scope, selected, template, value },
+      })
+
+    })
+
+  })
+
+
+
+  describe('#showToday', () => {
+
+    it('returns an action that selects "today"', () => {
+
+      let scope    = SCOPE.MONTHS
+      let selected = null
+      let template = 'yyyy-mm-dd'
+      let today    = new Date(2013, 3, 20)
+      let value    = new Date(2013, 3, 20)
+
+      actions.showToday({ scope, selected, template, today }).should.eql({
+        type    : ACTION.TYPE.SHOW,
+        payload : { scope, selected, template, value },
+      })
+
     })
 
   })
@@ -124,7 +227,7 @@ describe('/actions', () => {
 
   describe('#cycleScope', () => {
 
-    it('returns an action that cycles to the next scope of the picker', () => {
+    it('returns an action that cycles to the next scope', () => {
       actions.cycleScope().should.eql({
         type: ACTION.TYPE.CYCLE_SCOPE,
       })

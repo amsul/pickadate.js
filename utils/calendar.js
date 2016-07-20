@@ -45,8 +45,6 @@ function getWeekdays(state) {
  */
 function getDatesForRows(state) {
 
-  // TODO: Check state.selected to determine the date to use
-
   let { scope, view } = state
 
   let year  = view.getFullYear()
@@ -159,7 +157,7 @@ function getDateRelativeToDecade(dateObject, change) {
   let month = dateObject.getMonth()
   let date  = dateObject.getDate()
 
-  return getClosestDateForMonth(year + (change * 10), month, date)
+  return dateUtil.createInMonth(year + (change * 10), month, date)
 
 }
 
@@ -180,7 +178,7 @@ function getDateRelativeToYear(dateObject, change) {
   let month = dateObject.getMonth()
   let date  = dateObject.getDate()
 
-  return getClosestDateForMonth(year + change, month, date)
+  return dateUtil.createInMonth(year + change, month, date)
 
 }
 
@@ -201,32 +199,7 @@ function getDateRelativeToMonth(dateObject, change) {
   let month = dateObject.getMonth()
   let date  = dateObject.getDate()
 
-  return getClosestDateForMonth(year, month + change, date)
-
-}
-
-
-
-/**
- * Gets the closest date for a month, ensuring that the
- * @private
- * @param  {Number} year
- * @param  {Number} month
- * @param  {Number} date
- * @return {Date}
- */
-function getClosestDateForMonth(year, month, date) {
-
-  while (date >= 0) {
-    let dateObject = new Date(year, month, date)
-    if (dateObject.getMonth() === month) {
-      return dateObject
-    }
-    date -= 1
-  }
-
-  /* istanbul ignore next: used as fallback in case a date is not found */
-  return new Date(year, month, 1)
+  return dateUtil.createInMonth(year, month + change, date)
 
 }
 

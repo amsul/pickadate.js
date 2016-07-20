@@ -43,6 +43,22 @@ describe('/dateUtil', () => {
 
 
 
+  describe('#createInMonth', () => {
+
+    it('creates a date clamped in a month', () => {
+
+      dateUtil.createInMonth(2013, 2, 31)
+        .should.eql(new Date(2013, 2, 31))
+
+      dateUtil.createInMonth(2013, 1, 31)
+        .should.eql(new Date(2013, 1, 28))
+
+    })
+
+  })
+
+
+
 
 
   ////////////////////

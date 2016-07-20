@@ -40,10 +40,25 @@ describe('/scopeReducer', () => {
   describe('#[ACTION.TYPE.SELECT]', () => {
 
     it('shows the next deeper scope', () => {
-      scopeReducer[ACTION.TYPE.SELECT](SCOPE.YEARS).should.eql(SCOPE.MONTHS)
-      scopeReducer[ACTION.TYPE.SELECT](SCOPE.MONTHS).should.eql(SCOPE.DAYS)
-      scopeReducer[ACTION.TYPE.SELECT](SCOPE.DAYS).should.eql(SCOPE.DAYS)
-      scopeReducer[ACTION.TYPE.SELECT]().should.eql(SCOPE.DAYS)
+
+      let payload = { value: new Date(2014, 3, 20) }
+
+      scopeReducer[ACTION.TYPE.SELECT](SCOPE.YEARS, payload).should.eql(SCOPE.MONTHS)
+      scopeReducer[ACTION.TYPE.SELECT](SCOPE.MONTHS, payload).should.eql(SCOPE.DAYS)
+      scopeReducer[ACTION.TYPE.SELECT](SCOPE.DAYS, payload).should.eql(SCOPE.DAYS)
+      scopeReducer[ACTION.TYPE.SELECT](undefined, payload).should.eql(SCOPE.DAYS)
+
+    })
+
+
+    it('shows the same scope if there is no new value', () => {
+
+      let payload = {}
+
+      scopeReducer[ACTION.TYPE.SELECT](SCOPE.YEARS, payload).should.eql(SCOPE.YEARS)
+      scopeReducer[ACTION.TYPE.SELECT](SCOPE.MONTHS, payload).should.eql(SCOPE.MONTHS)
+      scopeReducer[ACTION.TYPE.SELECT](SCOPE.DAYS, payload).should.eql(SCOPE.DAYS)
+
     })
 
   })

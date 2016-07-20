@@ -20,13 +20,13 @@ function initialize(state = STATE.INITIAL.template) {
  * @param  {String} payload.template
  * @return {String}
  */
-function set(state, { template }) {
-  return template
-}
+// function set(state, { template }) {
+//   return template
+// }
 
 
 
 module.exports = {
-  [ACTION.TYPE.FORMAT]     : set,
+  // [ACTION.TYPE.FORMAT]     : set,
   [ACTION.TYPE.INITIALIZE] : initialize,
 }
