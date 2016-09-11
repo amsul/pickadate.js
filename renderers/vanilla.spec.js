@@ -1,14 +1,13 @@
-let sinon         = require('sinon')
+let sinon           = require('sinon')
 
-let actions       = require('actions')
-let classes       = require('classes')
-let vanillaEngine = require('engines/vanilla')
-let animationUtil = require('utils/animation')
-let dateUtil      = require('utils/date')
-
+let classes         = require('classes')
+let vanillaRenderer = require('renderers/vanilla')
+let animationUtil   = require('utils/animation')
+let dateUtil        = require('utils/date')
 
 
-describe('/vanillaEngine', () => {
+
+describe('/vanillaRenderer', () => {
 
 
   ////////////
@@ -22,7 +21,7 @@ describe('/vanillaEngine', () => {
     it('renders a picker into a parent node', () => {
 
       let parentNode = document.createElement('div')
-      vanillaEngine.render(parentNode)
+      vanillaRenderer.render(parentNode)
 
       parentNode.children.length.should.eql(1)
       parentNode.children[0].className.should.eql(classes.root)
@@ -33,7 +32,7 @@ describe('/vanillaEngine', () => {
     it('returns the picker api', () => {
 
       let parentNode = document.createElement('div')
-      let picker     = vanillaEngine.render(parentNode)
+      let picker     = vanillaRenderer.render(parentNode)
 
       picker.should.have.keys(
         'addStateListener',
@@ -66,7 +65,7 @@ describe('/vanillaEngine', () => {
         // Create the parent and input node and render the picker
         let parentNode = document.createElement('div')
         let inputNode  = document.createElement('input')
-        let picker     = vanillaEngine.render(parentNode, inputNode)
+        let picker     = vanillaRenderer.render(parentNode, inputNode)
 
         let selectedDate = new Date(2013, 3, 20)
 
@@ -94,7 +93,7 @@ describe('/vanillaEngine', () => {
         // Create the parent and input node and render the picker
         let parentNode = document.createElement('div')
         let inputNode  = document.createElement('input')
-        let picker     = vanillaEngine.render(parentNode, inputNode)
+        let picker     = vanillaRenderer.render(parentNode, inputNode)
 
         // Trigger a state change
         picker.dispatch({ type: 'ACTION_TYPE_TEST' })
@@ -129,7 +128,7 @@ describe('/vanillaEngine', () => {
 
         // Create the parent node and render the picker
         let parentNode = document.createElement('div')
-        vanillaEngine.render(parentNode)
+        vanillaRenderer.render(parentNode)
 
         // Grab the root element
         let rootElement = parentNode.children[0]
@@ -164,7 +163,7 @@ describe('/vanillaEngine', () => {
 
         // Create the parent node and render the picker
         let parentNode = document.createElement('div')
-        let picker     = vanillaEngine.render(parentNode)
+        let picker     = vanillaRenderer.render(parentNode)
 
         // Create the click event
         let event = new Event('click')
@@ -194,7 +193,7 @@ describe('/vanillaEngine', () => {
 
         // Create the parent node and render the picker
         let parentNode = document.createElement('div')
-        let picker     = vanillaEngine.render(parentNode)
+        let picker     = vanillaRenderer.render(parentNode)
 
         // Grab the scope button and it's children
         let scopeButton     = parentNode.getElementsByClassName(classes.button_scope)[0]
@@ -223,7 +222,7 @@ describe('/vanillaEngine', () => {
 
         // Create the parent node and render the picker
         let parentNode = document.createElement('div')
-        let picker     = vanillaEngine.render(parentNode)
+        let picker     = vanillaRenderer.render(parentNode)
 
         // Grab the scope button and it's children
         let scopeButton     = parentNode.getElementsByClassName(classes.button_scope)[0]
@@ -255,7 +254,7 @@ describe('/vanillaEngine', () => {
         // Create the parent node and render the picker
         // with a selected value
         let parentNode = document.createElement('div')
-        vanillaEngine.render(parentNode, {
+        vanillaRenderer.render(parentNode, {
           selected: new Date(2014, 3, 20)
         })
 
@@ -279,7 +278,7 @@ describe('/vanillaEngine', () => {
         // Create the parent node and render the picker
         // without a selected value
         let parentNode = document.createElement('div')
-        vanillaEngine.render(parentNode)
+        vanillaRenderer.render(parentNode)
 
         // Grab the "compound" scope item
         let scopeItemCompoundNodes = parentNode.getElementsByClassName(classes.scopeItem_compound)
@@ -305,7 +304,7 @@ describe('/vanillaEngine', () => {
 
         // Create the parent node and render the picker
         let parentNode = document.createElement('div')
-        let picker     = vanillaEngine.render(parentNode)
+        let picker     = vanillaRenderer.render(parentNode)
 
         // Create the click event
         let event = new Event('click')
@@ -337,7 +336,7 @@ describe('/vanillaEngine', () => {
 
         // Create the parent node and render the picker
         let parentNode = document.createElement('div')
-        let picker     = vanillaEngine.render(parentNode)
+        let picker     = vanillaRenderer.render(parentNode)
 
         // Create the click event
         let event = new Event('click')
@@ -369,7 +368,7 @@ describe('/vanillaEngine', () => {
 
         // Create the parent node and render the picker
         let parentNode = document.createElement('div')
-        let picker     = vanillaEngine.render(parentNode)
+        let picker     = vanillaRenderer.render(parentNode)
 
         // Create the click event
         let event = new Event('click')
@@ -401,7 +400,7 @@ describe('/vanillaEngine', () => {
 
         // Create the parent node and render the picker
         let parentNode = document.createElement('div')
-        let picker     = vanillaEngine.render(parentNode)
+        let picker     = vanillaRenderer.render(parentNode)
 
         // Create the click event
         let event = new Event('click')
@@ -433,7 +432,7 @@ describe('/vanillaEngine', () => {
 
         // Create the parent node and render the picker
         let parentNode = document.createElement('div')
-        let picker     = vanillaEngine.render(parentNode)
+        let picker     = vanillaRenderer.render(parentNode)
 
         // Create the click event
         let event = new Event('click')
@@ -473,7 +472,7 @@ describe('/vanillaEngine', () => {
 
         // Create the parent node and render the picker
         let parentNode = document.createElement('div')
-        let picker     = vanillaEngine.render(parentNode)
+        let picker     = vanillaRenderer.render(parentNode)
 
         // Create the click event
         let event = new Event('click', { bubbles: true })
@@ -501,7 +500,7 @@ describe('/vanillaEngine', () => {
 
         // Create the parent node and render the picker
         let parentNode = document.createElement('div')
-        let picker     = vanillaEngine.render(parentNode)
+        let picker     = vanillaRenderer.render(parentNode)
 
         // Create the click event
         let event = new Event('click', { bubbles: true })
@@ -533,7 +532,7 @@ describe('/vanillaEngine', () => {
 
         // Create the parent node and render the picker
         let parentNode = document.createElement('div')
-        let picker     = vanillaEngine.render(parentNode)
+        let picker     = vanillaRenderer.render(parentNode)
 
         // Grab the grid element and it's children
         let gridElement     = parentNode.getElementsByClassName(classes.grid)[0]
@@ -562,7 +561,7 @@ describe('/vanillaEngine', () => {
 
         // Create the parent node and render the picker
         let parentNode = document.createElement('div')
-        let picker     = vanillaEngine.render(parentNode)
+        let picker     = vanillaRenderer.render(parentNode)
 
         // Grab the grid element and it's children
         let gridElement     = parentNode.getElementsByClassName(classes.grid)[0]
@@ -591,7 +590,7 @@ describe('/vanillaEngine', () => {
 
         // Create the parent node and render the picker
         let parentNode = document.createElement('div')
-        let picker     = vanillaEngine.render(parentNode)
+        let picker     = vanillaRenderer.render(parentNode)
 
         // Grab the grid element and it's children
         let gridElement     = parentNode.getElementsByClassName(classes.grid)[0]
@@ -620,7 +619,7 @@ describe('/vanillaEngine', () => {
 
         // Create the parent node and render the picker
         let parentNode = document.createElement('div')
-        let picker     = vanillaEngine.render(parentNode)
+        let picker     = vanillaRenderer.render(parentNode)
 
         // Grab the grid element and it's children
         let gridElement     = parentNode.getElementsByClassName(classes.grid)[0]

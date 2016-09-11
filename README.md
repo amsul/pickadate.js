@@ -18,7 +18,7 @@ To avoid running into circular depedencies, the modules are organized so they ca
 - `utils/`
 - `actions/` & `reducers/`
 - `objects/`
-- `engines/`
+- `renderers/`
 
 
 
