@@ -195,7 +195,7 @@ function createButtonScopeEmptyElement(state) {
       classes.scopeItem,
       classes.scopeItem_empty,
     ],
-    dateUtil.format(state.view, 'mmmm yyyy')
+    dateUtil.format(state.view, 'mmm yyyy')
   )
 
   return node
@@ -230,7 +230,7 @@ function createButtonScopeMonthAndYearElement(state) {
       classes.scopeItemLabel,
       classes.scopeItemLabel_monthAndYear,
     ],
-    dateUtil.format(state.selected, 'mmmm yyyy')
+    dateUtil.format(state.selected, 'mmm yyyy')
   )
 
   return node
