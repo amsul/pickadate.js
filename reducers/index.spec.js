@@ -44,7 +44,7 @@ describe('/reducers', () => {
       }
 
       let value  = new Date(2014, 3, 20)
-      let action = actions.select(value, state)
+      let action = actions.select(state, value)
 
       let nextState = reducers.reduce(state, action)
 

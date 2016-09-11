@@ -25,6 +25,16 @@ describe('/pickerObject', () => {
         'dispatch',
         'removeStateListener',
         'state',
+
+        // Actions
+        'clear',
+        'confirm',
+        'cycleScope',
+        'select',
+        'show',
+        'showNext',
+        'showPrevious',
+        'showToday',
       )
 
       // Ensure the methods are functions
@@ -151,7 +161,7 @@ describe('/pickerObject', () => {
 
         // Dispatch an action
         let value = new Date(2013, 3, 20)
-        picker.dispatch(actions.select(value, picker.state))
+        picker.dispatch(actions.select(picker.state, value))
 
         // Grab the frame callback and trigger it
         let frameCallback = getFrameStub.lastCall.args[1]

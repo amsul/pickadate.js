@@ -1,6 +1,7 @@
 const ACTION      = require('constants/action')
 const STATE       = require('constants/state')
 
+let actions       = require('actions')
 let reducers      = require('reducers')
 let animationUtil = require('utils/animation')
 
@@ -84,8 +85,8 @@ function create(initialChangedState) {
     triggerStateListeners(nextState)
   }
 
-  // Return the picker api.
-  return {
+  // Create the picker api.
+  let picker = {
     addStateListener,
     dispatch,
     removeStateListener,
@@ -93,6 +94,22 @@ function create(initialChangedState) {
       return state
     },
   }
+
+  // Go through the actions and create a higher order function
+  // for each that dispatches the action with the state and
+  // any other arguments passed.
+  Object.keys(actions).forEach(actionName => {
+    /* istanbul ignore if: used as a debugging aid */
+    if (picker[actionName]) {
+      throw new Error(`The picker property "${actionName}" is already defined`)
+    }
+    picker[actionName] = (...args) => {
+      dispatch(actions[actionName](state, ...args))
+    }
+  })
+
+  // Return the final picker api
+  return picker
 
 }
 

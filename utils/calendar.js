@@ -14,7 +14,7 @@ let jsUtil   = require('utils/js')
 /**
  * Gets the weekdays for a given state.
  * @param  {Object} state
- * @return {DAY.FULL|DAY.SHORT}
+ * @return {(DAY.FULL|DAY.SHORT)[]}
  */
 function getWeekdays(state) {
 
@@ -103,7 +103,7 @@ function getDatesForRowsOfMonths(year) {
  * Gets the dates for rows of weeks, given a year and month.
  * @param  {Number} year
  * @param  {Number} month
- * @return {Array[]}
+ * @return {Array<Date[]>}
  */
 function getDatesForRowsOfWeeks(year, month) {
   return jsUtil.createRange(0, 5).map(

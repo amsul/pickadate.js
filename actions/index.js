@@ -84,11 +84,11 @@ let confirm = () => ({
  *
  * TODO: Require a `scope` and `template` when there is a value
  *
- * @param  {Date|Number|null} value
  * @param  {Object} state
+ * @param  {Date|Number|null} [value]
  * @return {Object}
  */
-let select = (value, { scope, selected, template }) => ({
+let select = ({ scope, selected, template }, value) => ({
   type    : ACTION.TYPE.SELECT,
   payload : { scope, selected, template, value },
 })
@@ -99,7 +99,7 @@ let select = (value, { scope, selected, template }) => ({
  * Returns an action that clears the value.
  * @return {Object}
  */
-let clear = () => select(null, {})
+let clear = () => select({}, null)
 
 
 
@@ -111,7 +111,13 @@ let clear = () => select(null, {})
 
 
 
-let show = (value, { scope, selected, template }) => ({
+/**
+ * Returns an action that selects a scoped value.
+ * @param  {Object} state
+ * @param  {Date|String} value
+ * @return {Object}
+ */
+let show = ({ scope, selected, template }, value) => ({
   type    : ACTION.TYPE.SHOW,
   payload : { scope, selected, template, value },
 })
@@ -125,8 +131,8 @@ let show = (value, { scope, selected, template }) => ({
  */
 let showPrevious = ({ scope, selected, template, view }) => (
   show(
-    calendarUtil.getDateOfPreviousScope(selected || view, scope),
-    { scope, selected, template }
+    { scope, selected, template },
+    calendarUtil.getDateOfPreviousScope(selected || view, scope)
   )
 )
 
@@ -139,8 +145,8 @@ let showPrevious = ({ scope, selected, template, view }) => (
  */
 let showNext = ({ scope, selected, template, view }) => (
   show(
-    calendarUtil.getDateOfNextScope(selected || view, scope),
-    { scope, selected, template }
+    { scope, selected, template },
+    calendarUtil.getDateOfNextScope(selected || view, scope)
   )
 )
 
@@ -152,7 +158,7 @@ let showNext = ({ scope, selected, template, view }) => (
  * @return {Object}
  */
 let showToday = ({ scope, selected, template, today }) => (
-  show(today, { scope, selected, template })
+  show({ scope, selected, template }, today)
 )
 
 

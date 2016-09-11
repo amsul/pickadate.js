@@ -65,7 +65,7 @@ describe('/actions', () => {
       let template = 'yyyy-mm-dd'
       let value    = new Date(2014, 3, 20)
 
-      actions.select(value, { scope, selected, template }).should.eql({
+      actions.select({ scope, selected, template }, value).should.eql({
         type    : ACTION.TYPE.SELECT,
         payload : { scope, selected, template, value },
       })
@@ -111,7 +111,7 @@ describe('/actions', () => {
       let template = 'yyyy-mm-dd'
       let value    = new Date(2012, 3, 20)
 
-      actions.show(value, { scope, selected, template }).should.eql({
+      actions.show({ scope, selected, template }, value).should.eql({
         type    : ACTION.TYPE.SHOW,
         payload : { scope, selected, template, value },
       })

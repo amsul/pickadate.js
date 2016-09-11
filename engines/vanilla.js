@@ -2,7 +2,6 @@ let fs               = require('fs')
 
 const SCOPE          = require('constants/scope')
 
-let actions          = require('actions')
 let classes          = require('classes')
 let pickerObject     = require('objects/picker')
 let calendarUtil     = require('utils/calendar')
@@ -124,7 +123,7 @@ function createRootElement(picker) {
 
 function createButtonScopeElement(picker) {
 
-  let onClick = () => picker.dispatch(actions.cycleScope())
+  let onClick = () => picker.cycleScope()
 
   let node = createButtonNode(
     [classes.button, classes.button_scope],
@@ -275,9 +274,7 @@ function createButtonNavigationElement(picker) {
 
 function createButtonNavigationPreviousElement(picker) {
 
-  let onClick = () => picker.dispatch(
-    actions.showPrevious(picker.state)
-  )
+  let onClick = () => picker.showPrevious()
 
   let node = createButtonNode(
     [classes.button, classes.button_navigation, classes.button_previous],
@@ -295,9 +292,7 @@ function createButtonNavigationPreviousElement(picker) {
 
 function createButtonNavigationTodayElement(picker) {
 
-  let onClick = () => picker.dispatch(
-    actions.showToday(picker.state)
-  )
+  let onClick = () => picker.showToday()
 
   let node = createButtonNode(
     [classes.button, classes.button_navigation, classes.button_today],
@@ -315,9 +310,7 @@ function createButtonNavigationTodayElement(picker) {
 
 function createButtonNavigationNextElement(picker) {
 
-  let onClick = () => picker.dispatch(
-    actions.showNext(picker.state)
-  )
+  let onClick = () => picker.showNext()
 
   let node = createButtonNode(
     [classes.button, classes.button_navigation, classes.button_next],
@@ -335,7 +328,7 @@ function createButtonNavigationNextElement(picker) {
 
 function createButtonClearElement(picker) {
 
-  let onClick = () => picker.dispatch(actions.clear())
+  let onClick = () => picker.clear()
 
   let node = createButtonNode(
     [classes.button, classes.button_clear],
@@ -353,7 +346,7 @@ function createButtonClearElement(picker) {
 
 function createButtonConfirmElement(picker) {
 
-  let onClick = () => picker.dispatch(actions.confirm())
+  let onClick = () => picker.confirm()
 
   let node = createButtonNode(
     [classes.button, classes.button_confirm],
@@ -384,7 +377,7 @@ function createGridElement(picker) {
     if (!value) {
       return
     }
-    picker.dispatch(actions.select(value, picker.state))
+    picker.select(value)
   }
 
   let node = createButtonNode(

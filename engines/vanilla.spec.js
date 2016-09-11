@@ -40,6 +40,16 @@ describe('/vanillaEngine', () => {
         'dispatch',
         'removeStateListener',
         'state',
+
+        // Actions
+        'clear',
+        'confirm',
+        'cycleScope',
+        'select',
+        'show',
+        'showNext',
+        'showPrevious',
+        'showToday',
       )
 
     })
@@ -61,7 +71,7 @@ describe('/vanillaEngine', () => {
         let selectedDate = new Date(2013, 3, 20)
 
         // Trigger a value change
-        picker.dispatch(actions.select(selectedDate, picker.state))
+        picker.select(selectedDate)
 
         // Grab the frame callback and trigger it
         let frameCallback = getFrameStub.lastCall.args[1]
@@ -150,7 +160,7 @@ describe('/vanillaEngine', () => {
 
     describe('(#createButtonScopeElement)', () => {
 
-      it('binds a click handler on the "scope" button that dispatches an action to cycle the scope', () => {
+      it('binds a click handler on the "scope" button that cycles the scope', () => {
 
         // Create the parent node and render the picker
         let parentNode = document.createElement('div')
@@ -164,15 +174,15 @@ describe('/vanillaEngine', () => {
         elements.length.should.eql(1)
         let scopeButton = elements[0]
 
-        // Stub out the dispatch method on the picker
-        let dispatchStub = sinon.stub(picker, 'dispatch')
+        // Stub out the cycleScope method on the picker
+        let cycleScopeStub = sinon.stub(picker, 'cycleScope')
 
         // Dispatch the click event on the scope button
         scopeButton.dispatchEvent(event)
 
-        // Ensure the dispatch stub was called as expected
-        dispatchStub.callCount.should.eql(1)
-        dispatchStub.lastCall.args.should.eql([actions.cycleScope()])
+        // Ensure the cycleScope stub was called as expected
+        cycleScopeStub.callCount.should.eql(1)
+        cycleScopeStub.lastCall.args.should.eql([])
 
       })
 
@@ -191,7 +201,7 @@ describe('/vanillaEngine', () => {
         let scopeButtonHTML = scopeButton.innerHTML
 
         // Trigger a state change
-        picker.dispatch(actions.select(new Date(2014, 3, 20), picker.state))
+        picker.select(new Date(2014, 3, 20))
 
         // Grab the frame callback and trigger it
         let frameCallback = getFrameStub.lastCall.args[1]
@@ -291,7 +301,7 @@ describe('/vanillaEngine', () => {
 
     describe('(#createButtonNavigationPreviousElement)', () => {
 
-      it('binds a click handler on the "previous" button that dispatches an action to show the previous view', () => {
+      it('binds a click handler on the "previous" button that shows the previous view', () => {
 
         // Create the parent node and render the picker
         let parentNode = document.createElement('div')
@@ -305,15 +315,15 @@ describe('/vanillaEngine', () => {
         elements.length.should.eql(1)
         let previousButton = elements[0]
 
-        // Stub out the dispatch method on the picker
-        let dispatchStub = sinon.stub(picker, 'dispatch')
+        // Stub out the showPrevious method on the picker
+        let showPreviousStub = sinon.stub(picker, 'showPrevious')
 
         // Dispatch the click event on the previous button
         previousButton.dispatchEvent(event)
 
-        // Ensure the dispatch stub was called as expected
-        dispatchStub.callCount.should.eql(1)
-        dispatchStub.lastCall.args.should.eql([actions.showPrevious(picker.state)])
+        // Ensure the showPrevious stub was called as expected
+        showPreviousStub.callCount.should.eql(1)
+        showPreviousStub.lastCall.args.should.eql([])
 
       })
 
@@ -323,7 +333,7 @@ describe('/vanillaEngine', () => {
 
     describe('(#createButtonNavigationNextElement)', () => {
 
-      it('binds a click handler on the "next" button that dispatches an action to show the next view', () => {
+      it('binds a click handler on the "next" button that shows the next view', () => {
 
         // Create the parent node and render the picker
         let parentNode = document.createElement('div')
@@ -337,15 +347,15 @@ describe('/vanillaEngine', () => {
         elements.length.should.eql(1)
         let nextButton = elements[0]
 
-        // Stub out the dispatch method on the picker
-        let dispatchStub = sinon.stub(picker, 'dispatch')
+        // Stub out the showNext method on the picker
+        let showNextStub = sinon.stub(picker, 'showNext')
 
         // Dispatch the click event on the next button
         nextButton.dispatchEvent(event)
 
-        // Ensure the dispatch stub was called as expected
-        dispatchStub.callCount.should.eql(1)
-        dispatchStub.lastCall.args.should.eql([actions.showNext(picker.state)])
+        // Ensure the showNext stub was called as expected
+        showNextStub.callCount.should.eql(1)
+        showNextStub.lastCall.args.should.eql([])
 
       })
 
@@ -355,7 +365,7 @@ describe('/vanillaEngine', () => {
 
     describe('(#createButtonNavigationTodayElement)', () => {
 
-      it('binds a click handler on the "today" button that dispatches an action to show the view today', () => {
+      it('binds a click handler on the "today" button that shows the view today', () => {
 
         // Create the parent node and render the picker
         let parentNode = document.createElement('div')
@@ -369,15 +379,15 @@ describe('/vanillaEngine', () => {
         elements.length.should.eql(1)
         let todayButton = elements[0]
 
-        // Stub out the dispatch method on the picker
-        let dispatchStub = sinon.stub(picker, 'dispatch')
+        // Stub out the showToday method on the picker
+        let showTodayStub = sinon.stub(picker, 'showToday')
 
         // Dispatch the click event on the today button
         todayButton.dispatchEvent(event)
 
-        // Ensure the dispatch stub was called as expected
-        dispatchStub.callCount.should.eql(1)
-        dispatchStub.lastCall.args.should.eql([actions.showToday(picker.state)])
+        // Ensure the showToday stub was called as expected
+        showTodayStub.callCount.should.eql(1)
+        showTodayStub.lastCall.args.should.eql([])
 
       })
 
@@ -387,7 +397,7 @@ describe('/vanillaEngine', () => {
 
     describe('(#createButtonClearElement)', () => {
 
-      it('binds a click handler on the "clear" button that dispatches an action to clear the selected value', () => {
+      it('binds a click handler on the "clear" button that clears the selected value', () => {
 
         // Create the parent node and render the picker
         let parentNode = document.createElement('div')
@@ -401,15 +411,15 @@ describe('/vanillaEngine', () => {
         elements.length.should.eql(1)
         let clearButton = elements[0]
 
-        // Stub out the dispatch method on the picker
-        let dispatchStub = sinon.stub(picker, 'dispatch')
+        // Stub out the clear method on the picker
+        let clearStub = sinon.stub(picker, 'clear')
 
         // Dispatch the click event on the clear button
         clearButton.dispatchEvent(event)
 
-        // Ensure the dispatch stub was called as expected
-        dispatchStub.callCount.should.eql(1)
-        dispatchStub.lastCall.args.should.eql([actions.clear()])
+        // Ensure the clear stub was called as expected
+        clearStub.callCount.should.eql(1)
+        clearStub.lastCall.args.should.eql([])
 
       })
 
@@ -419,7 +429,7 @@ describe('/vanillaEngine', () => {
 
     describe('(#createButtonConfirmElement)', () => {
 
-      it('binds a click handler on the "confirm" button that dispatches an action to confirm the selected value', () => {
+      it('binds a click handler on the "confirm" button that confirms the selected value', () => {
 
         // Create the parent node and render the picker
         let parentNode = document.createElement('div')
@@ -433,15 +443,15 @@ describe('/vanillaEngine', () => {
         elements.length.should.eql(1)
         let clearButton = elements[0]
 
-        // Stub out the dispatch method on the picker
-        let dispatchStub = sinon.stub(picker, 'dispatch')
+        // Stub out the confirm method on the picker
+        let confirmStub = sinon.stub(picker, 'confirm')
 
         // Dispatch the click event on the clear button
         clearButton.dispatchEvent(event)
 
-        // Ensure the dispatch stub was called as expected
-        dispatchStub.callCount.should.eql(1)
-        dispatchStub.lastCall.args.should.eql([actions.confirm()])
+        // Ensure the confirm stub was called as expected
+        confirmStub.callCount.should.eql(1)
+        confirmStub.lastCall.args.should.eql([])
 
       })
 
@@ -459,7 +469,7 @@ describe('/vanillaEngine', () => {
 
     describe('(#createGridElement)', () => {
 
-      it('binds a click handler on the "grid" that dispatches an action to select a value', () => {
+      it('binds a click handler on the "grid" that selects a value', () => {
 
         // Create the parent node and render the picker
         let parentNode = document.createElement('div')
@@ -473,18 +483,16 @@ describe('/vanillaEngine', () => {
         elements.length.should.eql(1)
         let gridElement = elements[0]
 
-        // Stub out the dispatch method on the picker
-        let dispatchStub = sinon.stub(picker, 'dispatch')
+        // Stub out the select method on the picker
+        let selectStub = sinon.stub(picker, 'select')
 
         // Dispatch the click event on a child cell element of the grid element
         let gridCellElement = gridElement.querySelector('[data-value]')
         gridCellElement.dispatchEvent(event)
 
-        // Ensure the dispatch stub was called as expected
-        dispatchStub.callCount.should.eql(1)
-        dispatchStub.lastCall.args.should.eql([
-          actions.select(+gridCellElement.dataset.value, picker.state)
-        ])
+        // Ensure the select stub was called as expected
+        selectStub.callCount.should.eql(1)
+        selectStub.lastCall.args.should.eql([+gridCellElement.dataset.value])
 
       })
 
@@ -501,8 +509,8 @@ describe('/vanillaEngine', () => {
         // Grab the grid element
         let gridElement = parentNode.getElementsByClassName(classes.grid)[0]
 
-        // Stub out the dispatch method on the picker
-        let dispatchStub = sinon.stub(picker, 'dispatch')
+        // Stub out the select method on the picker
+        let selectStub = sinon.stub(picker, 'select')
 
         // Grab the grid row heading element
         let elements = gridElement.getElementsByClassName(classes.gridRow_heading)
@@ -512,8 +520,8 @@ describe('/vanillaEngine', () => {
         // Dispatch the click event on the grid row heading element
         gridRowHeadingElement.dispatchEvent(event)
 
-        // Ensure the dispatch stub was not called
-        dispatchStub.callCount.should.eql(0)
+        // Ensure the select stub was not called
+        selectStub.callCount.should.eql(0)
 
       })
 
@@ -532,7 +540,7 @@ describe('/vanillaEngine', () => {
         let gridElementHTML = gridElement.innerHTML
 
         // Trigger a state change
-        picker.dispatch(actions.show(new Date(2014, 3, 20), picker.state))
+        picker.show(new Date(2014, 3, 20))
 
         // Grab the frame callback and trigger it
         let frameCallback = getFrameStub.lastCall.args[1]
@@ -561,7 +569,7 @@ describe('/vanillaEngine', () => {
         let gridElementHTML = gridElement.innerHTML
 
         // Trigger a state change
-        picker.dispatch(actions.select(new Date(2013, 3, 20), picker.state))
+        picker.select(new Date(2013, 3, 20))
 
         // Grab the frame callback and trigger it
         let frameCallback = getFrameStub.lastCall.args[1]
@@ -590,7 +598,7 @@ describe('/vanillaEngine', () => {
         let gridElementHTML = gridElement.innerHTML
 
         // Trigger a state change
-        picker.dispatch(actions.cycleScope())
+        picker.cycleScope()
 
         // Grab the frame callback and trigger it
         let frameCallback = getFrameStub.lastCall.args[1]
