@@ -1,7 +1,9 @@
-- [ ] Parsing values
-- [ ] Doc generator
+- [x] Parsing values
+- [ ] Disabled dates
+- [ ] Explicitly enabled dates
+- [ ] Move language into the state
+- [ ] Keyboard navigation
+- [ ] A11y bindings
 - [ ] Range of selected values
 - [ ] Multiple selected values
-- [ ] A11y bindings
-- [ ] Keyboard navigation
-- [ ] Design
+- [ ] Doc generator

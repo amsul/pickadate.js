@@ -7,7 +7,7 @@ let vanillaRenderer = require('renderers/vanilla')
 let parentNode = document.getElementById('picker')
 let inputNode  = document.getElementById('picker-input')
 
-let picker = vanillaRenderer.render(parentNode, inputNode, {
+let picker = window.picker = vanillaRenderer.render(parentNode, inputNode, {
   // scope: 'SCOPE_MONTHS',
   // value: '4 April, 2014',
   // template: 'yyyy [yyyy yeaaah] [dd]'

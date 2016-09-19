@@ -1,4 +1,4 @@
-let LANGUAGE = require('constants/language')
+const LANGUAGE = require('constants/language')
 
 
 

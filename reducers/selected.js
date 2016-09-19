@@ -1,5 +1,4 @@
 const ACTION  = require('constants/action')
-const SCOPE   = require('constants/scope')
 
 let dateUtil  = require('utils/date')
 let valueUtil = require('utils/value')
