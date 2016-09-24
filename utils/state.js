@@ -1,6 +1,7 @@
 const SCOPE  = require('constants/scope')
 
 let dateUtil = require('utils/date')
+let jsUtil   = require('utils/js')
 
 
 
@@ -54,6 +55,36 @@ function isChangingAny(state, nextState, ...stateKeys) {
 ////////////////////
 // STATE CHECKERS //
 ////////////////////
+
+
+
+/**
+ * Checks if a certain date object is disabled.
+ * @param  {Object}  state
+ * @param  {Date}  dateObject
+ * @return {Boolean}
+ */
+function isDisabled(state, dateObject) {
+
+  let { disabled } = state
+
+  if (
+    jsUtil.isIncluded(
+      disabled.exceptions,
+      dateObject,
+      dateUtil.isSameDate
+    )
+  ) {
+    return false
+  }
+
+  return (
+    jsUtil.isIncluded(disabled.days, dateObject.getDay())
+    ||
+    jsUtil.isIncluded(disabled.dates, dateObject, dateUtil.isSameDate)
+  )
+
+}
 
 
 
@@ -115,6 +146,7 @@ module.exports = {
   // isNotChanging,
 
   // State checkers
+  isDisabled,
   isSelected,
   isToday,
 

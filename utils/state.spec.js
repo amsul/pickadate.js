@@ -65,6 +65,43 @@ describe('/stateUtil', () => {
 
 
 
+  describe('#isDisabled', () => {
+
+    it('returns `true` if a certain date is disabled', () => {
+
+      let state = {
+        disabled: {
+          dates      : [new Date(2016, 3, 20)],
+          days       : [1, 2],
+          exceptions : [new Date(2016, 3, 4)],
+        }
+      }
+
+      stateUtil.isDisabled(state, new Date(2016, 3, 20)).should.eql(true)
+      stateUtil.isDisabled(state, new Date(2016, 3, 11)).should.eql(true)
+
+    })
+
+
+    it('returns `false` if a certain date is disabled', () => {
+
+      let state = {
+        disabled: {
+          dates      : [new Date(2016, 3, 20)],
+          days       : [1, 2],
+          exceptions : [new Date(2016, 3, 4)],
+        }
+      }
+
+      stateUtil.isDisabled(state, new Date(2016, 3, 21)).should.eql(false)
+      stateUtil.isDisabled(state, new Date(2016, 3, 4)).should.eql(false)
+
+    })
+
+  })
+
+
+
   describe('#isSelected', () => {
 
     it('returns `true` if a certain date is the same as the "selected" one with the scope as DAYS', () => {
