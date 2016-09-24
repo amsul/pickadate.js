@@ -39,6 +39,7 @@ function reduce(state, { type, payload }) {
   /* istanbul ignore if */
   if (process.env.DEBUG) {
     console.group('Action dispatched: %o', type)
+    console.assert(type, 'An undefined action was dispatched')
     logUtil.payload(payload)
   }
 
