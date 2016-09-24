@@ -1,11 +1,13 @@
-let lolex         = require('lolex')
-let sinon         = require('sinon')
+let lolex           = require('lolex')
+let sinon           = require('sinon')
 
-const STATE       = require('constants/state')
+const ACTION        = require('constants/action')
+const STATE         = require('constants/state')
 
-let actions       = require('actions')
-let pickerObject  = require('objects/picker')
-let animationUtil = require('utils/animation')
+let actions         = require('actions')
+let pickerObject    = require('objects/picker')
+let disabledReducer = require('reducers/disabled')
+let animationUtil   = require('utils/animation')
 
 
 
@@ -30,6 +32,8 @@ describe('/pickerObject', () => {
         'clear',
         'confirm',
         'cycleScope',
+        'disable',
+        'enable',
         'select',
         'show',
         'showNext',
@@ -69,8 +73,9 @@ describe('/pickerObject', () => {
       // Ensure it has the expected state
       picker.state.should.eql({
         ...STATE.INITIAL,
-        today : new Date(2014, 3, 20),
-        view  : new Date(2014, 3, 1),
+        disabled : disabledReducer[ACTION.TYPE.INITIALIZE](),
+        today    : new Date(2014, 3, 20),
+        view     : new Date(2014, 3, 1),
       })
 
       // Uninstall the clock
@@ -96,6 +101,7 @@ describe('/pickerObject', () => {
       picker.state.should.eql({
         ...STATE.INITIAL,
         ...initialChangedState,
+        disabled : disabledReducer[ACTION.TYPE.INITIALIZE](),
         today: new Date(2014, 3, 20),
       })
 

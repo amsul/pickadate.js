@@ -1,6 +1,7 @@
 let sinon           = require('sinon')
 
 let classes         = require('classes')
+let pickerObject    = require('objects/picker')
 let vanillaRenderer = require('renderers/vanilla')
 let animationUtil   = require('utils/animation')
 let dateUtil        = require('utils/date')
@@ -34,22 +35,7 @@ describe('/vanillaRenderer', () => {
       let parentNode = document.createElement('div')
       let picker     = vanillaRenderer.render(parentNode)
 
-      picker.should.have.keys(
-        'addStateListener',
-        'dispatch',
-        'removeStateListener',
-        'state',
-
-        // Actions
-        'clear',
-        'confirm',
-        'cycleScope',
-        'select',
-        'show',
-        'showNext',
-        'showPrevious',
-        'showToday',
-      )
+      picker.should.have.keys(Object.keys(pickerObject.create()))
 
     })
 
