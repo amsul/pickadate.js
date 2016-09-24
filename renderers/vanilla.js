@@ -389,7 +389,7 @@ function createGridElement(picker) {
   picker.addStateListener(nextState => {
     if (
       stateUtil.isChangingAny(
-        picker.state, nextState, 'scope', 'selected', 'view'
+        picker.state, nextState, 'disabled', 'scope', 'selected', 'view'
       )
     ) {
       node.innerHTML = ''
@@ -436,8 +436,11 @@ function createGridCellElement(state, dateObject) {
 
   let { scope, view } = state
 
+  let isDisabled = stateUtil.isDisabled(state, dateObject)
+
   let className = {
     [classes.gridCell]           : true,
+    [classes.gridCell_disabled]  : isDisabled,
     [classes.gridCell_selected]  : stateUtil.isSelected(state, dateObject),
     [classes.gridCell_today]     : stateUtil.isToday(state, dateObject),
     [classes.gridCell_outOfView] : (
@@ -446,7 +449,7 @@ function createGridCellElement(state, dateObject) {
     ),
   }
 
-  let attributes = {
+  let attributes = isDisabled ? undefined : {
     dataset: { value: dateObject.getTime() }
   }
 

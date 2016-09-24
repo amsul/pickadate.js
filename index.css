@@ -167,6 +167,18 @@
 
 
 
+    .pickadate-gridCell:hover {}
+
+      .pickadate-gridCell:hover .pickadate-gridCellLabel {
+        background: var(--silver);
+      }
+
+      .pickadate-gridCell_selected:hover .pickadate-gridCellLabel {
+        background: var(--blue);
+      }
+
+
+
     .pickadate-gridCell_today {}
 
       .pickadate-gridCell_today .pickadate-gridCellLabel {}
@@ -197,15 +209,12 @@
         }
 
 
+    .pickadate-gridCell_disabled {}
 
-    .pickadate-gridCell:hover {}
-
-      .pickadate-gridCell:hover .pickadate-gridCellLabel {
-        background: var(--silver);
-      }
-
-      .pickadate-gridCell_selected:hover .pickadate-gridCellLabel {
-        background: var(--blue);
+      .pickadate-gridCell_disabled .pickadate-gridCellLabel,
+      .pickadate-gridCell_disabled:hover .pickadate-gridCellLabel {
+        background : var(--grey);
+        opacity    : 0.2;
       }
 
 

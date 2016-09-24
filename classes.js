@@ -12,6 +12,7 @@ module.exports = {
   grid                        : 'pickadate-grid',
 
   gridCell                    : 'pickadate-gridCell',
+  gridCell_disabled           : 'pickadate-gridCell_disabled',
   gridCell_selected           : 'pickadate-gridCell_selected',
   gridCell_today              : 'pickadate-gridCell_today',
   gridCell_outOfView          : 'pickadate-gridCell_outOfView',
