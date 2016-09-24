@@ -1,3 +1,9 @@
+///////////
+// RANGE //
+///////////
+
+
+
 /**
  * Creates a range from one index to another (inclusive).
  * @param  {Number} fromIndex
@@ -15,6 +21,14 @@ function createRange(fromIndex, toIndex) {
   return range
 
 }
+
+
+
+
+
+////////////
+// NUMBER //
+////////////
 
 
 
@@ -41,7 +55,95 @@ function padZero(number, digitsCount) {
 
 
 
+
+
+///////////
+// ARRAY //
+///////////
+
+
+
+function getIdentity(identity) {
+  return identity || ((item, value) => item === value)
+}
+
+
+
+/**
+ * Checks if a value is included in an array.
+ * Optionally, an identity matching method can be passed.
+ * @param  {Array}  array
+ * @param  {Any}  value
+ * @param  {Function}  [identity]
+ * @return {Boolean}
+ */
+function isIncluded(array, value, identity) {
+  identity = getIdentity(identity)
+  return array.some(item => identity(item, value))
+}
+
+
+
+/**
+ * Adds a value to an array and returns a new array if it is not included.
+ * Optionally, an identity matching method can be passed.
+ * @param  {Array}  array
+ * @param  {Any}  value
+ * @param  {Function}  [identity]
+ * @return {Array}
+ */
+function addToArray(array, value, identity) {
+  if (isIncluded(array, value, identity)) {
+    return array
+  }
+  return [...array, value]
+}
+
+
+
+/**
+ * Removes a value from an array and returns a new array if it is included.
+ * Optionally, an identity matching method can be passed.
+ * @param  {Array}  array
+ * @param  {Any}  value
+ * @param  {Function}  [identity]
+ * @return {Array}
+ */
+function removeFromArray(array, value, identity) {
+
+  identity = getIdentity(identity)
+
+  let nextArray = array.filter(item => !identity(item, value))
+
+  return (
+    array.length === nextArray.length
+      ? array
+      : nextArray
+  )
+
+}
+
+
+
+
+
+/////////////
+// EXPORTS //
+/////////////
+
+
+
 module.exports = {
+
+  // Range
   createRange,
+
+  // Number
   padZero,
+
+  // Array
+  addToArray,
+  isIncluded,
+  removeFromArray,
+
 }
