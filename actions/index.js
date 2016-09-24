@@ -184,6 +184,40 @@ let cycleScope = () => ({
 
 
 /////////////
+// DISABLE //
+/////////////
+
+
+
+/**
+ * Returns an action that disables dates and days.
+ * @param  {Object}    state
+ * @param  {...(Date|Number)} values
+ * @return {Object}
+ */
+let disable = (state, ...values) => ({
+  type    : ACTION.TYPE.DISABLE,
+  payload : { values },
+})
+
+
+
+/**
+ * Returns an action that enables dates and days.
+ * @param  {Object}    state
+ * @param  {...(Date|Number)} values
+ * @return {Object}
+ */
+let enable = (state, ...values) => ({
+  type    : ACTION.TYPE.ENABLE,
+  payload : { values },
+})
+
+
+
+
+
+/////////////
 // EXPORTS //
 /////////////
 
@@ -213,5 +247,9 @@ module.exports = {
 
   // Scope
   cycleScope,
+
+  // Disable
+  disable,
+  enable,
 
 }

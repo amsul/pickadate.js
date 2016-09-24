@@ -236,4 +236,38 @@ describe('/actions', () => {
   })
 
 
+
+
+
+  /////////////
+  // DISABLE //
+  /////////////
+
+
+
+  describe('#disable', () => {
+
+    it('returns an action that disables dates and days', () => {
+      actions.disable({}, 1, 2, new Date(2014, 3, 20)).should.eql({
+        type    : ACTION.TYPE.DISABLE,
+        payload : { values: [1, 2, new Date(2014, 3, 20)] },
+      })
+    })
+
+  })
+
+
+
+  describe('#enable', () => {
+
+    it('returns an action that enables dates and days', () => {
+      actions.enable({}, 1, 2, new Date(2014, 3, 20)).should.eql({
+        type    : ACTION.TYPE.ENABLE,
+        payload : { values: [1, 2, new Date(2014, 3, 20)] },
+      })
+    })
+
+  })
+
+
 })
