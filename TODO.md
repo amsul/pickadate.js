@@ -1,7 +1,9 @@
 - [x] Parsing values
-- [ ] Disabled dates
-- [ ] Explicitly enabled dates
+- [x] Disabled dates
+- [x] Explicitly enabled dates
 - [ ] Move language into the state
+- [ ] Use date & time formats similar to http://momentjs.com/docs/#/parsing/string-format/
+- [ ] Set selected date by passing a date string
 - [ ] Keyboard navigation
 - [ ] A11y bindings
 - [ ] Range of selected values
