@@ -8,15 +8,21 @@ let dateUtil     = require('utils/date')
 /**
  * Initializes the view's date, defaulting to today.
  * @param  {Date} [state=new Date()]
- * @param  {String} [payload.template]
- * @param  {String} [payload.value]
+ * @param  {LANGUAGE} payload.language
+ * @param  {String} payload.template
+ * @param  {String} payload.value
  * @return {Date}
  */
-function initialize(state = new Date(), { template, value }) {
+function initialize(state = new Date(), { language, template, value }) {
+
   if (value) {
-    state = dateUtil.parse(value, template)
+    state = typeof value === 'string'
+      ? dateUtil.parse(value, template, language)
+      : value
   }
+
   return calendarUtil.getStartDateOfMonth(state)
+
 }
 
 

@@ -51,7 +51,7 @@ describe('/vanillaRenderer', () => {
         // Create the parent and input node and render the picker
         let parentNode = document.createElement('div')
         let inputNode  = document.createElement('input')
-        let picker     = vanillaRenderer.render(parentNode, inputNode)
+        let picker     = vanillaRenderer.render(parentNode, { inputNode })
 
         let selectedDate = new Date(2013, 3, 20)
 
@@ -63,7 +63,9 @@ describe('/vanillaRenderer', () => {
         frameCallback()
 
         // Ensure the input node now has the correct value
-        inputNode.value.should.eql(dateUtil.format(selectedDate, picker.state.template))
+        inputNode.value.should.eql(dateUtil.format(
+          selectedDate, picker.state.template, picker.state.language
+        ))
 
         // Clean up the stub
         getFrameStub.restore()
@@ -79,7 +81,7 @@ describe('/vanillaRenderer', () => {
         // Create the parent and input node and render the picker
         let parentNode = document.createElement('div')
         let inputNode  = document.createElement('input')
-        let picker     = vanillaRenderer.render(parentNode, inputNode)
+        let picker     = vanillaRenderer.render(parentNode, { inputNode })
 
         // Trigger a state change
         picker.dispatch({ type: 'ACTION_TYPE_TEST' })
@@ -241,7 +243,9 @@ describe('/vanillaRenderer', () => {
         // with a selected value
         let parentNode = document.createElement('div')
         vanillaRenderer.render(parentNode, {
-          selected: new Date(2014, 3, 20)
+          stateChanges: {
+            selected: new Date(2014, 3, 20)
+          }
         })
 
         // Grab the "compound" scope item

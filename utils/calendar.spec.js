@@ -20,8 +20,8 @@ describe('/calendarUtil', () => {
 
     it('gets the short weekdays', () => {
 
-      let state = {}
-      let weekdays = calendarUtil.getWeekdays(state)
+      let language = LANGUAGE.ENGLISH
+      let weekdays = calendarUtil.getWeekdays(language)
 
       weekdays.should.eql(DAY.SHORT[LANGUAGE.ENGLISH])
 
@@ -78,7 +78,7 @@ describe('/calendarUtil', () => {
 
       let state = { scope, view }
 
-      let datesForRows = calendarUtil.getDatesForRows(state)
+      let datesForRows = calendarUtil.getDatesForRows(state.view, state.scope)
 
       datesForRows.should.eql(expectedDatesForRows)
 
@@ -115,7 +115,7 @@ describe('/calendarUtil', () => {
 
       let state = { scope, view }
 
-      let datesForRows = calendarUtil.getDatesForRows(state)
+      let datesForRows = calendarUtil.getDatesForRows(state.view, state.scope)
 
       datesForRows.should.eql(expectedDatesForRows)
 
@@ -189,7 +189,7 @@ describe('/calendarUtil', () => {
 
       let state = { scope, view }
 
-      let datesForRows = calendarUtil.getDatesForRows(state)
+      let datesForRows = calendarUtil.getDatesForRows(state.view, state.scope)
 
       datesForRows.should.eql(expectedDatesForRows)
 
@@ -723,61 +723,26 @@ describe('/calendarUtil', () => {
   describe('#getLabel', () => {
 
     it('gets the label for a date given the scope of YEARS', () => {
-      let label = calendarUtil.getLabel(new Date(2014, 3, 20), SCOPE.YEARS)
+      let label = calendarUtil.getLabel(
+        new Date(2014, 3, 20), SCOPE.YEARS, LANGUAGE.ENGLISH
+      )
       label.should.eql('2014')
     })
 
 
     it('gets the label for a date given the scope of MONTHS', () => {
-      let label = calendarUtil.getLabel(new Date(2014, 3, 20), SCOPE.MONTHS)
+      let label = calendarUtil.getLabel(
+        new Date(2014, 3, 20), SCOPE.MONTHS, LANGUAGE.ENGLISH
+      )
       label.should.eql(MONTH.SHORT[LANGUAGE.ENGLISH][3])
     })
 
 
     it('gets the label for a date given the scope of DAYS', () => {
-      let label = calendarUtil.getLabel(new Date(2014, 3, 20), SCOPE.DAYS)
+      let label = calendarUtil.getLabel(
+        new Date(2014, 3, 20), SCOPE.DAYS, LANGUAGE.ENGLISH
+      )
       label.should.eql('20')
-    })
-
-  })
-
-
-
-  describe('#getRangeLabel', () => {
-
-    it('gets the label for a range of dates give the scope of YEARS', () => {
-
-      let rangeLabel = calendarUtil.getRangeLabel(
-        new Date(2014, 3, 20),
-        SCOPE.YEARS
-      )
-
-      rangeLabel.should.eql('2010 - 2019')
-
-    })
-
-
-    it('gets the label for a range of dates give the scope of MONTHS', () => {
-
-      let rangeLabel = calendarUtil.getRangeLabel(
-        new Date(2014, 3, 20),
-        SCOPE.MONTHS
-      )
-
-      rangeLabel.should.eql('2014')
-
-    })
-
-
-    it('gets the label for a range of dates give the scope of DAYS', () => {
-
-      let rangeLabel = calendarUtil.getRangeLabel(
-        new Date(2014, 3, 20),
-        SCOPE.DAYS
-      )
-
-      rangeLabel.should.eql(`${MONTH.FULL[LANGUAGE.ENGLISH][3]} 2014`)
-
     })
 
   })

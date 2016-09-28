@@ -26,19 +26,17 @@ let bullsEyeIcon     = fs.readFileSync('icons/bullsEye.svg')
 /**
  * Renders a picker into a node with a starting state.
  * @param  {HTMLElement} parentNode
- * @param  {HTMLInputElement} [inputNode]
- * @param  {Object} [initialChangedState]
+ * @param  {Object} options
+ *         {HTMLInputElement} [options.inputNode]
+ *         {String} [options.stateChanges]
  * @return {picker}
  */
-function render(parentNode, inputNode, initialChangedState) {
+function render(parentNode, options = {}) {
 
-  if (!(inputNode instanceof HTMLInputElement)) {
-    initialChangedState = inputNode
-    inputNode           = undefined
-  }
+  let { inputNode, stateChanges } = options
 
   // Create the picker object using the starting state.
-  let picker = pickerObject.create(initialChangedState)
+  let picker = pickerObject.create(stateChanges)
 
   // Create the root element using the current state.
   let rootElement = createRootElement(picker)
@@ -65,7 +63,12 @@ function addValueStateListenerToInput(inputNode, picker) {
   inputNode.value = picker.getValue()
 
   picker.addStateListener(nextState => {
-    if (picker.state.value !== nextState.value) {
+    if (
+      stateUtil.isChangingAny(
+        picker.state, nextState,
+        'language', 'selected'
+      )
+    ) {
       inputNode.value = picker.getValue(nextState)
     }
   })
@@ -134,7 +137,8 @@ function createButtonScopeElement(picker) {
   picker.addStateListener(nextState => {
     if (
       stateUtil.isChangingAny(
-        picker.state, nextState, 'scope', 'selected', 'view'
+        picker.state, nextState,
+        'language', 'scope', 'selected', 'view'
       )
     ) {
       node.innerHTML = ''
@@ -195,7 +199,7 @@ function createButtonScopeEmptyElement(state) {
       classes.scopeItem,
       classes.scopeItem_empty,
     ],
-    dateUtil.format(state.view, 'mmm yyyy')
+    dateUtil.format(state.view, 'mmm yyyy', state.language)
   )
 
   return node
@@ -213,7 +217,7 @@ function createButtonScopeDateElement(state) {
     ],
     createNode(
       [classes.scopeItemLabel, classes.scopeItemLabel_date],
-      dateUtil.format(state.selected, 'd')
+      dateUtil.format(state.selected, 'd', state.language)
     )
   )
 
@@ -230,7 +234,7 @@ function createButtonScopeMonthAndYearElement(state) {
       classes.scopeItemLabel,
       classes.scopeItemLabel_monthAndYear,
     ],
-    dateUtil.format(state.selected, 'mmm yyyy')
+    dateUtil.format(state.selected, 'mmm yyyy', state.language)
   )
 
   return node
@@ -246,7 +250,7 @@ function createButtonScopeWeekdayElement(state) {
       classes.scopeItemLabel,
       classes.scopeItemLabel_weekday,
     ],
-    dateUtil.format(state.selected, 'dddd')
+    dateUtil.format(state.selected, 'dddd', state.language)
   )
 
   return node
@@ -389,7 +393,8 @@ function createGridElement(picker) {
   picker.addStateListener(nextState => {
     if (
       stateUtil.isChangingAny(
-        picker.state, nextState, 'disabled', 'scope', 'selected', 'view'
+        picker.state, nextState,
+        'disabled', 'language', 'scope', 'selected', 'view'
       )
     ) {
       node.innerHTML = ''
@@ -405,7 +410,7 @@ function createGridElement(picker) {
 
 function createGridCellElements(state) {
 
-  let datesForRows = calendarUtil.getDatesForRows(state)
+  let datesForRows = calendarUtil.getDatesForRows(state.view, state.scope)
 
   let nodes = datesForRows.map(datesForRow => (
     createNode(
@@ -417,7 +422,7 @@ function createGridCellElements(state) {
   ))
 
   if (state.scope === SCOPE.DAYS) {
-    let weekdays = calendarUtil.getWeekdays(state)
+    let weekdays = calendarUtil.getWeekdays(state.language)
     nodes.unshift(createNode(
       [classes.gridRow, classes.gridRow_heading],
       weekdays.map(weekday => (
@@ -434,7 +439,7 @@ function createGridCellElements(state) {
 
 function createGridCellElement(state, dateObject) {
 
-  let { scope, view } = state
+  let { language, scope, view } = state
 
   let isDisabled = stateUtil.isDisabled(state, dateObject)
 
@@ -462,7 +467,7 @@ function createGridCellElement(state, dateObject) {
         [classes.gridCellLabel_months] : scope === SCOPE.MONTHS,
         [classes.gridCellLabel_years]  : scope === SCOPE.YEARS,
       },
-      calendarUtil.getLabel(dateObject, scope)
+      calendarUtil.getLabel(dateObject, scope, language)
     ),
     attributes
   )

@@ -1,7 +1,8 @@
-const ACTION = require('constants/action')
-const SCOPE  = require('constants/scope')
+const ACTION   = require('constants/action')
+const LANGUAGE = require('constants/language')
+const SCOPE    = require('constants/scope')
 
-let actions  = require('actions')
+let actions    = require('actions')
 
 
 
@@ -60,14 +61,12 @@ describe('/actions', () => {
 
     it('returns an action that selects a value', () => {
 
-      let scope    = SCOPE.DAYS
-      let selected = null
-      let template = 'yyyy-mm-dd'
-      let value    = new Date(2014, 3, 20)
+      let scope = SCOPE.DAYS
+      let value = new Date(2014, 3, 20)
 
-      actions.select({ scope, selected, template }, value).should.eql({
+      actions.select({ scope }, value).should.eql({
         type    : ACTION.TYPE.SELECT,
-        payload : { scope, selected, template, value },
+        payload : { scope, value },
       })
 
     })
@@ -82,10 +81,8 @@ describe('/actions', () => {
       actions.clear().should.eql({
         type    : ACTION.TYPE.SELECT,
         payload : {
-          scope    : undefined,
-          selected : undefined,
-          template : undefined,
-          value    : null,
+          scope : undefined,
+          value : null,
         },
       })
     })
@@ -106,14 +103,12 @@ describe('/actions', () => {
 
     it('returns an action that shows a scoped value', () => {
 
-      let scope    = SCOPE.MONTHS
-      let selected = null
-      let template = 'yyyy-mm-dd'
-      let value    = new Date(2012, 3, 20)
+      let scope = SCOPE.MONTHS
+      let value = new Date(2012, 3, 20)
 
-      actions.show({ scope, selected, template }, value).should.eql({
+      actions.show({ scope }, value).should.eql({
         type    : ACTION.TYPE.SHOW,
-        payload : { scope, selected, template, value },
+        payload : { scope, value },
       })
 
     })
@@ -128,13 +123,12 @@ describe('/actions', () => {
 
       let scope    = SCOPE.MONTHS
       let selected = null
-      let template = 'yyyy-mm-dd'
       let view     = new Date(2013, 3, 1)
       let value    = new Date(2012, 3, 1)
 
-      actions.showPrevious({ scope, selected, template, view }).should.eql({
+      actions.showPrevious({ scope, selected, view }).should.eql({
         type    : ACTION.TYPE.SHOW,
-        payload : { scope, selected, template, value },
+        payload : { scope, value },
       })
 
     })
@@ -144,13 +138,12 @@ describe('/actions', () => {
 
       let scope    = SCOPE.MONTHS
       let selected = new Date(2013, 3, 20)
-      let template = 'yyyy-mm-dd'
       let view     = new Date(2013, 3, 1)
       let value    = new Date(2012, 3, 20)
 
-      actions.showPrevious({ scope, selected, template, view }).should.eql({
+      actions.showPrevious({ scope, selected, view }).should.eql({
         type    : ACTION.TYPE.SHOW,
-        payload : { scope, selected, template, value },
+        payload : { scope, value },
       })
 
     })
@@ -165,13 +158,12 @@ describe('/actions', () => {
 
       let scope    = SCOPE.MONTHS
       let selected = null
-      let template = 'yyyy-mm-dd'
       let view     = new Date(2013, 3, 1)
       let value    = new Date(2014, 3, 1)
 
-      actions.showNext({ scope, selected, template, view }).should.eql({
+      actions.showNext({ scope, selected, view }).should.eql({
         type    : ACTION.TYPE.SHOW,
-        payload : { scope, selected, template, value },
+        payload : { scope, value },
       })
 
     })
@@ -181,13 +173,12 @@ describe('/actions', () => {
 
       let scope    = SCOPE.MONTHS
       let selected = new Date(2013, 3, 20)
-      let template = 'yyyy-mm-dd'
       let view     = new Date(2013, 3, 1)
       let value    = new Date(2014, 3, 20)
 
-      actions.showNext({ scope, selected, template, view }).should.eql({
+      actions.showNext({ scope, selected, view }).should.eql({
         type    : ACTION.TYPE.SHOW,
-        payload : { scope, selected, template, value },
+        payload : { scope, value },
       })
 
     })
@@ -200,15 +191,13 @@ describe('/actions', () => {
 
     it('returns an action that selects "today"', () => {
 
-      let scope    = SCOPE.MONTHS
-      let selected = null
-      let template = 'yyyy-mm-dd'
-      let today    = new Date(2013, 3, 20)
-      let value    = new Date(2013, 3, 20)
+      let scope = SCOPE.MONTHS
+      let today = new Date(2013, 3, 20)
+      let value = new Date(2013, 3, 20)
 
-      actions.showToday({ scope, selected, template, today }).should.eql({
+      actions.showToday({ scope, today }).should.eql({
         type    : ACTION.TYPE.SHOW,
-        payload : { scope, selected, template, value },
+        payload : { scope, value },
       })
 
     })
@@ -264,6 +253,27 @@ describe('/actions', () => {
       actions.enable({}, 1, 2, new Date(2014, 3, 20)).should.eql({
         type    : ACTION.TYPE.ENABLE,
         payload : { values: [1, 2, new Date(2014, 3, 20)] },
+      })
+    })
+
+  })
+
+
+
+
+
+  //////////////
+  // LANGUAGE //
+  //////////////
+
+
+
+  describe('#setLanguage', () => {
+
+    it('returns an action that sets the language', () => {
+      actions.setLanguage({}, LANGUAGE.FRENCH).should.eql({
+        type    : ACTION.TYPE.SET_LANGUAGE,
+        payload : { value: LANGUAGE.FRENCH },
       })
     })
 

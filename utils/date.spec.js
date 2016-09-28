@@ -2,7 +2,6 @@ let sinon      = require('sinon')
 
 const LANGUAGE = require('constants/language')
 
-let language   = require('language')
 let dateUtil   = require('utils/date')
 
 
@@ -73,10 +72,17 @@ describe('/dateUtil', () => {
 
       let dateObject = new Date(2014, 3, 2)
 
-      dateUtil.format(dateObject, 'yyyy-mm-dd').should.eql('2014-04-02')
-      dateUtil.format(dateObject, 'yyyy-m-d').should.eql('2014-4-2')
-      dateUtil.format(dateObject, 'dddd, d mmm, yyyy').should.eql('Wednesday, 2 Apr, 2014')
-      dateUtil.format(dateObject, 'ddd, dd mmmm, yyyy').should.eql('We, 02 April, 2014')
+      dateUtil.format(dateObject, 'yyyy-mm-dd', LANGUAGE.ENGLISH)
+        .should.eql('2014-04-02')
+
+      dateUtil.format(dateObject, 'yyyy-m-d', LANGUAGE.ENGLISH)
+        .should.eql('2014-4-2')
+
+      dateUtil.format(dateObject, 'dddd, d mmm, yyyy', LANGUAGE.ENGLISH)
+        .should.eql('Wednesday, 2 Apr, 2014')
+
+      dateUtil.format(dateObject, 'ddd, dd mmmm, yyyy', LANGUAGE.ENGLISH)
+        .should.eql('We, 02 April, 2014')
 
     })
 
@@ -85,19 +91,19 @@ describe('/dateUtil', () => {
 
       let dateObject = new Date(2014, 3, 2)
 
-      dateUtil.format(dateObject, 'escaped chars [yyyy] mmmm dd')
+      dateUtil.format(dateObject, 'escaped chars [yyyy] mmmm dd', LANGUAGE.ENGLISH)
         .should.eql('escaped chars yyyy April 02')
 
-      dateUtil.format(dateObject, 'escaped chars yyyy mmmm [dd]')
+      dateUtil.format(dateObject, 'escaped chars yyyy mmmm [dd]', LANGUAGE.ENGLISH)
         .should.eql('escaped chars 2014 April dd')
 
-      dateUtil.format(dateObject, '[mmm so yummay! @ ]yyyy mm dd')
+      dateUtil.format(dateObject, '[mmm so yummay! @ ]yyyy mm dd', LANGUAGE.ENGLISH)
         .should.eql('mmm so yummay! @ 2014 04 02')
 
-      dateUtil.format(dateObject, '[mmm] so yummay! @ yyyy mm dd')
+      dateUtil.format(dateObject, '[mmm] so yummay! @ yyyy mm dd', LANGUAGE.ENGLISH)
         .should.eql('mmm so yummay! @ 2014 04 02')
 
-      dateUtil.format(dateObject, '[yep mmm yummay]! @ yyyy mm dd')
+      dateUtil.format(dateObject, '[yep mmm yummay]! @ yyyy mm dd', LANGUAGE.ENGLISH)
         .should.eql('yep mmm yummay! @ 2014 04 02')
 
     })
@@ -110,16 +116,16 @@ describe('/dateUtil', () => {
 
     it('parses a date string with a given template', () => {
 
-      dateUtil.parse('2014-04-20', 'yyyy-mm-dd')
+      dateUtil.parse('2014-04-20', 'yyyy-mm-dd', LANGUAGE.ENGLISH)
         .should.eql(new Date(2014, 3, 20))
 
-      dateUtil.parse('2014-4-20', 'yyyy-m-d')
+      dateUtil.parse('2014-4-20', 'yyyy-m-d', LANGUAGE.ENGLISH)
         .should.eql(new Date(2014, 3, 20))
 
-      dateUtil.parse('20 April, 2014', 'd mmmm, yyyy')
+      dateUtil.parse('20 April, 2014', 'd mmmm, yyyy', LANGUAGE.ENGLISH)
         .should.eql(new Date(2014, 3, 20))
 
-      dateUtil.parse('20 Apr, 2014', 'dd mmm, yyyy')
+      dateUtil.parse('20 Apr, 2014', 'dd mmm, yyyy', LANGUAGE.ENGLISH)
         .should.eql(new Date(2014, 3, 20))
 
     })
@@ -127,16 +133,16 @@ describe('/dateUtil', () => {
 
     it('parses a date string with a given template that has escaped characters', () => {
 
-      dateUtil.parse('yyyy 2014-04-20', '[yyyy] yyyy-mm-dd')
+      dateUtil.parse('yyyy 2014-04-20', '[yyyy] yyyy-mm-dd', LANGUAGE.ENGLISH)
         .should.eql(new Date(2014, 3, 20))
 
-      dateUtil.parse('escape the d! 2014-4-20', 'escape the [d]! yyyy-m-d')
+      dateUtil.parse('escape the d! 2014-4-20', 'escape the [d]! yyyy-m-d', LANGUAGE.ENGLISH)
         .should.eql(new Date(2014, 3, 20))
 
-      dateUtil.parse('20 April, 2014 escape mm in the middle', 'd mmmm, yyyy [escape mm in the middle]')
+      dateUtil.parse('20 April, 2014 escape mm in the middle', 'd mmmm, yyyy [escape mm in the middle]', LANGUAGE.ENGLISH)
         .should.eql(new Date(2014, 3, 20))
 
-      dateUtil.parse('escape 20 Apr all the things! m ddd, 2014', '[escape] dd mmm [all] [the things!] [m ddd], yyyy')
+      dateUtil.parse('escape 20 Apr all the things! m ddd, 2014', '[escape] dd mmm [all] [the things!] [m ddd], yyyy', LANGUAGE.ENGLISH)
         .should.eql(new Date(2014, 3, 20))
 
     })
@@ -146,7 +152,7 @@ describe('/dateUtil', () => {
 
       let errorStub = sinon.stub(console, 'error')
 
-      true.should.eql(null == dateUtil.parse('lol-04-20', 'yyyy-mm-dd'))
+      true.should.eql(null == dateUtil.parse('lol-04-20', 'yyyy-mm-dd', LANGUAGE.ENGLISH))
       errorStub.callCount.should.eql(1)
       errorStub.lastCall.args.length.should.eql(4)
       errorStub.lastCall.args[0].should.match(/Unable to parse.+ Expected to match/)
@@ -154,7 +160,7 @@ describe('/dateUtil', () => {
       errorStub.lastCall.args[2].should.eql('yyyy')
       errorStub.lastCall.args[3].should.eql(0)
 
-      true.should.eql(null == dateUtil.parse('2014-wut-20', 'yyyy-m-d'))
+      true.should.eql(null == dateUtil.parse('2014-wut-20', 'yyyy-m-d', LANGUAGE.ENGLISH))
       errorStub.callCount.should.eql(2)
       errorStub.lastCall.args.length.should.eql(4)
       errorStub.lastCall.args[0].should.match(/Unable to parse.+ Expected to match/)
@@ -162,7 +168,7 @@ describe('/dateUtil', () => {
       errorStub.lastCall.args[2].should.eql('m')
       errorStub.lastCall.args[3].should.eql(5)
 
-      true.should.eql(null == dateUtil.parse('? April, 2014', 'd mmmm, yyyy'))
+      true.should.eql(null == dateUtil.parse('? April, 2014', 'd mmmm, yyyy', LANGUAGE.ENGLISH))
       errorStub.callCount.should.eql(3)
       errorStub.lastCall.args.length.should.eql(4)
       errorStub.lastCall.args[0].should.match(/Unable to parse.+ Expected to match/)
@@ -170,7 +176,7 @@ describe('/dateUtil', () => {
       errorStub.lastCall.args[2].should.eql('d')
       errorStub.lastCall.args[3].should.eql(0)
 
-      true.should.eql(null == dateUtil.parse('20 Apr, ✌️', 'dd mmm, yyyy'))
+      true.should.eql(null == dateUtil.parse('20 Apr, ✌️', 'dd mmm, yyyy', LANGUAGE.ENGLISH))
       errorStub.callCount.should.eql(4)
       errorStub.lastCall.args.length.should.eql(4)
       errorStub.lastCall.args[0].should.match(/Unable to parse.+ Expected to match/)
@@ -178,7 +184,7 @@ describe('/dateUtil', () => {
       errorStub.lastCall.args[2].should.eql('yyyy')
       errorStub.lastCall.args[3].should.eql(8)
 
-      true.should.eql(null == dateUtil.parse('20 4, ✌️', 'd m, yyyy'))
+      true.should.eql(null == dateUtil.parse('20 4, ✌️', 'd m, yyyy', LANGUAGE.ENGLISH))
       errorStub.callCount.should.eql(5)
       errorStub.lastCall.args.length.should.eql(4)
       errorStub.lastCall.args[0].should.match(/Unable to parse.+ Expected to match/)
@@ -222,18 +228,12 @@ describe('/dateUtil', () => {
         'December',
       ]
 
-      fullMonthNames.should.eql(dateUtil.getFullMonthNames())
+      fullMonthNames.should.eql(dateUtil.getFullMonthNames(LANGUAGE.ENGLISH))
 
     })
 
 
     it('gets a list of the full month names for the correct language', () => {
-
-      // Grab the original language
-      let originalLanguage = language.current
-
-      // Set the language to French
-      language.current = LANGUAGE.FRENCH
 
       let fullMonthNames = [
         'Janvier',
@@ -250,10 +250,7 @@ describe('/dateUtil', () => {
         'Décembre',
       ]
 
-      fullMonthNames.should.eql(dateUtil.getFullMonthNames())
-
-      // Reset the original language
-      language.current = originalLanguage
+      fullMonthNames.should.eql(dateUtil.getFullMonthNames(LANGUAGE.FRENCH))
 
     })
 
@@ -280,18 +277,12 @@ describe('/dateUtil', () => {
         'Dec',
       ]
 
-      shortMonthNames.should.eql(dateUtil.getShortMonthNames())
+      shortMonthNames.should.eql(dateUtil.getShortMonthNames(LANGUAGE.ENGLISH))
 
     })
 
 
     it('gets a list of the short month names for the correct language', () => {
-
-      // Grab the original language
-      let originalLanguage = language.current
-
-      // Set the language to French
-      language.current = LANGUAGE.FRENCH
 
       let shortMonthNames = [
         'Jan',
@@ -308,10 +299,7 @@ describe('/dateUtil', () => {
         'Dec',
       ]
 
-      shortMonthNames.should.eql(dateUtil.getShortMonthNames())
-
-      // Reset the original language
-      language.current = originalLanguage
+      shortMonthNames.should.eql(dateUtil.getShortMonthNames(LANGUAGE.FRENCH))
 
     })
 
@@ -323,25 +311,13 @@ describe('/dateUtil', () => {
 
     it('gets the full name of a specific month', () => {
       let fullMonthName = 'June'
-      fullMonthName.should.eql(dateUtil.getFullMonthName(5))
+      fullMonthName.should.eql(dateUtil.getFullMonthName(LANGUAGE.ENGLISH, 5))
     })
 
 
     it('gets the full name of a specific month for the correct language', () => {
-
-      // Grab the original language
-      let originalLanguage = language.current
-
-      // Set the language to French
-      language.current = LANGUAGE.FRENCH
-
       let fullMonthName = 'Juin'
-
-      fullMonthName.should.eql(dateUtil.getFullMonthName(5))
-
-      // Reset the original language
-      language.current = originalLanguage
-
+      fullMonthName.should.eql(dateUtil.getFullMonthName(LANGUAGE.FRENCH, 5))
     })
 
   })
@@ -352,25 +328,13 @@ describe('/dateUtil', () => {
 
     it('gets the short name of a specific month', () => {
       let shortMonthName = 'Aug'
-      shortMonthName.should.eql(dateUtil.getShortMonthName(7))
+      shortMonthName.should.eql(dateUtil.getShortMonthName(LANGUAGE.ENGLISH, 7))
     })
 
 
     it('gets the short name of a specific month for the correct language', () => {
-
-      // Grab the original language
-      let originalLanguage = language.current
-
-      // Set the language to French
-      language.current = LANGUAGE.FRENCH
-
       let fullMonthName = 'Aou'
-
-      fullMonthName.should.eql(dateUtil.getShortMonthName(7))
-
-      // Reset the original language
-      language.current = originalLanguage
-
+      fullMonthName.should.eql(dateUtil.getShortMonthName(LANGUAGE.FRENCH, 7))
     })
 
   })
@@ -399,18 +363,12 @@ describe('/dateUtil', () => {
         'Saturday',
       ]
 
-      fullDayNames.should.eql(dateUtil.getFullDayNames())
+      fullDayNames.should.eql(dateUtil.getFullDayNames(LANGUAGE.ENGLISH))
 
     })
 
 
     it('gets a list of the full day names for the correct language', () => {
-
-      // Grab the original language
-      let originalLanguage = language.current
-
-      // Set the language to French
-      language.current = LANGUAGE.FRENCH
 
       let fullDayNames = [
         'Dimanche',
@@ -422,10 +380,7 @@ describe('/dateUtil', () => {
         'Samedi',
       ]
 
-      fullDayNames.should.eql(dateUtil.getFullDayNames())
-
-      // Reset the original language
-      language.current = originalLanguage
+      fullDayNames.should.eql(dateUtil.getFullDayNames(LANGUAGE.FRENCH))
 
     })
 
@@ -447,18 +402,12 @@ describe('/dateUtil', () => {
         'Sa',
       ]
 
-      shortDayNames.should.eql(dateUtil.getShortDayNames())
+      shortDayNames.should.eql(dateUtil.getShortDayNames(LANGUAGE.ENGLISH))
 
     })
 
 
     it('gets a list of the short day names for the correct language', () => {
-
-      // Grab the original language
-      let originalLanguage = language.current
-
-      // Set the language to French
-      language.current = LANGUAGE.FRENCH
 
       let shortDayNames = [
         'Dim',
@@ -470,10 +419,7 @@ describe('/dateUtil', () => {
         'Sam',
       ]
 
-      shortDayNames.should.eql(dateUtil.getShortDayNames())
-
-      // Reset the original language
-      language.current = originalLanguage
+      shortDayNames.should.eql(dateUtil.getShortDayNames(LANGUAGE.FRENCH))
 
     })
 
@@ -485,25 +431,13 @@ describe('/dateUtil', () => {
 
     it('gets the full name of a specific day', () => {
       let fullDayName = 'Friday'
-      fullDayName.should.eql(dateUtil.getFullDayName(5))
+      fullDayName.should.eql(dateUtil.getFullDayName(LANGUAGE.ENGLISH, 5))
     })
 
 
     it('gets the full name of a specific day for the correct language', () => {
-
-      // Grab the original language
-      let originalLanguage = language.current
-
-      // Set the language to French
-      language.current = LANGUAGE.FRENCH
-
       let fullDayName = 'Vendredi'
-
-      fullDayName.should.eql(dateUtil.getFullDayName(5))
-
-      // Reset the original language
-      language.current = originalLanguage
-
+      fullDayName.should.eql(dateUtil.getFullDayName(LANGUAGE.FRENCH, 5))
     })
 
   })
@@ -514,25 +448,13 @@ describe('/dateUtil', () => {
 
     it('gets the short name of a specific day', () => {
       let shortDayName = 'Fr'
-      shortDayName.should.eql(dateUtil.getShortDayName(5))
+      shortDayName.should.eql(dateUtil.getShortDayName(LANGUAGE.ENGLISH, 5))
     })
 
 
     it('gets the short name of a specific day for the correct language', () => {
-
-      // Grab the original language
-      let originalLanguage = language.current
-
-      // Set the language to French
-      language.current = LANGUAGE.FRENCH
-
       let shortDayName = 'Ven'
-
-      shortDayName.should.eql(dateUtil.getShortDayName(5))
-
-      // Reset the original language
-      language.current = originalLanguage
-
+      shortDayName.should.eql(dateUtil.getShortDayName(LANGUAGE.FRENCH, 5))
     })
 
   })

@@ -15,7 +15,7 @@ describe('/reducers', () => {
     it('reduces a state key by an action', () => {
 
       let state  = {}
-      let action = { type: ACTION.TYPE.CYCLE_SCOPE }
+      let action = actions.cycleScope()
 
       let nextState = reducers.reduce(state, action)
 

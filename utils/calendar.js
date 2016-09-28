@@ -13,15 +13,15 @@ let jsUtil   = require('utils/js')
 
 /**
  * Gets the weekdays for a given state.
- * @param  {Object} state
+ * @param  {LANGUAGE} language
  * @return {(DAY.FULL|DAY.SHORT)[]}
  */
-function getWeekdays(state) {
+function getWeekdays(language) {
 
-  // TODO: Check the state to determine the weekdays to return
+  // TODO: Use the first day of the week to determine the order
 
   return jsUtil.createRange(0, 6).map(dayIndex => (
-    dateUtil.getShortDayName(dayIndex)
+    dateUtil.getShortDayName(language, dayIndex)
   ))
 
 }
@@ -38,14 +38,11 @@ function getWeekdays(state) {
 
 /**
  * Gets the dates for rows of a scope.
- * @param  {Object} state
- *         {SCOPE} state.scope
- *         {Date} state.view
+ * @param  {Date} view
+ * @param  {SCOPE} scope
  * @return {Array<Date[]>}
  */
-function getDatesForRows(state) {
-
-  let { scope, view } = state
+function getDatesForRows(view, scope) {
 
   let year  = view.getFullYear()
   let month = view.getMonth()
@@ -387,46 +384,20 @@ function getStartDateOfMonthInPreviousScope(dateObject, scope) {
  * Gets the label for a date, given a scope.
  * @param  {Date} dateObject
  * @param  {SCOPE} scope
+ * @param  {LANGUAGE} language
  * @return {String}
  */
-function getLabel(dateObject, scope) {
+function getLabel(dateObject, scope, language) {
 
   if (scope === SCOPE.YEARS) {
     return `${dateObject.getFullYear()}`
   }
 
   if (scope === SCOPE.MONTHS) {
-    return dateUtil.getShortMonthName(dateObject.getMonth())
+    return dateUtil.getShortMonthName(language, dateObject.getMonth())
   }
 
   return `${dateObject.getDate()}`
-
-}
-
-
-
-/**
- * Gets the label for a range of dates, given a scope.
- * @param  {Date} dateObject
- * @param  {SCOPE} scope
- * @return {String}
- */
-function getRangeLabel(dateObject, scope) {
-
-  let year  = dateObject.getFullYear()
-  let month = dateObject.getMonth()
-
-  if (scope === SCOPE.YEARS) {
-    let decadeStartYear = year - year % 10
-    let decadeEndYear   = decadeStartYear + 9
-    return `${decadeStartYear} - ${decadeEndYear}`
-  }
-
-  if (scope === SCOPE.MONTHS) {
-    return `${year}`
-  }
-
-  return `${dateUtil.getFullMonthName(month)} ${year}`
 
 }
 
@@ -469,6 +440,5 @@ module.exports = {
 
   // Labels
   getLabel,
-  getRangeLabel,
 
 }

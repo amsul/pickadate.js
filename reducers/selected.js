@@ -8,15 +8,23 @@ let valueUtil = require('utils/value')
 /**
  * Initializes the selected date, defaulting to `null`.
  * @param  {Object} state
- * @param  {String} [payload.template]
- * @param  {String} [payload.value]
+ * @param  {LANGUAGE} payload.language
+ * @param  {String} payload.template
+ * @param  {String} payload.value
  * @return {Date|null}
  */
-function initialize(state, { template, value }) {
-  if (value) {
-    return dateUtil.parse(value, template)
+function initialize(state, { language, template, value }) {
+
+  if (!state && !value) {
+    return null
   }
-  return state ? dateUtil.create(state) : null
+
+  if (typeof value === 'string') {
+    value = dateUtil.parse(value, template, language)
+  }
+
+  return dateUtil.create(value || state)
+
 }
 
 
@@ -25,7 +33,7 @@ function initialize(state, { template, value }) {
  * Sets the selected date.
  * @param  {Object} state
  * @param  {SCOPE} payload.scope
- * @param  {Date|null} payload.value
+ * @param  {Date|Number|null} payload.value
  * @return {Date|null}
  */
 function set(state, { scope, value }) {

@@ -16,10 +16,10 @@ let dateUtil      = require('utils/date')
 
 /**
  * Creates a picker.
- * @param  {Object} initialChangedState
+ * @param  {Object} [stateChanges]
  * @return {picker}
  */
-function create(initialChangedState) {
+function create(stateChanges) {
 
   /**
    * The collection of state listeners.
@@ -32,7 +32,7 @@ function create(initialChangedState) {
    * The state of the picker.
    * @type {Object}
    */
-  let state = getInitialState(initialChangedState)
+  let state = getInitialState(stateChanges)
 
   /**
    * The animation frame for notifying the state listeners.
@@ -144,14 +144,14 @@ function getNextState(state, action) {
 /**
  * Gets the initial state with certain changes applied.
  * @private
- * @param  {Object} initialChangedState
+ * @param  {Object} [stateChanges]
  * @return {Object}
  */
-function getInitialState(initialChangedState) {
-  let state = { ...STATE.INITIAL, ...initialChangedState }
-  let { template, value } = state
+function getInitialState(stateChanges) {
+  let state = { ...STATE.INITIAL, ...stateChanges }
+  let { language, selected, template } = state
   return getNextState(state, {
-    payload : { template, value },
+    payload : { language, template, value: selected },
     type    : ACTION.TYPE.INITIALIZE,
   })
 }

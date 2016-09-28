@@ -1,8 +1,7 @@
-const DAY    = require('constants/day')
-const MONTH  = require('constants/month')
+const DAY   = require('constants/day')
+const MONTH = require('constants/month')
 
-let language = require('language')
-let jsUtil   = require('utils/js')
+let jsUtil  = require('utils/js')
 
 
 
@@ -72,15 +71,33 @@ function createInMonth(year, month, date) {
  * @type {Object(Function)}
  */
 const HOOK_FORMATTER = {
-  d    : dateObject => `${dateObject.getDate()}`,
-  dd   : dateObject => `${jsUtil.padZero(HOOK_FORMATTER.d(dateObject), 2)}`,
-  ddd  : dateObject => getShortDayName(dateObject.getDay()),
-  dddd : dateObject => getFullDayName(dateObject.getDay()),
-  m    : dateObject => `${dateObject.getMonth() + 1}`,
-  mm   : dateObject => `${jsUtil.padZero(HOOK_FORMATTER.m(dateObject), 2)}`,
-  mmm  : dateObject => getShortMonthName(dateObject.getMonth()),
-  mmmm : dateObject => getFullMonthName(dateObject.getMonth()),
-  yyyy : dateObject => `${dateObject.getFullYear()}`,
+  d: (language, dateObject) => (
+    `${dateObject.getDate()}`
+  ),
+  dd: (language, dateObject) => (
+    `${jsUtil.padZero(HOOK_FORMATTER.d(language, dateObject), 2)}`
+  ),
+  ddd: (language, dateObject) => (
+    getShortDayName(language, dateObject.getDay())
+  ),
+  dddd: (language, dateObject) => (
+    getFullDayName(language, dateObject.getDay())
+  ),
+  m: (language, dateObject) => (
+    `${dateObject.getMonth() + 1}`
+  ),
+  mm: (language, dateObject) => (
+    `${jsUtil.padZero(HOOK_FORMATTER.m(language, dateObject), 2)}`
+  ),
+  mmm: (language, dateObject) => (
+    getShortMonthName(language, dateObject.getMonth())
+  ),
+  mmmm: (language, dateObject) => (
+    getFullMonthName(language, dateObject.getMonth())
+  ),
+  yyyy: (language, dateObject) => (
+    `${dateObject.getFullYear()}`
+  ),
 }
 
 
@@ -185,9 +202,10 @@ function matchHooks(template) {
  * Gets the date units (date, month, & year) from a hook value map.
  * @private
  * @param  {Object<String>} hookValue
+ * @param  {LANGUAGE} language
  * @return {Object}
  */
-function getDateUnitsFromHookValue(hookValue) {
+function getDateUnitsFromHookValue(hookValue, language) {
 
   // Grab the year and date from the hook values
   let year  = hookValue.yyyy
@@ -195,8 +213,8 @@ function getDateUnitsFromHookValue(hookValue) {
 
   // Grab the index of the month name or the hook value
   let month = (
-    hookValue.mmmm ? getIndexOfFullMonthName(hookValue.mmmm) :
-    hookValue.mmm ? getIndexOfShortMonthName(hookValue.mmm) :
+    hookValue.mmmm ? getIndexOfFullMonthName(hookValue.mmmm, language) :
+    hookValue.mmm ? getIndexOfShortMonthName(hookValue.mmm, language) :
     (hookValue.mm || hookValue.m) - 1
   )
 
@@ -231,12 +249,13 @@ function areValidParsedDateUnits(...dateUnits) {
 
 
 /**
- * Formats a date object with a given template.
+ * Formats a date object with a given template and language.
  * @param  {Date} dateObject
  * @param  {String} template
+ * @param  {LANGUAGE} language
  * @return {String}
  */
-function format(dateObject, template) {
+function format(dateObject, template, language) {
 
   dateObject = create(dateObject)
 
@@ -248,7 +267,7 @@ function format(dateObject, template) {
       // Map through the matches while formatting template hooks
       // and removing the hooks of escaped characters
       .map(match => (
-        match.index === 2 ? HOOK_FORMATTER[match.chunk](dateObject) :
+        match.index === 2 ? HOOK_FORMATTER[match.chunk](language, dateObject) :
         match.index === 1 ? match.chunk.replace(/^\[(.*)]$/, '$1') :
         match.chunk
       ))
@@ -266,9 +285,10 @@ function format(dateObject, template) {
  * Parses a date string with a given template.
  * @param  {String} dateString
  * @param  {String} template
+ * @param  {LANGUAGE} language
  * @return {Date|null}
  */
-function parse(dateString, template) {
+function parse(dateString, template, language) {
 
   // Keep a reference to the original date string
   let originalDateString = dateString
@@ -322,7 +342,7 @@ function parse(dateString, template) {
   })
 
   // Get the date units from the hook value
-  let { date, month, year } = getDateUnitsFromHookValue(hookValue)
+  let { date, month, year } = getDateUnitsFromHookValue(hookValue, language)
 
   // If date units are not found, return `null`
   if (!areValidParsedDateUnits(date, month, year)) {
@@ -346,42 +366,46 @@ function parse(dateString, template) {
 
 /**
  * Gets a list of the full month names.
+ * @param  {LANGUAGE} language
  * @return {String[]}
  */
-function getFullMonthNames() {
-  return getLanguageValues(MONTH.FULL)
+function getFullMonthNames(language) {
+  return MONTH.FULL[language]
 }
 
 
 
 /**
  * Gets a list of the short month names.
+ * @param  {LANGUAGE} language
  * @return {String[]}
  */
-function getShortMonthNames() {
-  return getLanguageValues(MONTH.SHORT)
+function getShortMonthNames(language) {
+  return MONTH.SHORT[language]
 }
 
 
 
 /**
  * Gets the full name of a specific month.
+ * @param  {LANGUAGE} language
  * @param  {Number} month
  * @return {String}
  */
-function getFullMonthName(month) {
-  return getLanguageValue(MONTH.FULL, month)
+function getFullMonthName(language, month) {
+  return MONTH.FULL[language][month]
 }
 
 
 
 /**
  * Gets the short name of a specific month.
+ * @param  {LANGUAGE} language
  * @param  {Number} month
  * @return {String}
  */
-function getShortMonthName(month) {
-  return getLanguageValue(MONTH.SHORT, month)
+function getShortMonthName(language, month) {
+  return MONTH.SHORT[language][month]
 }
 
 
@@ -390,10 +414,11 @@ function getShortMonthName(month) {
  * Gets the index of a month by it's full name.
  * @private
  * @param  {String} fullMonthName
+ * @param  {LANGUAGE} language
  * @return {Number}
  */
-function getIndexOfFullMonthName(fullMonthName) {
-  return MONTH.FULL[language.current].indexOf(fullMonthName)
+function getIndexOfFullMonthName(fullMonthName, language) {
+  return MONTH.FULL[language].indexOf(fullMonthName)
 }
 
 
@@ -402,10 +427,11 @@ function getIndexOfFullMonthName(fullMonthName) {
  * Gets the index of a month by it's short name.
  * @private
  * @param  {String} shortMonthName
+ * @param  {LANGUAGE} language
  * @return {Number}
  */
-function getIndexOfShortMonthName(shortMonthName) {
-  return MONTH.SHORT[language.current].indexOf(shortMonthName)
+function getIndexOfShortMonthName(shortMonthName, language) {
+  return MONTH.SHORT[language].indexOf(shortMonthName)
 }
 
 
@@ -420,42 +446,46 @@ function getIndexOfShortMonthName(shortMonthName) {
 
 /**
  * Gets a list of the full day names.
+ * @param  {LANGUAGE} language
  * @return {String[]}
  */
-function getFullDayNames() {
-  return getLanguageValues(DAY.FULL)
+function getFullDayNames(language) {
+  return DAY.FULL[language]
 }
 
 
 
 /**
  * Gets a list of the short day names.
+ * @param  {LANGUAGE} language
  * @return {String[]}
  */
-function getShortDayNames() {
-  return getLanguageValues(DAY.SHORT)
+function getShortDayNames(language) {
+  return DAY.SHORT[language]
 }
 
 
 
 /**
  * Gets the full name of a specific day.
+ * @param  {LANGUAGE} language
  * @param  {Number} day
  * @return {String}
  */
-function getFullDayName(day) {
-  return getLanguageValue(DAY.FULL, day)
+function getFullDayName(language, day) {
+  return DAY.FULL[language][day]
 }
 
 
 
 /**
  * Gets the short name of a specific day.
+ * @param  {LANGUAGE} language
  * @param  {Number} day
  * @return {String}
  */
-function getShortDayName(day) {
-  return getLanguageValue(DAY.SHORT, day)
+function getShortDayName(language, day) {
+  return DAY.SHORT[language][day]
 }
 
 
@@ -525,44 +555,6 @@ function isSameYear(one, two) {
     one.getFullYear() === two.getFullYear()
   )
 
-}
-
-
-
-
-
-/////////////
-// HELPERS //
-/////////////
-
-
-
-/**
- * Gets the values for a language.
- *
- * @private
- *
- * @param  {Object} languagesValues
- * @return {Object}
- */
-function getLanguageValues(languagesValues) {
-  let languageValues = languagesValues[language.current]
-  return Object.keys(languageValues).map(key => languageValues[key])
-}
-
-
-
-/**
- * Gets the value for a language by key.
- *
- * @private
- *
- * @param  {Object} languagesValues
- * @param  {String} key
- * @return {String}
- */
-function getLanguageValue(languagesValues, key) {
-  return languagesValues[language.current][key]
 }
 
 

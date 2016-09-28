@@ -81,16 +81,13 @@ let confirm = () => ({
 
 /**
  * Returns an action that selects a value.
- *
- * TODO: Require a `scope` and `template` when there is a value
- *
  * @param  {Object} state
  * @param  {Date|Number|null} [value]
  * @return {Object}
  */
-let select = ({ scope, selected, template }, value) => ({
+let select = ({ scope }, value) => ({
   type    : ACTION.TYPE.SELECT,
-  payload : { scope, selected, template, value },
+  payload : { scope, value },
 })
 
 
@@ -117,9 +114,9 @@ let clear = () => select({}, null)
  * @param  {Date|String} value
  * @return {Object}
  */
-let show = ({ scope, selected, template }, value) => ({
+let show = ({ scope }, value) => ({
   type    : ACTION.TYPE.SHOW,
-  payload : { scope, selected, template, value },
+  payload : { scope, value },
 })
 
 
@@ -129,9 +126,9 @@ let show = ({ scope, selected, template }, value) => ({
  * @param  {Object} state
  * @return {Object}
  */
-let showPrevious = ({ scope, selected, template, view }) => (
+let showPrevious = ({ scope, selected, view }) => (
   show(
-    { scope, selected, template },
+    { scope },
     calendarUtil.getDateOfPreviousScope(selected || view, scope)
   )
 )
@@ -143,9 +140,9 @@ let showPrevious = ({ scope, selected, template, view }) => (
  * @param  {Object} state
  * @return {Object}
  */
-let showNext = ({ scope, selected, template, view }) => (
+let showNext = ({ scope, selected, view }) => (
   show(
-    { scope, selected, template },
+    { scope },
     calendarUtil.getDateOfNextScope(selected || view, scope)
   )
 )
@@ -157,8 +154,8 @@ let showNext = ({ scope, selected, template, view }) => (
  * @param  {Object} state
  * @return {Object}
  */
-let showToday = ({ scope, selected, template, today }) => (
-  show({ scope, selected, template }, today)
+let showToday = ({ scope, today }) => (
+  show({ scope }, today)
 )
 
 
@@ -217,6 +214,27 @@ let enable = (state, ...values) => ({
 
 
 
+//////////////
+// LANGUAGE //
+//////////////
+
+
+
+/**
+ * Returns an action that sets the language.
+ * @param  {Object} state
+ * @param  {LANGUAGE} value
+ * @return {Object}
+ */
+let setLanguage = (state, value) => ({
+  type    : ACTION.TYPE.SET_LANGUAGE,
+  payload : { value },
+})
+
+
+
+
+
 /////////////
 // EXPORTS //
 /////////////
@@ -251,5 +269,8 @@ module.exports = {
   // Disable
   disable,
   enable,
+
+  // Language
+  setLanguage,
 
 }

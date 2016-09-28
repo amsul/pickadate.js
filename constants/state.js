@@ -1,4 +1,5 @@
-const SCOPE = require('constants/scope')
+const LANGUAGE = require('constants/language')
+const SCOPE    = require('constants/scope')
 
 
 
@@ -11,6 +12,7 @@ const SCOPE = require('constants/scope')
  */
 const INITIAL = {
   disabled : null,
+  language : LANGUAGE.ENGLISH,
   scope    : SCOPE.DAYS,
   selected : null,
   template : 'd mmmm, yyyy',

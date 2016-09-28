@@ -1,6 +1,7 @@
 let sinon           = require('sinon')
 
 const ACTION        = require('constants/action')
+const LANGUAGE      = require('constants/language')
 const SCOPE         = require('constants/scope')
 
 let selectedReducer = require('reducers/selected')
@@ -34,9 +35,9 @@ describe('/selectedReducer', () => {
     })
 
 
-    it('initializes the selected date with a specific payload value and template', () => {
+    it('initializes the selected date with a specific payload value, template, and language', () => {
       let state   = undefined
-      let payload = { template: 'yyyy-mm-dd', value: '2014-04-20' }
+      let payload = { language: LANGUAGE.ENGLISH, template: 'mmmm dd, yyyy', value: 'April 20, 2014' }
       selectedReducer[ACTION.TYPE.INITIALIZE](state, payload).should.eql(new Date(2014, 3, 20))
     })
 
