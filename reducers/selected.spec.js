@@ -5,7 +5,7 @@ const LANGUAGE      = require('constants/language')
 const SCOPE         = require('constants/scope')
 
 let selectedReducer = require('reducers/selected')
-let valueUtil       = require('utils/value')
+let selectedUtil    = require('utils/selected')
 
 
 
@@ -57,7 +57,7 @@ describe('/selectedReducer', () => {
       let state   = new Date(2013, 3, 20)
       let payload = { scope, selected, template, value }
 
-      let createDateToSetSpy = sinon.spy(valueUtil, 'createDateToSet')
+      let createDateToSetSpy = sinon.spy(selectedUtil, 'createDateToSet')
 
       selectedReducer[ACTION.TYPE.SELECT](null, payload).getTime()
         .should.eql(state.getTime())
@@ -84,7 +84,7 @@ describe('/selectedReducer', () => {
       let state   = selected
       let payload = { scope, selected, template, value }
 
-      let createDateToSetSpy = sinon.spy(valueUtil, 'createDateToSet')
+      let createDateToSetSpy = sinon.spy(selectedUtil, 'createDateToSet')
 
       selectedReducer[ACTION.TYPE.SELECT](state, payload).should.be.exactly(state)
 
@@ -105,7 +105,7 @@ describe('/selectedReducer', () => {
       let state   = new Date(2013, 3, 20)
       let payload = { value: null }
 
-      let createDateToSetSpy = sinon.spy(valueUtil, 'createDateToSet')
+      let createDateToSetSpy = sinon.spy(selectedUtil, 'createDateToSet')
 
       true.should.eql(null == selectedReducer[ACTION.TYPE.SELECT](state, payload))
 

@@ -1,7 +1,7 @@
-const ACTION  = require('constants/action')
+const ACTION     = require('constants/action')
 
-let dateUtil  = require('utils/date')
-let valueUtil = require('utils/value')
+let dateUtil     = require('utils/date')
+let selectedUtil = require('utils/selected')
 
 
 
@@ -44,7 +44,7 @@ function set(state, { scope, value }) {
   }
 
   // Otherwise create the date to set
-  return valueUtil.createDateToSet(state, {
+  return selectedUtil.createDateToSet(state, {
     scope,
     selected: state,
     value,

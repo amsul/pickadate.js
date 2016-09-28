@@ -1,13 +1,13 @@
-let sinon     = require('sinon')
+let sinon        = require('sinon')
 
-const SCOPE   = require('constants/scope')
+const SCOPE      = require('constants/scope')
 
-let dateUtil  = require('utils/date')
-let valueUtil = require('utils/value')
+let dateUtil     = require('utils/date')
+let selectedUtil = require('utils/selected')
 
 
 
-describe('/valueUtil', () => {
+describe('/selectedUtil', () => {
 
 
   describe('#createDateToSet', () => {
@@ -21,7 +21,7 @@ describe('/valueUtil', () => {
       let state   = new Date(2013, 1, 17)
       let payload = { scope, selected, value }
 
-      let nextValue = valueUtil.createDateToSet(state, payload)
+      let nextValue = selectedUtil.createDateToSet(state, payload)
 
       nextValue.should.be.exactly(state)
 
@@ -37,7 +37,7 @@ describe('/valueUtil', () => {
       let state   = selected
       let payload = { scope, selected, value }
 
-      let nextValue = valueUtil.createDateToSet(state, payload)
+      let nextValue = selectedUtil.createDateToSet(state, payload)
 
       nextValue.should.eql(new Date(2013, 3, 20))
 
@@ -53,7 +53,7 @@ describe('/valueUtil', () => {
       let state   = selected
       let payload = { scope, selected, value }
 
-      let nextValue = valueUtil.createDateToSet(state, payload)
+      let nextValue = selectedUtil.createDateToSet(state, payload)
 
       nextValue.should.be.exactly(state)
 
@@ -69,7 +69,7 @@ describe('/valueUtil', () => {
       let state   = selected
       let payload = { scope, selected, value }
 
-      let nextValue = valueUtil.createDateToSet(state, payload)
+      let nextValue = selectedUtil.createDateToSet(state, payload)
 
       nextValue.should.eql(new Date(2013, 3, 20))
 
@@ -87,7 +87,7 @@ describe('/valueUtil', () => {
 
       let createInMonthSpy = sinon.spy(dateUtil, 'createInMonth')
 
-      let nextValue = valueUtil.createDateToSet(state, payload)
+      let nextValue = selectedUtil.createDateToSet(state, payload)
 
       createInMonthSpy.callCount.should.eql(1)
       createInMonthSpy.lastCall.args.should.eql([2012, 1, 31])
