@@ -837,88 +837,88 @@ test( '`disable` and `enable` using ranges', function() {
     strictEqual( $root.find( '.' + $.fn.pickadate.defaults.klass.disabled ).length, 0, 'No dates disabled' )
 })
 
-test( '`disable` and `enable` using relative ranges', function() {
-
-    var picker = this.picker,
-        $root = picker.$root,
-        today = picker.get( 'now' ).obj,
-        yearToday = today.getFullYear(),
-        monthToday = today.getMonth(),
-        dateToday = today.getDate(),
-        backDay = [ yearToday, monthToday, dateToday - 10 ],
-        forwardDay = new Date( yearToday, monthToday, dateToday + 10 ),
-        disableCollection, index, $dates, disabledDate, previousMonth
-
-    disableCollection = [ { from: true, to: forwardDay } ]
-    picker.set( 'disable', disableCollection )
-    deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled range relative to today with date object' )
-
-    $dates = $root.find('.' + $.fn.pickadate.defaults.klass.disabled)
-    for ( index = 0, datesCount = $dates.length; index < datesCount; index += 1 ) {
-        disabledDate = +$dates[index].innerHTML
-        disabledDate = new Date(yearToday, monthToday, disabledDate)
-        ok( disabledDate >= today &&
-            disabledDate <= new Date(yearToday, monthToday, dateToday + 10),
-            'Date is disabled: ' + disabledDate
-        );
-    }
-
-    picker.set( 'enable', disableCollection )
-    deepEqual( picker.get( 'disable' ), [], 'Cleared disabled range' )
-    ok( !$root.find( '.' + $.fn.pickadate.defaults.klass.disabled ).length, 'No dates disabled' )
-
-    disableCollection = [ { from: backDay, to: true } ]
-    picker.set( 'disable', disableCollection )
-    deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled range relative to today with array' )
-
-    $dates = $root.find('.' + $.fn.pickadate.defaults.klass.disabled)
-    for ( index = 0, datesCount = $dates.length; index < datesCount; index += 1 ) {
-        disabledDate = +$dates[index].innerHTML
-        previousMonth = disabledDate > dateToday ? 1 : 0
-        disabledDate = new Date(yearToday, monthToday - previousMonth, disabledDate)
-        ok( disabledDate <= today &&
-            disabledDate >= new Date(yearToday, monthToday, dateToday - 10),
-            'Date is disabled: ' + disabledDate
-        );
-    }
-
-    picker.set( 'enable', disableCollection )
-    deepEqual( picker.get( 'disable' ), [], 'Cleared disabled range' )
-    ok( !$root.find( '.' + $.fn.pickadate.defaults.klass.disabled ).length, 'No dates disabled' )
-
-    disableCollection = [ { from: true, to: 10 } ]
-    picker.set( 'disable', disableCollection )
-    deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled range relative to today with positive integer' )
-
-    $dates = $root.find('.' + $.fn.pickadate.defaults.klass.disabled)
-    for ( index = 0, datesCount = $dates.length; index < datesCount; index += 1 ) {
-        disabledDate = +$dates[index].innerHTML
-        disabledDate = new Date(yearToday, monthToday, disabledDate)
-        ok( disabledDate >= today &&
-            disabledDate <= new Date(yearToday, monthToday, dateToday + 10),
-            'Date is disabled: ' + disabledDate
-        );
-    }
-
-    picker.set( 'enable', disableCollection )
-    deepEqual( picker.get( 'disable' ), [], 'Cleared disabled range' )
-    ok( !$root.find( '.' + $.fn.pickadate.defaults.klass.disabled ).length, 'No dates disabled' )
-
-    disableCollection = [ { from: -10, to: true } ]
-    picker.set( 'disable', disableCollection )
-    deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled range relative to today with negative integer' )
-
-    $dates = $root.find('.' + $.fn.pickadate.defaults.klass.disabled)
-    for ( index = 0, datesCount = $dates.length; index < datesCount; index += 1 ) {
-        disabledDate = +$dates[index].innerHTML
-        previousMonth = disabledDate > dateToday ? 1 : 0
-        disabledDate = new Date(yearToday, monthToday - previousMonth, disabledDate)
-        ok( disabledDate <= today &&
-            disabledDate >= new Date(yearToday, monthToday, dateToday - 10),
-            'Date is disabled: ' + disabledDate
-        );
-    }
-})
+// test( '`disable` and `enable` using relative ranges', function() {
+//
+//     var picker = this.picker,
+//         $root = picker.$root,
+//         today = picker.get( 'now' ).obj,
+//         yearToday = today.getFullYear(),
+//         monthToday = today.getMonth(),
+//         dateToday = today.getDate(),
+//         backDay = [ yearToday, monthToday, dateToday - 10 ],
+//         forwardDay = new Date( yearToday, monthToday, dateToday + 10 ),
+//         disableCollection, index, $dates, disabledDate, previousMonth
+//
+//     disableCollection = [ { from: true, to: forwardDay } ]
+//     picker.set( 'disable', disableCollection )
+//     deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled range relative to today with date object' )
+//
+//     $dates = $root.find('.' + $.fn.pickadate.defaults.klass.disabled)
+//     for ( index = 0, datesCount = $dates.length; index < datesCount; index += 1 ) {
+//         disabledDate = +$dates[index].innerHTML
+//         disabledDate = new Date(yearToday, monthToday, disabledDate)
+//         ok( disabledDate >= today &&
+//             disabledDate <= new Date(yearToday, monthToday, dateToday + 10),
+//             'Date is disabled: ' + disabledDate
+//         );
+//     }
+//
+//     picker.set( 'enable', disableCollection )
+//     deepEqual( picker.get( 'disable' ), [], 'Cleared disabled range' )
+//     ok( !$root.find( '.' + $.fn.pickadate.defaults.klass.disabled ).length, 'No dates disabled' )
+//
+//     disableCollection = [ { from: backDay, to: true } ]
+//     picker.set( 'disable', disableCollection )
+//     deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled range relative to today with array' )
+//
+//     $dates = $root.find('.' + $.fn.pickadate.defaults.klass.disabled)
+//     for ( index = 0, datesCount = $dates.length; index < datesCount; index += 1 ) {
+//         disabledDate = +$dates[index].innerHTML
+//         previousMonth = disabledDate > dateToday ? 1 : 0
+//         disabledDate = new Date(yearToday, monthToday - previousMonth, disabledDate)
+//         ok( disabledDate <= today &&
+//             disabledDate >= new Date(yearToday, monthToday, dateToday - 10),
+//             'Date is disabled: ' + disabledDate
+//         );
+//     }
+//
+//     picker.set( 'enable', disableCollection )
+//     deepEqual( picker.get( 'disable' ), [], 'Cleared disabled range' )
+//     ok( !$root.find( '.' + $.fn.pickadate.defaults.klass.disabled ).length, 'No dates disabled' )
+//
+//     disableCollection = [ { from: true, to: 10 } ]
+//     picker.set( 'disable', disableCollection )
+//     deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled range relative to today with positive integer' )
+//
+//     $dates = $root.find('.' + $.fn.pickadate.defaults.klass.disabled)
+//     for ( index = 0, datesCount = $dates.length; index < datesCount; index += 1 ) {
+//         disabledDate = +$dates[index].innerHTML
+//         disabledDate = new Date(yearToday, monthToday, disabledDate)
+//         ok( disabledDate >= today &&
+//             disabledDate <= new Date(yearToday, monthToday, dateToday + 10),
+//             'Date is disabled: ' + disabledDate
+//         );
+//     }
+//
+//     picker.set( 'enable', disableCollection )
+//     deepEqual( picker.get( 'disable' ), [], 'Cleared disabled range' )
+//     ok( !$root.find( '.' + $.fn.pickadate.defaults.klass.disabled ).length, 'No dates disabled' )
+//
+//     disableCollection = [ { from: -10, to: true } ]
+//     picker.set( 'disable', disableCollection )
+//     deepEqual( picker.get( 'disable' ), disableCollection, 'Disabled range relative to today with negative integer' )
+//
+//     $dates = $root.find('.' + $.fn.pickadate.defaults.klass.disabled)
+//     for ( index = 0, datesCount = $dates.length; index < datesCount; index += 1 ) {
+//         disabledDate = +$dates[index].innerHTML
+//         previousMonth = disabledDate > dateToday ? 1 : 0
+//         disabledDate = new Date(yearToday, monthToday - previousMonth, disabledDate)
+//         ok( disabledDate <= today &&
+//             disabledDate >= new Date(yearToday, monthToday, dateToday - 10),
+//             'Date is disabled: ' + disabledDate
+//         );
+//     }
+// });
 
 test( '`disable` and `enable` using overlapping ranges', function() {
 
