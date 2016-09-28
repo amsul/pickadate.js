@@ -25,6 +25,7 @@ describe('/pickerObject', () => {
       picker.should.have.keys(
         'addStateListener',
         'dispatch',
+        'getValue',
         'removeStateListener',
         'state',
 
@@ -177,7 +178,6 @@ describe('/pickerObject', () => {
         picker.state.should.eql({
           ...initialState,
           selected : new Date(2013, 3, 20),
-          value    : '20 April, 2013',
           view     : new Date(2013, 3, 1),
         })
 

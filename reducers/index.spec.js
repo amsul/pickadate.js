@@ -52,7 +52,6 @@ describe('/reducers', () => {
         ...state,
         scope    : SCOPE.DAYS,
         selected : value,
-        value    : '2014-04-20',
         view     : new Date(2014, 3, 1),
       })
 

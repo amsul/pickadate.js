@@ -4,6 +4,7 @@ const STATE       = require('constants/state')
 let actions       = require('actions')
 let reducers      = require('reducers')
 let animationUtil = require('utils/animation')
+let dateUtil      = require('utils/date')
 
 
 
@@ -85,10 +86,21 @@ function create(initialChangedState) {
     triggerStateListeners(nextState)
   }
 
+  /**
+   * Gets the formatted value based on the selected state.
+   * @param  {Object} [nextState=state]
+   * @return {String}
+   */
+  let getValue = (nextState = state) => {
+    let { language, selected, template } = nextState
+    return selected ? dateUtil.format(selected, template, language) : ''
+  }
+
   // Create the picker api.
   let picker = {
     addStateListener,
     dispatch,
+    getValue,
     removeStateListener,
     get state() {
       return state

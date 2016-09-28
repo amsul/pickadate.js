@@ -15,7 +15,6 @@ const INITIAL = {
   selected : null,
   template : 'd mmmm, yyyy',
   today    : null,
-  value    : '',
   view     : null,
 }
 

@@ -62,11 +62,11 @@ function addValueStateListenerToInput(inputNode, picker) {
     return
   }
 
-  inputNode.value = picker.state.value
+  inputNode.value = picker.getValue()
 
   picker.addStateListener(nextState => {
     if (picker.state.value !== nextState.value) {
-      inputNode.value = nextState.value
+      inputNode.value = picker.getValue(nextState)
     }
   })
 
