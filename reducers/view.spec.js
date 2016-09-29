@@ -45,7 +45,7 @@ describe('/viewReducer', () => {
       let clock = lolex.install(new Date(2014, 3, 20).getTime())
 
       let state   = undefined
-      let payload = { template: 'yyyy-mm-dd', value: '2014-04-20' }
+      let payload = { template: 'YYYY-MM-DD', value: '2014-04-20' }
 
       let view = viewReducer[ACTION.TYPE.INITIALIZE](state, payload)
       view.should.eql(new Date(2014, 3, 1))

@@ -18,7 +18,7 @@ describe('/actions', () => {
   // describe('#format', () => {
 
   //   it('returns an actions that sets the template to use to format a value', () => {
-  //     let template = 'yyyy-mm-dd'
+  //     let template = 'YYYY-MM-DD'
   //     actions.format(template).should.eql({
   //       type    : ACTION.TYPE.FORMAT,
   //       payload : { template },

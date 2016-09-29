@@ -40,7 +40,7 @@ describe('/reducers', () => {
 
       let state = {
         ...STATE.INITIAL,
-        template: 'yyyy-mm-dd'
+        template: 'YYYY-MM-DD'
       }
 
       let value  = new Date(2014, 3, 20)

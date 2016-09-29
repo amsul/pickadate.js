@@ -15,7 +15,7 @@ const INITIAL = {
   language : LANGUAGE.ENGLISH,
   scope    : SCOPE.DAYS,
   selected : null,
-  template : 'd mmmm, yyyy',
+  template : 'D MMMM, YYYY',
   today    : null,
   view     : null,
 }

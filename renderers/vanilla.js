@@ -199,7 +199,7 @@ function createButtonScopeEmptyElement(state) {
       classes.scopeItem,
       classes.scopeItem_empty,
     ],
-    dateUtil.format(state.view, 'mmm yyyy', state.language)
+    dateUtil.format(state.view, 'MMM YYYY', state.language)
   )
 
   return node
@@ -217,7 +217,7 @@ function createButtonScopeDateElement(state) {
     ],
     createNode(
       [classes.scopeItemLabel, classes.scopeItemLabel_date],
-      dateUtil.format(state.selected, 'd', state.language)
+      dateUtil.format(state.selected, 'D', state.language)
     )
   )
 
@@ -234,7 +234,7 @@ function createButtonScopeMonthAndYearElement(state) {
       classes.scopeItemLabel,
       classes.scopeItemLabel_monthAndYear,
     ],
-    dateUtil.format(state.selected, 'mmm yyyy', state.language)
+    dateUtil.format(state.selected, 'MMM YYYY', state.language)
   )
 
   return node
@@ -250,7 +250,7 @@ function createButtonScopeWeekdayElement(state) {
       classes.scopeItemLabel,
       classes.scopeItemLabel_weekday,
     ],
-    dateUtil.format(state.selected, 'dddd', state.language)
+    dateUtil.format(state.selected, 'DDDD', state.language)
   )
 
   return node

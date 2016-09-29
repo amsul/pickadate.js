@@ -16,7 +16,7 @@ describe('/templateReducer', () => {
 
 
     it('initializes a custom template', () => {
-      let state = 'yyyy-mm-dd'
+      let state = 'YYYY-MM-DD'
       templateReducer[ACTION.TYPE.INITIALIZE](state).should.eql(state)
     })
 
@@ -28,7 +28,7 @@ describe('/templateReducer', () => {
 
   //   it('sets the template to use for formatting the selected value', () => {
   //     let state    = STATE.INITIAL.template
-  //     let template = 'yyyy-mm-dd'
+  //     let template = 'YYYY-MM-DD'
   //     templateReducer[ACTION.TYPE.FORMAT](state, { template }).should.eql(template)
   //   })
 

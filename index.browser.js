@@ -13,9 +13,9 @@ let picker = window.picker = vanillaRenderer.render(
     inputNode,
     stateChanges: {
       // scope: 'SCOPE_MONTHS',
-      // selected: '4 April, 2014',
-      selected: new Date(2014, 3, 20),
-      // template: 'yyyy [yyyy yeaaah] [dd]'
+      selected: '2014 April 20 @ 4:20 p.m.',
+      // selected: new Date(2014, 3, 20, 16, 20, 34),
+      template: 'YYYY MMMM DD @ h:mm a',
     }
   },
 )

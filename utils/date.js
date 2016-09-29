@@ -66,38 +66,75 @@ function createInMonth(year, month, date) {
 
 /**
  * A mapping of template hooks to formatters.
- * FIXME: Use moment.js formats: http://momentjs.com/docs/#/parsing/string-format/
  * @private
  * @type {Object(Function)}
  */
 const HOOK_FORMATTER = {
-  d: (language, dateObject) => (
+
+  D: (language, dateObject) => (
     `${dateObject.getDate()}`
   ),
-  dd: (language, dateObject) => (
-    `${jsUtil.padZero(HOOK_FORMATTER.d(language, dateObject), 2)}`
+  DD: (language, dateObject) => (
+    `${jsUtil.padZero(HOOK_FORMATTER.D(language, dateObject), 2)}`
   ),
-  ddd: (language, dateObject) => (
+  DDD: (language, dateObject) => (
     getShortDayName(language, dateObject.getDay())
   ),
-  dddd: (language, dateObject) => (
+  DDDD: (language, dateObject) => (
     getFullDayName(language, dateObject.getDay())
   ),
-  m: (language, dateObject) => (
+
+  M: (language, dateObject) => (
     `${dateObject.getMonth() + 1}`
+  ),
+  MM: (language, dateObject) => (
+    `${jsUtil.padZero(HOOK_FORMATTER.M(language, dateObject), 2)}`
+  ),
+  MMM: (language, dateObject) => (
+    getShortMonthName(language, dateObject.getMonth())
+  ),
+  MMMM: (language, dateObject) => (
+    getFullMonthName(language, dateObject.getMonth())
+  ),
+
+  YYYY: (language, dateObject) => (
+    `${dateObject.getFullYear()}`
+  ),
+
+  H: (language, dateObject) => (
+    `${dateObject.getHours()}`
+  ),
+  HH: (language, dateObject) => (
+    `${jsUtil.padZero(HOOK_FORMATTER.H(language, dateObject), 2)}`
+  ),
+  h: (language, dateObject) => (
+    `${dateObject.getHours() % 12 || 12}`
+  ),
+  hh: (language, dateObject) => (
+    `${jsUtil.padZero(HOOK_FORMATTER.h(language, dateObject), 2)}`
+  ),
+
+  m: (language, dateObject) => (
+    `${dateObject.getMinutes()}`
   ),
   mm: (language, dateObject) => (
     `${jsUtil.padZero(HOOK_FORMATTER.m(language, dateObject), 2)}`
   ),
-  mmm: (language, dateObject) => (
-    getShortMonthName(language, dateObject.getMonth())
+
+  a: (language, dateObject) => (
+    dateObject.getHours() < 11 ? 'a.m.' : 'p.m.'
   ),
-  mmmm: (language, dateObject) => (
-    getFullMonthName(language, dateObject.getMonth())
+  A: (language, dateObject) => (
+    dateObject.getHours() < 11 ? 'AM' : 'PM'
   ),
-  yyyy: (language, dateObject) => (
-    `${dateObject.getFullYear()}`
+
+  s: (language, dateObject) => (
+    `${dateObject.getSeconds()}`
   ),
+  ss: (language, dateObject) => (
+    `${jsUtil.padZero(HOOK_FORMATTER.s(language, dateObject), 2)}`
+  ),
+
 }
 
 
@@ -108,15 +145,51 @@ const HOOK_FORMATTER = {
  * @type {Object(Function)}
  */
 const HOOK_PARSER = {
-  d    : getStartingDigits,
-  dd   : getStartingDigits,
-  ddd  : getStartingWord,
-  dddd : getStartingWord,
+
+  D    : getStartingDigits,
+  DD   : getStartingDigits,
+  DDD  : getStartingWord,
+  DDDD : getStartingWord,
+
+  M    : getStartingDigits,
+  MM   : getStartingDigits,
+  MMM  : getStartingWord,
+  MMMM : getStartingWord,
+
+  YYYY : getStartingDigits,
+
+  H    : getStartingDigits,
+  HH   : getStartingDigits,
+  h    : getStartingDigits,
+  hh   : getStartingDigits,
+
   m    : getStartingDigits,
   mm   : getStartingDigits,
-  mmm  : getStartingWord,
-  mmmm : getStartingWord,
-  yyyy : getStartingDigits,
+
+  a    : getStartingLowerCaseMeridiem,
+  A    : getStartingUpperCaseMeridiem,
+
+  s    : getStartingDigits,
+  ss   : getStartingDigits,
+
+}
+
+
+
+/* istanbul ignore if */
+if (process.env.DEBUG) {
+  let extraFormatterKeys = Object.keys(HOOK_FORMATTER)
+    .filter(key => !HOOK_PARSER[key])
+  console.assert(
+    !extraFormatterKeys.length,
+    'Missing keys to parse with', extraFormatterKeys
+  )
+  let extraParserKeys = Object.keys(HOOK_PARSER)
+    .filter(key => !HOOK_FORMATTER[key])
+  console.assert(
+    !extraParserKeys.length,
+    'Missing keys to format with', extraParserKeys
+  )
 }
 
 
@@ -175,6 +248,30 @@ function getStartingDigits(string) {
 
 
 /**
+ * Gets the starting lower-case meridiem from a string.
+ * @private
+ * @param  {String} string
+ * @return {String}
+ */
+function getStartingLowerCaseMeridiem(string) {
+  return string.replace(/(^[ap]\.m\.)?(.*)/, '$1')
+}
+
+
+
+/**
+ * Gets the starting upper-case meridiem from a string.
+ * @private
+ * @param  {String} string
+ * @return {String}
+ */
+function getStartingUpperCaseMeridiem(string) {
+  return string.replace(/(^[AP]M)?(.*)/, '$1')
+}
+
+
+
+/**
  * Matches the hooks of a template.
  * @private
  * @param  {String} template
@@ -207,18 +304,88 @@ function matchHooks(template) {
  */
 function getDateUnitsFromHookValue(hookValue, language) {
 
-  // Grab the year and date from the hook values
-  let year  = hookValue.yyyy
-  let date  = hookValue.dd || hookValue.d
+  // Grab the year, date, minutes, and seconds from the hook values
+  let year    = hookValue.YYYY
+  let date    = hookValue.DD || hookValue.D
+  let minutes = hookValue.mm || hookValue.m
+  let seconds = hookValue.ss || hookValue.s
 
-  // Grab the index of the month name or the hook value
-  let month = (
-    hookValue.mmmm ? getIndexOfFullMonthName(hookValue.mmmm, language) :
-    hookValue.mmm ? getIndexOfShortMonthName(hookValue.mmm, language) :
-    (hookValue.mm || hookValue.m) - 1
+  // Grab the month from the hook value by name or number
+  let month = getMonthFromHookValue(hookValue, language)
+
+  // Grab the hours from the hook value by number or meridiem
+  let hours = getHoursFromHookValue(hookValue)
+
+  return {
+    hours, minutes, seconds,
+    year, month, date,
+  }
+
+}
+
+
+
+/**
+ * Gets the month from a hook value map.
+ * @private
+ * @param  {Object<String>} hookValue
+ * @param  {LANGUAGE} language
+ * @return {Number}
+ */
+function getMonthFromHookValue(hookValue, language) {
+
+  if (hookValue.MMMM) {
+    return getIndexOfFullMonthName(hookValue.MMMM, language)
+  }
+
+  if (hookValue.MMM) {
+    return getIndexOfShortMonthName(hookValue.MMM, language)
+  }
+
+  return (hookValue.MM || hookValue.M) - 1
+
+}
+
+
+
+/**
+ * Gets the hours from a hook value map.
+ * @private
+ * @param  {Object<String>} hookValue
+ * @return {Number|null}
+ */
+function getHoursFromHookValue(hookValue) {
+
+  let hours = hookValue.HH || hookValue.H
+  if (hours) {
+    return hours
+  }
+
+  return getHoursBasedOnMeridiem(
+    hookValue.hh || hookValue.h,
+    hookValue.a || hookValue.A
   )
 
-  return { date, month, year }
+}
+
+
+
+/**
+ * Gets the hours based on the meridiem from a hook value map.
+ * @private
+ * @param  {String} hours
+ * @param  {String} meridiem
+ * @return {Number}
+ */
+function getHoursBasedOnMeridiem(hours, meridiem) {
+
+  if (!isValidParsedDateUnit(hours) || !meridiem) {
+    return null
+  }
+
+  hours = parseInt(hours, 10)
+
+  return /^p/i.test(meridiem) && hours < 12 ? hours + 12 : hours
 
 }
 
@@ -342,7 +509,10 @@ function parse(dateString, template, language) {
   })
 
   // Get the date units from the hook value
-  let { date, month, year } = getDateUnitsFromHookValue(hookValue, language)
+  let {
+    hours, minutes, seconds,
+    year, month, date,
+  } = getDateUnitsFromHookValue(hookValue, language)
 
   // If date units are not found, return `null`
   if (!areValidParsedDateUnits(date, month, year)) {
@@ -350,7 +520,7 @@ function parse(dateString, template, language) {
   }
 
   // Otherwise, create a date the date
-  return new Date(year, month, date)
+  return new Date(year, month, date, hours || 0, minutes || 0, seconds || 0)
 
 }
 

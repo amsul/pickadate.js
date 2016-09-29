@@ -35,9 +35,16 @@ describe('/selectedReducer', () => {
     })
 
 
+    it('initializes the selected date with a specific payload value', () => {
+      let state   = undefined
+      let payload = { value: new Date(2014, 3, 20) }
+      selectedReducer[ACTION.TYPE.INITIALIZE](state, payload).should.eql(new Date(2014, 3, 20))
+    })
+
+
     it('initializes the selected date with a specific payload value, template, and language', () => {
       let state   = undefined
-      let payload = { language: LANGUAGE.ENGLISH, template: 'mmmm dd, yyyy', value: 'April 20, 2014' }
+      let payload = { language: LANGUAGE.ENGLISH, template: 'MMMM DD, YYYY', value: 'April 20, 2014' }
       selectedReducer[ACTION.TYPE.INITIALIZE](state, payload).should.eql(new Date(2014, 3, 20))
     })
 
@@ -51,7 +58,7 @@ describe('/selectedReducer', () => {
 
       let scope    = SCOPE.DAYS
       let selected = null
-      let template = 'yyyy-mm-dd'
+      let template = 'YYYY-MM-DD'
       let value    = new Date(2013, 3, 20).getTime()
 
       let state   = new Date(2013, 3, 20)
@@ -78,7 +85,7 @@ describe('/selectedReducer', () => {
 
       let scope    = SCOPE.DAYS
       let selected = new Date(2013, 3, 20)
-      let template = 'yyyy-mm-dd'
+      let template = 'YYYY-MM-DD'
       let value    = new Date(2013, 3, 20, 4, 20)
 
       let state   = selected
