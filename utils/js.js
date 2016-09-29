@@ -33,7 +33,7 @@ function createRange(fromIndex, toIndex) {
 
 
 /**
- * Pads a number with leading zeros dependending on a digits count.
+ * Pads a number with leading zeros depending on a digits count.
  * @param  {Number|String} number
  * @param  {Number} digitsCount
  * @return {String}
