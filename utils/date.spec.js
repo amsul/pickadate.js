@@ -204,6 +204,7 @@ describe('/dateUtil', () => {
         dateUtil.format(new Date(2014, 3, 2, 4), 'h', LANGUAGE.ENGLISH).should.eql('4')
         dateUtil.format(new Date(2014, 11, 17, 18), 'h', LANGUAGE.ENGLISH).should.eql('6')
         dateUtil.format(new Date(2014, 11, 17, 23), 'h', LANGUAGE.ENGLISH).should.eql('11')
+        dateUtil.format(new Date(2014, 11, 17, 12), 'h', LANGUAGE.ENGLISH).should.eql('12')
       })
     })
 

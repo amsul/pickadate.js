@@ -20,6 +20,17 @@ describe('/languageReducer', () => {
 
     })
 
+
+    it('defaults to the original language', () => {
+
+      let state   = LANGUAGE.ENGLISH
+      let payload = { value: null }
+
+      languageReducer[ACTION.TYPE.SET_LANGUAGE](state, payload)
+        .should.eql(LANGUAGE.ENGLISH)
+
+    })
+
   })
 
 
