@@ -3,7 +3,7 @@
 - [x] Explicitly enabled dates
 - [x] Move language into the state
 - [x] Use date & time formats similar to http://momentjs.com/docs/#/parsing/string-format/
-- [ ] Set selected date by passing a date string
+- [x] Set selected date by passing a date string
 - [ ] Keyboard navigation
 - [ ] A11y bindings
 - [ ] Add default formats similar to https://github.com/moment/moment/blob/develop/src/lib/locale/formats.js
