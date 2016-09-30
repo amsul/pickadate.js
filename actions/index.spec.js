@@ -61,12 +61,35 @@ describe('/actions', () => {
 
     it('returns an action that selects a value', () => {
 
-      let scope = SCOPE.DAYS
-      let value = new Date(2014, 3, 20)
+      let language = LANGUAGE.ENGLISH
+      let scope    = SCOPE.DAYS
+      let template = 'D MMMM, YYYY'
+      let value    = '20 April, 2016'
 
-      actions.select({ scope }, value).should.eql({
+      actions.select({ language, scope, template }, value).should.eql({
         type    : ACTION.TYPE.SELECT,
-        payload : { scope, value },
+        payload : { language, scope, template, value },
+      })
+
+    })
+
+
+    it('returns an action that selects a value with a custom template', () => {
+
+      let language      = LANGUAGE.ENGLISH
+      let scope         = SCOPE.DAYS
+      let template      = 'D MMMM, YYYY'
+      let value         = '2016/20/04'
+      let valueTemplate = 'YYYY/MM/DD'
+
+      actions.select({ language, scope, template }, value, valueTemplate).should.eql({
+        type    : ACTION.TYPE.SELECT,
+        payload : {
+          language,
+          scope,
+          template: valueTemplate,
+          value,
+        },
       })
 
     })
@@ -81,8 +104,10 @@ describe('/actions', () => {
       actions.clear().should.eql({
         type    : ACTION.TYPE.SELECT,
         payload : {
-          scope : undefined,
-          value : null,
+          language : undefined,
+          scope    : undefined,
+          template : undefined,
+          value    : null,
         },
       })
     })
@@ -103,12 +128,35 @@ describe('/actions', () => {
 
     it('returns an action that shows a scoped value', () => {
 
-      let scope = SCOPE.MONTHS
-      let value = new Date(2012, 3, 20)
+      let language = LANGUAGE.ENGLISH
+      let scope    = SCOPE.MONTHS
+      let template = 'D MMMM, YYYY'
+      let value    = '20 April, 2016'
 
-      actions.show({ scope }, value).should.eql({
+      actions.show({ language, scope, template }, value).should.eql({
         type    : ACTION.TYPE.SHOW,
-        payload : { scope, value },
+        payload : { language, scope, template, value },
+      })
+
+    })
+
+
+    it('returns an action that show a scoped value with a custom template', () => {
+
+      let language      = LANGUAGE.ENGLISH
+      let scope         = SCOPE.MONTHS
+      let template      = 'D MMMM, YYYY'
+      let value         = '2016/20/04'
+      let valueTemplate = 'YYYY/MM/DD'
+
+      actions.show({ language, scope, template }, value, valueTemplate).should.eql({
+        type    : ACTION.TYPE.SHOW,
+        payload : {
+          language,
+          scope,
+          template: valueTemplate,
+          value,
+        },
       })
 
     })
@@ -128,7 +176,12 @@ describe('/actions', () => {
 
       actions.showPrevious({ scope, selected, view }).should.eql({
         type    : ACTION.TYPE.SHOW,
-        payload : { scope, value },
+        payload : {
+          language: undefined,
+          scope,
+          template: undefined,
+          value,
+        },
       })
 
     })
@@ -143,7 +196,12 @@ describe('/actions', () => {
 
       actions.showPrevious({ scope, selected, view }).should.eql({
         type    : ACTION.TYPE.SHOW,
-        payload : { scope, value },
+        payload : {
+          language: undefined,
+          scope,
+          template: undefined,
+          value,
+        },
       })
 
     })
@@ -163,7 +221,12 @@ describe('/actions', () => {
 
       actions.showNext({ scope, selected, view }).should.eql({
         type    : ACTION.TYPE.SHOW,
-        payload : { scope, value },
+        payload : {
+          language: undefined,
+          scope,
+          template: undefined,
+          value,
+        },
       })
 
     })
@@ -178,7 +241,12 @@ describe('/actions', () => {
 
       actions.showNext({ scope, selected, view }).should.eql({
         type    : ACTION.TYPE.SHOW,
-        payload : { scope, value },
+        payload : {
+          language: undefined,
+          scope,
+          template: undefined,
+          value,
+        },
       })
 
     })
@@ -197,7 +265,12 @@ describe('/actions', () => {
 
       actions.showToday({ scope, today }).should.eql({
         type    : ACTION.TYPE.SHOW,
-        payload : { scope, value },
+        payload : {
+          language: undefined,
+          scope,
+          template: undefined,
+          value,
+        },
       })
 
     })

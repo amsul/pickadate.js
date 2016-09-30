@@ -10,19 +10,23 @@ let selectedUtil = require('utils/selected')
  * @param  {Object} state
  * @param  {LANGUAGE} payload.language
  * @param  {String} payload.template
- * @param  {String} payload.value
+ * @param  {Date|Number|String|null} payload.value
  * @return {Date|null}
  */
 function initialize(state, { language, template, value }) {
 
+  // If there was no value and there is no new value,
+  // return the default value
   if (!state && !value) {
     return null
   }
 
+  // If the value is a string, parse it
   if (typeof value === 'string') {
     value = dateUtil.parse(value, template, language)
   }
 
+  // Create the date from the value or state
   return dateUtil.create(value || state)
 
 }
@@ -32,18 +36,25 @@ function initialize(state, { language, template, value }) {
 /**
  * Sets the selected date.
  * @param  {Object} state
+ * @param  {LANGUAGE} payload.language
  * @param  {SCOPE} payload.scope
- * @param  {Date|Number|null} payload.value
+ * @param  {String} payload.template
+ * @param  {Date|Number|String|null} payload.value
  * @return {Date|null}
  */
-function set(state, { scope, value }) {
+function set(state, { language, scope, template, value }) {
 
   // If there's no value, return the default value
   if (!value) {
     return null
   }
 
-  // Otherwise create the date to set
+  // If the value is a string, parse it
+  if (typeof value === 'string') {
+    value = dateUtil.parse(value, template, language)
+  }
+
+  // Create the date to set
   return selectedUtil.createDateToSet(state, {
     scope,
     selected: state,

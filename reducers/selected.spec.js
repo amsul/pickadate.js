@@ -57,23 +57,50 @@ describe('/selectedReducer', () => {
     it('sets the selected date', () => {
 
       let scope    = SCOPE.DAYS
-      let selected = null
       let template = 'YYYY-MM-DD'
       let value    = new Date(2013, 3, 20).getTime()
 
-      let state   = new Date(2013, 3, 20)
-      let payload = { scope, selected, template, value }
+      let state   = null
+      let payload = { scope, template, value }
 
       let createDateToSetSpy = sinon.spy(selectedUtil, 'createDateToSet')
 
-      selectedReducer[ACTION.TYPE.SELECT](null, payload).getTime()
-        .should.eql(state.getTime())
+      selectedReducer[ACTION.TYPE.SELECT](state, payload).getTime()
+        .should.eql(value)
 
       createDateToSetSpy.callCount.should.eql(1)
-      createDateToSetSpy.lastCall.args.should.eql([selected, {
+      createDateToSetSpy.lastCall.args.should.eql([state, {
         scope,
-        selected,
+        selected: state,
         value,
+      }])
+
+      createDateToSetSpy.restore()
+
+    })
+
+
+    it('sets the selected date by parsing the value', () => {
+
+      let language    = LANGUAGE.ENGLISH
+      let scope       = SCOPE.DAYS
+      let template    = 'D MMMM, YYYY'
+      let value       = '20 April, 2016'
+      let parsedValue = new Date(2016, 3, 20)
+
+      let state   = null
+      let payload = { language, scope, template, value }
+
+      let createDateToSetSpy = sinon.spy(selectedUtil, 'createDateToSet')
+
+      selectedReducer[ACTION.TYPE.SELECT](state, payload)
+        .should.eql(parsedValue)
+
+      createDateToSetSpy.callCount.should.eql(1)
+      createDateToSetSpy.lastCall.args.should.eql([state, {
+        scope,
+        selected : state,
+        value    : parsedValue,
       }])
 
       createDateToSetSpy.restore()
@@ -84,12 +111,11 @@ describe('/selectedReducer', () => {
     it('uses the original state if the value is the same as the selected date', () => {
 
       let scope    = SCOPE.DAYS
-      let selected = new Date(2013, 3, 20)
       let template = 'YYYY-MM-DD'
       let value    = new Date(2013, 3, 20, 4, 20)
 
-      let state   = selected
-      let payload = { scope, selected, template, value }
+      let state   = new Date(2013, 3, 20)
+      let payload = { scope, template, value }
 
       let createDateToSetSpy = sinon.spy(selectedUtil, 'createDateToSet')
 
@@ -98,7 +124,7 @@ describe('/selectedReducer', () => {
       createDateToSetSpy.callCount.should.eql(1)
       createDateToSetSpy.lastCall.args.should.eql([state, {
         scope,
-        selected,
+        selected: state,
         value,
       }])
 

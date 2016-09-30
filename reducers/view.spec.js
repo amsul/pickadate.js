@@ -1,6 +1,7 @@
 let lolex       = require('lolex')
 
 const ACTION    = require('constants/action')
+const LANGUAGE  = require('constants/language')
 
 let viewReducer = require('reducers/view')
 
@@ -66,6 +67,25 @@ describe('/viewReducer', () => {
 
       let state   = new Date(2016, 8, 8)
       let payload = { value: new Date(2011, 6, 11) }
+
+      let view = viewReducer[ACTION.TYPE.SELECT](state, payload)
+      view.should.eql(new Date(2011, 6, 1))
+
+      clock.uninstall()
+
+    })
+
+
+    it('updates the view when a value is selected by parsing the value', () => {
+
+      let clock = lolex.install(new Date(2014, 3, 20).getTime())
+
+      let state   = new Date(2016, 8, 8)
+      let payload = {
+        language : LANGUAGE.ENGLISH,
+        template : 'D MMMM, YYYY',
+        value    : '11 July, 2011',
+      }
 
       let view = viewReducer[ACTION.TYPE.SELECT](state, payload)
       view.should.eql(new Date(2011, 6, 1))

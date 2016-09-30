@@ -82,12 +82,18 @@ let confirm = () => ({
 /**
  * Returns an action that selects a value.
  * @param  {Object} state
- * @param  {Date|Number|null} [value]
+ * @param  {Date|Number|String|null} [value]
+ * @param  {String} [template=state.template]
  * @return {Object}
  */
-let select = ({ scope }, value) => ({
+let select = (state, value, template = state.template) => ({
   type    : ACTION.TYPE.SELECT,
-  payload : { scope, value },
+  payload : {
+    language : state.language,
+    scope    : state.scope,
+    template,
+    value,
+  },
 })
 
 
@@ -111,12 +117,18 @@ let clear = () => select({}, null)
 /**
  * Returns an action that selects a scoped value.
  * @param  {Object} state
- * @param  {Date|String} value
+ * @param  {Date|Number|String} value
+ * @param  {String} [template=state.template]
  * @return {Object}
  */
-let show = ({ scope }, value) => ({
+let show = (state, value, template = state.template) => ({
   type    : ACTION.TYPE.SHOW,
-  payload : { scope, value },
+  payload : {
+    language : state.language,
+    scope    : state.scope,
+    template,
+    value,
+  },
 })
 
 

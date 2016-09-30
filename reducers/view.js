@@ -15,13 +15,13 @@ let dateUtil     = require('utils/date')
  */
 function initialize(state = new Date(), { language, template, value }) {
 
-  if (value) {
-    state = typeof value === 'string'
-      ? dateUtil.parse(value, template, language)
-      : value
+  // If there is a string value, parse it
+  if (value && typeof value === 'string') {
+    value = dateUtil.parse(value, template, language)
   }
 
-  return calendarUtil.getStartDateOfMonth(state)
+  // Create the start date of the month from the value or state
+  return calendarUtil.getStartDateOfMonth(value || state)
 
 }
 
@@ -30,14 +30,32 @@ function initialize(state = new Date(), { language, template, value }) {
 /**
  * Updates a view when the selection changes.
  * @param  {Object} state
- * @param  {Date} payload.value
+ * @param  {LANGUAGE} payload.language
+ * @param  {String} payload.template
+ * @param  {Date|Number|String} payload.value
  * @return {Date}
  */
-function update(state, { value }) {
-  if (!value || dateUtil.isSameMonth(state, value)) {
+function update(state, { language, template, value }) {
+
+  // If there is no value, return the original state
+  if (!value) {
     return state
   }
+
+  // If the value is a string, parse it
+  if (typeof value === 'string') {
+    value = dateUtil.parse(value, template, language)
+  }
+
+  // If the value is in the same month as the original state,
+  // return the original state
+  if (dateUtil.isSameMonth(state, value)) {
+    return state
+  }
+
+  // Create the start date of the month from the value
   return calendarUtil.getStartDateOfMonth(value)
+
 }
 
 
