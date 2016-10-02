@@ -17,9 +17,10 @@ let dateUtil      = require('utils/date')
 /**
  * Creates a picker.
  * @param  {Object} [stateChanges]
+ * @param  {Function[]} [addons=[]]
  * @return {picker}
  */
-function create(stateChanges) {
+function create(stateChanges, addons = []) {
 
   /**
    * The collection of state listeners.
@@ -119,6 +120,9 @@ function create(stateChanges) {
       dispatch(actions[actionName](state, ...args))
     }
   })
+
+  // Add all the addons
+  addons.forEach(addon => addon(picker))
 
   // Return the final picker api
   return picker

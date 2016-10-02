@@ -113,6 +113,26 @@ describe('/pickerObject', () => {
     })
 
 
+    it('creates a picker with addons', () => {
+
+      let addon1 = sinon.stub()
+      let addon2 = sinon.stub()
+      let addons = [addon1, addon2]
+
+      // Create the picker
+      let picker = pickerObject.create(undefined, addons)
+
+      // Ensure the addons were called as expected
+      addon1.callCount.should.eql(1)
+      addon1.lastCall.args.length.should.eql(1)
+      addon1.lastCall.args[0].should.be.exactly(picker)
+      addon2.callCount.should.eql(1)
+      addon2.lastCall.args.length.should.eql(1)
+      addon2.lastCall.args[0].should.be.exactly(picker)
+
+    })
+
+
     describe('#dispatch', () => {
 
       it('dispatches an action and notifies listeners on the next animation frame', () => {
