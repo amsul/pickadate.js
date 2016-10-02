@@ -17,6 +17,7 @@ To avoid running into circular depedencies, the modules are organized so they ca
 - `classes.js`
 - `utils/`
 - `actions/` & `reducers/`
+- `addons/`
 - `objects/`
 - `renderers/`
 
