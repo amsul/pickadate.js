@@ -135,6 +135,10 @@ const HOOK_FORMATTER = {
     `${jsUtil.padZero(HOOK_FORMATTER.s(language, dateObject), 2)}`
   ),
 
+  x: (language, dateObject) => (
+    `${dateObject.getTime()}`
+  ),
+
 }
 
 
@@ -171,6 +175,8 @@ const HOOK_PARSER = {
 
   s    : getStartingDigits,
   ss   : getStartingDigits,
+
+  x    : getStartingDigits,
 
 }
 
@@ -507,6 +513,11 @@ function parse(dateString, template, language) {
     dateString = dateString.slice(lengthToStrip)
 
   })
+
+  // If there's a unix timestamp, use that directly
+  if (hookValue.x) {
+    return new Date(parseInt(hookValue.x, 10))
+  }
 
   // Get the date units from the hook value
   let {

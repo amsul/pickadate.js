@@ -265,6 +265,14 @@ describe('/dateUtil', () => {
       })
     })
 
+
+    describe('(HOOK_FORMATTER.x)', () => {
+      it('formats a date object as unix timestamp', () => {
+        dateUtil.format(new Date(2014, 3, 2, 4, 7, 51), 'x', LANGUAGE.ENGLISH).should.eql('1396426071000')
+        dateUtil.format(new Date(2014, 11, 17, 18, 49, 3), 'x', LANGUAGE.ENGLISH).should.eql('1418860143000')
+      })
+    })
+
   })
 
 
@@ -475,6 +483,14 @@ describe('/dateUtil', () => {
       it('parses a date string as the minutes', () => {
         dateUtil.parse('3 4, 2016 @ 17:08:06', 'D M, YYYY @ HH:mm:ss', LANGUAGE.ENGLISH).should.eql(new Date(2016, 3, 3, 17, 8, 6))
         dateUtil.parse('20 12, 2016 @ 02:13:19', 'D M, YYYY @ HH:mm:ss', LANGUAGE.ENGLISH).should.eql(new Date(2016, 11, 20, 2, 13, 19))
+      })
+    })
+
+
+    describe('(HOOK_PARSER.x)', () => {
+      it('parses a date string as the unix timestamp', () => {
+        dateUtil.parse('1396426071000', 'x', LANGUAGE.ENGLISH).should.eql(new Date(2014, 3, 2, 4, 7, 51))
+        dateUtil.parse('1418860143000', 'x', LANGUAGE.ENGLISH).should.eql(new Date(2014, 11, 17, 18, 49, 3))
       })
     })
 
