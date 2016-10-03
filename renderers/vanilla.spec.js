@@ -21,82 +21,12 @@ describe('/vanillaRenderer', () => {
 
     it('renders a picker into a parent node', () => {
 
+      let picker     = pickerObject.create()
       let parentNode = document.createElement('div')
-      vanillaRenderer.render(parentNode)
+      vanillaRenderer.render(parentNode, picker)
 
       parentNode.children.length.should.eql(1)
       parentNode.children[0].className.should.eql(classes.root)
-
-    })
-
-
-    it('returns the picker api', () => {
-
-      let parentNode = document.createElement('div')
-      let picker     = vanillaRenderer.render(parentNode)
-
-      picker.should.have.keys(Object.keys(pickerObject.create()))
-
-    })
-
-
-
-    describe('(#addValueStateListenerToInput)', () => {
-
-      it('binds a state listener that updates the value of the input node if the selected value changes', () => {
-
-        // Stub out getFrame
-        let getFrameStub = sinon.stub(animationUtil, 'getFrame')
-
-        // Create the parent and input node and render the picker
-        let parentNode = document.createElement('div')
-        let inputNode  = document.createElement('input')
-        let picker     = vanillaRenderer.render(parentNode, { inputNode })
-
-        let selectedDate = new Date(2013, 3, 20)
-
-        // Trigger a value change
-        picker.select(selectedDate)
-
-        // Grab the frame callback and trigger it
-        let frameCallback = getFrameStub.lastCall.args[1]
-        frameCallback()
-
-        // Ensure the input node now has the correct value
-        inputNode.value.should.eql(dateUtil.format(
-          selectedDate, picker.state.template, picker.state.language
-        ))
-
-        // Clean up the stub
-        getFrameStub.restore()
-
-      })
-
-
-      it('binds a state listener that does nothing to the value of the input node if the selected value does not change', () => {
-
-        // Stub out getFrame
-        let getFrameStub = sinon.stub(animationUtil, 'getFrame')
-
-        // Create the parent and input node and render the picker
-        let parentNode = document.createElement('div')
-        let inputNode  = document.createElement('input')
-        let picker     = vanillaRenderer.render(parentNode, { inputNode })
-
-        // Trigger a state change
-        picker.dispatch({ type: 'ACTION_TYPE_TEST' })
-
-        // Grab the frame callback and trigger it
-        let frameCallback = getFrameStub.lastCall.args[1]
-        frameCallback()
-
-        // Ensure the input node still has no value
-        inputNode.value.should.eql('')
-
-        // Clean up the stub
-        getFrameStub.restore()
-
-      })
 
     })
 
@@ -115,8 +45,9 @@ describe('/vanillaRenderer', () => {
       it('binds a touch move handler on the "root" element to prevent scrolling', () => {
 
         // Create the parent node and render the picker
+        let picker     = pickerObject.create()
         let parentNode = document.createElement('div')
-        vanillaRenderer.render(parentNode)
+        vanillaRenderer.render(parentNode, picker)
 
         // Grab the root element
         let rootElement = parentNode.children[0]
@@ -150,8 +81,9 @@ describe('/vanillaRenderer', () => {
       it('binds a click handler on the "scope" button that cycles the scope', () => {
 
         // Create the parent node and render the picker
+        let picker     = pickerObject.create()
         let parentNode = document.createElement('div')
-        let picker     = vanillaRenderer.render(parentNode)
+        vanillaRenderer.render(parentNode, picker)
 
         // Create the click event
         let event = new Event('click')
@@ -180,8 +112,9 @@ describe('/vanillaRenderer', () => {
         let getFrameStub = sinon.stub(animationUtil, 'getFrame')
 
         // Create the parent node and render the picker
+        let picker     = pickerObject.create()
         let parentNode = document.createElement('div')
-        let picker     = vanillaRenderer.render(parentNode)
+        vanillaRenderer.render(parentNode, picker)
 
         // Grab the scope button and it's children
         let scopeButton     = parentNode.getElementsByClassName(classes.button_scope)[0]
@@ -209,8 +142,9 @@ describe('/vanillaRenderer', () => {
         let getFrameStub = sinon.stub(animationUtil, 'getFrame')
 
         // Create the parent node and render the picker
+        let picker     = pickerObject.create()
         let parentNode = document.createElement('div')
-        let picker     = vanillaRenderer.render(parentNode)
+        vanillaRenderer.render(parentNode, picker)
 
         // Grab the scope button and it's children
         let scopeButton     = parentNode.getElementsByClassName(classes.button_scope)[0]
@@ -241,12 +175,11 @@ describe('/vanillaRenderer', () => {
 
         // Create the parent node and render the picker
         // with a selected value
-        let parentNode = document.createElement('div')
-        vanillaRenderer.render(parentNode, {
-          stateChanges: {
-            selected: new Date(2014, 3, 20)
-          }
+        let picker = pickerObject.create({
+          selected: new Date(2014, 3, 20)
         })
+        let parentNode = document.createElement('div')
+        vanillaRenderer.render(parentNode, picker)
 
         // Grab the "compound" scope item
         let scopeItemCompoundNodes = parentNode.getElementsByClassName(classes.scopeItem_compound)
@@ -267,8 +200,9 @@ describe('/vanillaRenderer', () => {
 
         // Create the parent node and render the picker
         // without a selected value
+        let picker     = pickerObject.create()
         let parentNode = document.createElement('div')
-        vanillaRenderer.render(parentNode)
+        vanillaRenderer.render(parentNode, picker)
 
         // Grab the "compound" scope item
         let scopeItemCompoundNodes = parentNode.getElementsByClassName(classes.scopeItem_compound)
@@ -293,8 +227,9 @@ describe('/vanillaRenderer', () => {
       it('binds a click handler on the "previous" button that shows the previous view', () => {
 
         // Create the parent node and render the picker
+        let picker     = pickerObject.create()
         let parentNode = document.createElement('div')
-        let picker     = vanillaRenderer.render(parentNode)
+        vanillaRenderer.render(parentNode, picker)
 
         // Create the click event
         let event = new Event('click')
@@ -325,8 +260,9 @@ describe('/vanillaRenderer', () => {
       it('binds a click handler on the "next" button that shows the next view', () => {
 
         // Create the parent node and render the picker
+        let picker     = pickerObject.create()
         let parentNode = document.createElement('div')
-        let picker     = vanillaRenderer.render(parentNode)
+        vanillaRenderer.render(parentNode, picker)
 
         // Create the click event
         let event = new Event('click')
@@ -357,8 +293,9 @@ describe('/vanillaRenderer', () => {
       it('binds a click handler on the "today" button that shows the view today', () => {
 
         // Create the parent node and render the picker
+        let picker     = pickerObject.create()
         let parentNode = document.createElement('div')
-        let picker     = vanillaRenderer.render(parentNode)
+        vanillaRenderer.render(parentNode, picker)
 
         // Create the click event
         let event = new Event('click')
@@ -389,8 +326,9 @@ describe('/vanillaRenderer', () => {
       it('binds a click handler on the "clear" button that clears the selected value', () => {
 
         // Create the parent node and render the picker
+        let picker     = pickerObject.create()
         let parentNode = document.createElement('div')
-        let picker     = vanillaRenderer.render(parentNode)
+        vanillaRenderer.render(parentNode, picker)
 
         // Create the click event
         let event = new Event('click')
@@ -421,8 +359,9 @@ describe('/vanillaRenderer', () => {
       it('binds a click handler on the "confirm" button that confirms the selected value', () => {
 
         // Create the parent node and render the picker
+        let picker     = pickerObject.create()
         let parentNode = document.createElement('div')
-        let picker     = vanillaRenderer.render(parentNode)
+        vanillaRenderer.render(parentNode, picker)
 
         // Create the click event
         let event = new Event('click')
@@ -461,8 +400,9 @@ describe('/vanillaRenderer', () => {
       it('binds a click handler on the "grid" that selects a value', () => {
 
         // Create the parent node and render the picker
+        let picker     = pickerObject.create()
         let parentNode = document.createElement('div')
-        let picker     = vanillaRenderer.render(parentNode)
+        vanillaRenderer.render(parentNode, picker)
 
         // Create the click event
         let event = new Event('click', { bubbles: true })
@@ -489,8 +429,9 @@ describe('/vanillaRenderer', () => {
       it('binds a click handler on the "grid" that does nothing if a value is not found on the click target', () => {
 
         // Create the parent node and render the picker
+        let picker     = pickerObject.create()
         let parentNode = document.createElement('div')
-        let picker     = vanillaRenderer.render(parentNode)
+        vanillaRenderer.render(parentNode, picker)
 
         // Create the click event
         let event = new Event('click', { bubbles: true })
@@ -521,8 +462,9 @@ describe('/vanillaRenderer', () => {
         let getFrameStub = sinon.stub(animationUtil, 'getFrame')
 
         // Create the parent node and render the picker
+        let picker     = pickerObject.create()
         let parentNode = document.createElement('div')
-        let picker     = vanillaRenderer.render(parentNode)
+        vanillaRenderer.render(parentNode, picker)
 
         // Grab the grid element and it's children
         let gridElement     = parentNode.getElementsByClassName(classes.grid)[0]
@@ -550,8 +492,9 @@ describe('/vanillaRenderer', () => {
         let getFrameStub = sinon.stub(animationUtil, 'getFrame')
 
         // Create the parent node and render the picker
+        let picker     = pickerObject.create()
         let parentNode = document.createElement('div')
-        let picker     = vanillaRenderer.render(parentNode)
+        vanillaRenderer.render(parentNode, picker)
 
         // Grab the grid element and it's children
         let gridElement     = parentNode.getElementsByClassName(classes.grid)[0]
@@ -579,8 +522,9 @@ describe('/vanillaRenderer', () => {
         let getFrameStub = sinon.stub(animationUtil, 'getFrame')
 
         // Create the parent node and render the picker
+        let picker     = pickerObject.create()
         let parentNode = document.createElement('div')
-        let picker     = vanillaRenderer.render(parentNode)
+        vanillaRenderer.render(parentNode, picker)
 
         // Grab the grid element and it's children
         let gridElement     = parentNode.getElementsByClassName(classes.grid)[0]
@@ -608,8 +552,9 @@ describe('/vanillaRenderer', () => {
         let getFrameStub = sinon.stub(animationUtil, 'getFrame')
 
         // Create the parent node and render the picker
+        let picker     = pickerObject.create()
         let parentNode = document.createElement('div')
-        let picker     = vanillaRenderer.render(parentNode)
+        vanillaRenderer.render(parentNode, picker)
 
         // Grab the grid element and it's children
         let gridElement     = parentNode.getElementsByClassName(classes.grid)[0]

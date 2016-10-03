@@ -3,7 +3,6 @@ let fs               = require('fs')
 const SCOPE          = require('constants/scope')
 
 let classes          = require('classes')
-let pickerObject     = require('objects/picker')
 let calendarUtil     = require('utils/calendar')
 let dateUtil         = require('utils/date')
 let stateUtil        = require('utils/state')
@@ -26,52 +25,15 @@ let bullsEyeIcon     = fs.readFileSync('icons/bullsEye.svg')
 /**
  * Renders a picker into a node with a starting state.
  * @param  {HTMLElement} parentNode
- * @param  {Object} options
- *         {HTMLInputElement} [options.inputNode]
- *         {String} [options.stateChanges]
- * @return {picker}
+ * @param  {Picker} picker
  */
-function render(parentNode, options = {}) {
-
-  let { inputNode, stateChanges } = options
-
-  // Create the picker object using the starting state.
-  let picker = pickerObject.create(stateChanges)
+function render(parentNode, picker) {
 
   // Create the root element using the current state.
   let rootElement = createRootElement(picker)
 
   // Append the root element to the parent node.
   parentNode.appendChild(rootElement)
-
-  // Add the value state listener to the input
-  addValueStateListenerToInput(inputNode, picker)
-
-  // Return the picker object.
-  return picker
-
-}
-
-
-
-function addValueStateListenerToInput(inputNode, picker) {
-
-  if (!inputNode) {
-    return
-  }
-
-  inputNode.value = picker.getValue()
-
-  picker.addStateListener(nextState => {
-    if (
-      stateUtil.isChangingAny(
-        picker.state, nextState,
-        'language', 'selected'
-      )
-    ) {
-      inputNode.value = picker.getValue(nextState)
-    }
-  })
 
 }
 
