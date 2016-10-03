@@ -4,6 +4,8 @@
 - [x] Move language into the state
 - [x] Use date & time formats similar to http://momentjs.com/docs/#/parsing/string-format/
 - [x] Set selected date by passing a date string
+- [x] Add-on API
+- [ ] First day of the week
 - [ ] Keyboard navigation
 - [ ] A11y bindings
 - [ ] Add default formats similar to https://github.com/moment/moment/blob/develop/src/lib/locale/formats.js
