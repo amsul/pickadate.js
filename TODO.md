@@ -6,6 +6,8 @@
 - [x] Set selected date by passing a date string
 - [x] Add-on API
 - [ ] First day of the week
+- [ ] Custom layout API
+- [ ] Minimum & maximum date limits (relative & absolute)
 - [ ] Keyboard navigation
 - [ ] A11y bindings
 - [ ] Add default formats similar to https://github.com/moment/moment/blob/develop/src/lib/locale/formats.js
