@@ -2,6 +2,7 @@ let lolex           = require('lolex')
 let sinon           = require('sinon')
 
 const ACTION        = require('constants/action')
+const LANGUAGE      = require('constants/language')
 const STATE         = require('constants/state')
 
 let actions         = require('actions')
@@ -92,17 +93,17 @@ describe('/pickerObject', () => {
       let clock = lolex.install(new Date(2014, 3, 20).getTime())
 
       // Create the initially changed state
-      let initialChangedState = {
+      let stateChanges = {
         view: new Date(2012, 5, 1)
       }
 
       // Create the picker
-      let picker = pickerObject.create(initialChangedState)
+      let picker = pickerObject.create(stateChanges)
 
       // Ensure it has the expected state
       picker.state.should.eql({
         ...STATE.INITIAL,
-        ...initialChangedState,
+        ...stateChanges,
         disabled : disabledReducer[ACTION.TYPE.INITIALIZE](),
         today: new Date(2014, 3, 20),
       })
@@ -131,6 +132,44 @@ describe('/pickerObject', () => {
       addon2.lastCall.args[0].should.be.exactly(picker)
 
     })
+
+
+
+    describe('#getValue', () => {
+
+      it('gets the value', () => {
+
+        pickerObject
+          .create()
+          .getValue()
+          .should.eql('')
+
+        pickerObject
+          .create({ selected: new Date(2014, 3, 20) })
+          .getValue()
+          .should.eql('20 April, 2014')
+
+      })
+
+
+      it('gets the value using the next state', () => {
+
+        let picker = pickerObject.create({
+          selected: new Date(2014, 3, 20)
+        })
+
+        let nextState = {
+          ...picker.state,
+          language : LANGUAGE.FRENCH,
+          selected : new Date(2015, 7, 14)
+        }
+
+        picker.getValue(nextState).should.eql('14 Août, 2015')
+
+      })
+
+    })
+
 
 
     describe('#dispatch', () => {
@@ -210,6 +249,7 @@ describe('/pickerObject', () => {
     })
 
 
+
     describe('#addStateListener', () => {
 
       it('adds a state listener', () => {
@@ -254,6 +294,7 @@ describe('/pickerObject', () => {
       })
 
     })
+
 
 
     describe('#removeStateListener', () => {
@@ -329,6 +370,7 @@ describe('/pickerObject', () => {
       })
 
     })
+
 
   })
 
