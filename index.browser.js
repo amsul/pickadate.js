@@ -24,16 +24,6 @@ let stateChanges = {
   template: 'YYYY MMMM DD @ h:mm a',
 }
 
-
-
-// let picker = window.picker = vanillaRenderer.render(
-//   parentNode,
-//   {
-//     addons,
-//     stateChanges
-//   },
-// )
-
 let picker = window.picker = pickerObject.create(stateChanges, addons)
 vanillaRenderer.render(parentNode, picker)
 

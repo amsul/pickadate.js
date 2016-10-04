@@ -4,57 +4,6 @@ let calendarUtil = require('utils/calendar')
 
 
 
-//////////////
-// TEMPLATE //
-//////////////
-
-
-
-/**
- * Returns an action that sets the template to use to format a value.
- * ??
- * @param  {String} template
- * @return {Object}
- */
-// let format = (template) => ({
-//   type    : ACTION.TYPE.FORMAT,
-//   payload : { template },
-// })
-
-
-
-
-
-//////////
-// OPEN //
-//////////
-
-
-
-/**
- * Returns an action that marks the picker as closed.
- * @return {Object}
- */
-// let close = () => ({
-//   type    : ACTION.TYPE.SET_OPEN,
-//   payload : { isOpened: false },
-// })
-
-
-
-/**
- * Returns an action that marks the picker as opened.
- * @return {Object}
- */
-// let open = () => ({
-//   type    : ACTION.TYPE.SET_OPEN,
-//   payload : { isOpened: true },
-// })
-
-
-
-
-
 /////////////
 // CONFIRM //
 /////////////
@@ -254,13 +203,6 @@ let setLanguage = (state, value) => ({
 
 
 module.exports = {
-
-  // Template
-  // format,
-
-  // Open
-  // close,
-  // open,
 
   // Confirm
   confirm,
