@@ -27,7 +27,7 @@ describe('/inputValueAddon', () => {
   })
 
 
-  it('creates an addon for an input that listens for value changes and updates', () => {
+  it('creates an addon for an input that listens for state changes and updates', () => {
 
     // Create the picker
     let picker = pickerObject.create()
@@ -45,12 +45,15 @@ describe('/inputValueAddon', () => {
     let getFrameStub = sinon.stub(animationUtil, 'getFrame')
 
     // Update the selected value
+    // and ensure the value was updated
     picker.select(new Date(2015, 3, 20))
-
-    // Trigger the animation frame callback
     getFrameStub.lastCall.args[1]()
+    inputNode.value.should.eql('20 April, 2015')
 
-    // Ensure the value was updated
+    // Update something irrelevant
+    // and ensure the value was not updated
+    picker.cycleScope()
+    getFrameStub.lastCall.args[1]()
     inputNode.value.should.eql('20 April, 2015')
 
     // Clean up

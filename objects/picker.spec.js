@@ -152,19 +152,24 @@ describe('/pickerObject', () => {
       })
 
 
-      it('gets the value using the next state', () => {
+      it('gets the value using a custom template', () => {
 
         let picker = pickerObject.create({
-          selected: new Date(2014, 3, 20)
+          selected: new Date(2015, 7, 14)
         })
 
-        let nextState = {
-          ...picker.state,
-          language : LANGUAGE.FRENCH,
-          selected : new Date(2015, 7, 14)
-        }
+        picker.getValue('YYYY-MM-DD').should.eql('2015-08-14')
 
-        picker.getValue(nextState).should.eql('14 Août, 2015')
+      })
+
+
+      it('gets the value using a custom language', () => {
+
+        let picker = pickerObject.create({
+          selected: new Date(2015, 7, 14)
+        })
+
+        picker.getValue(undefined, LANGUAGE.FRENCH).should.eql('14 Août, 2015')
 
       })
 

@@ -59,7 +59,7 @@ function add(state, { values }) {
   // If the state hasn't changed,
   // return the original state object
   return (
-    stateUtil.isChangingAny(state, nextState, 'dates', 'days', 'exceptions')
+    stateUtil.hasAnyChanged(state, nextState, 'dates', 'days', 'exceptions')
       ? nextState
       : state
   )
@@ -107,7 +107,7 @@ function remove(state, { values }) {
   // If the state hasn't changed,
   // return the original state object
   return (
-    stateUtil.isChangingAny(state, nextState, 'dates', 'days', 'exceptions')
+    stateUtil.hasAnyChanged(state, nextState, 'dates', 'days', 'exceptions')
       ? nextState
       : state
   )

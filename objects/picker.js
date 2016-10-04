@@ -43,16 +43,15 @@ function create(stateChanges, addons = []) {
   let animationFrame = null
 
   /**
-   * Triggers the state listeners and then sets the state as the next one.
+   * Triggers the state listeners with the previous state.
    * @private
-   * @param  {Object} nextState
+   * @param  {Object} previousState
    */
-  let triggerStateListeners = (nextState) => {
+  let triggerStateListeners = (previousState) => {
     animationFrame = animationUtil.getFrame(
       animationFrame,
       () => {
-        stateListeners.forEach(listener => listener(nextState))
-        state = nextState
+        stateListeners.forEach(listener => listener(previousState))
       }
     )
   }
@@ -83,17 +82,19 @@ function create(stateChanges, addons = []) {
    *         {Object} [action.payload]
    */
   let dispatch = (action) => {
-    let nextState = getNextState(state, action)
-    triggerStateListeners(nextState)
+    let previousState = state
+    state = getNextState(state, action)
+    triggerStateListeners(previousState)
   }
 
   /**
    * Gets the formatted value based on the selected state.
-   * @param  {Object} [nextState=state]
+   * @param  {String} [template=state.template]
+   * @param  {LANGUAGE} [language=state.language]
    * @return {String}
    */
-  let getValue = (nextState = state) => {
-    let { language, selected, template } = nextState
+  let getValue = (template = state.template, language = state.language) => {
+    let { selected } = state
     return selected ? dateUtil.format(selected, template, language) : ''
   }
 

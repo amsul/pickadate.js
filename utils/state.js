@@ -12,41 +12,15 @@ let jsUtil   = require('utils/js')
 
 
 /**
- * Checks if the value of certain state properties are changing.
+ * Checks if any of the values of certain state properties have changed.
+ * @param  {Object}    previousState
  * @param  {Object}    state
- * @param  {Object}    nextState
  * @param  {...String} stateKeys A list of the property keys to compare
  * @return {Boolean}
  */
-// function isChanging(state, nextState, ...stateKeys) {
-//   return stateKeys.every(stateKey => state[stateKey] !== nextState[stateKey])
-// }
-
-
-
-/**
- * Checks if any of the values of certain state properties are changing.
- * @param  {Object}    state
- * @param  {Object}    nextState
- * @param  {...String} stateKeys A list of the property keys to compare
- * @return {Boolean}
- */
-function isChangingAny(state, nextState, ...stateKeys) {
-  return stateKeys.some(stateKey => state[stateKey] !== nextState[stateKey])
+function hasAnyChanged(previousState, state, ...stateKeys) {
+  return stateKeys.some(stateKey => previousState[stateKey] !== state[stateKey])
 }
-
-
-
-/**
- * Checks if the value of certain state properties are not changing.
- * @param  {Object}    state
- * @param  {Object}    nextState
- * @param  {...String} stateKeys A list of the property keys to compare
- * @return {Boolean}
- */
-// function isNotChanging(state, nextState, ...stateKeys) {
-//   return !isChanging(state, nextState, ...stateKeys)
-// }
 
 
 
@@ -141,9 +115,7 @@ function isToday(state, dateObject) {
 module.exports = {
 
   // Change checkers
-  // isChanging,
-  isChangingAny,
-  // isNotChanging,
+  hasAnyChanged,
 
   // State checkers
   isDisabled,

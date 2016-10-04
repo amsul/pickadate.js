@@ -7,12 +7,12 @@ let calendarUtil     = require('utils/calendar')
 let dateUtil         = require('utils/date')
 let stateUtil        = require('utils/state')
 
-let checkmarkIcon    = fs.readFileSync('icons/checkmark.svg')
-let chevronDownIcon  = fs.readFileSync('icons/chevronDown.svg')
-let chevronLeftIcon  = fs.readFileSync('icons/chevronLeft.svg')
-let chevronRightIcon = fs.readFileSync('icons/chevronRight.svg')
-let crossIcon        = fs.readFileSync('icons/cross.svg')
-let bullsEyeIcon     = fs.readFileSync('icons/bullsEye.svg')
+let checkmarkIcon    = fs.readFileSync('icons/checkmark.svg', 'utf-8')
+let chevronDownIcon  = fs.readFileSync('icons/chevronDown.svg', 'utf-8')
+let chevronLeftIcon  = fs.readFileSync('icons/chevronLeft.svg', 'utf-8')
+let chevronRightIcon = fs.readFileSync('icons/chevronRight.svg', 'utf-8')
+let crossIcon        = fs.readFileSync('icons/cross.svg', 'utf-8')
+let bullsEyeIcon     = fs.readFileSync('icons/bullsEye.svg', 'utf-8')
 
 
 
@@ -23,14 +23,40 @@ let bullsEyeIcon     = fs.readFileSync('icons/bullsEye.svg')
 
 
 /**
+ * The default layout to use to render pickers.
+ * @private
+ * @type {Function}
+ */
+const DEFAULT_LAYOUT = createRootContainer(
+  createHeaderContainer(
+    createScopeButton(),
+    createNavigationContainer(
+      createPreviousButton(),
+      createTodayButton(),
+      createNextButton(),
+    ),
+  ),
+  createBodyContainer(
+    createGridButton()
+  ),
+  createFooterContainer(
+    createClearButton(),
+    createConfirmButton(),
+  )
+)
+
+
+
+/**
  * Renders a picker into a node with a starting state.
  * @param  {HTMLElement} parentNode
  * @param  {Picker} picker
+ * @param  {Function} [layout=DEFAULT_LAYOUT]
  */
-function render(parentNode, picker) {
+function render(parentNode, picker, layout = DEFAULT_LAYOUT) {
 
   // Create the root element using the current state.
-  let rootElement = createRootElement(picker)
+  let rootElement = layout(picker)
 
   // Append the root element to the parent node.
   parentNode.appendChild(rootElement)
@@ -41,96 +67,310 @@ function render(parentNode, picker) {
 
 
 
-//////////////////
-// ROOT ELEMENT //
-//////////////////
+/////////////
+// LAYOUTS //
+/////////////
 
 
 
-function createRootElement(picker) {
-
-  let onTouchMove = (event) => {
-    event.preventDefault()
+function createLayout(...layouts) {
+  return (picker) => {
+    let element = document.createElement('div')
+    appendChildren(element, layouts.map(layout => layout(picker)))
+    return element
   }
-
-  let node = createNode(
-    classes.root,
-    [
-      createSectionNode(classes.section_header, [
-        createButtonScopeElement(picker),
-        createButtonNavigationElement(picker),
-      ]),
-      createSectionNode(
-        classes.section_body,
-        createGridElement(picker)
-      ),
-      createSectionNode(classes.section_footer, [
-        createButtonClearElement(picker),
-        createButtonConfirmElement(picker),
-      ]),
-    ],
-    { onTouchMove }
-  )
-
-  return node
-
 }
 
 
 
 
 
-/////////////////////
-// BUTTON ELEMENTS //
-/////////////////////
+///////////////////////
+// CONTAINER LAYOUTS //
+///////////////////////
 
 
 
-function createButtonScopeElement(picker) {
+function createRootContainer(...layouts) {
+  return (picker) => {
 
-  let onClick = () => picker.cycleScope()
-
-  let node = createButtonNode(
-    [classes.button, classes.button_scope],
-    createButtonScopeItemElements(picker.state),
-    onClick
-  )
-
-  picker.addStateListener(nextState => {
-    if (
-      stateUtil.isChangingAny(
-        picker.state, nextState,
-        'language', 'scope', 'selected', 'view'
-      )
-    ) {
-      node.innerHTML = ''
-      appendChildren(node, createButtonScopeItemElements(nextState))
+    let onTouchMove = (event) => {
+      event.preventDefault()
     }
-  })
 
-  return node
+    let layout  = createLayout(...layouts)
+    let element = layout(picker)
 
+    element.className = classes.root
+
+    addAttributes(element, { onTouchMove })
+
+    return element
+
+  }
 }
 
 
 
-function createButtonScopeItemElements(state) {
+function createHeaderContainer(...layouts) {
+  return (picker) => {
+
+    let layout  = createLayout(...layouts)
+    let element = layout(picker)
+
+    addClassName(element, [classes.section, classes.section_header])
+
+    return element
+
+  }
+}
+
+
+
+function createBodyContainer(...layouts) {
+  return (picker) => {
+
+    let layout  = createLayout(...layouts)
+    let element = layout(picker)
+
+    addClassName(element, [classes.section, classes.section_body])
+
+    return element
+
+  }
+}
+
+
+
+function createFooterContainer(...layouts) {
+  return (picker) => {
+
+    let layout  = createLayout(...layouts)
+    let element = layout(picker)
+
+    addClassName(element, [classes.section, classes.section_footer])
+
+    return element
+
+  }
+}
+
+
+
+function createNavigationContainer(...layouts) {
+  return (picker) => {
+
+    let layout  = createLayout(...layouts)
+    let element = layout(picker)
+
+    element.className = classes.navigation
+
+    return element
+
+  }
+}
+
+
+
+
+
+///////////////////////
+// COMPONENT LAYOUTS //
+///////////////////////
+
+
+
+function createScopeButton() {
+  return (picker) => {
+
+    let onClick = () => picker.cycleScope()
+
+    let button = createButtonNode(
+      [classes.button, classes.button_scope],
+      createScopeNodes(picker.state),
+      onClick
+    )
+
+    picker.addStateListener(previousState => {
+      if (
+        stateUtil.hasAnyChanged(
+          previousState, picker.state,
+          'language', 'scope', 'selected', 'view'
+        )
+      ) {
+        button.innerHTML = ''
+        appendChildren(button, createScopeNodes(picker.state))
+      }
+    })
+
+    return button
+
+  }
+}
+
+
+
+function createPreviousButton() {
+  return (picker) => {
+
+    let onClick = () => picker.showPrevious()
+
+    let button = createButtonNode(
+      [classes.button, classes.button_navigation, classes.button_previous],
+      '',
+      onClick
+    )
+
+    button.innerHTML = chevronLeftIcon
+
+    return button
+
+  }
+}
+
+
+
+function createTodayButton() {
+  return (picker) => {
+
+    let onClick = () => picker.showToday()
+
+    let button = createButtonNode(
+      [classes.button, classes.button_navigation, classes.button_today],
+      '',
+      onClick
+    )
+
+    button.innerHTML = bullsEyeIcon
+
+    return button
+
+  }
+}
+
+
+
+function createNextButton() {
+  return (picker) => {
+
+    let onClick = () => picker.showNext()
+
+    let button = createButtonNode(
+      [classes.button, classes.button_navigation, classes.button_next],
+      '',
+      onClick
+    )
+
+    button.innerHTML = chevronRightIcon
+
+    return button
+
+  }
+}
+
+
+
+function createClearButton() {
+  return (picker) => {
+
+    let onClick = () => picker.clear()
+
+    let button = createButtonNode(
+      [classes.button, classes.button_clear],
+      '',
+      onClick
+    )
+
+    button.innerHTML = crossIcon
+
+    return button
+
+  }
+}
+
+
+
+function createConfirmButton() {
+  return (picker) => {
+
+    let onClick = () => picker.confirm()
+
+    let button = createButtonNode(
+      [classes.button, classes.button_confirm],
+      '',
+      onClick
+    )
+
+    button.innerHTML = checkmarkIcon
+
+    return button
+
+  }
+}
+
+
+
+function createGridButton() {
+  return (picker) => {
+
+    let onClick = (event) => {
+      let value = getValueFromMouseEvent(event)
+      if (!value) {
+        return
+      }
+      picker.select(value)
+    }
+
+    let button = createButtonNode(
+      [classes.grid],
+      createGridCellElements(picker.state),
+      onClick
+    )
+
+    picker.addStateListener(previousState => {
+      if (
+        stateUtil.hasAnyChanged(
+          previousState, picker.state,
+          'disabled', 'language', 'scope', 'selected', 'view'
+        )
+      ) {
+        button.innerHTML = ''
+        appendChildren(button, createGridCellElements(picker.state))
+      }
+    })
+
+    return button
+
+  }
+}
+
+
+
+
+
+/////////////////
+// SCOPE NODES //
+/////////////////
+
+
+
+function createScopeNodes(state) {
 
   if (!state.selected) {
     return [
-      createButtonScopeChevronElement(state),
-      createButtonScopeEmptyElement(state),
+      createScopeChevronNode(state),
+      createScopeEmptyNode(state),
     ]
   }
 
   return [
-    createButtonScopeChevronElement(state),
-    createButtonScopeDateElement(state),
+    createScopeChevronNode(state),
+    createScopeDateNode(state),
     createNode(
       [classes.scopeItem, classes.scopeItem_compound],
       [
-        createButtonScopeMonthAndYearElement(state),
-        createButtonScopeWeekdayElement(state),
+        createScopeMonthAndYearNode(state),
+        createScopeWeekdayNode(state),
       ]
     )
   ]
@@ -139,7 +379,7 @@ function createButtonScopeItemElements(state) {
 
 
 
-function createButtonScopeChevronElement(state) {
+function createScopeChevronNode(state) {
 
   let node = createNode([
     classes.scopeItem,
@@ -154,7 +394,7 @@ function createButtonScopeChevronElement(state) {
 
 
 
-function createButtonScopeEmptyElement(state) {
+function createScopeEmptyNode(state) {
 
   let node = createNode(
     [
@@ -170,7 +410,7 @@ function createButtonScopeEmptyElement(state) {
 
 
 
-function createButtonScopeDateElement(state) {
+function createScopeDateNode(state) {
 
   let node = createNode(
     [
@@ -189,7 +429,7 @@ function createButtonScopeDateElement(state) {
 
 
 
-function createButtonScopeMonthAndYearElement(state) {
+function createScopeMonthAndYearNode(state) {
 
   let node = createNode(
     [
@@ -205,7 +445,7 @@ function createButtonScopeMonthAndYearElement(state) {
 
 
 
-function createButtonScopeWeekdayElement(state) {
+function createScopeWeekdayNode(state) {
 
   let node = createNode(
     [
@@ -221,152 +461,11 @@ function createButtonScopeWeekdayElement(state) {
 
 
 
-function createButtonNavigationElement(picker) {
-
-  let node = createNode(
-    classes.navigation,
-    [
-      createButtonNavigationPreviousElement(picker),
-      createButtonNavigationTodayElement(picker),
-      createButtonNavigationNextElement(picker),
-    ]
-  )
-
-  return node
-
-}
 
 
-
-function createButtonNavigationPreviousElement(picker) {
-
-  let onClick = () => picker.showPrevious()
-
-  let node = createButtonNode(
-    [classes.button, classes.button_navigation, classes.button_previous],
-    '',
-    onClick
-  )
-
-  node.innerHTML = chevronLeftIcon
-
-  return node
-
-}
-
-
-
-function createButtonNavigationTodayElement(picker) {
-
-  let onClick = () => picker.showToday()
-
-  let node = createButtonNode(
-    [classes.button, classes.button_navigation, classes.button_today],
-    '',
-    onClick
-  )
-
-  node.innerHTML = bullsEyeIcon
-
-  return node
-
-}
-
-
-
-function createButtonNavigationNextElement(picker) {
-
-  let onClick = () => picker.showNext()
-
-  let node = createButtonNode(
-    [classes.button, classes.button_navigation, classes.button_next],
-    '',
-    onClick
-  )
-
-  node.innerHTML = chevronRightIcon
-
-  return node
-
-}
-
-
-
-function createButtonClearElement(picker) {
-
-  let onClick = () => picker.clear()
-
-  let node = createButtonNode(
-    [classes.button, classes.button_clear],
-    '',
-    onClick
-  )
-
-  node.innerHTML = crossIcon
-
-  return node
-
-}
-
-
-
-function createButtonConfirmElement(picker) {
-
-  let onClick = () => picker.confirm()
-
-  let node = createButtonNode(
-    [classes.button, classes.button_confirm],
-    '',
-    onClick
-  )
-
-  node.innerHTML = checkmarkIcon
-
-  return node
-
-}
-
-
-
-
-
-///////////////////
-// GRID ELEMENTS //
-///////////////////
-
-
-
-function createGridElement(picker) {
-
-  let onClick = (event) => {
-    let value = getValueFromMouseEvent(event)
-    if (!value) {
-      return
-    }
-    picker.select(value)
-  }
-
-  let node = createButtonNode(
-    [classes.grid],
-    createGridCellElements(picker.state),
-    onClick
-  )
-
-  picker.addStateListener(nextState => {
-    if (
-      stateUtil.isChangingAny(
-        picker.state, nextState,
-        'disabled', 'language', 'scope', 'selected', 'view'
-      )
-    ) {
-      node.innerHTML = ''
-      appendChildren(node, createGridCellElements(nextState))
-    }
-  })
-
-  return node
-
-}
+////////////////
+// GRID NODES //
+////////////////
 
 
 
@@ -378,7 +477,7 @@ function createGridCellElements(state) {
     createNode(
       [classes.gridRow, classes.gridRow_body],
       datesForRow.map(dateForCell => (
-        createGridCellElement(state, dateForCell)
+        createGridCellNode(state, dateForCell)
       ))
     )
   ))
@@ -399,7 +498,7 @@ function createGridCellElements(state) {
 
 
 
-function createGridCellElement(state, dateObject) {
+function createGridCellNode(state, dateObject) {
 
   let { language, scope, view } = state
 
@@ -455,7 +554,7 @@ function createNodeWithOptions(tagName, options) {
   let element = document.createElement(tagName)
 
   addAttributes(element, attributes)
-  addClassList(element, className)
+  addClassName(element, className)
   appendChildren(element, children)
 
   return element
@@ -490,15 +589,6 @@ function createButtonNode(className, children, attributes) {
 
 
 
-function createSectionNode(className, children) {
-  return createNode(
-    [classes.section, className],
-    children
-  )
-}
-
-
-
 
 
 //////////////////
@@ -507,6 +597,11 @@ function createSectionNode(className, children) {
 
 
 
+/**
+ * Adds attributes to an element.
+ * @param {HTMLElement} element
+ * @param {Object} attributes
+ */
 function addAttributes(element, attributes) {
 
   if (!attributes) {
@@ -541,26 +636,31 @@ function addAttributes(element, attributes) {
 
 
 
-function addClassList(element, classList) {
+/**
+ * Adds class names to an element.
+ * @param {HTMLElement} element
+ * @param {String|Array<String>|Object<Boolean>} [classNameData]
+ */
+function addClassName(element, classNameData) {
 
-  if (!classList) {
+  if (!classNameData) {
     return
   }
 
-  if (!Array.isArray(classList)) {
-    classList = [classList]
+  if (!Array.isArray(classNameData)) {
+    classNameData = [classNameData]
   }
 
-  classList.forEach(classList => {
+  classNameData.forEach(classNameData => {
 
-    if (typeof classList === 'string') {
-      classList = {
-        [classList]: true
+    if (typeof classNameData === 'string') {
+      classNameData = {
+        [classNameData]: true
       }
     }
 
-    Object.keys(classList).forEach(className => {
-      if (classList[className]) {
+    Object.keys(classNameData).forEach(className => {
+      if (classNameData[className]) {
         element.classList.add(className)
       }
     })
@@ -571,6 +671,11 @@ function addClassList(element, classList) {
 
 
 
+/**
+ * Appends children to an element.
+ * @param  {HTMLElement} element
+ * @param  {Node|String|Number|Boolean|Array<Node|String|Number|Boolean>} children
+ */
 function appendChildren(element, children) {
 
   if (!children) {
@@ -694,5 +799,32 @@ function caseDash(string) {
 
 
 module.exports = {
+
+  // Render
   render,
+
+  // Layouts
+  createLayout,
+
+  // Container layouts
+  createBodyContainer,
+  createFooterContainer,
+  createHeaderContainer,
+  createNavigationContainer,
+  createRootContainer,
+
+  // Component layouts
+  createClearButton,
+  createConfirmButton,
+  createGridButton,
+  createNextButton,
+  createPreviousButton,
+  createScopeButton,
+  createTodayButton,
+
+  // Node helpers
+  addAttributes,
+  addClassName,
+  appendChildren,
+
 }

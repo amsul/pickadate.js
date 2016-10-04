@@ -13,45 +13,29 @@ describe('/stateUtil', () => {
 
 
 
-  describe('#isChanging', () => {
-
-    it('returns `true` if certain properties of a state are changing')
-
-  })
-
-
-
-  describe('#isChangingAny', () => {
+  describe('#hasAnyChanged', () => {
 
     it('returns `true` if any of certain properties of a state are changing', () => {
 
-      let state     = { 0: 'zero', 1: 'one', 2: 'two', 3: 'three' }
-      let nextState = { ...state, 1: 'ONE' }
+      let previousState = { 0: 'zero', 1: 'one', 2: 'two', 3: 'three' }
+      let state         = { ...previousState, 1: 'ONE' }
 
-      stateUtil.isChangingAny(state, nextState, '0', '1', '2').should.eql(true)
-      stateUtil.isChangingAny(state, nextState, '0', '1').should.eql(true)
-      stateUtil.isChangingAny(state, nextState, '1', '3').should.eql(true)
+      stateUtil.hasAnyChanged(previousState, state, '0', '1', '2').should.eql(true)
+      stateUtil.hasAnyChanged(previousState, state, '0', '1').should.eql(true)
+      stateUtil.hasAnyChanged(previousState, state, '1', '3').should.eql(true)
 
     })
 
 
     it('returns `false` if all of certain properties of a state are not changing', () => {
 
-      let state     = { 0: 'zero', 1: 'one', 2: 'two', 3: 'three' }
-      let nextState = { ...state, 1: 'ONE' }
+      let previousState = { 0: 'zero', 1: 'one', 2: 'two', 3: 'three' }
+      let state         = { ...previousState, 1: 'ONE' }
 
-      stateUtil.isChangingAny(state, nextState, '2', '3').should.eql(false)
-      stateUtil.isChangingAny(state, nextState, '0', '2', '3').should.eql(false)
+      stateUtil.hasAnyChanged(previousState, state, '2', '3').should.eql(false)
+      stateUtil.hasAnyChanged(previousState, state, '0', '2', '3').should.eql(false)
 
     })
-
-  })
-
-
-
-  describe('#isNotChanging', () => {
-
-    it('...')
 
   })
 

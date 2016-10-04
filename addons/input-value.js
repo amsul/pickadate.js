@@ -2,29 +2,19 @@ let stateUtil = require('utils/state')
 
 
 
-function getValue(picker, template, nextState = picker.state) {
-  template = template || nextState.template
-  return picker.getValue({
-    ...nextState,
-    template,
-  })
-}
-
-
-
 module.exports = (inputNode, template) => {
   return (picker) => {
 
-    inputNode.value = getValue(picker, template)
+    inputNode.value = picker.getValue(template)
 
-    picker.addStateListener(nextState => {
+    picker.addStateListener(previousState => {
       if (
-        stateUtil.isChangingAny(
-          picker.state, nextState,
+        stateUtil.hasAnyChanged(
+          previousState, picker.state,
           'language', 'selected'
         )
       ) {
-        inputNode.value = getValue(picker, template, nextState)
+        inputNode.value = picker.getValue(template)
       }
     })
 
