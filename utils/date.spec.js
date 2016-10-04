@@ -268,8 +268,13 @@ describe('/dateUtil', () => {
 
     describe('(HOOK_FORMATTER.x)', () => {
       it('formats a date object as unix timestamp', () => {
-        dateUtil.format(new Date(2014, 3, 2, 4, 7, 51), 'x', LANGUAGE.ENGLISH).should.eql('1396426071000')
-        dateUtil.format(new Date(2014, 11, 17, 18, 49, 3), 'x', LANGUAGE.ENGLISH).should.eql('1418860143000')
+
+        let date1 = new Date(2014, 3, 2, 4, 7, 51)
+        dateUtil.format(date1, 'x', LANGUAGE.ENGLISH).should.eql(`${date1.getTime()}`)
+
+        let date2 = new Date(2014, 11, 17, 18, 49, 3)
+        dateUtil.format(date2, 'x', LANGUAGE.ENGLISH).should.eql(`${date2.getTime()}`)
+
       })
     })
 
@@ -489,8 +494,13 @@ describe('/dateUtil', () => {
 
     describe('(HOOK_PARSER.x)', () => {
       it('parses a date string as the unix timestamp', () => {
-        dateUtil.parse('1396426071000', 'x', LANGUAGE.ENGLISH).should.eql(new Date(2014, 3, 2, 4, 7, 51))
-        dateUtil.parse('1418860143000', 'x', LANGUAGE.ENGLISH).should.eql(new Date(2014, 11, 17, 18, 49, 3))
+
+        let date1 = new Date(2014, 3, 2, 4, 7, 51)
+        dateUtil.parse(`${date1.getTime()}`, 'x', LANGUAGE.ENGLISH).should.eql(date1)
+
+        let date2 = new Date(2014, 11, 17, 18, 49, 3)
+        dateUtil.parse(`${date2.getTime()}`, 'x', LANGUAGE.ENGLISH).should.eql(date2)
+
       })
     })
 
