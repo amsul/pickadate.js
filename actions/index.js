@@ -196,6 +196,27 @@ let setLanguage = (state, value) => ({
 
 
 
+///////////////
+// FIRST DAY //
+///////////////
+
+
+
+/**
+ * Returns an action that sets the first day of the week.
+ * @param  {Number} state
+ * @param  {Number} value
+ * @return {Object}
+ */
+let setFirstDay = (state, value) => ({
+  type    : ACTION.TYPE.SET_FIRST_DAY,
+  payload : { value: value % 7 },
+})
+
+
+
+
+
 /////////////
 // EXPORTS //
 /////////////
@@ -226,5 +247,8 @@ module.exports = {
 
   // Language
   setLanguage,
+
+  // First day of week
+  setFirstDay,
 
 }

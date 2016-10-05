@@ -56,6 +56,25 @@ describe('/jsUtil', () => {
 
 
 
+  ////////////
+  // STRING //
+  ////////////
+
+
+
+  describe('#caseDash', () => {
+
+    it('changes the letter case of a string to be "dashed"', () => {
+      jsUtil.caseDash('ThisIsPascalCase').should.eql('this-is-pascal-case')
+      jsUtil.caseDash('thisIsCamelCase').should.eql('this-is-camel-case')
+    })
+
+  })
+
+
+
+
+
   ///////////
   // ARRAY //
   ///////////

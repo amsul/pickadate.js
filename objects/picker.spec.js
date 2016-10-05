@@ -37,6 +37,7 @@ describe('/pickerObject', () => {
         'disable',
         'enable',
         'select',
+        'setFirstDay',
         'setLanguage',
         'show',
         'showNext',

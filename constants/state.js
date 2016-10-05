@@ -12,6 +12,7 @@ const SCOPE    = require('constants/scope')
  */
 const INITIAL = {
   disabled : null,
+  firstDay : 0,
   language : LANGUAGE.ENGLISH,
   scope    : SCOPE.DAYS,
   selected : null,

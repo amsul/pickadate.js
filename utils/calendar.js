@@ -1,4 +1,6 @@
+const NUMBER = require('constants/number')
 const SCOPE  = require('constants/scope')
+const STATE  = require('constants/state')
 
 let dateUtil = require('utils/date')
 let jsUtil   = require('utils/js')
@@ -14,14 +16,19 @@ let jsUtil   = require('utils/js')
 /**
  * Gets the weekdays for a given state.
  * @param  {LANGUAGE} language
+ * @param  {Number} [firstDay=STATE.INITIAL.firstDay]
  * @return {(DAY.FULL|DAY.SHORT)[]}
  */
-function getWeekdays(language) {
+function getWeekdays(language, firstDay = STATE.INITIAL.firstDay) {
 
-  // TODO: Use the first day of the week to determine the order
+  let start = NUMBER.COLUMN_INDEX.DAY.START
+  let end   = NUMBER.COLUMN_INDEX.DAY.END
 
-  return jsUtil.createRange(0, 6).map(dayIndex => (
-    dateUtil.getShortDayName(language, dayIndex)
+  return jsUtil.createRange(start, end).map(dayIndex => (
+    dateUtil.getShortDayName(
+      language,
+      (dayIndex + firstDay) % NUMBER.DAYS_IN_WEEK
+    )
   ))
 
 }
@@ -40,9 +47,10 @@ function getWeekdays(language) {
  * Gets the dates for rows of a scope.
  * @param  {Date} view
  * @param  {SCOPE} scope
+ * @param  {Number} [firstDay=STATE.INITIAL.firstDay]
  * @return {Array<Date[]>}
  */
-function getDatesForRows(view, scope) {
+function getDatesForRows(view, scope, firstDay = STATE.INITIAL.firstDay) {
 
   let year  = view.getFullYear()
   let month = view.getMonth()
@@ -55,7 +63,7 @@ function getDatesForRows(view, scope) {
     return getDatesForRowsOfMonths(year)
   }
 
-  return getDatesForRowsOfWeeks(year, month)
+  return getDatesForRowsOfWeeks(year, month, firstDay)
 
 }
 
@@ -69,13 +77,21 @@ function getDatesForRows(view, scope) {
  */
 function getDatesForRowsOfYears(year, month) {
 
-  year -= year % 10
+  year -= year % NUMBER.YEARS_IN_DECADE
 
-  return jsUtil.createRange(0, 1).map(row => (
-    jsUtil.createRange(0, 4).map(column => (
-      new Date(year + column + (row * 5), month, 1)
+  let start = NUMBER.ROW_INDEX.YEAR.START
+  let end   = NUMBER.ROW_INDEX.YEAR.END
+
+  return jsUtil.createRange(start, end).map(row => {
+
+    let start = NUMBER.COLUMN_INDEX.YEAR.START
+    let end   = NUMBER.COLUMN_INDEX.YEAR.END
+
+    return jsUtil.createRange(start, end).map(column => (
+      new Date(year + column + (row * NUMBER.COLUMN.YEARS), month, 1)
     ))
-  ))
+
+  })
 
 }
 
@@ -87,11 +103,20 @@ function getDatesForRowsOfYears(year, month) {
  * @return {Array<Date[]>}
  */
 function getDatesForRowsOfMonths(year) {
-  return jsUtil.createRange(0, 2).map(row => (
-    jsUtil.createRange(0, 3).map(column => (
-      new Date(year, column + (row * 4), 1)
+
+  let start = NUMBER.ROW_INDEX.MONTH.START
+  let end   = NUMBER.ROW_INDEX.MONTH.END
+
+  return jsUtil.createRange(start, end).map(row => {
+
+    let start = NUMBER.COLUMN_INDEX.MONTH.START
+    let end   = NUMBER.COLUMN_INDEX.MONTH.END
+
+    return jsUtil.createRange(start, end).map(column => (
+      new Date(year, column + (row * NUMBER.COLUMN.MONTHS), 1)
     ))
-  ))
+
+  })
 }
 
 
@@ -100,12 +125,26 @@ function getDatesForRowsOfMonths(year) {
  * Gets the dates for rows of weeks, given a year and month.
  * @param  {Number} year
  * @param  {Number} month
+ * @param  {Number} [firstDay=STATE.INITIAL.firstDay]
  * @return {Array<Date[]>}
+ *
+ * Test with December, 2012 & firstDay as 6
  */
-function getDatesForRowsOfWeeks(year, month) {
-  return jsUtil.createRange(0, 5).map(
-    weekIndex => getDatesForWeek(year, month, weekIndex)
+function getDatesForRowsOfWeeks(year, month, firstDay = STATE.INITIAL.firstDay) {
+
+  let monthOfLastDayInFirstWeek = (
+    getMonthOfLastDayInFirstWeek(year, month, firstDay)
   )
+
+  let shift = monthOfLastDayInFirstWeek === month ? 0 : 1
+
+  let start = NUMBER.ROW_INDEX.DATE.START + shift
+  let end   = NUMBER.ROW_INDEX.DATE.END + shift
+
+  return jsUtil.createRange(start, end).map(
+    weekIndex => getDatesForWeek(year, month, weekIndex, firstDay)
+  )
+
 }
 
 
@@ -115,18 +154,54 @@ function getDatesForRowsOfWeeks(year, month) {
  * @param  {Number} year
  * @param  {Number} month
  * @param  {Number} weekIndex
+ * @param  {Number} [firstDay=STATE.INITIAL.firstDay]
  * @return {Date[]}
  */
-function getDatesForWeek(year, month, weekIndex) {
+function getDatesForWeek(year, month, weekIndex, firstDay = STATE.INITIAL.firstDay) {
 
+  let startDayOfMonth = getStartDayOfMonth(year, month)
+  let startDayOfWeek  = weekIndex * NUMBER.DAYS_IN_WEEK
+
+  let start = NUMBER.COLUMN_INDEX.DATE.START
+  let end   = NUMBER.COLUMN_INDEX.DATE.END
+
+  return jsUtil.createRange(start, end).map(date => (
+    new Date(
+      year,
+      month,
+      date + startDayOfWeek - startDayOfMonth + firstDay
+    )
+  ))
+
+}
+
+
+
+/**
+ * Gets the month of the last day in the first week in the display of a month.
+ * @private
+ * @param  {Number} year
+ * @param  {Number} month
+ * @param  {Number} firstDay
+ * @return {Number}
+ */
+function getMonthOfLastDayInFirstWeek(year, month, firstDay) {
+  let startDayOfMonth = getStartDayOfMonth(year, month)
+  return new Date(year, month, NUMBER.DAYS_IN_WEEK - startDayOfMonth).getMonth()
+}
+
+
+
+/**
+ * Gets the start day of a month.
+ * @private
+ * @param  {Number} year
+ * @param  {Number} month
+ * @return {Number}
+ */
+function getStartDayOfMonth(year, month) {
   let startDateOfMonth = new Date(year, month, 1)
-  let startDayOfMonth  = startDateOfMonth.getDay()
-
-  return jsUtil.createRange(1, 7).map(dayNumber => {
-    let day = (weekIndex * 7) + dayNumber - startDayOfMonth
-    return new Date(year, month, day)
-  })
-
+  return startDateOfMonth.getDay()
 }
 
 
@@ -154,7 +229,11 @@ function getDateRelativeToDecade(dateObject, change) {
   let month = dateObject.getMonth()
   let date  = dateObject.getDate()
 
-  return dateUtil.createInMonth(year + (change * 10), month, date)
+  return dateUtil.createInMonth(
+    year + (change * NUMBER.YEARS_IN_DECADE),
+    month,
+    date
+  )
 
 }
 

@@ -57,6 +57,29 @@ function padZero(number, digitsCount) {
 
 
 
+////////////
+// STRING //
+////////////
+
+
+
+/**
+ * Changes the letter case of a string to be "dashed".
+ * @param  {String} string
+ * @return {String}
+ */
+function caseDash(string) {
+  return (
+    string.split(/(?=[A-Z])/g)
+      .map(chunk => chunk.toLowerCase())
+      .join('-')
+  )
+}
+
+
+
+
+
 ///////////
 // ARRAY //
 ///////////
@@ -140,6 +163,9 @@ module.exports = {
 
   // Number
   padZero,
+
+  // String
+  caseDash,
 
   // Array
   addToArray,

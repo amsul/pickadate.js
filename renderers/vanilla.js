@@ -5,6 +5,7 @@ const SCOPE          = require('constants/scope')
 let classes          = require('classes')
 let calendarUtil     = require('utils/calendar')
 let dateUtil         = require('utils/date')
+let jsUtil           = require('utils/js')
 let stateUtil        = require('utils/state')
 
 let checkmarkIcon    = fs.readFileSync('icons/checkmark.svg', 'utf-8')
@@ -331,7 +332,7 @@ function createGridButton() {
       if (
         stateUtil.hasAnyChanged(
           previousState, picker.state,
-          'disabled', 'language', 'scope', 'selected', 'view'
+          'disabled', 'firstDay', 'language', 'scope', 'selected', 'view'
         )
       ) {
         button.innerHTML = ''
@@ -471,7 +472,9 @@ function createScopeWeekdayNode(state) {
 
 function createGridCellElements(state) {
 
-  let datesForRows = calendarUtil.getDatesForRows(state.view, state.scope)
+  let datesForRows = calendarUtil.getDatesForRows(
+    state.view, state.scope, state.firstDay
+  )
 
   let nodes = datesForRows.map(datesForRow => (
     createNode(
@@ -483,7 +486,7 @@ function createGridCellElements(state) {
   ))
 
   if (state.scope === SCOPE.DAYS) {
-    let weekdays = calendarUtil.getWeekdays(state.language)
+    let weekdays = calendarUtil.getWeekdays(state.language, state.firstDay)
     nodes.unshift(createNode(
       [classes.gridRow, classes.gridRow_heading],
       weekdays.map(weekday => (
@@ -626,7 +629,7 @@ function addAttributes(element, attributes) {
     }
 
     Object.keys(attributeValue).forEach(datasetName => {
-      let fullDatasetName = `data-${caseDash(datasetName)}`
+      let fullDatasetName = `data-${jsUtil.caseDash(datasetName)}`
       element.setAttribute(fullDatasetName, attributeValue[datasetName])
     })
 
@@ -768,24 +771,6 @@ function getValueFromMouseEventPath(path, rootNode) {
 
   }
 
-}
-
-
-
-
-
-////////////////////
-// STRING HELPERS //
-////////////////////
-
-
-
-function caseDash(string) {
-  return (
-    string.split(/(?=[A-Z])/g)
-      .map(chunk => chunk.toLowerCase())
-      .join('-')
-  )
 }
 
 
