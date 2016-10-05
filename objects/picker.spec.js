@@ -378,6 +378,324 @@ describe('/pickerObject', () => {
     })
 
 
+
+    /////////////
+    // ACTIONS //
+    /////////////
+
+
+
+    describe('#clear', () => {
+      it('is an overloaded method to clear the value', () => {
+
+        // Create the picker
+        let picker = pickerObject.create({ selected: new Date(2015, 3, 20) })
+
+        // Stub out dispatch and spy on the clear action
+        let dispatchStub = sinon.stub(picker, 'dispatch')
+        let clearSpy     = sinon.spy(actions, 'clear')
+
+        // Trigger the overloaded action
+        picker.clear()
+
+        // Ensure the action was called as expected
+        clearSpy.callCount.should.eql(1)
+        clearSpy.lastCall.args.should.eql([picker.state])
+
+        // Ensure the dispatch was called as expected
+        dispatchStub.callCount.should.eql(1)
+        dispatchStub.lastCall.args.should.eql([clearSpy.lastCall.returnValue])
+
+      })
+    })
+
+
+
+    describe('#confirm', () => {
+      it('is an overloaded method to confirm the value', () => {
+
+        // Create the picker
+        let picker = pickerObject.create()
+
+        // Stub out dispatch and spy on the confirm action
+        let dispatchStub = sinon.stub(picker, 'dispatch')
+        let confirmSpy   = sinon.spy(actions, 'confirm')
+
+        // Trigger the overloaded action
+        picker.confirm()
+
+        // Ensure the action was called as expected
+        confirmSpy.callCount.should.eql(1)
+        confirmSpy.lastCall.args.should.eql([picker.state])
+
+        // Ensure the dispatch was called as expected
+        dispatchStub.callCount.should.eql(1)
+        dispatchStub.lastCall.args.should.eql([confirmSpy.lastCall.returnValue])
+
+      })
+    })
+
+
+
+    describe('#cycleScope', () => {
+      it('is an overloaded method to cycle the scope', () => {
+
+        // Create the picker
+        let picker = pickerObject.create()
+
+        // Stub out dispatch and spy on the cycleScope action
+        let dispatchStub  = sinon.stub(picker, 'dispatch')
+        let cycleScopeSpy = sinon.spy(actions, 'cycleScope')
+
+        // Trigger the overloaded action
+        picker.cycleScope()
+
+        // Ensure the action was called as expected
+        cycleScopeSpy.callCount.should.eql(1)
+        cycleScopeSpy.lastCall.args.should.eql([picker.state])
+
+        // Ensure the dispatch was called as expected
+        dispatchStub.callCount.should.eql(1)
+        dispatchStub.lastCall.args.should.eql([cycleScopeSpy.lastCall.returnValue])
+
+      })
+    })
+
+
+
+    describe('#disable', () => {
+      it('is an overloaded method to disable dates', () => {
+
+        // Create the picker
+        let picker = pickerObject.create()
+
+        // Stub out dispatch and spy on the disable action
+        let dispatchStub = sinon.stub(picker, 'dispatch')
+        let disableSpy   = sinon.spy(actions, 'disable')
+
+        // Trigger the overloaded action
+        picker.disable(new Date(2015, 3, 20), 2, 5, new Date(1988, 7, 14))
+
+        // Ensure the action was called as expected
+        disableSpy.callCount.should.eql(1)
+        disableSpy.lastCall.args.should.eql([picker.state, new Date(2015, 3, 20), 2, 5, new Date(1988, 7, 14)])
+
+        // Ensure the dispatch was called as expected
+        dispatchStub.callCount.should.eql(1)
+        dispatchStub.lastCall.args.should.eql([disableSpy.lastCall.returnValue])
+
+      })
+    })
+
+
+
+    describe('#enable', () => {
+      it('is an overloaded method to enable dates', () => {
+
+        // Create the picker
+        let picker = pickerObject.create()
+
+        // Stub out dispatch and spy on the enable action
+        let dispatchStub = sinon.stub(picker, 'dispatch')
+        let enableSpy   = sinon.spy(actions, 'enable')
+
+        // Trigger the overloaded action
+        picker.enable(new Date(2015, 3, 20), 2, 5, new Date(1988, 7, 14))
+
+        // Ensure the action was called as expected
+        enableSpy.callCount.should.eql(1)
+        enableSpy.lastCall.args.should.eql([picker.state, new Date(2015, 3, 20), 2, 5, new Date(1988, 7, 14)])
+
+        // Ensure the dispatch was called as expected
+        dispatchStub.callCount.should.eql(1)
+        dispatchStub.lastCall.args.should.eql([enableSpy.lastCall.returnValue])
+
+      })
+    })
+
+
+
+    describe('#select', () => {
+      it('is an overloaded method to select a date', () => {
+
+        // Create the picker
+        let picker = pickerObject.create()
+
+        // Stub out dispatch and spy on the select action
+        let dispatchStub = sinon.stub(picker, 'dispatch')
+        let selectSpy    = sinon.spy(actions, 'select')
+
+        // Trigger the overloaded action
+        picker.select(new Date(2015, 3, 20))
+
+        // Ensure the action was called as expected
+        selectSpy.callCount.should.eql(1)
+        selectSpy.lastCall.args.should.eql([picker.state, new Date(2015, 3, 20)])
+
+        // Ensure the dispatch was called as expected
+        dispatchStub.callCount.should.eql(1)
+        dispatchStub.lastCall.args.should.eql([selectSpy.lastCall.returnValue])
+
+      })
+    })
+
+
+
+    describe('#setFirstDay', () => {
+      it('is an overloaded method to set the first day', () => {
+
+        // Create the picker
+        let picker = pickerObject.create()
+
+        // Stub out dispatch and spy on the setFirstDay action
+        let dispatchStub   = sinon.stub(picker, 'dispatch')
+        let setFirstDaySpy = sinon.spy(actions, 'setFirstDay')
+
+        // Trigger the overloaded action
+        picker.setFirstDay(3)
+
+        // Ensure the action was called as expected
+        setFirstDaySpy.callCount.should.eql(1)
+        setFirstDaySpy.lastCall.args.should.eql([picker.state, 3])
+
+        // Ensure the dispatch was called as expected
+        dispatchStub.callCount.should.eql(1)
+        dispatchStub.lastCall.args.should.eql([setFirstDaySpy.lastCall.returnValue])
+
+      })
+    })
+
+
+
+    describe('#setLanguage', () => {
+      it('is an overloaded method to set the language', () => {
+
+        // Create the picker
+        let picker = pickerObject.create()
+
+        // Stub out dispatch and spy on the setLanguage action
+        let dispatchStub   = sinon.stub(picker, 'dispatch')
+        let setLanguageSpy = sinon.spy(actions, 'setLanguage')
+
+        // Trigger the overloaded action
+        picker.setLanguage(LANGUAGE.FRENCH)
+
+        // Ensure the action was called as expected
+        setLanguageSpy.callCount.should.eql(1)
+        setLanguageSpy.lastCall.args.should.eql([picker.state, LANGUAGE.FRENCH])
+
+        // Ensure the dispatch was called as expected
+        dispatchStub.callCount.should.eql(1)
+        dispatchStub.lastCall.args.should.eql([setLanguageSpy.lastCall.returnValue])
+
+      })
+    })
+
+
+
+    describe('#show', () => {
+      it('is an overloaded method to show a date', () => {
+
+        // Create the picker
+        let picker = pickerObject.create()
+
+        // Stub out dispatch and spy on the show action
+        let dispatchStub = sinon.stub(picker, 'dispatch')
+        let showSpy      = sinon.spy(actions, 'show')
+
+        // Trigger the overloaded action
+        picker.show(new Date(2015, 3, 20))
+
+        // Ensure the action was called as expected
+        showSpy.callCount.should.eql(1)
+        showSpy.lastCall.args.should.eql([picker.state, new Date(2015, 3, 20)])
+
+        // Ensure the dispatch was called as expected
+        dispatchStub.callCount.should.eql(1)
+        dispatchStub.lastCall.args.should.eql([showSpy.lastCall.returnValue])
+
+      })
+    })
+
+
+
+    describe('#showNext', () => {
+      it('is an overloaded method to show the next view', () => {
+
+        // Create the picker
+        let picker = pickerObject.create()
+
+        // Stub out dispatch and spy on the showNext action
+        let dispatchStub = sinon.stub(picker, 'dispatch')
+        let showNextSpy  = sinon.spy(actions, 'showNext')
+
+        // Trigger the overloaded action
+        picker.showNext()
+
+        // Ensure the action was called as expected
+        showNextSpy.callCount.should.eql(1)
+        showNextSpy.lastCall.args.should.eql([picker.state])
+
+        // Ensure the dispatch was called as expected
+        dispatchStub.callCount.should.eql(1)
+        dispatchStub.lastCall.args.should.eql([showNextSpy.lastCall.returnValue])
+
+      })
+    })
+
+
+
+    describe('#showPrevious', () => {
+      it('is an overloaded method to show the previous view', () => {
+
+        // Create the picker
+        let picker = pickerObject.create()
+
+        // Stub out dispatch and spy on the showPrevious action
+        let dispatchStub    = sinon.stub(picker, 'dispatch')
+        let showPreviousSpy = sinon.spy(actions, 'showPrevious')
+
+        // Trigger the overloaded action
+        picker.showPrevious()
+
+        // Ensure the action was called as expected
+        showPreviousSpy.callCount.should.eql(1)
+        showPreviousSpy.lastCall.args.should.eql([picker.state])
+
+        // Ensure the dispatch was called as expected
+        dispatchStub.callCount.should.eql(1)
+        dispatchStub.lastCall.args.should.eql([showPreviousSpy.lastCall.returnValue])
+
+      })
+    })
+
+
+
+    describe('#showToday', () => {
+      it('is an overloaded method to show today', () => {
+
+        // Create the picker
+        let picker = pickerObject.create()
+
+        // Stub out dispatch and spy on the showToday action
+        let dispatchStub = sinon.stub(picker, 'dispatch')
+        let showTodaySpy = sinon.spy(actions, 'showToday')
+
+        // Trigger the overloaded action
+        picker.showToday()
+
+        // Ensure the action was called as expected
+        showTodaySpy.callCount.should.eql(1)
+        showTodaySpy.lastCall.args.should.eql([picker.state])
+
+        // Ensure the dispatch was called as expected
+        dispatchStub.callCount.should.eql(1)
+        dispatchStub.lastCall.args.should.eql([showTodaySpy.lastCall.returnValue])
+
+      })
+    })
+
+
   })
 
 

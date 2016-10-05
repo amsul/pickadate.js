@@ -118,7 +118,7 @@ function create(stateChanges, addons = []) {
       throw new Error(`The picker property "${actionName}" is already defined`)
     }
     picker[actionName] = (...args) => {
-      dispatch(actions[actionName](state, ...args))
+      picker.dispatch(actions[actionName](state, ...args))
     }
   })
 
