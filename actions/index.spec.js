@@ -353,4 +353,40 @@ describe('/actions', () => {
   })
 
 
+
+
+
+  ///////////////
+  // FIRST DAY //
+  ///////////////
+
+
+
+  describe('#setFirstDay', () => {
+
+    it('returns an action that sets the first day of the week', () => {
+      actions.setFirstDay({}, 3).should.eql({
+        type    : ACTION.TYPE.SET_FIRST_DAY,
+        payload : { value: 3 },
+      })
+    })
+
+
+    it('ensures the value is within the valid range of days', () => {
+
+      actions.setFirstDay({}, 11).should.eql({
+        type    : ACTION.TYPE.SET_FIRST_DAY,
+        payload : { value: 4 },
+      })
+
+      actions.setFirstDay({}, 7).should.eql({
+        type    : ACTION.TYPE.SET_FIRST_DAY,
+        payload : { value: 0 },
+      })
+
+    })
+
+  })
+
+
 })
