@@ -5,8 +5,8 @@
 - [x] Use date & time formats similar to http://momentjs.com/docs/#/parsing/string-format/
 - [x] Set selected date by passing a date string
 - [x] Add-on API
-- [ ] First day of the week
-- [ ] Custom layout API
+- [x] First day of the week
+- [x] Custom layout API
 - [ ] Minimum & maximum date limits (relative & absolute)
 - [ ] Keyboard navigation
 - [ ] A11y bindings
