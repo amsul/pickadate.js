@@ -4,8 +4,6 @@ The mobile-friendly, responsive, and lightweight jQuery date & time input picker
 
 [![Build status: master](https://travis-ci.org/amsul/pickadate.js.svg?branch=master)](https://travis-ci.org/amsul/pickadate.js) <sup>[`master`](https://github.com/amsul/pickadate.js/tree/master)</sup>
 <sup>&nbsp;&nbsp;&nbsp;</sup>
-[![Build status: dev](https://travis-ci.org/amsul/pickadate.js.svg?branch=dev)](https://travis-ci.org/amsul/pickadate.js) <sup>[`dev`](https://github.com/amsul/pickadate.js/tree/dev)</sup>
-<sup>&nbsp;&nbsp;&nbsp;</sup>
 [![pickadate dev dependencies status](https://david-dm.org/amsul/pickadate.js/dev-status.svg)](https://david-dm.org/amsul/pickadate.js#info=devDependencies)
 
 
