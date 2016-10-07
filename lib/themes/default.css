@@ -166,3 +166,31 @@
     bottom: 0;
   }
 }
+/**
+ * Inline picker...
+ */
+.picker--inline.picker {
+  position: static;
+}
+.picker--inline .picker__holder,
+.picker--inline .picker__frame {
+  position: static;
+  outline: 0;
+  opacity: 1;
+  background-color: transparent;
+  margin: 0;
+  -webkit-transform: none;
+  -ms-transform: none;
+  transform: none;
+  -webkit-transition: none;
+  transition: none;
+}
+.picker--inline .picker__wrap,
+.picker--inline .picker__box {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+.picker--inline .picker__header {
+  margin: 0;
+}
