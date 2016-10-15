@@ -26,9 +26,9 @@ describe('/pickerObject', () => {
       picker.should.have.keys(
         'addStateListener',
         'dispatch',
+        'getState',
         'getValue',
         'removeStateListener',
-        'state',
 
         // Actions
         'clear',
@@ -48,20 +48,9 @@ describe('/pickerObject', () => {
       // Ensure the methods are functions
       picker.addStateListener.should.be.an.instanceOf(Function)
       picker.dispatch.should.be.an.instanceOf(Function)
+      picker.getState.should.be.an.instanceOf(Function)
+      picker.getValue.should.be.an.instanceOf(Function)
       picker.removeStateListener.should.be.an.instanceOf(Function)
-
-      // Ensure the state is a getter
-      let stateDescriptor = Object.getOwnPropertyDescriptor(picker, 'state')
-      stateDescriptor.should.have.keys(
-        'configurable',
-        'enumerable',
-        'get',
-        'set',
-      )
-      stateDescriptor.configurable.should.eql(true)
-      stateDescriptor.enumerable.should.eql(true)
-      stateDescriptor.get.should.be.an.instanceOf(Function)
-      true.should.eql(undefined === stateDescriptor.set)
 
     })
 
@@ -75,7 +64,7 @@ describe('/pickerObject', () => {
       let picker = pickerObject.create()
 
       // Ensure it has the expected state
-      picker.state.should.eql({
+      picker.getState().should.eql({
         ...STATE.INITIAL,
         disabled : disabledReducer[ACTION.TYPE.INITIALIZE](),
         today    : new Date(2014, 3, 20),
@@ -102,7 +91,7 @@ describe('/pickerObject', () => {
       let picker = pickerObject.create(stateChanges)
 
       // Ensure it has the expected state
-      picker.state.should.eql({
+      picker.getState().should.eql({
         ...STATE.INITIAL,
         ...stateChanges,
         disabled : disabledReducer[ACTION.TYPE.INITIALIZE](),
@@ -213,7 +202,7 @@ describe('/pickerObject', () => {
         // Ensure the listener was called
         listenerSpy.callCount.should.eql(1)
         listenerSpy.lastCall.args.length.should.eql(1)
-        listenerSpy.lastCall.args[0].should.be.exactly(picker.state)
+        listenerSpy.lastCall.args[0].should.be.exactly(picker.getState())
 
         // Clean up the stub
         getFrameStub.restore()
@@ -230,18 +219,18 @@ describe('/pickerObject', () => {
         let picker = pickerObject.create()
 
         // Grab the initial state
-        let initialState = picker.state
+        let initialState = picker.getState()
 
         // Dispatch an action
         let value = new Date(2013, 3, 20)
-        picker.dispatch(actions.select(picker.state, value))
+        picker.dispatch(actions.select(picker.getState(), value))
 
         // Grab the frame callback and trigger it
         let frameCallback = getFrameStub.lastCall.args[1]
         frameCallback()
 
         // Ensure the state was updated as expected
-        picker.state.should.eql({
+        picker.getState().should.eql({
           ...initialState,
           selected : new Date(2013, 3, 20),
           view     : new Date(2013, 3, 1),
@@ -286,13 +275,13 @@ describe('/pickerObject', () => {
         // Ensure all the callbacks were called with the state
         listenerSpy1.callCount.should.eql(1)
         listenerSpy1.lastCall.args.length.should.eql(1)
-        listenerSpy1.lastCall.args[0].should.be.exactly(picker.state)
+        listenerSpy1.lastCall.args[0].should.be.exactly(picker.getState())
         listenerSpy2.callCount.should.eql(1)
         listenerSpy2.lastCall.args.length.should.eql(1)
-        listenerSpy2.lastCall.args[0].should.be.exactly(picker.state)
+        listenerSpy2.lastCall.args[0].should.be.exactly(picker.getState())
         listenerSpy3.callCount.should.eql(1)
         listenerSpy3.lastCall.args.length.should.eql(1)
-        listenerSpy3.lastCall.args[0].should.be.exactly(picker.state)
+        listenerSpy3.lastCall.args[0].should.be.exactly(picker.getState())
 
         // Clean up the stub
         getFrameStub.restore()
@@ -400,7 +389,7 @@ describe('/pickerObject', () => {
 
         // Ensure the action was called as expected
         clearSpy.callCount.should.eql(1)
-        clearSpy.lastCall.args.should.eql([picker.state])
+        clearSpy.lastCall.args.should.eql([picker.getState()])
 
         // Ensure the dispatch was called as expected
         dispatchStub.callCount.should.eql(1)
@@ -426,7 +415,7 @@ describe('/pickerObject', () => {
 
         // Ensure the action was called as expected
         confirmSpy.callCount.should.eql(1)
-        confirmSpy.lastCall.args.should.eql([picker.state])
+        confirmSpy.lastCall.args.should.eql([picker.getState()])
 
         // Ensure the dispatch was called as expected
         dispatchStub.callCount.should.eql(1)
@@ -452,7 +441,7 @@ describe('/pickerObject', () => {
 
         // Ensure the action was called as expected
         cycleScopeSpy.callCount.should.eql(1)
-        cycleScopeSpy.lastCall.args.should.eql([picker.state])
+        cycleScopeSpy.lastCall.args.should.eql([picker.getState()])
 
         // Ensure the dispatch was called as expected
         dispatchStub.callCount.should.eql(1)
@@ -478,7 +467,7 @@ describe('/pickerObject', () => {
 
         // Ensure the action was called as expected
         disableSpy.callCount.should.eql(1)
-        disableSpy.lastCall.args.should.eql([picker.state, new Date(2015, 3, 20), 2, 5, new Date(1988, 7, 14)])
+        disableSpy.lastCall.args.should.eql([picker.getState(), new Date(2015, 3, 20), 2, 5, new Date(1988, 7, 14)])
 
         // Ensure the dispatch was called as expected
         dispatchStub.callCount.should.eql(1)
@@ -504,7 +493,7 @@ describe('/pickerObject', () => {
 
         // Ensure the action was called as expected
         enableSpy.callCount.should.eql(1)
-        enableSpy.lastCall.args.should.eql([picker.state, new Date(2015, 3, 20), 2, 5, new Date(1988, 7, 14)])
+        enableSpy.lastCall.args.should.eql([picker.getState(), new Date(2015, 3, 20), 2, 5, new Date(1988, 7, 14)])
 
         // Ensure the dispatch was called as expected
         dispatchStub.callCount.should.eql(1)
@@ -530,7 +519,7 @@ describe('/pickerObject', () => {
 
         // Ensure the action was called as expected
         selectSpy.callCount.should.eql(1)
-        selectSpy.lastCall.args.should.eql([picker.state, new Date(2015, 3, 20)])
+        selectSpy.lastCall.args.should.eql([picker.getState(), new Date(2015, 3, 20)])
 
         // Ensure the dispatch was called as expected
         dispatchStub.callCount.should.eql(1)
@@ -556,7 +545,7 @@ describe('/pickerObject', () => {
 
         // Ensure the action was called as expected
         setFirstDaySpy.callCount.should.eql(1)
-        setFirstDaySpy.lastCall.args.should.eql([picker.state, 3])
+        setFirstDaySpy.lastCall.args.should.eql([picker.getState(), 3])
 
         // Ensure the dispatch was called as expected
         dispatchStub.callCount.should.eql(1)
@@ -582,7 +571,7 @@ describe('/pickerObject', () => {
 
         // Ensure the action was called as expected
         setLanguageSpy.callCount.should.eql(1)
-        setLanguageSpy.lastCall.args.should.eql([picker.state, LANGUAGE.FRENCH])
+        setLanguageSpy.lastCall.args.should.eql([picker.getState(), LANGUAGE.FRENCH])
 
         // Ensure the dispatch was called as expected
         dispatchStub.callCount.should.eql(1)
@@ -608,7 +597,7 @@ describe('/pickerObject', () => {
 
         // Ensure the action was called as expected
         showSpy.callCount.should.eql(1)
-        showSpy.lastCall.args.should.eql([picker.state, new Date(2015, 3, 20)])
+        showSpy.lastCall.args.should.eql([picker.getState(), new Date(2015, 3, 20)])
 
         // Ensure the dispatch was called as expected
         dispatchStub.callCount.should.eql(1)
@@ -634,7 +623,7 @@ describe('/pickerObject', () => {
 
         // Ensure the action was called as expected
         showNextSpy.callCount.should.eql(1)
-        showNextSpy.lastCall.args.should.eql([picker.state])
+        showNextSpy.lastCall.args.should.eql([picker.getState()])
 
         // Ensure the dispatch was called as expected
         dispatchStub.callCount.should.eql(1)
@@ -660,7 +649,7 @@ describe('/pickerObject', () => {
 
         // Ensure the action was called as expected
         showPreviousSpy.callCount.should.eql(1)
-        showPreviousSpy.lastCall.args.should.eql([picker.state])
+        showPreviousSpy.lastCall.args.should.eql([picker.getState()])
 
         // Ensure the dispatch was called as expected
         dispatchStub.callCount.should.eql(1)
@@ -686,7 +675,7 @@ describe('/pickerObject', () => {
 
         // Ensure the action was called as expected
         showTodaySpy.callCount.should.eql(1)
-        showTodaySpy.lastCall.args.should.eql([picker.state])
+        showTodaySpy.lastCall.args.should.eql([picker.getState()])
 
         // Ensure the dispatch was called as expected
         dispatchStub.callCount.should.eql(1)

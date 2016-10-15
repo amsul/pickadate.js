@@ -88,6 +88,12 @@ function create(stateChanges, addons = []) {
   }
 
   /**
+   * Gets the state of the picker.
+   * @return {Object}
+   */
+  let getState = () => state
+
+  /**
    * Gets the formatted value based on the selected state.
    * @param  {String} [template=state.template]
    * @param  {LANGUAGE} [language=state.language]
@@ -102,11 +108,9 @@ function create(stateChanges, addons = []) {
   let picker = {
     addStateListener,
     dispatch,
+    getState,
     getValue,
     removeStateListener,
-    get state() {
-      return state
-    },
   }
 
   // Go through the actions and create a higher order function

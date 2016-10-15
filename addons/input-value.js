@@ -10,7 +10,7 @@ module.exports = (inputNode, template) => {
     picker.addStateListener(previousState => {
       if (
         stateUtil.hasAnyChanged(
-          previousState, picker.state,
+          previousState, picker.getState(),
           'language', 'selected'
         )
       ) {

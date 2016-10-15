@@ -188,19 +188,19 @@ function createScopeButton() {
 
     let button = createButtonNode(
       [classes.button, classes.button_scope],
-      createScopeNodes(picker.state),
+      createScopeNodes(picker.getState()),
       onClick
     )
 
     picker.addStateListener(previousState => {
       if (
         stateUtil.hasAnyChanged(
-          previousState, picker.state,
+          previousState, picker.getState(),
           'language', 'scope', 'selected', 'view'
         )
       ) {
         button.innerHTML = ''
-        appendChildren(button, createScopeNodes(picker.state))
+        appendChildren(button, createScopeNodes(picker.getState()))
       }
     })
 
@@ -324,19 +324,19 @@ function createGridButton() {
 
     let button = createButtonNode(
       [classes.grid],
-      createGridCellElements(picker.state),
+      createGridCellElements(picker.getState()),
       onClick
     )
 
     picker.addStateListener(previousState => {
       if (
         stateUtil.hasAnyChanged(
-          previousState, picker.state,
+          previousState, picker.getState(),
           'disabled', 'firstDay', 'language', 'scope', 'selected', 'view'
         )
       ) {
         button.innerHTML = ''
-        appendChildren(button, createGridCellElements(picker.state))
+        appendChildren(button, createGridCellElements(picker.getState()))
       }
     })
 
