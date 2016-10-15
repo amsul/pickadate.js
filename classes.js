@@ -2,7 +2,6 @@ module.exports = {
 
   button                      : 'pickadate-button',
   button_clear                : 'pickadate-button_clear',
-  button_confirm              : 'pickadate-button_confirm',
   button_next                 : 'pickadate-button_next',
   button_previous             : 'pickadate-button_previous',
   button_scope                : 'pickadate-button_scope',

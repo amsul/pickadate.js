@@ -255,13 +255,11 @@
 
 
 
-.pickadate-button_clear,
-.pickadate-button_confirm {
+.pickadate-button_clear {
   padding: 1em;
 }
 
-  .pickadate-button_clear svg,
-  .pickadate-button_confirm svg {
+  .pickadate-button_clear svg {
     width  : auto;
     height : 1.5em;
     fill   : currentColor;
@@ -270,9 +268,7 @@
 
 
 .pickadate-button_navigation:hover,
-.pickadate-button_navigation:focus,
-.pickadate-button_confirm:hover,
-.pickadate-button_confirm:focus {
+.pickadate-button_navigation:focus {
   color: var(--blue);
 }
 

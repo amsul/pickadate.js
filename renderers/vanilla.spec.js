@@ -687,50 +687,6 @@ describe('/vanillaRenderer', () => {
 
 
 
-  describe('#createConfirmButton', () => {
-
-    it('creates a layout for the "confirm" button component', () => {
-
-      // Create the picker and layout
-      let picker = pickerObject.create()
-      let layout = vanillaRenderer.createConfirmButton()
-
-      // Render the element with the picker
-      let element = layout(picker)
-
-      // Ensure the element is what was expected
-      element.tagName.should.eql('BUTTON')
-      element.className.should.eql([classes.button, classes.button_confirm].join(' '))
-      element.innerHTML.should.eql(checkmarkIcon)
-
-    })
-
-
-    it('creates a layout for the "confirm" button component with a click handler that confirms the "selected" state', () => {
-
-      // Create the picker and layout
-      let picker = pickerObject.create()
-      let layout = vanillaRenderer.createConfirmButton()
-
-      // Render the element with the picker
-      let element = layout(picker)
-
-      // Stub out confirm
-      let confirmStub = sinon.stub(picker, 'confirm')
-
-      // Dispatch the click event on the element
-      element.dispatchEvent(new Event('click'))
-
-      // Ensure the stub was called
-      confirmStub.callCount.should.eql(1)
-      confirmStub.lastCall.args.should.eql([])
-
-    })
-
-  })
-
-
-
   describe('#createGridButton', () => {
 
     it('creates a layout for the "grid" button component', () => {

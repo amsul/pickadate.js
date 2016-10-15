@@ -32,7 +32,6 @@ describe('/pickerObject', () => {
 
         // Actions
         'clear',
-        'confirm',
         'cycleScope',
         'disable',
         'enable',
@@ -394,32 +393,6 @@ describe('/pickerObject', () => {
         // Ensure the dispatch was called as expected
         dispatchStub.callCount.should.eql(1)
         dispatchStub.lastCall.args.should.eql([clearSpy.lastCall.returnValue])
-
-      })
-    })
-
-
-
-    describe('#confirm', () => {
-      it('is an overloaded method to confirm the value', () => {
-
-        // Create the picker
-        let picker = pickerObject.create()
-
-        // Stub out dispatch and spy on the confirm action
-        let dispatchStub = sinon.stub(picker, 'dispatch')
-        let confirmSpy   = sinon.spy(actions, 'confirm')
-
-        // Trigger the overloaded action
-        picker.confirm()
-
-        // Ensure the action was called as expected
-        confirmSpy.callCount.should.eql(1)
-        confirmSpy.lastCall.args.should.eql([picker.getState()])
-
-        // Ensure the dispatch was called as expected
-        dispatchStub.callCount.should.eql(1)
-        dispatchStub.lastCall.args.should.eql([confirmSpy.lastCall.returnValue])
 
       })
     })

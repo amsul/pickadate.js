@@ -4,24 +4,6 @@ let calendarUtil = require('utils/calendar')
 
 
 
-/////////////
-// CONFIRM //
-/////////////
-
-
-
-/**
- * Returns an action that confirms the selected value.
- * @return {Object}
- */
-let confirm = () => ({
-  type : ACTION.TYPE.CONFIRM,
-})
-
-
-
-
-
 ////////////
 // SELECT //
 ////////////
@@ -224,9 +206,6 @@ let setFirstDay = (state, value) => ({
 
 
 module.exports = {
-
-  // Confirm
-  confirm,
 
   // Select
   clear,

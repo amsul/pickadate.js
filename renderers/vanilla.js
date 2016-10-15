@@ -42,7 +42,6 @@ const DEFAULT_LAYOUT = createRootContainer(
   ),
   createFooterContainer(
     createClearButton(),
-    createConfirmButton(),
   )
 )
 
@@ -283,26 +282,6 @@ function createClearButton() {
     )
 
     button.innerHTML = crossIcon
-
-    return button
-
-  }
-}
-
-
-
-function createConfirmButton() {
-  return (picker) => {
-
-    let onClick = () => picker.confirm()
-
-    let button = createButtonNode(
-      [classes.button, classes.button_confirm],
-      '',
-      onClick
-    )
-
-    button.innerHTML = checkmarkIcon
 
     return button
 
@@ -800,7 +779,6 @@ module.exports = {
 
   // Component layouts
   createClearButton,
-  createConfirmButton,
   createGridButton,
   createNextButton,
   createPreviousButton,

@@ -31,26 +31,6 @@ describe('/actions', () => {
 
 
 
-  /////////////
-  // CONFIRM //
-  /////////////
-
-
-
-  describe('#confirm', () => {
-
-    it('returns an action that confirms the selected value', () => {
-      actions.confirm().should.eql({
-        type : ACTION.TYPE.CONFIRM,
-      })
-    })
-
-  })
-
-
-
-
-
   ////////////
   // SELECT //
   ////////////
