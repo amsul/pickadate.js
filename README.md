@@ -111,23 +111,6 @@ Make sure to run the `grunt develop` task before making any changes to compile i
 
 
 
-<br>
-## Versioning
-
-To maintain consistency in the sort of changes to expect with version bumps, [Semantic Versioning guidelines](http://semver.org/) is followed as closely as possible:
-
-`<major>.<minor>.<patch>`
-
-Constructed as such:
-
-- `major`: breaks backward compatibility (resets the `minor` and `patch`)
-- `minor`: new additions with backward compatibility (resets the `patch`)
-- `patch`: bug fixes and misc changes
-
-If a version bump is due, make sure to update the version with a project-wide search and replace.
-
-
-
 
 
 <br>
