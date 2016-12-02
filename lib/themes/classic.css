@@ -17,6 +17,12 @@
           user-select: none;
 }
 /**
+ *
+ */
+.picker[aria-hidden="true"] {
+   display: none;
+}
+/**
  * The picker input element.
  */
 .picker__input {
