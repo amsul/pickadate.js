@@ -136,7 +136,7 @@ Before contributing any code to the project, please take a look at the [Contribu
 
 If there’s anything you’d like to discuss, we like to hang out on Gitter.
 
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/amsul/pickadate.js)
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/amsul/pickadate.js)
 
 
 
