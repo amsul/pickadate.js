@@ -31,7 +31,7 @@
   "homepage": "http://amsul.ca/pickadate.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/amsul/pickadate.js.git"
+    "url": "git://github.com/ConnectedHomes/pickadate.js.git"
   },
   "dependencies": {
     "jquery": ">=1.7"
