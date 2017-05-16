@@ -28,6 +28,7 @@ The mobile-friendly, responsive, and lightweight jQuery date & time input picker
 
 
 <br>
+
 ## NOTE: Looking for Project Maintainers
 
 I am looking for project maintainers to keep pickadate up to date and bug-free. As it stands, there are quite a few issues are that ready to be resolved and merged, but I would like help from someone in championing it forward.
@@ -38,6 +39,7 @@ If it sounds like you are up to the challenge, shoot met an email at reach@amsul
 
 
 <br>
+
 ## Library files
 
 The `lib` folder includes the library files with a `compressed` folder containing the minified counter-parts. These files are minified using [Grunt](#building-with-grunt).
@@ -78,6 +80,7 @@ The translations live in the `lib/translations` folder. There are currently [43 
 
 
 <br>
+
 ## Building with Grunt
 
 [Grunt](http://gruntjs.com/) `~0.4.5` is used to build the project files. To get started, clone the project and then run:
@@ -96,6 +99,7 @@ Type out `grunt --help` to see a list of all the tasks available. The generally 
 
 
 <br>
+
 <a name="less-styling"></a>
 ## Styling with LESS
 
@@ -114,6 +118,7 @@ Make sure to run the `grunt develop` task before making any changes to compile i
 
 
 <br>
+
 ## Bugs
 
 Before opening a new issue, please search the existing [Issues](https://github.com/amsul/pickadate.js/issues) for anything similar – there might already be an answer to your problem. You might also wanna check out the [Contributing](https://github.com/amsul/pickadate.js/blob/master/CONTRIBUTING.md) guide.
@@ -123,6 +128,7 @@ Before opening a new issue, please search the existing [Issues](https://github.c
 
 
 <br>
+
 ## Contributing
 
 Before contributing any code to the project, please take a look at the [Contributing](https://github.com/amsul/pickadate.js/blob/master/CONTRIBUTING.md) guide.
@@ -136,6 +142,7 @@ If there’s anything you’d like to discuss, we like to hang out on Gitter.
 
 
 <br>
+
 ## Support
 
 If you find this library useful and would like to see further development, consider [supporting it](http://selz.co/1g80kCZ).
