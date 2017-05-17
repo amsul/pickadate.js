@@ -10,6 +10,7 @@
     "input",
     "responsive"
   ],
+  "main": "lib/index.js",
   "homepage": "http://amsul.ca/pickadate.js",
   "bugs": "https://github.com/amsul/pickadate.js/issues",
   "license": "MIT",
