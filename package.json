@@ -25,6 +25,7 @@
   "bugs": "https://github.com/amsul/pickadate.js/issues",
   "scripts": {
     "start": "DEBUG=* webpack-dev-server --progress --colors --host=0.0.0.0",
+    "pretest": "eslint \"**/*.js\" --max-warnings 287",
     "test": "NODE_PATH=. mocha --opts .mocha **/*.spec.js",
     "test:cover": "NODE_PATH=. istanbul cover _mocha -- --opts .mocha **/*.spec.js",
     "test:travis": "npm run test:cover && cat coverage/lcov.info | coveralls"
