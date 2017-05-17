@@ -58,7 +58,7 @@
     "raf": "3.2.0",
     "raw-loader": "0.5.1",
     "should": "9.0.2",
-    "sinon": "git://github.com/cjohansen/Sinon.JS.git#b672042043517b9f84e14ed0fb8265126168778a",
+    "sinon": "2.1.0",
     "style-loader": "0.13.1",
     "webpack": "1.13.1",
     "webpack-dev-server": "1.14.1",
