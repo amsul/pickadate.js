@@ -1,7 +1,6 @@
-const ACTION        = require('constants/action')
-const LANGUAGE      = require('constants/language')
-
-let languageReducer = require('reducers/language')
+const ACTION          = require('constants/action')
+const LANGUAGE        = require('constants/language')
+const languageReducer = require('reducers/language')
 
 
 
@@ -12,8 +11,8 @@ describe('/languageReducer', () => {
 
     it('sets the language', () => {
 
-      let state   = LANGUAGE.ENGLISH
-      let payload = { value: LANGUAGE.FRENCH }
+      const state   = LANGUAGE.ENGLISH
+      const payload = { value: LANGUAGE.FRENCH }
 
       languageReducer[ACTION.TYPE.SET_LANGUAGE](state, payload)
         .should.eql(LANGUAGE.FRENCH)
@@ -23,8 +22,8 @@ describe('/languageReducer', () => {
 
     it('defaults to the original language', () => {
 
-      let state   = LANGUAGE.ENGLISH
-      let payload = { value: null }
+      const state   = LANGUAGE.ENGLISH
+      const payload = { value: null }
 
       languageReducer[ACTION.TYPE.SET_LANGUAGE](state, payload)
         .should.eql(LANGUAGE.ENGLISH)

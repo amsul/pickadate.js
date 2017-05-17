@@ -1,8 +1,7 @@
-let sinon      = require('sinon')
+const sinon    = require('sinon')
 
 const LANGUAGE = require('constants/language')
-
-let dateUtil   = require('utils/date')
+const dateUtil = require('utils/date')
 
 
 
@@ -19,10 +18,10 @@ describe('/dateUtil', () => {
 
     it('creates a new date from an epoch timestamp', () => {
 
-      let expectedDate = new Date()
-      let epochTime    = expectedDate.getTime()
+      const expectedDate = new Date()
+      const epochTime    = expectedDate.getTime()
 
-      let actualDate = dateUtil.create(epochTime)
+      const actualDate = dateUtil.create(epochTime)
       actualDate.should.be.instanceOf(Date)
       actualDate.getTime().should.eql(epochTime)
 
@@ -31,9 +30,9 @@ describe('/dateUtil', () => {
 
     it('does nothing if a date object is passed in', () => {
 
-      let expectedDate = new Date()
+      const expectedDate = new Date()
 
-      let actualDate = dateUtil.create(expectedDate)
+      const actualDate = dateUtil.create(expectedDate)
       actualDate.should.be.exactly(expectedDate)
 
     })
@@ -70,7 +69,7 @@ describe('/dateUtil', () => {
 
     it('formats a date object with a given template', () => {
 
-      let dateObject = new Date(2014, 3, 2)
+      const dateObject = new Date(2014, 3, 2)
 
       dateUtil.format(dateObject, 'YYYY-MM-DD', LANGUAGE.ENGLISH)
         .should.eql('2014-04-02')
@@ -89,7 +88,7 @@ describe('/dateUtil', () => {
 
     it('formats a date object with a given template that has escaped characters', () => {
 
-      let dateObject = new Date(2014, 3, 2)
+      const dateObject = new Date(2014, 3, 2)
 
       dateUtil.format(dateObject, 'ESCAPED CHARS [YYYY] MMMM DD', LANGUAGE.ENGLISH)
         .should.eql('ESCAPED CHARS YYYY April 02')
@@ -269,10 +268,10 @@ describe('/dateUtil', () => {
     describe('(HOOK_FORMATTER.x)', () => {
       it('formats a date object as unix timestamp', () => {
 
-        let date1 = new Date(2014, 3, 2, 4, 7, 51)
+        const date1 = new Date(2014, 3, 2, 4, 7, 51)
         dateUtil.format(date1, 'x', LANGUAGE.ENGLISH).should.eql(`${date1.getTime()}`)
 
-        let date2 = new Date(2014, 11, 17, 18, 49, 3)
+        const date2 = new Date(2014, 11, 17, 18, 49, 3)
         dateUtil.format(date2, 'x', LANGUAGE.ENGLISH).should.eql(`${date2.getTime()}`)
 
       })
@@ -320,7 +319,7 @@ describe('/dateUtil', () => {
 
     it('returns `null` if a valid year, month, and date are not found', () => {
 
-      let errorStub = sinon.stub(console, 'error')
+      const errorStub = sinon.stub(console, 'error')
 
       true.should.eql(null == dateUtil.parse('lol-04-20', 'YYYY-MM-DD', LANGUAGE.ENGLISH))
       errorStub.callCount.should.eql(1)
@@ -495,10 +494,10 @@ describe('/dateUtil', () => {
     describe('(HOOK_PARSER.x)', () => {
       it('parses a date string as the unix timestamp', () => {
 
-        let date1 = new Date(2014, 3, 2, 4, 7, 51)
+        const date1 = new Date(2014, 3, 2, 4, 7, 51)
         dateUtil.parse(`${date1.getTime()}`, 'x', LANGUAGE.ENGLISH).should.eql(date1)
 
-        let date2 = new Date(2014, 11, 17, 18, 49, 3)
+        const date2 = new Date(2014, 11, 17, 18, 49, 3)
         dateUtil.parse(`${date2.getTime()}`, 'x', LANGUAGE.ENGLISH).should.eql(date2)
 
       })
@@ -520,7 +519,7 @@ describe('/dateUtil', () => {
 
     it('gets a list of the full month names', () => {
 
-      let fullMonthNames = [
+      const fullMonthNames = [
         'January',
         'February',
         'March',
@@ -542,7 +541,7 @@ describe('/dateUtil', () => {
 
     it('gets a list of the full month names for the correct language', () => {
 
-      let fullMonthNames = [
+      const fullMonthNames = [
         'Janvier',
         'Février',
         'Mars',
@@ -569,7 +568,7 @@ describe('/dateUtil', () => {
 
     it('gets a list of the short month names', () => {
 
-      let shortMonthNames = [
+      const shortMonthNames = [
         'Jan',
         'Feb',
         'Mar',
@@ -591,7 +590,7 @@ describe('/dateUtil', () => {
 
     it('gets a list of the short month names for the correct language', () => {
 
-      let shortMonthNames = [
+      const shortMonthNames = [
         'Jan',
         'Fev',
         'Mar',
@@ -617,13 +616,13 @@ describe('/dateUtil', () => {
   describe('#getFullMonthName', () => {
 
     it('gets the full name of a specific month', () => {
-      let fullMonthName = 'June'
+      const fullMonthName = 'June'
       fullMonthName.should.eql(dateUtil.getFullMonthName(LANGUAGE.ENGLISH, 5))
     })
 
 
     it('gets the full name of a specific month for the correct language', () => {
-      let fullMonthName = 'Juin'
+      const fullMonthName = 'Juin'
       fullMonthName.should.eql(dateUtil.getFullMonthName(LANGUAGE.FRENCH, 5))
     })
 
@@ -634,13 +633,13 @@ describe('/dateUtil', () => {
   describe('#getShortMonthName', () => {
 
     it('gets the short name of a specific month', () => {
-      let shortMonthName = 'Aug'
+      const shortMonthName = 'Aug'
       shortMonthName.should.eql(dateUtil.getShortMonthName(LANGUAGE.ENGLISH, 7))
     })
 
 
     it('gets the short name of a specific month for the correct language', () => {
-      let fullMonthName = 'Aou'
+      const fullMonthName = 'Aou'
       fullMonthName.should.eql(dateUtil.getShortMonthName(LANGUAGE.FRENCH, 7))
     })
 
@@ -660,7 +659,7 @@ describe('/dateUtil', () => {
 
     it('gets a list of the full day names', () => {
 
-      let fullDayNames = [
+      const fullDayNames = [
         'Sunday',
         'Monday',
         'Tuesday',
@@ -677,7 +676,7 @@ describe('/dateUtil', () => {
 
     it('gets a list of the full day names for the correct language', () => {
 
-      let fullDayNames = [
+      const fullDayNames = [
         'Dimanche',
         'Lundi',
         'Mardi',
@@ -699,7 +698,7 @@ describe('/dateUtil', () => {
 
     it('gets a list of the short day names', () => {
 
-      let shortDayNames = [
+      const shortDayNames = [
         'Su',
         'Mo',
         'Tu',
@@ -716,7 +715,7 @@ describe('/dateUtil', () => {
 
     it('gets a list of the short day names for the correct language', () => {
 
-      let shortDayNames = [
+      const shortDayNames = [
         'Dim',
         'Lun',
         'Mar',
@@ -737,13 +736,13 @@ describe('/dateUtil', () => {
   describe('#getFullDayName', () => {
 
     it('gets the full name of a specific day', () => {
-      let fullDayName = 'Friday'
+      const fullDayName = 'Friday'
       fullDayName.should.eql(dateUtil.getFullDayName(LANGUAGE.ENGLISH, 5))
     })
 
 
     it('gets the full name of a specific day for the correct language', () => {
-      let fullDayName = 'Vendredi'
+      const fullDayName = 'Vendredi'
       fullDayName.should.eql(dateUtil.getFullDayName(LANGUAGE.FRENCH, 5))
     })
 
@@ -754,13 +753,13 @@ describe('/dateUtil', () => {
   describe('#getShortDayName', () => {
 
     it('gets the short name of a specific day', () => {
-      let shortDayName = 'Fr'
+      const shortDayName = 'Fr'
       shortDayName.should.eql(dateUtil.getShortDayName(LANGUAGE.ENGLISH, 5))
     })
 
 
     it('gets the short name of a specific day for the correct language', () => {
-      let shortDayName = 'Ven'
+      const shortDayName = 'Ven'
       shortDayName.should.eql(dateUtil.getShortDayName(LANGUAGE.FRENCH, 5))
     })
 

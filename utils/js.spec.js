@@ -1,6 +1,6 @@
-let sinon  = require('sinon')
+const sinon  = require('sinon')
 
-let jsUtil = require('utils/js')
+const jsUtil = require('utils/js')
 
 
 
@@ -93,9 +93,9 @@ describe('/jsUtil', () => {
       jsUtil.isIncluded([1, 2, 3], 4).should.eql(false)
       jsUtil.isIncluded([1, 2, 3], -1).should.eql(false)
 
-      let object1 = { id: 123 }
-      let object2 = { id: 124 }
-      let object3 = { id: 123 }
+      const object1 = { id: 123 }
+      const object2 = { id: 124 }
+      const object3 = { id: 123 }
       jsUtil.isIncluded([object1, object2], object1).should.eql(true)
       jsUtil.isIncluded([object1, object2], object3).should.eql(false)
 
@@ -104,12 +104,12 @@ describe('/jsUtil', () => {
 
     it('checks if a value is included in an array using an identity matching method', () => {
 
-      let object1 = { id: 123 }
-      let object2 = { id: 124 }
-      let object3 = { id: 123 }
-      let object4 = { id: 125 }
+      const object1 = { id: 123 }
+      const object2 = { id: 124 }
+      const object3 = { id: 123 }
+      const object4 = { id: 125 }
 
-      let identity = (item, value) => item.id === value.id
+      const identity = (item, value) => item.id === value.id
 
       jsUtil.isIncluded([object1, object2], object1, identity).should.eql(true)
       jsUtil.isIncluded([object1, object2], object3, identity).should.eql(true)
@@ -125,9 +125,9 @@ describe('/jsUtil', () => {
 
     it('adds a value to an array and returns a new array', () => {
 
-      let array = [1, 2, 3]
+      const array = [1, 2, 3]
 
-      let nextArray = jsUtil.addToArray(array, 4)
+      const nextArray = jsUtil.addToArray(array, 4)
 
       nextArray.should.eql([1, 2, 3, 4])
       nextArray.should.not.be.exactly(array)
@@ -137,9 +137,9 @@ describe('/jsUtil', () => {
 
     it('returns the original array if the value is already included', () => {
 
-      let array = [1, 2, 3, 4]
+      const array = [1, 2, 3, 4]
 
-      let nextArray = jsUtil.addToArray(array, 4)
+      const nextArray = jsUtil.addToArray(array, 4)
 
       nextArray.should.eql([1, 2, 3, 4])
       nextArray.should.be.exactly(array)
@@ -149,9 +149,9 @@ describe('/jsUtil', () => {
 
     it('adds a value to an array using an identity matching method', () => {
 
-      let identity = (item, value) => item.id === value.id
+      const identity = (item, value) => item.id === value.id
 
-      let array = [{ id: 1 }, { id: 2 }]
+      const array = [{ id: 1 }, { id: 2 }]
 
       let nextArray = jsUtil.addToArray(array, { id: 2 }, identity)
 
@@ -173,9 +173,9 @@ describe('/jsUtil', () => {
 
     it('removes a value from an array and returns a new array', () => {
 
-      let array = [1, 2, 3, 4]
+      const array = [1, 2, 3, 4]
 
-      let nextArray = jsUtil.removeFromArray(array, 4)
+      const nextArray = jsUtil.removeFromArray(array, 4)
 
       nextArray.should.eql([1, 2, 3])
       nextArray.should.not.be.exactly(array)
@@ -185,9 +185,9 @@ describe('/jsUtil', () => {
 
     it('returns the original array if the value is already not included', () => {
 
-      let array = [1, 2, 3]
+      const array = [1, 2, 3]
 
-      let nextArray = jsUtil.removeFromArray(array, 4)
+      const nextArray = jsUtil.removeFromArray(array, 4)
 
       nextArray.should.eql([1, 2, 3])
       nextArray.should.be.exactly(array)
@@ -197,9 +197,9 @@ describe('/jsUtil', () => {
 
     it('removes a value from an array using an identity matching method', () => {
 
-      let identity = (item, value) => item.id === value.id
+      const identity = (item, value) => item.id === value.id
 
-      let array = [{ id: 1 }, { id: 2 }]
+      const array = [{ id: 1 }, { id: 2 }]
 
       let nextArray = jsUtil.removeFromArray(array, { id: 3 }, identity)
 
@@ -229,10 +229,10 @@ describe('/jsUtil', () => {
 
     it('triggers all methods in the list of methods with certain arguments', () => {
 
-      let stub1   = sinon.stub()
-      let stub2   = sinon.stub()
-      let methods = [stub1, stub2]
-      let args    = [1, 2, '3456', { test: true }]
+      const stub1   = sinon.stub()
+      const stub2   = sinon.stub()
+      const methods = [stub1, stub2]
+      const args    = [1, 2, '3456', { test: true }]
 
       jsUtil.triggerAll(methods, ...args)
 
@@ -246,7 +246,7 @@ describe('/jsUtil', () => {
 
 
     it('does nothing if no methods are passed', () => {
-      let args = [1, 2, '3456', { test: true }]
+      const args = [1, 2, '3456', { test: true }]
       jsUtil.triggerAll(null, ...args)
     })
 

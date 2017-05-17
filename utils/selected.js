@@ -1,6 +1,5 @@
-const SCOPE  = require('constants/scope')
-
-let dateUtil = require('utils/date')
+const SCOPE    = require('constants/scope')
+const dateUtil = require('utils/date')
 
 
 
@@ -14,7 +13,7 @@ let dateUtil = require('utils/date')
  */
 function createDateToSet(state, { scope, selected, value }) {
 
-  let isScopeDays = scope === SCOPE.DAYS
+  const isScopeDays = scope === SCOPE.DAYS
 
   // If there's nothing currently selected,
   // and the scope is not DAYS,

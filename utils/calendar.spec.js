@@ -1,9 +1,8 @@
-const DAY        = require('constants/day')
-const LANGUAGE   = require('constants/language')
-const MONTH      = require('constants/month')
-const SCOPE      = require('constants/scope')
-
-let calendarUtil = require('utils/calendar')
+const DAY          = require('constants/day')
+const LANGUAGE     = require('constants/language')
+const MONTH        = require('constants/month')
+const SCOPE        = require('constants/scope')
+const calendarUtil = require('utils/calendar')
 
 
 
@@ -20,8 +19,8 @@ describe('/calendarUtil', () => {
 
     it('gets the short weekdays', () => {
 
-      let language = LANGUAGE.ENGLISH
-      let weekdays = calendarUtil.getWeekdays(language)
+      const language = LANGUAGE.ENGLISH
+      const weekdays = calendarUtil.getWeekdays(language)
 
       weekdays.should.eql(DAY.SHORT[LANGUAGE.ENGLISH])
 
@@ -52,11 +51,11 @@ describe('/calendarUtil', () => {
 
     it('gets the dates for rows of years, with the state scope of YEARS ', () => {
 
-      let year  = 2014
-      let month = 3
+      const year  = 2014
+      const month = 3
 
-      let decadeStartYear = 2010
-      let expectedDatesForRows = [
+      const decadeStartYear = 2010
+      const expectedDatesForRows = [
         [
           new Date(decadeStartYear, month, 1),
           new Date(decadeStartYear + 1, month, 1),
@@ -73,12 +72,12 @@ describe('/calendarUtil', () => {
         ],
       ]
 
-      let scope = SCOPE.YEARS
-      let view  = new Date(year, month, 20)
+      const scope = SCOPE.YEARS
+      const view  = new Date(year, month, 20)
 
-      let state = { scope, view }
+      const state = { scope, view }
 
-      let datesForRows = calendarUtil.getDatesForRows(state.view, state.scope)
+      const datesForRows = calendarUtil.getDatesForRows(state.view, state.scope)
 
       datesForRows.should.eql(expectedDatesForRows)
 
@@ -87,9 +86,9 @@ describe('/calendarUtil', () => {
 
     it('gets the dates for rows of months, with the state scope of MONTHS', () => {
 
-      let year = 2014
+      const year = 2014
 
-      let expectedDatesForRows = [
+      const expectedDatesForRows = [
         [
           new Date(year, 0, 1),
           new Date(year, 1, 1),
@@ -110,12 +109,12 @@ describe('/calendarUtil', () => {
         ],
       ]
 
-      let scope = SCOPE.MONTHS
-      let view  = new Date(year, 3, 20)
+      const scope = SCOPE.MONTHS
+      const view  = new Date(year, 3, 20)
 
-      let state = { scope, view }
+      const state = { scope, view }
 
-      let datesForRows = calendarUtil.getDatesForRows(state.view, state.scope)
+      const datesForRows = calendarUtil.getDatesForRows(state.view, state.scope)
 
       datesForRows.should.eql(expectedDatesForRows)
 
@@ -124,10 +123,10 @@ describe('/calendarUtil', () => {
 
     it('gets the dates for rows of weeks, with the state scope of DAYS', () => {
 
-      let year  = 2014
-      let month = 3
+      const year  = 2014
+      const month = 3
 
-      let expectedDatesForRows = [
+      const expectedDatesForRows = [
         [
           new Date(year, month, -1),
           new Date(year, month, 0),
@@ -184,12 +183,12 @@ describe('/calendarUtil', () => {
         ],
       ]
 
-      let scope = SCOPE.DAYS
-      let view  = new Date(year, month, 20)
+      const scope = SCOPE.DAYS
+      const view  = new Date(year, month, 20)
 
-      let state = { scope, view }
+      const state = { scope, view }
 
-      let datesForRows = calendarUtil.getDatesForRows(state.view, state.scope)
+      const datesForRows = calendarUtil.getDatesForRows(state.view, state.scope)
 
       datesForRows.should.eql(expectedDatesForRows)
 
@@ -203,11 +202,11 @@ describe('/calendarUtil', () => {
 
     it('gets the dates for rows of years, given a year and month', () => {
 
-      let year  = 2014
-      let month = 3
+      const year  = 2014
+      const month = 3
 
-      let decadeStartYear = 2010
-      let expectedDatesForRowsOfYears = [
+      const decadeStartYear = 2010
+      const expectedDatesForRowsOfYears = [
         [
           new Date(decadeStartYear, month, 1),
           new Date(decadeStartYear + 1, month, 1),
@@ -224,7 +223,7 @@ describe('/calendarUtil', () => {
         ],
       ]
 
-      let datesForRowsOfYears = calendarUtil.getDatesForRowsOfYears(year, month)
+      const datesForRowsOfYears = calendarUtil.getDatesForRowsOfYears(year, month)
 
       datesForRowsOfYears.should.eql(expectedDatesForRowsOfYears)
 
@@ -238,9 +237,9 @@ describe('/calendarUtil', () => {
 
     it('gets the dates for rows of months, given a year', () => {
 
-      let year = 2014
+      const year = 2014
 
-      let expectedDatesForRowsOfMonths = [
+      const expectedDatesForRowsOfMonths = [
         [
           new Date(year, 0, 1),
           new Date(year, 1, 1),
@@ -261,7 +260,7 @@ describe('/calendarUtil', () => {
         ],
       ]
 
-      let datesForRowsOfMonths = calendarUtil.getDatesForRowsOfMonths(year)
+      const datesForRowsOfMonths = calendarUtil.getDatesForRowsOfMonths(year)
 
       datesForRowsOfMonths.should.eql(expectedDatesForRowsOfMonths)
 
@@ -275,10 +274,10 @@ describe('/calendarUtil', () => {
 
     it('gets the dates for rows of weeks, given a year and month', () => {
 
-      let year  = 2014
-      let month = 3
+      const year  = 2014
+      const month = 3
 
-      let expectedDatesForRowsOfWeeks = [
+      const expectedDatesForRowsOfWeeks = [
         [
           new Date(year, month, -1),
           new Date(year, month, 0),
@@ -335,7 +334,7 @@ describe('/calendarUtil', () => {
         ],
       ]
 
-      let datesForRowsOfWeeks = calendarUtil.getDatesForRowsOfWeeks(year, month)
+      const datesForRowsOfWeeks = calendarUtil.getDatesForRowsOfWeeks(year, month)
 
       datesForRowsOfWeeks.should.eql(expectedDatesForRowsOfWeeks)
 
@@ -349,12 +348,12 @@ describe('/calendarUtil', () => {
 
     it('gets the dates for a week, give a year, month, and week index', () => {
 
-      let year  = 2014
-      let month = 4
+      const year  = 2014
+      const month = 4
 
       for (let weekIndex = 0; weekIndex < 6; weekIndex += 1) {
 
-        let expectedDatesForWeek = [
+        const expectedDatesForWeek = [
           new Date(year, month, -3 + (weekIndex * 7)),
           new Date(year, month, -2 + (weekIndex * 7)),
           new Date(year, month, -1 + (weekIndex * 7)),
@@ -364,7 +363,7 @@ describe('/calendarUtil', () => {
           new Date(year, month, 3 + (weekIndex * 7)),
         ]
 
-        let datesForWeek = calendarUtil.getDatesForWeek(year, month, weekIndex)
+        const datesForWeek = calendarUtil.getDatesForWeek(year, month, weekIndex)
 
         datesForWeek.should.eql(expectedDatesForWeek)
 
@@ -387,43 +386,43 @@ describe('/calendarUtil', () => {
   describe('#getDateOfNextScope', () => {
 
     it('gets the date of the next scope, given a date with the scope of YEARS', () => {
-      let dateObject = new Date(2014, 3, 20)
-      let startDate  = calendarUtil.getDateOfNextScope(dateObject, SCOPE.YEARS)
+      const dateObject = new Date(2014, 3, 20)
+      const startDate  = calendarUtil.getDateOfNextScope(dateObject, SCOPE.YEARS)
       startDate.should.eql(new Date(2024, 3, 20))
     })
 
 
     it('gets the closest date of the next scope, given a date with the scope of YEARS', () => {
-      let dateObject = new Date(2012, 1, 29)
-      let startDate  = calendarUtil.getDateOfNextScope(dateObject, SCOPE.YEARS)
+      const dateObject = new Date(2012, 1, 29)
+      const startDate  = calendarUtil.getDateOfNextScope(dateObject, SCOPE.YEARS)
       startDate.should.eql(new Date(2022, 1, 28))
     })
 
 
     it('gets the date of the next scope, given a date with the scope of MONTHS', () => {
-      let dateObject = new Date(2014, 3, 20)
-      let startDate  = calendarUtil.getDateOfNextScope(dateObject, SCOPE.MONTHS)
+      const dateObject = new Date(2014, 3, 20)
+      const startDate  = calendarUtil.getDateOfNextScope(dateObject, SCOPE.MONTHS)
       startDate.should.eql(new Date(2015, 3, 20))
     })
 
 
     it('gets the closest date of the next scope, given a date with the scope of MONTHS', () => {
-      let dateObject = new Date(2012, 1, 29)
-      let startDate  = calendarUtil.getDateOfNextScope(dateObject, SCOPE.MONTHS)
+      const dateObject = new Date(2012, 1, 29)
+      const startDate  = calendarUtil.getDateOfNextScope(dateObject, SCOPE.MONTHS)
       startDate.should.eql(new Date(2013, 1, 28))
     })
 
 
     it('gets the date of the next scope, given a date with the scope of DAYS', () => {
-      let dateObject = new Date(2014, 3, 20)
-      let startDate  = calendarUtil.getDateOfNextScope(dateObject, SCOPE.DAYS)
+      const dateObject = new Date(2014, 3, 20)
+      const startDate  = calendarUtil.getDateOfNextScope(dateObject, SCOPE.DAYS)
       startDate.should.eql(new Date(2014, 4, 20))
     })
 
 
     it('gets the closest date of the next scope, given a date with the scope of DAYS', () => {
-      let dateObject = new Date(2012, 0, 31)
-      let startDate  = calendarUtil.getDateOfNextScope(dateObject, SCOPE.DAYS)
+      const dateObject = new Date(2012, 0, 31)
+      const startDate  = calendarUtil.getDateOfNextScope(dateObject, SCOPE.DAYS)
       startDate.should.eql(new Date(2012, 1, 29))
     })
 
@@ -434,15 +433,15 @@ describe('/calendarUtil', () => {
   describe('#getDateOfNextDecade', () => {
 
     it('gets the date of the next decade, given a date', () => {
-      let dateObject = new Date(2014, 3, 20)
-      let startDate  = calendarUtil.getDateOfNextDecade(dateObject)
+      const dateObject = new Date(2014, 3, 20)
+      const startDate  = calendarUtil.getDateOfNextDecade(dateObject)
       startDate.should.eql(new Date(2024, 3, 20))
     })
 
 
     it('gets the closest date of the next decade, given a date', () => {
-      let dateObject = new Date(2012, 1, 29)
-      let startDate  = calendarUtil.getDateOfNextDecade(dateObject)
+      const dateObject = new Date(2012, 1, 29)
+      const startDate  = calendarUtil.getDateOfNextDecade(dateObject)
       startDate.should.eql(new Date(2022, 1, 28))
     })
 
@@ -453,15 +452,15 @@ describe('/calendarUtil', () => {
   describe('#getDateOfNextYear', () => {
 
     it('gets the date of the next year, given a date', () => {
-      let dateObject = new Date(2014, 3, 20)
-      let startDate  = calendarUtil.getDateOfNextYear(dateObject)
+      const dateObject = new Date(2014, 3, 20)
+      const startDate  = calendarUtil.getDateOfNextYear(dateObject)
       startDate.should.eql(new Date(2015, 3, 20))
     })
 
 
     it('gets the closest date of the next year, given a date', () => {
-      let dateObject = new Date(2012, 1, 29)
-      let startDate  = calendarUtil.getDateOfNextYear(dateObject)
+      const dateObject = new Date(2012, 1, 29)
+      const startDate  = calendarUtil.getDateOfNextYear(dateObject)
       startDate.should.eql(new Date(2013, 1, 28))
     })
 
@@ -472,15 +471,15 @@ describe('/calendarUtil', () => {
   describe('#getDateOfNextMonth', () => {
 
     it('gets the date of the next month, given a date', () => {
-      let dateObject = new Date(2014, 3, 20)
-      let startDate  = calendarUtil.getDateOfNextMonth(dateObject)
+      const dateObject = new Date(2014, 3, 20)
+      const startDate  = calendarUtil.getDateOfNextMonth(dateObject)
       startDate.should.eql(new Date(2014, 4, 20))
     })
 
 
     it('gets the closest date of the next month, given a date', () => {
-      let dateObject = new Date(2012, 0, 31)
-      let startDate  = calendarUtil.getDateOfNextMonth(dateObject)
+      const dateObject = new Date(2012, 0, 31)
+      const startDate  = calendarUtil.getDateOfNextMonth(dateObject)
       startDate.should.eql(new Date(2012, 1, 29))
     })
 
@@ -499,43 +498,43 @@ describe('/calendarUtil', () => {
   describe('#getDateOfPreviousScope', () => {
 
     it('gets the date of the previous scope, given a date with the scope of YEARS', () => {
-      let dateObject = new Date(2014, 3, 20)
-      let startDate  = calendarUtil.getDateOfPreviousScope(dateObject, SCOPE.YEARS)
+      const dateObject = new Date(2014, 3, 20)
+      const startDate  = calendarUtil.getDateOfPreviousScope(dateObject, SCOPE.YEARS)
       startDate.should.eql(new Date(2004, 3, 20))
     })
 
 
     it('gets the closest date of the previous scope, given a date with the scope of YEARS', () => {
-      let dateObject = new Date(2012, 1, 29)
-      let startDate  = calendarUtil.getDateOfPreviousScope(dateObject, SCOPE.YEARS)
+      const dateObject = new Date(2012, 1, 29)
+      const startDate  = calendarUtil.getDateOfPreviousScope(dateObject, SCOPE.YEARS)
       startDate.should.eql(new Date(2002, 1, 28))
     })
 
 
     it('gets the date of the previous scope, given a date with the scope of MONTHS', () => {
-      let dateObject = new Date(2014, 3, 20)
-      let startDate  = calendarUtil.getDateOfPreviousScope(dateObject, SCOPE.MONTHS)
+      const dateObject = new Date(2014, 3, 20)
+      const startDate  = calendarUtil.getDateOfPreviousScope(dateObject, SCOPE.MONTHS)
       startDate.should.eql(new Date(2013, 3, 20))
     })
 
 
     it('gets the closest date of the previous scope, given a date with the scope of MONTHS', () => {
-      let dateObject = new Date(2012, 1, 29)
-      let startDate  = calendarUtil.getDateOfPreviousScope(dateObject, SCOPE.MONTHS)
+      const dateObject = new Date(2012, 1, 29)
+      const startDate  = calendarUtil.getDateOfPreviousScope(dateObject, SCOPE.MONTHS)
       startDate.should.eql(new Date(2011, 1, 28))
     })
 
 
     it('gets the date of the previous scope, given a date with the scope of DAYS', () => {
-      let dateObject = new Date(2014, 3, 20)
-      let startDate  = calendarUtil.getDateOfPreviousScope(dateObject, SCOPE.DAYS)
+      const dateObject = new Date(2014, 3, 20)
+      const startDate  = calendarUtil.getDateOfPreviousScope(dateObject, SCOPE.DAYS)
       startDate.should.eql(new Date(2014, 2, 20))
     })
 
 
     it('gets the closest date of the previous scope, given a date with the scope of DAYS', () => {
-      let dateObject = new Date(2012, 2, 31)
-      let startDate  = calendarUtil.getDateOfPreviousScope(dateObject, SCOPE.DAYS)
+      const dateObject = new Date(2012, 2, 31)
+      const startDate  = calendarUtil.getDateOfPreviousScope(dateObject, SCOPE.DAYS)
       startDate.should.eql(new Date(2012, 1, 29))
     })
 
@@ -546,15 +545,15 @@ describe('/calendarUtil', () => {
   describe('#getDateOfPreviousDecade', () => {
 
     it('gets the date of the previous decade, given a date', () => {
-      let dateObject = new Date(2014, 3, 20)
-      let startDate  = calendarUtil.getDateOfPreviousDecade(dateObject)
+      const dateObject = new Date(2014, 3, 20)
+      const startDate  = calendarUtil.getDateOfPreviousDecade(dateObject)
       startDate.should.eql(new Date(2004, 3, 20))
     })
 
 
     it('gets the closest date of the previous decade, given a date', () => {
-      let dateObject = new Date(2012, 1, 29)
-      let startDate  = calendarUtil.getDateOfPreviousDecade(dateObject)
+      const dateObject = new Date(2012, 1, 29)
+      const startDate  = calendarUtil.getDateOfPreviousDecade(dateObject)
       startDate.should.eql(new Date(2002, 1, 28))
     })
 
@@ -565,15 +564,15 @@ describe('/calendarUtil', () => {
   describe('#getDateOfPreviousYear', () => {
 
     it('gets the date of the previous year, given a date', () => {
-      let dateObject = new Date(2014, 3, 20)
-      let startDate  = calendarUtil.getDateOfPreviousYear(dateObject)
+      const dateObject = new Date(2014, 3, 20)
+      const startDate  = calendarUtil.getDateOfPreviousYear(dateObject)
       startDate.should.eql(new Date(2013, 3, 20))
     })
 
 
     it('gets the closest date of the previous year, given a date', () => {
-      let dateObject = new Date(2012, 1, 29)
-      let startDate  = calendarUtil.getDateOfPreviousYear(dateObject)
+      const dateObject = new Date(2012, 1, 29)
+      const startDate  = calendarUtil.getDateOfPreviousYear(dateObject)
       startDate.should.eql(new Date(2011, 1, 28))
     })
 
@@ -584,15 +583,15 @@ describe('/calendarUtil', () => {
   describe('#getDateOfPreviousMonth', () => {
 
     it('gets the date of the previous month, given a date', () => {
-      let dateObject = new Date(2014, 3, 20)
-      let startDate  = calendarUtil.getDateOfPreviousMonth(dateObject)
+      const dateObject = new Date(2014, 3, 20)
+      const startDate  = calendarUtil.getDateOfPreviousMonth(dateObject)
       startDate.should.eql(new Date(2014, 2, 20))
     })
 
 
     it('gets the closest date of the previous month, given a date', () => {
-      let dateObject = new Date(2012, 2, 31)
-      let startDate  = calendarUtil.getDateOfPreviousMonth(dateObject)
+      const dateObject = new Date(2012, 2, 31)
+      const startDate  = calendarUtil.getDateOfPreviousMonth(dateObject)
       startDate.should.eql(new Date(2012, 1, 29))
     })
 
@@ -628,7 +627,7 @@ describe('/calendarUtil', () => {
 
     it('gets the start date of a month in the next scope, with the scope as DAYS', () => {
 
-      let scope = SCOPE.DAYS
+      const scope = SCOPE.DAYS
 
       calendarUtil.getStartDateOfMonthInNextScope(new Date(2014, 3, 20), scope)
         .should.eql(new Date(2014, 4, 1))
@@ -641,7 +640,7 @@ describe('/calendarUtil', () => {
 
     it('gets the start date of a month in the next scope, with the scope as MONTHS', () => {
 
-      let scope = SCOPE.MONTHS
+      const scope = SCOPE.MONTHS
 
       calendarUtil.getStartDateOfMonthInNextScope(new Date(2014, 3, 20), scope)
         .should.eql(new Date(2015, 3, 1))
@@ -654,7 +653,7 @@ describe('/calendarUtil', () => {
 
     it('gets the start date of a month in the next scope, with the scope as YEARS', () => {
 
-      let scope = SCOPE.YEARS
+      const scope = SCOPE.YEARS
 
       calendarUtil.getStartDateOfMonthInNextScope(new Date(2014, 3, 20), scope)
         .should.eql(new Date(2024, 3, 1))
@@ -672,7 +671,7 @@ describe('/calendarUtil', () => {
 
     it('gets the start date of a month in the next scope, with the scope as DAYS', () => {
 
-      let scope = SCOPE.DAYS
+      const scope = SCOPE.DAYS
 
       calendarUtil.getStartDateOfMonthInPreviousScope(new Date(2014, 3, 20), scope)
         .should.eql(new Date(2014, 2, 1))
@@ -685,7 +684,7 @@ describe('/calendarUtil', () => {
 
     it('gets the start date of a month in the next scope, with the scope as MONTHS', () => {
 
-      let scope = SCOPE.MONTHS
+      const scope = SCOPE.MONTHS
 
       calendarUtil.getStartDateOfMonthInPreviousScope(new Date(2014, 3, 20), scope)
         .should.eql(new Date(2013, 3, 1))
@@ -698,7 +697,7 @@ describe('/calendarUtil', () => {
 
     it('gets the start date of a month in the next scope, with the scope as YEARS', () => {
 
-      let scope = SCOPE.YEARS
+      const scope = SCOPE.YEARS
 
       calendarUtil.getStartDateOfMonthInPreviousScope(new Date(2014, 3, 20), scope)
         .should.eql(new Date(2004, 3, 1))
@@ -723,7 +722,7 @@ describe('/calendarUtil', () => {
   describe('#getLabel', () => {
 
     it('gets the label for a date given the scope of YEARS', () => {
-      let label = calendarUtil.getLabel(
+      const label = calendarUtil.getLabel(
         new Date(2014, 3, 20), SCOPE.YEARS, LANGUAGE.ENGLISH
       )
       label.should.eql('2014')
@@ -731,7 +730,7 @@ describe('/calendarUtil', () => {
 
 
     it('gets the label for a date given the scope of MONTHS', () => {
-      let label = calendarUtil.getLabel(
+      const label = calendarUtil.getLabel(
         new Date(2014, 3, 20), SCOPE.MONTHS, LANGUAGE.ENGLISH
       )
       label.should.eql(MONTH.SHORT[LANGUAGE.ENGLISH][3])
@@ -739,7 +738,7 @@ describe('/calendarUtil', () => {
 
 
     it('gets the label for a date given the scope of DAYS', () => {
-      let label = calendarUtil.getLabel(
+      const label = calendarUtil.getLabel(
         new Date(2014, 3, 20), SCOPE.DAYS, LANGUAGE.ENGLISH
       )
       label.should.eql('20')

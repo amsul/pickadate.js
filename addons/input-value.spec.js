@@ -1,8 +1,8 @@
-let sinon           = require('sinon')
+const sinon           = require('sinon')
 
-let inputValueAddon = require('addons/input-value')
-let pickerObject    = require('objects/picker')
-let animationUtil   = require('utils/animation')
+const inputValueAddon = require('addons/input-value')
+const pickerObject    = require('objects/picker')
+const animationUtil   = require('utils/animation')
 
 
 
@@ -11,12 +11,12 @@ describe('/inputValueAddon', () => {
   it('creates an addon for an input with a starting value', () => {
 
     // Create the picker
-    let picker = pickerObject.create({
-      selected: new Date(2015, 3, 20)
+    const picker = pickerObject.create({
+      selected: new Date(2015, 3, 20),
     })
 
     // Create the input
-    let inputNode = document.createElement('input')
+    const inputNode = document.createElement('input')
 
     // Create the input addon with the input and pass the picker
     inputValueAddon(inputNode)(picker)
@@ -30,10 +30,10 @@ describe('/inputValueAddon', () => {
   it('creates an addon for an input that listens for state changes and updates', () => {
 
     // Create the picker
-    let picker = pickerObject.create()
+    const picker = pickerObject.create()
 
     // Create the input
-    let inputNode = document.createElement('input')
+    const inputNode = document.createElement('input')
 
     // Create the input addon with the input and pass the picker
     inputValueAddon(inputNode)(picker)
@@ -42,7 +42,7 @@ describe('/inputValueAddon', () => {
     inputNode.value.should.eql('')
 
     // Capture the animation frame
-    let getFrameStub = sinon.stub(animationUtil, 'getFrame')
+    const getFrameStub = sinon.stub(animationUtil, 'getFrame')
 
     // Update the selected value
     // and ensure the value was updated
@@ -65,13 +65,13 @@ describe('/inputValueAddon', () => {
   it('creates an addon for an input with a custom template', () => {
 
     // Create the picker
-    let picker = pickerObject.create({
-      selected: new Date(2015, 3, 20)
+    const picker = pickerObject.create({
+      selected: new Date(2015, 3, 20),
     })
 
     // Create the input and template
-    let inputNode = document.createElement('input')
-    let template  = 'YYYY-MMMM-DD'
+    const inputNode = document.createElement('input')
+    const template  = 'YYYY-MMMM-DD'
 
     // Create the input addon with the input and pass the picker
     inputValueAddon(inputNode, template)(picker)
@@ -85,11 +85,11 @@ describe('/inputValueAddon', () => {
   it('creates an addon for an input with a custom template that updates with the template', () => {
 
     // Create the picker
-    let picker = pickerObject.create()
+    const picker = pickerObject.create()
 
     // Create the input and template
-    let inputNode = document.createElement('input')
-    let template  = 'YYYY-MMMM-DD'
+    const inputNode = document.createElement('input')
+    const template  = 'YYYY-MMMM-DD'
 
     // Create the input addon with the input and pass the picker
     inputValueAddon(inputNode, template)(picker)
@@ -98,7 +98,7 @@ describe('/inputValueAddon', () => {
     inputNode.value.should.eql('')
 
     // Capture the animation frame
-    let getFrameStub = sinon.stub(animationUtil, 'getFrame')
+    const getFrameStub = sinon.stub(animationUtil, 'getFrame')
 
     // Update the selected value
     picker.select(new Date(2015, 3, 20))

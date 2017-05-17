@@ -3,8 +3,8 @@
  * @private
  * @type {Object}
  */
-let contextMap = {
-  icons: require.context('icons')
+const contextMap = {
+  icons: require.context('icons'),
 }
 
 
@@ -17,9 +17,9 @@ let contextMap = {
  */
 function readFileSync(path) {
 
-  let contextDir = path.split('/')[0]
-  let context    = contextMap[contextDir]
-  let filePath   = `./${path.substring(path.indexOf('/') + 1)}`
+  const contextDir = path.split('/')[0]
+  const context    = contextMap[contextDir]
+  const filePath   = `./${path.substring(path.indexOf('/') + 1)}`
 
   return context(filePath)
 

@@ -1,7 +1,6 @@
-const ACTION     = require('constants/action')
-const SCOPE      = require('constants/scope')
-
-let scopeReducer = require('reducers/scope')
+const ACTION       = require('constants/action')
+const SCOPE        = require('constants/scope')
+const scopeReducer = require('reducers/scope')
 
 
 
@@ -41,7 +40,7 @@ describe('/scopeReducer', () => {
 
     it('shows the next deeper scope', () => {
 
-      let payload = { value: new Date(2014, 3, 20) }
+      const payload = { value: new Date(2014, 3, 20) }
 
       scopeReducer[ACTION.TYPE.SELECT](SCOPE.YEARS, payload).should.eql(SCOPE.MONTHS)
       scopeReducer[ACTION.TYPE.SELECT](SCOPE.MONTHS, payload).should.eql(SCOPE.DAYS)
@@ -53,7 +52,7 @@ describe('/scopeReducer', () => {
 
     it('shows the same scope if there is no new value', () => {
 
-      let payload = {}
+      const payload = {}
 
       scopeReducer[ACTION.TYPE.SELECT](SCOPE.YEARS, payload).should.eql(SCOPE.YEARS)
       scopeReducer[ACTION.TYPE.SELECT](SCOPE.MONTHS, payload).should.eql(SCOPE.MONTHS)

@@ -1,9 +1,7 @@
-const ACTION = require('constants/action')
-const SCOPE  = require('constants/scope')
-const STATE  = require('constants/state')
-
-let actions  = require('actions')
-let reducers = require('reducers')
+const actions  = require('actions')
+const SCOPE    = require('constants/scope')
+const STATE    = require('constants/state')
+const reducers = require('reducers')
 
 
 
@@ -14,10 +12,10 @@ describe('/reducers', () => {
 
     it('reduces a state key by an action', () => {
 
-      let state  = {}
-      let action = actions.cycleScope()
+      const state  = {}
+      const action = actions.cycleScope()
 
-      let nextState = reducers.reduce(state, action)
+      const nextState = reducers.reduce(state, action)
 
       nextState.should.eql({
         ...state,
@@ -25,7 +23,7 @@ describe('/reducers', () => {
       })
       nextState.should.not.be.exactly(state)
 
-      let finalState = reducers.reduce(nextState, action)
+      const finalState = reducers.reduce(nextState, action)
 
       finalState.should.eql({
         ...nextState,
@@ -38,15 +36,15 @@ describe('/reducers', () => {
 
     it('reduces multiple state keys by an action', () => {
 
-      let state = {
+      const state = {
         ...STATE.INITIAL,
-        template: 'YYYY-MM-DD'
+        template: 'YYYY-MM-DD',
       }
 
-      let value  = new Date(2014, 3, 20)
-      let action = actions.select(state, value)
+      const value  = new Date(2014, 3, 20)
+      const action = actions.select(state, value)
 
-      let nextState = reducers.reduce(state, action)
+      const nextState = reducers.reduce(state, action)
 
       nextState.should.eql({
         ...state,
@@ -60,10 +58,10 @@ describe('/reducers', () => {
 
     it('does nothing if the state hasn’t changed', () => {
 
-      let state  = {}
-      let action = { type: 'ACTION_TYPE_TEST' }
+      const state  = {}
+      const action = { type: 'ACTION_TYPE_TEST' }
 
-      let nextState = reducers.reduce(state, action)
+      const nextState = reducers.reduce(state, action)
 
       nextState.should.eql(state)
       nextState.should.be.exactly(state)

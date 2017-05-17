@@ -1,6 +1,5 @@
-const ACTION     = require('constants/action')
-
-let calendarUtil = require('utils/calendar')
+const ACTION       = require('constants/action')
+const calendarUtil = require('utils/calendar')
 
 
 
@@ -17,7 +16,7 @@ let calendarUtil = require('utils/calendar')
  * @param  {String} [template=state.template]
  * @return {Object}
  */
-let select = (state, value, template = state.template) => ({
+const select = (state, value, template = state.template) => ({
   type    : ACTION.TYPE.SELECT,
   payload : {
     language : state.language,
@@ -33,7 +32,7 @@ let select = (state, value, template = state.template) => ({
  * Returns an action that clears the value.
  * @return {Object}
  */
-let clear = () => select({}, null)
+const clear = () => select({}, null)
 
 
 
@@ -52,7 +51,7 @@ let clear = () => select({}, null)
  * @param  {String} [template=state.template]
  * @return {Object}
  */
-let show = (state, value, template = state.template) => ({
+const show = (state, value, template = state.template) => ({
   type    : ACTION.TYPE.SHOW,
   payload : {
     language : state.language,
@@ -69,7 +68,7 @@ let show = (state, value, template = state.template) => ({
  * @param  {Object} state
  * @return {Object}
  */
-let showPrevious = ({ scope, selected, view }) => (
+const showPrevious = ({ scope, selected, view }) => (
   show(
     { scope },
     calendarUtil.getDateOfPreviousScope(selected || view, scope)
@@ -83,7 +82,7 @@ let showPrevious = ({ scope, selected, view }) => (
  * @param  {Object} state
  * @return {Object}
  */
-let showNext = ({ scope, selected, view }) => (
+const showNext = ({ scope, selected, view }) => (
   show(
     { scope },
     calendarUtil.getDateOfNextScope(selected || view, scope)
@@ -97,7 +96,7 @@ let showNext = ({ scope, selected, view }) => (
  * @param  {Object} state
  * @return {Object}
  */
-let showToday = ({ scope, today }) => (
+const showToday = ({ scope, today }) => (
   show({ scope }, today)
 )
 
@@ -115,7 +114,7 @@ let showToday = ({ scope, today }) => (
  * Returns an action that cycles through the scopes.
  * @return {Object}
  */
-let cycleScope = () => ({
+const cycleScope = () => ({
   type: ACTION.TYPE.CYCLE_SCOPE,
 })
 
@@ -135,7 +134,7 @@ let cycleScope = () => ({
  * @param  {...(Date|Number)} values
  * @return {Object}
  */
-let disable = (state, ...values) => ({
+const disable = (state, ...values) => ({
   type    : ACTION.TYPE.DISABLE,
   payload : { values },
 })
@@ -148,7 +147,7 @@ let disable = (state, ...values) => ({
  * @param  {...(Date|Number)} values
  * @return {Object}
  */
-let enable = (state, ...values) => ({
+const enable = (state, ...values) => ({
   type    : ACTION.TYPE.ENABLE,
   payload : { values },
 })
@@ -169,7 +168,7 @@ let enable = (state, ...values) => ({
  * @param  {LANGUAGE} value
  * @return {Object}
  */
-let setLanguage = (state, value) => ({
+const setLanguage = (state, value) => ({
   type    : ACTION.TYPE.SET_LANGUAGE,
   payload : { value },
 })
@@ -190,7 +189,7 @@ let setLanguage = (state, value) => ({
  * @param  {Number} value
  * @return {Object}
  */
-let setFirstDay = (state, value) => ({
+const setFirstDay = (state, value) => ({
   type    : ACTION.TYPE.SET_FIRST_DAY,
   payload : { value: value % 7 },
 })

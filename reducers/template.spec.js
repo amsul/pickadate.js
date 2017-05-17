@@ -1,7 +1,6 @@
-const ACTION        = require('constants/action')
-const STATE         = require('constants/state')
-
-let templateReducer = require('reducers/template')
+const ACTION          = require('constants/action')
+const STATE           = require('constants/state')
+const templateReducer = require('reducers/template')
 
 
 
@@ -16,7 +15,7 @@ describe('/templateReducer', () => {
 
 
     it('initializes a custom template', () => {
-      let state = 'YYYY-MM-DD'
+      const state = 'YYYY-MM-DD'
       templateReducer[ACTION.TYPE.INITIALIZE](state).should.eql(state)
     })
 

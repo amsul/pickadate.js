@@ -1,6 +1,6 @@
-let sinon         = require('sinon')
+const sinon         = require('sinon')
 
-let animationUtil = require('utils/animation')
+const animationUtil = require('utils/animation')
 
 
 
@@ -11,13 +11,13 @@ describe('/animationUtil', () => {
 
     it('gets a new animation frame request while cancelling a previous frame request', () => {
 
-      let cancelAnimationFrameSpy  = sinon.spy(window, 'cancelAnimationFrame')
-      let requestAnimationFrameSpy = sinon.spy(window, 'requestAnimationFrame')
+      const cancelAnimationFrameSpy  = sinon.spy(window, 'cancelAnimationFrame')
+      const requestAnimationFrameSpy = sinon.spy(window, 'requestAnimationFrame')
 
-      let animationFrame = 1
-      let callback       = () => {}
+      const animationFrame = 1
+      const callback       = () => {}
 
-      let newAnimationFrame = animationUtil.getFrame(animationFrame, callback)
+      const newAnimationFrame = animationUtil.getFrame(animationFrame, callback)
 
       cancelAnimationFrameSpy.callCount.should.eql(1)
       cancelAnimationFrameSpy.lastCall.args.should.eql([animationFrame])

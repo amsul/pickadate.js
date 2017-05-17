@@ -1,7 +1,6 @@
-const ACTION     = require('constants/action')
-
-let dateUtil     = require('utils/date')
-let selectedUtil = require('utils/selected')
+const ACTION       = require('constants/action')
+const dateUtil     = require('utils/date')
+const selectedUtil = require('utils/selected')
 
 
 

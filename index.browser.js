@@ -1,38 +1,38 @@
 require('index.css')
 
-let inputValueAddon = require('addons/input-value')
-let ACTION          = require('constants/action')
-let pickerObject    = require('objects/picker')
-let vanillaRenderer = require('renderers/vanilla')
+const inputValueAddon = require('addons/input-value')
+// const ACTION          = require('constants/action')
+const pickerObject    = require('objects/picker')
+const vanillaRenderer = require('renderers/vanilla')
 
 
 
-let parentNode      = document.getElementById('picker')
-let inputNode       = document.getElementById('picker-input')
-let hiddenInputNode = document.getElementById('picker-input-hidden')
+const parentNode      = document.getElementById('picker')
+const inputNode       = document.getElementById('picker-input')
+const hiddenInputNode = document.getElementById('picker-input-hidden')
 
 
 
-let addons = [
+const addons = [
   inputValueAddon(inputNode),
   inputValueAddon(hiddenInputNode, 'YYYY/MM/DD : x'),
 ]
 
-let reducer = function(state, action) {
+const reducer = function(state, action) {
   return {
     ...state,
-    toggle: !state.toggle
+    toggle: !state.toggle,
   }
 }
 
-let stateChanges = {
+const stateChanges = {
   // scope: 'SCOPE_MONTHS',
   selected: '2014 April 20 @ 4:20 p.m.',
   // selected: new Date(2014, 3, 20, 16, 20, 34),
   template: 'YYYY MMMM DD @ h:mm a',
 }
 
-let picker = window.picker = pickerObject.create(stateChanges, {
+const picker = window.picker = pickerObject.create(stateChanges, {
   addons,
   reducer,
 })

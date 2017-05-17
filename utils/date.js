@@ -1,7 +1,6 @@
-const DAY   = require('constants/day')
-const MONTH = require('constants/month')
-
-let jsUtil  = require('utils/js')
+const DAY    = require('constants/day')
+const MONTH  = require('constants/month')
+const jsUtil = require('utils/js')
 
 
 
@@ -184,13 +183,13 @@ const HOOK_PARSER = {
 
 /* istanbul ignore if */
 if (process.env.DEBUG) {
-  let extraFormatterKeys = Object.keys(HOOK_FORMATTER)
+  const extraFormatterKeys = Object.keys(HOOK_FORMATTER)
     .filter(key => !HOOK_PARSER[key])
   console.assert(
     !extraFormatterKeys.length,
     'Missing keys to parse with', extraFormatterKeys
   )
-  let extraParserKeys = Object.keys(HOOK_PARSER)
+  const extraParserKeys = Object.keys(HOOK_PARSER)
     .filter(key => !HOOK_FORMATTER[key])
   console.assert(
     !extraParserKeys.length,
@@ -311,16 +310,16 @@ function matchHooks(template) {
 function getDateUnitsFromHookValue(hookValue, language) {
 
   // Grab the year, date, minutes, and seconds from the hook values
-  let year    = hookValue.YYYY
-  let date    = hookValue.DD || hookValue.D
-  let minutes = hookValue.mm || hookValue.m
-  let seconds = hookValue.ss || hookValue.s
+  const year    = hookValue.YYYY
+  const date    = hookValue.DD || hookValue.D
+  const minutes = hookValue.mm || hookValue.m
+  const seconds = hookValue.ss || hookValue.s
 
   // Grab the month from the hook value by name or number
-  let month = getMonthFromHookValue(hookValue, language)
+  const month = getMonthFromHookValue(hookValue, language)
 
   // Grab the hours from the hook value by number or meridiem
-  let hours = getHoursFromHookValue(hookValue)
+  const hours = getHoursFromHookValue(hookValue)
 
   return {
     hours, minutes, seconds,
@@ -362,7 +361,7 @@ function getMonthFromHookValue(hookValue, language) {
  */
 function getHoursFromHookValue(hookValue) {
 
-  let hours = hookValue.HH || hookValue.H
+  const hours = hookValue.HH || hookValue.H
   if (hours) {
     return hours
   }
@@ -464,10 +463,10 @@ function format(dateObject, template, language) {
 function parse(dateString, template, language) {
 
   // Keep a reference to the original date string
-  let originalDateString = dateString
+  const originalDateString = dateString
 
   // Create a mapping of hook to the parsing value
-  let hookValue = {}
+  const hookValue = {}
 
   // Match hooks within the template and iterate over it
   matchHooks(template).some(match => {
@@ -489,7 +488,7 @@ function parse(dateString, template, language) {
     }
 
     // Grab the length of the string to strip
-    let lengthToStrip = stringToStrip.length
+    const lengthToStrip = stringToStrip.length
 
     // If there is no length to strip,
     // or the string to strip does not match the starting
@@ -520,7 +519,7 @@ function parse(dateString, template, language) {
   }
 
   // Get the date units from the hook value
-  let {
+  const {
     hours, minutes, seconds,
     year, month, date,
   } = getDateUnitsFromHookValue(hookValue, language)

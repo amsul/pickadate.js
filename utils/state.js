@@ -1,7 +1,6 @@
-const SCOPE  = require('constants/scope')
-
-let dateUtil = require('utils/date')
-let jsUtil   = require('utils/js')
+const SCOPE    = require('constants/scope')
+const dateUtil = require('utils/date')
+const jsUtil   = require('utils/js')
 
 
 
@@ -40,7 +39,7 @@ function hasAnyChanged(previousState, state, ...stateKeys) {
  */
 function isDisabled(state, dateObject) {
 
-  let { disabled } = state
+  const { disabled } = state
 
   if (
     jsUtil.isIncluded(
@@ -70,9 +69,9 @@ function isDisabled(state, dateObject) {
  */
 function isSelected(state, dateObject) {
 
-  let { scope, selected } = state
+  const { scope, selected } = state
 
-  let checker = (
+  const checker = (
     scope === SCOPE.YEARS ? dateUtil.isSameYear :
     scope === SCOPE.MONTHS ? dateUtil.isSameMonth :
     dateUtil.isSameDate
@@ -92,7 +91,7 @@ function isSelected(state, dateObject) {
  */
 function isToday(state, dateObject) {
 
-  let { scope, today } = state
+  const { scope, today } = state
 
   if (scope !== SCOPE.DAYS) {
     return false

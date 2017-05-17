@@ -13,5 +13,5 @@ function initialize() {
 
 
 module.exports = {
-  [ACTION.TYPE.INITIALIZE]: initialize
+  [ACTION.TYPE.INITIALIZE]: initialize,
 }

@@ -1,7 +1,6 @@
-const ACTION     = require('constants/action')
-
-let calendarUtil = require('utils/calendar')
-let dateUtil     = require('utils/date')
+const ACTION       = require('constants/action')
+const calendarUtil = require('utils/calendar')
+const dateUtil     = require('utils/date')
 
 
 

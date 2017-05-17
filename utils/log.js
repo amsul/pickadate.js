@@ -1,4 +1,4 @@
-let deepDiff = require('deep-diff')
+const deepDiff = require('deep-diff')
 
 
 
@@ -27,7 +27,7 @@ const DIFF_DICTIONARY = {
     label  : 'array',
     render : ({ path, index, item }) => (
       renderDiffUpdates({ ...item, path: [...path, index]})
-    )
+    ),
   },
   D: {
     color  : '#F44336',
@@ -43,7 +43,7 @@ const DIFF_DICTIONARY = {
       renderUpdateValue(lhs)
     } → ${
       renderUpdateValue(rhs)
-    }`
+    }`,
   },
   N: {
     color  : '#4CAF50',
@@ -119,7 +119,7 @@ function renderUpdateValue(value) {
 
 
 function renderDiffUpdates(diff) {
-  let render = DIFF_DICTIONARY[diff.kind].render
+  const render = DIFF_DICTIONARY[diff.kind].render
   return render ? render(diff) : diff
 }
 
@@ -167,7 +167,7 @@ function styleDiffItemLabel(diff) {
 
 function diff(state, nextState) {
 
-  let diffs = deepDiff(state, nextState)
+  const diffs = deepDiff(state, nextState)
 
   console.log(`%c${renderStateLabel('P')}`, styleState('P'), state)
   console.log(`%c${renderStateLabel('N')}`, styleState('N'), nextState)

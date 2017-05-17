@@ -1,6 +1,5 @@
-const SCOPE   = require('constants/scope')
-
-let stateUtil = require('utils/state')
+const SCOPE     = require('constants/scope')
+const stateUtil = require('utils/state')
 
 
 
@@ -17,8 +16,8 @@ describe('/stateUtil', () => {
 
     it('returns `true` if any of certain properties of a state are changing', () => {
 
-      let previousState = { 0: 'zero', 1: 'one', 2: 'two', 3: 'three' }
-      let state         = { ...previousState, 1: 'ONE' }
+      const previousState = { 0: 'zero', 1: 'one', 2: 'two', 3: 'three' }
+      const state         = { ...previousState, 1: 'ONE' }
 
       stateUtil.hasAnyChanged(previousState, state, '0', '1', '2').should.eql(true)
       stateUtil.hasAnyChanged(previousState, state, '0', '1').should.eql(true)
@@ -29,8 +28,8 @@ describe('/stateUtil', () => {
 
     it('returns `false` if all of certain properties of a state are not changing', () => {
 
-      let previousState = { 0: 'zero', 1: 'one', 2: 'two', 3: 'three' }
-      let state         = { ...previousState, 1: 'ONE' }
+      const previousState = { 0: 'zero', 1: 'one', 2: 'two', 3: 'three' }
+      const state         = { ...previousState, 1: 'ONE' }
 
       stateUtil.hasAnyChanged(previousState, state, '2', '3').should.eql(false)
       stateUtil.hasAnyChanged(previousState, state, '0', '2', '3').should.eql(false)
@@ -53,12 +52,12 @@ describe('/stateUtil', () => {
 
     it('returns `true` if a certain date is disabled', () => {
 
-      let state = {
+      const state = {
         disabled: {
           dates      : [new Date(2016, 3, 20)],
           days       : [1, 2],
           exceptions : [new Date(2016, 3, 4)],
-        }
+        },
       }
 
       stateUtil.isDisabled(state, new Date(2016, 3, 20)).should.eql(true)
@@ -69,12 +68,12 @@ describe('/stateUtil', () => {
 
     it('returns `false` if a certain date is disabled', () => {
 
-      let state = {
+      const state = {
         disabled: {
           dates      : [new Date(2016, 3, 20)],
           days       : [1, 2],
           exceptions : [new Date(2016, 3, 4)],
-        }
+        },
       }
 
       stateUtil.isDisabled(state, new Date(2016, 3, 21)).should.eql(false)
@@ -90,7 +89,7 @@ describe('/stateUtil', () => {
 
     it('returns `true` if a certain date is the same as the "selected" one with the scope as DAYS', () => {
 
-      let state = {
+      const state = {
         selected : new Date(2013, 3, 20),
         scope    : SCOPE.DAYS,
       }
@@ -103,7 +102,7 @@ describe('/stateUtil', () => {
 
     it('returns `false` if a certain date is not the same as the "selected" one with the scope as DAYS', () => {
 
-      let state = {
+      const state = {
         selected : new Date(2013, 3, 20),
         scope    : SCOPE.DAYS,
       }
@@ -117,7 +116,7 @@ describe('/stateUtil', () => {
 
     it('returns `true` if a certain date is the same as the "selected" one with the scope as MONTHS', () => {
 
-      let state = {
+      const state = {
         selected : new Date(2013, 3, 20),
         scope    : SCOPE.MONTHS,
       }
@@ -131,7 +130,7 @@ describe('/stateUtil', () => {
 
     it('returns `false` if a certain date is not the same as the "selected" one with the scope as MONTHS', () => {
 
-      let state = {
+      const state = {
         selected : new Date(2013, 3, 20),
         scope    : SCOPE.MONTHS,
       }
@@ -145,7 +144,7 @@ describe('/stateUtil', () => {
 
     it('returns `true` if a certain date is the same as the "selected" one with the scope as YEARS', () => {
 
-      let state = {
+      const state = {
         selected : new Date(2013, 3, 20),
         scope    : SCOPE.YEARS,
       }
@@ -159,7 +158,7 @@ describe('/stateUtil', () => {
 
     it('returns `false` if a certain date is not the same as the "selected" one with the scope as YEARS', () => {
 
-      let state = {
+      const state = {
         selected : new Date(2013, 3, 20),
         scope    : SCOPE.YEARS,
       }
@@ -178,7 +177,7 @@ describe('/stateUtil', () => {
 
     it('returns `true` if a certain date is the same as "today" with the scope as DAYS', () => {
 
-      let state = {
+      const state = {
         today : new Date(2013, 3, 20),
         scope : SCOPE.DAYS,
       }
@@ -191,7 +190,7 @@ describe('/stateUtil', () => {
 
     it('returns `false` if a certain date is not the same as "today" with the scope as DAYS', () => {
 
-      let state = {
+      const state = {
         today : new Date(2013, 3, 20),
         scope : SCOPE.DAYS,
       }
@@ -204,7 +203,7 @@ describe('/stateUtil', () => {
 
     it('returns `false` if the scope is MONTHS', () => {
 
-      let state = {
+      const state = {
         today : new Date(2013, 3, 20),
         scope : SCOPE.MONTHS,
       }
@@ -216,7 +215,7 @@ describe('/stateUtil', () => {
 
     it('returns `false` if the scope is YEARS', () => {
 
-      let state = {
+      const state = {
         today : new Date(2013, 3, 20),
         scope : SCOPE.YEARS,
       }

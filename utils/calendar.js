@@ -1,9 +1,8 @@
-const NUMBER = require('constants/number')
-const SCOPE  = require('constants/scope')
-const STATE  = require('constants/state')
-
-let dateUtil = require('utils/date')
-let jsUtil   = require('utils/js')
+const NUMBER   = require('constants/number')
+const SCOPE    = require('constants/scope')
+const STATE    = require('constants/state')
+const dateUtil = require('utils/date')
+const jsUtil   = require('utils/js')
 
 
 
@@ -21,8 +20,8 @@ let jsUtil   = require('utils/js')
  */
 function getWeekdays(language, firstDay = STATE.INITIAL.firstDay) {
 
-  let start = NUMBER.COLUMN_INDEX.DAY.START
-  let end   = NUMBER.COLUMN_INDEX.DAY.END
+  const start = NUMBER.COLUMN_INDEX.DAY.START
+  const end   = NUMBER.COLUMN_INDEX.DAY.END
 
   return jsUtil.createRange(start, end).map(dayIndex => (
     dateUtil.getShortDayName(
@@ -52,8 +51,8 @@ function getWeekdays(language, firstDay = STATE.INITIAL.firstDay) {
  */
 function getDatesForRows(view, scope, firstDay = STATE.INITIAL.firstDay) {
 
-  let year  = view.getFullYear()
-  let month = view.getMonth()
+  const year  = view.getFullYear()
+  const month = view.getMonth()
 
   if (scope === SCOPE.YEARS) {
     return getDatesForRowsOfYears(year, month)
@@ -79,13 +78,13 @@ function getDatesForRowsOfYears(year, month) {
 
   year -= year % NUMBER.YEARS_IN_DECADE
 
-  let start = NUMBER.ROW_INDEX.YEAR.START
-  let end   = NUMBER.ROW_INDEX.YEAR.END
+  const start = NUMBER.ROW_INDEX.YEAR.START
+  const end   = NUMBER.ROW_INDEX.YEAR.END
 
   return jsUtil.createRange(start, end).map(row => {
 
-    let start = NUMBER.COLUMN_INDEX.YEAR.START
-    let end   = NUMBER.COLUMN_INDEX.YEAR.END
+    const start = NUMBER.COLUMN_INDEX.YEAR.START
+    const end   = NUMBER.COLUMN_INDEX.YEAR.END
 
     return jsUtil.createRange(start, end).map(column => (
       new Date(year + column + (row * NUMBER.COLUMN.YEARS), month, 1)
@@ -104,13 +103,13 @@ function getDatesForRowsOfYears(year, month) {
  */
 function getDatesForRowsOfMonths(year) {
 
-  let start = NUMBER.ROW_INDEX.MONTH.START
-  let end   = NUMBER.ROW_INDEX.MONTH.END
+  const start = NUMBER.ROW_INDEX.MONTH.START
+  const end   = NUMBER.ROW_INDEX.MONTH.END
 
   return jsUtil.createRange(start, end).map(row => {
 
-    let start = NUMBER.COLUMN_INDEX.MONTH.START
-    let end   = NUMBER.COLUMN_INDEX.MONTH.END
+    const start = NUMBER.COLUMN_INDEX.MONTH.START
+    const end   = NUMBER.COLUMN_INDEX.MONTH.END
 
     return jsUtil.createRange(start, end).map(column => (
       new Date(year, column + (row * NUMBER.COLUMN.MONTHS), 1)
@@ -127,19 +126,21 @@ function getDatesForRowsOfMonths(year) {
  * @param  {Number} month
  * @param  {Number} [firstDay=STATE.INITIAL.firstDay]
  * @return {Array<Date[]>}
- *
- * Test with December, 2012 & firstDay as 6
  */
-function getDatesForRowsOfWeeks(year, month, firstDay = STATE.INITIAL.firstDay) {
+function getDatesForRowsOfWeeks(
+  year,
+  month,
+  firstDay = STATE.INITIAL.firstDay
+) {
 
-  let monthOfLastDayInFirstWeek = (
+  const monthOfLastDayInFirstWeek = (
     getMonthOfLastDayInFirstWeek(year, month, firstDay)
   )
 
-  let shift = monthOfLastDayInFirstWeek === month ? 0 : 1
+  const shift = monthOfLastDayInFirstWeek === month ? 0 : 1
 
-  let start = NUMBER.ROW_INDEX.DATE.START + shift
-  let end   = NUMBER.ROW_INDEX.DATE.END + shift
+  const start = NUMBER.ROW_INDEX.DATE.START + shift
+  const end   = NUMBER.ROW_INDEX.DATE.END + shift
 
   return jsUtil.createRange(start, end).map(
     weekIndex => getDatesForWeek(year, month, weekIndex, firstDay)
@@ -157,13 +158,18 @@ function getDatesForRowsOfWeeks(year, month, firstDay = STATE.INITIAL.firstDay) 
  * @param  {Number} [firstDay=STATE.INITIAL.firstDay]
  * @return {Date[]}
  */
-function getDatesForWeek(year, month, weekIndex, firstDay = STATE.INITIAL.firstDay) {
+function getDatesForWeek(
+  year,
+  month,
+  weekIndex,
+  firstDay = STATE.INITIAL.firstDay
+) {
 
-  let startDayOfMonth = getStartDayOfMonth(year, month)
-  let startDayOfWeek  = weekIndex * NUMBER.DAYS_IN_WEEK
+  const startDayOfMonth = getStartDayOfMonth(year, month)
+  const startDayOfWeek  = weekIndex * NUMBER.DAYS_IN_WEEK
 
-  let start = NUMBER.COLUMN_INDEX.DATE.START
-  let end   = NUMBER.COLUMN_INDEX.DATE.END
+  const start = NUMBER.COLUMN_INDEX.DATE.START
+  const end   = NUMBER.COLUMN_INDEX.DATE.END
 
   return jsUtil.createRange(start, end).map(date => (
     new Date(
@@ -186,7 +192,7 @@ function getDatesForWeek(year, month, weekIndex, firstDay = STATE.INITIAL.firstD
  * @return {Number}
  */
 function getMonthOfLastDayInFirstWeek(year, month, firstDay) {
-  let startDayOfMonth = getStartDayOfMonth(year, month)
+  const startDayOfMonth = getStartDayOfMonth(year, month)
   return new Date(year, month, NUMBER.DAYS_IN_WEEK - startDayOfMonth).getMonth()
 }
 
@@ -200,7 +206,7 @@ function getMonthOfLastDayInFirstWeek(year, month, firstDay) {
  * @return {Number}
  */
 function getStartDayOfMonth(year, month) {
-  let startDateOfMonth = new Date(year, month, 1)
+  const startDateOfMonth = new Date(year, month, 1)
   return startDateOfMonth.getDay()
 }
 
@@ -225,9 +231,9 @@ function getDateRelativeToDecade(dateObject, change) {
 
   dateObject = dateUtil.create(dateObject)
 
-  let year  = dateObject.getFullYear()
-  let month = dateObject.getMonth()
-  let date  = dateObject.getDate()
+  const year  = dateObject.getFullYear()
+  const month = dateObject.getMonth()
+  const date  = dateObject.getDate()
 
   return dateUtil.createInMonth(
     year + (change * NUMBER.YEARS_IN_DECADE),
@@ -250,9 +256,9 @@ function getDateRelativeToYear(dateObject, change) {
 
   dateObject = dateUtil.create(dateObject)
 
-  let year  = dateObject.getFullYear()
-  let month = dateObject.getMonth()
-  let date  = dateObject.getDate()
+  const year  = dateObject.getFullYear()
+  const month = dateObject.getMonth()
+  const date  = dateObject.getDate()
 
   return dateUtil.createInMonth(year + change, month, date)
 
@@ -271,9 +277,9 @@ function getDateRelativeToMonth(dateObject, change) {
 
   dateObject = dateUtil.create(dateObject)
 
-  let year  = dateObject.getFullYear()
-  let month = dateObject.getMonth()
-  let date  = dateObject.getDate()
+  const year  = dateObject.getFullYear()
+  const month = dateObject.getMonth()
+  const date  = dateObject.getDate()
 
   return dateUtil.createInMonth(year, month + change, date)
 
@@ -297,7 +303,7 @@ function getDateRelativeToMonth(dateObject, change) {
  */
 function getDateOfNextScope(dateObject, scope) {
 
-  let dateGetter = (
+  const dateGetter = (
     scope === SCOPE.YEARS ? getDateOfNextDecade :
     scope === SCOPE.MONTHS ? getDateOfNextYear :
     getDateOfNextMonth
@@ -358,7 +364,7 @@ function getDateOfNextMonth(dateObject) {
  */
 function getDateOfPreviousScope(dateObject, scope) {
 
-  let dateGetter = (
+  const dateGetter = (
     scope === SCOPE.YEARS ? getDateOfPreviousDecade :
     scope === SCOPE.MONTHS ? getDateOfPreviousYear :
     getDateOfPreviousMonth
@@ -418,8 +424,8 @@ function getDateOfPreviousMonth(dateObject) {
  */
 function getStartDateOfMonth(dateObject) {
   dateObject = dateUtil.create(dateObject)
-  let year   = dateObject.getFullYear()
-  let month  = dateObject.getMonth()
+  const year   = dateObject.getFullYear()
+  const month  = dateObject.getMonth()
   return new Date(year, month, 1)
 }
 

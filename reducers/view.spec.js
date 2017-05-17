@@ -1,9 +1,8 @@
-let lolex       = require('lolex')
+const lolex       = require('lolex')
 
-const ACTION    = require('constants/action')
-const LANGUAGE  = require('constants/language')
-
-let viewReducer = require('reducers/view')
+const ACTION      = require('constants/action')
+const LANGUAGE    = require('constants/language')
+const viewReducer = require('reducers/view')
 
 
 
@@ -14,10 +13,10 @@ describe('/viewReducer', () => {
 
     it('initializes the view’s date, defaulting to today', () => {
 
-      let clock = lolex.install(new Date(2014, 3, 20).getTime())
+      const clock = lolex.install(new Date(2014, 3, 20).getTime())
 
-      let state   = undefined
-      let payload = {}
+      const state   = undefined
+      const payload = {}
 
       viewReducer[ACTION.TYPE.INITIALIZE](state, payload).should.eql(new Date(2014, 3, 1))
 
@@ -28,12 +27,12 @@ describe('/viewReducer', () => {
 
     it('initializes the view’s date with a specific value', () => {
 
-      let clock = lolex.install(new Date(2014, 3, 20).getTime())
+      const clock = lolex.install(new Date(2014, 3, 20).getTime())
 
-      let state   = new Date(2016, 8, 8)
-      let payload = {}
+      const state   = new Date(2016, 8, 8)
+      const payload = {}
 
-      let view = viewReducer[ACTION.TYPE.INITIALIZE](state, payload)
+      const view = viewReducer[ACTION.TYPE.INITIALIZE](state, payload)
       view.should.eql(new Date(2016, 8, 1))
 
       clock.uninstall()
@@ -43,12 +42,12 @@ describe('/viewReducer', () => {
 
     it('initializes the view’s date with a specific payload value and template', () => {
 
-      let clock = lolex.install(new Date(2014, 3, 20).getTime())
+      const clock = lolex.install(new Date(2014, 3, 20).getTime())
 
-      let state   = undefined
-      let payload = { template: 'YYYY-MM-DD', value: '2014-04-20' }
+      const state   = undefined
+      const payload = { template: 'YYYY-MM-DD', value: '2014-04-20' }
 
-      let view = viewReducer[ACTION.TYPE.INITIALIZE](state, payload)
+      const view = viewReducer[ACTION.TYPE.INITIALIZE](state, payload)
       view.should.eql(new Date(2014, 3, 1))
 
       clock.uninstall()
@@ -63,12 +62,12 @@ describe('/viewReducer', () => {
 
     it('updates the view when a value is selected', () => {
 
-      let clock = lolex.install(new Date(2014, 3, 20).getTime())
+      const clock = lolex.install(new Date(2014, 3, 20).getTime())
 
-      let state   = new Date(2016, 8, 8)
-      let payload = { value: new Date(2011, 6, 11) }
+      const state   = new Date(2016, 8, 8)
+      const payload = { value: new Date(2011, 6, 11) }
 
-      let view = viewReducer[ACTION.TYPE.SELECT](state, payload)
+      const view = viewReducer[ACTION.TYPE.SELECT](state, payload)
       view.should.eql(new Date(2011, 6, 1))
 
       clock.uninstall()
@@ -78,16 +77,16 @@ describe('/viewReducer', () => {
 
     it('updates the view when a value is selected by parsing the value', () => {
 
-      let clock = lolex.install(new Date(2014, 3, 20).getTime())
+      const clock = lolex.install(new Date(2014, 3, 20).getTime())
 
-      let state   = new Date(2016, 8, 8)
-      let payload = {
+      const state   = new Date(2016, 8, 8)
+      const payload = {
         language : LANGUAGE.ENGLISH,
         template : 'D MMMM, YYYY',
         value    : '11 July, 2011',
       }
 
-      let view = viewReducer[ACTION.TYPE.SELECT](state, payload)
+      const view = viewReducer[ACTION.TYPE.SELECT](state, payload)
       view.should.eql(new Date(2011, 6, 1))
 
       clock.uninstall()
@@ -97,10 +96,10 @@ describe('/viewReducer', () => {
 
     it('returns the original state if there is no selected value', () => {
 
-      let state   = new Date(2016, 8, 8)
-      let payload = { value: null }
+      const state   = new Date(2016, 8, 8)
+      const payload = { value: null }
 
-      let view = viewReducer[ACTION.TYPE.SELECT](state, payload)
+      const view = viewReducer[ACTION.TYPE.SELECT](state, payload)
       view.should.be.exactly(state)
 
     })
@@ -108,10 +107,10 @@ describe('/viewReducer', () => {
 
     it('returns the original state if the selected value is in the same month', () => {
 
-      let state   = new Date(2016, 8, 8)
-      let payload = { value: new Date(2016, 8, 24) }
+      const state   = new Date(2016, 8, 8)
+      const payload = { value: new Date(2016, 8, 24) }
 
-      let view = viewReducer[ACTION.TYPE.SELECT](state, payload)
+      const view = viewReducer[ACTION.TYPE.SELECT](state, payload)
       view.should.be.exactly(state)
 
     })

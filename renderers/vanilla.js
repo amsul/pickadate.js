@@ -1,19 +1,18 @@
-let fs               = require('fs')
+const fs               = require('fs')
 
-const SCOPE          = require('constants/scope')
+const classes          = require('classes')
+const SCOPE            = require('constants/scope')
+const calendarUtil     = require('utils/calendar')
+const dateUtil         = require('utils/date')
+const jsUtil           = require('utils/js')
+const stateUtil        = require('utils/state')
 
-let classes          = require('classes')
-let calendarUtil     = require('utils/calendar')
-let dateUtil         = require('utils/date')
-let jsUtil           = require('utils/js')
-let stateUtil        = require('utils/state')
-
-let checkmarkIcon    = fs.readFileSync('icons/checkmark.svg', 'utf-8')
-let chevronDownIcon  = fs.readFileSync('icons/chevronDown.svg', 'utf-8')
-let chevronLeftIcon  = fs.readFileSync('icons/chevronLeft.svg', 'utf-8')
-let chevronRightIcon = fs.readFileSync('icons/chevronRight.svg', 'utf-8')
-let crossIcon        = fs.readFileSync('icons/cross.svg', 'utf-8')
-let bullsEyeIcon     = fs.readFileSync('icons/bullsEye.svg', 'utf-8')
+// const checkmarkIcon = fs.readFileSync('icons/checkmark.svg', 'utf-8')
+const chevronDownIcon  = fs.readFileSync('icons/chevronDown.svg', 'utf-8')
+const chevronLeftIcon  = fs.readFileSync('icons/chevronLeft.svg', 'utf-8')
+const chevronRightIcon = fs.readFileSync('icons/chevronRight.svg', 'utf-8')
+const crossIcon        = fs.readFileSync('icons/cross.svg', 'utf-8')
+const bullsEyeIcon     = fs.readFileSync('icons/bullsEye.svg', 'utf-8')
 
 
 
@@ -56,7 +55,7 @@ const DEFAULT_LAYOUT = createRootContainer(
 function render(parentNode, picker, layout = DEFAULT_LAYOUT) {
 
   // Create the root element using the current state.
-  let rootElement = layout(picker)
+  const rootElement = layout(picker)
 
   // Append the root element to the parent node.
   parentNode.appendChild(rootElement)
@@ -75,7 +74,7 @@ function render(parentNode, picker, layout = DEFAULT_LAYOUT) {
 
 function createLayout(...layouts) {
   return (picker) => {
-    let element = document.createElement('div')
+    const element = document.createElement('div')
     appendChildren(element, layouts.map(layout => layout(picker)))
     return element
   }
@@ -94,12 +93,12 @@ function createLayout(...layouts) {
 function createRootContainer(...layouts) {
   return (picker) => {
 
-    let onTouchMove = (event) => {
+    const onTouchMove = (event) => {
       event.preventDefault()
     }
 
-    let layout  = createLayout(...layouts)
-    let element = layout(picker)
+    const layout  = createLayout(...layouts)
+    const element = layout(picker)
 
     element.className = classes.root
 
@@ -115,8 +114,8 @@ function createRootContainer(...layouts) {
 function createHeaderContainer(...layouts) {
   return (picker) => {
 
-    let layout  = createLayout(...layouts)
-    let element = layout(picker)
+    const layout  = createLayout(...layouts)
+    const element = layout(picker)
 
     addClassName(element, [classes.section, classes.section_header])
 
@@ -130,8 +129,8 @@ function createHeaderContainer(...layouts) {
 function createBodyContainer(...layouts) {
   return (picker) => {
 
-    let layout  = createLayout(...layouts)
-    let element = layout(picker)
+    const layout  = createLayout(...layouts)
+    const element = layout(picker)
 
     addClassName(element, [classes.section, classes.section_body])
 
@@ -145,8 +144,8 @@ function createBodyContainer(...layouts) {
 function createFooterContainer(...layouts) {
   return (picker) => {
 
-    let layout  = createLayout(...layouts)
-    let element = layout(picker)
+    const layout  = createLayout(...layouts)
+    const element = layout(picker)
 
     addClassName(element, [classes.section, classes.section_footer])
 
@@ -160,8 +159,8 @@ function createFooterContainer(...layouts) {
 function createNavigationContainer(...layouts) {
   return (picker) => {
 
-    let layout  = createLayout(...layouts)
-    let element = layout(picker)
+    const layout  = createLayout(...layouts)
+    const element = layout(picker)
 
     element.className = classes.navigation
 
@@ -183,9 +182,9 @@ function createNavigationContainer(...layouts) {
 function createScopeButton() {
   return (picker) => {
 
-    let onClick = () => picker.cycleScope()
+    const onClick = () => picker.cycleScope()
 
-    let button = createButtonNode(
+    const button = createButtonNode(
       [classes.button, classes.button_scope],
       createScopeNodes(picker.getState()),
       onClick
@@ -213,9 +212,9 @@ function createScopeButton() {
 function createPreviousButton() {
   return (picker) => {
 
-    let onClick = () => picker.showPrevious()
+    const onClick = () => picker.showPrevious()
 
-    let button = createButtonNode(
+    const button = createButtonNode(
       [classes.button, classes.button_navigation, classes.button_previous],
       '',
       onClick
@@ -233,9 +232,9 @@ function createPreviousButton() {
 function createTodayButton() {
   return (picker) => {
 
-    let onClick = () => picker.showToday()
+    const onClick = () => picker.showToday()
 
-    let button = createButtonNode(
+    const button = createButtonNode(
       [classes.button, classes.button_navigation, classes.button_today],
       '',
       onClick
@@ -253,9 +252,9 @@ function createTodayButton() {
 function createNextButton() {
   return (picker) => {
 
-    let onClick = () => picker.showNext()
+    const onClick = () => picker.showNext()
 
-    let button = createButtonNode(
+    const button = createButtonNode(
       [classes.button, classes.button_navigation, classes.button_next],
       '',
       onClick
@@ -273,9 +272,9 @@ function createNextButton() {
 function createClearButton() {
   return (picker) => {
 
-    let onClick = () => picker.clear()
+    const onClick = () => picker.clear()
 
-    let button = createButtonNode(
+    const button = createButtonNode(
       [classes.button, classes.button_clear],
       '',
       onClick
@@ -293,15 +292,15 @@ function createClearButton() {
 function createGridButton() {
   return (picker) => {
 
-    let onClick = (event) => {
-      let value = getValueFromMouseEvent(event)
+    const onClick = (event) => {
+      const value = getValueFromMouseEvent(event)
       if (!value) {
         return
       }
       picker.select(value)
     }
 
-    let button = createButtonNode(
+    const button = createButtonNode(
       [classes.grid],
       createGridCellElements(picker.getState()),
       onClick
@@ -352,7 +351,7 @@ function createScopeNodes(state) {
         createScopeMonthAndYearNode(state),
         createScopeWeekdayNode(state),
       ]
-    )
+    ),
   ]
 
 }
@@ -361,7 +360,7 @@ function createScopeNodes(state) {
 
 function createScopeChevronNode(state) {
 
-  let node = createNode([
+  const node = createNode([
     classes.scopeItem,
     classes.scopeItem_chevron,
   ])
@@ -376,7 +375,7 @@ function createScopeChevronNode(state) {
 
 function createScopeEmptyNode(state) {
 
-  let node = createNode(
+  const node = createNode(
     [
       classes.scopeItem,
       classes.scopeItem_empty,
@@ -392,7 +391,7 @@ function createScopeEmptyNode(state) {
 
 function createScopeDateNode(state) {
 
-  let node = createNode(
+  const node = createNode(
     [
       classes.scopeItem,
       classes.scopeItem_date,
@@ -411,7 +410,7 @@ function createScopeDateNode(state) {
 
 function createScopeMonthAndYearNode(state) {
 
-  let node = createNode(
+  const node = createNode(
     [
       classes.scopeItemLabel,
       classes.scopeItemLabel_monthAndYear,
@@ -427,7 +426,7 @@ function createScopeMonthAndYearNode(state) {
 
 function createScopeWeekdayNode(state) {
 
-  let node = createNode(
+  const node = createNode(
     [
       classes.scopeItemLabel,
       classes.scopeItemLabel_weekday,
@@ -451,11 +450,11 @@ function createScopeWeekdayNode(state) {
 
 function createGridCellElements(state) {
 
-  let datesForRows = calendarUtil.getDatesForRows(
+  const datesForRows = calendarUtil.getDatesForRows(
     state.view, state.scope, state.firstDay
   )
 
-  let nodes = datesForRows.map(datesForRow => (
+  const nodes = datesForRows.map(datesForRow => (
     createNode(
       [classes.gridRow, classes.gridRow_body],
       datesForRow.map(dateForCell => (
@@ -465,7 +464,7 @@ function createGridCellElements(state) {
   ))
 
   if (state.scope === SCOPE.DAYS) {
-    let weekdays = calendarUtil.getWeekdays(state.language, state.firstDay)
+    const weekdays = calendarUtil.getWeekdays(state.language, state.firstDay)
     nodes.unshift(createNode(
       [classes.gridRow, classes.gridRow_heading],
       weekdays.map(weekday => (
@@ -482,11 +481,11 @@ function createGridCellElements(state) {
 
 function createGridCellNode(state, dateObject) {
 
-  let { language, scope, view } = state
+  const { language, scope, view } = state
 
-  let isDisabled = stateUtil.isDisabled(state, dateObject)
+  const isDisabled = stateUtil.isDisabled(state, dateObject)
 
-  let className = {
+  const className = {
     [classes.gridCell]           : true,
     [classes.gridCell_disabled]  : isDisabled,
     [classes.gridCell_selected]  : stateUtil.isSelected(state, dateObject),
@@ -497,11 +496,11 @@ function createGridCellNode(state, dateObject) {
     ),
   }
 
-  let attributes = isDisabled ? undefined : {
-    dataset: { value: dateObject.getTime() }
+  const attributes = isDisabled ? undefined : {
+    dataset: { value: dateObject.getTime() },
   }
 
-  let node = createNode(
+  const node = createNode(
     className,
     createNode(
       {
@@ -531,9 +530,9 @@ function createGridCellNode(state, dateObject) {
 
 function createNodeWithOptions(tagName, options) {
 
-  let { attributes, children, className } = options
+  const { attributes, children, className } = options
 
-  let element = document.createElement(tagName)
+  const element = document.createElement(tagName)
 
   addAttributes(element, attributes)
   addClassName(element, className)
@@ -592,7 +591,7 @@ function addAttributes(element, attributes) {
 
   Object.keys(attributes).forEach(attributeName => {
 
-    let attributeValue = attributes[attributeName]
+    const attributeValue = attributes[attributeName]
 
     if (typeof attributeValue === 'function') {
       element.addEventListener(
@@ -608,7 +607,7 @@ function addAttributes(element, attributes) {
     }
 
     Object.keys(attributeValue).forEach(datasetName => {
-      let fullDatasetName = `data-${jsUtil.caseDash(datasetName)}`
+      const fullDatasetName = `data-${jsUtil.caseDash(datasetName)}`
       element.setAttribute(fullDatasetName, attributeValue[datasetName])
     })
 
@@ -637,7 +636,7 @@ function addClassName(element, classNameData) {
 
     if (typeof classNameData === 'string') {
       classNameData = {
-        [classNameData]: true
+        [classNameData]: true,
       }
     }
 
@@ -694,7 +693,7 @@ function getEventPath(event) {
     return event.path
   }
 
-  let path   = []
+  const path   = []
   let target = event.target
 
   while (target.parentNode) {
@@ -712,7 +711,7 @@ function getEventPath(event) {
 
 function getValueFromMouseEvent(event) {
 
-  let eventPath = getEventPath(event)
+  const eventPath = getEventPath(event)
   let value     = getValueFromMouseEventPath(eventPath, event.currentTarget)
 
   if (value == null) {
@@ -736,13 +735,13 @@ function getValueFromMouseEventPath(path, rootNode) {
 
   for (let i = 0; i < path.length; i += 1) {
 
-    let node = path[i]
+    const node = path[i]
 
     if (node === rootNode) {
       return
     }
 
-    let { value } = node.dataset
+    const { value } = node.dataset
 
     if (value != null) {
       return value

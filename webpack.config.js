@@ -1,6 +1,6 @@
-var BellOnBundlerErrorPlugin = require('bell-on-bundler-error-plugin')
-var WebpackNotifierPlugin    = require('webpack-notifier')
-var webpack                  = require('webpack')
+const BellOnBundlerErrorPlugin = require('bell-on-bundler-error-plugin')
+const WebpackNotifierPlugin    = require('webpack-notifier')
+const webpack                  = require('webpack')
 
 
 
@@ -20,7 +20,7 @@ module.exports = {
 
   resolve: {
     alias: {
-      fs: 'file.js'
+      fs: 'file.js',
     },
     extensions: ['', '.js'],
     modulesDirectories: ['', 'node_modules'],
@@ -43,7 +43,11 @@ module.exports = {
       },
       {
         test   : /\.css$/,
-        loader : 'style!css!autoprefixer?{browsers:["iOS >= 6", "last 2 Chrome versions"]}',
+        loader : [
+          'style',
+          'css',
+          'autoprefixer?{browsers:["iOS >= 6", "last 2 Chrome versions"]}',
+        ].join('!')
       },
     ],
   },

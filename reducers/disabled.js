@@ -1,8 +1,7 @@
-const ACTION  = require('constants/action')
-
-let dateUtil  = require('utils/date')
-let jsUtil    = require('utils/js')
-let stateUtil = require('utils/state')
+const ACTION    = require('constants/action')
+const dateUtil  = require('utils/date')
+const jsUtil    = require('utils/js')
+const stateUtil = require('utils/state')
 
 
 
@@ -29,7 +28,7 @@ function initialize() {
  */
 function add(state, { values }) {
 
-  let nextState = { ...state }
+  const nextState = { ...state }
 
   values.forEach(value => {
 
@@ -77,7 +76,7 @@ function add(state, { values }) {
  */
 function remove(state, { values }) {
 
-  let nextState = { ...state }
+  const nextState = { ...state }
 
   values.forEach(value => {
 

@@ -1,14 +1,13 @@
-let lolex           = require('lolex')
-let sinon           = require('sinon')
+const lolex           = require('lolex')
+const sinon           = require('sinon')
 
-const ACTION        = require('constants/action')
-const LANGUAGE      = require('constants/language')
-const STATE         = require('constants/state')
-
-let actions         = require('actions')
-let pickerObject    = require('objects/picker')
-let disabledReducer = require('reducers/disabled')
-let animationUtil   = require('utils/animation')
+const actions         = require('actions')
+const ACTION          = require('constants/action')
+const LANGUAGE        = require('constants/language')
+const STATE           = require('constants/state')
+const pickerObject    = require('objects/picker')
+const disabledReducer = require('reducers/disabled')
+const animationUtil   = require('utils/animation')
 
 
 
@@ -20,7 +19,7 @@ describe('/pickerObject', () => {
     it('creates a picker', () => {
 
       // Create the picker
-      let picker = pickerObject.create()
+      const picker = pickerObject.create()
 
       // Ensure it returned the expected api
       picker.should.have.keys(
@@ -57,10 +56,10 @@ describe('/pickerObject', () => {
     it('creates a picker with an initial state', () => {
 
       // Create a clock to prevent time from ticking
-      let clock = lolex.install(new Date(2014, 3, 20).getTime())
+      const clock = lolex.install(new Date(2014, 3, 20).getTime())
 
       // Create the picker
-      let picker = pickerObject.create()
+      const picker = pickerObject.create()
 
       // Ensure it has the expected state
       picker.getState().should.eql({
@@ -79,15 +78,15 @@ describe('/pickerObject', () => {
     it('creates a picker with an initially changed state', () => {
 
       // Create a clock to prevent time from ticking
-      let clock = lolex.install(new Date(2014, 3, 20).getTime())
+      const clock = lolex.install(new Date(2014, 3, 20).getTime())
 
       // Create the initially changed state
-      let stateChanges = {
-        view: new Date(2012, 5, 1)
+      const stateChanges = {
+        view: new Date(2012, 5, 1),
       }
 
       // Create the picker
-      let picker = pickerObject.create(stateChanges)
+      const picker = pickerObject.create(stateChanges)
 
       // Ensure it has the expected state
       picker.getState().should.eql({
@@ -105,12 +104,12 @@ describe('/pickerObject', () => {
 
     it('creates a picker with addons', () => {
 
-      let addon1 = sinon.stub()
-      let addon2 = sinon.stub()
-      let addons = [addon1, addon2]
+      const addon1 = sinon.stub()
+      const addon2 = sinon.stub()
+      const addons = [addon1, addon2]
 
       // Create the picker
-      let picker = pickerObject.create(undefined, { addons })
+      const picker = pickerObject.create(undefined, { addons })
 
       // Ensure the addons were called as expected
       addon1.callCount.should.eql(1)
@@ -125,19 +124,19 @@ describe('/pickerObject', () => {
 
     it('creates a picker with a custom reducer', () => {
 
-      let reducer = sinon.spy((state, action) => {
+      const reducer = sinon.spy((state, action) => {
         if (action.type === 'ACTION_TYPE_TEST') {
           return {
             ...state,
-            test: true
+            test: true,
           }
         }
         return state
       })
 
       // Create the picker
-      let picker = pickerObject.create(undefined, { reducer })
-      let state  = picker.getState()
+      const picker = pickerObject.create(undefined, { reducer })
+      const state  = picker.getState()
 
       // Ensure the reducer was called as expected
       reducer.callCount.should.eql(1)
@@ -150,11 +149,11 @@ describe('/pickerObject', () => {
             value    : state.selected,
           },
           type: ACTION.TYPE.INITIALIZE,
-        }
+        },
       ])
 
       // Dispatch an action to trigger the reducer
-      let action = { type: 'ACTION_TYPE_TEST' }
+      const action = { type: 'ACTION_TYPE_TEST' }
       picker.dispatch(action)
 
       // Ensure the reducer was called as expected
@@ -164,7 +163,7 @@ describe('/pickerObject', () => {
       // Ensure the state was updated as expected
       picker.getState().should.eql({
         ...state,
-        test: true
+        test: true,
       })
 
     })
@@ -190,8 +189,8 @@ describe('/pickerObject', () => {
 
       it('gets the value using a custom template', () => {
 
-        let picker = pickerObject.create({
-          selected: new Date(2015, 7, 14)
+        const picker = pickerObject.create({
+          selected: new Date(2015, 7, 14),
         })
 
         picker.getValue('YYYY-MM-DD').should.eql('2015-08-14')
@@ -201,8 +200,8 @@ describe('/pickerObject', () => {
 
       it('gets the value using a custom language', () => {
 
-        let picker = pickerObject.create({
-          selected: new Date(2015, 7, 14)
+        const picker = pickerObject.create({
+          selected: new Date(2015, 7, 14),
         })
 
         picker.getValue(undefined, LANGUAGE.FRENCH).should.eql('14 Août, 2015')
@@ -218,13 +217,13 @@ describe('/pickerObject', () => {
       it('dispatches an action and notifies listeners on the next animation frame', () => {
 
         // Stub out getFrame
-        let getFrameStub = sinon.stub(animationUtil, 'getFrame')
+        const getFrameStub = sinon.stub(animationUtil, 'getFrame')
 
         // Create the picker
-        let picker = pickerObject.create()
+        const picker = pickerObject.create()
 
         // Create the listener spy
-        let listenerSpy = sinon.spy()
+        const listenerSpy = sinon.spy()
 
         // Add a state listener
         picker.addStateListener(listenerSpy)
@@ -242,7 +241,7 @@ describe('/pickerObject', () => {
         getFrameStub.lastCall.args[1].should.be.instanceOf(Function)
 
         // Grab the frame callback and trigger it
-        let frameCallback = getFrameStub.lastCall.args[1]
+        const frameCallback = getFrameStub.lastCall.args[1]
         frameCallback()
 
         // Ensure the listener was called
@@ -259,20 +258,20 @@ describe('/pickerObject', () => {
       it('dispatches an action that updates the state', () => {
 
         // Stub out getFrame
-        let getFrameStub = sinon.stub(animationUtil, 'getFrame')
+        const getFrameStub = sinon.stub(animationUtil, 'getFrame')
 
         // Create the picker
-        let picker = pickerObject.create()
+        const picker = pickerObject.create()
 
         // Grab the initial state
-        let initialState = picker.getState()
+        const initialState = picker.getState()
 
         // Dispatch an action
-        let value = new Date(2013, 3, 20)
+        const value = new Date(2013, 3, 20)
         picker.dispatch(actions.select(picker.getState(), value))
 
         // Grab the frame callback and trigger it
-        let frameCallback = getFrameStub.lastCall.args[1]
+        const frameCallback = getFrameStub.lastCall.args[1]
         frameCallback()
 
         // Ensure the state was updated as expected
@@ -296,15 +295,15 @@ describe('/pickerObject', () => {
       it('adds a state listener', () => {
 
         // Stub out getFrame
-        let getFrameStub = sinon.stub(animationUtil, 'getFrame')
+        const getFrameStub = sinon.stub(animationUtil, 'getFrame')
 
         // Create the picker
-        let picker = pickerObject.create()
+        const picker = pickerObject.create()
 
         // Create a few spies
-        let listenerSpy1 = sinon.spy()
-        let listenerSpy2 = sinon.spy()
-        let listenerSpy3 = sinon.spy()
+        const listenerSpy1 = sinon.spy()
+        const listenerSpy2 = sinon.spy()
+        const listenerSpy3 = sinon.spy()
 
         // Add the state listeners
         picker.addStateListener(listenerSpy1)
@@ -315,7 +314,7 @@ describe('/pickerObject', () => {
         picker.dispatch({ type: 'ACTION_TYPE_TEST' })
 
         // Grab the frame callback and trigger it
-        let frameCallback = getFrameStub.lastCall.args[1]
+        const frameCallback = getFrameStub.lastCall.args[1]
         frameCallback()
 
         // Ensure all the callbacks were called with the state
@@ -343,15 +342,15 @@ describe('/pickerObject', () => {
       it('removes a state listener', () => {
 
         // Stub out getFrame
-        let getFrameStub = sinon.stub(animationUtil, 'getFrame')
+        const getFrameStub = sinon.stub(animationUtil, 'getFrame')
 
         // Create the picker
-        let picker = pickerObject.create()
+        const picker = pickerObject.create()
 
         // Create a few spies
-        let listenerSpy1 = sinon.spy()
-        let listenerSpy2 = sinon.spy()
-        let listenerSpy3 = sinon.spy()
+        const listenerSpy1 = sinon.spy()
+        const listenerSpy2 = sinon.spy()
+        const listenerSpy3 = sinon.spy()
 
         // Add the state listeners
         picker.addStateListener(listenerSpy1)
@@ -367,7 +366,7 @@ describe('/pickerObject', () => {
         picker.removeStateListener(listenerSpy3)
 
         // Grab the frame callback and trigger it
-        let frameCallback = getFrameStub.lastCall.args[1]
+        const frameCallback = getFrameStub.lastCall.args[1]
         frameCallback()
 
         // Ensure none of the callbacks were called
@@ -384,13 +383,13 @@ describe('/pickerObject', () => {
       it('does nothing if the state listener is not bound', () => {
 
         // Stub out getFrame
-        let getFrameStub = sinon.stub(animationUtil, 'getFrame')
+        const getFrameStub = sinon.stub(animationUtil, 'getFrame')
 
         // Create the picker
-        let picker = pickerObject.create()
+        const picker = pickerObject.create()
 
         // Create a spy
-        let listenerSpy = sinon.spy()
+        const listenerSpy = sinon.spy()
 
         // Dispatch an action
         picker.dispatch({ type: 'ACTION_TYPE_TEST' })
@@ -399,7 +398,7 @@ describe('/pickerObject', () => {
         picker.removeStateListener(listenerSpy)
 
         // Grab the frame callback and trigger it
-        let frameCallback = getFrameStub.lastCall.args[1]
+        const frameCallback = getFrameStub.lastCall.args[1]
         frameCallback()
 
         // Ensure the callbacks was not called
@@ -424,11 +423,11 @@ describe('/pickerObject', () => {
       it('is an overloaded method to clear the value', () => {
 
         // Create the picker
-        let picker = pickerObject.create({ selected: new Date(2015, 3, 20) })
+        const picker = pickerObject.create({ selected: new Date(2015, 3, 20) })
 
         // Stub out dispatch and spy on the clear action
-        let dispatchStub = sinon.stub(picker, 'dispatch')
-        let clearSpy     = sinon.spy(actions, 'clear')
+        const dispatchStub = sinon.stub(picker, 'dispatch')
+        const clearSpy     = sinon.spy(actions, 'clear')
 
         // Trigger the overloaded action
         picker.clear()
@@ -450,11 +449,11 @@ describe('/pickerObject', () => {
       it('is an overloaded method to cycle the scope', () => {
 
         // Create the picker
-        let picker = pickerObject.create()
+        const picker = pickerObject.create()
 
         // Stub out dispatch and spy on the cycleScope action
-        let dispatchStub  = sinon.stub(picker, 'dispatch')
-        let cycleScopeSpy = sinon.spy(actions, 'cycleScope')
+        const dispatchStub  = sinon.stub(picker, 'dispatch')
+        const cycleScopeSpy = sinon.spy(actions, 'cycleScope')
 
         // Trigger the overloaded action
         picker.cycleScope()
@@ -476,11 +475,11 @@ describe('/pickerObject', () => {
       it('is an overloaded method to disable dates', () => {
 
         // Create the picker
-        let picker = pickerObject.create()
+        const picker = pickerObject.create()
 
         // Stub out dispatch and spy on the disable action
-        let dispatchStub = sinon.stub(picker, 'dispatch')
-        let disableSpy   = sinon.spy(actions, 'disable')
+        const dispatchStub = sinon.stub(picker, 'dispatch')
+        const disableSpy   = sinon.spy(actions, 'disable')
 
         // Trigger the overloaded action
         picker.disable(new Date(2015, 3, 20), 2, 5, new Date(1988, 7, 14))
@@ -502,11 +501,11 @@ describe('/pickerObject', () => {
       it('is an overloaded method to enable dates', () => {
 
         // Create the picker
-        let picker = pickerObject.create()
+        const picker = pickerObject.create()
 
         // Stub out dispatch and spy on the enable action
-        let dispatchStub = sinon.stub(picker, 'dispatch')
-        let enableSpy   = sinon.spy(actions, 'enable')
+        const dispatchStub = sinon.stub(picker, 'dispatch')
+        const enableSpy   = sinon.spy(actions, 'enable')
 
         // Trigger the overloaded action
         picker.enable(new Date(2015, 3, 20), 2, 5, new Date(1988, 7, 14))
@@ -528,11 +527,11 @@ describe('/pickerObject', () => {
       it('is an overloaded method to select a date', () => {
 
         // Create the picker
-        let picker = pickerObject.create()
+        const picker = pickerObject.create()
 
         // Stub out dispatch and spy on the select action
-        let dispatchStub = sinon.stub(picker, 'dispatch')
-        let selectSpy    = sinon.spy(actions, 'select')
+        const dispatchStub = sinon.stub(picker, 'dispatch')
+        const selectSpy    = sinon.spy(actions, 'select')
 
         // Trigger the overloaded action
         picker.select(new Date(2015, 3, 20))
@@ -554,11 +553,11 @@ describe('/pickerObject', () => {
       it('is an overloaded method to set the first day', () => {
 
         // Create the picker
-        let picker = pickerObject.create()
+        const picker = pickerObject.create()
 
         // Stub out dispatch and spy on the setFirstDay action
-        let dispatchStub   = sinon.stub(picker, 'dispatch')
-        let setFirstDaySpy = sinon.spy(actions, 'setFirstDay')
+        const dispatchStub   = sinon.stub(picker, 'dispatch')
+        const setFirstDaySpy = sinon.spy(actions, 'setFirstDay')
 
         // Trigger the overloaded action
         picker.setFirstDay(3)
@@ -580,11 +579,11 @@ describe('/pickerObject', () => {
       it('is an overloaded method to set the language', () => {
 
         // Create the picker
-        let picker = pickerObject.create()
+        const picker = pickerObject.create()
 
         // Stub out dispatch and spy on the setLanguage action
-        let dispatchStub   = sinon.stub(picker, 'dispatch')
-        let setLanguageSpy = sinon.spy(actions, 'setLanguage')
+        const dispatchStub   = sinon.stub(picker, 'dispatch')
+        const setLanguageSpy = sinon.spy(actions, 'setLanguage')
 
         // Trigger the overloaded action
         picker.setLanguage(LANGUAGE.FRENCH)
@@ -606,11 +605,11 @@ describe('/pickerObject', () => {
       it('is an overloaded method to show a date', () => {
 
         // Create the picker
-        let picker = pickerObject.create()
+        const picker = pickerObject.create()
 
         // Stub out dispatch and spy on the show action
-        let dispatchStub = sinon.stub(picker, 'dispatch')
-        let showSpy      = sinon.spy(actions, 'show')
+        const dispatchStub = sinon.stub(picker, 'dispatch')
+        const showSpy      = sinon.spy(actions, 'show')
 
         // Trigger the overloaded action
         picker.show(new Date(2015, 3, 20))
@@ -632,11 +631,11 @@ describe('/pickerObject', () => {
       it('is an overloaded method to show the next view', () => {
 
         // Create the picker
-        let picker = pickerObject.create()
+        const picker = pickerObject.create()
 
         // Stub out dispatch and spy on the showNext action
-        let dispatchStub = sinon.stub(picker, 'dispatch')
-        let showNextSpy  = sinon.spy(actions, 'showNext')
+        const dispatchStub = sinon.stub(picker, 'dispatch')
+        const showNextSpy  = sinon.spy(actions, 'showNext')
 
         // Trigger the overloaded action
         picker.showNext()
@@ -658,11 +657,11 @@ describe('/pickerObject', () => {
       it('is an overloaded method to show the previous view', () => {
 
         // Create the picker
-        let picker = pickerObject.create()
+        const picker = pickerObject.create()
 
         // Stub out dispatch and spy on the showPrevious action
-        let dispatchStub    = sinon.stub(picker, 'dispatch')
-        let showPreviousSpy = sinon.spy(actions, 'showPrevious')
+        const dispatchStub    = sinon.stub(picker, 'dispatch')
+        const showPreviousSpy = sinon.spy(actions, 'showPrevious')
 
         // Trigger the overloaded action
         picker.showPrevious()
@@ -684,11 +683,11 @@ describe('/pickerObject', () => {
       it('is an overloaded method to show today', () => {
 
         // Create the picker
-        let picker = pickerObject.create()
+        const picker = pickerObject.create()
 
         // Stub out dispatch and spy on the showToday action
-        let dispatchStub = sinon.stub(picker, 'dispatch')
-        let showTodaySpy = sinon.spy(actions, 'showToday')
+        const dispatchStub = sinon.stub(picker, 'dispatch')
+        const showTodaySpy = sinon.spy(actions, 'showToday')
 
         // Trigger the overloaded action
         picker.showToday()

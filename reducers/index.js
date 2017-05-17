@@ -1,6 +1,5 @@
-const STATE = require('constants/state')
-
-let jsUtil  = require('utils/js')
+const STATE  = require('constants/state')
+const jsUtil = require('utils/js')
 
 
 
@@ -13,7 +12,7 @@ let jsUtil  = require('utils/js')
 const KEY_TYPE_REDUCERS = STATE.KEYS.reduce(
   (KEY_TYPE_REDUCERS, key) => {
     try {
-      let fileName = jsUtil.caseDash(key)
+      const fileName = jsUtil.caseDash(key)
       KEY_TYPE_REDUCERS[key] = require(`reducers/${fileName}`)
     }
     catch (err) {
@@ -41,13 +40,13 @@ function reduce(state, { type, payload }) {
   let hasChanged = false
 
   // Create the next state using the current state
-  let nextState = { ...state }
+  const nextState = { ...state }
 
   // Go through all the state keys
   STATE.KEYS.forEach(key => {
 
     // Grab the reducer for the state key and action type
-    let reducer = KEY_TYPE_REDUCERS[key][type]
+    const reducer = KEY_TYPE_REDUCERS[key][type]
 
     // If there's no reducer, do nothing
     if (!reducer) {
@@ -56,10 +55,10 @@ function reduce(state, { type, payload }) {
 
     // Grab the previous state for the key and default `null` values
     // to `undefined` so default params can kick in
-    let previousStateForKey = state[key] == null ? undefined : state[key]
+    const previousStateForKey = state[key] == null ? undefined : state[key]
 
     // Reduce the state with the action payload to get the next state
-    let nextStateForKey = reducer(previousStateForKey, payload)
+    const nextStateForKey = reducer(previousStateForKey, payload)
 
     // Update the key in the next state
     nextState[key] = nextStateForKey

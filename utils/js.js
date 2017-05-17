@@ -12,7 +12,7 @@
  */
 function createRange(fromIndex, toIndex) {
 
-  let range = []
+  const range = []
 
   for (let index = fromIndex; index <= toIndex; index++) {
     range.push(index)
@@ -42,8 +42,8 @@ function padZero(number, digitsCount) {
 
   number = `${number}`
 
-  let numberDigitsCount       = number.length
-  let differenceInDigitsCount = digitsCount - numberDigitsCount
+  const numberDigitsCount       = number.length
+  const differenceInDigitsCount = digitsCount - numberDigitsCount
 
   return (
     differenceInDigitsCount > 0
@@ -136,7 +136,7 @@ function removeFromArray(array, value, identity) {
 
   identity = getIdentity(identity)
 
-  let nextArray = array.filter(item => !identity(item, value))
+  const nextArray = array.filter(item => !identity(item, value))
 
   return (
     array.length === nextArray.length

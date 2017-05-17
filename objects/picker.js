@@ -1,12 +1,11 @@
-const ACTION      = require('constants/action')
-const STATE       = require('constants/state')
-
-let actions       = require('actions')
-let reducers      = require('reducers')
-let animationUtil = require('utils/animation')
-let dateUtil      = require('utils/date')
-let jsUtil        = require('utils/js')
-let logUtil       = require('utils/log')
+const actions       = require('actions')
+const ACTION        = require('constants/action')
+const STATE         = require('constants/state')
+const reducers      = require('reducers')
+const animationUtil = require('utils/animation')
+const dateUtil      = require('utils/date')
+const jsUtil        = require('utils/js')
+const logUtil       = require('utils/log')
 
 
 
@@ -31,7 +30,7 @@ function create(stateChanges, options = {}) {
    * @private
    * @type {Function[]}
    */
-  let stateListeners = []
+  const stateListeners = []
 
   /**
    * The state of the picker.
@@ -51,7 +50,7 @@ function create(stateChanges, options = {}) {
    * @private
    * @param  {Object} previousState
    */
-  let triggerStateListeners = (previousState) => {
+  const triggerStateListeners = (previousState) => {
     animationFrame = animationUtil.getFrame(
       animationFrame,
       () => jsUtil.triggerAll(stateListeners, previousState)
@@ -62,7 +61,7 @@ function create(stateChanges, options = {}) {
    * Adds a state listener.
    * @param  {Function} listener
    */
-  let addStateListener = (listener) => {
+  const addStateListener = (listener) => {
     stateListeners.push(listener)
   }
 
@@ -70,8 +69,8 @@ function create(stateChanges, options = {}) {
    * Removes a state listener.
    * @param  {Function} listener
    */
-  let removeStateListener = (listener) => {
-    let indexOfListener = stateListeners.indexOf(listener)
+  const removeStateListener = (listener) => {
+    const indexOfListener = stateListeners.indexOf(listener)
     if (indexOfListener > -1) {
       stateListeners.splice(indexOfListener, 1)
     }
@@ -83,8 +82,8 @@ function create(stateChanges, options = {}) {
    *         {ACTION.TYPE} action.type
    *         {Object} [action.payload]
    */
-  let dispatch = (action) => {
-    let previousState = state
+  const dispatch = (action) => {
+    const previousState = state
     state = getNextState(state, action, options.reducer)
     triggerStateListeners(previousState)
   }
@@ -93,7 +92,7 @@ function create(stateChanges, options = {}) {
    * Gets the state of the picker.
    * @return {Object}
    */
-  let getState = () => state
+  const getState = () => state
 
   /**
    * Gets the formatted value based on the selected state.
@@ -101,13 +100,13 @@ function create(stateChanges, options = {}) {
    * @param  {LANGUAGE} [language=state.language]
    * @return {String}
    */
-  let getValue = (template = state.template, language = state.language) => {
-    let { selected } = state
+  const getValue = (template = state.template, language = state.language) => {
+    const { selected } = state
     return selected ? dateUtil.format(selected, template, language) : ''
   }
 
   // Create the picker api.
-  let picker = {
+  const picker = {
     addStateListener,
     dispatch,
     getState,
@@ -156,7 +155,7 @@ function getNextState(state, action, reducer) {
     logUtil.payload(action.payload)
   }
 
-  let previousState = state
+  const previousState = state
   state = reducers.reduce(state, action)
   state = reducer ? reducer(state, action) : state
 
@@ -181,10 +180,10 @@ function getNextState(state, action, reducer) {
  */
 function getInitialState(stateChanges, reducer) {
 
-  let state = { ...STATE.INITIAL, ...stateChanges }
-  let { language, selected, template } = state
+  const state = { ...STATE.INITIAL, ...stateChanges }
+  const { language, selected, template } = state
 
-  let action = {
+  const action = {
     payload : { language, template, value: selected },
     type    : ACTION.TYPE.INITIALIZE,
   }
