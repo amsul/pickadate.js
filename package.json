@@ -43,7 +43,7 @@
     "css-loader": "0.23.1",
     "deep-diff": "0.3.4",
     "element-dataset": "1.3.0",
-    "eslint": "2.7.0",
+    "eslint": "3.19.0",
     "exports-loader": "0.6.3",
     "file-loader": "0.8.5",
     "imports-loader": "0.6.5",
