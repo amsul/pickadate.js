@@ -1,7 +1,6 @@
 const STATE = require('constants/state')
 
 let jsUtil  = require('utils/js')
-let logUtil = require('utils/log')
 
 
 
@@ -38,13 +37,6 @@ const KEY_TYPE_REDUCERS = STATE.KEYS.reduce(
  */
 function reduce(state, { type, payload }) {
 
-  /* istanbul ignore if */
-  if (process.env.DEBUG) {
-    console.group('Action dispatched: %o', type)
-    console.assert(type, 'An undefined action was dispatched')
-    logUtil.payload(payload)
-  }
-
   // Start off with the state not being changed
   let hasChanged = false
 
@@ -76,12 +68,6 @@ function reduce(state, { type, payload }) {
     hasChanged = hasChanged || nextStateForKey !== previousStateForKey
 
   })
-
-  /* istanbul ignore if */
-  if (process.env.DEBUG) {
-    logUtil.diff(state, nextState)
-    console.groupEnd()
-  }
 
   // If the state hasn't changed, return the original state
   return hasChanged ? nextState : state

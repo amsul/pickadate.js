@@ -110,7 +110,7 @@ describe('/pickerObject', () => {
       let addons = [addon1, addon2]
 
       // Create the picker
-      let picker = pickerObject.create(undefined, addons)
+      let picker = pickerObject.create(undefined, { addons })
 
       // Ensure the addons were called as expected
       addon1.callCount.should.eql(1)
@@ -119,6 +119,53 @@ describe('/pickerObject', () => {
       addon2.callCount.should.eql(1)
       addon2.lastCall.args.length.should.eql(1)
       addon2.lastCall.args[0].should.be.exactly(picker)
+
+    })
+
+
+    it('creates a picker with a custom reducer', () => {
+
+      let reducer = sinon.spy((state, action) => {
+        if (action.type === 'ACTION_TYPE_TEST') {
+          return {
+            ...state,
+            test: true
+          }
+        }
+        return state
+      })
+
+      // Create the picker
+      let picker = pickerObject.create(undefined, { reducer })
+      let state  = picker.getState()
+
+      // Ensure the reducer was called as expected
+      reducer.callCount.should.eql(1)
+      reducer.lastCall.args.should.eql([
+        state,
+        {
+          payload: {
+            language : state.language,
+            template : state.template,
+            value    : state.selected,
+          },
+          type: ACTION.TYPE.INITIALIZE,
+        }
+      ])
+
+      // Dispatch an action to trigger the reducer
+      let action = { type: 'ACTION_TYPE_TEST' }
+      picker.dispatch(action)
+
+      // Ensure the reducer was called as expected
+      reducer.callCount.should.eql(2)
+      reducer.lastCall.args.should.eql([state, action])
+
+      // Ensure the state was updated as expected
+      picker.getState().should.eql({
+        ...state,
+        test: true
+      })
 
     })
 

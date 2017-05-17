@@ -5,6 +5,8 @@ let actions       = require('actions')
 let reducers      = require('reducers')
 let animationUtil = require('utils/animation')
 let dateUtil      = require('utils/date')
+let jsUtil        = require('utils/js')
+let logUtil       = require('utils/log')
 
 
 
@@ -17,10 +19,12 @@ let dateUtil      = require('utils/date')
 /**
  * Creates a picker.
  * @param  {Object} [stateChanges]
- * @param  {Function[]} [addons=[]]
+ * @param  {Object} [options={}]
+ *         {Function[]} [options.addons]
+ *         {Function} [options.reducer]
  * @return {picker}
  */
-function create(stateChanges, addons = []) {
+function create(stateChanges, options = {}) {
 
   /**
    * The collection of state listeners.
@@ -33,7 +37,7 @@ function create(stateChanges, addons = []) {
    * The state of the picker.
    * @type {Object}
    */
-  let state = getInitialState(stateChanges)
+  let state = getInitialState(stateChanges, options.reducer)
 
   /**
    * The animation frame for notifying the state listeners.
@@ -50,9 +54,7 @@ function create(stateChanges, addons = []) {
   let triggerStateListeners = (previousState) => {
     animationFrame = animationUtil.getFrame(
       animationFrame,
-      () => {
-        stateListeners.forEach(listener => listener(previousState))
-      }
+      () => jsUtil.triggerAll(stateListeners, previousState)
     )
   }
 
@@ -83,7 +85,7 @@ function create(stateChanges, addons = []) {
    */
   let dispatch = (action) => {
     let previousState = state
-    state = getNextState(state, action)
+    state = getNextState(state, action, options.reducer)
     triggerStateListeners(previousState)
   }
 
@@ -127,7 +129,7 @@ function create(stateChanges, addons = []) {
   })
 
   // Add all the addons
-  addons.forEach(addon => addon(picker))
+  jsUtil.triggerAll(options.addons, picker)
 
   // Return the final picker api
   return picker
@@ -142,10 +144,30 @@ function create(stateChanges, addons = []) {
  * @private
  * @param  {Object} state
  * @param  {Object} action
+ * @param  {Function} [reducer]
  * @return {Object}
  */
-function getNextState(state, action) {
-  return reducers.reduce(state, action)
+function getNextState(state, action, reducer) {
+
+  /* istanbul ignore if */
+  if (process.env.DEBUG) {
+    console.group('Action dispatched: %o', action.type)
+    console.assert(action.type, 'An undefined action was dispatched')
+    logUtil.payload(action.payload)
+  }
+
+  let previousState = state
+  state = reducers.reduce(state, action)
+  state = reducer ? reducer(state, action) : state
+
+  /* istanbul ignore if */
+  if (process.env.DEBUG) {
+    logUtil.diff(previousState, state)
+    console.groupEnd()
+  }
+
+  return state
+
 }
 
 
@@ -154,15 +176,21 @@ function getNextState(state, action) {
  * Gets the initial state with certain changes applied.
  * @private
  * @param  {Object} [stateChanges]
+ * @param  {Function} [reducer]
  * @return {Object}
  */
-function getInitialState(stateChanges) {
+function getInitialState(stateChanges, reducer) {
+
   let state = { ...STATE.INITIAL, ...stateChanges }
   let { language, selected, template } = state
-  return getNextState(state, {
+
+  let action = {
     payload : { language, template, value: selected },
     type    : ACTION.TYPE.INITIALIZE,
-  })
+  }
+
+  return getNextState(state, action, reducer)
+
 }
 
 
