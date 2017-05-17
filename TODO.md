@@ -7,6 +7,7 @@
 - [x] Add-on API
 - [x] First day of the week
 - [x] Custom layout API
+- [x] Custom reducer API
 - [ ] Minimum & maximum date limits (relative & absolute)
 - [ ] Keyboard navigation
 - [ ] A11y bindings
