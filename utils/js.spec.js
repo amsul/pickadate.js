@@ -1,3 +1,5 @@
+let sinon  = require('sinon')
+
 let jsUtil = require('utils/js')
 
 
@@ -209,6 +211,43 @@ describe('/jsUtil', () => {
       nextArray.should.eql([{ id: 1 }])
       nextArray.should.not.be.exactly(array)
 
+    })
+
+  })
+
+
+
+
+
+  //////////////
+  // FUNCTION //
+  //////////////
+
+
+
+  describe('#triggerAll', () => {
+
+    it('triggers all methods in the list of methods with certain arguments', () => {
+
+      let stub1   = sinon.stub()
+      let stub2   = sinon.stub()
+      let methods = [stub1, stub2]
+      let args    = [1, 2, '3456', { test: true }]
+
+      jsUtil.triggerAll(methods, ...args)
+
+      stub1.callCount.should.eql(1)
+      stub1.lastCall.args.should.eql(args)
+
+      stub2.callCount.should.eql(1)
+      stub2.lastCall.args.should.eql(args)
+
+    })
+
+
+    it('does nothing if no methods are passed', () => {
+      let args = [1, 2, '3456', { test: true }]
+      jsUtil.triggerAll(null, ...args)
     })
 
   })

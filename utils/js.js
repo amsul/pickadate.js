@@ -150,6 +150,27 @@ function removeFromArray(array, value, identity) {
 
 
 
+//////////////
+// FUNCTION //
+//////////////
+
+
+
+/**
+ * Triggers all methods in the list of methods with certain arguments.
+ * @param {Function[]}  [methods]
+ * @param {...Any} args
+ */
+function triggerAll(methods, ...args) {
+  if (methods) {
+    methods.forEach(method => method(...args))
+  }
+}
+
+
+
+
+
 /////////////
 // EXPORTS //
 /////////////
@@ -171,5 +192,8 @@ module.exports = {
   addToArray,
   isIncluded,
   removeFromArray,
+
+  // Function
+  triggerAll,
 
 }
