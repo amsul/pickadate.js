@@ -5,7 +5,6 @@ const SCOPE            = require('constants/scope')
 const calendarUtil     = require('utils/calendar')
 const dateUtil         = require('utils/date')
 const jsUtil           = require('utils/js')
-const stateUtil        = require('utils/state')
 
 // const checkmarkIcon = fs.readFileSync('icons/checkmark.svg', 'utf-8')
 const chevronDownIcon  = fs.readFileSync('icons/chevronDown.svg', 'utf-8')
@@ -481,8 +480,6 @@ function createGridCellElements(state) {
 
 function createGridCellNode(state, dateObject) {
 
-  const { language, scope, view } = state
-
   const isDisabled = calendarUtil.isDisabled(dateObject, {
     disabled : state.disabled,
     maximum  : state.maximum,
@@ -490,15 +487,27 @@ function createGridCellNode(state, dateObject) {
     scope    : state.scope,
   })
 
+  const isOutOfView = calendarUtil.isOutOfView(dateObject, {
+    scope : state.scope,
+    view  : state.view,
+  })
+
+  const isSelected = calendarUtil.isSelected(dateObject, {
+    scope    : state.scope,
+    selected : state.selected,
+  })
+
+  const isToday = calendarUtil.isToday(dateObject, {
+    scope : state.scope,
+    today : state.today,
+  })
+
   const className = {
     [classes.gridCell]           : true,
     [classes.gridCell_disabled]  : isDisabled,
-    [classes.gridCell_selected]  : stateUtil.isSelected(state, dateObject),
-    [classes.gridCell_today]     : stateUtil.isToday(state, dateObject),
-    [classes.gridCell_outOfView] : (
-      scope === SCOPE.DAYS &&
-      !dateUtil.isSameMonth(view, dateObject)
-    ),
+    [classes.gridCell_outOfView] : isOutOfView,
+    [classes.gridCell_selected]  : isSelected,
+    [classes.gridCell_today]     : isToday,
   }
 
   const attributes = isDisabled ? undefined : {
@@ -510,11 +519,11 @@ function createGridCellNode(state, dateObject) {
     createNode(
       {
         [classes.gridCellLabel]        : true,
-        [classes.gridCellLabel_days]   : scope === SCOPE.DAYS,
-        [classes.gridCellLabel_months] : scope === SCOPE.MONTHS,
-        [classes.gridCellLabel_years]  : scope === SCOPE.YEARS,
+        [classes.gridCellLabel_days]   : state.scope === SCOPE.DAYS,
+        [classes.gridCellLabel_months] : state.scope === SCOPE.MONTHS,
+        [classes.gridCellLabel_years]  : state.scope === SCOPE.YEARS,
       },
-      calendarUtil.getLabel(dateObject, scope, language)
+      calendarUtil.getLabel(dateObject, state.scope, state.language)
     ),
     attributes
   )
