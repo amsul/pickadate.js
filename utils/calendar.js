@@ -534,6 +534,62 @@ function isDisabled(dateObject, { disabled, maximum, minimum, scope }) {
 
 
 
+/**
+ * Checks if a date is the same as the "selected" one.
+ * @param  {Date}  dateObject
+ * @param  {SCOPE}  options.scope
+ * @param  {Date}  options.selected
+ * @return {Boolean}
+ */
+function isSelected(dateObject, { scope, selected }) {
+
+  const checker = (
+    scope === SCOPE.YEARS ? dateUtil.isSameYear :
+    scope === SCOPE.MONTHS ? dateUtil.isSameMonth :
+    dateUtil.isSameDate
+  )
+
+  return checker(selected, dateObject)
+
+}
+
+
+
+/**
+ * Checks if a date is the same as "today".
+ * @param  {Date}  dateObject
+ * @param  {SCOPE}  options.scope
+ * @param  {Date}  options.today
+ * @return {Boolean}
+ */
+function isToday(dateObject, { scope, today }) {
+
+  if (scope !== SCOPE.DAYS) {
+    return false
+  }
+
+  return dateUtil.isSameDate(today, dateObject)
+
+}
+
+
+
+/**
+ * Checks if a date is outside the current view.
+ * @param  {Date}  dateObject
+ * @param  {SCOPE}  options.scope
+ * @param  {Date}  options.view
+ * @return {Boolean}
+ */
+function isOutOfView(dateObject, { scope, view }) {
+  return (
+    scope === SCOPE.DAYS &&
+    !dateUtil.isSameMonth(view, dateObject)
+  )
+}
+
+
+
 
 
 /////////////
@@ -574,5 +630,8 @@ module.exports = {
 
   // Checkers
   isDisabled,
+  isOutOfView,
+  isSelected,
+  isToday,
 
 }

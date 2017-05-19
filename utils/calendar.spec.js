@@ -891,4 +891,295 @@ describe('/calendarUtil', () => {
   })
 
 
+
+  describe('#isSelected', () => {
+
+    it(
+      'returns `true` if a date is the same as the "selected" one ' +
+      'with the scope as DAYS',
+    () => {
+
+      const options = {
+        scope    : SCOPE.DAYS,
+        selected : new Date(2013, 3, 20),
+      }
+
+      calendarUtil
+        .isSelected(new Date(2013, 3, 20), options)
+        .should.eql(true)
+
+      calendarUtil
+        .isSelected(new Date(2013, 3, 20, 4, 20), options)
+        .should.eql(true)
+
+    })
+
+
+    it(
+      'returns `false` if a date is not the same as the "selected" one ' +
+      'with the scope as DAYS',
+    () => {
+
+      const options = {
+        scope    : SCOPE.DAYS,
+        selected : new Date(2013, 3, 20),
+      }
+
+      calendarUtil
+        .isSelected(new Date(2013, 3, 19), options)
+        .should.eql(false)
+
+      calendarUtil
+        .isSelected(new Date(2013, 5, 20), options)
+        .should.eql(false)
+
+      calendarUtil
+        .isSelected(new Date(2012, 3, 20, 4, 20), options)
+        .should.eql(false)
+
+    })
+
+
+    it(
+      'returns `true` if a date is the same as the "selected" one ' +
+      'with the scope as MONTHS',
+    () => {
+
+      const options = {
+        scope    : SCOPE.MONTHS,
+        selected : new Date(2013, 3, 20),
+      }
+
+      calendarUtil
+        .isSelected(new Date(2013, 3, 20), options)
+        .should.eql(true)
+
+      calendarUtil
+        .isSelected(new Date(2013, 3, 24), options)
+        .should.eql(true)
+
+      calendarUtil
+        .isSelected(new Date(2013, 3, 13, 4, 20), options)
+        .should.eql(true)
+
+    })
+
+
+    it(
+      'returns `false` if a date is not the same as the "selected" one ' +
+      'with the scope as MONTHS',
+    () => {
+
+      const options = {
+        scope    : SCOPE.MONTHS,
+        selected : new Date(2013, 3, 20),
+      }
+
+      calendarUtil
+        .isSelected(new Date(2013, 2, 20), options)
+        .should.eql(false)
+
+      calendarUtil
+        .isSelected(new Date(2013, 5, 20), options)
+        .should.eql(false)
+
+      calendarUtil
+        .isSelected(new Date(2012, 2, 29, 4, 20), options)
+        .should.eql(false)
+
+    })
+
+
+    it(
+      'returns `true` if a date is the same as the "selected" one ' +
+      'with the scope as YEARS',
+    () => {
+
+      const options = {
+        scope    : SCOPE.YEARS,
+        selected : new Date(2013, 3, 20),
+      }
+
+      calendarUtil
+        .isSelected(new Date(2013, 5, 20), options)
+        .should.eql(true)
+
+      calendarUtil
+        .isSelected(new Date(2013, 0, 24), options)
+        .should.eql(true)
+
+      calendarUtil
+        .isSelected(new Date(2013, 11, 13, 4, 20), options)
+        .should.eql(true)
+
+    })
+
+
+    it(
+      'returns `false` if a date is not the same as the "selected" one ' +
+      'with the scope as YEARS',
+    () => {
+
+      const options = {
+        scope    : SCOPE.YEARS,
+        selected : new Date(2013, 3, 20),
+      }
+
+      calendarUtil
+        .isSelected(new Date(2012, 3, 20), options)
+        .should.eql(false)
+
+      calendarUtil
+        .isSelected(new Date(2015, 5, 20), options)
+        .should.eql(false)
+
+      calendarUtil
+        .isSelected(new Date(2012, 2, 29, 4, 20), options)
+        .should.eql(false)
+
+    })
+
+  })
+
+
+
+  describe('#isToday', () => {
+
+    it(
+      'returns `true` if a certain date is the same as "today" ' +
+      'with the scope as DAYS',
+    () => {
+
+      const options = {
+        scope : SCOPE.DAYS,
+        today : new Date(2013, 3, 20),
+      }
+
+      calendarUtil
+        .isToday(new Date(2013, 3, 20), options)
+        .should.eql(true)
+
+      calendarUtil
+        .isToday(new Date(2013, 3, 20, 4, 20), options)
+        .should.eql(true)
+
+    })
+
+
+    it(
+      'returns `false` if a certain date is not the same as "today" ' +
+      'with the scope as DAYS',
+    () => {
+
+      const options = {
+        scope : SCOPE.DAYS,
+        today : new Date(2013, 3, 20),
+      }
+
+      calendarUtil
+        .isToday(new Date(2013, 3, 19), options)
+        .should.eql(false)
+
+      calendarUtil
+        .isToday(new Date(2013, 2, 20, 4, 20), options)
+        .should.eql(false)
+
+    })
+
+
+    it('returns `false` if the scope is MONTHS', () => {
+
+      const options = {
+        scope : SCOPE.MONTHS,
+        today : new Date(2013, 3, 20),
+      }
+
+      calendarUtil
+        .isToday(new Date(2013, 3, 20), options)
+        .should.eql(false)
+
+    })
+
+
+    it('returns `false` if the scope is YEARS', () => {
+
+      const options = {
+        scope : SCOPE.YEARS,
+        today : new Date(2013, 3, 20),
+      }
+
+      calendarUtil
+        .isToday(new Date(2013, 3, 20), options)
+        .should.eql(false)
+
+    })
+
+  })
+
+
+
+  describe('#isOutOfView', () => {
+
+    it(
+      'returns `true` if the scope is DAYS and the date is out of view',
+    () => {
+
+      const options = {
+        scope : SCOPE.DAYS,
+        view : new Date(2013, 3, 20),
+      }
+
+      calendarUtil
+        .isOutOfView(new Date(2013, 2, 31), options)
+        .should.eql(true)
+
+    })
+
+
+    it(
+      'returns `false` if the scope is DAYS and the date is not out of view',
+    () => {
+
+      const options = {
+        scope : SCOPE.DAYS,
+        view : new Date(2013, 3, 20),
+      }
+
+      calendarUtil
+        .isOutOfView(new Date(2013, 3, 1), options)
+        .should.eql(false)
+
+    })
+
+
+    it('returns `false` if the scope is MONTHS', () => {
+
+      const options = {
+        scope : SCOPE.MONTHS,
+        view : new Date(2013, 3, 20),
+      }
+
+      calendarUtil
+        .isOutOfView(new Date(2013, 2, 31), options)
+        .should.eql(false)
+
+    })
+
+
+    it('returns `false` if the scope is YEARS', () => {
+
+      const options = {
+        scope : SCOPE.YEARS,
+        view : new Date(2013, 3, 20),
+      }
+
+      calendarUtil
+        .isOutOfView(new Date(2013, 2, 31), options)
+        .should.eql(false)
+
+    })
+
+  })
+
+
 })
