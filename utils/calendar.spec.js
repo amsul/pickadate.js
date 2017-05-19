@@ -52,7 +52,9 @@ describe('/calendarUtil', () => {
 
   describe('#getDatesForRows', () => {
 
-    it('gets the dates for rows of years, with the state scope of YEARS ', () => {
+    it(
+      'gets the dates for rows of years, with the state scope of YEARS ',
+    () => {
 
       const year  = 2014
       const month = 3
@@ -87,7 +89,9 @@ describe('/calendarUtil', () => {
     })
 
 
-    it('gets the dates for rows of months, with the state scope of MONTHS', () => {
+    it(
+      'gets the dates for rows of months, with the state scope of MONTHS',
+    () => {
 
       const year = 2014
 
@@ -226,7 +230,10 @@ describe('/calendarUtil', () => {
         ],
       ]
 
-      const datesForRowsOfYears = calendarUtil.getDatesForRowsOfYears(year, month)
+      const datesForRowsOfYears = calendarUtil.getDatesForRowsOfYears(
+        year,
+        month
+      )
 
       datesForRowsOfYears.should.eql(expectedDatesForRowsOfYears)
 
@@ -337,7 +344,10 @@ describe('/calendarUtil', () => {
         ],
       ]
 
-      const datesForRowsOfWeeks = calendarUtil.getDatesForRowsOfWeeks(year, month)
+      const datesForRowsOfWeeks = calendarUtil.getDatesForRowsOfWeeks(
+        year,
+        month
+      )
 
       datesForRowsOfWeeks.should.eql(expectedDatesForRowsOfWeeks)
 
@@ -366,7 +376,11 @@ describe('/calendarUtil', () => {
           new Date(year, month, 3 + (weekIndex * 7)),
         ]
 
-        const datesForWeek = calendarUtil.getDatesForWeek(year, month, weekIndex)
+        const datesForWeek = calendarUtil.getDatesForWeek(
+          year,
+          month,
+          weekIndex
+        )
 
         datesForWeek.should.eql(expectedDatesForWeek)
 
