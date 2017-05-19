@@ -150,6 +150,27 @@ function removeFromArray(array, value, identity) {
 
 
 
+////////////
+// OBJECT //
+////////////
+
+
+
+/**
+ * Checks if any of the specified keys of two objects has changed.
+ * @param  {Object}    one
+ * @param  {Object}    two
+ * @param  {...String} keys
+ * @return {Boolean}
+ */
+function hasChanged(one, two, ...keys) {
+  return keys.some(key => one[key] !== two[key])
+}
+
+
+
+
+
 //////////////
 // FUNCTION //
 //////////////
@@ -192,6 +213,9 @@ module.exports = {
   addToArray,
   isIncluded,
   removeFromArray,
+
+  // Object
+  hasChanged,
 
   // Function
   triggerAll,

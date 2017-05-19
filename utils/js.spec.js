@@ -219,6 +219,46 @@ describe('/jsUtil', () => {
 
 
 
+  ////////////
+  // OBJECT //
+  ////////////
+
+
+
+  describe('#hasChanged', () => {
+
+    it(
+      'returns `true` if any specified keys of two objects have changed',
+    () => {
+
+      const one = { 0: 'zero', 1: 'one', 2: 'two', 3: 'three' }
+      const two = { ...one, 1: 'ONE' }
+
+      jsUtil.hasChanged(one, two, '0', '1', '2').should.eql(true)
+      jsUtil.hasChanged(one, two, '0', '1').should.eql(true)
+      jsUtil.hasChanged(one, two, '1', '3').should.eql(true)
+
+    })
+
+
+    it(
+      'returns `false` if all specified keys of two objects have not changed',
+    () => {
+
+      const one = { 0: 'zero', 1: 'one', 2: 'two', 3: 'three' }
+      const two = { ...one, 1: 'ONE' }
+
+      jsUtil.hasChanged(one, two, '2', '3').should.eql(false)
+      jsUtil.hasChanged(one, two, '0', '2', '3').should.eql(false)
+
+    })
+
+  })
+
+
+
+
+
   //////////////
   // FUNCTION //
   //////////////
