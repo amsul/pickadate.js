@@ -1111,6 +1111,113 @@ describe('/dateUtil', () => {
 
 
 
+  describe('#isAfter', () => {
+
+    it(
+      'checks if the year of one is after another in the scope of YEARS',
+    () => {
+
+      dateUtil
+        .isAfter(
+          new Date(2014, 3, 20),
+          new Date(2010, 5, 22),
+          SCOPE.YEARS
+        )
+        .should.eql(true)
+
+      dateUtil
+        .isAfter(
+          new Date(2014, 3, 20),
+          new Date(2014, 2, 22),
+          SCOPE.YEARS
+        )
+        .should.eql(false)
+
+    })
+
+
+    it(
+      'checks if the month of one is after another in the scope of MONTHS',
+    () => {
+
+      dateUtil
+        .isAfter(
+          new Date(2014, 3, 20),
+          new Date(2010, 5, 22),
+          SCOPE.MONTHS
+        )
+        .should.eql(true)
+
+      dateUtil
+        .isAfter(
+          new Date(2014, 3, 20),
+          new Date(2014, 2, 22),
+          SCOPE.MONTHS
+        )
+        .should.eql(true)
+
+      dateUtil
+        .isAfter(
+          new Date(2014, 3, 20),
+          new Date(2015, 5, 22),
+          SCOPE.MONTHS
+        )
+        .should.eql(false)
+
+      dateUtil
+        .isAfter(
+          new Date(2014, 3, 20),
+          new Date(2014, 3, 19),
+          SCOPE.MONTHS
+        )
+        .should.eql(false)
+
+    })
+
+
+    it('checks if the year of one is after another', () => {
+
+      dateUtil
+        .isAfter(
+          new Date(2014, 3, 20),
+          new Date(2010, 5, 22),
+        )
+        .should.eql(true)
+
+      dateUtil
+        .isAfter(
+          new Date(2014, 3, 20),
+          new Date(2014, 2, 22),
+        )
+        .should.eql(true)
+
+      dateUtil
+        .isAfter(
+          new Date(2014, 3, 20),
+          new Date(2014, 3, 19),
+        )
+        .should.eql(true)
+
+      dateUtil
+        .isAfter(
+          new Date(2014, 3, 20),
+          new Date(2014, 3, 20),
+        )
+        .should.eql(false)
+
+      dateUtil
+        .isAfter(
+          new Date(2014, 3, 20),
+          new Date(2015, 4, 22),
+        )
+        .should.eql(false)
+
+    })
+
+  })
+
+
+
   describe('#isBefore', () => {
 
     it(

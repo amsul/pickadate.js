@@ -680,6 +680,34 @@ function getShortDayName(language, day) {
 
 
 /**
+ * Checks if one date is after another, given a certain scope.
+ * @param  {Date}  one
+ * @param  {Date}  two
+ * @param  {SCOPE} [scope]
+ * @return {Boolean}
+ */
+function isAfter(one, two, scope) {
+
+  if (scope === SCOPE.YEARS) {
+    return one.getFullYear() > two.getFullYear()
+  }
+
+  if (scope === SCOPE.MONTHS) {
+    return (
+      one.getFullYear() > two.getFullYear()
+      ||
+      one.getFullYear() === two.getFullYear() &&
+      one.getMonth() > two.getMonth()
+    )
+  }
+
+  return one > two
+
+}
+
+
+
+/**
  * Checks if one date is before another, given a certain scope.
  * @param  {Date}  one
  * @param  {Date}  two
@@ -799,6 +827,7 @@ module.exports = {
   getShortDayNames,
 
   // Checkers
+  isAfter,
   isBefore,
   isSameDate,
   isSameMonth,
