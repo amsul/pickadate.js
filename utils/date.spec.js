@@ -1,6 +1,7 @@
 const sinon    = require('sinon')
 
 const LANGUAGE = require('constants/language')
+const SCOPE    = require('constants/scope')
 const dateUtil = require('utils/date')
 
 
@@ -772,6 +773,113 @@ describe('/dateUtil', () => {
   //////////////
   // CHECKERS //
   //////////////
+
+
+
+  describe('#isBefore', () => {
+
+    it(
+      'checks if the year of one is before another in the scope of YEARS',
+    () => {
+
+      dateUtil
+        .isBefore(
+          new Date(2010, 5, 22),
+          new Date(2014, 3, 20),
+          SCOPE.YEARS
+        )
+        .should.eql(true)
+
+      dateUtil
+        .isBefore(
+          new Date(2014, 2, 22),
+          new Date(2014, 3, 20),
+          SCOPE.YEARS
+        )
+        .should.eql(false)
+
+    })
+
+
+    it(
+      'checks if the month of one is before another in the scope of MONTHS',
+    () => {
+
+      dateUtil
+        .isBefore(
+          new Date(2010, 5, 22),
+          new Date(2014, 3, 20),
+          SCOPE.MONTHS
+        )
+        .should.eql(true)
+
+      dateUtil
+        .isBefore(
+          new Date(2014, 2, 22),
+          new Date(2014, 3, 20),
+          SCOPE.MONTHS
+        )
+        .should.eql(true)
+
+      dateUtil
+        .isBefore(
+          new Date(2015, 5, 22),
+          new Date(2014, 3, 20),
+          SCOPE.MONTHS
+        )
+        .should.eql(false)
+
+      dateUtil
+        .isBefore(
+          new Date(2014, 3, 19),
+          new Date(2014, 3, 20),
+          SCOPE.MONTHS
+        )
+        .should.eql(false)
+
+    })
+
+
+    it('checks if the year of one is before another', () => {
+
+      dateUtil
+        .isBefore(
+          new Date(2010, 5, 22),
+          new Date(2014, 3, 20),
+        )
+        .should.eql(true)
+
+      dateUtil
+        .isBefore(
+          new Date(2014, 2, 22),
+          new Date(2014, 3, 20),
+        )
+        .should.eql(true)
+
+      dateUtil
+        .isBefore(
+          new Date(2014, 3, 19),
+          new Date(2014, 3, 20),
+        )
+        .should.eql(true)
+
+      dateUtil
+        .isBefore(
+          new Date(2014, 3, 20),
+          new Date(2014, 3, 20),
+        )
+        .should.eql(false)
+
+      dateUtil
+        .isBefore(
+          new Date(2015, 4, 22),
+          new Date(2014, 3, 20),
+        )
+        .should.eql(false)
+
+    })
+
+  })
 
 
 

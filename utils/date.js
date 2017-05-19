@@ -1,5 +1,6 @@
 const DAY    = require('constants/day')
 const MONTH  = require('constants/month')
+const SCOPE  = require('constants/scope')
 const jsUtil = require('utils/js')
 
 
@@ -679,6 +680,34 @@ function getShortDayName(language, day) {
 
 
 /**
+ * Checks if one date is before another, given a certain scope.
+ * @param  {Date}  one
+ * @param  {Date}  two
+ * @param  {SCOPE} [scope]
+ * @return {Boolean}
+ */
+function isBefore(one, two, scope) {
+
+  if (scope === SCOPE.YEARS) {
+    return one.getFullYear() < two.getFullYear()
+  }
+
+  if (scope === SCOPE.MONTHS) {
+    return (
+      one.getFullYear() < two.getFullYear()
+      ||
+      one.getFullYear() === two.getFullYear() &&
+      one.getMonth() < two.getMonth()
+    )
+  }
+
+  return one < two
+
+}
+
+
+
+/**
  * Checks if two dates fall on the same date.
  * @param  {Date}  one
  * @param  {Date}  two
@@ -770,6 +799,7 @@ module.exports = {
   getShortDayNames,
 
   // Checkers
+  isBefore,
   isSameDate,
   isSameMonth,
   isSameYear,
