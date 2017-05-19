@@ -1,8 +1,11 @@
+const sinon        = require('sinon')
+
 const DAY          = require('constants/day')
 const LANGUAGE     = require('constants/language')
 const MONTH        = require('constants/month')
 const SCOPE        = require('constants/scope')
 const calendarUtil = require('utils/calendar')
+const dateUtil     = require('utils/date')
 
 
 
@@ -742,6 +745,133 @@ describe('/calendarUtil', () => {
         new Date(2014, 3, 20), SCOPE.DAYS, LANGUAGE.ENGLISH
       )
       label.should.eql('20')
+    })
+
+  })
+
+
+
+
+
+  //////////////
+  // CHECKERS //
+  //////////////
+
+
+
+  describe('#isDisabled', () => {
+
+    const disabled = {
+      dates      : [new Date(2017, 3, 20)],
+      days       : [1, 4],
+      exceptions : [new Date(2017, 4, 19)],
+    }
+
+    const options = {
+      disabled,
+      maximum : new Date(2017, 11, 5),
+      minimum : new Date(2017, 0, 3),
+      scope   : SCOPE.DAYS,
+    }
+
+
+    it('returns `true` if the date is included in the disabled days', () => {
+
+      const dateObject = new Date(2017, 4, 22)
+
+      calendarUtil
+        .isDisabled(dateObject, options)
+        .should.eql(true)
+
+    })
+
+
+    it('returns `true` if the date is included in the disabled dates', () => {
+
+      const dateObject = new Date(2017, 3, 20)
+
+      calendarUtil
+        .isDisabled(dateObject, options)
+        .should.eql(true)
+
+    })
+
+
+    it('returns `true` if the date is before the minimum', () => {
+
+      const dateObject = new Date(2016, 3, 20)
+
+      // Create the spy to ensure the date is correctly being checked
+      const isBeforeSpy = sinon.spy(dateUtil, 'isBefore')
+
+      calendarUtil
+        .isDisabled(dateObject, options)
+        .should.eql(true)
+
+      // Ensure the spy was called as expected
+      isBeforeSpy.callCount.should.eql(1)
+      isBeforeSpy.lastCall.args.should.eql([
+        dateObject,
+        options.minimum,
+        options.scope,
+      ])
+
+      // Clean up
+      isBeforeSpy.restore()
+
+    })
+
+
+    it('returns `true` if the date is after the maximum', () => {
+
+      const dateObject = new Date(2018, 3, 20)
+
+      // Create the spy to ensure the date is correctly being checked
+      const isAfterSpy = sinon.spy(dateUtil, 'isAfter')
+
+      calendarUtil
+        .isDisabled(dateObject, options)
+        .should.eql(true)
+
+      // Ensure the spy was called as expected
+      isAfterSpy.callCount.should.eql(1)
+      isAfterSpy.lastCall.args.should.eql([
+        dateObject,
+        options.maximum,
+        options.scope,
+      ])
+
+      // Clean up
+      isAfterSpy.restore()
+
+    })
+
+
+    it(
+      'returns `false` if the date is included in the disabled exceptions',
+    () => {
+
+      const dateObject = new Date(2017, 4, 19)
+
+      calendarUtil
+        .isDisabled(dateObject, options)
+        .should.eql(false)
+
+    })
+
+
+    it(
+      'returns `false` if the date is ' +
+      'not included in the disabled dates, days, and exceptions ' +
+      'nor is it before the minimum or after the maximum',
+    () => {
+
+      const dateObject = new Date(2017, 4, 2)
+
+      calendarUtil
+        .isDisabled(dateObject, options)
+        .should.eql(false)
+
     })
 
   })

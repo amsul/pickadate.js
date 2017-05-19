@@ -490,6 +490,52 @@ function getLabel(dateObject, scope, language) {
 
 
 
+//////////////
+// CHECKERS //
+//////////////
+
+
+
+/**
+ * Checks if a date is disabled.
+ * @param  {Date}  dateObject
+ * @param  {Object}  options.disabled
+ *         {Date[]}  options.disabled.dates
+ *         {Number[]}  options.disabled.days
+ *         {Date[]}  options.disabled.exceptions
+ * @param  {Date}  [options.maximum]
+ * @param  {Date}  [options.minimum]
+ * @param  {SCOPE}  options.scope
+ * @return {Boolean}
+ */
+function isDisabled(dateObject, { disabled, maximum, minimum, scope }) {
+
+  if (
+    jsUtil.isIncluded(
+      disabled.exceptions,
+      dateObject,
+      dateUtil.isSameDate
+    )
+  ) {
+    return false
+  }
+
+  return (
+    jsUtil.isIncluded(disabled.days, dateObject.getDay())
+    ||
+    jsUtil.isIncluded(disabled.dates, dateObject, dateUtil.isSameDate)
+    ||
+    !!minimum && dateUtil.isBefore(dateObject, minimum, scope)
+    ||
+    !!maximum && dateUtil.isAfter(dateObject, maximum, scope)
+  )
+
+}
+
+
+
+
+
 /////////////
 // EXPORTS //
 /////////////
@@ -525,5 +571,8 @@ module.exports = {
 
   // Labels
   getLabel,
+
+  // Checkers
+  isDisabled,
 
 }
