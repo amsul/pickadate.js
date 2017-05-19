@@ -192,7 +192,7 @@ function createScopeButton() {
 
     picker.addStateListener(previousState => {
       if (
-        stateUtil.hasAnyChanged(
+        jsUtil.hasChanged(
           previousState, picker.getState(),
           'language', 'scope', 'selected', 'view'
         )
@@ -308,7 +308,7 @@ function createGridButton() {
 
     picker.addStateListener(previousState => {
       if (
-        stateUtil.hasAnyChanged(
+        jsUtil.hasChanged(
           previousState, picker.getState(),
           'disabled', 'firstDay', 'language', 'scope', 'selected', 'view'
         )

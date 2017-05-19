@@ -1,4 +1,4 @@
-const stateUtil = require('utils/state')
+const jsUtil = require('utils/js')
 
 
 
@@ -9,7 +9,7 @@ module.exports = (inputNode, template) => {
 
     picker.addStateListener(previousState => {
       if (
-        stateUtil.hasAnyChanged(
+        jsUtil.hasChanged(
           previousState, picker.getState(),
           'language', 'selected'
         )
