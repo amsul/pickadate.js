@@ -102,7 +102,10 @@ describe('/jsUtil', () => {
     })
 
 
-    it('checks if a value is included in an array using an identity matching method', () => {
+    it(
+      'checks if a value is included in an array using ' +
+      'an identity matching method',
+    () => {
 
       const object1 = { id: 123 }
       const object2 = { id: 124 }
@@ -183,7 +186,9 @@ describe('/jsUtil', () => {
     })
 
 
-    it('returns the original array if the value is already not included', () => {
+    it(
+      'returns the original array if the value is already not included',
+    () => {
 
       const array = [1, 2, 3]
 
@@ -195,7 +200,9 @@ describe('/jsUtil', () => {
     })
 
 
-    it('removes a value from an array using an identity matching method', () => {
+    it(
+      'removes a value from an array using an identity matching method',
+    () => {
 
       const identity = (item, value) => item.id === value.id
 
@@ -267,7 +274,9 @@ describe('/jsUtil', () => {
 
   describe('#triggerAll', () => {
 
-    it('triggers all methods in the list of methods with certain arguments', () => {
+    it(
+      'triggers all methods in the list of methods with certain arguments',
+    () => {
 
       const stub1   = sinon.stub()
       const stub2   = sinon.stub()
