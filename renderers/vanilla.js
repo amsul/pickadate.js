@@ -483,7 +483,12 @@ function createGridCellNode(state, dateObject) {
 
   const { language, scope, view } = state
 
-  const isDisabled = stateUtil.isDisabled(state, dateObject)
+  const isDisabled = calendarUtil.isDisabled(dateObject, {
+    disabled : state.disabled,
+    maximum  : state.maximum,
+    minimum  : state.minimum,
+    scope    : state.scope,
+  })
 
   const className = {
     [classes.gridCell]           : true,
