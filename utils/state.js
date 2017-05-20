@@ -1,124 +1,65 @@
-const SCOPE    = require('constants/scope')
-const dateUtil = require('utils/date')
-const jsUtil   = require('utils/js')
-
-
-
-/////////////////////
-// CHANGE CHECKERS //
-/////////////////////
+const ACTION      = require('constants/action')
+const STATE       = require('constants/state')
+const rootReducer = require('reducers/root')
+const logUtil     = require('utils/log')
 
 
 
 /**
- * Checks if any of the values of certain state properties have changed.
- * @param  {Object}    previousState
- * @param  {Object}    state
- * @param  {...String} stateKeys A list of the property keys to compare
- * @return {Boolean}
+ * Gets the next state by passing a state through reducers
+ * with a certain action.
+ * @private
+ * @param  {Object} state
+ * @param  {Object} action
+ * @param  {Function} [reducer]
+ * @return {Object}
  */
-function hasAnyChanged(previousState, state, ...stateKeys) {
-  return stateKeys.some(stateKey => previousState[stateKey] !== state[stateKey])
-}
+function getNext(state, action, reducer) {
 
-
-
-
-
-////////////////////
-// STATE CHECKERS //
-////////////////////
-
-
-
-/**
- * Checks if a certain date object is disabled.
- * @param  {Object}  state
- * @param  {Date}  dateObject
- * @return {Boolean}
- */
-function isDisabled(state, dateObject) {
-
-  const { disabled } = state
-
-  if (
-    jsUtil.isIncluded(
-      disabled.exceptions,
-      dateObject,
-      dateUtil.isSameDate
-    )
-  ) {
-    return false
+  /* istanbul ignore if */
+  if (process.env.DEBUG) {
+    console.group('Action dispatched: %o', action.type)
+    console.assert(action.type, 'An undefined action was dispatched')
+    logUtil.payload(action.payload)
   }
 
-  return (
-    jsUtil.isIncluded(disabled.days, dateObject.getDay())
-    ||
-    jsUtil.isIncluded(disabled.dates, dateObject, dateUtil.isSameDate)
-  )
+  const previousState = state
+  state = rootReducer(state, action)
+  state = reducer ? reducer(state, action) : state
 
-}
-
-
-
-/**
- * Checks if a certain date object is the same as the "selected" one.
- * @param  {Object}  state
- * @param  {Date}  dateObject
- * @return {Boolean}
- */
-function isSelected(state, dateObject) {
-
-  const { scope, selected } = state
-
-  const checker = (
-    scope === SCOPE.YEARS ? dateUtil.isSameYear :
-    scope === SCOPE.MONTHS ? dateUtil.isSameMonth :
-    dateUtil.isSameDate
-  )
-
-  return checker(selected, dateObject)
-
-}
-
-
-
-/**
- * Checks if a certain date object is the same as "today".
- * @param  {Object}  state
- * @param  {Date}  dateObject
- * @return {Boolean}
- */
-function isToday(state, dateObject) {
-
-  const { scope, today } = state
-
-  if (scope !== SCOPE.DAYS) {
-    return false
+  /* istanbul ignore if */
+  if (process.env.DEBUG) {
+    logUtil.diff(previousState, state)
+    console.groupEnd()
   }
 
-  return dateUtil.isSameDate(today, dateObject)
+  return state
 
 }
 
 
 
+/**
+ * Gets the initial state with certain changes applied.
+ * @private
+ * @param  {Object} [payload={}]
+ * @param  {Function} [reducer]
+ * @return {Object}
+ */
+function getInitial(payload = {}, reducer) {
 
+  const action = {
+    payload,
+    type: ACTION.TYPE.INITIALIZE,
+  }
 
-/////////////
-// EXPORTS //
-/////////////
+  return getNext(STATE.INITIAL, action, reducer)
+
+}
 
 
 
 module.exports = {
-
-  // Change checkers
-  hasAnyChanged,
-
-  // State checkers
-  isDisabled,
-  isSelected,
-  isToday,
-
+  getInitial,
+  getNext,
 }

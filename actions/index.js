@@ -1,5 +1,5 @@
-const ACTION       = require('constants/action')
-const calendarUtil = require('utils/calendar')
+const ACTION = require('constants/action')
+const PERIOD = require('constants/period')
 
 
 
@@ -11,19 +11,13 @@ const calendarUtil = require('utils/calendar')
 
 /**
  * Returns an action that selects a value.
- * @param  {Object} state
  * @param  {Date|Number|String|null} [value]
- * @param  {String} [template=state.template]
+ * @param  {String} [template]
  * @return {Object}
  */
-const select = (state, value, template = state.template) => ({
+const select = (value, template) => ({
   type    : ACTION.TYPE.SELECT,
-  payload : {
-    language : state.language,
-    scope    : state.scope,
-    template,
-    value,
-  },
+  payload : { template, value },
 })
 
 
@@ -32,73 +26,43 @@ const select = (state, value, template = state.template) => ({
  * Returns an action that clears the value.
  * @return {Object}
  */
-const clear = () => select({}, null)
-
-
-
-
-
-//////////
-// SHOW //
-//////////
+const clear = () => select(null)
 
 
 
 /**
- * Returns an action that selects a scoped value.
- * @param  {Object} state
- * @param  {Date|Number|String} value
- * @param  {String} [template=state.template]
+ * Returns an action that selects a value in a period.
+ * @param  {PERIOD.ID} period
  * @return {Object}
  */
-const show = (state, value, template = state.template) => ({
-  type    : ACTION.TYPE.SHOW,
-  payload : {
-    language : state.language,
-    scope    : state.scope,
-    template,
-    value,
-  },
+const selectInPeriod = (period) => ({
+  type    : ACTION.TYPE.SELECT_IN_PERIOD,
+  payload : { period },
 })
 
 
 
 /**
- * Returns an action that selects a scoped value from the previous view.
- * @param  {Object} state
+ * Returns an action that selects a value in the previous period.
  * @return {Object}
  */
-const showPrevious = ({ scope, selected, view }) => (
-  show(
-    { scope },
-    calendarUtil.getDateOfPreviousScope(selected || view, scope)
-  )
-)
+const selectInPreviousPeriod = () => selectInPeriod(PERIOD.ID.PREVIOUS)
 
 
 
 /**
- * Returns an action that selects a scoped value from the next view.
- * @param  {Object} state
+ * Returns an action that selects a value in the next period.
  * @return {Object}
  */
-const showNext = ({ scope, selected, view }) => (
-  show(
-    { scope },
-    calendarUtil.getDateOfNextScope(selected || view, scope)
-  )
-)
+const selectInNextPeriod = () => selectInPeriod(PERIOD.ID.NEXT)
 
 
 
 /**
- * Returns an action that selects "today".
- * @param  {Object} state
+ * Returns an action that selects a value in the "today" period.
  * @return {Object}
  */
-const showToday = ({ scope, today }) => (
-  show({ scope }, today)
-)
+const selectInTodayPeriod = () => selectInPeriod(PERIOD.ID.TODAY)
 
 
 
@@ -130,11 +94,10 @@ const cycleScope = () => ({
 
 /**
  * Returns an action that disables dates and days.
- * @param  {Object}    state
  * @param  {...(Date|Number)} values
  * @return {Object}
  */
-const disable = (state, ...values) => ({
+const disable = (...values) => ({
   type    : ACTION.TYPE.DISABLE,
   payload : { values },
 })
@@ -143,11 +106,10 @@ const disable = (state, ...values) => ({
 
 /**
  * Returns an action that enables dates and days.
- * @param  {Object}    state
  * @param  {...(Date|Number)} values
  * @return {Object}
  */
-const enable = (state, ...values) => ({
+const enable = (...values) => ({
   type    : ACTION.TYPE.ENABLE,
   payload : { values },
 })
@@ -164,13 +126,12 @@ const enable = (state, ...values) => ({
 
 /**
  * Returns an action that sets the language.
- * @param  {Object} state
- * @param  {LANGUAGE} value
+ * @param  {LANGUAGE} language
  * @return {Object}
  */
-const setLanguage = (state, value) => ({
+const setLanguage = (language) => ({
   type    : ACTION.TYPE.SET_LANGUAGE,
-  payload : { value },
+  payload : { language },
 })
 
 
@@ -185,13 +146,12 @@ const setLanguage = (state, value) => ({
 
 /**
  * Returns an action that sets the first day of the week.
- * @param  {Number} state
- * @param  {Number} value
+ * @param  {Number} firstDay
  * @return {Object}
  */
-const setFirstDay = (state, value) => ({
+const setFirstDay = (firstDay) => ({
   type    : ACTION.TYPE.SET_FIRST_DAY,
-  payload : { value: value % 7 },
+  payload : { firstDay },
 })
 
 
@@ -209,12 +169,9 @@ module.exports = {
   // Select
   clear,
   select,
-
-  // Show
-  show,
-  showNext,
-  showPrevious,
-  showToday,
+  selectInNextPeriod,
+  selectInPreviousPeriod,
+  selectInTodayPeriod,
 
   // Scope
   cycleScope,
@@ -226,7 +183,7 @@ module.exports = {
   // Language
   setLanguage,
 
-  // First day of week
+  // First day
   setFirstDay,
 
 }

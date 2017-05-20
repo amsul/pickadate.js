@@ -1,13 +1,12 @@
-const lolex           = require('lolex')
-const sinon           = require('sinon')
+const lolex         = require('lolex')
+const sinon         = require('sinon')
 
-const actions         = require('actions')
-const ACTION          = require('constants/action')
-const LANGUAGE        = require('constants/language')
-const STATE           = require('constants/state')
-const pickerObject    = require('objects/picker')
-const disabledReducer = require('reducers/disabled')
-const animationUtil   = require('utils/animation')
+const actions       = require('actions')
+const ACTION        = require('constants/action')
+const LANGUAGE      = require('constants/language')
+const pickerObject  = require('objects/picker')
+const animationUtil = require('utils/animation')
+const stateUtil     = require('utils/state')
 
 
 
@@ -35,12 +34,11 @@ describe('/pickerObject', () => {
         'disable',
         'enable',
         'select',
+        'selectInNextPeriod',
+        'selectInPreviousPeriod',
+        'selectInTodayPeriod',
         'setFirstDay',
         'setLanguage',
-        'show',
-        'showNext',
-        'showPrevious',
-        'showToday',
       )
 
       // Ensure the methods are functions
@@ -63,8 +61,7 @@ describe('/pickerObject', () => {
 
       // Ensure it has the expected state
       picker.getState().should.eql({
-        ...STATE.INITIAL,
-        disabled : disabledReducer[ACTION.TYPE.INITIALIZE](),
+        ...stateUtil.getInitial(),
         today    : new Date(2014, 3, 20),
         view     : new Date(2014, 3, 1),
       })
@@ -75,25 +72,26 @@ describe('/pickerObject', () => {
     })
 
 
-    it('creates a picker with an initially changed state', () => {
+    it('creates a picker with an initial payload', () => {
 
       // Create a clock to prevent time from ticking
       const clock = lolex.install(new Date(2014, 3, 20).getTime())
 
-      // Create the initially changed state
-      const stateChanges = {
-        view: new Date(2012, 5, 1),
+      // Create the payload
+      const payload = {
+        template : 'YYYY-MM-DD',
+        selected : new Date(2012, 5, 4),
       }
 
       // Create the picker
-      const picker = pickerObject.create(stateChanges)
+      const picker = pickerObject.create({ payload })
 
       // Ensure it has the expected state
       picker.getState().should.eql({
-        ...STATE.INITIAL,
-        ...stateChanges,
-        disabled : disabledReducer[ACTION.TYPE.INITIALIZE](),
-        today: new Date(2014, 3, 20),
+        ...stateUtil.getInitial(),
+        ...payload,
+        today    : new Date(2014, 3, 20),
+        view     : new Date(2012, 5, 1),
       })
 
       // Uninstall the clock
@@ -109,7 +107,7 @@ describe('/pickerObject', () => {
       const addons = [addon1, addon2]
 
       // Create the picker
-      const picker = pickerObject.create(undefined, { addons })
+      const picker = pickerObject.create({ addons })
 
       // Ensure the addons were called as expected
       addon1.callCount.should.eql(1)
@@ -135,7 +133,7 @@ describe('/pickerObject', () => {
       })
 
       // Create the picker
-      const picker = pickerObject.create(undefined, { reducer })
+      const picker = pickerObject.create({ reducer })
       const state  = picker.getState()
 
       // Ensure the reducer was called as expected
@@ -143,12 +141,8 @@ describe('/pickerObject', () => {
       reducer.lastCall.args.should.eql([
         state,
         {
-          payload: {
-            language : state.language,
-            template : state.template,
-            value    : state.selected,
-          },
-          type: ACTION.TYPE.INITIALIZE,
+          payload : {},
+          type    : ACTION.TYPE.INITIALIZE,
         },
       ])
 
@@ -180,7 +174,7 @@ describe('/pickerObject', () => {
           .should.eql('')
 
         pickerObject
-          .create({ selected: new Date(2014, 3, 20) })
+          .create({ payload: { selected: new Date(2014, 3, 20) } })
           .getValue()
           .should.eql('20 April, 2014')
 
@@ -190,7 +184,7 @@ describe('/pickerObject', () => {
       it('gets the value using a custom template', () => {
 
         const picker = pickerObject.create({
-          selected: new Date(2015, 7, 14),
+          payload: { selected: new Date(2015, 7, 14) },
         })
 
         picker.getValue('YYYY-MM-DD').should.eql('2015-08-14')
@@ -201,7 +195,7 @@ describe('/pickerObject', () => {
       it('gets the value using a custom language', () => {
 
         const picker = pickerObject.create({
-          selected: new Date(2015, 7, 14),
+          payload: { selected: new Date(2015, 7, 14) },
         })
 
         picker.getValue(undefined, LANGUAGE.FRENCH).should.eql('14 Août, 2015')
@@ -214,7 +208,10 @@ describe('/pickerObject', () => {
 
     describe('#dispatch', () => {
 
-      it('dispatches an action and notifies listeners on the next animation frame', () => {
+      it(
+        'dispatches an action and notifies listeners ' +
+        'on the next animation frame'
+      , () => {
 
         // Stub out getFrame
         const getFrameStub = sinon.stub(animationUtil, 'getFrame')
@@ -268,7 +265,7 @@ describe('/pickerObject', () => {
 
         // Dispatch an action
         const value = new Date(2013, 3, 20)
-        picker.dispatch(actions.select(picker.getState(), value))
+        picker.dispatch(actions.select(value))
 
         // Grab the frame callback and trigger it
         const frameCallback = getFrameStub.lastCall.args[1]
@@ -423,7 +420,9 @@ describe('/pickerObject', () => {
       it('is an overloaded method to clear the value', () => {
 
         // Create the picker
-        const picker = pickerObject.create({ selected: new Date(2015, 3, 20) })
+        const picker = pickerObject.create({
+          payload: { selected: new Date(2015, 3, 20) },
+        })
 
         // Stub out dispatch and spy on the clear action
         const dispatchStub = sinon.stub(picker, 'dispatch')
@@ -434,7 +433,7 @@ describe('/pickerObject', () => {
 
         // Ensure the action was called as expected
         clearSpy.callCount.should.eql(1)
-        clearSpy.lastCall.args.should.eql([picker.getState()])
+        clearSpy.lastCall.args.should.eql([])
 
         // Ensure the dispatch was called as expected
         dispatchStub.callCount.should.eql(1)
@@ -460,11 +459,13 @@ describe('/pickerObject', () => {
 
         // Ensure the action was called as expected
         cycleScopeSpy.callCount.should.eql(1)
-        cycleScopeSpy.lastCall.args.should.eql([picker.getState()])
+        cycleScopeSpy.lastCall.args.should.eql([])
 
         // Ensure the dispatch was called as expected
         dispatchStub.callCount.should.eql(1)
-        dispatchStub.lastCall.args.should.eql([cycleScopeSpy.lastCall.returnValue])
+        dispatchStub.lastCall.args.should.eql([
+          cycleScopeSpy.lastCall.returnValue
+        ])
 
       })
     })
@@ -486,7 +487,7 @@ describe('/pickerObject', () => {
 
         // Ensure the action was called as expected
         disableSpy.callCount.should.eql(1)
-        disableSpy.lastCall.args.should.eql([picker.getState(), new Date(2015, 3, 20), 2, 5, new Date(1988, 7, 14)])
+        disableSpy.lastCall.args.should.eql([new Date(2015, 3, 20), 2, 5, new Date(1988, 7, 14)])
 
         // Ensure the dispatch was called as expected
         dispatchStub.callCount.should.eql(1)
@@ -512,7 +513,7 @@ describe('/pickerObject', () => {
 
         // Ensure the action was called as expected
         enableSpy.callCount.should.eql(1)
-        enableSpy.lastCall.args.should.eql([picker.getState(), new Date(2015, 3, 20), 2, 5, new Date(1988, 7, 14)])
+        enableSpy.lastCall.args.should.eql([new Date(2015, 3, 20), 2, 5, new Date(1988, 7, 14)])
 
         // Ensure the dispatch was called as expected
         dispatchStub.callCount.should.eql(1)
@@ -538,11 +539,98 @@ describe('/pickerObject', () => {
 
         // Ensure the action was called as expected
         selectSpy.callCount.should.eql(1)
-        selectSpy.lastCall.args.should.eql([picker.getState(), new Date(2015, 3, 20)])
+        selectSpy.lastCall.args.should.eql([new Date(2015, 3, 20)])
 
         // Ensure the dispatch was called as expected
         dispatchStub.callCount.should.eql(1)
         dispatchStub.lastCall.args.should.eql([selectSpy.lastCall.returnValue])
+
+      })
+    })
+
+
+
+    describe('#selectInNextPeriod', () => {
+      it('is an overloaded method to show the next view', () => {
+
+        // Create the picker
+        const picker = pickerObject.create()
+
+        // Stub out dispatch and spy on the selectInNextPeriod action
+        const dispatchStub = sinon.stub(picker, 'dispatch')
+        const selectInNextPeriodSpy  = sinon.spy(actions, 'selectInNextPeriod')
+
+        // Trigger the overloaded action
+        picker.selectInNextPeriod()
+
+        // Ensure the action was called as expected
+        selectInNextPeriodSpy.callCount.should.eql(1)
+        selectInNextPeriodSpy.lastCall.args.should.eql([])
+
+        // Ensure the dispatch was called as expected
+        dispatchStub.callCount.should.eql(1)
+        dispatchStub.lastCall.args.should.eql([
+          selectInNextPeriodSpy.lastCall.returnValue
+        ])
+
+      })
+    })
+
+
+
+    describe('#selectInPreviousPeriod', () => {
+      it('is an overloaded method to show the previous view', () => {
+
+        // Create the picker
+        const picker = pickerObject.create()
+
+        // Stub out dispatch and spy on the selectInPreviousPeriod action
+        const dispatchStub = sinon.stub(picker, 'dispatch')
+        const selectInPreviousPeriodSpy = sinon.spy(
+          actions,
+          'selectInPreviousPeriod'
+        )
+
+        // Trigger the overloaded action
+        picker.selectInPreviousPeriod()
+
+        // Ensure the action was called as expected
+        selectInPreviousPeriodSpy.callCount.should.eql(1)
+        selectInPreviousPeriodSpy.lastCall.args.should.eql([])
+
+        // Ensure the dispatch was called as expected
+        dispatchStub.callCount.should.eql(1)
+        dispatchStub.lastCall.args.should.eql([
+          selectInPreviousPeriodSpy.lastCall.returnValue
+        ])
+
+      })
+    })
+
+
+
+    describe('#selectInTodayPeriod', () => {
+      it('is an overloaded method to show today', () => {
+
+        // Create the picker
+        const picker = pickerObject.create()
+
+        // Stub out dispatch and spy on the selectInTodayPeriod action
+        const dispatchStub = sinon.stub(picker, 'dispatch')
+        const selectInTodayPeriodSpy = sinon.spy(actions, 'selectInTodayPeriod')
+
+        // Trigger the overloaded action
+        picker.selectInTodayPeriod()
+
+        // Ensure the action was called as expected
+        selectInTodayPeriodSpy.callCount.should.eql(1)
+        selectInTodayPeriodSpy.lastCall.args.should.eql([])
+
+        // Ensure the dispatch was called as expected
+        dispatchStub.callCount.should.eql(1)
+        dispatchStub.lastCall.args.should.eql([
+          selectInTodayPeriodSpy.lastCall.returnValue
+        ])
 
       })
     })
@@ -564,7 +652,7 @@ describe('/pickerObject', () => {
 
         // Ensure the action was called as expected
         setFirstDaySpy.callCount.should.eql(1)
-        setFirstDaySpy.lastCall.args.should.eql([picker.getState(), 3])
+        setFirstDaySpy.lastCall.args.should.eql([3])
 
         // Ensure the dispatch was called as expected
         dispatchStub.callCount.should.eql(1)
@@ -590,115 +678,11 @@ describe('/pickerObject', () => {
 
         // Ensure the action was called as expected
         setLanguageSpy.callCount.should.eql(1)
-        setLanguageSpy.lastCall.args.should.eql([picker.getState(), LANGUAGE.FRENCH])
+        setLanguageSpy.lastCall.args.should.eql([LANGUAGE.FRENCH])
 
         // Ensure the dispatch was called as expected
         dispatchStub.callCount.should.eql(1)
         dispatchStub.lastCall.args.should.eql([setLanguageSpy.lastCall.returnValue])
-
-      })
-    })
-
-
-
-    describe('#show', () => {
-      it('is an overloaded method to show a date', () => {
-
-        // Create the picker
-        const picker = pickerObject.create()
-
-        // Stub out dispatch and spy on the show action
-        const dispatchStub = sinon.stub(picker, 'dispatch')
-        const showSpy      = sinon.spy(actions, 'show')
-
-        // Trigger the overloaded action
-        picker.show(new Date(2015, 3, 20))
-
-        // Ensure the action was called as expected
-        showSpy.callCount.should.eql(1)
-        showSpy.lastCall.args.should.eql([picker.getState(), new Date(2015, 3, 20)])
-
-        // Ensure the dispatch was called as expected
-        dispatchStub.callCount.should.eql(1)
-        dispatchStub.lastCall.args.should.eql([showSpy.lastCall.returnValue])
-
-      })
-    })
-
-
-
-    describe('#showNext', () => {
-      it('is an overloaded method to show the next view', () => {
-
-        // Create the picker
-        const picker = pickerObject.create()
-
-        // Stub out dispatch and spy on the showNext action
-        const dispatchStub = sinon.stub(picker, 'dispatch')
-        const showNextSpy  = sinon.spy(actions, 'showNext')
-
-        // Trigger the overloaded action
-        picker.showNext()
-
-        // Ensure the action was called as expected
-        showNextSpy.callCount.should.eql(1)
-        showNextSpy.lastCall.args.should.eql([picker.getState()])
-
-        // Ensure the dispatch was called as expected
-        dispatchStub.callCount.should.eql(1)
-        dispatchStub.lastCall.args.should.eql([showNextSpy.lastCall.returnValue])
-
-      })
-    })
-
-
-
-    describe('#showPrevious', () => {
-      it('is an overloaded method to show the previous view', () => {
-
-        // Create the picker
-        const picker = pickerObject.create()
-
-        // Stub out dispatch and spy on the showPrevious action
-        const dispatchStub    = sinon.stub(picker, 'dispatch')
-        const showPreviousSpy = sinon.spy(actions, 'showPrevious')
-
-        // Trigger the overloaded action
-        picker.showPrevious()
-
-        // Ensure the action was called as expected
-        showPreviousSpy.callCount.should.eql(1)
-        showPreviousSpy.lastCall.args.should.eql([picker.getState()])
-
-        // Ensure the dispatch was called as expected
-        dispatchStub.callCount.should.eql(1)
-        dispatchStub.lastCall.args.should.eql([showPreviousSpy.lastCall.returnValue])
-
-      })
-    })
-
-
-
-    describe('#showToday', () => {
-      it('is an overloaded method to show today', () => {
-
-        // Create the picker
-        const picker = pickerObject.create()
-
-        // Stub out dispatch and spy on the showToday action
-        const dispatchStub = sinon.stub(picker, 'dispatch')
-        const showTodaySpy = sinon.spy(actions, 'showToday')
-
-        // Trigger the overloaded action
-        picker.showToday()
-
-        // Ensure the action was called as expected
-        showTodaySpy.callCount.should.eql(1)
-        showTodaySpy.lastCall.args.should.eql([picker.getState()])
-
-        // Ensure the dispatch was called as expected
-        dispatchStub.callCount.should.eql(1)
-        dispatchStub.lastCall.args.should.eql([showTodaySpy.lastCall.returnValue])
 
       })
     })

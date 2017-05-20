@@ -4,10 +4,14 @@ const ACTION = require('constants/action')
 
 /**
  * Initializes the date today.
- * @return {Date}
+ * @param  {Object} state
+ * @return {Object}
  */
-function initialize() {
-  return new Date()
+function initialize(state) {
+  return {
+    ...state,
+    today: new Date()
+  }
 }
 
 

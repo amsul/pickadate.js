@@ -1,11 +1,8 @@
 const actions       = require('actions')
-const ACTION        = require('constants/action')
-const STATE         = require('constants/state')
-const reducers      = require('reducers')
 const animationUtil = require('utils/animation')
 const dateUtil      = require('utils/date')
 const jsUtil        = require('utils/js')
-const logUtil       = require('utils/log')
+const stateUtil     = require('utils/state')
 
 
 
@@ -17,13 +14,13 @@ const logUtil       = require('utils/log')
 
 /**
  * Creates a picker.
- * @param  {Object} [stateChanges]
  * @param  {Object} [options={}]
  *         {Function[]} [options.addons]
  *         {Function} [options.reducer]
+ *         {Object} [options.payload]
  * @return {picker}
  */
-function create(stateChanges, options = {}) {
+function create(options = {}) {
 
   /**
    * The collection of state listeners.
@@ -36,7 +33,7 @@ function create(stateChanges, options = {}) {
    * The state of the picker.
    * @type {Object}
    */
-  let state = getInitialState(stateChanges, options.reducer)
+  let state = stateUtil.getInitial(options.payload, options.reducer)
 
   /**
    * The animation frame for notifying the state listeners.
@@ -84,7 +81,7 @@ function create(stateChanges, options = {}) {
    */
   const dispatch = (action) => {
     const previousState = state
-    state = getNextState(state, action, options.reducer)
+    state = stateUtil.getNext(state, action, options.reducer)
     triggerStateListeners(previousState)
   }
 
@@ -123,7 +120,7 @@ function create(stateChanges, options = {}) {
       throw new Error(`The picker property "${actionName}" is already defined`)
     }
     picker[actionName] = (...args) => {
-      picker.dispatch(actions[actionName](state, ...args))
+      picker.dispatch(actions[actionName](...args))
     }
   })
 
@@ -132,63 +129,6 @@ function create(stateChanges, options = {}) {
 
   // Return the final picker api
   return picker
-
-}
-
-
-
-/**
- * Gets the next state by passing a state through reducers
- * with a certain action.
- * @private
- * @param  {Object} state
- * @param  {Object} action
- * @param  {Function} [reducer]
- * @return {Object}
- */
-function getNextState(state, action, reducer) {
-
-  /* istanbul ignore if */
-  if (process.env.DEBUG) {
-    console.group('Action dispatched: %o', action.type)
-    console.assert(action.type, 'An undefined action was dispatched')
-    logUtil.payload(action.payload)
-  }
-
-  const previousState = state
-  state = reducers.reduce(state, action)
-  state = reducer ? reducer(state, action) : state
-
-  /* istanbul ignore if */
-  if (process.env.DEBUG) {
-    logUtil.diff(previousState, state)
-    console.groupEnd()
-  }
-
-  return state
-
-}
-
-
-
-/**
- * Gets the initial state with certain changes applied.
- * @private
- * @param  {Object} [stateChanges]
- * @param  {Function} [reducer]
- * @return {Object}
- */
-function getInitialState(stateChanges, reducer) {
-
-  const state = { ...STATE.INITIAL, ...stateChanges }
-  const { language, selected, template } = state
-
-  const action = {
-    payload : { language, template, value: selected },
-    type    : ACTION.TYPE.INITIALIZE,
-  }
-
-  return getNextState(state, action, reducer)
 
 }
 

@@ -211,7 +211,7 @@ function createScopeButton() {
 function createPreviousButton() {
   return (picker) => {
 
-    const onClick = () => picker.showPrevious()
+    const onClick = () => picker.selectInPreviousPeriod()
 
     const button = createButtonNode(
       [classes.button, classes.button_navigation, classes.button_previous],
@@ -231,7 +231,7 @@ function createPreviousButton() {
 function createTodayButton() {
   return (picker) => {
 
-    const onClick = () => picker.showToday()
+    const onClick = () => picker.selectInTodayPeriod()
 
     const button = createButtonNode(
       [classes.button, classes.button_navigation, classes.button_today],
@@ -251,7 +251,7 @@ function createTodayButton() {
 function createNextButton() {
   return (picker) => {
 
-    const onClick = () => picker.showNext()
+    const onClick = () => picker.selectInNextPeriod()
 
     const button = createButtonNode(
       [classes.button, classes.button_navigation, classes.button_next],

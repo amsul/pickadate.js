@@ -12,7 +12,7 @@ describe('/inputValueAddon', () => {
 
     // Create the picker
     const picker = pickerObject.create({
-      selected: new Date(2015, 3, 20),
+      payload: { selected: new Date(2015, 3, 20) },
     })
 
     // Create the input
@@ -66,7 +66,7 @@ describe('/inputValueAddon', () => {
 
     // Create the picker
     const picker = pickerObject.create({
-      selected: new Date(2015, 3, 20),
+      payload: { selected: new Date(2015, 3, 20) },
     })
 
     // Create the input and template

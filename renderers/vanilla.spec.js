@@ -421,7 +421,7 @@ describe('/vanillaRenderer', () => {
       const getFrameStub = sinon.stub(animationUtil, 'getFrame')
 
       // Trigger a state change
-      picker.show(new Date(2014, 3, 20))
+      picker.select(new Date(2014, 3, 20))
 
       // Grab the frame callback and trigger it
       const frameCallback = getFrameStub.lastCall.args[1]
@@ -470,7 +470,9 @@ describe('/vanillaRenderer', () => {
     it('creates a layout for the "scope" button that renders the "compound" scope element when there is a "selected" state', () => {
 
       // Create the picker and layout
-      const picker = pickerObject.create({ selected: new Date(2014, 3, 20) })
+      const picker = pickerObject.create({
+        payload: { selected: new Date(2014, 3, 20) }
+      })
       const layout = vanillaRenderer.createScopeButton()
 
       // Render the element with the picker
@@ -523,13 +525,20 @@ describe('/vanillaRenderer', () => {
 
       // Ensure the element is what was expected
       element.tagName.should.eql('BUTTON')
-      element.className.should.eql([classes.button, classes.button_navigation, classes.button_previous].join(' '))
+      element.className.should.eql([
+        classes.button,
+        classes.button_navigation,
+        classes.button_previous
+      ].join(' '))
       element.innerHTML.should.eql(chevronLeftIcon)
 
     })
 
 
-    it('creates a layout for the "previous" button component with a click handler that shows the previous view', () => {
+    it(
+      'creates a layout for the "previous" button component ' +
+      'with a click handler that selects in the previous period',
+    () => {
 
       // Create the picker and layout
       const picker = pickerObject.create()
@@ -538,15 +547,18 @@ describe('/vanillaRenderer', () => {
       // Render the element with the picker
       const element = layout(picker)
 
-      // Stub out showPrevious
-      const showPreviousStub = sinon.stub(picker, 'showPrevious')
+      // Stub out selectInPreviousPeriod
+      const selectInPreviousPeriodStub = sinon.stub(
+        picker,
+        'selectInPreviousPeriod'
+      )
 
       // Dispatch the click event on the element
       element.dispatchEvent(new Event('click'))
 
       // Ensure the stub was called
-      showPreviousStub.callCount.should.eql(1)
-      showPreviousStub.lastCall.args.should.eql([])
+      selectInPreviousPeriodStub.callCount.should.eql(1)
+      selectInPreviousPeriodStub.lastCall.args.should.eql([])
 
     })
 
@@ -567,13 +579,20 @@ describe('/vanillaRenderer', () => {
 
       // Ensure the element is what was expected
       element.tagName.should.eql('BUTTON')
-      element.className.should.eql([classes.button, classes.button_navigation, classes.button_today].join(' '))
+      element.className.should.eql([
+        classes.button,
+        classes.button_navigation,
+        classes.button_today
+      ].join(' '))
       element.innerHTML.should.eql(bullsEyeIcon)
 
     })
 
 
-    it('creates a layout for the "today" button component with a click handler that shows today', () => {
+    it(
+      'creates a layout for the "today" button component ' +
+      'with a click handler that selects in the "today" period',
+    () => {
 
       // Create the picker and layout
       const picker = pickerObject.create()
@@ -583,14 +602,14 @@ describe('/vanillaRenderer', () => {
       const element = layout(picker)
 
       // Stub out showToday
-      const showTodayStub = sinon.stub(picker, 'showToday')
+      const selectInTodayPeriodStub = sinon.stub(picker, 'selectInTodayPeriod')
 
       // Dispatch the click event on the element
       element.dispatchEvent(new Event('click'))
 
       // Ensure the stub was called
-      showTodayStub.callCount.should.eql(1)
-      showTodayStub.lastCall.args.should.eql([])
+      selectInTodayPeriodStub.callCount.should.eql(1)
+      selectInTodayPeriodStub.lastCall.args.should.eql([])
 
     })
 
@@ -611,13 +630,20 @@ describe('/vanillaRenderer', () => {
 
       // Ensure the element is what was expected
       element.tagName.should.eql('BUTTON')
-      element.className.should.eql([classes.button, classes.button_navigation, classes.button_next].join(' '))
+      element.className.should.eql([
+        classes.button,
+        classes.button_navigation,
+        classes.button_next
+      ].join(' '))
       element.innerHTML.should.eql(chevronRightIcon)
 
     })
 
 
-    it('creates a layout for the "next" button component with a click handler that shows the next view', () => {
+    it(
+      'creates a layout for the "next" button component ' +
+      'with a click handler that selects in the the next period',
+    () => {
 
       // Create the picker and layout
       const picker = pickerObject.create()
@@ -626,15 +652,15 @@ describe('/vanillaRenderer', () => {
       // Render the element with the picker
       const element = layout(picker)
 
-      // Stub out showNext
-      const showNextStub = sinon.stub(picker, 'showNext')
+      // Stub out selectInNextPeriod
+      const selectInNextPeriodStub = sinon.stub(picker, 'selectInNextPeriod')
 
       // Dispatch the click event on the element
       element.dispatchEvent(new Event('click'))
 
       // Ensure the stub was called
-      showNextStub.callCount.should.eql(1)
-      showNextStub.lastCall.args.should.eql([])
+      selectInNextPeriodStub.callCount.should.eql(1)
+      selectInNextPeriodStub.lastCall.args.should.eql([])
 
     })
 
@@ -728,21 +754,26 @@ describe('/vanillaRenderer', () => {
     })
 
 
-    it('creates a layout for the "grid" button component with a click handler that does nothing for disabled clicks', () => {
+    it(
+      'creates a layout for the "grid" button component ' +
+      'with a click handler that does nothing for disabled clicks',
+    () => {
 
       // Create the picker and layout
       const picker = pickerObject.create()
       const layout = vanillaRenderer.createGridButton()
 
-      // Disable a date and show that month
+      // Disable a date and select that month
       picker.disable(new Date(2015, 3, 20))
-      picker.show(new Date(2015, 3, 1))
+      picker.select(new Date(2015, 3, 1))
 
       // Render the element with the picker
       const element = layout(picker)
 
       // Find the disabled child elements and ensure there's only one
-      const disabledChildElements = element.getElementsByClassName(classes.gridCell_disabled)
+      const disabledChildElements = element.getElementsByClassName(
+        classes.gridCell_disabled
+      )
       disabledChildElements.length.should.eql(1)
 
       // Ensure the disabled child element is the correct one
@@ -907,7 +938,10 @@ describe('/vanillaRenderer', () => {
     })
 
 
-    it('creates a layout for the "grid" button component that renders new children if the "view" state changes', () => {
+    it(
+      'creates a layout for the "grid" button component ' +
+      'that renders new children if the "view" state changes',
+    () => {
 
       // Create the picker and layout
       const picker = pickerObject.create()
@@ -923,7 +957,7 @@ describe('/vanillaRenderer', () => {
       const getFrameStub = sinon.stub(animationUtil, 'getFrame')
 
       // Trigger a state change
-      picker.show(new Date(2014, 3, 20))
+      picker.select(new Date(2014, 3, 20))
 
       // Grab the frame callback and trigger it
       const frameCallback = getFrameStub.lastCall.args[1]
