@@ -25,15 +25,20 @@ const reducer = function(state, action) {
   }
 }
 
-const stateChanges = {
+const payload = {
+  disabled: { dates: [new Date(2014, 4, 20)] },
+  firstDay: 8,
+  minimum: new Date(2014, 3, 12),
   // scope: 'SCOPE_MONTHS',
   selected: '2014 April 20 @ 4:20 p.m.',
   // selected: new Date(2014, 3, 20, 16, 20, 34),
   template: 'YYYY MMMM DD @ h:mm a',
+  today: 'lol'
 }
 
-const picker = window.picker = pickerObject.create(stateChanges, {
+const picker = window.picker = pickerObject.create({
   addons,
+  payload,
   reducer,
 })
 vanillaRenderer.render(parentNode, picker)
