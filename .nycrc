@@ -1,9 +1,12 @@
 {
+  "check-coverage": true,
+  "instrument": false,
   "exclude": [
     "coverage/**",
     "file.js",
     "tests.browser.js",
     "utils/log.js",
     "webpack.config.js"
-  ]
+  ],
+  "sourceMap": false
 }
