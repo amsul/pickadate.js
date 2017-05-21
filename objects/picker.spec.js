@@ -314,7 +314,7 @@ describe('/pickerObject', () => {
         const frameCallback = getFrameStub.lastCall.args[1]
         frameCallback()
 
-        // Ensure all the callbacks were called with the state
+        // Ensure all the listeners were called with the state
         listenerSpy1.callCount.should.eql(1)
         listenerSpy1.lastCall.args.length.should.eql(1)
         listenerSpy1.lastCall.args[0].should.be.exactly(picker.getState())
@@ -324,6 +324,58 @@ describe('/pickerObject', () => {
         listenerSpy3.callCount.should.eql(1)
         listenerSpy3.lastCall.args.length.should.eql(1)
         listenerSpy3.lastCall.args[0].should.be.exactly(picker.getState())
+
+        // Clean up the stub
+        getFrameStub.restore()
+
+      })
+
+
+      it('is passed the previous state since the last notify', () => {
+
+        // Stub out getFrame
+        const getFrameStub = sinon.stub(animationUtil, 'getFrame')
+
+        // Create the picker
+        const picker = pickerObject.create()
+
+        // Grab the initial state
+        const initialState = picker.getState()
+
+        // Create a spy
+        const listenerSpy = sinon.spy()
+
+        // Add the state listener
+        picker.addStateListener(listenerSpy)
+
+        // Dispatch several actions in sync
+        Array.from(Array(10)).forEach(
+          (_, index) => picker.select(new Date(2014, 3, 20 + index))
+        )
+
+        // Grab the frame callback and trigger it
+        getFrameStub.lastCall.args[1]()
+
+        // Ensure the listener was called with the initial state
+        listenerSpy.callCount.should.eql(1)
+        listenerSpy.lastCall.args.length.should.eql(1)
+        listenerSpy.lastCall.args[0].should.be.exactly(initialState)
+
+        // Grab the updated state
+        const updatedState = picker.getState()
+
+        // Dispatch several more actions in sync
+        Array.from(Array(10)).forEach(
+          (_, index) => picker.select(new Date(2014, 4, 20 + index))
+        )
+
+        // Grab the frame callback and trigger it
+        getFrameStub.lastCall.args[1]()
+
+        // Ensure the listener was called with the initial state
+        listenerSpy.callCount.should.eql(2)
+        listenerSpy.lastCall.args.length.should.eql(1)
+        listenerSpy.lastCall.args[0].should.be.exactly(updatedState)
 
         // Clean up the stub
         getFrameStub.restore()
@@ -366,7 +418,7 @@ describe('/pickerObject', () => {
         const frameCallback = getFrameStub.lastCall.args[1]
         frameCallback()
 
-        // Ensure none of the callbacks were called
+        // Ensure none of the listeners were called
         listenerSpy1.callCount.should.eql(0)
         listenerSpy2.callCount.should.eql(0)
         listenerSpy3.callCount.should.eql(0)
@@ -398,7 +450,7 @@ describe('/pickerObject', () => {
         const frameCallback = getFrameStub.lastCall.args[1]
         frameCallback()
 
-        // Ensure the callbacks was not called
+        // Ensure the listeners was not called
         listenerSpy.callCount.should.eql(0)
 
         // Clean up the stub

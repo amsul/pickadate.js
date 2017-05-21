@@ -36,6 +36,12 @@ function create(options = {}) {
   let state = stateUtil.getInitial(options.payload, options.reducer)
 
   /**
+   * The previous state of the picker since the last notify.
+   * @type {Object}
+   */
+  let previousState = state
+
+  /**
    * The animation frame for notifying the state listeners.
    * @private
    * @type {Number}
@@ -45,13 +51,12 @@ function create(options = {}) {
   /**
    * Triggers the state listeners with the previous state.
    * @private
-   * @param  {Object} previousState
    */
-  const triggerStateListeners = (previousState) => {
-    animationFrame = animationUtil.getFrame(
-      animationFrame,
-      () => jsUtil.triggerAll(stateListeners, previousState)
-    )
+  const triggerStateListeners = () => {
+    animationFrame = animationUtil.getFrame(animationFrame, () => {
+      jsUtil.triggerAll(stateListeners, previousState)
+      previousState = state
+    })
   }
 
   /**
@@ -80,9 +85,8 @@ function create(options = {}) {
    *         {Object} [action.payload]
    */
   const dispatch = (action) => {
-    const previousState = state
     state = stateUtil.getNext(state, action, options.reducer)
-    triggerStateListeners(previousState)
+    triggerStateListeners()
   }
 
   /**
