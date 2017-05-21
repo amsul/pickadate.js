@@ -26,9 +26,9 @@
   "scripts": {
     "start": "DEBUG=*,-babel webpack-dev-server --progress --colors --host=0.0.0.0",
     "pretest": "eslint '**/*.js' --max-warnings 92",
-    "test": "NODE_ENV=test NODE_PATH=. mocha $(find . -name '*.spec.js' ! -ipath '*node_modules*') --opts .mocha",
+    "test": "NODE_ENV=test NODE_PATH=. nyc mocha $(find . -name '*.spec.js' ! -ipath '*node_modules*') --opts .mocha",
     "test:cover": "nyc --all --reporter=html --reporter=text yarn test",
-    "test:travis": "yarn test:cover && nyc report --reporter=text-lcov | coveralls"
+    "test:travis": "yarn test && nyc report --reporter=text-lcov | coveralls"
   },
   "devDependencies": {
     "autoprefixer-loader": "3.2.0",

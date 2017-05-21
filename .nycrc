@@ -1,6 +1,6 @@
 {
   "check-coverage": true,
-  "instrument": false,
+  "instrument": true,
   "exclude": [
     "coverage/**",
     "file.js",
@@ -8,5 +8,5 @@
     "utils/log.js",
     "webpack.config.js"
   ],
-  "sourceMap": false
+  "sourceMap": true
 }
