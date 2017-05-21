@@ -204,6 +204,26 @@ describe('/domainReducer.selected', () => {
     })
 
 
+    it('returns the original state if the value cannot be parsed', () => {
+
+      // Freeze time
+      const clock = lolex.install()
+
+      const state = stateUtil.getInitial()
+      const value = 'Value that cannot be parsed'
+
+      const nextState = domainReducer
+        .selected[ACTION.TYPE.SELECT](state, { value })
+
+      nextState.should.be.exactly(state)
+      nextState.should.eql(stateUtil.getInitial())
+
+      // Clean up
+      clock.uninstall()
+
+    })
+
+
     it('returns the original state if the value is disabled', () => {
 
       // Freeze time
@@ -481,6 +501,102 @@ describe('/domainReducer.selected', () => {
       nextState.should.eql({
         ...state,
         selected: new Date(),
+      })
+
+      // Clean up
+      clock.uninstall()
+
+    })
+
+
+    it('clamps the selected date to the PREVIOUS period', () => {
+
+      // Freeze time
+      const clock = lolex.install(new Date(2014, 4, 31).getTime())
+
+      const state  = stateUtil.getInitial()
+      const period = PERIOD.ID.PREVIOUS
+
+      const nextState = domainReducer
+        .selected[ACTION.TYPE.SELECT_IN_PERIOD](state, { period })
+
+      nextState.should.be.not.exactly(state)
+      nextState.should.eql({
+        ...state,
+        selected: new Date(2014, 3, 30),
+      })
+
+      // Clean up
+      clock.uninstall()
+
+    })
+
+
+    it('clamps the selected date to the NEXT period', () => {
+
+      // Freeze time
+      const clock = lolex.install(new Date(2014, 0, 31).getTime())
+
+      const state  = stateUtil.getInitial()
+      const period = PERIOD.ID.NEXT
+
+      const nextState = domainReducer
+        .selected[ACTION.TYPE.SELECT_IN_PERIOD](state, { period })
+
+      nextState.should.be.not.exactly(state)
+      nextState.should.eql({
+        ...state,
+        selected: new Date(2014, 1, 28),
+      })
+
+      // Clean up
+      clock.uninstall()
+
+    })
+
+
+    it('maintains the selected date to the PREVIOUS period', () => {
+
+      // Freeze time
+      const clock = lolex.install(new Date(2014, 4, 31).getTime())
+
+      const state = stateUtil.getInitial({
+        selected: new Date(2014, 4, 5)
+      })
+      const period = PERIOD.ID.PREVIOUS
+
+      const nextState = domainReducer
+        .selected[ACTION.TYPE.SELECT_IN_PERIOD](state, { period })
+
+      nextState.should.be.not.exactly(state)
+      nextState.should.eql({
+        ...state,
+        selected: new Date(2014, 3, 5),
+      })
+
+      // Clean up
+      clock.uninstall()
+
+    })
+
+
+    it('maintains the selected date to the NEXT period', () => {
+
+      // Freeze time
+      const clock = lolex.install(new Date(2014, 0, 31).getTime())
+
+      const state  = stateUtil.getInitial({
+        selected: new Date(2014, 0, 5)
+      })
+      const period = PERIOD.ID.NEXT
+
+      const nextState = domainReducer
+        .selected[ACTION.TYPE.SELECT_IN_PERIOD](state, { period })
+
+      nextState.should.be.not.exactly(state)
+      nextState.should.eql({
+        ...state,
+        selected: new Date(2014, 1, 5),
       })
 
       // Clean up
