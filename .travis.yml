@@ -4,4 +4,4 @@ node_js:
   - 6
   - 5
   - 4
-script: npm run test:travis
+script: yarn test:travis

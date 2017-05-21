@@ -25,12 +25,11 @@
   "bugs": "https://github.com/amsul/pickadate.js/issues",
   "scripts": {
     "start": "DEBUG=*,-babel webpack-dev-server --progress --colors --host=0.0.0.0",
-    "pretest": "eslint \"**/*.js\" --max-warnings 287",
-    "test": "NODE_PATH=. mocha --opts .mocha **/*.spec.js",
-    "test:cover": "NODE_PATH=. istanbul cover _mocha -- --opts .mocha **/*.spec.js",
-    "test:travis": "npm run test:cover && cat coverage/lcov.info | coveralls"
+    "pretest": "eslint '**/*.js' --max-warnings 92",
+    "test": "NODE_ENV=test NODE_PATH=. mocha $(find . -name '*.spec.js' ! -ipath '*node_modules*') --opts .mocha",
+    "test:cover": "nyc --all --reporter=html --reporter=text yarn test",
+    "test:travis": "yarn test:cover && nyc report --reporter=text-lcov | coveralls"
   },
-  "dependencies": {},
   "devDependencies": {
     "autoprefixer-loader": "3.2.0",
     "babel-core": "6.10.4",
@@ -48,13 +47,13 @@
     "exports-loader": "0.6.3",
     "file-loader": "0.8.5",
     "imports-loader": "0.6.5",
-    "istanbul": "1.0.0-alpha.2",
     "jsdom": "9.3.0",
     "jsdom-global": "2.0.0",
     "json-loader": "0.5.4",
     "lolex": "1.5.0",
     "mocha": "2.5.3",
     "mocha-lcov-reporter": "1.2.0",
+    "nyc": "10.3.2",
     "raf": "3.2.0",
     "raw-loader": "0.5.1",
     "should": "9.0.2",

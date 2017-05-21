@@ -1,0 +1,9 @@
+{
+  "exclude": [
+    "coverage/**",
+    "file.js",
+    "tests.browser.js",
+    "utils/log.js",
+    "webpack.config.js"
+  ]
+}

@@ -12,5 +12,6 @@
 node_modules
 
 #testing
+.nyc_output
 coverage
 temp
