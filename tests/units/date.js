@@ -445,7 +445,7 @@ test( '`max`', function() {
     deepEqual( picker.get( 'highlight' ), picker.get( 'now' ), '`highlight` unaffected' )
 
     playdate.setYear( today.getFullYear() )
-    playdate.setMonth( today.getMonth() )
+    playdate.setMonth( today.getMonth(), 1 )
     playdate.setDate( 1 )
     deepEqual( picker.get( 'view' ).obj, playdate, '`view` unaffected' )
     strictEqual( picker.get( 'value' ), '', '`value` unaffected' )
