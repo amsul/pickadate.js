@@ -144,8 +144,9 @@ test( 'Disable today with `min` as `true`', function() {
     var picker = $input.pickadate('picker')
     var highlighted = picker.get('highlight')
 
+    var playdate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1)
     deepEqual(
-        [today.getFullYear(), today.getMonth(), today.getDate() + 1],
+        [playdate.getFullYear(), playdate.getMonth(), playdate.getDate()],
         [highlighted.year, highlighted.month, highlighted.date],
         'Able to disable today'
     )
@@ -1150,9 +1151,13 @@ test( 'Highlight', function() {
 
     $root.find( '.' + $.fn.pickadate.defaults.klass.navPrev ).click()
     playdate.setMonth( playdate.getMonth() - 1 )
+    if ( playdate.getMonth() === today.getMonth() ) {
+        playdate.setDate( 0 )
+    }
     deepEqual( picker.get( 'highlight' ).obj, playdate, 'Previous month: ' + playdate )
     deepEqual( picker.get( 'select' ), null, 'Select unaffected' )
 
+    var day = playdate.getDate()
     playdate.setDate( 1 )
     deepEqual( picker.get( 'view' ).obj, playdate, 'View updated' )
 
@@ -1160,9 +1165,9 @@ test( 'Highlight', function() {
     $root.find( '.' + $.fn.pickadate.defaults.klass.navNext ).click()
     playdate.setMonth( today.getMonth() + 1 )
 
-    playdate = new Date(today.getFullYear(), today.getMonth() + 1, today.getDate())
-    while ( playdate.getMonth() > today.getMonth() + 1 ) {
-        playdate = new Date(playdate.getFullYear(), playdate.getMonth(), playdate.getDate() - 1)
+    playdate = new Date(today.getFullYear(), today.getMonth() + 1, day)
+    if ( playdate.getDate() < day ) {
+        playdate.setDate( 0 )
     }
     deepEqual( picker.get( 'highlight' ).obj, playdate, 'Next month: ' + playdate )
     deepEqual( picker.get( 'select' ), null, 'Select unaffected' )
