@@ -164,8 +164,9 @@ test( 'Disable today with `max` as `true`', function() {
     var picker = $input.pickadate('picker')
     var highlighted = picker.get('highlight')
 
+    var playdate = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1)
     deepEqual(
-        [today.getFullYear(), today.getMonth(), today.getDate() - 1],
+        [playdate.getFullYear(), playdate.getMonth(), playdate.getDate()],
         [highlighted.year, highlighted.month, highlighted.date],
         'Able to disable today'
     )
