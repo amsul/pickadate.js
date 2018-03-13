@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.5.7
+
+- [#809](https://github.com/amsul/pickadate.js/issues/809) Fixed issue where override of selectMonth and selectYear klass breaks picker
+
 ## 3.5.6
 
 - [#667](https://github.com/amsul/pickadate.js/issues/667) Fixed issue where script was executed before `body` was loaded.
@@ -279,6 +283,3 @@ To enable all this goodness, some **backward-incompatible changes** have been in
 ## Older changelogs
 
 If you’re looking for changes in older versions, please [browse the tags](https://github.com/amsul/pickadate.js/tags) for the relevant commit archive and changelog file.
-
-
-
