@@ -1233,9 +1233,9 @@ describe('shadow.Pickadate', function() {
         var pickadate = shadow.Pickadate.create({
             $el: $('<div />'),
             attrs: {
-                view: [2003, 2, 1]
-            },
-            showWeekNumbers: true
+                view: [2003, 2, 1],
+                showWeekNumbers: true
+            }
         })
 
         var gridHeadDates = pickadate.createGridHeadDates()
