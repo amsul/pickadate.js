@@ -30,21 +30,41 @@
 <body>
 
     <section class="section">
+      
+                <script type="text/javascript">
+
+                var today = new Date();
+                var dd = today.getDate();
+                var mm = today.getMonth()+1; //January is 0!
+                var yyyy = today.getFullYear();
+
+                if(dd<10) {
+                    dd='0'+dd
+                } 
+
+                if(mm<10) {
+                    mm='0'+mm
+                } 
+
+                today = dd+'/'+mm+'/'+yyyy;
+
+                </script>
+
 
         <form>
             <fieldset>
                 <h3><label for="input_01">Pick a date. Go ahead...</label></h3>
 
-                <input type="text">
+              
                 <input
                     id="input_01"
                     class="datepicker"
                     name="date"
                     type="text"
-                    autofocuss
-                    value="14 August, 2014"
-                    data-valuee="2014-08-08">
-                <input type="text">
+                    autofocus
+                    value=today
+                    data-value=today>
+               
 
                 <br><br><br><br><br>
                 <!-- <button type="button">Disable all dates</button>
