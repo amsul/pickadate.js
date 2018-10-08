@@ -9,9 +9,8 @@ If there’s anything you’d like to discuss before diving in, you can find us 
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/amsul/pickadate.js)
 
 
-
-<br>
 <a name="bugs"></a>
+
 ## Bug reports
 
 If you believe you’ve found a bug within the repository code:
@@ -25,8 +24,8 @@ If you believe you’ve found a bug within the repository code:
 
 
 
-<br>
 <a name="pull-requests"></a>
+
 ## Pull requests
 
 If you’re submitting a pull request, please respect the coding standards used (indentations, comments, semi-colons, etc) as per the **Golden Rule**:
@@ -47,8 +46,8 @@ A few other things to keep in mind:
 
 
 
-<br>
 <a name="features"></a>
+
 ## Feature requests
 
 Feature requests are welcome. But take a moment to find out whether your idea fits within the scope and aims of this project. It’s up to *you* to make a strong case to the merits of this feature. Please provide as much detail and context as possible.
