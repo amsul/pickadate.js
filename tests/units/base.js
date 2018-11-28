@@ -452,6 +452,37 @@ test( 'Open and close', function() {
 
 
 
+module( 'Overflow hidden', {
+    setup: function() {
+        $DOM.append( $INPUT.clone() )
+        var $input = $DOM.find( 'input' ).pickadate()
+        this.picker = $input.pickadate( 'picker' )
+        $('html, body').css('height', '100%')
+        $('body').css('overflow', 'hidden')
+    },
+    teardown: function() {
+        $('body').css('overflow', '')
+        $('html, body').css('height', '')
+        this.picker.stop()
+        $DOM.empty()
+    }
+})
+
+test( 'Picker does not change the window scrollY', function() {
+    var picker = this.picker
+
+    window.scrollTo(0,500)
+
+    picker.open()
+    picker.close()
+    strictEqual( window.scrollY, 500, 'Kept scrollY untouched' )
+})
+
+
+
+
+
+
 module( 'Base keyboard events', {
     setup: function() {
         $DOM.append( $INPUT.clone() )
