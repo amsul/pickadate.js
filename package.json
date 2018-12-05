@@ -1,0 +1,38 @@
+{
+  "name": "datepicker-state",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.2.0",
+    "@babel/preset-env": "^7.2.0",
+    "@babel/preset-flow": "^7.0.0",
+    "@babel/runtime": "^7.2.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-eslint": "^10.0.1",
+    "babel-jest": "^23.6.0",
+    "eslint": "^5.9.0",
+    "eslint-plugin-flowtype": "^3.2.0",
+    "eslint-plugin-jest": "^22.1.2",
+    "flow-bin": "^0.87.0",
+    "flow-typed": "^2.5.1",
+    "husky": "^1.2.0",
+    "jest": "^23.6.0",
+    "lint-staged": "^8.1.0",
+    "prettier": "^1.15.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,md}": [
+      "prettier --write",
+      "git add"
+    ]
+  }
+}
