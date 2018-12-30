@@ -3,7 +3,24 @@
   "version": "5.0.0-prealpha.0",
   "title": "pickadate.js",
   "description": "The composable date & time picker.",
+  "repository": "https://github.com/amsul/pickadate.js",
+  "author": "Amsul <reach@amsul.ca>",
   "license": "MIT",
+  "scripts": {
+    "prebuild": "rm -rf dist/",
+    "build": "rollup -c",
+    "develop": "watch 'yarn build' lib/.",
+    "format": "prettier --write 'lib/**/*.js'",
+    "prepublish": "yarn format && yarn build",
+    "test": "jest"
+  },
+  "files": [
+    "dist/**",
+    "lib/**"
+  ],
+  "main": "dist/pickadate.js",
+  "homepage": "http://amsul.ca/pickadate.js",
+  "bugs": "https://github.com/amsul/pickadate.js/issues",
   "keywords": [
     "date",
     "time",
@@ -11,21 +28,6 @@
     "input",
     "responsive"
   ],
-  "main": "lib/index.js",
-  "homepage": "http://amsul.ca/pickadate.js",
-  "author": {
-    "name": "Amsul",
-    "email": "reach@amsul.ca",
-    "url": "http://amsul.ca"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/amsul/pickadate.js.git"
-  },
-  "bugs": "https://github.com/amsul/pickadate.js/issues",
-  "scripts": {
-    "test": "jest"
-  },
   "dependencies": {
     "raf": "^3.4.1"
   },
@@ -50,7 +52,8 @@
     "rollup-plugin-babel": "^4.2.0",
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-flow": "^1.1.1",
-    "rollup-plugin-node-resolve": "^4.0.0"
+    "rollup-plugin-node-resolve": "^4.0.0",
+    "watch": "^1.0.2"
   },
   "husky": {
     "hooks": {
