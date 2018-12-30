@@ -1,0 +1,22 @@
+<style>
+  .pickadate--root {
+    width: 420px;
+    height: 420px;
+    border: 1px solid #ccc;
+  }
+  .testing {
+    background: #f0f0f0;
+  }
+</style>
+
+<div id="date-picker"></div>
+<script src="../dist/pickadate.browser.js"></script>
+<script>
+  var datePickerElement = document.getElementById('date-picker')
+  var dateStore = window.pickadate.createDateStore()
+  window.pickadate.renderDatePicker(dateStore, datePickerElement, {
+    className: {
+      root: 'pickadate--root testing'
+    }
+  })
+</script>

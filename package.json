@@ -18,7 +18,7 @@
     "dist/**",
     "lib/**"
   ],
-  "main": "dist/pickadate.js",
+  "main": "dist/pickadate.browser.js",
   "homepage": "http://amsul.ca/pickadate.js",
   "bugs": "https://github.com/amsul/pickadate.js/issues",
   "keywords": [

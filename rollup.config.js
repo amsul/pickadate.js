@@ -4,10 +4,10 @@ import flow from 'rollup-plugin-flow'
 import nodeResolve from 'rollup-plugin-node-resolve'
 
 export default {
-  input: 'lib/index.js',
+  input: 'lib/pickadate/browser.js',
   output: [
     {
-      file: 'dist/pickadate.js',
+      file: 'dist/pickadate.browser.js',
       format: 'umd',
       exports: 'default',
       name: 'pickadate',
