@@ -4,6 +4,7 @@
     flex-direction: column;
     align-items: flex-start;
     align-self: stretch;
+    box-sizing: border-box;
   }
 
   .pickadate--root {
@@ -42,6 +43,18 @@
   }
   .pickadate--grid_cell:hover {
     background: #ddd;
+  }
+  .pickadate--grid_cell__today {
+    border: 1px solid #0089ec;
+  }
+  .pickadate--grid_cell__selected,
+  .pickadate--grid_cell__selected:hover {
+    background: #0089ec;
+    color: #fff;
+    font-weight: bold;
+  }
+  .pickadate--grid_cell__outOfView {
+    opacity: 0.25;
   }
 </style>
 
