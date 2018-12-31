@@ -1,11 +1,39 @@
 <style>
+  .pickadate--element {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: stretch;
+  }
+
   .pickadate--root {
-    width: 420px;
-    height: 420px;
     border: 1px solid #ccc;
   }
-  .testing {
-    background: #f0f0f0;
+  .pickadate--header {
+    flex-direction: row;
+  }
+  .pickadate--body {
+    flex-grow: 1;
+          background: pink;
+  }
+
+  .pickadate--grid {
+    padding: 0;
+    margin: 0;
+    border: 0;
+    flex-grow: 1;
+    align-items: stretch;
+  }
+  .pickadate--grid_row {
+    flex-direction: row;
+    flex-grow: 1;
+    min-height: 24px;
+  }
+  .pickadate--grid_cell {
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    min-width: 24px;
   }
 </style>
 
@@ -14,9 +42,5 @@
 <script>
   var datePickerElement = document.getElementById('date-picker')
   var dateStore = window.pickadate.createDateStore()
-  window.pickadate.renderDatePicker(dateStore, datePickerElement, {
-    className: {
-      root: 'pickadate--root testing'
-    }
-  })
+  window.pickadate.renderDatePicker(dateStore, datePickerElement)
 </script>
