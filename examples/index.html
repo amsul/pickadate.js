@@ -64,9 +64,15 @@
 </style>
 
 <div id="date-picker"></div>
+<br /><br /><br />
+<div id="date-selected"></div>
 <script src="../dist/pickadate.browser.js"></script>
 <script>
   var datePickerElement = document.getElementById('date-picker')
+  var dateSelectedElement = document.getElementById('date-selected')
   var dateStore = window.pickadate.createDateStore()
-  window.pickadate.renderDatePicker(dateStore, datePickerElement)
+  window.pickadate.renderDatePicker(dateStore, datePickerElement, {
+    weekdays: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+  })
+  window.pickadate.renderDate(dateStore, dateSelectedElement)
 </script>
