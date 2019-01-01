@@ -9,7 +9,7 @@
   "scripts": {
     "prebuild": "rm -rf dist/",
     "build": "rollup -c",
-    "develop": "watch 'yarn build' lib/.",
+    "start": "watch 'yarn build' lib/.",
     "format": "prettier --write 'lib/**/*.js'",
     "prepublish": "yarn format && yarn build",
     "test": "jest"
@@ -53,6 +53,7 @@
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-flow": "^1.1.1",
     "rollup-plugin-node-resolve": "^4.0.0",
+    "rollup-plugin-postcss": "^1.6.3",
     "watch": "^1.0.2"
   },
   "husky": {

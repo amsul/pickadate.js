@@ -1,13 +1,14 @@
 import babel from 'rollup-plugin-babel'
 import commonjs from 'rollup-plugin-commonjs'
 import flow from 'rollup-plugin-flow'
+import postcss from 'rollup-plugin-postcss'
 import nodeResolve from 'rollup-plugin-node-resolve'
 
-export default {
-  input: 'lib/pickadate/browser/index.js',
+const getBrowserConfig = (input, output) => ({
+  input: `lib/pickadate/browser/${input}.js`,
   output: [
     {
-      file: 'dist/pickadate/browser.js',
+      file: `dist/pickadate/${output}.js`,
       format: 'umd',
       exports: 'default',
       name: 'pickadate',
@@ -20,5 +21,11 @@ export default {
     }),
     commonjs(),
     nodeResolve(),
+    postcss(),
   ],
-}
+})
+
+export default [
+  getBrowserConfig('index', 'browser'),
+  getBrowserConfig('api', 'browser/vanilla'),
+]
