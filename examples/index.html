@@ -94,5 +94,9 @@
   window.pickadate.renderDatePicker(dateStore, datePickerElement, {
     weekdays: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
   })
-  window.pickadate.renderDate(dateStore, dateSelectedElement)
+  window.pickadate.renderDate(dateStore, dateSelectedElement, {
+    renderFallback: () => {
+      dateSelectedElement.innerHTML = 'None selected'
+    }
+  })
 </script>
