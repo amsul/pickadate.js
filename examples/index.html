@@ -83,20 +83,19 @@
   }
 </style>
 
-<div id="date-picker"></div>
+<div id="picker"></div>
 <br /><br /><br />
-<div id="date-selected"></div>
+<div id="picker-value"></div>
 <script src="../dist/pickadate/browser.js"></script>
 <script>
-  var datePickerElement = document.getElementById('date-picker')
-  var dateSelectedElement = document.getElementById('date-selected')
-  var dateStore = window.pickadate.createDateStore()
-  window.pickadate.renderDatePicker(dateStore, datePickerElement, {
+  var pickerElement = document.getElementById('picker')
+  var pickerValueElement = document.getElementById('picker-value')
+
+  const picker = window.pickadate.create({
     weekdays: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
   })
-  window.pickadate.renderDate(dateStore, dateSelectedElement, {
-    renderFallback: () => {
-      dateSelectedElement.innerHTML = 'None selected'
-    }
+  picker.render(pickerElement)
+  picker.renderValue(pickerValueElement, () => {
+    pickerValueElement.innerHTML = 'None selected'
   })
 </script>
