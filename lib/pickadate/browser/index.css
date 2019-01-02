@@ -31,12 +31,16 @@ button.pickadate--element {
   border: 1px solid #ccc;
   border-radius: 8px;
 }
+.pickadate--header,
+.pickadate--body,
+.pickadate--footer {
+  align-self: stretch;
+}
 .pickadate--header {
   flex-direction: row;
 }
 .pickadate--body {
   flex-grow: 1;
-  align-self: stretch;
 }
 
 .pickadate--button {
@@ -60,7 +64,10 @@ button.pickadate--element {
 }
 .pickadate--button__previous:hover svg,
 .pickadate--button__today:hover svg,
-.pickadate--button__next:hover svg {
+.pickadate--button__next:hover svg,
+.pickadate--button__previous:active svg,
+.pickadate--button__today:active svg,
+.pickadate--button__next:active svg {
   fill: #0089ec;
 }
 .pickadate--button__previous:focus,
@@ -70,11 +77,12 @@ button.pickadate--element {
   border-color: #0089ec;
 }
 .pickadate--button__meridiem {
-  width: 5em;
+  width: 3em;
   border-radius: 4px;
   border: 1px solid transparent;
 }
-.pickadate--button__meridiem:hover {
+.pickadate--button__meridiem:hover,
+.pickadate--button__meridiem:active {
   background: #e5e5e5;
 }
 .pickadate--button__meridiem:focus {
@@ -172,22 +180,31 @@ button.pickadate--element {
 .pickadate--time {
   flex-direction: row;
   align-items: stretch;
+  align-self: stretch;
+  justify-content: center;
 
   border-top: 1px solid #e5e5e5;
-  margin: 0.25em 1em 0;
-  padding: 0.25em 1em 0;
+  margin: 0.5em 5em 0;
+  padding-top: 0.25em;
+
+  font-weight: 500;
 }
 .pickadate--time_unit {
-  margin: 0 0.25em;
+}
+.pickadate--time_unit__hours {
+  margin-right: 0.5em;
+}
+.pickadate--time_unit__minutes {
+  margin-right: 0.25em;
 }
 .pickadate--time_separator {
-  margin: 0 0.25em;
+  margin-right: 0.25em;
   justify-content: center;
   font-weight: bold;
 }
 .pickadate--time_counter {
   position: absolute;
-  right: calc(50% - 2.5em);
+  left: 2px;
   opacity: 0;
 
   border: 0;
@@ -212,12 +229,11 @@ button.pickadate--element {
   height: 0.4375em;
 }
 .pickadate--time_input {
-  width: 100%;
+  width: 4em;
   height: 2.25em;
-  padding: 0;
+  padding: 0 0.25em 0 1.5em;
   border: 1px solid transparent;
-  border-radius: 4px;
-  text-align: center;
+  border-radius: 6px;
 }
 .pickadate--time_input:focus {
   border-color: #0089ec;
