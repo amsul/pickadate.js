@@ -54,6 +54,7 @@
     "rollup-plugin-flow": "^1.1.1",
     "rollup-plugin-node-resolve": "^4.0.0",
     "rollup-plugin-postcss": "^1.6.3",
+    "rollup-plugin-svgo": "^1.0.2",
     "watch": "^1.0.2"
   },
   "husky": {

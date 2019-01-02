@@ -5,10 +5,31 @@
   align-items: flex-start;
   box-sizing: border-box;
 }
+.pickadate--element:focus {
+  z-index: 1;
+}
+input.pickadate--element,
+button.pickadate--element {
+  font: inherit;
+  color: inherit;
+}
+.pickadate--element[hidden] {
+  display: none;
+}
 
 .pickadate--root {
+  font-size: 16px;
+  font-weight: 300;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  max-width: 24em;
+  padding: 0.5em;
   border: 1px solid #ccc;
-  height: 420px;
+  border-radius: 8px;
 }
 .pickadate--header {
   flex-direction: row;
@@ -18,21 +39,68 @@
   align-self: stretch;
 }
 
+.pickadate--button {
+  border: 0;
+  padding: 0;
+  justify-content: center;
+  align-items: center;
+}
+.pickadate--button__previous,
+.pickadate--button__today,
+.pickadate--button__next {
+  height: 2.5em;
+  width: 2.5em;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+.pickadate--button__previous svg,
+.pickadate--button__today svg,
+.pickadate--button__next svg {
+  height: 1.5em;
+}
+.pickadate--button__previous:hover svg,
+.pickadate--button__today:hover svg,
+.pickadate--button__next:hover svg {
+  fill: #0089ec;
+}
+.pickadate--button__previous:focus,
+.pickadate--button__today:focus,
+.pickadate--button__next:focus {
+  outline: none;
+  border-color: #0089ec;
+}
+.pickadate--button__meridiem {
+  width: 5em;
+  border-radius: 4px;
+  border: 1px solid transparent;
+}
+.pickadate--button__meridiem:hover {
+  background: #e5e5e5;
+}
+.pickadate--button__meridiem:focus {
+  border-color: #0089ec;
+  outline: none;
+}
+
 .pickadate--grid {
   padding: 0;
   margin: 0;
-  border: 0;
+  border: 1px solid transparent;
   flex-grow: 1;
   align-self: stretch;
   align-items: stretch;
 }
+.pickadate--grid:focus {
+  outline: none;
+}
 .pickadate--grid_row {
   flex-direction: row;
   flex-grow: 1;
-  min-height: 24px;
+  min-height: 2.25em;
 }
 .pickadate--grid_row__label {
   flex-grow: 0;
+  min-height: 1.325em;
 }
 .pickadate--grid_label,
 .pickadate--grid_cell {
@@ -40,44 +108,122 @@
   align-items: center;
   align-self: stretch;
   flex-grow: 1;
-  min-width: 24px;
+  min-width: 2.25em;
 }
-.pickadate--grid_cell:hover {
-  background: #e5e5e5;
+.pickadate--grid_label {
+  align-self: flex-start;
+  font-size: 0.75em;
+  color: #999;
+  font-weight: 700;
 }
-.pickadate--grid_cell__today {
-  border: 1px solid #0089ec;
+.pickadate--grid_cell {
+  font-size: 1.125em;
+  font-weight: 400;
 }
-.pickadate--grid_cell__selected,
-.pickadate--grid_cell__selected:hover {
+.pickadate--grid_cell div {
+  justify-content: center;
+  align-items: center;
+  width: 2.25em;
+  height: 2.25em;
+  border-radius: 50%;
+}
+.pickadate--grid_cell:hover div,
+.pickadate--grid:focus
+  .pickadate--grid_cell__highlighted:not(.pickadate--grid_cell__selected)
+  div {
+  background: #b1dcfb;
+}
+.pickadate--grid_cell__today div {
+  border: 1px solid #e5e5e5;
+}
+.pickadate--grid_cell__today:hover div,
+.pickadate--grid:focus
+  .pickadate--grid_cell__today.pickadate--grid_cell__highlighted:not(.pickadate--grid_cell__selected)
+  div,
+.pickadate--grid_cell__today.pickadate--grid_cell__selected div {
+  border-color: #0089ec;
+}
+.pickadate--grid_cell__today.pickadate--grid_cell__selected div:after {
+  content: ' ';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  border: 1px solid #fff;
+  border-radius: 50%;
+}
+.pickadate--grid_cell__selected div,
+.pickadate--grid_cell__selected:hover div {
   background: #0089ec;
   color: #fff;
-  font-weight: bold;
-}
-.pickadate--grid_cell__outOfView {
-  opacity: 0.25;
+  font-weight: 600;
 }
 .pickadate--grid_cell__disabled,
-.pickadate--grid_cell__disabled:hover {
+.pickadate--grid_cell__outOfView {
   opacity: 0.25;
+  transform: scale(0.8);
+}
+.pickadate--grid_cell__disabled div,
+.pickadate--grid_cell__disabled:hover div {
   background: #b2b2b2;
 }
 
 .pickadate--time {
   flex-direction: row;
+  align-items: stretch;
+
+  border-top: 1px solid #e5e5e5;
+  margin: 0.25em 1em 0;
+  padding: 0.25em 1em 0;
 }
 .pickadate--time_unit {
+  margin: 0 0.25em;
+}
+.pickadate--time_separator {
+  margin: 0 0.25em;
+  justify-content: center;
+  font-weight: bold;
 }
 .pickadate--time_counter {
   position: absolute;
-  right: 0;
+  right: calc(50% - 2.5em);
+  opacity: 0;
+
+  border: 0;
+  border-radius: 4px;
+  padding: 0 4px;
+  height: calc(50% - 3px);
+  justify-content: center;
+}
+.pickadate--time_counter:hover {
+  background: #e5e5e5;
+}
+.pickadate--time_unit:hover .pickadate--time_counter {
+  opacity: 1;
 }
 .pickadate--time_counter__up {
-  top: 0;
+  top: 2px;
 }
 .pickadate--time_counter__down {
-  bottom: 0;
+  bottom: 2px;
+}
+.pickadate--time_counter svg {
+  height: 0.4375em;
 }
 .pickadate--time_input {
-  height: 40px;
+  width: 100%;
+  height: 2.25em;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  text-align: center;
+}
+.pickadate--time_input:focus {
+  border-color: #0089ec;
+  outline: none;
+}
+.pickadate--time_input:focus ~ .pickadate--time_counter {
+  z-index: 2;
+  opacity: 1;
 }

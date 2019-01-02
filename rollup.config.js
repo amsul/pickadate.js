@@ -3,6 +3,7 @@ import commonjs from 'rollup-plugin-commonjs'
 import flow from 'rollup-plugin-flow'
 import postcss from 'rollup-plugin-postcss'
 import nodeResolve from 'rollup-plugin-node-resolve'
+import svgo from 'rollup-plugin-svgo'
 
 const getBrowserConfig = (input, output) => ({
   input: `lib/pickadate/browser/${input}.js`,
@@ -22,6 +23,7 @@ const getBrowserConfig = (input, output) => ({
     commonjs(),
     nodeResolve(),
     postcss(),
+    svgo(),
   ],
 })
 
