@@ -128,7 +128,7 @@ button.pickadate--element {
   border-radius: 50%;
 }
 .pickadate--grid_cell:hover div,
-.pickadate--grid:focus
+.pickadate--grid:focus:not(:active)
   .pickadate--grid_cell__highlighted:not(.pickadate--grid_cell__selected)
   div {
   background: #b1dcfb;
