@@ -159,7 +159,7 @@ button.pickadate--element {
 .pickadate--grid_cell__today div {
   border: 1px solid #e5e5e5;
 }
-.pickadate--grid_cell__today:hover div,
+.pickadate--grid_cell__today:hover:not(.pickadate--grid_cell__disabled) div,
 .pickadate--grid:focus
   .pickadate--grid_cell__today.pickadate--grid_cell__highlighted:not(.pickadate--grid_cell__selected)
   div,

@@ -13,7 +13,12 @@
   var pickerValueElement = document.getElementById('picker-value')
 
   const picker = window.pickadate.create({
-    weekdays: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+    config: {
+      weekdays: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+    },
+    initialState: {
+      minimum: new Date(),
+    }
   })
   picker.render(pickerElement)
   picker.renderValue(pickerValueElement, () => {
