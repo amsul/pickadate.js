@@ -38,9 +38,24 @@ button.pickadate--element {
 }
 .pickadate--header {
   flex-direction: row;
+  align-items: center;
 }
 .pickadate--body {
   flex-grow: 1;
+}
+
+.pickadate--monthAndYear {
+  flex-grow: 1;
+  flex-direction: row;
+  font-size: 1.125em;
+}
+.pickadate--monthAndYear_month {
+  margin-left: 0.5em;
+  margin-right: 0.325em;
+  font-weight: 500;
+}
+.pickadate--monthAndYear_year {
+  color: #999;
 }
 
 .pickadate--button {
