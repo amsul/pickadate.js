@@ -27,7 +27,8 @@ button.pickadate--element {
   -moz-osx-font-smoothing: grayscale;
 
   max-width: 24em;
-  padding: 0.5em;
+  min-width: 20em;
+  padding: 0.5em 0.5em 0.325em;
   border: 1px solid #ccc;
   border-radius: 8px;
 }
