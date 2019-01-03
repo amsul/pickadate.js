@@ -35,8 +35,10 @@
   },
   "devDependencies": {
     "@babel/core": "^7.2.0",
+    "@babel/plugin-proposal-class-properties": "^7.2.3",
     "@babel/preset-env": "^7.2.0",
     "@babel/preset-flow": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
     "@babel/runtime": "^7.2.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
@@ -44,6 +46,7 @@
     "eslint": "^5.9.0",
     "eslint-plugin-flowtype": "^3.2.0",
     "eslint-plugin-jest": "^22.1.2",
+    "eslint-plugin-react": "^7.12.2",
     "flow-bin": "^0.87.0",
     "flow-typed": "^2.5.1",
     "husky": "^1.2.0",
@@ -54,9 +57,13 @@
     "rollup-plugin-babel": "^4.2.0",
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-flow": "^1.1.1",
+    "rollup-plugin-node-globals": "^1.4.0",
     "rollup-plugin-node-resolve": "^4.0.0",
     "rollup-plugin-postcss": "^1.6.3",
     "rollup-plugin-svgo": "^1.0.2"
+  },
+  "optionalPeerDependencies": {
+    "react": "^15"
   },
   "husky": {
     "hooks": {

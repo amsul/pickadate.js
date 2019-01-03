@@ -1,6 +1,6 @@
 module.exports = {
-  extends: ['eslint:recommended'],
-  plugins: ['flowtype'],
+  extends: ['eslint:recommended', 'plugin:react/recommended'],
+  plugins: ['flowtype', 'react'],
   parser: 'babel-eslint',
   env: {
     browser: true,
