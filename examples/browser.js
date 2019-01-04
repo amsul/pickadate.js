@@ -1,5 +1,6 @@
 const pickerElement = document.getElementById('picker')
 const pickerValueElement = document.getElementById('picker-value')
+const pickerInputElement = document.getElementById('picker-input')
 
 const today = new Date()
 const yy = today.getFullYear()
@@ -24,6 +25,7 @@ const picker = window.pickadate.create({
   },
 })
 picker.render(pickerElement)
-picker.renderValue(pickerValueElement, () => {
-  pickerValueElement.innerHTML = 'None selected'
+picker.subscribeToValue(formattedValue => {
+  pickerValueElement.innerHTML = formattedValue || 'None selected'
+  pickerInputElement.value = formattedValue
 })
