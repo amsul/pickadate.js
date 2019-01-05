@@ -8,7 +8,7 @@ const pickadateInputPickerElement = document.getElementById(
 const inputPicker = window.pickadate.create()
 inputPicker.render(pickadateInputPickerElement)
 pickadateInputPickerElement.addEventListener('change', () => {
-  console.log(inputPicker.store.getState())
+  console.log('input value changed')
 })
 
 const today = new Date()
@@ -32,6 +32,9 @@ const picker = window.pickadate.create({
       [new Date(yy, mm, 26), new Date(yy, mm, 28)],
     ],
   },
+})
+picker.addEventListener('change', () => {
+  console.log('picker value changed')
 })
 picker.render(pickadateElement)
 picker.subscribeToValue(formattedValue => {
