@@ -1,0 +1,6 @@
+{
+  "main": {
+    "Getting Started": ["introduction", "installation", "usage"],
+    "Interfaces": ["interface-javascript", "interface-react-dom", "interface-react-native"]
+  }
+}

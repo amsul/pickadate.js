@@ -1,0 +1,9 @@
+{
+  "arrowParens": "avoid",
+  "printWidth": 80,
+  "parser": "babylon",
+  "semi": false,
+  "singleQuote": true,
+  "jsxSingleQuote": true,
+  "trailingComma": "es5",
+}
