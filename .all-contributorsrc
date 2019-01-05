@@ -1,0 +1,31 @@
+{
+  "projectName": "pickadate.js",
+  "projectOwner": "Amsul",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "contributors": [
+    {
+      "login": "amsul",
+      "name": "amsul",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/685051?v=4",
+      "profile": "http://amsul.ca",
+      "contributions": [
+        "question",
+        "blog",
+        "bug",
+        "code",
+        "design",
+        "doc",
+        "example",
+        "review",
+        "test",
+        "translation",
+        "tutorial"
+      ]
+    }
+  ],
+  "repoType": "github"
+}
