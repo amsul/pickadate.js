@@ -37,6 +37,18 @@
         "code",
         "review"
       ]
+    },
+    {
+      "login": "josephrexme",
+      "name": "Joseph Rex",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/5395567?v=4",
+      "profile": "https://josephrex.me",
+      "contributions": [
+        "question",
+        "bug",
+        "code",
+        "review"
+      ]
     }
   ],
   "repoType": "github"
