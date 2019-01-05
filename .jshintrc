@@ -1,8 +1,0 @@
-{
-    "debug": true,
-    "devel": true,
-    "browser": true,
-    "asi": true,
-    "unused": true,
-    "eqnull": true
-}
