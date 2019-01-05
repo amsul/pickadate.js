@@ -1,0 +1,292 @@
+.pickadate--element {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+.pickadate--element:focus {
+  z-index: 1;
+}
+input.pickadate--element,
+button.pickadate--element {
+  font: inherit;
+  color: inherit;
+}
+.pickadate--element[hidden] {
+  display: none;
+}
+
+.pickadate--root {
+  font-size: 16px;
+  font-weight: 300;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  max-width: 23em;
+  min-width: 20em;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+}
+.pickadate--header,
+.pickadate--body,
+.pickadate--footer {
+  align-self: stretch;
+}
+.pickadate--header {
+  flex-direction: row;
+  align-items: center;
+  padding: 0.5em 0.5em 0;
+}
+.pickadate--body {
+  flex-grow: 1;
+  padding: 0 0.125em;
+}
+.pickadate--footer {
+  margin-top: 0.325em;
+}
+
+.pickadate--monthAndYear {
+  flex-grow: 1;
+  flex-direction: row;
+  font-size: 1.125em;
+}
+.pickadate--monthAndYear_month {
+  margin-left: 0.5em;
+  margin-right: 0.325em;
+  font-weight: 500;
+}
+.pickadate--monthAndYear_year {
+  color: #999;
+}
+
+.pickadate--button {
+  border: 0;
+  padding: 0;
+  justify-content: center;
+  align-items: center;
+}
+.pickadate--button__previous,
+.pickadate--button__today,
+.pickadate--button__next {
+  height: 2.5em;
+  width: 2.5em;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+.pickadate--button__previous svg,
+.pickadate--button__today svg,
+.pickadate--button__next svg {
+  height: 1.5em;
+}
+.pickadate--button__previous:hover svg,
+.pickadate--button__today:hover svg,
+.pickadate--button__next:hover svg,
+.pickadate--button__previous:active svg,
+.pickadate--button__today:active svg,
+.pickadate--button__next:active svg {
+  fill: #0089ec;
+}
+.pickadate--button__previous:focus,
+.pickadate--button__today:focus,
+.pickadate--button__next:focus {
+  outline: none;
+  border-color: #0089ec;
+}
+.pickadate--button__meridiem {
+  width: 3em;
+  border-radius: 4px;
+  border: 1px solid transparent;
+}
+.pickadate--button__meridiem:hover,
+.pickadate--button__meridiem:active {
+  background: #e5e5e5;
+}
+.pickadate--button__meridiem:focus {
+  border-color: #0089ec;
+  outline: none;
+}
+
+.pickadate--grid {
+  padding: 0;
+  margin: 0;
+  border: 1px solid transparent;
+  flex-grow: 1;
+  align-self: stretch;
+  align-items: stretch;
+}
+.pickadate--grid:focus {
+  outline: none;
+}
+.pickadate--grid_row {
+  flex-direction: row;
+  flex-grow: 1;
+  min-height: 2.25em;
+}
+.pickadate--grid_row__label {
+  flex-grow: 0;
+  min-height: 1.325em;
+}
+.pickadate--grid_label,
+.pickadate--grid_cell {
+  justify-content: center;
+  align-items: center;
+  align-self: stretch;
+  flex-grow: 1;
+  min-width: 2.25em;
+}
+.pickadate--grid_label {
+  align-self: flex-start;
+  font-size: 0.75em;
+  color: #999;
+  font-weight: 700;
+}
+.pickadate--grid_cell {
+  font-size: 1.125em;
+  font-weight: 400;
+}
+.pickadate--grid_cell div {
+  justify-content: center;
+  align-items: center;
+  width: 2.25em;
+  height: 2.25em;
+  border-radius: 50%;
+}
+.pickadate--grid_cell:hover div,
+.pickadate--grid:focus:not(:active)
+  .pickadate--grid_cell__highlighted:not(.pickadate--grid_cell__selected)
+  div,
+.pickadate--grid__focused:not(:active)
+  .pickadate--grid_cell__highlighted:not(.pickadate--grid_cell__selected)
+  div {
+  background: #b1dcfb;
+}
+.pickadate--grid_cell__today div {
+  border: 1px solid #e5e5e5;
+}
+.pickadate--grid_cell__today:hover:not(.pickadate--grid_cell__disabled) div,
+.pickadate--grid:focus
+  .pickadate--grid_cell__today.pickadate--grid_cell__highlighted:not(.pickadate--grid_cell__selected)
+  div,
+.pickadate--grid__focused
+  .pickadate--grid_cell__today.pickadate--grid_cell__highlighted:not(.pickadate--grid_cell__selected)
+  div,
+.pickadate--grid_cell__today.pickadate--grid_cell__selected div {
+  border-color: #0089ec;
+}
+.pickadate--grid_cell__today.pickadate--grid_cell__selected div:after {
+  content: ' ';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  border: 1px solid #fff;
+  border-radius: 50%;
+}
+.pickadate--grid_cell__selected div,
+.pickadate--grid_cell__selected:hover div {
+  background: #0089ec;
+  color: #fff;
+  font-weight: 600;
+}
+.pickadate--grid_cell__disabled,
+.pickadate--grid_cell__outOfView {
+  opacity: 0.25;
+  transform: scale(0.8);
+}
+.pickadate--grid_cell__disabled div,
+.pickadate--grid_cell__disabled:hover div {
+  background: #b2b2b2;
+}
+
+.pickadate--time {
+  flex-direction: row;
+  align-items: stretch;
+  align-self: stretch;
+  justify-content: center;
+
+  border-top: 1px solid #e5e5e5;
+  margin: 0 17.5% 0.325em;
+  padding-top: 0.25em;
+
+  font-weight: 500;
+}
+.pickadate--time_unit {
+}
+.pickadate--time_unit__hours {
+  margin-right: 0.5em;
+}
+.pickadate--time_unit__minutes {
+  margin-right: 0.25em;
+}
+.pickadate--time_separator {
+  margin-right: 0.25em;
+  justify-content: center;
+  font-weight: bold;
+}
+.pickadate--time_counter {
+  position: absolute;
+  left: 2px;
+  opacity: 0;
+
+  border: 0;
+  border-radius: 4px;
+  padding: 0 4px;
+  height: calc(50% - 3px);
+  justify-content: center;
+}
+.pickadate--time_counter:hover {
+  background: #e5e5e5;
+}
+.pickadate--time_unit:hover .pickadate--time_counter {
+  opacity: 1;
+}
+.pickadate--time_counter__up {
+  top: 2px;
+}
+.pickadate--time_counter__down {
+  bottom: 2px;
+}
+.pickadate--time_counter svg {
+  height: 0.4375em;
+}
+.pickadate--time_input {
+  width: 4em;
+  height: 2.25em;
+  padding: 0 0.25em 0 1.5em;
+  border: 1px solid transparent;
+  border-radius: 6px;
+}
+.pickadate--time_input:focus {
+  border-color: #0089ec;
+  outline: none;
+}
+.pickadate--time_input:focus ~ .pickadate--time_counter {
+  z-index: 2;
+  opacity: 1;
+}
+
+/**
+ * INPUT PICKER
+ */
+
+.pickadate--input-root {
+  position: absolute;
+  z-index: 1;
+}
+.pickadate--input-root .pickadate--root {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+.pickadate--input-root .pickadate--root__active {
+  max-height: none;
+  opacity: 1;
+  pointer-events: auto;
+}
