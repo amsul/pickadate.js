@@ -1,7 +1,0 @@
-{
-  "name": "pickadate-gh-pages",
-  "devDependencies": {
-    "grunt": "^0.4.5",
-    "shelljs": "^0.3.0"
-  }
-}

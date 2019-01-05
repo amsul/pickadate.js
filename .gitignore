@@ -1,7 +1,7 @@
-_site
-.sass-cache
+dist
+node_modules
+
+*.log
 *.DS_Store
 *.sublime-project
 *.sublime-workspace
-*.log
-node_modules
