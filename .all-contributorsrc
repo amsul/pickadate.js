@@ -25,6 +25,18 @@
         "translation",
         "tutorial"
       ]
+    },
+    {
+      "login": "DanielRuf",
+      "name": "Daniel Ruf",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/827205?v=4",
+      "profile": "https://daniel-ruf.de",
+      "contributions": [
+        "question",
+        "bug",
+        "code",
+        "review"
+      ]
     }
   ],
   "repoType": "github"
