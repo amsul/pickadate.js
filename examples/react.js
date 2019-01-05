@@ -23,6 +23,10 @@ class App extends window.React.Component {
         <br />
         <hr />
         <br />
+        <Pickadate.InputPicker />
+        <br />
+        <hr />
+        <br />
         <Pickadate.DatePicker />
       </div>
     )
