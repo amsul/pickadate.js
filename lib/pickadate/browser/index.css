@@ -159,6 +159,9 @@ button.pickadate--element {
 .pickadate--grid_cell:hover div,
 .pickadate--grid:focus:not(:active)
   .pickadate--grid_cell__highlighted:not(.pickadate--grid_cell__selected)
+  div,
+.pickadate--grid__focused:not(:active)
+  .pickadate--grid_cell__highlighted:not(.pickadate--grid_cell__selected)
   div {
   background: #b1dcfb;
 }
@@ -167,6 +170,9 @@ button.pickadate--element {
 }
 .pickadate--grid_cell__today:hover:not(.pickadate--grid_cell__disabled) div,
 .pickadate--grid:focus
+  .pickadate--grid_cell__today.pickadate--grid_cell__highlighted:not(.pickadate--grid_cell__selected)
+  div,
+.pickadate--grid__focused
   .pickadate--grid_cell__today.pickadate--grid_cell__highlighted:not(.pickadate--grid_cell__selected)
   div,
 .pickadate--grid_cell__today.pickadate--grid_cell__selected div {
@@ -263,4 +269,24 @@ button.pickadate--element {
 .pickadate--time_input:focus ~ .pickadate--time_counter {
   z-index: 2;
   opacity: 1;
+}
+
+/**
+ * INPUT PICKER
+ */
+
+.pickadate--input-root {
+  position: absolute;
+  z-index: 1;
+}
+.pickadate--input-root .pickadate--root {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+.pickadate--input-root .pickadate--root__active {
+  max-height: none;
+  opacity: 1;
+  pointer-events: auto;
 }
