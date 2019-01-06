@@ -1,10 +1,20 @@
-@import url('https://fonts.googleapis.com/css?family=Poppins:400,400i,700,700i');
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,400i,600,600i,700,700i');
 @import url('https://fonts.googleapis.com/css?family=PT+Mono');
+
+/**
+ * BASE
+ */
 
 body {
   font-family: 'Poppins', sans-serif;
+  font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+img,
+svg {
+  vertical-align: middle;
 }
 
 pre,
@@ -15,6 +25,9 @@ pre code.hljs {
   font-size: inherit;
 }
 
+.post {
+  font-size: 18px;
+}
 .post h1 {
   letter-spacing: -1.25px;
 }
@@ -24,6 +37,16 @@ pre code.hljs {
 .post h3 {
   letter-spacing: -0.325px;
 }
+.post p a {
+  text-decoration: underline;
+}
+.post p a:hover {
+  background: hsla(205, 36%, 92%, 1);
+}
+
+/**
+ * CODE DEMOS
+ */
 
 .pickadate-demo {
   border-radius: 12px;
@@ -83,10 +106,382 @@ pre code.hljs {
   color: #707f89;
 }
 
-@media only screen and (min-device-width: 360px) and (max-device-width: 736px) {
+/**
+ * HEADER
+ */
+
+.fixedHeaderContainer {
+  padding: 0;
+  background: url(../img/bg.png) repeat;
+  border-bottom: 1px solid #dadee0;
+}
+.fixedHeaderContainer header > a[href='/pickadate.js/'] {
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
+.navigationSlider {
+  height: auto;
+}
 @media only screen and (min-width: 1024px) {
+  .navigationSlider {
+  }
+}
+
+.navigationSlider .slidingNav ul li a {
+  color: #000;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.325px;
+
+  height: auto;
+  padding: 24px 0 20px;
+  margin-left: 20px;
+}
+@media only screen and (min-width: 1024px) {
+  .navigationSlider .slidingNav ul li a {
+    color: #000;
+  }
+}
+
+.navigationSlider .slidingNav ul li a:hover,
+.navigationSlider .slidingNav ul li a:focus,
+.navigationSlider .slidingNav ul li.siteNavItemActive a,
+.navigationSlider .slidingNav ul li.siteNavGroupActive a {
+  background: none;
+  color: #0474c5;
+}
+
+.navigationSlider .slidingNav ul li.siteNavGroupActive a {
+  position: relative;
+}
+.navigationSlider .slidingNav ul li.siteNavGroupActive a:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 3px;
+  background: #0474c5;
+}
+
+/**
+ * HOME PAGE
+ */
+
+[data-pathname='/pickadate.js/'] {
+  background: url(../img/bg.png) repeat;
+}
+
+[data-pathname='/pickadate.js/'] .fixedHeaderContainer {
+  background: none;
+  border: 0;
+  color: #000;
+}
+[data-pathname='/pickadate.js/']
+  .fixedHeaderContainer
+  header
+  > a[href='/pickadate.js/'] {
+  display: none;
+}
+
+[data-pathname='/pickadate.js/'] .fixedHeaderContainer {
+  position: relative;
+  overflow-x: scroll;
+}
+[data-pathname='/pickadate.js/'] .navigationSlider {
+  margin-left: auto;
+}
+[data-pathname='/pickadate.js/'] .navigationSlider .slidingNav {
+  position: relative;
+}
+[data-pathname='/pickadate.js/'] .navigationSlider .slidingNav ul {
+  margin: 0;
+  background: none;
+}
+[data-pathname='/pickadate.js/'] .navigationSlider .slidingNav ul li a {
+  padding-top: 48px;
+}
+
+[data-pathname='/pickadate.js/'] .navigationSlider .slidingNav {
+  margin-right: 40px;
+}
+@media only screen and (min-width: 480px) {
+  [data-pathname='/pickadate.js/'] .navigationSlider .slidingNav {
+    margin-right: 0;
+  }
+}
+
+[data-pathname='/pickadate.js/'] .navPusher {
+  padding-top: 0;
+  min-height: 0;
+
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+[data-pathname='/pickadate.js/'] .navPusher > :first-child {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  align-items: stretch;
+}
+[data-pathname='/pickadate.js/'] .mainContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+[data-pathname='/pickadate.js/'] .homeHeaderWrapper {
+  flex-grow: 1;
+}
+
+.homeSplash {
+  max-width: 960px;
+  margin: 0 auto 40px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+@media only screen and (min-width: 736px) {
+  .homeSplash {
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-between;
+    flex-grow: 1;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+@media only screen and (min-width: 1024px) {
+  .homeSplash {
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-between;
+    flex-grow: 1;
+  }
+}
+
+.homeSplash_section__left {
+  padding-top: 20px;
+  max-width: 560px;
+}
+@media only screen and (min-width: 736px) {
+  .homeSplash_section__left {
+    margin-right: 20px;
+  }
+}
+@media only screen and (min-width: 1024px) {
+  .homeSplash_section__left {
+    padding-top: 28px;
+  }
+}
+
+.homeSplash_heading {
+  margin: 0;
+  text-align: center;
+}
+@media only screen and (min-width: 736px) {
+  .homeSplash_heading {
+    text-align: left;
+  }
+}
+.homeSplash_heading__secondary {
+  font-weight: 400;
+  font-size: 20px;
+  letter-spacing: -0.75px;
+  line-height: inherit;
+
+  margin-top: 28px;
+}
+@media only screen and (min-width: 736px) {
+  .homeSplash_heading__secondary {
+    font-size: 22px;
+  }
+}
+@media only screen and (min-width: 1024px) {
+  .homeSplash_heading__secondary {
+    font-size: 24px;
+  }
+}
+
+.homeSplash_image {
+  height: 60px;
+}
+@media only screen and (min-width: 480px) {
+  .homeSplash_image {
+    height: 72px;
+  }
+}
+@media only screen and (min-width: 1024px) {
+  .homeSplash_image {
+    height: 84px;
+  }
+}
+
+.homeSplash #index-datepicker .pickadate--root {
+  margin: auto;
+}
+@media only screen and (min-width: 1024px) {
+  .homeSplash #index-datepicker {
+    width: 380px;
+  }
+  .homeSplash #index-datepicker .pickadate--root {
+    margin-left: auto;
+    margin-right: 0;
+  }
+}
+
+.homeCta {
+  margin-top: 32px;
+  margin-bottom: 40px;
+
+  display: flex;
+  justify-content: center;
+}
+@media only screen and (min-width: 736px) {
+  .homeCta {
+    justify-content: flex-start;
+  }
+}
+.homeCta_button {
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  background: #fff;
+  border: 3px solid #0474c5;
+  color: #0474c5;
+
+  height: 48px;
+  border-radius: 24px;
+  padding: 0 24px;
+
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: -0.25px;
+}
+.homeCta_button__primary {
+  background: #0474c5;
+  color: #fff;
+
+  padding: 0 32px;
+  margin-right: 8px;
+}
+.homeCta_button__primary:hover,
+.homeCta_button__primary:focus {
+  color: #fff;
+}
+@media only screen and (min-width: 480px) {
+  .homeCta_button {
+    font-size: 18px;
+    padding: 0 28px;
+    height: 56px;
+    border-radius: 30px;
+  }
+  .homeCta_button__primary {
+    padding: 0 40px;
+    margin-right: 12px;
+  }
+}
+@media only screen and (min-width: 1024px) {
+  .homeCta_button {
+    font-size: 20px;
+    padding: 0 28px;
+    height: 60px;
+    border-radius: 30px;
+  }
+  .homeCta_button__primary {
+    padding: 0 44px;
+    margin-right: 12px;
+  }
+}
+
+.homeCta_button:hover:after,
+.homeCta_button:focus:after {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  border-radius: 28px;
+  background: hsla(205, 96%, 9%, 0.1);
+}
+
+.homeFooter {
+  margin-bottom: 44px;
+}
+.homeFooter-information {
+  margin-bottom: 40px;
+}
+.homeFooter-informationText {
+  margin: 0 0 8px;
+  text-align: center;
+  font-size: 18px;
+  color: #a4adb3;
+}
+.homeFooter-informationText a {
+  color: inherit;
+  text-decoration: underline;
+}
+.homeFooter-informationText a:hover,
+.homeFooter-informationText a:focus {
+  color: #787c80;
+}
+
+.homeFooter-bottom {
+  text-align: center;
+}
+@media only screen and (min-width: 736px) {
+  .homeFooter-bottom {
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.homeFooter-copyright {
+  margin-bottom: 12px;
+}
+@media only screen and (min-width: 736px) {
+  .homeFooter-copyright {
+    margin-bottom: 0;
+  }
+}
+
+.homeFooter-bottom,
+.homeFooter-bottom a {
+  color: #c2c8cc;
+}
+.homeFooter-copyright a {
+  text-decoration: underline;
+}
+.homeFooter-copyright a:hover,
+.homeFooter-copyright a:focus {
+  color: #a4adb3;
+}
+.homeFooter-peace {
+  font-family: 'Zapf Dingbats', dingbats;
+  font-size: 28px;
+  line-height: 0;
+  position: relative;
+  top: 3px;
+}
+.homeFooter-donation {
+}
+.homeFooter-donationText {
+  margin-right: 8px;
+}
+.homeFooter-donation a svg {
+  transition: 0.125s;
+}
+.homeFooter-donation a:hover svg,
+.homeFooter-donation a:focus svg {
+  fill: #74b359;
+}
+
+@media only screen and (min-device-width: 360px) and (max-device-width: 736px) {
 }
 
 @media only screen and (max-width: 1023px) {

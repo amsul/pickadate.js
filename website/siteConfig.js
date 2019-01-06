@@ -1,30 +1,13 @@
-/**
- * Copyright (c) 2017-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
 // See https://docusaurus.io/docs/site-config for all the possible
 // site configuration options.
 
-// List of projects/orgs using your project for the users page.
-const users = [
-  {
-    caption: 'User1',
-    // You will need to prepend the image path with your baseUrl
-    // if it is not '/', like: '/test-site/img/docusaurus.svg'.
-    image: '/img/docusaurus.svg',
-    infoLink: 'https://www.facebook.com',
-    pinned: true,
-  },
-]
+const baseUrl = '/pickadate.js/'
 
 const siteConfig = {
   title: 'pickadate.js',
   tagline: 'The composable date & time picker.',
   url: 'https://amsul.github.io',
-  baseUrl: '/pickadate.js/',
+  baseUrl,
 
   // Used for publishing and more
   projectName: 'pickadate.js',
@@ -33,50 +16,44 @@ const siteConfig = {
   // For no header links in the top nav bar -> headerLinks: [],
   headerLinks: [
     { doc: 'introduction', label: 'Documentation' },
-    { page: 'help', label: 'Help' },
-    { blog: true, label: 'Blog' },
+    { href: 'https://github.com/amsul/pickadate.js', label: 'Discussions' },
+    { href: 'https://github.com/amsul/pickadate.js', label: 'GitHub' },
+    { href: 'https://github.com/amsul/pickadate.js', label: 'v3 Docs' },
   ],
 
-  // If you have users set above, you add it here:
-  users,
-
-  /* path to images for header/footer */
-  headerIcon: 'img/docusaurus.svg',
-  footerIcon: 'img/docusaurus.svg',
+  // Path to images for header/footer
+  headerIcon: 'img/logo.svg',
+  footerIcon: 'img/favicon.svg',
   favicon: 'img/favicon.png',
 
-  /* Colors for website */
-  colors: {
-    // primaryColor: '#0089ec',
-    primaryColor: '#0474c5',
-    secondaryColor: '#3395db',
-  },
+  disableHeaderTitle: true,
 
-  /* Custom fonts for website */
-  /*
-  fonts: {
-    myFont: [
-      "Times New Roman",
-      "Serif"
-    ],
-    myOtherFont: [
-      "-apple-system",
-      "system-ui"
-    ]
+  // Colors for website
+  colors: {
+    primaryColor: '#0474c5',
+    secondaryColor: '#0474c5',
   },
-  */
 
   // This copyright info is used in /core/Footer.js and blog RSS/Atom feeds.
-  copyright: `Copyright © ${new Date().getFullYear()} Your Name or Your Company Name`,
+  copyright: `Copyright © 2012-${new Date().getFullYear()} Amsul and the pickadate.js documentation authors.`,
 
   highlight: {
     // Highlight.js theme to use for syntax highlighting in code blocks.
-    theme: 'default',
+    theme: 'atom-one-dark',
   },
   usePrism: ['html', 'js', 'jsx'],
 
   // Add custom scripts here that would be placed in <script> tags.
-  scripts: ['https://buttons.github.io/buttons.js'],
+  scripts: [
+    {
+      src: `${baseUrl}pickadate--temporary.js`,
+      defer: true,
+    },
+    {
+      src: `${baseUrl}js/custom.js`,
+      defer: true,
+    },
+  ],
 
   // On page navigation for the current documentation page.
   onPageNav: 'separate',
@@ -84,18 +61,8 @@ const siteConfig = {
   cleanUrl: true,
 
   // Open Graph and Twitter card images.
-  ogImage: 'img/docusaurus.png',
-  twitterImage: 'img/docusaurus.png',
-
-  // Show documentation's last contributor's name.
-  // enableUpdateBy: true,
-
-  // Show documentation's last update time.
-  // enableUpdateTime: true,
-
-  // You may provide arbitrary config keys to be used as needed by your
-  // template. For example, if you need your repo's URL...
-  //   repoUrl: 'https://github.com/facebook/test-site',
+  ogImage: 'img/logo.png',
+  twitterImage: 'img/logo.png',
 }
 
 module.exports = siteConfig

@@ -50,8 +50,9 @@
     },
     "links": {
       "Documentation": "Documentation",
-      "Help": "Help",
-      "Blog": "Blog"
+      "Discussions": "Discussions",
+      "GitHub": "GitHub",
+      "v3 Docs": "v3 Docs"
     },
     "categories": {
       "Getting Started": "Getting Started",
