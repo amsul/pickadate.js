@@ -5,6 +5,30 @@
     "previous": "Previous",
     "tagline": "The composable date & time picker.",
     "docs": {
+      "api-config-options": {
+        "title": "List of Configuration Options"
+      },
+      "api-picker": {
+        "title": "The Picker Object"
+      },
+      "api-state-options": {
+        "title": "List of State Options"
+      },
+      "api-store": {
+        "title": "The Store Object"
+      },
+      "api-theming": {
+        "title": "Theming"
+      },
+      "guide-custom-actors": {
+        "title": "Creating Custom Actors"
+      },
+      "guide-initial-state": {
+        "title": "Initializing with a State"
+      },
+      "guide-updating-state": {
+        "title": "Updating the State"
+      },
       "installation": {
         "title": "Installation"
       },
@@ -31,7 +55,9 @@
     },
     "categories": {
       "Getting Started": "Getting Started",
-      "Interfaces": "Interfaces"
+      "Interfaces": "Interfaces",
+      "Guides": "Guides",
+      "API": "API"
     }
   },
   "pages-strings": {

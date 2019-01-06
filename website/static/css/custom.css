@@ -1,4 +1,87 @@
-/* your custom css */
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,400i,700,700i');
+@import url('https://fonts.googleapis.com/css?family=PT+Mono');
+
+body {
+  font-family: 'Poppins', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+pre,
+code,
+pre code,
+pre code.hljs {
+  font-family: 'PT Mono', monospace;
+  font-size: inherit;
+}
+
+.post h1 {
+  letter-spacing: -1.25px;
+}
+.post h2 {
+  letter-spacing: -0.5px;
+}
+.post h3 {
+  letter-spacing: -0.325px;
+}
+
+.pickadate-demo {
+  border-radius: 12px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #242829;
+  background-color: #242829;
+  overflow: hidden;
+  position: relative;
+}
+.pickadate-demo iframe {
+  margin-bottom: -40px;
+}
+.pickadate-demo:before {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  height: 40px;
+  width: 296px;
+  background: #242829;
+}
+
+.hljs {
+  border-radius: 12px;
+  padding: 1.25rem 2rem;
+  color: #f0f0f0;
+}
+.token.property,
+.token.tag,
+.token.boolean,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: #dd4a68;
+}
+.token.selector,
+.token.number,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+  color: #82b125;
+}
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+  color: #3095c0;
+}
+.token.function,
+.token.class-name {
+  color: #dd4a68;
+}
+.token.punctuation {
+  color: #707f89;
+}
 
 @media only screen and (min-device-width: 360px) and (max-device-width: 736px) {
 }

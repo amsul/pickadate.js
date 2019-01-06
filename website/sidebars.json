@@ -1,6 +1,22 @@
 {
   "main": {
     "Getting Started": ["introduction", "installation", "usage"],
-    "Interfaces": ["interface-javascript", "interface-react-dom", "interface-react-native"]
+    "Interfaces": [
+      "interface-javascript",
+      "interface-react-dom",
+      "interface-react-native"
+    ],
+    "Guides": [
+      "guide-initial-state",
+      "guide-updating-state",
+      "guide-custom-actors"
+    ],
+    "API": [
+      "api-theming",
+      "api-state-options",
+      "api-config-options",
+      "api-picker",
+      "api-store"
+    ]
   }
 }
