@@ -24,6 +24,9 @@ pre code.hljs {
   font-family: 'PT Mono', monospace;
   font-size: inherit;
 }
+code {
+  border-radius: 4px;
+}
 
 /**
  * POSTS
@@ -44,8 +47,13 @@ pre code.hljs {
 .post p a {
   text-decoration: underline;
 }
-.post p a:hover {
+.post p a:hover,
+.post p a:focus {
   background: hsla(205, 36%, 92%, 1);
+}
+
+.post .hash-link:focus {
+  opacity: 0.5;
 }
 
 /**
@@ -79,12 +87,10 @@ pre code.hljs {
  * SYNTAX HIGHLIGHTING
  */
 
-code {
-  border-radius: 4px;
-}
 code,
 .hljs {
   background: #eff3f5;
+  position: relative;
 }
 .hljs {
   border-radius: 12px;
@@ -100,6 +106,34 @@ code,
 }
 .token.punctuation {
   color: #a2aeb3;
+}
+
+.hljs.language-js:before,
+.hljs.language-jsx:before,
+.hljs.language-html:before {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  height: 20px;
+  line-height: 20px;
+  border-radius: 10px;
+  background: #9baebb;
+  padding-left: 8px;
+  padding-right: 8px;
+
+  color: #fff;
+  font-size: 10px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+}
+.hljs.language-js:before {
+  content: 'JavaScript';
+}
+.hljs.language-jsx:before {
+  content: 'JSX';
+}
+.hljs.language-html:before {
+  content: 'HTML';
 }
 
 /**
@@ -414,7 +448,7 @@ code,
   margin: 0 0 8px;
   text-align: center;
   font-size: 18px;
-  color: #a4adb3;
+  color: #9baebb;
 }
 .homeFooter-informationText a {
   color: inherit;
@@ -422,7 +456,7 @@ code,
 }
 .homeFooter-informationText a:hover,
 .homeFooter-informationText a:focus {
-  color: #787c80;
+  color: #6a7d90;
 }
 
 .homeFooter-bottom {
@@ -448,14 +482,14 @@ code,
 
 .homeFooter-bottom,
 .homeFooter-bottom a {
-  color: #c2c8cc;
+  color: #bec9cf;
 }
 .homeFooter-copyright a {
   text-decoration: underline;
 }
 .homeFooter-copyright a:hover,
 .homeFooter-copyright a:focus {
-  color: #a4adb3;
+  color: #9baebb;
 }
 .homeFooter-peace {
   font-family: 'Zapf Dingbats', dingbats;

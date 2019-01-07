@@ -35,7 +35,7 @@ const element = document.getElementById('pickadate')
 picker.render(element)
 ```
 
-<div class="pickadate-demo"><iframe src="https://codesandbox.io/embed/2vj4opzp9n?moduleview=1&hidenavigation=1" style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe></div>
+<div class="pickadate-demo"><iframe src="https://codesandbox.io/embed/2vj4opzp9n?moduleview=1&hidenavigation=1" tabindex="-1" style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe></div>
 
 ### Rendering: Input Picker
 
@@ -49,7 +49,7 @@ const element = document.getElementById('pickadate')
 picker.render(element)
 ```
 
-<div class="pickadate-demo"><iframe src="https://codesandbox.io/embed/ko4k4618ov?moduleview=1&hidenavigation=1" style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe></div>
+<div class="pickadate-demo"><iframe src="https://codesandbox.io/embed/ko4k4618ov?moduleview=1&hidenavigation=1" tabindex="-1" style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe></div>
 
 ## React DOM
 
@@ -67,7 +67,7 @@ import Pickadate from 'pickadate/react'
 <Pickadate.DatePicker />
 ```
 
-<div class="pickadate-demo"><iframe src="https://codesandbox.io/embed/q4nl091xwq?moduleview=1&hidenavigation=1" style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe></div>
+<div class="pickadate-demo"><iframe src="https://codesandbox.io/embed/q4nl091xwq?moduleview=1&hidenavigation=1" tabindex="-1" style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe></div>
 
 ### Rendering: Input Picker
 
@@ -75,7 +75,7 @@ import Pickadate from 'pickadate/react'
 <Pickadate.InputPicker />
 ```
 
-<div class="pickadate-demo"><iframe src="https://codesandbox.io/embed/zkqvyypv53?moduleview=1&hidenavigation=1" style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe></div>
+<div class="pickadate-demo"><iframe src="https://codesandbox.io/embed/zkqvyypv53?moduleview=1&hidenavigation=1" tabindex="-1" style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe></div>
 
 ## React Native
 
