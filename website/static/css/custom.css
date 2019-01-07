@@ -25,6 +25,10 @@ pre code.hljs {
   font-size: inherit;
 }
 
+/**
+ * POSTS
+ */
+
 .post {
   font-size: 18px;
 }
@@ -71,10 +75,20 @@ pre code.hljs {
   background: #242829;
 }
 
+/**
+ * SYNTAX HIGHLIGHTING
+ */
+
+code {
+  border-radius: 4px;
+}
+code,
+.hljs {
+  background: #eff3f5;
+}
 .hljs {
   border-radius: 12px;
   padding: 1.25rem 2rem;
-  color: #f0f0f0;
 }
 .token.property,
 .token.tag,
@@ -84,26 +98,8 @@ pre code.hljs {
 .token.deleted {
   color: #dd4a68;
 }
-.token.selector,
-.token.number,
-.token.attr-name,
-.token.string,
-.token.char,
-.token.builtin,
-.token.inserted {
-  color: #82b125;
-}
-.token.atrule,
-.token.attr-value,
-.token.keyword {
-  color: #3095c0;
-}
-.token.function,
-.token.class-name {
-  color: #dd4a68;
-}
 .token.punctuation {
-  color: #707f89;
+  color: #a2aeb3;
 }
 
 /**
