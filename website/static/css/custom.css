@@ -28,6 +28,41 @@ code {
   border-radius: 4px;
 }
 
+blockquote {
+  border-radius: 12px;
+}
+
+table {
+  display: table;
+  border: 1px solid #dadee0;
+  border-radius: 8px;
+  overflow: hidden;
+  width: auto;
+  border-collapse: separate;
+}
+table th {
+  background: #f6f8f8;
+}
+table th,
+table td {
+  border: 0;
+  padding: 8px 12px;
+}
+table tr {
+  border-top: 0;
+}
+table tr:nth-child(2n) {
+  background: transparent;
+}
+
+/**
+ * TABLES
+ */
+
+.table--config-options--classNames + table td:nth-child(3) {
+  min-width: 360px;
+}
+
 /**
  * POSTS
  */
@@ -54,6 +89,19 @@ code {
 
 .post .hash-link:focus {
   opacity: 0.5;
+}
+
+.docs-prevnext .button {
+  border-width: 2px;
+  border-radius: 22px;
+  height: 44px;
+  padding: 0 20px;
+
+  display: flex;
+  align-items: center;
+
+  text-transform: none;
+  font-weight: 600;
 }
 
 /**
