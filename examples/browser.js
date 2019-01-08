@@ -35,6 +35,13 @@ picker.addEventListener('change', () => {
 })
 picker.render(pickadateElement, {
   weekdays: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+  renderCell: ({ dateObject, children }) => {
+    if (dateObject.getDate() === 10) {
+      children.style.color = 'red'
+      return
+    }
+    children.innerHTML = `(${dateObject.getDate()})`
+  },
 })
 
 const renderValue = value => {
