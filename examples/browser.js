@@ -37,7 +37,11 @@ picker.addEventListener('change', () => {
   console.log('picker value changed')
 })
 picker.render(pickadateElement)
-picker.subscribeToValue(formattedValue => {
-  pickadateValueElement.innerHTML = formattedValue || 'None selected'
-  pickadateInputElement.value = formattedValue
-})
+
+const renderValue = value => {
+  pickadateValueElement.innerHTML = value || 'None selected'
+  pickadateInputElement.value = value
+}
+
+renderValue(picker.getValue())
+picker.subscribeToValue(renderValue)
