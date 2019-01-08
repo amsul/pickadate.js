@@ -3,9 +3,6 @@
 const Pickadate = window.pickadate
 
 class App extends window.React.Component {
-  config = {
-    weekdays: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-  }
   initialState = {
     disabled: [3],
   }
@@ -13,7 +10,6 @@ class App extends window.React.Component {
     return (
       <div>
         <Pickadate
-          config={this.config}
           initialState={this.initialState}
           onChange={() => console.log('pickadate value changed')}
         >
@@ -22,7 +18,11 @@ class App extends window.React.Component {
           <br />
           <Pickadate.DateText renderFallback={() => <div>None selected</div>} />
           <br />
-          <Pickadate.DatePicker />
+          <Pickadate.DatePicker
+            options={{
+              weekdays: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+            }}
+          />
         </Pickadate>
         <br />
         <hr />

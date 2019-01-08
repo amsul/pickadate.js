@@ -20,9 +20,6 @@ const maximum = new Date(today)
 maximum.setDate(maximum.getDate() + 40)
 
 const picker = window.pickadate.create({
-  config: {
-    weekdays: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-  },
   initialState: {
     minimum,
     maximum,
@@ -36,7 +33,9 @@ const picker = window.pickadate.create({
 picker.addEventListener('change', () => {
   console.log('picker value changed')
 })
-picker.render(pickadateElement)
+picker.render(pickadateElement, {
+  weekdays: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+})
 
 const renderValue = value => {
   pickadateValueElement.innerHTML = value || 'None selected'
