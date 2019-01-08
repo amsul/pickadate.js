@@ -101,3 +101,16 @@ If the element is an `input` element, a new `div` is created as a sibling and th
 const element = document.getElementById('date-picker')
 picker.render(element)
 ```
+
+### `unrender`
+
+| Arguments              | Returns |
+| ---------------------- | ------- |
+| `element: HTMLElement` | nothing |
+
+Unrenders the UI for the picker bound to an HTML element.
+
+```js
+const element = document.getElementById('date-picker')
+picker.unrender(element)
+```
