@@ -126,9 +126,14 @@ table tr:nth-child(2n) {
   z-index: 1;
   top: 0;
   left: 0;
+  width: 20%;
   height: 40px;
-  width: 296px;
   background: #242829;
+}
+@media only screen and (min-width: 480px) {
+  .pickadate-demo:before {
+    width: 30%;
+  }
 }
 
 /**
@@ -194,8 +199,12 @@ code,
   border-bottom: 1px solid #dadee0;
 }
 .fixedHeaderContainer header > a[href='/pickadate.js/'] {
-  margin-top: auto;
-  margin-bottom: auto;
+  margin: 7px auto 0;
+}
+@media only screen and (min-width: 1024px) {
+  .fixedHeaderContainer header > a[href='/pickadate.js/'] {
+    margin: auto 0;
+  }
 }
 
 .navigationSlider {
@@ -206,6 +215,10 @@ code,
   }
 }
 
+.navigationSlider .slidingNav ul {
+  background: #fff;
+  margin-bottom: 0;
+}
 .navigationSlider .slidingNav ul li a {
   color: #000;
   font-size: 18px;
@@ -213,12 +226,16 @@ code,
   letter-spacing: -0.325px;
 
   height: auto;
-  padding: 24px 0 20px;
+  padding: 12px 0;
   margin-left: 20px;
 }
 @media only screen and (min-width: 1024px) {
+  .navigationSlider .slidingNav ul {
+    background: none;
+  }
   .navigationSlider .slidingNav ul li a {
     color: #000;
+    padding: 24px 0 20px;
   }
 }
 
