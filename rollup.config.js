@@ -7,7 +7,7 @@ import nodeGlobals from 'rollup-plugin-node-globals'
 import svgo from 'rollup-plugin-svgo'
 
 const getBrowserConfig = (input, output) => ({
-  input: `lib/pickadate/browser/${input}.js`,
+  input: `lib/apis/${input}.js`,
   output: [
     {
       file: `dist/pickadate/${output}.js`,
@@ -41,7 +41,9 @@ const getBrowserConfig = (input, output) => ({
 })
 
 export default [
-  getBrowserConfig('index', 'browser'),
-  getBrowserConfig('api', 'browser/vanilla'),
-  getBrowserConfig('react', 'browser/react'),
+  getBrowserConfig('dom/index', 'index'),
+  getBrowserConfig('dom/vanilla', 'vanilla'),
+  getBrowserConfig('react-dom/index', 'react-dom'),
+  getBrowserConfig('react-native/index', 'react-native'),
+  getBrowserConfig('jquery/index', 'jquery'),
 ]
