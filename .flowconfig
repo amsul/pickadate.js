@@ -7,5 +7,6 @@
 [lints]
 
 [options]
+module.name_mapper='^pickadate\/\(.*\)$' -> '<PROJECT_ROOT>/lib/\1'
 
 [strict]

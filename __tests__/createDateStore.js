@@ -1,6 +1,6 @@
 // @flow
 
-import createDateStore from '../lib/createDateStore'
+import createDateStore from 'pickadate/createDateStore'
 
 // let sleep = duration => new Promise(resolve => setTimeout(resolve, duration))
 
