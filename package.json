@@ -15,8 +15,9 @@
     "prestart": "yarn clean",
     "start": "rollup -c --watch",
     "format": "prettier --write 'lib/**/*.js'",
-    "prepublish": "yarn format && yarn build",
-    "test": "jest"
+    "prepublish": "yarn format && yarn test && yarn build",
+    "test": "yarn flow && yarn test:units",
+    "test:units": "jest"
   },
   "files": [
     "dist/**",
