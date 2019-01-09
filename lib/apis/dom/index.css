@@ -148,6 +148,7 @@ button.pickadate--element {
 .pickadate--grid_cell {
   font-size: 1.125em;
   font-weight: 400;
+  line-height: 1;
 }
 .pickadate--grid_cell div {
   justify-content: center;
