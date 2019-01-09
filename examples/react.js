@@ -11,7 +11,7 @@ class App extends window.React.Component {
       <div>
         <Pickadate
           initialState={this.initialState}
-          onChange={() => console.log('pickadate value changed')}
+          //onChange={() => console.log('pickadate value changed')}
         >
           <Pickadate.Input placeholder='select a date' />
           <br />
@@ -21,6 +21,15 @@ class App extends window.React.Component {
           <Pickadate.DatePicker
             options={{
               weekdays: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+              renderCell: ({ dateObject, children }) => (
+                <div
+                  style={{
+                    color: dateObject.getDate() === 10 ? 'red' : undefined,
+                  }}
+                >
+                  ({dateObject.getDate()})
+                </div>
+              ),
             }}
           />
         </Pickadate>
@@ -28,13 +37,13 @@ class App extends window.React.Component {
         <hr />
         <br />
         <Pickadate.InputPicker
-          onChange={() => console.log('input picker value changed')}
+        //onChange={() => console.log('input picker value changed')}
         />
         <br />
         <hr />
         <br />
         <Pickadate.DatePicker
-          onChange={() => console.log('date picker value changed')}
+        //onChange={() => console.log('date picker value changed')}
         />
       </div>
     )
