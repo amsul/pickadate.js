@@ -13,11 +13,11 @@
     "prebundle": "yarn clean",
     "bundle": "rollup -c",
     "prestart": "yarn clean",
-    "start": "rollup -c --watch",
+    "start": "NODE_ENV=development rollup -c --watch",
     "format": "prettier --write 'lib/**/*.js'",
     "publish": "yarn format && yarn test && yarn bundle",
-    "test": "yarn flow && yarn test:units",
-    "test:units": "jest"
+    "test": "NODE_ENV=test yarn flow && jest --ci --coverage --collectCoverageFrom=lib/**",
+    "test:units": "NODE_ENV=test jest --verbose"
   },
   "files": [
     "builds/**",
