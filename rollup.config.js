@@ -10,7 +10,7 @@ const getBrowserConfig = (input, output) => ({
   input: `lib/apis/${input}.js`,
   output: [
     {
-      file: `dist/pickadate/${output}.js`,
+      file: `builds/${output}.js`,
       format: 'umd',
       exports: 'default',
       name: 'pickadate',

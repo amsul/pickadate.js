@@ -9,7 +9,7 @@
   "scripts": {
     "contributors:add": "all-contributors add",
     "contributors:generate": "all-contributors generate",
-    "clean": "rm -rf dist/",
+    "clean": "rm -rf builds/",
     "prebundle": "yarn clean",
     "bundle": "rollup -c",
     "prestart": "yarn clean",
@@ -20,10 +20,10 @@
     "test:units": "jest"
   },
   "files": [
-    "dist/**",
+    "builds/**",
     "lib/**"
   ],
-  "main": "dist/pickadate/index.js",
+  "main": "builds/index.js",
   "homepage": "http://amsul.ca/pickadate.js",
   "bugs": "https://github.com/amsul/pickadate.js/issues",
   "keywords": [

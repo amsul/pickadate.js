@@ -5,7 +5,7 @@ We are open to, and grateful for, any contributions made by the community! By co
 ## Overview
 
 - `yarn` - install dependencies
-- `yarn build` - build the files from `lib/` to `dist/`
+- `yarn bundle` - build the files from `lib/` to `builds/`
 - `yarn start` - build the files in `lib/` and watch for changes
 - `yarn test` - run tests
 - `yarn publish` - publish new build
