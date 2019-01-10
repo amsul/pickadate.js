@@ -1,23 +1,103 @@
 ---
-id: api-config-options
-title: List of Configuration Options
+id: binding-javascript
+title: Plain JavaScript
 ---
 
-Below is a list of all the valid `config` properties.
+The plain JavaScript binding uses a simple DOM rendering mechanism to render the UI and keep it in sync with the state of the picker.
 
-## `template`
+The binding comes with the following methods:
+
+- [`create`](#create)
+- [`render`](#render)
+- [`unrender`](#unrender)
+
+## Overview
+
+The first step is to create a [`picker` object](api-picker):
+
+```js
+const picker = pickadate.create()
+```
+
+> For a full reference on creating the picker, read the API of [the `create` method](#create) below.
+
+With the `picker` created, it can be rendered into any HTML element:
+
+```js
+const element = document.getElementById('pickadate')
+pickadate.render(element, picker)
+```
+
+> For a full reference on the rendering, read the API of [the `render` method](#render) below.
+
+Once done with the UI and it is ready to be destroyed, it can be unrendered from the HTML element:
+
+```js
+const element = document.getElementById('pickadate')
+pickadate.unrender(element)
+```
+
+> For a full reference on the unrendering, read the API of [the `unrender` method](#unrender) below.
+
+## `create`
+
+| Arguments                            | Returns                |
+| ------------------------------------ | ---------------------- |
+| [`initialState: ?Object`](api-state) | [`picker`](api-picker) |
+
+Creates a [`picker` object](api-picker) with an optional [initial state](api-state).
+
+```js
+const initialState = {
+  selected: new Date(),
+}
+const picker = pickadate.create(initialState)
+```
+
+## `render`
+
+| Arguments                      | Returns |
+| ------------------------------ | ------- |
+| `element: HTMLElement`         | nothing |
+| [`picker`](api-picker)         |         |
+| [`options: ?Object`](#options) |         |
+
+Renders the UI for the picker into an HTML element.
+
+If the element is an `input` element, a new `div` is created as a sibling and the UI is rendered into it instead.
+
+```js
+const element = document.getElementById('date-picker')
+pickadate.render(element, picker)
+```
+
+The third argument is an optional object to customize how the picker renders:
+
+```js
+pickadate.render(element, picker, {
+  weekdays: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+})
+```
+
+<div class="pickadate-demo"><iframe src="https://codesandbox.io/embed/13vv2y0jw4?hidenavigation=1" tabindex="-1" style="width:100%; height:500px; border:0; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe></div>
+
+### `options`
+
+Below is a list of all the valid `options` properties.
+
+### `options.template`
 
 The template used to format the selected date value.
 
 The formatting hooks listed below can be used in the template.
 
-### Default value
+#### Default value
 
 ```js
-const template = 'DDD, MMMM DD, YYYY @ h:mm a'
+const template = 'D MMMM, YYYY @ h:mm a'
 ```
 
-### Formatting hooks
+#### Formatting hooks
 
 | Hook   | Description                                 | Result             |
 | ------ | ------------------------------------------- | ------------------ |
@@ -50,11 +130,11 @@ const template = 'DDD, MMMM DD, YYYY @ h:mm a'
 |        |                                             |                    |
 | `x`    | The unix time stamp                         | 587534400000       |
 
-## `templateHookWords`
+### `options.templateHookWords`
 
 A mapping of hooks to words for the parser to use.
 
-### Default value
+#### Default value
 
 ```js
 const templateHookWords = {
@@ -65,21 +145,21 @@ const templateHookWords = {
 }
 ```
 
-## `weekdays`
+### `options.weekdays`
 
 The weekday labels to use as the heading labels of the grid.
 
-### Default value
+#### Default value
 
 ```js
 const weekdays = ['Sun', 'Mon', ..., 'Sat']
 ```
 
-## `className`
+### `options.className`
 
 The various class names used to style the picker UI.
 
-<div class="table--config-options--classNames"></div>
+<div class="table--options--classNames"></div>
 
 | Key                                                                                                                | Type                 | Description                                                                                                     |
 | ------------------------------------------------------------------------------------------------------------------ | -------------------- | --------------------------------------------------------------------------------------------------------------- |
@@ -110,7 +190,7 @@ The various class names used to style the picker UI.
 | `time_counter`                                                                                                     | `string`             | The counters of a time unit.                                                                                    |
 | `time_counter__up`, `time_counter__down`                                                                           | `string`             | The up/down counter of a time unit.                                                                             |
 
-### Default value
+#### Default value
 
 ```js
 const className = {
@@ -155,4 +235,17 @@ const className = {
   time_counter__up: 'pickadate--time_counter__up',
   time_counter__down: 'pickadate--time_counter__down',
 }
+```
+
+## `unrender`
+
+| Arguments              | Returns |
+| ---------------------- | ------- |
+| `element: HTMLElement` | nothing |
+
+Unrenders the UI for the picker bound to an HTML element.
+
+```js
+const element = document.getElementById('date-picker')
+picker.unrender(element)
 ```

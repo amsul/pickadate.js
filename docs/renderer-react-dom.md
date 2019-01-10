@@ -1,5 +1,5 @@
 ---
-id: interface-react-dom
+id: binding-react-dom
 title: React DOM
 ---
 

@@ -1,5 +1,5 @@
 ---
-id: interface-react-native
+id: binding-react-native
 title: React Native
 ---
 

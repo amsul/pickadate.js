@@ -10,5 +10,5 @@ document.body.dataset.pathname = window.location.pathname
 var element = document.getElementById('index-datepicker')
 if (element) {
   var picker = window.pickadate.create()
-  picker.render(element)
+  window.pickadate.render(element, picker)
 }

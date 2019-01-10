@@ -69,13 +69,13 @@ class Index extends React.Component {
         <div className='wrapper'>
           <div className='homeFooter-information'>
             <p className='homeFooter-informationText'>
-              <a href={`${baseUrl}docs/interface-javascript`}>
+              <a href={`${baseUrl}docs/binding-javascript`}>
                 Plain JavaScript core
               </a>{' '}
               with bindings for{' '}
-              <a href={`${baseUrl}docs/interface-react-dom`}>React DOM</a>,{' '}
-              <a href={`${baseUrl}docs/interface-react-native`}>React Native</a>
-              , & more.
+              <a href={`${baseUrl}docs/binding-react-dom`}>React DOM</a>,{' '}
+              <a href={`${baseUrl}docs/binding-react-native`}>React Native</a>,
+              & more.
             </p>
             <p className='homeFooter-informationText'>
               Translations for 40+ languages.

@@ -1,15 +1,15 @@
 ---
-id: api-state-options
-title: List of State Options
+id: api-state
+title: The State Object
 ---
 
 Below is a list of all the valid `state` properties.
 
 ## `selected`
 
-| Type           |
-| -------------- |
-| `Date`, `null` |
+| Type                          |
+| ----------------------------- |
+| <code>Date &vert; null</code> |
 
 The date selected by the user.
 
@@ -31,9 +31,9 @@ The date used to represent the currently visible month.
 
 ## `firstDayOfWeek`
 
-| Type                              |
-| --------------------------------- |
-| `0`, `1`, `2`, `3`, `4`, `5`, `6` |
+| Type                                                                 |
+| -------------------------------------------------------------------- |
+| <code>0 &vert; 1 &vert; 2 &vert; 3 &vert; 4 &vert; 5 &vert; 6</code> |
 
 The index of the first day of the week.
 
@@ -43,17 +43,17 @@ The index of the first day of the week.
 
 ## `maximum`
 
-| Type           |
-| -------------- |
-| `Date`, `null` |
+| Type                          |
+| ----------------------------- |
+| <code>Date &vert; null</code> |
 
 The maximum date that can be selected.
 
 ## `minimum`
 
-| Type           |
-| -------------- |
-| `Date`, `null` |
+| Type                          |
+| ----------------------------- |
+| <code>Date &vert; null</code> |
 
 The minimum date that can be selected.
 
@@ -61,7 +61,7 @@ The minimum date that can be selected.
 
 | Type                                                       |
 | ---------------------------------------------------------- |
-| <code>Array<number &#124; Date &#124; [Date, Date]></code> |
+| <code>Array<number &vert; Date &vert; [Date, Date]></code> |
 
 The list of disabled dates.
 

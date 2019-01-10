@@ -46,7 +46,7 @@ const siteConfig = {
   // Add custom scripts here that would be placed in <script> tags.
   scripts: [
     {
-      src: `${baseUrl}pickadate--temporary.js`,
+      src: 'https://unpkg.com/pickadate@5.0.0-alpha.0/builds/index.js',
       defer: true,
     },
     {

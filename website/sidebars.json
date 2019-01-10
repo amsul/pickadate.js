@@ -1,10 +1,11 @@
 {
   "main": {
     "Getting Started": ["introduction", "installation", "usage"],
-    "Interfaces": [
-      "interface-javascript",
-      "interface-react-dom",
-      "interface-react-native"
+    "Bindings": [
+      "binding-javascript",
+      "binding-react-dom",
+      "binding-react-native",
+      "binding-jquery"
     ],
     "Guides": [
       "guide-initial-state",
@@ -13,8 +14,7 @@
     ],
     "API": [
       "api-theming",
-      "api-state-options",
-      "api-config-options",
+      "api-state",
       "api-picker",
       "api-store"
     ]

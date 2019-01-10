@@ -25,7 +25,13 @@ pre code.hljs {
   font-size: inherit;
 }
 code {
+  background: #eff3f5;
+  border: 1px solid #eff3f5;
   border-radius: 4px;
+  padding: 3px 5px;
+}
+a:hover code {
+  border-color: #a8c0d1;
 }
 
 blockquote {
@@ -59,7 +65,7 @@ table tr:nth-child(2n) {
  * TABLES
  */
 
-.table--config-options--classNames + table td:nth-child(3) {
+.table--options--classNames + table td:nth-child(3) {
   min-width: 360px;
 }
 
@@ -79,11 +85,11 @@ table tr:nth-child(2n) {
 .post h3 {
   letter-spacing: -0.325px;
 }
-.post p a {
+.post a {
   text-decoration: underline;
 }
-.post p a:hover,
-.post p a:focus {
+.post a:hover,
+.post a:focus {
   background: hsla(205, 36%, 92%, 1);
 }
 
@@ -116,6 +122,7 @@ table tr:nth-child(2n) {
   background-color: #242829;
   overflow: hidden;
   position: relative;
+  margin-bottom: 1em;
 }
 .pickadate-demo iframe {
   margin-bottom: -40px;
@@ -135,13 +142,38 @@ table tr:nth-child(2n) {
     width: 30%;
   }
 }
+@media only screen and (min-width: 540px) {
+  .pickadate-demo:before {
+    width: 33%;
+  }
+}
+@media only screen and (min-width: 780px) {
+  .pickadate-demo:before {
+    width: 32%;
+  }
+}
+@media only screen and (min-width: 920px) {
+  .pickadate-demo:before {
+    width: 28%;
+  }
+}
+@media only screen and (min-width: 1100px) {
+  .pickadate-demo:before {
+    width: 32%;
+  }
+}
+@media only screen and (min-width: 1200px) {
+  .pickadate-demo:before {
+    width: 35%;
+  }
+}
 
 /**
  * SYNTAX HIGHLIGHTING
  */
 
-code,
 .hljs {
+  border: 0;
   background: #eff3f5;
   position: relative;
 }

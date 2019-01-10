@@ -5,14 +5,11 @@
     "previous": "Previous",
     "tagline": "The composable date & time picker.",
     "docs": {
-      "api-config-options": {
-        "title": "List of Configuration Options"
-      },
       "api-picker": {
         "title": "The Picker Object"
       },
-      "api-state-options": {
-        "title": "List of State Options"
+      "api-state": {
+        "title": "The State Object"
       },
       "api-store": {
         "title": "The Store Object"
@@ -32,17 +29,20 @@
       "installation": {
         "title": "Installation"
       },
-      "interface-react-dom": {
-        "title": "React DOM"
-      },
-      "interface-react-native": {
-        "title": "React Native"
-      },
-      "interface-javascript": {
-        "title": "Plain JavaScript"
-      },
       "introduction": {
         "title": "Introduction"
+      },
+      "binding-javascript": {
+        "title": "Plain JavaScript"
+      },
+      "binding-jquery": {
+        "title": "jQuery"
+      },
+      "binding-react-dom": {
+        "title": "React DOM"
+      },
+      "binding-react-native": {
+        "title": "React Native"
       },
       "usage": {
         "title": "Usage"
@@ -56,7 +56,7 @@
     },
     "categories": {
       "Getting Started": "Getting Started",
-      "Interfaces": "Interfaces",
+      "Bindings": "Bindings",
       "Guides": "Guides",
       "API": "API"
     }

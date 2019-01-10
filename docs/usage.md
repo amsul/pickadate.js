@@ -7,7 +7,7 @@ Pickadate.js can be used in a couple ways depending on your setup.
 
 ## Plain JavaScript
 
-For a full reference, read the guide on the [Plain JavaScript interface](interface-javascript). Below are some of the basics on setting up.
+Below are the basics on setting up without using any JavaScript UI frameworks.
 
 ### Importing
 
@@ -20,7 +20,7 @@ Or for the layman: `window.pickadate`
 ### Importing without any styles
 
 ```js
-import pickadate from 'pickadate/vanilla'
+import pickadate from 'pickadate/builds/vanilla'
 ```
 
 ### Rendering: Picker
@@ -35,7 +35,9 @@ const element = document.getElementById('pickadate')
 picker.render(element)
 ```
 
-<div class="pickadate-demo"><iframe src="https://codesandbox.io/embed/2vj4opzp9n?moduleview=1&hidenavigation=1" tabindex="-1" style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe></div>
+<div class="pickadate-demo"><iframe src="https://codesandbox.io/embed/2vj4opzp9n?moduleview=1&hidenavigation=1" tabindex="-1" style="width:100%; height:500px; border:0; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe></div>
+
+> For a full reference, read the guide on the [Plain JavaScript binding](binding-javascript).
 
 ### Rendering: Input Picker
 
@@ -49,16 +51,16 @@ const element = document.getElementById('pickadate')
 picker.render(element)
 ```
 
-<div class="pickadate-demo"><iframe src="https://codesandbox.io/embed/ko4k4618ov?moduleview=1&hidenavigation=1" tabindex="-1" style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe></div>
+<div class="pickadate-demo"><iframe src="https://codesandbox.io/embed/ko4k4618ov?moduleview=1&hidenavigation=1" tabindex="-1" style="width:100%; height:500px; border:0; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe></div>
 
 ## React DOM
 
-For a full reference, read the guide on the [React DOM interface](interface-react-dom). Below are some of the basics on setting up.
+Below are the basics on setting up with React DOM as the UI framework of choice.
 
 ### Importing
 
 ```js
-import Pickadate from 'pickadate/react'
+import Pickadate from 'pickadate/builds/react-dom'
 ```
 
 ### Rendering: Picker
@@ -67,7 +69,7 @@ import Pickadate from 'pickadate/react'
 <Pickadate.DatePicker />
 ```
 
-<div class="pickadate-demo"><iframe src="https://codesandbox.io/embed/q4nl091xwq?moduleview=1&hidenavigation=1" tabindex="-1" style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe></div>
+<div class="pickadate-demo"><iframe src="https://codesandbox.io/embed/q4nl091xwq?moduleview=1&hidenavigation=1" tabindex="-1" style="width:100%; height:500px; border:0; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe></div>
 
 ### Rendering: Input Picker
 
@@ -75,10 +77,14 @@ import Pickadate from 'pickadate/react'
 <Pickadate.InputPicker />
 ```
 
-<div class="pickadate-demo"><iframe src="https://codesandbox.io/embed/zkqvyypv53?moduleview=1&hidenavigation=1" tabindex="-1" style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe></div>
+<div class="pickadate-demo"><iframe src="https://codesandbox.io/embed/zkqvyypv53?moduleview=1&hidenavigation=1" tabindex="-1" style="width:100%; height:500px; border:0; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe></div>
+
+> For a full reference, read the guide on the [React DOM binding](binding-react-dom).
 
 ## React Native
 
-For a full reference, read the guide on the [React Native interface](interface-react-native). Below are some of the basics on setting up.
+Below are the basics on setting up with React Native as the UI framework of choice.
 
 TODO
+
+> For a full reference, read the guide on the [React Native binding](binding-react-native).
