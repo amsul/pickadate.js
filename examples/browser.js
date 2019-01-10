@@ -20,15 +20,13 @@ const maximum = new Date(today)
 maximum.setDate(maximum.getDate() + 40)
 
 const picker = window.pickadate.create({
-  initialState: {
-    minimum,
-    maximum,
-    disabled: [
-      3,
-      new Date(yy, mm, 21),
-      [new Date(yy, mm, 26), new Date(yy, mm, 28)],
-    ],
-  },
+  minimum,
+  maximum,
+  disabled: [
+    3,
+    new Date(yy, mm, 21),
+    [new Date(yy, mm, 26), new Date(yy, mm, 28)],
+  ],
 })
 picker.addEventListener('change', () => {
   console.log('picker value changed')
