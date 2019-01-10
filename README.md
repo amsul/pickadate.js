@@ -10,7 +10,8 @@ Write this:
 
 ```js
 const element = document.getElementById('pickadate')
-pickadate.create().render(pickadateElement)
+const picker = pickadate.create()
+pickadate.render(element, picker)
 ```
 
 To render this:

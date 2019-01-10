@@ -6,7 +6,7 @@ const pickadateInputPickerElement = document.getElementById(
 )
 
 const inputPicker = window.pickadate.create()
-inputPicker.render(pickadateInputPickerElement)
+window.pickadate.render(pickadateInputPickerElement, inputPicker)
 pickadateInputPickerElement.addEventListener('change', () => {
   console.log('input value changed')
 })
@@ -33,7 +33,7 @@ const picker = window.pickadate.create({
 picker.addEventListener('change', () => {
   console.log('picker value changed')
 })
-picker.render(pickadateElement, {
+window.pickadate.render(pickadateElement, picker, {
   weekdays: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
   renderCell: ({ dateObject, children }) => {
     if (dateObject.getDate() === 10) {
