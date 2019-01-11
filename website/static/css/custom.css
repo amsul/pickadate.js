@@ -90,7 +90,7 @@ table tr:nth-child(2n) {
 }
 .post a:hover,
 .post a:focus {
-  background: hsla(205, 36%, 92%, 1);
+  background: #e3ecf2;
 }
 
 .post .hash-link:focus {

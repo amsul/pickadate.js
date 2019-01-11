@@ -19,8 +19,6 @@ The first step is to create a [`picker` object](api-picker):
 const picker = pickadate.create()
 ```
 
-> For a full reference on creating the picker, read the API of [the `create` method](#create) below.
-
 With the `picker` created, it can be rendered into any HTML element:
 
 ```js
@@ -28,16 +26,12 @@ const element = document.getElementById('pickadate')
 pickadate.render(element, picker)
 ```
 
-> For a full reference on the rendering, read the API of [the `render` method](#render) below.
-
 Once done with the UI and it is ready to be destroyed, it can be unrendered from the HTML element:
 
 ```js
 const element = document.getElementById('pickadate')
 pickadate.unrender(element)
 ```
-
-> For a full reference on the unrendering, read the API of [the `unrender` method](#unrender) below.
 
 ## `create`
 

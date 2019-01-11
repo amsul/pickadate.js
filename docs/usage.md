@@ -37,8 +37,6 @@ picker.render(element)
 
 <div class="pickadate-demo"><iframe src="https://codesandbox.io/embed/2vj4opzp9n?moduleview=1&hidenavigation=1" tabindex="-1" style="width:100%; height:500px; border:0; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe></div>
 
-> For a full reference, read the guide on the [Plain JavaScript binding](binding-javascript).
-
 ### Rendering: Input Picker
 
 ```html
@@ -52,6 +50,8 @@ picker.render(element)
 ```
 
 <div class="pickadate-demo"><iframe src="https://codesandbox.io/embed/ko4k4618ov?moduleview=1&hidenavigation=1" tabindex="-1" style="width:100%; height:500px; border:0; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe></div>
+
+> For a full reference, read the guide on the [Plain JavaScript binding](binding-javascript).
 
 ## React DOM
 
