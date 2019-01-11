@@ -9,4 +9,7 @@
 [options]
 module.name_mapper='^pickadate\/\(.*\)$' -> '<PROJECT_ROOT>/lib/\1'
 
+suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
+suppress_comment= \\(.\\|\n\\)*\\$FlowExpected
+
 [strict]
