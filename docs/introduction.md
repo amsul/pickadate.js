@@ -16,6 +16,6 @@ Or, use one of the bindings baked in:
 1. [React Native](binding-react-native) (coming soon)
 1. [jQuery](binding-jquery) (coming soon)
 
-Which looks like this:
+Which look like this:
 
-<div class="pickadate-demo"><iframe src="https://codesandbox.io/embed/2vj4opzp9n?hidenavigation=1" tabindex="-1" style="width:100%; height:500px; border:0; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe></div>
+<div id="pickadate--datepicker"></div>

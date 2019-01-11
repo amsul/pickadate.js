@@ -15,7 +15,7 @@ Below are the basics on setting up without using any JavaScript UI frameworks.
 import pickadate from 'pickadate'
 ```
 
-Or for the layman: `window.pickadate`
+Or if you're loading it from a `<script>` tag: `window.pickadate`
 
 ### Importing without any styles
 
@@ -32,10 +32,8 @@ import pickadate from 'pickadate/builds/vanilla'
 ```js
 const picker = pickadate.create()
 const element = document.getElementById('pickadate')
-picker.render(element)
+pickadate.render(element, picker)
 ```
-
-<div class="pickadate-demo"><iframe src="https://codesandbox.io/embed/2vj4opzp9n?moduleview=1&hidenavigation=1" tabindex="-1" style="width:100%; height:500px; border:0; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe></div>
 
 ### Rendering: Input Picker
 
@@ -46,10 +44,8 @@ picker.render(element)
 ```js
 const picker = pickadate.create()
 const element = document.getElementById('pickadate')
-picker.render(element)
+pickadate.render(element, picker)
 ```
-
-<div class="pickadate-demo"><iframe src="https://codesandbox.io/embed/ko4k4618ov?moduleview=1&hidenavigation=1" tabindex="-1" style="width:100%; height:500px; border:0; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe></div>
 
 > For a full reference, read the guide on the [Plain JavaScript binding](binding-javascript).
 
@@ -63,21 +59,19 @@ Below are the basics on setting up with React DOM as the UI framework of choice.
 import Pickadate from 'pickadate/builds/react-dom'
 ```
 
+Or if you're loading it from a `<script>` tag: `window.Pickadate`
+
 ### Rendering: Picker
 
 ```jsx
 <Pickadate.DatePicker />
 ```
 
-<div class="pickadate-demo"><iframe src="https://codesandbox.io/embed/q4nl091xwq?moduleview=1&hidenavigation=1" tabindex="-1" style="width:100%; height:500px; border:0; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe></div>
-
 ### Rendering: Input Picker
 
 ```jsx
 <Pickadate.InputPicker />
 ```
-
-<div class="pickadate-demo"><iframe src="https://codesandbox.io/embed/zkqvyypv53?moduleview=1&hidenavigation=1" tabindex="-1" style="width:100%; height:500px; border:0; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe></div>
 
 > For a full reference, read the guide on the [React DOM binding](binding-react-dom).
 

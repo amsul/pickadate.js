@@ -35,7 +35,7 @@ class Index extends React.Component {
               />
             </h1>
             <h2 className='homeSplash_heading homeSplash_heading__secondary'>
-              A zero dependency, composable date-time picker & state management
+              A light-weight, composable date-time picker & state management
               library.
             </h2>
             <div className='homeCta'>
@@ -54,7 +54,7 @@ class Index extends React.Component {
             </div>
           </div>
           <div className='homeSplash_section homeSplash_section__right'>
-            <div id='index-datepicker' />
+            <div id='pickadate--datepicker' />
           </div>
         </div>
       </div>

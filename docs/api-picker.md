@@ -42,7 +42,7 @@ The function returned can be called to unsubscribe to the updates.
 
 ```js
 const callback = formattedValue => {
-  console.log(formattedValue) // 'Tue, January 01, 2019 @ 12:00 a.m.'
+  console.log(formattedValue) // '1 January, 2019 @ 12:00 a.m.'
 }
 const unsubscribe = picker.subscribeToValue(callback)
 ```

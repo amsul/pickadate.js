@@ -7,7 +7,7 @@ document.body.dataset.pathname = window.location.pathname
 
 //
 
-var element = document.getElementById('index-datepicker')
+var element = document.getElementById('pickadate--datepicker')
 if (element) {
   var picker = window.pickadate.create()
   window.pickadate.render(element, picker)

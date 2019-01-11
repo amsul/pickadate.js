@@ -17,6 +17,18 @@
       "api-theming": {
         "title": "Theming"
       },
+      "binding-javascript": {
+        "title": "Plain JavaScript"
+      },
+      "binding-jquery": {
+        "title": "jQuery"
+      },
+      "binding-react-dom": {
+        "title": "React DOM"
+      },
+      "binding-react-native": {
+        "title": "React Native"
+      },
       "guide-custom-actors": {
         "title": "Creating Custom Actors"
       },
@@ -31,18 +43,6 @@
       },
       "introduction": {
         "title": "Introduction"
-      },
-      "binding-javascript": {
-        "title": "Plain JavaScript"
-      },
-      "binding-jquery": {
-        "title": "jQuery"
-      },
-      "binding-react-dom": {
-        "title": "React DOM"
-      },
-      "binding-react-native": {
-        "title": "React Native"
       },
       "usage": {
         "title": "Usage"

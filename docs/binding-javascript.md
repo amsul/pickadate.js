@@ -48,6 +48,8 @@ const initialState = {
 const picker = pickadate.create(initialState)
 ```
 
+<div class="pickadate-demo"><iframe src="https://codesandbox.io/embed/v89p1p0pqy?fontsize=14&hidenavigation=1&view=split" tabindex="-1" style="width:100%; height:500px; border:0; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe></div>
+
 ## `render`
 
 | Arguments                      | Returns |
@@ -73,71 +75,15 @@ pickadate.render(element, picker, {
 })
 ```
 
-<div class="pickadate-demo"><iframe src="https://codesandbox.io/embed/13vv2y0jw4?hidenavigation=1" tabindex="-1" style="width:100%; height:500px; border:0; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe></div>
+<div class="pickadate-demo"><iframe src="https://codesandbox.io/embed/13vv2y0jw4?fontsize=14&hidenavigation=1&view=split" tabindex="-1" style="width:100%; height:500px; border:0; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe></div>
 
 ### `options`
 
-Below is a list of all the valid `options` properties.
+Here a list of all the valid `options` properties:
 
-### `options.template`
-
-The template used to format the selected date value.
-
-The formatting hooks listed below can be used in the template.
-
-#### Default value
-
-```js
-const template = 'D MMMM, YYYY @ h:mm a'
-```
-
-#### Formatting hooks
-
-| Hook   | Description                                 | Result             |
-| ------ | ------------------------------------------- | ------------------ |
-| `D`    | Date of the month                           | 1 - 31             |
-| `DD`   | Date of the month with a leading zero       | 01 - 31            |
-|        |                                             |                    |
-| `DDD`  | Day of the week in short form               | Sun - Sat          |
-| `DDDD` | Day of the week in full form                | Sunday - Saturday  |
-|        |                                             |                    |
-| `M`    | Month of the year                           | 1 - 12             |
-| `MM`   | Month of the year with a leading zero       | 01 - 12            |
-| `MMM`  | Month name in short form                    | Jan - Dec          |
-| `MMMM` | Month name in full form                     | January - December |
-|        |                                             |                    |
-| `YYYY` | The year                                    | 2000 - 2999        |
-|        |                                             |                    |
-| `H`    | Hours in 24-hour format                     | 0 - 23             |
-| `HH`   | Hours in 24-hour format with a leading zero | 00 - 23            |
-| `h`    | Hours in 12-hour format                     | 1 - 12             |
-| `hh`   | Hours in 12-hour format with a leading zero | 01 - 12            |
-|        |                                             |                    |
-| `m`    | Minutes in hour                             | 0 - 59             |
-| `mm`   | Minutes in hour with a leading zero         | 00 - 59            |
-|        |                                             |                    |
-| `a`    | Day time period (meridiem)                  | a.m. / p.m.        |
-| `A`    | Day time period in uppercase (meridiem)     | AM / PM            |
-|        |                                             |                    |
-| `s`    | Seconds in minute                           | 0 - 59             |
-| `ss`   | Seconds in minute with a leading zero       | 00 - 59            |
-|        |                                             |                    |
-| `x`    | The unix time stamp                         | 587534400000       |
-
-### `options.templateHookWords`
-
-A mapping of hooks to words for the parser to use.
-
-#### Default value
-
-```js
-const templateHookWords = {
-  MMM  : ['Jan', 'Feb', ..., 'Dec'],
-  MMMM : ['January', 'February', ..., 'December'],
-  DDD  : ['Sun', 'Mon', ..., 'Sat'],
-  DDDD : ['Sunday', 'Monday', ..., 'Saturday'],
-}
-```
+- [`weekdays`](#options.weekdays)
+- [`className`](#options.className)
+- [`renderCell`](#options.renderCell)
 
 ### `options.weekdays`
 
@@ -230,6 +176,47 @@ const className = {
   time_counter__down: 'pickadate--time_counter__down',
 }
 ```
+
+### `options.renderCell`
+
+A render method to customize the appearance of individual date cells in the grid of the picker.
+
+#### Default value
+
+By default, it does nothing:
+
+```js
+const renderCell = () => {}
+```
+
+#### Custom value
+
+To customize the rendering, the date object and the default children are passed as arguments:
+
+```js
+type RenderCell = ({
+  dateObject: Date,
+  children: HTMLElement,
+}) => ?HTMLElement,
+```
+
+The children can be used or ignored; a new element can be returned or not:
+
+```js
+const renderCell = ({ dateObject, children }) => {
+  if (dateObject.getDate() === 10) {
+    children.style.color = 'red'
+    return
+  }
+  if (dateObject.getDay() === 4) {
+    const newElement = document.createElement('div')
+    newElement.innerHTML = `<div>${dateObject.getDate()}<div>⭐️</div></div>`
+    return newElement
+  }
+}
+```
+
+<div class="pickadate-demo"><iframe src="https://codesandbox.io/embed/rm2lp17rzp?fontsize=14&hidenavigation=1&view=split" tabindex="-1" style="width:100%; height:500px; border:0; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe></div>
 
 ## `unrender`
 

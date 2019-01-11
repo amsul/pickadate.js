@@ -136,36 +136,7 @@ table tr:nth-child(2n) {
   width: 20%;
   height: 40px;
   background: #242829;
-}
-@media only screen and (min-width: 480px) {
-  .pickadate-demo:before {
-    width: 30%;
-  }
-}
-@media only screen and (min-width: 540px) {
-  .pickadate-demo:before {
-    width: 33%;
-  }
-}
-@media only screen and (min-width: 780px) {
-  .pickadate-demo:before {
-    width: 32%;
-  }
-}
-@media only screen and (min-width: 920px) {
-  .pickadate-demo:before {
-    width: 28%;
-  }
-}
-@media only screen and (min-width: 1100px) {
-  .pickadate-demo:before {
-    width: 32%;
-  }
-}
-@media only screen and (min-width: 1200px) {
-  .pickadate-demo:before {
-    width: 35%;
-  }
+  width: calc(50% + 100px);
 }
 
 /**
