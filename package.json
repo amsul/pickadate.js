@@ -16,7 +16,7 @@
     "start": "NODE_ENV=development rollup -c --watch",
     "format": "prettier --write 'lib/**/*.js'",
     "publish": "yarn format && yarn test && yarn bundle",
-    "test": "NODE_ENV=test yarn flow && jest --ci --coverage --collectCoverageFrom=lib/**",
+    "test": "NODE_ENV=test yarn flow && jest --ci --coverage --collectCoverageFrom=lib/** --coverageReporters=text-lcov | coveralls",
     "test:units": "NODE_ENV=development jest --verbose"
   },
   "files": [
@@ -48,6 +48,7 @@
     "babel-eslint": "^10.0.1",
     "babel-jest": "^23.6.0",
     "babel-plugin-module-resolver": "^3.1.1",
+    "coveralls": "^3.0.2",
     "eslint": "^5.9.0",
     "eslint-plugin-flowtype": "^3.2.0",
     "eslint-plugin-jest": "^22.1.2",

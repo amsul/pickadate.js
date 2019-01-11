@@ -2,7 +2,7 @@
 
 The composable date & time picker 🕰
 
-[![Build status: future](https://travis-ci.org/amsul/pickadate.js.svg?branch=future)](https://travis-ci.org/amsul/pickadate.js) <sup>[`future`](https://github.com/amsul/pickadate.js/tree/future)</sup>
+<sup>[`future`](https://github.com/amsul/pickadate.js/tree/future) branch:</sup> [![Build status](https://travis-ci.org/amsul/pickadate.js.svg?branch=future)](https://travis-ci.org/amsul/pickadate.js) [![Coverage Status](https://coveralls.io/repos/github/amsul/pickadate.js/badge.svg?branch=future)](https://coveralls.io/github/amsul/pickadate.js?branch=future)
 
 ### Example
 
