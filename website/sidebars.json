@@ -8,9 +8,8 @@
       "binding-jquery"
     ],
     "Guides": [
-      "guide-initial-state",
-      "guide-updating-state",
-      "guide-custom-actors"
+      "guide-custom-actors",
+      "guide-upgrade-from-v3"
     ],
     "API": [
       "api-theming",

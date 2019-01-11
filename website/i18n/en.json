@@ -32,11 +32,8 @@
       "guide-custom-actors": {
         "title": "Creating Custom Actors"
       },
-      "guide-initial-state": {
-        "title": "Initializing with a State"
-      },
-      "guide-updating-state": {
-        "title": "Updating the State"
+      "guide-upgrade-from-v3": {
+        "title": "Upgrading from v3"
       },
       "installation": {
         "title": "Installation"
