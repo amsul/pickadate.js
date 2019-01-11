@@ -53,6 +53,10 @@ const siteConfig = {
       src: `${baseUrl}js/custom.js`,
       defer: true,
     },
+    {
+      src: 'https://buttons.github.io/buttons.js',
+      defer: true,
+    },
   ],
 
   // On page navigation for the current documentation page.

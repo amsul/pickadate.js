@@ -264,6 +264,73 @@ table tr:nth-child(2n) {
 }
 
 /**
+ * SIDEBAR
+ */
+
+.toc .toggleNav ul li a,
+.onPageNav a {
+  color: #6a7d90;
+}
+.toc .toggleNav ul li a:hover,
+.toc .toggleNav ul li a:focus {
+  color: #0474c5;
+  text-decoration: underline;
+}
+.onPageNav a:hover,
+.onPageNav a:focus {
+  color: #000;
+}
+
+.toc .toggleNav ul li.navListItemActive a {
+  position: relative;
+  font-weight: 600;
+}
+.toc .toggleNav ul li.navListItemActive a:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 4px;
+  background: #0474c5;
+}
+
+/**
+ * FOOTER
+ */
+
+.nav-footer {
+  background: url(../img/bg.png) repeat;
+  border-top: 1px solid #dadee0;
+}
+
+.nav-footer .sitemap .nav-home {
+  opacity: 1;
+  margin-right: 60px;
+  margin-bottom: 20px;
+}
+
+.nav-footer .sitemap h5 {
+  color: #000;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.25px;
+  margin-bottom: 1em;
+}
+.nav-footer .sitemap a {
+  color: #6a7d90;
+}
+.nav-footer .sitemap a:hover,
+.nav-footer .sitemap a:focus {
+  color: #0474c5;
+  text-decoration: underline;
+}
+
+.nav-footer .copyright {
+  color: #bec9cf;
+}
+
+/**
  * HOME PAGE
  */
 

@@ -1,17 +1,16 @@
 const React = require('react')
 
 class Footer extends React.Component {
-  docUrl(doc, language) {
+  docUrl(doc) {
     const baseUrl = this.props.config.baseUrl
     const docsUrl = this.props.config.docsUrl
     const docsPart = `${docsUrl ? `${docsUrl}/` : ''}`
-    const langPart = `${language ? `${language}/` : ''}`
-    return `${baseUrl}${docsPart}${langPart}${doc}`
+    return `${baseUrl}${docsPart}${doc}`
   }
 
-  pageUrl(doc, language) {
+  pageUrl(doc) {
     const baseUrl = this.props.config.baseUrl
-    return baseUrl + (language ? `${language}/` : '') + doc
+    return baseUrl + doc
   }
 
   render() {
@@ -30,48 +29,46 @@ class Footer extends React.Component {
             )}
           </a>
           <div>
-            <h5>Docs</h5>
-            <a href={this.docUrl('doc1.html', this.props.language)}>
-              Getting Started (or other categories)
-            </a>
-            <a href={this.docUrl('doc2.html', this.props.language)}>
-              Guides (or other categories)
-            </a>
-            <a href={this.docUrl('doc3.html', this.props.language)}>
-              API Reference (or other categories)
-            </a>
+            <h5>Documentation</h5>
+            <a href={this.docUrl('introduction')}>Getting Started</a>
+            <a href={this.docUrl('binding-javascript')}>JavaScript</a>
+            <a href={this.docUrl('binding-react-dom')}>React DOM</a>
+            <a href={this.docUrl('binding-react-native')}>React Native</a>
+            <a href={this.docUrl('binding-jquery')}>jQuery</a>
           </div>
           <div>
             <h5>Community</h5>
-            <a href={this.pageUrl('users.html', this.props.language)}>
-              User Showcase
-            </a>
             <a
-              href='http://stackoverflow.com/questions/tagged/'
+              href='https://stackoverflow.com/questions/tagged/pickadate'
               target='_blank'
               rel='noreferrer noopener'
             >
               Stack Overflow
             </a>
-            <a href='https://discordapp.com/'>Project Chat</a>
             <a
-              href='https://twitter.com/'
+              href='https://spectrum.chat/pickadate'
               target='_blank'
               rel='noreferrer noopener'
             >
-              Twitter
+              Spectrum
             </a>
           </div>
           <div>
             <h5>More</h5>
-            <a href={`${this.props.config.baseUrl}blog`}>Blog</a>
-            <a href='https://github.com/'>GitHub</a>
+            {/*<a
+              href='https://twitter.com/pickadate_js'
+              target='_blank'
+              rel='noreferrer noopener'
+            >
+              Twitter
+            </a>*/}
+            <a href='https://github.com/amsul/pickadate.js'>GitHub</a>
             <a
               className='github-button'
-              href={this.props.config.repoUrl}
-              data-icon='octicon-star'
-              data-count-href='/facebook/docusaurus/stargazers'
+              href='https://github.com/amsul/pickadate.js'
               data-show-count='true'
+              data-count-href='/amsul/pickadate.js/stargazers'
+              aria-label='Star amsul/pickadate.js on GitHub'
               data-count-aria-label='# stargazers on GitHub'
               aria-label='Star this project on GitHub'
             >
@@ -79,20 +76,6 @@ class Footer extends React.Component {
             </a>
           </div>
         </section>
-
-        <a
-          href='https://code.facebook.com/projects/'
-          target='_blank'
-          rel='noreferrer noopener'
-          className='fbOpenSource'
-        >
-          <img
-            src={`${this.props.config.baseUrl}img/oss_logo.png`}
-            alt='Facebook Open Source'
-            width='170'
-            height='45'
-          />
-        </a>
         <section className='copyright'>{this.props.config.copyright}</section>
       </footer>
     )
