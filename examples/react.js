@@ -11,7 +11,9 @@ class App extends window.React.Component {
       <div>
         <Pickadate
           initialState={this.initialState}
-          //onChange={() => console.log('pickadate value changed')}
+          onChangeValue={formattedValue =>
+            console.log('pickadate value changed: %o', formattedValue)
+          }
         >
           <Pickadate.Input placeholder='select a date' />
           <br />
@@ -37,13 +39,17 @@ class App extends window.React.Component {
         <hr />
         <br />
         <Pickadate.InputPicker
-        //onChange={() => console.log('input picker value changed')}
+          onChangeValue={formattedValue =>
+            console.log('input picker value changed: %o', formattedValue)
+          }
         />
         <br />
         <hr />
         <br />
         <Pickadate.DatePicker
-        //onChange={() => console.log('date picker value changed')}
+          onChangeValue={formattedValue =>
+            console.log('date picker value changed: %o', formattedValue)
+          }
         />
       </div>
     )
