@@ -150,36 +150,36 @@ button.pickadate--element {
   font-weight: 400;
   line-height: 1;
 }
-.pickadate--grid_cell div {
+.pickadate--grid_cell > div {
   justify-content: center;
   align-items: center;
   width: 2.25em;
   height: 2.25em;
   border-radius: 50%;
 }
-.pickadate--grid_cell:hover div,
+.pickadate--grid_cell:hover > div,
 .pickadate--grid:focus:not(:active)
   .pickadate--grid_cell__highlighted:not(.pickadate--grid_cell__selected)
-  div,
+  > div,
 .pickadate--grid__focused:not(:active)
   .pickadate--grid_cell__highlighted:not(.pickadate--grid_cell__selected)
-  div {
+  > div {
   background: #b1dcfb;
 }
-.pickadate--grid_cell__today div {
+.pickadate--grid_cell__today > div {
   border: 1px solid #e5e5e5;
 }
-.pickadate--grid_cell__today:hover:not(.pickadate--grid_cell__disabled) div,
+.pickadate--grid_cell__today:hover:not(.pickadate--grid_cell__disabled) > div,
 .pickadate--grid:focus
   .pickadate--grid_cell__today.pickadate--grid_cell__highlighted:not(.pickadate--grid_cell__selected)
-  div,
+  > div,
 .pickadate--grid__focused
   .pickadate--grid_cell__today.pickadate--grid_cell__highlighted:not(.pickadate--grid_cell__selected)
-  div,
-.pickadate--grid_cell__today.pickadate--grid_cell__selected div {
+  > div,
+.pickadate--grid_cell__today.pickadate--grid_cell__selected > div {
   border-color: #0089ec;
 }
-.pickadate--grid_cell__today.pickadate--grid_cell__selected div:after {
+.pickadate--grid_cell__today.pickadate--grid_cell__selected > div:after {
   content: ' ';
   position: absolute;
   top: 0;
@@ -189,8 +189,8 @@ button.pickadate--element {
   border: 1px solid #fff;
   border-radius: 50%;
 }
-.pickadate--grid_cell__selected div,
-.pickadate--grid_cell__selected:hover div {
+.pickadate--grid_cell__selected > div,
+.pickadate--grid_cell__selected:hover > div {
   background: #0089ec;
   color: #fff;
   font-weight: 600;
@@ -200,8 +200,8 @@ button.pickadate--element {
   opacity: 0.25;
   transform: scale(0.8);
 }
-.pickadate--grid_cell__disabled div,
-.pickadate--grid_cell__disabled:hover div {
+.pickadate--grid_cell__disabled > div,
+.pickadate--grid_cell__disabled:hover > div {
   background: #b2b2b2;
 }
 
