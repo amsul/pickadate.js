@@ -5,7 +5,7 @@ title: Plain JavaScript
 
 The plain JavaScript binding uses a simple DOM rendering mechanism to render the UI and keep it in sync with the state of the picker.
 
-The binding comes with the following methods:
+It comes with the following methods:
 
 - [`create`](#create)
 - [`render`](#render)
@@ -32,6 +32,8 @@ Once done with the UI and it is ready to be destroyed, it can be unrendered from
 const element = document.getElementById('pickadate')
 pickadate.unrender(element)
 ```
+
+Continue reading below for a full reference on all the methods and events.
 
 ## `create`
 
@@ -230,3 +232,48 @@ Unrenders the UI for the picker bound to an HTML element.
 const element = document.getElementById('date-picker')
 picker.unrender(element)
 ```
+
+## Events
+
+To bind a handler to a UI event, add an event listener to the element the picker is rendered into:
+
+```js
+const onChange = formattedValue => {
+  console.log('New value:', formattedValue)
+}
+element.addEventListener('pickadate:change', onChange)
+```
+
+To unbind the handler, remove the listener as any other DOM event:
+
+```js
+element.removeEventListener('pickadate:change', onChange)
+```
+
+The event names are:
+
+- `pickadate:change`
+- `pickadate:mount`
+- `pickadate:unmount`
+- `pickadate:input-open`
+- `pickadate:input-close`
+
+### `pickadate:change`
+
+Dispatched when the value of the picker changes.
+
+### `pickadate:mount`
+
+Dispatched when the picker mounts into the element.
+
+### `pickadate:unmount`
+
+Dispatched when the picker unmounts from the element.
+
+### `pickadate:input-open`
+
+Dispatched when the picker (rendered into an input element) opens.
+
+### `pickadate:input-close`
+
+Dispatched when the picker (rendered into an input element) closes.

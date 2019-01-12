@@ -47,44 +47,6 @@ const callback = formattedValue => {
 const unsubscribe = picker.subscribeToValue(callback)
 ```
 
-### `addEventListener`
-
-| Arguments            | Returns                    |
-| -------------------- | -------------------------- |
-| `eventName: string`  | `removeListener: Function` |
-| `listener: Function` |                            |
-
-Adds a listener for a specific UI event.
-
-The function returned can be called to remove the listener.
-
-```js
-const listener = () => {
-  console.log('The selected value was changed!')
-}
-const removeListener = picker.addEventListener('change', listener)
-```
-
-The event names are:
-
-- `change`
-- `active`
-- `inactive`
-- `grid.remove-active`
-- `grid.remove-inactive`
-
-### `triggerEvent`
-
-| Arguments           | Returns |
-| ------------------- | ------- |
-| `eventName: string` | nothing |
-
-Triggers a specific UI event by name.
-
-```js
-picker.triggerEvent('change')
-```
-
 ## Actions
 
 ### `setSelected`
