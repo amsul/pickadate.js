@@ -16,7 +16,8 @@
     "start": "NODE_ENV=development rollup -c --watch",
     "format": "prettier --write 'lib/**/*.js'",
     "publish": "yarn format && yarn test && yarn bundle",
-    "test": "NODE_ENV=test yarn flow && jest --ci --coverage --collectCoverageFrom=lib/** --coverageReporters=text-lcov | coveralls",
+    "test": "NODE_ENV=test yarn flow && yarn test:coverage --coverageReporters=text-lcov | coveralls",
+    "test:coverage": "NODE_ENV=test jest --ci --coverage --collectCoverageFrom=lib/**",
     "test:units": "NODE_ENV=development jest --verbose"
   },
   "files": [
