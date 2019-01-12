@@ -10,6 +10,9 @@ window.pickadate.render(pickadateInputPickerElement, inputPicker)
 pickadateInputPickerElement.addEventListener('change', () => {
   console.log('input value changed')
 })
+pickadateInputPickerElement.addEventListener('pickadate:change', () => {
+  console.log('input value pickadate:changed')
+})
 
 const today = new Date()
 const yy = today.getFullYear()
@@ -28,7 +31,7 @@ const picker = window.pickadate.create({
     [new Date(yy, mm, 26), new Date(yy, mm, 28)],
   ],
 })
-picker.addEventListener('change', () => {
+pickadateElement.addEventListener('pickadate:change', () => {
   console.log('picker value changed')
 })
 window.pickadate.render(pickadateElement, picker, {
