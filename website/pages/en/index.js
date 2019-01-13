@@ -35,7 +35,7 @@ class Index extends React.Component {
               />
             </h1>
             <h2 className='homeSplash_heading homeSplash_heading__secondary'>
-              A light-weight, composable date-time picker & state management
+              A light-weight, composable date-time UI & state management
               library.
             </h2>
             <div className='homeCta'>
@@ -80,10 +80,58 @@ class Index extends React.Component {
             <p className='homeFooter-informationText'>
               Translations for 40+ languages.
             </p>
-            <p className='homeFooter-informationText'>
-              Mobile & keyboard friendly.
-            </p>
             <p className='homeFooter-informationText'>WCAG 2.0 compliant.</p>
+          </div>
+          <div className='homeUsing'>
+            <div className='homeUsing-title'>
+              Some websites using pickadate:
+            </div>
+            <div className='homeUsing-row'>
+              <a
+                className='homeUsing-item homeUsing-item--openTable'
+                href='https://www.opentable.com/'
+              >
+                OpenTable
+              </a>
+              <a
+                className='homeUsing-item homeUsing-item--pampers'
+                href='https://www.pampers.ca/'
+              >
+                Pampers
+              </a>
+              <a
+                className='homeUsing-item homeUsing-item--pokemon'
+                href='https://www.pokemon.com/'
+              >
+                Pokémon
+              </a>
+              <a
+                className='homeUsing-item homeUsing-item--hostelworld'
+                href='https://www.hostelworld.com/'
+              >
+                Hostelworld
+              </a>
+            </div>
+            <div className='homeUsing-row'>
+              <a
+                className='homeUsing-item homeUsing-item--politico'
+                href='https://www.politico.com/'
+              >
+                Politico
+              </a>
+              <a
+                className='homeUsing-item homeUsing-item--bitfinex'
+                href='https://www.bitfinex.com/'
+              >
+                Bitfinex
+              </a>
+              <a
+                className='homeUsing-item homeUsing-item--hired'
+                href='https://hired.ca/'
+              >
+                Hired
+              </a>
+            </div>
           </div>
           <div className='homeFooter-bottom'>
             <div className='homeFooter-copyright'>
@@ -96,7 +144,23 @@ class Index extends React.Component {
             </div>
             <div className='homeFooter-donation'>
               <span className='homeFooter-donationText'>Share some love:</span>
-              <a href='https://paypal.me/pools/c/8abG4tT5dP'>
+              <a
+                className='homeFooter-donationIcon homeFooter-donationIcon--bitcoin'
+                href='https://en.cryptobadges.io/donate/1GfajgmoQXPUzqTA3LASAKxFeBhmHb2qSZ'
+              >
+                <svg
+                  width='28px'
+                  height='28px'
+                  viewBox='0 0 28 28'
+                  fill='#bec9cf'
+                >
+                  <path d='M27.5851199,17.3871499 C25.715024,24.8872995 18.1178142,29.45179 10.6159906,27.5814557 C3.11722992,25.711559 -1.44774676,18.1147209 0.423224227,10.6150088 C2.292445,3.11398425 9.88965483,-1.45094373 17.3892906,0.41895297 C24.8906766,2.28884967 29.4552158,9.88656286 27.5851199,17.3871499 Z M20.1752213,12.0058375 C20.4539121,10.1429408 19.0355206,9.14149171 17.0960606,8.47342146 L17.7251929,5.94989217 L16.1891126,5.56707522 L15.5766054,8.02410374 C15.1727883,7.92347758 14.7580334,7.82853897 14.3459037,7.73447538 L14.9627858,5.26125918 L13.4275805,4.87844223 L12.7980107,7.40109651 C12.4637568,7.32497063 12.135628,7.24971976 11.8171243,7.17053134 L11.8188743,7.16265624 L9.70047474,6.63371261 L9.291845,8.27435665 C9.291845,8.27435665 10.4315457,8.53554718 10.4074829,8.55173487 C11.0296152,8.70704917 11.142054,9.11874145 11.1232413,9.44512024 L10.4066079,12.3199661 C10.4494834,12.3309037 10.5050466,12.3466539 10.5662973,12.3711542 C10.5151092,12.3584666 10.4604211,12.3444664 10.4039829,12.3309037 L9.39947125,16.358138 C9.32334537,16.5471402 9.13040563,16.8306435 8.69552558,16.7230172 C8.71083826,16.74533 7.57901262,16.4443265 7.57901262,16.4443265 L6.81644127,18.2026594 L8.81540197,18.7009777 C9.18728129,18.7941663 9.55172302,18.8917299 9.91047718,18.983606 L9.2747823,21.5360106 L10.8091126,21.9188275 L11.4386824,19.3935482 C11.8578123,19.5072995 12.264692,19.6123007 12.6628216,19.7111769 L12.0354393,22.2246436 L13.5715197,22.6074605 L14.2072146,20.0598684 C16.8265575,20.5555617 18.7962053,20.3556219 19.6252774,17.9865319 C20.2933477,16.0790097 19.5920271,14.9786845 18.2138861,14.2611761 C19.2175227,14.029736 19.9735315,13.3695408 20.1752213,12.0058375 Z M16.6655556,16.9273321 C16.1908626,18.8348542 12.9791378,17.8036548 11.9378757,17.5450893 L12.7813855,14.1636125 C13.8226476,14.4234905 17.1616863,14.9379965 16.6655556,16.9273321 Z M17.1406861,11.9782746 C16.7075561,13.7134198 14.0344,12.831847 13.167265,12.6157195 L13.9320239,9.54880894 C14.7991589,9.76493645 17.5917538,10.1683161 17.1406861,11.9782746 Z' />
+                </svg>
+              </a>
+              <a
+                className='homeFooter-donationIcon homeFooter-donationIcon--dollar'
+                href='https://paypal.me/pools/c/8abG4tT5dP'
+              >
                 <svg
                   width='28px'
                   height='28px'

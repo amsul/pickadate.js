@@ -232,6 +232,9 @@ table tr:nth-child(2n) {
   padding: 12px 0;
   margin-left: 20px;
 }
+.navigationSlider .slidingNav ul li:first-child a {
+  margin-left: 0;
+}
 @media only screen and (min-width: 1024px) {
   .navigationSlider .slidingNav ul {
     background: none;
@@ -356,6 +359,7 @@ table tr:nth-child(2n) {
 }
 [data-pathname='/pickadate.js/'] .navigationSlider {
   margin-left: auto;
+  margin-right: auto;
 }
 [data-pathname='/pickadate.js/'] .navigationSlider .slidingNav {
   position: relative;
@@ -365,7 +369,7 @@ table tr:nth-child(2n) {
   background: none;
 }
 [data-pathname='/pickadate.js/'] .navigationSlider .slidingNav ul li a {
-  padding-top: 48px;
+  padding-top: 30px;
 }
 
 [data-pathname='/pickadate.js/'] .navigationSlider .slidingNav {
@@ -402,42 +406,43 @@ table tr:nth-child(2n) {
 
 .homeSplash {
   max-width: 960px;
-  margin: 0 auto 40px;
+  margin: 0 auto 20px;
   padding-left: 20px;
   padding-right: 20px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 @media only screen and (min-width: 736px) {
   .homeSplash {
-    margin-top: 40px;
-    display: flex;
+    flex-direction: row;
     justify-content: space-between;
     flex-grow: 1;
+
+    margin-top: 8px;
     padding-left: 0;
     padding-right: 0;
-  }
-}
-@media only screen and (min-width: 1024px) {
-  .homeSplash {
-    margin-top: 40px;
-    display: flex;
-    justify-content: space-between;
-    flex-grow: 1;
   }
 }
 
 .homeSplash_section__left {
   padding-top: 20px;
-  max-width: 560px;
+  max-width: 500px;
 }
 @media only screen and (min-width: 736px) {
   .homeSplash_section__left {
-    margin-right: 20px;
+    margin-right: 40px;
   }
 }
 @media only screen and (min-width: 1024px) {
   .homeSplash_section__left {
     padding-top: 28px;
   }
+}
+
+.homeSplash_section__right {
+  min-width: 340px;
 }
 
 .homeSplash_heading {
@@ -577,13 +582,12 @@ table tr:nth-child(2n) {
   margin-bottom: 44px;
 }
 .homeFooter-information {
-  margin-bottom: 40px;
+  margin-bottom: 28px;
 }
 .homeFooter-informationText {
-  margin: 0 0 8px;
+  margin-bottom: 6px;
   text-align: center;
-  font-size: 18px;
-  color: #9baebb;
+  color: #6a7d90;
 }
 .homeFooter-informationText a {
   color: inherit;
@@ -591,7 +595,7 @@ table tr:nth-child(2n) {
 }
 .homeFooter-informationText a:hover,
 .homeFooter-informationText a:focus {
-  color: #6a7d90;
+  color: #0474c5;
 }
 
 .homeFooter-bottom {
@@ -617,7 +621,7 @@ table tr:nth-child(2n) {
 
 .homeFooter-bottom,
 .homeFooter-bottom a {
-  color: #bec9cf;
+  color: #9baebb;
 }
 .homeFooter-copyright a {
   text-decoration: underline;
@@ -636,24 +640,146 @@ table tr:nth-child(2n) {
 .homeFooter-donation {
 }
 .homeFooter-donationText {
-  margin-right: 8px;
 }
-.homeFooter-donation a svg {
+.homeFooter-donationIcon {
+  margin-left: 8px;
+}
+.homeFooter-donationIcon svg {
   transition: 0.125s;
 }
-.homeFooter-donation a:hover svg,
-.homeFooter-donation a:focus svg {
+.homeFooter-donationIcon--bitcoin:hover svg,
+.homeFooter-donationIcon--bitcoin:focus svg {
+  fill: #f99400;
+}
+.homeFooter-donationIcon--dollar:hover svg,
+.homeFooter-donationIcon--dollar:focus svg {
   fill: #74b359;
 }
 
-@media only screen and (min-device-width: 360px) and (max-device-width: 736px) {
+.homeUsing {
+  margin-bottom: 32px;
+}
+.homeUsing-title {
+  color: #6a7d90;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  letter-spacing: -0.25px;
+}
+.homeUsing-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.homeUsing-row:last-child {
+  margin-bottom: 0;
+}
+.homeUsing-item {
+  text-indent: -99999px;
+  position: relative;
+  margin: 0 16px;
+}
+.homeUsing-item:before,
+.homeUsing-item:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  transition: 0.25s;
+}
+.homeUsing-item:before {
+  z-index: 2;
+  opacity: 0;
+}
+.homeUsing-item:after {
+  z-index: 1;
+}
+.homeUsing-item:hover:before {
+  opacity: 1;
 }
 
-@media only screen and (max-width: 1023px) {
+.homeUsing-item--openTable,
+.homeUsing-item--pampers,
+.homeUsing-item--pokemon,
+.homeUsing-item--hostelworld {
+  margin: 0 24px;
+}
+.homeUsing-item--openTable {
+  width: 62px;
+  height: 38px;
+}
+.homeUsing-item--pampers {
+  width: 76px;
+  height: 44px;
+}
+.homeUsing-item--pokemon {
+  width: 83px;
+  height: 30px;
+}
+.homeUsing-item--hostelworld {
+  width: 74px;
+  height: 34px;
+}
+.homeUsing-item--politico {
+  width: 89px;
+  height: 16px;
+}
+.homeUsing-item--bitfinex {
+  width: 134px;
+  height: 16px;
+}
+.homeUsing-item--hired {
+  width: 112px;
+  height: 16px;
 }
 
-@media only screen and (min-width: 1400px) {
+.homeUsing-item--openTable:before {
+  background-image: url(../img/users/OpenTable.png);
 }
-
-@media only screen and (min-width: 1500px) {
+.homeUsing-item--openTable:after {
+  background-image: url(../img/users/OpenTable_dim.png);
+}
+.homeUsing-item--pampers:before {
+  background-image: url(../img/users/Pampers.png);
+}
+.homeUsing-item--pampers:after {
+  background-image: url(../img/users/Pampers_dim.png);
+}
+.homeUsing-item--hostelworld:before {
+  background-image: url(../img/users/Hostelworld.png);
+}
+.homeUsing-item--hostelworld:after {
+  background-image: url(../img/users/Hostelworld_dim.png);
+}
+.homeUsing-item--pokemon:before {
+  background-image: url(../img/users/Pokemon.png);
+}
+.homeUsing-item--pokemon:after {
+  background-image: url(../img/users/Pokemon_dim.png);
+}
+.homeUsing-item--bitfinex:before {
+  background-image: url(../img/users/Bitfinex.png);
+}
+.homeUsing-item--bitfinex:after {
+  background-image: url(../img/users/Bitfinex_dim.png);
+}
+.homeUsing-item--hired:before {
+  background-image: url(../img/users/Hired.png);
+}
+.homeUsing-item--hired:after {
+  background-image: url(../img/users/Hired_dim.png);
+}
+.homeUsing-item--politico:before {
+  background-image: url(../img/users/Politico.png);
+}
+.homeUsing-item--politico:after {
+  background-image: url(../img/users/Politico_dim.png);
 }
