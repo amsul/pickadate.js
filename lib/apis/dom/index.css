@@ -137,6 +137,8 @@ button.pickadate--element {
   align-items: center;
   align-self: stretch;
   flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: 0;
   min-width: 2.25em;
 }
 .pickadate--grid_label {
