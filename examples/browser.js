@@ -35,7 +35,6 @@ pickadateElement.addEventListener('pickadate:change', () => {
   console.log('picker value changed')
 })
 window.pickadate.render(pickadateElement, picker, {
-  weekdays: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
   renderCell: ({ dateObject, children }) => {
     if (dateObject.getDate() === 10) {
       children.style.color = 'red'

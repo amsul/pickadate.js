@@ -22,7 +22,6 @@ class App extends window.React.Component {
           <br />
           <Pickadate.DatePicker
             options={{
-              weekdays: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
               renderCell: ({ dateObject, children }) => (
                 <div
                   style={{
