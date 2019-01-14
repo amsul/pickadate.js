@@ -4,6 +4,9 @@ const pickadateInputElement = document.getElementById('pickadate-input')
 const pickadateInputPickerElement = document.getElementById(
   'pickadate-input-picker'
 )
+const pickadateTranslatedElement = document.getElementById(
+  'pickadate-translated'
+)
 
 const inputPicker = window.pickadate.create()
 window.pickadate.render(pickadateInputPickerElement, inputPicker)
@@ -51,3 +54,14 @@ const renderValue = value => {
 
 renderValue(picker.getValue())
 picker.subscribeToValue(renderValue)
+
+const frenchTranslation = window.pickadate.translations.fr_FR
+const frenchPicker = window.pickadate.create(
+  {
+    templateHookWords: {
+      MMMM: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+    },
+  },
+  frenchTranslation
+)
+window.pickadate.render(pickadateTranslatedElement, frenchPicker)

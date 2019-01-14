@@ -1,15 +1,21 @@
-/*eslint-disable react/react-in-jsx-scope*/
+// @flow
 
+const React = window.React
 const Pickadate = window.pickadate
+const frenchTranslation = window.pickadate.translations.fr_FR
 
 class App extends window.React.Component {
   initialState = {
     disabled: [3],
+    templateHookWords: {
+      DDD: ['1', '2', '3', '4', '5', '6', '7'],
+    },
   }
   render() {
     return (
       <div>
         <Pickadate
+          initialTranslation={frenchTranslation}
           initialState={this.initialState}
           onChangeValue={formattedValue =>
             console.log('pickadate value changed: %o', formattedValue)
@@ -46,6 +52,7 @@ class App extends window.React.Component {
         <hr />
         <br />
         <Pickadate.DatePicker
+          initialTranslation={frenchTranslation}
           onChangeValue={formattedValue =>
             console.log('date picker value changed: %o', formattedValue)
           }
