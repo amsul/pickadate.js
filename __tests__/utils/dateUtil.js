@@ -203,7 +203,7 @@ describe('dateUtil', () => {
 
     it('formats a date object based on a template for unix', () => {
       expect(dateUtil.format(date, 'x', templateHookWords)).toEqual(
-        '1567447504000'
+        date.getTime().toString()
       )
     })
 
