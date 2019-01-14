@@ -1,6 +1,6 @@
 {
   "name": "pickadate",
-  "version": "5.0.0-alpha.0",
+  "version": "5.0.0-alpha.2",
   "title": "pickadate.js",
   "description": "The composable date & time picker.",
   "repository": "https://github.com/amsul/pickadate.js",
@@ -15,7 +15,7 @@
     "prestart": "yarn clean",
     "start": "NODE_ENV=development rollup -c --watch",
     "format": "prettier --write 'lib/**/*.js'",
-    "publish": "yarn format && yarn test && yarn bundle",
+    "prepublish": "yarn format && yarn flow && yarn test:units && yarn bundle",
     "test": "NODE_ENV=test yarn flow && yarn test:coverage --coverageReporters=text-lcov | coveralls",
     "test:coverage": "NODE_ENV=test jest --ci --coverage --collectCoverageFrom=lib/**",
     "test:units": "NODE_ENV=development jest --verbose"
