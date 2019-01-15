@@ -52,7 +52,9 @@ class App extends window.React.Component {
         <hr />
         <br />
         <Pickadate.DatePicker
+          options={{ mode: 'date-time' }}
           initialTranslation={frenchTranslation}
+          initialState={{ template: 'YYYY MMMM DD hh:mm a' }}
           onChangeValue={formattedValue =>
             console.log('date picker value changed: %o', formattedValue)
           }

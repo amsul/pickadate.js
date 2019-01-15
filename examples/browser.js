@@ -64,4 +64,6 @@ const frenchPicker = window.pickadate.create(
   },
   frenchTranslation
 )
-window.pickadate.render(pickadateTranslatedElement, frenchPicker)
+window.pickadate.render(pickadateTranslatedElement, frenchPicker, {
+  mode: 'date-time',
+})
