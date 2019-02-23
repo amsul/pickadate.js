@@ -1,0 +1,265 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>The Picker Object · pickadate.js</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&lt;p&gt;The &lt;code&gt;picker&lt;/code&gt; object provides methods to manage the UI and actions to update the state.&lt;/p&gt;
+"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="The Picker Object · pickadate.js"/><meta property="og:type" content="website"/><meta property="og:url" content="https://amsul.github.io/pickadate.js/v5/index.html"/><meta property="og:description" content="&lt;p&gt;The &lt;code&gt;picker&lt;/code&gt; object provides methods to manage the UI and actions to update the state.&lt;/p&gt;
+"/><meta property="og:image" content="https://amsul.github.io/pickadate.js/v5/img/logo.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://amsul.github.io/pickadate.js/v5/img/logo.png"/><link rel="shortcut icon" href="/pickadate.js/v5/img/favicon.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css"/><script type="text/javascript" src="https://unpkg.com/pickadate@5.0.0-alpha.0/builds/index.js" defer=""></script><script type="text/javascript" src="/pickadate.js/v5/js/custom.js" defer=""></script><script type="text/javascript" src="https://buttons.github.io/buttons.js" defer=""></script><link rel="stylesheet" href="/pickadate.js/v5/css/prism.css"/><link rel="stylesheet" href="/pickadate.js/v5/css/main.css"/></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/pickadate.js/v5/"><img class="logo" src="/pickadate.js/v5/img/logo.svg" alt="pickadate.js"/></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/pickadate.js/v5/docs/introduction" target="_self">Documentation</a></li><li class=""><a href="https://github.com/amsul/pickadate.js" target="_self">Discussions</a></li><li class=""><a href="https://github.com/amsul/pickadate.js" target="_self">GitHub</a></li><li class=""><a href="https://github.com/amsul/pickadate.js" target="_self">v3 Docs</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>API</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Getting Started</h3><ul><li class="navListItem"><a class="navItem" href="/pickadate.js/v5/docs/introduction">Introduction</a></li><li class="navListItem"><a class="navItem" href="/pickadate.js/v5/docs/installation">Installation</a></li><li class="navListItem"><a class="navItem" href="/pickadate.js/v5/docs/usage">Usage</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Bindings</h3><ul><li class="navListItem"><a class="navItem" href="/pickadate.js/v5/docs/binding-javascript">Plain JavaScript</a></li><li class="navListItem"><a class="navItem" href="/pickadate.js/v5/docs/binding-react-dom">React DOM</a></li><li class="navListItem"><a class="navItem" href="/pickadate.js/v5/docs/binding-react-native">React Native</a></li><li class="navListItem"><a class="navItem" href="/pickadate.js/v5/docs/binding-jquery">jQuery</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Guides</h3><ul><li class="navListItem"><a class="navItem" href="/pickadate.js/v5/docs/guide-translations">Using Translations</a></li><li class="navListItem"><a class="navItem" href="/pickadate.js/v5/docs/guide-custom-actors">Creating Custom Actors</a></li><li class="navListItem"><a class="navItem" href="/pickadate.js/v5/docs/guide-upgrade-from-v3">Upgrading from v3</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">API</h3><ul><li class="navListItem"><a class="navItem" href="/pickadate.js/v5/docs/api-state">The State Object</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/pickadate.js/v5/docs/api-picker">The Picker Object</a></li><li class="navListItem"><a class="navItem" href="/pickadate.js/v5/docs/api-store">The Store Object</a></li></ul></div></div></section></div><script>
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              const headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                if (event.target.tagName === 'A') {
+                  document.body.classList.remove('tocActive');
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">The Picker Object</h1></header><article><div><span><p>The <code>picker</code> object provides methods to manage the UI and actions to update the state.</p>
+<p>It can be used to customize and extend the functionality of any renderer.</p>
+<h2><a class="anchor" aria-hidden="true" id="properties"></a><a href="#properties" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Properties</h2>
+<h3><a class="anchor" aria-hidden="true" id="store"></a><a href="#store" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>store</code></h3>
+<p>The <code>store</code> object contains the state of the picker.</p>
+<blockquote>
+<p>For a full reference, read the API of <a href="api-store">the Store Object</a>.</p>
+</blockquote>
+<h2><a class="anchor" aria-hidden="true" id="methods"></a><a href="#methods" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Methods</h2>
+<h3><a class="anchor" aria-hidden="true" id="getvalue"></a><a href="#getvalue" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>getValue</code></h3>
+<table>
+<thead>
+<tr><th>Arguments</th><th>Returns</th></tr>
+</thead>
+<tbody>
+<tr><td>none</td><td><code>string</code></td></tr>
+</tbody>
+</table>
+<p>Gets the current selected value as a formatted string.</p>
+<pre><code class="hljs css language-js"><span class="token keyword">const</span> value <span class="token operator">=</span> picker<span class="token punctuation">.</span><span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>value<span class="token punctuation">)</span> <span class="token comment">// '1 January, 2019 @ 12:00 a.m.'</span>
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="subscribetovalue"></a><a href="#subscribetovalue" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>subscribeToValue</code></h3>
+<table>
+<thead>
+<tr><th>Arguments</th><th>Returns</th></tr>
+</thead>
+<tbody>
+<tr><td><code>callback: Function</code></td><td><code>unsubscribe: Function</code></td></tr>
+</tbody>
+</table>
+<p>Subscribes to updates to the selected value.</p>
+<p>The function returned can be called to unsubscribe to the updates.</p>
+<pre><code class="hljs css language-js"><span class="token keyword">const</span> <span class="token function-variable function">callback</span> <span class="token operator">=</span> formattedValue <span class="token operator">=></span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>formattedValue<span class="token punctuation">)</span> <span class="token comment">// '1 January, 2019 @ 12:00 a.m.'</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">const</span> unsubscribe <span class="token operator">=</span> picker<span class="token punctuation">.</span><span class="token function">subscribeToValue</span><span class="token punctuation">(</span>callback<span class="token punctuation">)</span>
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="actions"></a><a href="#actions" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Actions</h2>
+<h3><a class="anchor" aria-hidden="true" id="setselected"></a><a href="#setselected" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>setSelected</code></h3>
+<table>
+<thead>
+<tr><th>Arguments</th><th>Returns</th></tr>
+</thead>
+<tbody>
+<tr><td><code>{<br/>  value: Date | string | number,<br/>  isUpdatingView?: boolean,<br/>}</code></td><td>nothing</td></tr>
+</tbody>
+</table>
+<p>An action that sets the <code>selected</code> state of the store.</p>
+<blockquote>
+<p>Note: <code>isUpdatingView</code> defaults to <code>true</code>. To prevent updating the view, set it to <code>false</code>.</p>
+</blockquote>
+<pre><code class="hljs css language-js">picker<span class="token punctuation">.</span><span class="token function">setSelected</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  value<span class="token punctuation">:</span> <span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token number">2020</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="sethighlighted"></a><a href="#sethighlighted" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>setHighlighted</code></h3>
+<table>
+<thead>
+<tr><th>Arguments</th><th>Returns</th></tr>
+</thead>
+<tbody>
+<tr><td><code>{<br/>  keyCode: number,<br/>}</code></td><td>nothing</td></tr>
+</tbody>
+</table>
+<p>An action that sets the <code>highlighted</code> state of the store using a keyboard event's key code.</p>
+<p>For instance, the &quot;up&quot; key's key code highlights the date 7 days before the currently highlighted date.</p>
+<pre><code class="hljs css language-js">picker<span class="token punctuation">.</span><span class="token function">setHighlighted</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  keyCode<span class="token punctuation">:</span> <span class="token number">39</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="setmaximum"></a><a href="#setmaximum" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>setMaximum</code></h3>
+<table>
+<thead>
+<tr><th>Arguments</th><th>Returns</th></tr>
+</thead>
+<tbody>
+<tr><td><code>{<br/>  value: Date,<br/>}</code></td><td>nothing</td></tr>
+</tbody>
+</table>
+<p>An action that sets the <code>maximum</code> state of the store.</p>
+<pre><code class="hljs css language-js">picker<span class="token punctuation">.</span><span class="token function">setMaximum</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  value<span class="token punctuation">:</span> <span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token number">2021</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="setminimum"></a><a href="#setminimum" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>setMinimum</code></h3>
+<table>
+<thead>
+<tr><th>Arguments</th><th>Returns</th></tr>
+</thead>
+<tbody>
+<tr><td><code>{<br/>  value: Date,<br/>}</code></td><td>nothing</td></tr>
+</tbody>
+</table>
+<p>An action that sets the <code>minimum</code> state of the store.</p>
+<pre><code class="hljs css language-js">picker<span class="token punctuation">.</span><span class="token function">setMinimum</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  value<span class="token punctuation">:</span> <span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token number">2019</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="settime"></a><a href="#settime" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>setTime</code></h3>
+<table>
+<thead>
+<tr><th>Arguments</th><th>Returns</th></tr>
+</thead>
+<tbody>
+<tr><td><code>{<br/>  hours?: number,<br/>  minutes?: number,<br/>}</code></td><td>nothing</td></tr>
+</tbody>
+</table>
+<p>An action that sets the time of the <code>selected</code> state of the store.</p>
+<pre><code class="hljs css language-js">picker<span class="token punctuation">.</span><span class="token function">setTime</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  hours<span class="token punctuation">:</span> <span class="token number">9</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="setfirstdayofweek"></a><a href="#setfirstdayofweek" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>setFirstDayOfWeek</code></h3>
+<table>
+<thead>
+<tr><th>Arguments</th><th>Returns</th></tr>
+</thead>
+<tbody>
+<tr><td><code>{<br/>  value: number,<br/>}</code></td><td>nothing</td></tr>
+</tbody>
+</table>
+<p>An action that sets the <code>firstDayOfWeek</code> state of the store.</p>
+<pre><code class="hljs css language-js">picker<span class="token punctuation">.</span><span class="token function">setFirstDayOfWeek</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  value<span class="token punctuation">:</span> <span class="token number">5</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="clear"></a><a href="#clear" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>clear</code></h3>
+<table>
+<thead>
+<tr><th>Arguments</th><th>Returns</th></tr>
+</thead>
+<tbody>
+<tr><td>none</td><td>nothing</td></tr>
+</tbody>
+</table>
+<p>An action that clears the <code>selected</code> state of the store.</p>
+<pre><code class="hljs css language-js">picker<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="viewnext"></a><a href="#viewnext" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>viewNext</code></h3>
+<table>
+<thead>
+<tr><th>Arguments</th><th>Returns</th></tr>
+</thead>
+<tbody>
+<tr><td>none</td><td>nothing</td></tr>
+</tbody>
+</table>
+<p>An action that updates the <code>view</code> and <code>highlight</code> state of the store to show the next month.</p>
+<pre><code class="hljs css language-js">picker<span class="token punctuation">.</span><span class="token function">viewNext</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="viewprevious"></a><a href="#viewprevious" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>viewPrevious</code></h3>
+<table>
+<thead>
+<tr><th>Arguments</th><th>Returns</th></tr>
+</thead>
+<tbody>
+<tr><td>none</td><td>nothing</td></tr>
+</tbody>
+</table>
+<p>An action that updates the <code>view</code> and <code>highlight</code> state of the store to show the previous month.</p>
+<pre><code class="hljs css language-js">picker<span class="token punctuation">.</span><span class="token function">viewPrevious</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="viewtoday"></a><a href="#viewtoday" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>viewToday</code></h3>
+<table>
+<thead>
+<tr><th>Arguments</th><th>Returns</th></tr>
+</thead>
+<tbody>
+<tr><td>none</td><td>nothing</td></tr>
+</tbody>
+</table>
+<p>An action that updates the <code>view</code> and <code>highlight</code> state of the store to show the month of &quot;today&quot;.</p>
+<pre><code class="hljs css language-js">picker<span class="token punctuation">.</span><span class="token function">viewToday</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="cyclehourup"></a><a href="#cyclehourup" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>cycleHourUp</code></h3>
+<table>
+<thead>
+<tr><th>Arguments</th><th>Returns</th></tr>
+</thead>
+<tbody>
+<tr><td>none</td><td>nothing</td></tr>
+</tbody>
+</table>
+<p>An action that updates the <code>selected</code> state of the store to cycle up through the hours of 1 - 12.</p>
+<pre><code class="hljs css language-js">picker<span class="token punctuation">.</span><span class="token function">cycleHourUp</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="cyclehourdown"></a><a href="#cyclehourdown" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>cycleHourDown</code></h3>
+<table>
+<thead>
+<tr><th>Arguments</th><th>Returns</th></tr>
+</thead>
+<tbody>
+<tr><td>none</td><td>nothing</td></tr>
+</tbody>
+</table>
+<p>An action that updates the <code>selected</code> state of the store to cycle down through the hours of 1 - 12.</p>
+<pre><code class="hljs css language-js">picker<span class="token punctuation">.</span><span class="token function">cycleHourDown</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="cycleminuteup"></a><a href="#cycleminuteup" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>cycleMinuteUp</code></h3>
+<table>
+<thead>
+<tr><th>Arguments</th><th>Returns</th></tr>
+</thead>
+<tbody>
+<tr><td>none</td><td>nothing</td></tr>
+</tbody>
+</table>
+<p>An action that updates the <code>selected</code> state of the store to cycle up through the minutes of 0 - 59.</p>
+<pre><code class="hljs css language-js">picker<span class="token punctuation">.</span><span class="token function">cycleMinuteUp</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="cycleminutedown"></a><a href="#cycleminutedown" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>cycleMinuteDown</code></h3>
+<table>
+<thead>
+<tr><th>Arguments</th><th>Returns</th></tr>
+</thead>
+<tbody>
+<tr><td>none</td><td>nothing</td></tr>
+</tbody>
+</table>
+<p>An action that updates the <code>selected</code> state of the store to cycle down through the minutes of 0 - 59.</p>
+<pre><code class="hljs css language-js">picker<span class="token punctuation">.</span><span class="token function">cycleMinuteDown</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="cyclemeridiem"></a><a href="#cyclemeridiem" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>cycleMeridiem</code></h3>
+<table>
+<thead>
+<tr><th>Arguments</th><th>Returns</th></tr>
+</thead>
+<tbody>
+<tr><td>none</td><td>nothing</td></tr>
+</tbody>
+</table>
+<p>An action that updates the <code>selected</code> state of the store to cycle the day time period (meridiem) between AM and PM.</p>
+<pre><code class="hljs css language-js">picker<span class="token punctuation">.</span><span class="token function">cycleMeridiem</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/pickadate.js/v5/docs/api-state"><span class="arrow-prev">← </span><span>The State Object</span></a><a class="docs-next button" href="/pickadate.js/v5/docs/api-store"><span>The Store Object</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#properties">Properties</a><ul class="toc-headings"><li><a href="#store"><code>store</code></a></li></ul></li><li><a href="#methods">Methods</a><ul class="toc-headings"><li><a href="#getvalue"><code>getValue</code></a></li><li><a href="#subscribetovalue"><code>subscribeToValue</code></a></li></ul></li><li><a href="#actions">Actions</a><ul class="toc-headings"><li><a href="#setselected"><code>setSelected</code></a></li><li><a href="#sethighlighted"><code>setHighlighted</code></a></li><li><a href="#setmaximum"><code>setMaximum</code></a></li><li><a href="#setminimum"><code>setMinimum</code></a></li><li><a href="#settime"><code>setTime</code></a></li><li><a href="#setfirstdayofweek"><code>setFirstDayOfWeek</code></a></li><li><a href="#clear"><code>clear</code></a></li><li><a href="#viewnext"><code>viewNext</code></a></li><li><a href="#viewprevious"><code>viewPrevious</code></a></li><li><a href="#viewtoday"><code>viewToday</code></a></li><li><a href="#cyclehourup"><code>cycleHourUp</code></a></li><li><a href="#cyclehourdown"><code>cycleHourDown</code></a></li><li><a href="#cycleminuteup"><code>cycleMinuteUp</code></a></li><li><a href="#cycleminutedown"><code>cycleMinuteDown</code></a></li><li><a href="#cyclemeridiem"><code>cycleMeridiem</code></a></li></ul></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/pickadate.js/v5/" class="nav-home"><img src="/pickadate.js/v5/img/favicon.svg" alt="pickadate.js" width="66" height="58"/></a><div><h5>Documentation</h5><a href="/pickadate.js/v5/docs/introduction">Getting Started</a><a href="/pickadate.js/v5/docs/binding-javascript">JavaScript</a><a href="/pickadate.js/v5/docs/binding-react-dom">React DOM</a><a href="/pickadate.js/v5/docs/binding-react-native">React Native</a><a href="/pickadate.js/v5/docs/binding-jquery">jQuery</a></div><div><h5>Community</h5><a href="https://stackoverflow.com/questions/tagged/pickadate" target="_blank" rel="noreferrer noopener">Stack Overflow</a><a href="https://spectrum.chat/pickadate" target="_blank" rel="noreferrer noopener">Spectrum</a></div><div><h5>More</h5><a href="https://github.com/amsul/pickadate.js">GitHub</a><a class="github-button" href="https://github.com/amsul/pickadate.js" data-show-count="true" data-count-href="/amsul/pickadate.js/stargazers" aria-label="Star this project on GitHub" data-count-aria-label="# stargazers on GitHub">Star</a></div></section><section class="copyright">Copyright © 2012-2019 Amsul and the pickadate.js documentation authors.</section></footer></div></body></html>
