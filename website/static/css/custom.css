@@ -74,7 +74,7 @@ table tr:nth-child(2n) {
  */
 
 .post {
-  font-size: 18px;
+  font-size: 16px;
 }
 .post h1 {
   letter-spacing: -1.25px;
@@ -147,10 +147,8 @@ table tr:nth-child(2n) {
   border: 0;
   background: #eff3f5;
   position: relative;
-}
-.hljs {
   border-radius: 12px;
-  padding: 1.25rem 2rem;
+  padding: 1.25em 2em;
 }
 .token.property,
 .token.tag,
