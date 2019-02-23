@@ -17,6 +17,5 @@ project:
 
 # Build settings
 markdown: kramdown
-gems:
-  - jekyll-redirect-from
+plugins:
   - jekyll-sitemap
