@@ -8,11 +8,11 @@
       "binding-jquery"
     ],
     "Guides": [
+      "guide-translations",
       "guide-custom-actors",
       "guide-upgrade-from-v3"
     ],
     "API": [
-      "api-theming",
       "api-state",
       "api-picker",
       "api-store"

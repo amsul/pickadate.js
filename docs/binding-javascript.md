@@ -69,33 +69,14 @@ const element = document.getElementById('date-picker')
 pickadate.render(element, picker)
 ```
 
-The third argument is an optional object to customize how the picker renders:
-
-```js
-pickadate.render(element, picker, {
-  weekdays: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-})
-```
-
-<div class="pickadate-demo"><iframe src="https://codesandbox.io/embed/13vv2y0jw4?fontsize=14&hidenavigation=1&view=split" tabindex="-1" style="width:100%; height:500px; border:0; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe></div>
-
 ### `options`
+
+The third argument to `pickadate.render` is an optional object to customize how the picker renders.
 
 Here a list of all the valid `options` properties:
 
-- [`weekdays`](#options.weekdays)
 - [`className`](#options.className)
 - [`renderCell`](#options.renderCell)
-
-### `options.weekdays`
-
-The weekday labels to use as the heading labels of the grid.
-
-#### Default value
-
-```js
-const weekdays = ['Sun', 'Mon', ..., 'Sat']
-```
 
 ### `options.className`
 

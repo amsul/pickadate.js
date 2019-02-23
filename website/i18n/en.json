@@ -14,9 +14,6 @@
       "api-store": {
         "title": "The Store Object"
       },
-      "api-theming": {
-        "title": "Theming"
-      },
       "binding-javascript": {
         "title": "Plain JavaScript"
       },
@@ -31,6 +28,9 @@
       },
       "guide-custom-actors": {
         "title": "Creating Custom Actors"
+      },
+      "guide-translations": {
+        "title": "Using Translations"
       },
       "guide-upgrade-from-v3": {
         "title": "Upgrading from v3"

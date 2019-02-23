@@ -13,8 +13,8 @@ Or, use one of the bindings baked in:
 
 1. [Plain JavaScript](binding-javascript)
 1. [React DOM](binding-react-dom)
-1. [React Native](binding-react-native) (coming soon)
-1. [jQuery](binding-jquery) (coming soon)
+1. [React Native](binding-react-native) (TODO)
+1. [jQuery](binding-jquery) (TODO)
 
 Which look like this:
 
