@@ -1,11 +1,8 @@
-# pickadate
+# pickadate [![Build status: master](https://travis-ci.org/amsul/pickadate.js.svg?branch=master)](https://travis-ci.org/amsul/pickadate.js) [![jsDelivr Hits](https://data.jsdelivr.com/v1/package/npm/pickadate/badge?style=rounded)](https://www.jsdelivr.com/package/npm/pickadate)
 
 The mobile-friendly, responsive, and lightweight jQuery date & time input picker.
 
-[![Build status: master](https://travis-ci.org/amsul/pickadate.js.svg?branch=master)](https://travis-ci.org/amsul/pickadate.js) <sup>[`master`](https://github.com/amsul/pickadate.js/tree/master)</sup>
-<sup>&nbsp;&nbsp;&nbsp;</sup>
-[![pickadate dev dependencies status](https://david-dm.org/amsul/pickadate.js/dev-status.svg)](https://david-dm.org/amsul/pickadate.js#info=devDependencies)
-[![jsDelivr Hits](https://data.jsdelivr.com/v1/package/npm/pickadate/badge?style=rounded)](https://www.jsdelivr.com/package/npm/pickadate)
+[![Join the community on Spectrum](https://withspectrum.github.io/badge/badge.svg)](https://spectrum.chat/pickadate)
 
 
 #### To get started, check out the:
@@ -24,17 +21,6 @@ The mobile-friendly, responsive, and lightweight jQuery date & time input picker
 *or*
 
 `bower install pickadate`
-
-
-
-
-<br>
-
-## NOTE: Looking for Project Maintainers
-
-I am looking for project maintainers to keep pickadate up to date and bug-free. As it stands, there are quite a few issues that are ready to be resolved and merged, but I would like help from someone in championing it forward.
-
-If it sounds like you are up to the challenge, shoot met an email at reach@amsul.ca with a link to your Github account :pray:.
 
 
 
@@ -134,9 +120,10 @@ Before opening a new issue, please search the existing [Issues](https://github.c
 
 Before contributing any code to the project, please take a look at the [Contributing](https://github.com/amsul/pickadate.js/blob/master/CONTRIBUTING.md) guide.
 
-If there’s anything you’d like to discuss, we like to hang out on Gitter.
+If there’s anything you’d like to discuss, we like to hang out on Spectrum.
 
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/amsul/pickadate.js)
+
+[![Spectrum](https://withspectrum.github.io/badge/badge.svg)](https://spectrum.chat/pickadate)
 
 
 
