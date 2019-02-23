@@ -1,7 +1,7 @@
 // See https://docusaurus.io/docs/site-config for all the possible
 // site configuration options.
 
-const baseUrl = '/pickadate.js/'
+const baseUrl = '/pickadate.js/v5/'
 
 const siteConfig = {
   title: 'pickadate.js',

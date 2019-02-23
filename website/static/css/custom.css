@@ -199,11 +199,11 @@ table tr:nth-child(2n) {
   background: url(../img/bg.png) repeat;
   border-bottom: 1px solid #dadee0;
 }
-.fixedHeaderContainer header > a[href='/pickadate.js/'] {
+.fixedHeaderContainer header > a[href='/pickadate.js/v5/'] {
   margin: 7px auto 0;
 }
 @media only screen and (min-width: 1024px) {
-  .fixedHeaderContainer header > a[href='/pickadate.js/'] {
+  .fixedHeaderContainer header > a[href='/pickadate.js/v5/'] {
     margin: auto 0;
   }
 }
@@ -335,51 +335,51 @@ table tr:nth-child(2n) {
  * HOME PAGE
  */
 
-[data-pathname='/pickadate.js/'] {
+[data-pathname='/pickadate.js/v5/'] {
   background: url(../img/bg.png) repeat;
 }
 
-[data-pathname='/pickadate.js/'] .fixedHeaderContainer {
+[data-pathname='/pickadate.js/v5/'] .fixedHeaderContainer {
   background: none;
   border: 0;
   color: #000;
 }
-[data-pathname='/pickadate.js/']
+[data-pathname='/pickadate.js/v5/']
   .fixedHeaderContainer
   header
-  > a[href='/pickadate.js/'] {
+  > a[href='/pickadate.js/v5/'] {
   display: none;
 }
 
-[data-pathname='/pickadate.js/'] .fixedHeaderContainer {
+[data-pathname='/pickadate.js/v5/'] .fixedHeaderContainer {
   position: relative;
   overflow-x: scroll;
 }
-[data-pathname='/pickadate.js/'] .navigationSlider {
+[data-pathname='/pickadate.js/v5/'] .navigationSlider {
   margin-left: auto;
   margin-right: auto;
 }
-[data-pathname='/pickadate.js/'] .navigationSlider .slidingNav {
+[data-pathname='/pickadate.js/v5/'] .navigationSlider .slidingNav {
   position: relative;
 }
-[data-pathname='/pickadate.js/'] .navigationSlider .slidingNav ul {
+[data-pathname='/pickadate.js/v5/'] .navigationSlider .slidingNav ul {
   margin: 0;
   background: none;
 }
-[data-pathname='/pickadate.js/'] .navigationSlider .slidingNav ul li a {
+[data-pathname='/pickadate.js/v5/'] .navigationSlider .slidingNav ul li a {
   padding-top: 30px;
 }
 
-[data-pathname='/pickadate.js/'] .navigationSlider .slidingNav {
+[data-pathname='/pickadate.js/v5/'] .navigationSlider .slidingNav {
   margin-right: 40px;
 }
 @media only screen and (min-width: 480px) {
-  [data-pathname='/pickadate.js/'] .navigationSlider .slidingNav {
+  [data-pathname='/pickadate.js/v5/'] .navigationSlider .slidingNav {
     margin-right: 0;
   }
 }
 
-[data-pathname='/pickadate.js/'] .navPusher {
+[data-pathname='/pickadate.js/v5/'] .navPusher {
   padding-top: 0;
   min-height: 0;
 
@@ -387,18 +387,23 @@ table tr:nth-child(2n) {
   flex-direction: column;
   flex-grow: 1;
 }
-[data-pathname='/pickadate.js/'] .navPusher > :first-child {
+[data-pathname='/pickadate.js/v5/'] .navPusher > :first-child {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
   align-items: stretch;
 }
-[data-pathname='/pickadate.js/'] .mainContainer {
+[data-pathname='/pickadate.js/v5/'] .mainContainer {
   display: flex;
   flex-direction: column;
   padding: 0;
 }
-[data-pathname='/pickadate.js/'] .homeHeaderWrapper {
+[data-pathname='/pickadate.js/v5/'] .mainContainer-blockquote {
+  align-self: center;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+[data-pathname='/pickadate.js/v5/'] .homeHeaderWrapper {
   flex-grow: 1;
 }
 

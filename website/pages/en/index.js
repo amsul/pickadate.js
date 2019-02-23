@@ -13,6 +13,9 @@ class Index extends React.Component {
     return (
       <div>
         <div className='mainContainer'>
+          <blockquote className='mainContainer-blockquote'>
+            <p>Note: v5 of pickadate.js is not yet ready for a full-featured release. Use it at your own discretion.</p>
+          </blockquote>
           {this.renderSplash()}
           {this.renderFooter()}
         </div>
@@ -35,8 +38,7 @@ class Index extends React.Component {
               />
             </h1>
             <h2 className='homeSplash_heading homeSplash_heading__secondary'>
-              A light-weight, composable date-time UI & state management
-              library.
+              A light-weight, composable date-time UI & state management library.
             </h2>
             <div className='homeCta'>
               <a

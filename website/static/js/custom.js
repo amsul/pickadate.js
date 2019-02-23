@@ -1,4 +1,4 @@
-if (window.location.pathname === '/pickadate.js/') {
+if (window.location.pathname === '/pickadate.js/v5/') {
   document.getElementById('footer').style.display = 'none'
 } else {
   document.getElementById('footer').style.display = ''
