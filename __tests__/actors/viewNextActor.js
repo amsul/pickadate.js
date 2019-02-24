@@ -8,7 +8,7 @@ describe('viewNextActor()', () => {
     const picker = createPicker({ view: new Date(2030, 3, 20) })
 
     expect(picker.store.getState().selected).toEqual(null)
-    expect(picker.store.getState().view).toEqual(new Date(2030, 3, 20))
+    expect(picker.store.getState().view).toEqual(new Date(2030, 3, 1))
 
     const partialState = viewNextActor(picker.store.getState())
     expect(partialState).toEqual({
