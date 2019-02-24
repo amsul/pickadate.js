@@ -1,7 +1,7 @@
 {
   "arrowParens": "avoid",
   "printWidth": 80,
-  "parser": "babylon",
+  "parser": "babel",
   "semi": false,
   "singleQuote": true,
   "jsxSingleQuote": true,

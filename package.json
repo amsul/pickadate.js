@@ -60,7 +60,7 @@
     "jest": "^23.6.0",
     "lint-staged": "^8.1.0",
     "lolex": "^3.0.0",
-    "prettier": "^1.15.3",
+    "prettier": "^1.16.4",
     "rollup": "^1.0.0",
     "rollup-plugin-babel": "^4.2.0",
     "rollup-plugin-commonjs": "^9.2.0",
