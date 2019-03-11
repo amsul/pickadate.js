@@ -9,7 +9,7 @@
   text-align: left;
   line-height: 1.2;
   color: #000000;
-  position: absolute;
+  position: fixed;
   z-index: 10000;
   -webkit-user-select: none;
      -moz-user-select: none;
