@@ -31,9 +31,9 @@
   "scripts": {
     "prebump": "npm test",
     "bump": "node ./version-bump.js",
-    "postbump": "grunt package && node ./version-commit.js",
+    "postbump": "npx grunt package && node ./version-commit.js",
     "push": "git push && git push origin --tags && npm publish",
-    "test": "grunt test --verbose"
+    "test": "npx grunt test --verbose"
   },
   "dependencies": {
     "jquery": ">=1.7"
