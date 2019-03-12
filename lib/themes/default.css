@@ -8,13 +8,14 @@
   font-size: 16px;
   text-align: left;
   line-height: 1.2;
-  color: #000000;
+  color: #000;
   position: absolute;
   z-index: 10000;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
+  outline: none;
 }
 /**
  * The picker input element.
@@ -53,16 +54,14 @@
   bottom: 0;
   left: 0;
   right: 0;
-  -webkit-transform: translateY(100%);
-      -ms-transform: translateY(100%);
-          transform: translateY(100%);
+  -ms-transform: translateY(100%);
+      transform: translateY(100%);
 }
 /**
  * The holder should overlay the entire screen.
  */
 .picker__holder {
   position: fixed;
-  transition: background 0.15s ease-out, -webkit-transform 0s 0.15s;
   transition: background 0.15s ease-out, transform 0s 0.15s;
   -webkit-backface-visibility: hidden;
 }
@@ -111,7 +110,7 @@
  * The box contains all the picker contents.
  */
 .picker__box {
-  background: #ffffff;
+  background: #fff;
   display: table-cell;
   vertical-align: middle;
 }
@@ -124,7 +123,7 @@
   .picker__box {
     display: block;
     font-size: 1.33em;
-    border: 1px solid #777777;
+    border: 1px solid #777;
     border-top-color: #898989;
     border-bottom-width: 0;
     border-radius: 5px 5px 0 0;
@@ -142,9 +141,8 @@
  * When the picker opens...
  */
 .picker--opened .picker__holder {
-  -webkit-transform: translateY(0);
-      -ms-transform: translateY(0);
-          transform: translateY(0);
+  -ms-transform: translateY(0);
+      transform: translateY(0);
   background: transparent;
   -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#1E000000,endColorstr=#1E000000)";
   zoom: 1;
@@ -152,9 +150,8 @@
   transition: background 0.15s ease-out;
 }
 .picker--opened .picker__frame {
-  -webkit-transform: translateY(0);
-      -ms-transform: translateY(0);
-          transform: translateY(0);
+  -ms-transform: translateY(0);
+      transform: translateY(0);
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
   filter: alpha(opacity=100);
   -moz-opacity: 1;
