@@ -21,9 +21,9 @@
 }
 .picker__nav--next:before {
   border-left: 0;
-  border-right: 0.75em solid #000000;
+  border-right: 0.75em solid #000;
 }
 .picker__nav--prev:before {
   border-right: 0;
-  border-left: 0.75em solid #000000;
+  border-left: 0.75em solid #000;
 }

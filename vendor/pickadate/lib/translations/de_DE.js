@@ -14,5 +14,6 @@ jQuery.extend( jQuery.fn.pickadate.defaults, {
 });
 
 jQuery.extend( jQuery.fn.pickatime.defaults, {
-    clear: 'Löschen'
+    clear: 'Löschen',
+    format: 'H:i'
 });

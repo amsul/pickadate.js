@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v3.5.6, 2015/04/20
+ * pickadate.js v3.6.1, 2019/03/15
  * By Amsul, http://amsul.ca
  * Hosted on http://amsul.github.io/pickadate.js
  * Licensed under MIT
@@ -254,7 +254,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
 
                     // Prevent the page from scrolling.
                     if ( IS_DEFAULT_THEME ) {
-                        $html.
+                        $('body').
                             css( 'overflow', 'hidden' ).
                             css( 'padding-right', '+=' + getScrollbarWidth() )
                     }
@@ -265,7 +265,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                     // Bind the document events.
                     $document.on( 'click.' + STATE.id + ' focusin.' + STATE.id, function( event ) {
 
-                        var target = event.target
+                        var target = getRealEventTarget( event, ELEMENT )
 
                         // If the target of the event is not the element, close the picker picker.
                         // * Don’t worry about clicks or focusins on the root because those don’t bubble up.
@@ -274,7 +274,9 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                         // * In Firefox stopPropagation() doesn’t prevent right-click events from bubbling,
                         //   which causes the picker to unexpectedly close when right-clicking it. So make
                         //   sure the event wasn’t a right-click.
-                        if ( target != ELEMENT && target != document && event.which != 3 ) {
+                        // * In Chrome 62 and up, password autofill causes a simulated focusin event which
+                        //   closes the picker.
+                        if ( ! event.isSimulated && target != ELEMENT && target != document && event.which != 3 ) {
 
                             // If the target was the holder that covers the screen,
                             // keep the element focused to maintain tabindex.
@@ -291,7 +293,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                             keycodeToMove = P.component.key[ keycode ],
 
                             // Grab the target.
-                            target = event.target
+                            target = getRealEventTarget( event, ELEMENT )
 
 
                         // On escape, close the picker and give focus.
@@ -379,7 +381,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
 
                 // Allow the page to scroll.
                 if ( IS_DEFAULT_THEME ) {
-                    $html.
+                    $('body').
                         css( 'overflow', '' ).
                         css( 'padding-right', '-=' + getScrollbarWidth() )
                 }
@@ -432,7 +434,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                         }
 
                         // Then, check to update the element value and broadcast a change.
-                        if ( thingItem == 'select' || thingItem == 'clear' ) {
+                        if ( ( thingItem == 'select' || thingItem == 'clear' ) && SETTINGS.updateInput ) {
                             $ELEMENT.
                                 val( thingItem == 'clear' ? '' : P.get( thingItem, SETTINGS.format ) ).
                                 trigger( 'change' )
@@ -605,8 +607,6 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
         ) //endreturn
     } //createWrappedComponent
 
-
-
     /**
      * Prepare the input element with all bindings.
      */
@@ -624,19 +624,19 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
             val( $ELEMENT.data('value') ?
                 P.get('select', SETTINGS.format) :
                 ELEMENT.value
-            )
+            ).
 
+            // On focus/click, open the picker.
+            on( 'focus.' + STATE.id + ' click.' + STATE.id,
+            debounce(function(event) {
+                event.preventDefault()
+                P.open()
+            }, 50))
 
         // Only bind keydown events if the element isn’t editable.
         if ( !SETTINGS.editable ) {
 
             $ELEMENT.
-
-                // On focus/click, open the picker.
-                on( 'focus.' + STATE.id + ' click.' + STATE.id, function(event) {
-                    event.preventDefault()
-                    P.open()
-                }).
 
                 // Handle keyboard event based on the picker being opened or not.
                 on( 'keydown.' + STATE.id, handleKeydownEvent )
@@ -691,7 +691,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                 // from bubbling to the doc.
                 'mousedown click': function( event ) {
 
-                    var target = event.target
+                    var target = getRealEventTarget( event, ELEMENT )
 
                     // Make sure the target isn’t the root holder so it can bubble up.
                     if ( target != P.$holder[0] ) {
@@ -708,7 +708,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
 
                             // Re-focus onto the holder so that users can click away
                             // from elements focused within the picker.
-                            P.$holder[0].focus()
+                            P.$holder.eq(0).focus()
                         }
                     }
                 }
@@ -725,11 +725,11 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                     // * For IE, non-focusable elements can be active elements as well
                     //   (http://stackoverflow.com/a/2684561).
                     activeElement = getActiveElement()
-                    activeElement = activeElement && ( activeElement.type || activeElement.href )
+                    activeElement = activeElement && ( (activeElement.type || activeElement.href ) ? activeElement : null);
 
                 // If it’s disabled or nothing inside is actively focused, re-focus the element.
                 if ( targetDisabled || activeElement && !$.contains( P.$root[0], activeElement ) ) {
-                    P.$holder[0].focus()
+                    P.$holder.eq(0).focus()
                 }
 
                 // If something is superficially changed, update the `highlight` based on the `nav`.
@@ -814,11 +814,13 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
 
         if (IS_DEFAULT_THEME && supportsTransitions) {
             P.$holder.find('.' + CLASSES.frame).one('transitionend', function() {
-                P.$holder[0].focus()
+                P.$holder.eq(0).focus()
             })
         }
         else {
-            P.$holder[0].focus()
+            setTimeout(function() {
+                P.$holder.eq(0).focus()
+            }, 0)
         }
     }
 
@@ -956,6 +958,50 @@ function getScrollbarWidth() {
 }
 
 
+
+/**
+ * Get the target element from the event.
+ * If ELEMENT is supplied and present in the event path (ELEMENT is ancestor of the target),
+ * returns ELEMENT instead
+ */
+function getRealEventTarget( event, ELEMENT ) {
+
+    var path = []
+
+    if ( event.path ) {
+        path = event.path
+    }
+
+    if ( event.originalEvent && event.originalEvent.path ) {
+        path = event.originalEvent.path
+    }
+
+    if ( path && path.length > 0 ) {
+        if ( ELEMENT && path.indexOf( ELEMENT ) >= 0 ) {
+            return ELEMENT
+        } else {
+            return path[0]
+        }
+    }
+
+    return event.target
+}
+
+// taken from https://davidwalsh.name/javascript-debounce-function
+function debounce(func, wait, immediate) {
+    var timeout;
+    return function() {
+        var context = this, args = arguments;
+        var later = function() {
+            timeout = null;
+            if (!immediate) func.apply(context, args);
+        };
+        var callNow = immediate && !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+        if (callNow) func.apply(context, args);
+    };
+}
 
 /**
  * PickerConstructor helper methods.
@@ -1158,6 +1204,3 @@ return PickerConstructor
 
 
 }));
-
-
-

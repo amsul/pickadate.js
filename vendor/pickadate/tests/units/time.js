@@ -83,10 +83,10 @@ test( 'Formats', function() {
                 return leadZero( minutes%60 )
             },
             a: function() {
-                return ~~( minutes/60 ) % 24 > 12 ? 'p.m.' : 'a.m.'
+                return ~~( minutes/60 ) % 24 >= 12 ? 'p.m.' : 'a.m.'
             },
             A: function() {
-                return ~~( minutes/60 ) % 24 > 12 ? 'PM' : 'AM'
+                return ~~( minutes/60 ) % 24 >= 12 ? 'PM' : 'AM'
             }
         }
 

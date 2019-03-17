@@ -7,7 +7,7 @@ jQuery.extend( jQuery.fn.pickadate.defaults, {
     weekdaysShort: [ '日', '一', '二', '三', '四', '五', '六' ],
     today: '今天',
     clear: '清除',
-    close: '关闭',
+    close: '關閉',
     firstDay: 1,
     format: 'yyyy 年 mm 月 dd 日',
     formatSubmit: 'yyyy/mm/dd'
