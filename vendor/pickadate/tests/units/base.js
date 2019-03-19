@@ -437,8 +437,8 @@ asyncTest( 'Open and close', function() {
         setTimeout(function(){
             ok( picker.get( 'open' ) === false, 'Closed with click out' )
             QUnit.start();
-        }, 100)
-    }, 100)
+        }, 200)
+    }, 200)
 })
 
 asyncTest( 'Open and close', function() {
@@ -453,8 +453,8 @@ asyncTest( 'Open and close', function() {
         setTimeout(function(){
             strictEqual( picker.get( 'open' ), false, 'Closed by clicking “close”' )
             QUnit.start();
-        }, 100)
-    }, 100)
+        }, 200)
+    }, 200)
 })
 
 
@@ -528,15 +528,15 @@ asyncTest( 'Open and close', function() {
                                     setTimeout(function () {
                                         ok(picker.get('open') === true, 'Opened after arrow “right”')
                                         QUnit.start();
-                                    }, 100)
-                                }, 100)
-                            }, 100)
-                        }, 100)
-                    }, 100)
-                }, 100)
-            }, 100)
-        }, 100)
-    }, 100)
+                                    }, 200)
+                                }, 200)
+                            }, 200)
+                        }, 200)
+                    }, 200)
+                }, 200)
+            }, 200)
+        }, 200)
+    }, 200)
 })
 
 test( 'Set and clear', function() {

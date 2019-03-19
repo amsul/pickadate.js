@@ -9,7 +9,7 @@ baseurl: /pickadate.js
 
 # Pickadate settings
 project:
-  version: 3.6.1
+  version: 3.6.2
   license: MIT
   repo: http://github.com/amsul/pickadate.js
   bugs: http://github.com/amsul/pickadate.js/issues

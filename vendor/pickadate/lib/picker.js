@@ -1,5 +1,5 @@
 /*!
- * pickadate.js v3.6.1, 2019/03/15
+ * pickadate.js v3.6.2, 2019/03/19
  * By Amsul, http://amsul.ca
  * Hosted on http://amsul.github.io/pickadate.js
  * Licensed under MIT
@@ -631,7 +631,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
             debounce(function(event) {
                 event.preventDefault()
                 P.open()
-            }, 50))
+            }, 100))
 
         // Only bind keydown events if the element isn’t editable.
         if ( !SETTINGS.editable ) {
