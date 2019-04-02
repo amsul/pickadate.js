@@ -12,10 +12,11 @@
     "clean": "rm -rf builds/",
     "prebundle": "yarn clean",
     "bundle": "rollup -c",
+    "postinstall": "yarn bundle",
     "prestart": "yarn clean",
     "start": "NODE_ENV=development rollup -c --watch",
     "format": "prettier --write 'lib/**/*.js'",
-    "prepublish": "yarn format && yarn flow && yarn test:units && yarn bundle",
+    "prepublishOnly": "yarn format && yarn flow && yarn test:units && yarn bundle",
     "test": "NODE_ENV=test yarn flow && yarn test:coverage --coverageReporters=text-lcov | coveralls",
     "test:coverage": "NODE_ENV=test jest --ci --coverage --collectCoverageFrom=lib/**",
     "test:units": "NODE_ENV=development jest --verbose"
