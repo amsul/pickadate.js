@@ -57,7 +57,7 @@ const renderValue = value => {
 }
 
 renderValue(picker.getValue())
-picker.subscribeToValue(renderValue)
+picker.subscribeToSelection(({ value }) => renderValue(value))
 
 const frenchTranslation = window.pickadate.translations.fr_FR
 const frenchPicker = window.pickadate.create(

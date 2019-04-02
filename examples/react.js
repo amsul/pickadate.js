@@ -17,8 +17,8 @@ class App extends window.React.Component {
         <Pickadate
           initialTranslation={frenchTranslation}
           initialState={this.initialState}
-          onChangeValue={formattedValue =>
-            console.log('pickadate value changed: %o', formattedValue)
+          onChangeValue={({ value, date }) =>
+            console.log('pickadate value changed: %o', value)
           }
         >
           <Pickadate.Input placeholder='select a date' />
@@ -44,8 +44,8 @@ class App extends window.React.Component {
         <hr />
         <br />
         <Pickadate.InputPicker
-          onChangeValue={formattedValue =>
-            console.log('input picker value changed: %o', formattedValue)
+          onChangeValue={({ value, date }) =>
+            console.log('input picker value changed: %o', value)
           }
         />
         <br />
@@ -55,8 +55,8 @@ class App extends window.React.Component {
           options={{ mode: 'date-time' }}
           initialTranslation={frenchTranslation}
           initialState={{ template: 'YYYY MMMM DD hh:mm a' }}
-          onChangeValue={formattedValue =>
-            console.log('date picker value changed: %o', formattedValue)
+          onChangeValue={({ value, date }) =>
+            console.log('date picker value changed: %o', value)
           }
         />
       </div>
