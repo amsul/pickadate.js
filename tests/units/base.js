@@ -457,7 +457,40 @@ asyncTest( 'Open and close', function() {
     }, 200)
 })
 
+asyncTest( 'Open with a slower click', function() {
+    // This test ensures that behaviour in chrome as described in PR 1145
+    // https://github.com/amsul/pickadate.js/pull/1145
+    // is handled correctly
 
+    var picker = this.picker
+
+    // The sequence of events fired by chrome are:
+    //  - focus on the input
+    //  - mousedown on the input
+    //  - mouseup on the input
+    //  - click on the common ancestor (in this case $DOM)
+    picker.$node.focus()
+    setTimeout(function () {
+        ok(picker.get('open') === true, 'Opened due to focus change')
+        picker.$node.trigger({
+            type: 'mousedown'
+        })
+        setTimeout(function () {
+            ok(picker.get('open') === true, 'Still open after mousedown')
+            // The mouseup and the click happen one after the other with no pause
+            picker.$node.trigger({
+                type: 'mouseup'
+            })
+            $DOM.trigger({
+                type: 'click'
+            })
+            setTimeout(function () {
+                ok(picker.get('open') === true, 'Still open after final click event')
+                QUnit.start();
+            }, 200)
+        }, 200)
+    }, 200)
+})
 
 
 
