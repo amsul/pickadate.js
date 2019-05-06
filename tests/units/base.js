@@ -425,36 +425,26 @@ module( 'Base mouse events', {
     }
 })
 
-asyncTest( 'Open and close', function() {
+test( 'Open and close', function() {
 
     var picker = this.picker
 
     picker.$node.click()
-    setTimeout(function() {
-        ok( picker.get( 'open' ) === true, 'Opened with click in' )
+    ok( picker.get( 'open' ) === true, 'Opened with click in' )
 
-        $( 'body' ).click()
-        setTimeout(function(){
-            ok( picker.get( 'open' ) === false, 'Closed with click out' )
-            QUnit.start();
-        }, 200)
-    }, 200)
-})
+    $( 'body' ).click()
+    ok( picker.get( 'open' ) === false, 'Closed with click out' )
+ })
 
-asyncTest( 'Open and close', function() {
+test( 'Open and close', function() {
 
     var picker = this.picker
 
     picker.$node.click()
-    setTimeout(function() {
-        strictEqual( picker.get( 'open' ), true, 'Opened with click in' )
+    strictEqual( picker.get( 'open' ), true, 'Opened with click in' )
 
-        picker.$root.find( '.' + $.fn.pickadate.defaults.klass.buttonClose ).click();
-        setTimeout(function(){
-            strictEqual( picker.get( 'open' ), false, 'Closed by clicking “close”' )
-            QUnit.start();
-        }, 200)
-    }, 200)
+    picker.$root.find( '.' + $.fn.pickadate.defaults.klass.buttonClose ).click();
+    strictEqual( picker.get( 'open' ), false, 'Closed by clicking “close”' )
 })
 
 asyncTest( 'Open with a slower click', function() {
@@ -507,69 +497,50 @@ module( 'Base keyboard events', {
     }
 })
 
-asyncTest( 'Open and close', function() {
+test( 'Open and close', function() {
 
     var picker = this.picker
 
     picker.$node.focus()
-    setTimeout(function () {
-        ok(picker.get('open') === true, 'Opened with key in')
-        picker.$node.blur()
-        $DOM.focusin()
-        setTimeout(function () {
-            ok(picker.get('open') === false, 'Closed with key out')
-            picker.$node.trigger({
-                type: 'keydown',
-                keyCode: 40
-            })
-            setTimeout(function () {
-                ok(picker.get('open') === true, 'Opened after arrow “down”')
-                picker.$node.trigger({
-                    type: 'keydown',
-                    keyCode: 27
-                })
-                setTimeout(function () {
-                    ok(picker.get('open') === false, 'Closed after “escape”')
-                    picker.$node.trigger({
-                        type: 'keydown',
-                        keyCode: 38
-                    })
-                    setTimeout(function () {
-                        ok(picker.get('open') === true, 'Opened after arrow “up”')
-                        picker.$node.trigger({
-                            type: 'keydown',
-                            keyCode: 8
-                        })
-                        setTimeout(function () {
-                            ok(picker.get('open') === false, 'Closed after “backspace”')
-                            picker.$node.trigger({
-                                type: 'keydown',
-                                keyCode: 37
-                            })
-                            setTimeout(function () {
-                                ok(picker.get('open') === true, 'Opened after arrow “left”')
-                                picker.$node.trigger({
-                                    type: 'keydown',
-                                    keyCode: 46
-                                })
-                                setTimeout(function () {
-                                    ok(picker.get('open') === false, 'Closed after “alt. backspace”')
-                                    picker.$node.trigger({
-                                        type: 'keydown',
-                                        keyCode: 39
-                                    })
-                                    setTimeout(function () {
-                                        ok(picker.get('open') === true, 'Opened after arrow “right”')
-                                        QUnit.start();
-                                    }, 200)
-                                }, 200)
-                            }, 200)
-                        }, 200)
-                    }, 200)
-                }, 200)
-            }, 200)
-        }, 200)
-    }, 200)
+    ok(picker.get('open') === true, 'Opened with key in')
+    picker.$node.blur()
+    $DOM.focusin()
+    ok(picker.get('open') === false, 'Closed with key out')
+    picker.$node.trigger({
+        type: 'keydown',
+        keyCode: 40
+    })
+    ok(picker.get('open') === true, 'Opened after arrow “down”')
+    picker.$node.trigger({
+        type: 'keydown',
+        keyCode: 27
+    })
+    ok(picker.get('open') === false, 'Closed after “escape”')
+    picker.$node.trigger({
+        type: 'keydown',
+        keyCode: 38
+    })
+    ok(picker.get('open') === true, 'Opened after arrow “up”')
+    picker.$node.trigger({
+        type: 'keydown',
+        keyCode: 8
+    })
+    ok(picker.get('open') === false, 'Closed after “backspace”')
+    picker.$node.trigger({
+        type: 'keydown',
+        keyCode: 37
+    })
+    ok(picker.get('open') === true, 'Opened after arrow “left”')
+    picker.$node.trigger({
+        type: 'keydown',
+        keyCode: 46
+    })
+    ok(picker.get('open') === false, 'Closed after “alt. backspace”')
+    picker.$node.trigger({
+        type: 'keydown',
+        keyCode: 39
+    })
+    ok(picker.get('open') === true, 'Opened after arrow “right”')
 })
 
 test( 'Set and clear', function() {
