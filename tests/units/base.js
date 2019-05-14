@@ -448,9 +448,10 @@ test( 'Open and close', function() {
 })
 
 asyncTest( 'Open with a slower click', function() {
-    // This test ensures that behaviour in chrome as described in PR 1145
+    // This test ensures that behaviour in chrome as described in PR 1167
     // https://github.com/amsul/pickadate.js/pull/1145
-    // is handled correctly
+    // is handled correctly where the pointer stream is captured to the
+    // picker input.
 
     var picker = this.picker
 
@@ -471,7 +472,7 @@ asyncTest( 'Open with a slower click', function() {
             picker.$node.trigger({
                 type: 'mouseup'
             })
-            $DOM.trigger({
+            picker.$DOM.trigger({
                 type: 'click'
             })
             setTimeout(function () {
