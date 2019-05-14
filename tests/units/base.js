@@ -472,7 +472,7 @@ asyncTest( 'Open with a slower click', function() {
             picker.$node.trigger({
                 type: 'mouseup'
             })
-            picker.$DOM.trigger({
+            picker.$node.trigger({
                 type: 'click'
             })
             setTimeout(function () {
