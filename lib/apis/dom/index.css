@@ -89,13 +89,13 @@ button.pickadate--element {
 .pickadate--button__previous:active svg,
 .pickadate--button__today:active svg,
 .pickadate--button__next:active svg {
-  fill: #0089ec;
+  fill: #0474c5;
 }
 .pickadate--button__previous:focus,
 .pickadate--button__today:focus,
 .pickadate--button__next:focus {
   outline: none;
-  border-color: #0089ec;
+  border-color: #0474c5;
 }
 .pickadate--button__meridiem {
   width: 3em;
@@ -107,7 +107,7 @@ button.pickadate--element {
   background: #e5e5e5;
 }
 .pickadate--button__meridiem:focus {
-  border-color: #0089ec;
+  border-color: #0474c5;
   outline: none;
 }
 
@@ -166,7 +166,7 @@ button.pickadate--element {
 .pickadate--grid__focused:not(:active)
   .pickadate--grid_cell__highlighted:not(.pickadate--grid_cell__selected)
   > div {
-  background: #b1dcfb;
+  background: #bde1fa;
 }
 .pickadate--grid_cell__today > div {
   border: 1px solid #e5e5e5;
@@ -179,7 +179,7 @@ button.pickadate--element {
   .pickadate--grid_cell__today.pickadate--grid_cell__highlighted:not(.pickadate--grid_cell__selected)
   > div,
 .pickadate--grid_cell__today.pickadate--grid_cell__selected > div {
-  border-color: #0089ec;
+  border-color: #0474c5;
 }
 .pickadate--grid_cell__today.pickadate--grid_cell__selected > div:after {
   content: ' ';
@@ -193,7 +193,7 @@ button.pickadate--element {
 }
 .pickadate--grid_cell__selected > div,
 .pickadate--grid_cell__selected:hover > div {
-  background: #0089ec;
+  background: #0474c5;
   color: #fff;
   font-weight: 600;
 }
@@ -266,7 +266,7 @@ button.pickadate--element {
   border-radius: 6px;
 }
 .pickadate--time_input:focus {
-  border-color: #0089ec;
+  border-color: #0474c5;
   outline: none;
 }
 .pickadate--time_input:focus ~ .pickadate--time_counter {
