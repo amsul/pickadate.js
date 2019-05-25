@@ -49,15 +49,15 @@
     "phantomjs": "^1.9.7-5",
     "zlib-browserify": "0.0.3"
   },
-  "version": "3.6.2",
-  "_release": "3.6.2",
+  "version": "3.6.4",
+  "_release": "3.6.4",
   "_resolution": {
     "type": "version",
-    "tag": "3.6.2",
-    "commit": "4c66ddb9563cd8e6d92392f4cfd405e7750821cf"
+    "tag": "3.6.4",
+    "commit": "c5233dcd40e0ae115b1205ad2dc5ed29b7783035"
   },
   "_source": "https://github.com/amsul/pickadate.js.git",
-  "_target": "3.6.2",
+  "_target": "3.6.4",
   "_originalSource": "pickadate",
   "_direct": true
 }
