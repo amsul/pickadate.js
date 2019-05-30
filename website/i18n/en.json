@@ -14,6 +14,9 @@
       "api-store": {
         "title": "The Store Object"
       },
+      "api-translation": {
+        "title": "The Translation Object"
+      },
       "binding-javascript": {
         "title": "Plain JavaScript"
       },

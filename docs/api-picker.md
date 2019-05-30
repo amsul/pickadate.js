@@ -19,9 +19,9 @@ The `store` object contains the state of the picker.
 
 ### `getValue`
 
-| Arguments | Returns  |
-| --------- | -------- |
-| none      | `string` |
+| Arguments                     | Returns  |
+| ----------------------------- | -------- |
+| `template: string` (optional) | `string` |
 
 Gets the current selected value as a formatted string.
 
@@ -30,7 +30,14 @@ const value = picker.getValue()
 console.log(value) // '1 January, 2019 @ 12:00 a.m.'
 ```
 
-### `subscribeToValue`
+With the optional `template` argument, the string can be formatted using the [formatting hooks](api-state#formatting-hooks).
+
+```js
+const value = picker.getValue('YYYY-MM-DD')
+console.log(value) // '2019-01-01'
+```
+
+### `subscribeToSelection`
 
 | Arguments            | Returns                 |
 | -------------------- | ----------------------- |
@@ -41,10 +48,11 @@ Subscribes to updates to the selected value.
 The function returned can be called to unsubscribe to the updates.
 
 ```js
-const callback = formattedValue => {
-  console.log(formattedValue) // '1 January, 2019 @ 12:00 a.m.'
+const callback = ({ value, date }) => {
+  console.log(value) // '1 January, 2019 @ 12:00 a.m.'
+  console.log(date.getTime()) // 1546318800000
 }
-const unsubscribe = picker.subscribeToValue(callback)
+const unsubscribe = picker.subscribeToSelection(callback)
 ```
 
 ## Actions

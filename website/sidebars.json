@@ -15,7 +15,8 @@
     "API": [
       "api-state",
       "api-picker",
-      "api-store"
+      "api-store",
+      "api-translation"
     ]
   }
 }

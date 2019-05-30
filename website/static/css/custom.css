@@ -81,6 +81,10 @@ table tr:nth-child(2n) {
 }
 .post h2 {
   letter-spacing: -0.5px;
+
+  margin-top: 2.5em;
+  border-top: 1px solid #eff3f5;
+  padding-top: 2em;
 }
 .post h3 {
   letter-spacing: -0.325px;

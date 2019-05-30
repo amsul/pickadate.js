@@ -37,11 +37,18 @@ Continue reading below for a full reference on all the methods and events.
 
 ## `create`
 
-| Arguments                            | Returns                |
-| ------------------------------------ | ---------------------- |
-| [`initialState: ?Object`](api-state) | [`picker`](api-picker) |
+| Arguments                                        | Returns                |
+| ------------------------------------------------ | ---------------------- |
+| [`initialState: ?Object`](#initial-state)        | [`picker`](api-picker) |
+| [`initialTranslation: ?Object`](api-translation) |                        |
 
-Creates a [`picker` object](api-picker) with an optional [initial state](api-state).
+Creates a [`picker` object](api-picker) that can be rendered into an element.
+
+<div class="pickadate-demo"><iframe src="https://codesandbox.io/embed/2vj4opzp9n?fontsize=14&hidenavigation=1&view=split" tabindex="-1" style="width:100%; height:500px; border:0; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe></div>
+
+### Initial State
+
+The picker can be created with an optional [initial state](api-state).
 
 ```js
 const initialState = {
@@ -51,6 +58,20 @@ const picker = pickadate.create(initialState)
 ```
 
 <div class="pickadate-demo"><iframe src="https://codesandbox.io/embed/v89p1p0pqy?fontsize=14&hidenavigation=1&view=split" tabindex="-1" style="width:100%; height:500px; border:0; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe></div>
+
+### Initial Translation
+
+The picker can also be created with an optional [translation object](api-translation).
+
+```js
+import frenchTranslation from 'pickadate/builds/translations/fr_FR'
+const initialState = {
+  selected: new Date(),
+}
+const picker = pickadate.create(initialState, frenchTranslation)
+```
+
+<div class="pickadate-demo"><iframe src="https://codesandbox.io/embed/date-picker-create-with-translation-lu045?fontsize=14&hidenavigation=1&view=split" tabindex="-1" style="width:100%; height:500px; border:0; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe></div>
 
 ## `render`
 

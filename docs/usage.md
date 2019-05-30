@@ -3,7 +3,11 @@ id: usage
 title: Usage
 ---
 
-Pickadate.js can be used in a couple ways depending on your setup.
+Pickadate.js can be used in a couple ways depending on your setup:
+
+- [Plain JavaScript](#plain-javascript)
+- [React DOM](#react-dom)
+- [React Native](#react-native)
 
 ## Plain JavaScript
 

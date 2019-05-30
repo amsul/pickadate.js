@@ -162,6 +162,22 @@ const template = 'D MMMM, YYYY @ h:mm a'
 |        |                                             |                    |
 | `x`    | The unix time stamp                         | 587534400000       |
 
+### Escaping formatting hooks
+
+In order to type out characters of formatting hooks literally, they can be escaped by surrounding them with square brackets (`[]`).
+
+For example:
+
+```js
+'Unescaped MMMM' // Output: 'Unescaped January'
+```
+
+In contrast to:
+
+```js
+'Escaped [MMMM]' // Output: 'Escaped MMMM'
+```
+
 ## `templateHookWords`
 
 | Type                                                     |
