@@ -1,0 +1,89 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>The Translation Object · pickadate.js</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&lt;p&gt;The &lt;code&gt;translation&lt;/code&gt; object is basically a subset of the &lt;a href=&quot;api-state&quot;&gt;&lt;code&gt;state&lt;/code&gt; object&lt;/a&gt; properties:&lt;/p&gt;
+"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="The Translation Object · pickadate.js"/><meta property="og:type" content="website"/><meta property="og:url" content="https://amsul.github.io/pickadate.js/v5/index.html"/><meta property="og:description" content="&lt;p&gt;The &lt;code&gt;translation&lt;/code&gt; object is basically a subset of the &lt;a href=&quot;api-state&quot;&gt;&lt;code&gt;state&lt;/code&gt; object&lt;/a&gt; properties:&lt;/p&gt;
+"/><meta property="og:image" content="https://amsul.github.io/pickadate.js/v5/img/logo.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://amsul.github.io/pickadate.js/v5/img/logo.png"/><link rel="shortcut icon" href="/pickadate.js/v5/img/favicon.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css"/><script type="text/javascript" src="https://unpkg.com/pickadate@5.0.0-alpha.0/builds/index.js" defer=""></script><script type="text/javascript" src="/pickadate.js/v5/js/custom.js" defer=""></script><script type="text/javascript" src="https://buttons.github.io/buttons.js" defer=""></script><link rel="stylesheet" href="/pickadate.js/v5/css/prism.css"/><link rel="stylesheet" href="/pickadate.js/v5/css/main.css"/></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/pickadate.js/v5/"><img class="logo" src="/pickadate.js/v5/img/logo.svg" alt="pickadate.js"/></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/pickadate.js/v5/docs/introduction" target="_self">Documentation</a></li><li class=""><a href="https://github.com/amsul/pickadate.js" target="_self">Discussions</a></li><li class=""><a href="https://github.com/amsul/pickadate.js" target="_self">GitHub</a></li><li class=""><a href="https://github.com/amsul/pickadate.js" target="_self">v3 Docs</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>API</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Getting Started</h3><ul><li class="navListItem"><a class="navItem" href="/pickadate.js/v5/docs/introduction">Introduction</a></li><li class="navListItem"><a class="navItem" href="/pickadate.js/v5/docs/installation">Installation</a></li><li class="navListItem"><a class="navItem" href="/pickadate.js/v5/docs/usage">Usage</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Bindings</h3><ul><li class="navListItem"><a class="navItem" href="/pickadate.js/v5/docs/binding-javascript">Plain JavaScript</a></li><li class="navListItem"><a class="navItem" href="/pickadate.js/v5/docs/binding-react-dom">React DOM</a></li><li class="navListItem"><a class="navItem" href="/pickadate.js/v5/docs/binding-react-native">React Native</a></li><li class="navListItem"><a class="navItem" href="/pickadate.js/v5/docs/binding-jquery">jQuery</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Guides</h3><ul><li class="navListItem"><a class="navItem" href="/pickadate.js/v5/docs/guide-translations">Using Translations</a></li><li class="navListItem"><a class="navItem" href="/pickadate.js/v5/docs/guide-custom-actors">Creating Custom Actors</a></li><li class="navListItem"><a class="navItem" href="/pickadate.js/v5/docs/guide-upgrade-from-v3">Upgrading from v3</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">API</h3><ul><li class="navListItem"><a class="navItem" href="/pickadate.js/v5/docs/api-state">The State Object</a></li><li class="navListItem"><a class="navItem" href="/pickadate.js/v5/docs/api-picker">The Picker Object</a></li><li class="navListItem"><a class="navItem" href="/pickadate.js/v5/docs/api-store">The Store Object</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/pickadate.js/v5/docs/api-translation">The Translation Object</a></li></ul></div></div></section></div><script>
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              const headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                if (event.target.tagName === 'A') {
+                  document.body.classList.remove('tocActive');
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">The Translation Object</h1></header><article><div><span><p>The <code>translation</code> object is basically a subset of the <a href="api-state"><code>state</code> object</a> properties:</p>
+<ul>
+<li><a href="api-state#firstDayOfWeek"><code>firstDayOfWeek</code></a></li>
+<li><a href="api-state#template"><code>template</code></a></li>
+<li><a href="api-state#templateHookWords"><code>templateHookWords</code></a></li>
+</ul>
+<h2><a class="anchor" aria-hidden="true" id="included-translations"></a><a href="#included-translations" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Included translations</h2>
+<p>Translations for the following languages are included in the library:</p>
+<table>
+<thead>
+<tr><th>Language</th><th>Path</th></tr>
+</thead>
+<tbody>
+<tr><td>Bulgarian</td><td><code>pickadate/builds/translations/bg_BG</code></td></tr>
+<tr><td>Bosnian</td><td><code>pickadate/builds/translations/bs_BA</code></td></tr>
+<tr><td>Catalan</td><td><code>pickadate/builds/translations/ca_ES</code></td></tr>
+<tr><td>Czech</td><td><code>pickadate/builds/translations/cs_CZ</code></td></tr>
+<tr><td>Danish</td><td><code>pickadate/builds/translations/da_DK</code></td></tr>
+<tr><td>German</td><td><code>pickadate/builds/translations/de_DE</code></td></tr>
+<tr><td>Greek</td><td><code>pickadate/builds/translations/el_GR</code></td></tr>
+<tr><td>Spanish</td><td><code>pickadate/builds/translations/es_ES</code></td></tr>
+<tr><td>Estonian</td><td><code>pickadate/builds/translations/et_EE</code></td></tr>
+<tr><td>Basque</td><td><code>pickadate/builds/translations/eu_ES</code></td></tr>
+<tr><td>Finnish</td><td><code>pickadate/builds/translations/fi_FI</code></td></tr>
+<tr><td>French</td><td><code>pickadate/builds/translations/fr_FR</code></td></tr>
+<tr><td>Georgian</td><td><code>pickadate/builds/translations/ge_GEO</code></td></tr>
+<tr><td>Galician</td><td><code>pickadate/builds/translations/gl_ES</code></td></tr>
+<tr><td>Hindi</td><td><code>pickadate/builds/translations/hi_IN</code></td></tr>
+<tr><td>Croatian</td><td><code>pickadate/builds/translations/hr_HR</code></td></tr>
+<tr><td>Hungarian</td><td><code>pickadate/builds/translations/hu_HU</code></td></tr>
+<tr><td>Indonesian</td><td><code>pickadate/builds/translations/id_ID</code></td></tr>
+<tr><td>Icelandic</td><td><code>pickadate/builds/translations/is_IS</code></td></tr>
+<tr><td>Italian</td><td><code>pickadate/builds/translations/it_IT</code></td></tr>
+<tr><td>Japanese</td><td><code>pickadate/builds/translations/ja_JP</code></td></tr>
+<tr><td>Khmer</td><td><code>pickadate/builds/translations/km_KH</code></td></tr>
+<tr><td>Korean</td><td><code>pickadate/builds/translations/ko_KR</code></td></tr>
+<tr><td>Lietuviškai</td><td><code>pickadate/builds/translations/lt_LT</code></td></tr>
+<tr><td>Latvian</td><td><code>pickadate/builds/translations/lv_LV</code></td></tr>
+<tr><td>Norwegian</td><td><code>pickadate/builds/translations/nb_NO</code></td></tr>
+<tr><td>Nepali</td><td><code>pickadate/builds/translations/ne_NP</code></td></tr>
+<tr><td>Dutch</td><td><code>pickadate/builds/translations/nl_NL</code></td></tr>
+<tr><td>Polish</td><td><code>pickadate/builds/translations/pl_PL</code></td></tr>
+<tr><td>Brazilian Portuguese</td><td><code>pickadate/builds/translations/pt_BR</code></td></tr>
+<tr><td>Portuguese</td><td><code>pickadate/builds/translations/pt_PT</code></td></tr>
+<tr><td>Romanian</td><td><code>pickadate/builds/translations/ro_RO</code></td></tr>
+<tr><td>Russian</td><td><code>pickadate/builds/translations/ru_RU</code></td></tr>
+<tr><td>Slovak</td><td><code>pickadate/builds/translations/sk_SK</code></td></tr>
+<tr><td>Slovenian</td><td><code>pickadate/builds/translations/sl_SI</code></td></tr>
+<tr><td>Serbian (Cyrillic)</td><td><code>pickadate/builds/translations/sr_RS_cy</code></td></tr>
+<tr><td>Serbian (Latin)</td><td><code>pickadate/builds/translations/sr_RS_lt</code></td></tr>
+<tr><td>Swedish</td><td><code>pickadate/builds/translations/sv_SE</code></td></tr>
+<tr><td>Thai</td><td><code>pickadate/builds/translations/th_TH</code></td></tr>
+<tr><td>Turkish</td><td><code>pickadate/builds/translations/tr_TR</code></td></tr>
+<tr><td>Ukrainian</td><td><code>pickadate/builds/translations/uk_UA</code></td></tr>
+<tr><td>Vietnamese</td><td><code>pickadate/builds/translations/vi_VN</code></td></tr>
+<tr><td>Simplified Chinese</td><td><code>pickadate/builds/translations/zh_CN</code></td></tr>
+<tr><td>Traditional Chinese</td><td><code>pickadate/builds/translations/zh_TW</code></td></tr>
+</tbody>
+</table>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/pickadate.js/v5/docs/api-store"><span class="arrow-prev">← </span><span>The Store Object</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#included-translations">Included translations</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/pickadate.js/v5/" class="nav-home"><img src="/pickadate.js/v5/img/favicon.svg" alt="pickadate.js" width="66" height="58"/></a><div><h5>Documentation</h5><a href="/pickadate.js/v5/docs/introduction">Getting Started</a><a href="/pickadate.js/v5/docs/binding-javascript">JavaScript</a><a href="/pickadate.js/v5/docs/binding-react-dom">React DOM</a><a href="/pickadate.js/v5/docs/binding-react-native">React Native</a><a href="/pickadate.js/v5/docs/binding-jquery">jQuery</a></div><div><h5>Community</h5><a href="https://stackoverflow.com/questions/tagged/pickadate" target="_blank" rel="noreferrer noopener">Stack Overflow</a><a href="https://spectrum.chat/pickadate" target="_blank" rel="noreferrer noopener">Spectrum</a></div><div><h5>More</h5><a href="https://github.com/amsul/pickadate.js">GitHub</a><a class="github-button" href="https://github.com/amsul/pickadate.js" data-show-count="true" data-count-href="/amsul/pickadate.js/stargazers" aria-label="Star this project on GitHub" data-count-aria-label="# stargazers on GitHub">Star</a></div></section><section class="copyright">Copyright © 2012-2019 Amsul and the pickadate.js documentation authors.</section></footer></div></body></html>
