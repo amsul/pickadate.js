@@ -1,6 +1,6 @@
 {
   "name": "pickadate",
-  "version": "5.0.0-alpha.2",
+  "version": "5.0.0-alpha.3",
   "title": "pickadate.js",
   "description": "The composable date & time picker.",
   "repository": "https://github.com/amsul/pickadate.js",
