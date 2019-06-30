@@ -69,6 +69,9 @@ button.pickadate--element {
   padding: 0;
   justify-content: center;
   align-items: center;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
 }
 .pickadate--button__previous,
 .pickadate--button__today,
