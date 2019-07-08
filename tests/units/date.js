@@ -200,6 +200,28 @@ test( '`clear`', function() {
     strictEqual( picker.get('select'), null, 'Clears out selection' )
 })
 
+test( '`today`', function() {
+
+    var picker = this.picker
+    var dateToday = new Date()
+    
+    dateToday.setHours(0,0,0,0)
+    dateToday.setDate(1)
+    
+    var dateYearAgo = new Date(dateToday.valueOf())
+    
+    dateYearAgo = new Date(dateYearAgo.setFullYear(new Date().getFullYear() - 1))
+    dateYearAgo.setHours(0,0,0,0)
+
+    strictEqual( picker.get('select'), null, 'Starts off without a selection' )
+    
+    picker.set('select', dateYearAgo)
+    strictEqual( picker.get('view').obj.toString(), dateYearAgo.toString(), 'Set date to last year' )
+    
+    picker.today()
+    notStrictEqual( picker.get('view').obj, dateToday, 'Today date is back' )
+})
+
 test( '`select`', function() {
 
     var picker = this.picker,
