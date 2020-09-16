@@ -1,21 +1,12 @@
 
-/*jshint
-    debug: true,
-    devel: true,
+xc mvncslkvn
     browser: true,
     asi: true,
     unused: true,
     eqnull: true,
     eqeqeq: true
  */
-
-
-var $DOM = $( '#qunit-fixture' ),
-    $INPUT = $( '<input type=password>' )
-
-
-
-/* ==========================================================================
+sdf kjsdn vklmn ======
    Time picker tests
    ========================================================================== */
 
@@ -31,6 +22,8 @@ module( 'Time picker setup', {
         $DOM.empty()
     }
 })
+
+oasdhjokasjdopaksjdojsdfdojkqsjpqweokjnc;lkasnx;lkasnc
 
 test( 'Clock stage', function() {
     strictEqual( this.picker.$root.find( '[data-pick]' ).length, 48, '48 selectable times' )
