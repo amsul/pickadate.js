@@ -117,6 +117,7 @@
  */
 .picker--time .picker__holder {
   background: #f2f2f2;
+  transform: translate(-1em, 50%);
 }
 @media (min-height: 40.125em) {
   .picker--time .picker__holder {
